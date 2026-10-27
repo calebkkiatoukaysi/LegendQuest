@@ -4,8 +4,8 @@ using Microsoft.Xna.Framework;
 namespace LegendQuest.World;
 
 /// <summary>
-/// One map, as read out of its .map file: what it's called, its tiles in three layers, how it's lit,
-/// what plays on it, and everything placed on it.
+/// One map, as read out of its .map file: what it's called, where it is on the world map, its tiles
+/// in three layers, how it's lit, what plays on it, and everything placed on it.
 /// </summary>
 /// <remarks>
 /// Data only. MapLoader builds these and checks them, Tilemap draws one, and nothing changes one
@@ -18,6 +18,9 @@ public sealed class MapDefinition
 
     /// <summary>What it's called on screen.</summary>
     public required string Name { get; init; }
+
+    /// <summary>Where it is on the world map, in the map screen's pixels from the top left of the world.</summary>
+    public required Point World { get; init; }
 
     /// <summary>The tileset every layer is drawn from.</summary>
     public required TilesetDefinition Tileset { get; init; }
@@ -47,8 +50,20 @@ public sealed class MapDefinition
     public required int[,] Overhead { get; init; }
 
     /// <summary>Where the party can arrive, by name. Every map has one called start.</summary>
-    public required IReadOnlyDictionary<string, Vector2> Spawns { get; init; }
+    public required IReadOnlyDictionary<string, MapSpawn> Spawns { get; init; }
 
     /// <summary>Every prop on it.</summary>
     public required IReadOnlyList<MapProp> Props { get; init; }
+
+    /// <summary>Every pool of light that isn't a prop's.</summary>
+    public required IReadOnlyList<MapLight> Lights { get; init; }
+
+    /// <summary>The ways off it. Where they go is what links this map to others on the world map.</summary>
+    public required IReadOnlyList<MapExit> Exits { get; init; }
+
+    /// <summary>The rectangles that do something when you walk into them.</summary>
+    public required IReadOnlyList<MapTrigger> Triggers { get; init; }
+
+    /// <summary>Everything on it you can use.</summary>
+    public required IReadOnlyList<MapInteractable> Interactables { get; init; }
 }

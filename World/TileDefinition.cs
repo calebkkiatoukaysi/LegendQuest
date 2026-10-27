@@ -2,7 +2,7 @@ namespace LegendQuest.World;
 
 /// <summary>
 /// One kind of tile in a tileset: what it's called, how many ways it's drawn, whether you can walk
-/// through it, and what it sounds like underfoot.
+/// through it or see past it, and what it sounds like underfoot.
 /// </summary>
 /// <remarks>
 /// Variants are drawn one after another on the sheet, and the map picks one per cell from where the
@@ -18,6 +18,10 @@ public sealed class TileDefinition
 
     /// <summary>Whether it stops people walking. Collision is built from this.</summary>
     public bool Solid { get; init; }
+
+    /// <summary>Whether it stops light and sight: the dark map's pools and what the map screen has seen.</summary>
+    /// <remarks>Walls are. A fence, a heap of rubble or a tree trunk is solid but isn't, since you can see over or round it.</remarks>
+    public bool Opaque { get; init; }
 
     /// <summary>What it sounds like to walk on.</summary>
     public Surface Surface { get; init; } = Surface.Stone;

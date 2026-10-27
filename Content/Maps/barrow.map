@@ -1,9 +1,12 @@
-; The barrow. In at the bottom up the steps, through a short dark passage into the hall, the
-; side room off it to the west, and the tomb at the back. Lit by the sconces and nothing else.
+; The barrow. In at the bottom up the steps, through a short dark passage into the hall. The tomb
+; is behind the locked door in the middle of the hall's north wall, and the side room is behind the
+; stone door at its west end, which the lever at the east end works. Lit by the sconces (two either
+; side of the tomb door), and a little daylight down the steps.
 
 [map]
 id = barrow
 name = The Barrow
+world = 860 110
 tileset = crypt
 size = 40 30
 dark = yes
@@ -30,20 +33,20 @@ c = cobweb
 ##############BBBBBBBBBBBB##############
 ##############ssssssssssss##############
 ##############,,,,,ww,,,,w##############
-##############,,,,w,,,,,,,##############
-##############,,,,,,,,,,,,##############
-##############,,ww,,,,,,,,##############
-###################,,###################
-###################,,###################
-###################,,###################
-########FFFFFFFFFFF,,FFFNFFFFFFF########
-##FFFFF#BBBBBBBBBBB,,BBBBBBBBBBB########
-##BBBBB#sssssssssss,wsssssssssss########
-##sssss#,,,,,,,,,,,,,,,,,,,,,,,,########
-##,,w,,#,,,,,,,,,,,,,,,,,,,,,,,w########
-##,,w,,,,,,,,,w,,,,,,,,,,,,,,,,,########
+##FFNFFF######,,,,w,,,,,,,##############
+##BBBBBB######,,,,,,,,,,,,##############
+##ssssss######,,ww,,,,,,,,##############
+##,,,w,,###########,,###################
+##,w,,,,###########,,###################
+####,,#############,,###################
+##FF,,FFFFFFFFFFFFF,,FFFNFFFFFFF########
+##BB,,BBBBBBBBBBBBB,,BBBBBBBBBBB########
+##ss,,sssssssssssss,,sssssssssss########
+##,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,########
+##,,w,,,,,,,,,,,,,,,,,,,,,,,,,,w########
+##,,,,,,,,,,,w,,,,,,,,,,,,,,,,,,########
 ##,,,,,,,,,,w,w,,,,,,,,,,,,,,,,,########
-##,,,,,#w,,w,,,w,,,w,w,,,,,,,,,,########
+##,,,,,,w,,w,,,w,,,w,w,,,,,,,,,,########
 ##################,ww,##################
 ##################,w,,##################
 ##################,w,w##################
@@ -60,19 +63,19 @@ c = cobweb
 ........................................
 ........................................
 ........................................
-........................................
 ..............c.........................
 ........................................
+........................................
 .......................b................
+..c.....................................
+......b.................................
 ........................................
 ........................................
 ........................................
 ........................................
 ........................................
-........................................
-........................................
-........c...............................
-..c........................b............
+..c.....................................
+...........................b............
 ........................................
 ....b......b.................r..........
 ...r....................................
@@ -87,15 +90,27 @@ c = cobweb
 ........................................
 ........................................
 
-; kind id x y, in tiles. A sconce goes on the lower row of a wall's face.
+; kind id x y, in tiles, then any settings. A sconce or a lever goes on the lower row of a wall's
+; face, and a door's foot is on the line where the face meets the floor.
 [objects]
-spawn start 19.5 27
-prop sconce 11 13
+spawn start 19.5 27 facing=up
+exit road 18 29 w=4 to=road at=barrow
+light daylight 19.5 28.5 reach=3 strength=0.6
+trigger cold 18 19 w=4 say="The air in here is colder."
+
+prop sconce 8 13
+prop sconce 17 13
+prop sconce 22 13
 prop sconce 28 13
 prop sconce 19 3
-prop sconce 4 14
+prop sconce 6 7
 prop sconce 23 25
 prop sarcophagus 19.5 6.5
-prop urn 9 15
+prop urn 10 15
 prop urn 30 15
 prop urn 16 5
+
+door tomb 19.5 13.5 locked=yes name="Tomb door"
+door side 4.5 13.5 look=gate flag=side-gate name="Stone door"
+lever side-lever 30 13 flag=side-gate
+chest side-chest 4.5 8 gold=40

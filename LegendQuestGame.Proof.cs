@@ -42,8 +42,10 @@ public partial class LegendQuestGame
     /// <summary>The slot the proof breaks on purpose, and then erases.</summary>
     private const int ProofBrokenSlot = 1;
 
-    /// <summary>How long the title gets to settle after coming back through the loading screen.</summary>
+    /// <summary>How long the title gets to settle after coming back through the loading screen, and when the slots open over it after.</summary>
     private const int ProofSettle = 60;
+    private const int ProofSlotsAgainOpen = ProofSettle + 1;
+    private const int ProofSlotsAgainShot = ProofSettle + 26;
 
     /// <summary>The frame the proof run is on, which is what schedules it.</summary>
     private int _proofFrame;
@@ -106,15 +108,27 @@ public partial class LegendQuestGame
                 break;
 
             case ProofStage.Village:
-                _proofPending = RunSubject<ExploreScreen>(s => s.ProofStep(Frame()), ExploreScreen.VillageProofEnd, ProofStage.Barrow);
+                _proofPending = RunMap("village", ExploreScreen.VillageProofEnd, ProofStage.Road);
+                break;
+
+            case ProofStage.Road:
+                _proofPending = RunMap("road", ExploreScreen.RoadProofEnd, ProofStage.VillageAgain);
+                break;
+
+            case ProofStage.VillageAgain:
+                _proofPending = RunMap("village", ExploreScreen.VillageAgainProofEnd, ProofStage.RoadAgain);
+                break;
+
+            case ProofStage.RoadAgain:
+                _proofPending = RunMap("road", ExploreScreen.RoadAgainProofEnd, ProofStage.Barrow);
                 break;
 
             case ProofStage.Barrow:
-                _proofPending = RunSubject<ExploreScreen>(s => s.ProofStep(Frame()), ExploreScreen.BarrowProofEnd, ProofStage.TitleAgain);
+                _proofPending = RunMap("barrow", ExploreScreen.BarrowProofEnd, ProofStage.TitleAgain);
                 break;
 
             case ProofStage.TitleAgain:
-                _proofPending = RunSubject<TitleScreen>(_ => Frame() == ProofSettle ? "title-again.png" : null, ProofSettle, ProofStage.Done);
+                _proofPending = RunSubject<TitleScreen>(_ => ProofTitleAgain(), ProofSlotsAgainShot, ProofStage.Done, null);
                 break;
 
             default:
@@ -184,11 +198,41 @@ public partial class LegendQuestGame
         }
     }
 
-    /// <summary>The first screen of type T on the stack that isn't on its way out, or null.</summary>
-    private T Find<T>() where T : GameScreen
+    /// <summary>Back on the title: a shot of it, then the load slots, which should have the autosave from the barrow in them.</summary>
+    private string ProofTitleAgain()
+    {
+        switch (Frame())
+        {
+            case ProofSettle:
+                return "title-again.png";
+
+            case ProofSlotsAgainOpen:
+                _screenManager.AddScreen(new SaveSlotScreen(SlotPurpose.Load));
+                return null;
+
+            case ProofSlotsAgainShot:
+                return "slots-autosave.png";
+
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>Runs one visit to a map: waits for that map's screen, then its schedule for this stage.</summary>
+    /// <param name="mapId">The map the visit is on.</param>
+    /// <param name="end">The last frame of the visit's schedule.</param>
+    /// <param name="next">Which part comes next.</param>
+    private string RunMap(string mapId, int end, ProofStage next)
+    {
+        ProofStage stage = _proofStage;
+        return RunSubject<ExploreScreen>(s => s.ProofStep(Frame(), stage), end, next, s => s.MapId == mapId);
+    }
+
+    /// <summary>The first screen of type T on the stack that isn't on its way out (and passes the test, if there is one), or null.</summary>
+    private T Find<T>(System.Func<T, bool> test = null) where T : GameScreen
     {
         foreach (GameScreen screen in _screenManager.GetScreens())
-            if (screen is T found && !found.IsExiting) return found;
+            if (screen is T found && !found.IsExiting && (test is null || test(found))) return found;
         return null;
     }
 
@@ -197,11 +241,12 @@ public partial class LegendQuestGame
     /// <param name="step">One frame of its schedule. Returns the file name to save, or null.</param>
     /// <param name="end">The last frame of its schedule.</param>
     /// <param name="next">Which part comes next.</param>
-    private string RunSubject<T>(System.Func<T, string> step, int end, ProofStage next) where T : GameScreen
+    /// <param name="test">Which screen of type T it has to be, or null for any. The maps use it, since the last map's screen is still fading out when the next one's stage starts.</param>
+    private string RunSubject<T>(System.Func<T, string> step, int end, ProofStage next, System.Func<T, bool> test) where T : GameScreen
     {
         if (_proofSubject is not T subject)
         {
-            T found = Find<T>();
+            T found = Find(test);
             if (found is not null)
             {
                 _proofSubject = found;

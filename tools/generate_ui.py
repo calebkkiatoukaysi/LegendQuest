@@ -1,9 +1,10 @@
 """
-UI art for Legend Quest: the button plates and the panel the forms sit on. Run it from the repo root:
+UI art for Legend Quest: the button plates, the panel the forms sit on, and the marks on the map.
+Run it from the repo root:
 
     python tools/generate_ui.py
 
-Both are nine-sliced in the game, so they follow the same rule The Black Box's did: anything that
+The plates and the panel are nine-sliced in the game, so they follow the same rule The Black Box's did: anything that
 varies has to be in a corner or vary only along the edge it sits on, and the middle is flat. Same
 muted look, with dark iron instead of concrete. Only needs CPython, and it's seeded, so a rerun
 writes the same bytes.
@@ -272,8 +273,107 @@ def build_panel(seed=4472):
     write_png(os.path.join(OUT, "panel.png"), img)
 
 
+# --------------------------------------------------------------------------- #
+# map-marks.png -- the marks on the map screen
+# --------------------------------------------------------------------------- #
+#
+# One row of 12x12 marks, blown up 3x in the game: a place you've been, a place you know of but
+# haven't been, the ring round the place you are, a waypoint stone, the brackets round the place
+# you've picked to travel to, you on the local map, and one dot of a road.
+
+MARK = 12
+MARK_BONE = (222, 212, 198)
+MARK_DIM = (120, 110, 100)
+MARK_TORCH = (232, 150, 58)
+MARK_STONE = (150, 146, 140)
+MARK_RUNE = (170, 214, 236)
+MARK_INK = (14, 11, 10)
+
+
+def _mark_place(img, ox, filled):
+    """A lozenge, lit on its upper left. Hollow for a place you only know of."""
+    c = 5.5
+    for y in range(MARK):
+        for x in range(MARK):
+            d = abs(x - c) + abs(y - c)
+            if d > 4.6:
+                continue
+            if d > 3.6:
+                put(img, ox + x, y, MARK_INK + (255,))
+            elif filled:
+                lit = (x - c) + (y - c) < -0.5
+                put(img, ox + x, y, tone(MARK_BONE, 1.0 if lit else 0.74))
+            elif d > 2.6:
+                put(img, ox + x, y, tone(MARK_DIM, 1.0))
+
+
+def _mark_ring(img, ox):
+    """A ring round a place, in torchlight, for where you are."""
+    for y in range(MARK):
+        for x in range(MARK):
+            d = ((x - 5.5) ** 2 + (y - 5.5) ** 2) ** 0.5
+            if 5.0 < d < 6.0:
+                put(img, ox + x, y, tone(MARK_TORCH, 1.1 if x + y < 11 else 0.8))
+            elif 4.3 < d <= 5.0:
+                put(img, ox + x, y, MARK_INK + (200,))
+
+
+def _mark_waypoint(img, ox):
+    """A standing stone with its mark lit."""
+    for y in range(1, 11):
+        for x in range(4, 8):
+            put(img, ox + x, y, tone(MARK_STONE, 1.15 if x == 4 else 0.7 if x == 7 else 0.95))
+    for y in range(3, 9):
+        put(img, ox + 5, y, tone(MARK_RUNE, 1.0))
+    for x in range(3, 9):
+        put(img, ox + x, 0, MARK_INK + (255,))
+        put(img, ox + x, 11, MARK_INK + (255,))
+    for y in range(1, 11):
+        put(img, ox + 3, y, MARK_INK + (255,))
+        put(img, ox + 8, y, MARK_INK + (255,))
+
+
+def _mark_brackets(img, ox):
+    """Four corners round a place, for the one picked to travel to."""
+    for (x0, y0, sx, sy) in ((0, 0, 1, 1), (11, 0, -1, 1), (0, 11, 1, -1), (11, 11, -1, -1)):
+        for i in range(3):
+            put(img, ox + x0 + sx * i, y0, tone(MARK_TORCH, 1.1))
+            put(img, ox + x0, y0 + sy * i, tone(MARK_TORCH, 1.1))
+
+
+def _mark_you(img, ox):
+    """You, on the local map: a dot of torchlight with a dark edge and a highlight."""
+    for y in range(MARK):
+        for x in range(MARK):
+            d = ((x - 5.5) ** 2 + (y - 5.5) ** 2) ** 0.5
+            if d < 2.6:
+                put(img, ox + x, y, tone(MARK_TORCH, 1.25 if (x, y) == (4, 4) else 1.0))
+            elif d < 3.6:
+                put(img, ox + x, y, MARK_INK + (255,))
+
+
+def _mark_dot(img, ox):
+    """One dot of a road between places."""
+    for y in (5, 6):
+        for x in (5, 6):
+            put(img, ox + x, y, tone(MARK_BONE, 0.8 if (x, y) == (6, 6) else 0.95))
+
+
+def build_map_marks():
+    img = new_image(MARK * 7, MARK)
+    _mark_place(img, 0, True)
+    _mark_place(img, MARK, False)
+    _mark_ring(img, MARK * 2)
+    _mark_waypoint(img, MARK * 3)
+    _mark_brackets(img, MARK * 4)
+    _mark_you(img, MARK * 5)
+    _mark_dot(img, MARK * 6)
+    write_png(os.path.join(OUT, "map-marks.png"), img)
+
+
 if __name__ == "__main__":
     print("Generating UI for Legend Quest...")
     build_button()
     build_panel()
+    build_map_marks()
     print("Done.")

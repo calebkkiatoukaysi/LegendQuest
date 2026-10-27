@@ -4,7 +4,7 @@ namespace LegendQuest.World;
 
 /// <summary>
 /// One kind of prop: its picture, how much floor it blocks, whether it's on the floor or a wall, and
-/// any light it gives off.
+/// any light it gives off. Chests, doors and levers are props too, with a picture for each way they can be.
 /// </summary>
 /// <remarks>
 /// A prop stands on its foot (the middle of its bottom edge), the same as the people do, so they sort
@@ -18,6 +18,9 @@ public sealed class PropDefinition
 
     /// <summary>Its picture, by content name.</summary>
     public required string Texture { get; init; }
+
+    /// <summary>How many pictures are side by side in it. Two for anything that opens, the shut one first.</summary>
+    public int Frames { get; init; } = 1;
 
     /// <summary>How much floor it blocks, width and depth in art pixels, measured up from its foot. Zero to walk through it.</summary>
     public Point Footprint { get; init; }

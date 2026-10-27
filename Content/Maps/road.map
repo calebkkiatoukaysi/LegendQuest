@@ -1,0 +1,167 @@
+; The old road. In from the village on the west, east through the forest at dusk. A camp off the
+; road to the south with its fire still going, a path north to the barrow where the road forks,
+; and a tree down across the road further east.
+
+[map]
+id = road
+name = The Old Road
+world = 600 290
+tileset = forest
+size = 60 34
+dark = yes
+ambient = 0.55          ; dusk, not night: the dark is only to make the fire count
+music = Exploring
+
+[legend]
+, = leaves
+: = road
+T = thicket
+m = moss
+v = tuft
+f = fern
+o = rock
+s = stump
+< = log-left
+> = log-right
+| = trunk
+b = bush
+/ = canopy-nw
+^ = canopy-n
+\ = canopy-ne
+( = canopy-w
+@ = canopy
+) = canopy-e
+L = canopy-sw
+_ = canopy-s
+J = canopy-se
+
+[ground]
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTT,,,,,,TTTTTTTTTTTTT,,,,,T::TTTTTTTTTTTTTTTTTT
+TTTTTTTTTT,,,,,,,,,,,,TTTTTTTTTT,,,,,,,,::TT,,,,,,,TTTTTTTTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
+:::::::::::::::,,,,,,,,,,,,,,,,:::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+,,,,,,,,,,,,,,,::::::::::::::::,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
+,,,TTTTTTTT,,,TTTT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTTTTTTT
+TTTTTTTTTTTTTTTTTT,,,,,,,,,,,,,,,,T,,,,,,,,,,,TTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTT,,,,,,,,,,,,,,,,TTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+[detail]
+..........................................b.................
+..........................................b.................
+..........................................b.................
+.......................................b..b.................
+............................................................
+............................................................
+............................................................
+...............mmmm|m..............|v.|b....................
+..........|..|....m.m...........|....vv...b.....|mm.........
+...|mm|mmmm.......mmmm.|v...|.......v..v.........mmmm|mmm...
+.....mmmmm.mv.......mm.vv..........vv.vv..........mmmm.mm...
+vvvvmm.mo...v......mmm.vf..........vf.v..........mm.mmmmm...
+.v.vmmfm...vvv......mm.vv....o.....vvv.v.......s.mmmmmmmm...
+...mmmmm..v.vv....mmm.mvvv.........vvv...........mfmmmmmm...
+...mmmmv.v........mmmmm..v.........v.v...........mmmm.mmm...
+..................mmmm.vvv.............................ob...
+.......................................................<>...
+.......................................................bo...
+.................................vv.........v.vv.v..........
+..............mmmmvv...............vv....v....fvv...........
+...............mmv.vvvvv....vvvv..v.vv..v.....v..v..f.......
+...........f...mm..vvv..........vf.vvvv..v.....vvo..........
+...f....v......f...................vvv......................
+....v...v.....vv.ovv.............v...........m..............
+...vvvvvv.....vvv..vv............v.....mmmm.mmmm............
+mm.................v............v.....mmmmmmm.mmmm..........
+...................v.v.........vv.....m.mmmmmm..............
+..................v.v.vv.vv.vvvvv...........................
+............................................................
+............................................................
+............................................................
+............................................................
+............................................................
+............................................................
+
+[overhead]
+/^\(@)..(@)(@)/^\.L_J/^\/^\/^\L_JL_J./^\.....L_JL_J../^\..L_
+(@)L_J..L_JL_J(@)./^\(@)(@)(@)/^\/^^\(@).../^\./^^\..(@)/^\/
+L_J./^\/^^\/^\L_J.(@)L_JL_JL_J(@)(@@)L_J...(@).(@@)..L_J(@)(
+^\..(@)(@@)(@)./^\L_J/^\/^\/^\L_JL__J......L_J.(@@)/^^\.L_JL
+@)..L_JL__JL_J.(@)/^\(@)(@)(@)..../^\/^\../^\..L__J(@@)/^^\/
+_J/^\/^^\/^\/^\L_J(@)L_JL_JL_J./^\(@)(@)..(@)../^^\L__J(@@)(
+^\(@)(@@)(@)(@)...L_J./^\../^^\(@)L_JL_J..(@)..(@@)./^\(@@)L
+@)(@)(@@)L_JL_J.......(@)..(@@)L_J........L_J..L__J.(@)L__J.
+_JL_JL__J.............L_J..L__J.....................L_J.../^
+..........................................................(@
+..........................................................L_
+........................................................./^\
+.........................................................(@)
+.........................................................(@)
+.........................................................L_J
+............................................................
+............................................................
+............................................................
+............................................................
+.........................................................../
+...........................................................(
+...........................................................L
+........................................................./^\
+.........................................................(@)
+.........................................................L_J
+..../^\/^\..../^^\................................../^\./^^\
+/^\.(@)(@)/^^\(@@)............................/^\/^\(@).(@@)
+(@).L_JL_J(@@)L__J................../^\../^^\.(@)(@)L_J.L__J
+L_J/^^\/^\L__J../^\/^\../^^\../^^\..(@)..(@@).L_JL_J./^^\./^
+^\.(@@)(@)/^^\..(@)(@)..(@@)..(@@)..L_J..L__J../^\/^\(@@).(@
+@).L__JL_J(@@)..L_JL_J..L__J..L__J/^\/^\/^\./^\(@)(@)(@@).(@
+_J/^^\/^^\(@@)./^\/^^\./^\/^\/^^\.(@)(@)(@).(@)(@)L_JL__J.L_
+^\(@@)(@@)L__J.(@)(@@).(@)(@)(@@).(@)L_J(@).L_JL_J/^\./^\./^
+@)(@@)L__J./^\.L_J(@@).L_JL_JL__J.L_J/^\L_J/^\/^\.(@).(@).(@
+
+; kind id x y, in tiles, then any settings. Exits and triggers are rectangles from their top left tile.
+[objects]
+spawn start 2 16 facing=right
+spawn barrow 40.5 2
+exit village 0 15 h=3 to=village at=east
+exit barrow 40 0 w=2 to=barrow
+
+; The camp.
+prop campfire 26 23
+prop bedroll 22.5 21.5
+prop bedroll 29 25
+prop crate 21 26
+prop barrel 22 26
+chest camp 30 22 gold=14
+trigger watched 17 7 h=18 say="Someone has been watching the road." set=road-ambush
+
+; The fork.
+sign fork 38 13 text="West, the village. North, the barrow."
+waypoint stone 44 11
+
+; The far end.
+trigger blocked 53 14 h=5 once=no say="No way through to the east."

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
+using LegendQuest.Collisions;
 
 namespace LegendQuest.World;
 
@@ -33,7 +34,10 @@ public static class MapLoader
     public const string StartSpawn = "start";
 
     private static readonly string[] Sections = { "map", "legend", "ground", "detail", "overhead", "objects" };
-    private static readonly string[] RequiredSettings = { "id", "name", "tileset", "size", "dark", "music" };
+    private static readonly string[] RequiredSettings = { "id", "name", "world", "tileset", "size", "dark", "music" };
+
+    /// <summary>Every kind of object, for the error message when a line names one that isn't.</summary>
+    private static readonly string[] Kinds = { "spawn", "prop", "light", "exit", "trigger", "chest", "door", "lever", "sign", "waypoint" };
 
     /// <summary>Reads and checks one map.</summary>
     /// <param name="id">The map, which is also its file name without the .map.</param>
@@ -65,7 +69,13 @@ public static class MapLoader
         if (!TilesetCatalog.TryGet(settings["tileset"].Value, out TilesetDefinition tileset))
             throw Fail(id, settings["tileset"].Line, $"there's no tileset called {settings["tileset"].Value}");
 
-        (int width, int height) = ReadSize(id, settings["size"]);
+        (int width, int height) = ReadPair(id, settings["size"], "size", "the width and height in tiles, like 40 30");
+        if (width < 1 || height < 1) throw Fail(id, settings["size"].Line, "a map has to be at least one tile each way");
+
+        (int worldX, int worldY) = ReadPair(id, settings["world"], "world", "where it is on the world map, like 300 200");
+        if (worldX > MapCatalog.WorldWidth || worldY > MapCatalog.WorldHeight)
+            throw Fail(id, settings["world"].Line, $"world has to be inside the world map, which is {MapCatalog.WorldWidth} by {MapCatalog.WorldHeight}");
+
         bool dark = ReadYesNo(id, settings["dark"]);
         float ambient = ReadAmbient(id, settings, dark);
 
@@ -84,18 +94,30 @@ public static class MapLoader
             ? ReadLayer(id, "overhead", overheadLines, legend, width, height, emptyAllowed: true)
             : new int[width, height];
 
-        var spawns = new Dictionary<string, Vector2>();
-        var props = new List<MapProp>();
-        if (sections.TryGetValue("objects", out var objectLines))
-            ReadObjects(id, objectLines, width, height, spawns, props);
+        List<MapObjectLine> objects = sections.TryGetValue("objects", out var objectLines)
+            ? ReadObjects(id, objectLines, width, height)
+            : new List<MapObjectLine>();
 
-        if (!spawns.ContainsKey(StartSpawn))
-            throw Fail(id, $"there's no spawn called {StartSpawn}, and every map needs one");
+        // Solid the same way Tilemap works it out, for checking where things stand.
+        bool Solid(int x, int y) => x < 0 || y < 0 || x >= width || y >= height
+            || tileset[ground[x, y]].Solid || detail[x, y] != 0 && tileset[detail[x, y]].Solid;
+
+        Dictionary<string, MapSpawn> spawns = ReadSpawns(id, objects);
+        List<MapExit> exits = ReadAreas(objects, "exit", width, height, ReadExit);
+        List<MapTrigger> triggers = ReadAreas(objects, "trigger", width, height, ReadTrigger);
+        List<MapInteractable> interactables = ReadInteractables(objects, Solid);
+
+        foreach ((string name, MapSpawn spawn) in spawns)
+        {
+            foreach (MapExit exit in exits)
+                if (Inside(spawn.Feet, exit.Area)) throw Fail(id, $"spawn {name} is inside exit {exit.Id}; move it a tile or so in from the way out");
+        }
 
         return new MapDefinition
         {
             Id = id,
             Name = settings["name"].Value,
+            World = new Point(worldX, worldY),
             Tileset = tileset,
             Dark = dark,
             Ambient = ambient,
@@ -106,7 +128,11 @@ public static class MapLoader
             Detail = detail,
             Overhead = overhead,
             Spawns = spawns,
-            Props = props,
+            Props = ReadProps(objects),
+            Lights = ReadLights(objects),
+            Exits = exits,
+            Triggers = triggers,
+            Interactables = interactables,
         };
     }
 
@@ -174,19 +200,22 @@ public static class MapLoader
         return settings;
     }
 
-    /// <summary>Reads size = width height.</summary>
-    private static (int Width, int Height) ReadSize(string id, (int Line, string Value) setting)
+    /// <summary>Reads a setting that's two whole numbers, like size = 40 30.</summary>
+    /// <param name="id">The map, for the error message.</param>
+    /// <param name="setting">The setting and its line.</param>
+    /// <param name="key">What it's called, for the error message.</param>
+    /// <param name="meaning">What the two numbers are, for the error message.</param>
+    private static (int A, int B) ReadPair(string id, (int Line, string Value) setting, string key, string meaning)
     {
         string[] parts = setting.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length != 2
-            || !int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out int width)
-            || !int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out int height)
-            || width < 1 || height < 1)
+            || !int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out int a)
+            || !int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out int b))
         {
-            throw Fail(id, setting.Line, $"size has to be the width and height in tiles, like 40 30, not {setting.Value}");
+            throw Fail(id, setting.Line, $"{key} has to be {meaning}, not {setting.Value}");
         }
 
-        return (width, height);
+        return (a, b);
     }
 
     /// <summary>Reads a yes or no.</summary>
@@ -276,48 +305,217 @@ public static class MapLoader
         return layer;
     }
 
-    /// <summary>Reads the [objects]: one per line, kind id x y, with x and y in tiles.</summary>
-    /// <remarks>An object at x, y stands with its feet on the middle of that tile. Halves are fine, for anything that sits between two.</remarks>
-    private static void ReadObjects(string id, List<(int Line, string Text)> lines, int width, int height,
-        Dictionary<string, Vector2> spawns, List<MapProp> props)
+    /// <summary>Splits up every line of [objects], checking each is a kind there is, on the map, and the only one with its id.</summary>
+    /// <remarks>
+    /// Spawns have their own names and props are named after what they are, so those two don't count.
+    /// Everything else is kept track of by its id, in the save, so two with the same one would share
+    /// whether they'd been opened or used.
+    /// </remarks>
+    private static List<MapObjectLine> ReadObjects(string id, List<(int Line, string Text)> lines, int width, int height)
     {
+        var objects = new List<MapObjectLine>();
+        var ids = new HashSet<string>();
+
         foreach ((int line, string text) in lines)
         {
-            string[] parts = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length < 4) throw Fail(id, line, "an object line has to be kind id x y");
+            var o = new MapObjectLine(id, line, text);
 
-            string kind = parts[0].ToLowerInvariant();
-            string name = parts[1];
+            if (Array.IndexOf(Kinds, o.Kind) < 0)
+                throw o.Fail($"there's no kind of object called {o.Kind} (the kinds are {string.Join(", ", Kinds)})");
+            if (o.X < 0f || o.Y < 0f || o.X >= width || o.Y >= height)
+                throw o.Fail($"{o.X} {o.Y} is off the map, which is {width} by {height}");
+            if (o.Kind is not ("spawn" or "prop") && !ids.Add(o.Id))
+                throw o.Fail($"there are two objects called {o.Id}");
 
-            if (!float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float x)
-                || !float.TryParse(parts[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float y))
-                throw Fail(id, line, $"{parts[2]} {parts[3]} isn't a place on the map (x and y are in tiles)");
-            if (x < 0f || y < 0f || x >= width || y >= height)
-                throw Fail(id, line, $"{x} {y} is off the map, which is {width} by {height}");
-
-            if (parts.Length > 4) throw Fail(id, line, $"a {kind} has nothing to set, but this line sets {parts[4]}");
-
-            var at = new Vector2((x + 0.5f) * Tilemap.TileSize, (y + 0.5f) * Tilemap.TileSize);
-
-            switch (kind)
-            {
-                case "spawn":
-                    if (!spawns.TryAdd(name, at)) throw Fail(id, line, $"there are two spawns called {name}");
-                    break;
-
-                case "prop":
-                    if (!PropCatalog.TryGet(name, out PropDefinition prop)) throw Fail(id, line, $"there's no prop called {name}");
-                    props.Add(new MapProp(prop, at));
-                    break;
-
-                default:
-                    throw Fail(id, line, $"there's no kind of object called {kind} (so far there's spawn and prop)");
-            }
+            objects.Add(o);
         }
+
+        return objects;
     }
 
+    /// <summary>The spawns, by name: spawn name x y, and which way to face on arriving (facing=, down if it isn't set).</summary>
+    private static Dictionary<string, MapSpawn> ReadSpawns(string id, List<MapObjectLine> objects)
+    {
+        var spawns = new Dictionary<string, MapSpawn>();
+
+        foreach (MapObjectLine o in Of(objects, "spawn"))
+        {
+            var spawn = new MapSpawn(FeetOn(o), o.Facing("facing", Direction.Down));
+            o.Done("facing");
+            if (!spawns.TryAdd(o.Id, spawn)) throw o.Fail($"there are two spawns called {o.Id}");
+        }
+
+        if (!spawns.ContainsKey(StartSpawn))
+            throw Fail(id, $"there's no spawn called {StartSpawn}, and every map needs one");
+
+        return spawns;
+    }
+
+    /// <summary>The props: prop which x y.</summary>
+    private static List<MapProp> ReadProps(List<MapObjectLine> objects)
+    {
+        var props = new List<MapProp>();
+
+        foreach (MapObjectLine o in Of(objects, "prop"))
+        {
+            if (!PropCatalog.TryGet(o.Id, out PropDefinition prop)) throw o.Fail($"there's no prop called {o.Id}");
+            o.Done(string.Empty);
+            props.Add(new MapProp(prop, FeetOn(o)));
+        }
+
+        return props;
+    }
+
+    /// <summary>The lights that aren't a prop's: light id x y reach=tiles, and strength= (1 if it isn't set).</summary>
+    private static List<MapLight> ReadLights(List<MapObjectLine> objects)
+    {
+        var lights = new List<MapLight>();
+
+        foreach (MapObjectLine o in Of(objects, "light"))
+        {
+            float reach = o.Number("reach", 0f);
+            if (reach <= 0f) throw o.Fail("a light has to set reach, how far it gets in tiles");
+            float strength = o.Number("strength", 1f);
+            if (strength <= 0f || strength > 1f) throw o.Fail($"strength has to be more than 0 and no more than 1, not {strength}");
+            o.Done("reach, strength");
+
+            lights.Add(new MapLight(FeetOn(o), reach * Tilemap.TileSize, strength));
+        }
+
+        return lights;
+    }
+
+    /// <summary>Reads every object of a kind that's a rectangle: x y is its top left tile, and w= and h= are its size in tiles (1 if they aren't set).</summary>
+    /// <param name="objects">Every object on the map.</param>
+    /// <param name="kind">Exits or triggers.</param>
+    /// <param name="width">The map's width, which the rectangle has to fit inside.</param>
+    /// <param name="height">The map's height.</param>
+    /// <param name="read">Reads the rest of one, given its rectangle in world pixels.</param>
+    private static List<T> ReadAreas<T>(List<MapObjectLine> objects, string kind, int width, int height,
+        Func<MapObjectLine, BoundingRectangle, T> read)
+    {
+        var areas = new List<T>();
+
+        foreach (MapObjectLine o in Of(objects, kind))
+        {
+            if (o.X != MathF.Floor(o.X) || o.Y != MathF.Floor(o.Y))
+                throw o.Fail($"x and y are the top left tile of the {kind}, so they're whole numbers");
+
+            int w = o.Count("w", 1), h = o.Count("h", 1);
+            if (o.X + w > width || o.Y + h > height) throw o.Fail($"it's {w} by {h}, which goes off the edge of the map");
+
+            const int tile = Tilemap.TileSize;
+            areas.Add(read(o, new BoundingRectangle(o.X * tile, o.Y * tile, w * tile, h * tile)));
+        }
+
+        return areas;
+    }
+
+    /// <summary>The rest of an exit: to= the map it goes to, and at= the spawn there (start if it isn't set).</summary>
+    /// <remarks>Whether that map and that spawn exist gets checked once every map is read, in MapCatalog.</remarks>
+    private static MapExit ReadExit(MapObjectLine o, BoundingRectangle area)
+    {
+        var exit = new MapExit(o.Id, area, o.Required("to"), o.Text("at") ?? StartSpawn);
+        o.Done("w, h, to, at");
+        return exit;
+    }
+
+    /// <summary>The rest of a trigger: once= (yes if it isn't set), say= a line to show, set= a flag to set. It has to do one of the two.</summary>
+    private static MapTrigger ReadTrigger(MapObjectLine o, BoundingRectangle area)
+    {
+        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"));
+        o.Done("w, h, once, say, set");
+
+        if (trigger.Say is null && trigger.SetFlag is null) throw o.Fail("this trigger doesn't do anything (it needs say= or set=)");
+        return trigger;
+    }
+
+    /// <summary>The chests, doors, levers, signs and waypoints.</summary>
+    /// <remarks>
+    /// Each kind looks like the prop with its name (a chest looks like the chest prop) unless look=
+    /// says otherwise, and is called by its kind on screen unless name= says otherwise.
+    /// </remarks>
+    /// <param name="objects">Every object on the map.</param>
+    /// <param name="solid">Whether a tile is solid, for checking there's room beside a waypoint.</param>
+    private static List<MapInteractable> ReadInteractables(List<MapObjectLine> objects, Func<int, int, bool> solid)
+    {
+        var interactables = new List<MapInteractable>();
+        MapInteractable waypoint = null;
+
+        foreach (MapObjectLine o in objects)
+        {
+            if (!Enum.TryParse(o.Kind, ignoreCase: true, out InteractableKind kind)) continue;
+
+            string lookId = o.Text("look") ?? o.Kind;
+            if (!PropCatalog.TryGet(lookId, out PropDefinition look)) throw o.Fail($"there's no prop called {lookId} for it to look like");
+
+            int pictures = kind == InteractableKind.Sign ? 1 : 2;
+            if (look.Frames != pictures)
+                throw o.Fail($"the {lookId} prop has {look.Frames} {(look.Frames == 1 ? "picture" : "pictures")}, and a {o.Kind} needs {pictures}");
+
+            var thing = new MapInteractable
+            {
+                Kind = kind,
+                Id = o.Id,
+                Foot = FeetOn(o),
+                Look = look,
+                Name = o.Text("name") ?? kind.ToString(),
+                Gold = kind == InteractableKind.Chest ? o.Count("gold", 0) : 0,
+                Locked = kind == InteractableKind.Door && o.YesNo("locked", false),
+                Flag = kind is InteractableKind.Door or InteractableKind.Lever ? o.Text("flag") : null,
+                Text = kind == InteractableKind.Sign ? o.Required("text") : null,
+            };
+
+            o.Done(kind switch
+            {
+                InteractableKind.Chest => "look, name, gold",
+                InteractableKind.Door => "look, name, locked, flag",
+                InteractableKind.Lever => "look, name, flag",
+                InteractableKind.Sign => "look, name, text",
+                _ => "look, name",
+            });
+
+            if (kind == InteractableKind.Lever && thing.Flag is null) throw o.Fail("a lever has to set flag, the flag it pulls");
+            if (thing.Locked && thing.Flag is not null) throw o.Fail("a door can be locked or worked by a flag, not both");
+
+            if (kind == InteractableKind.Waypoint)
+            {
+                // The world map picks a waypoint by its map, so there can only be one on each.
+                if (waypoint is not null) throw o.Fail($"there's already a waypoint on this map, {waypoint.Id}");
+                waypoint = thing;
+
+                Point beside = Tilemap.CellOf(thing.Beside);
+                if (solid(beside.X, beside.Y))
+                    throw o.Fail("the tile to its right is solid, and that's where fast travel puts you");
+            }
+
+            interactables.Add(thing);
+        }
+
+        return interactables;
+    }
+
+    /// <summary>Every object of one kind.</summary>
+    private static IEnumerable<MapObjectLine> Of(List<MapObjectLine> objects, string kind)
+    {
+        foreach (MapObjectLine o in objects)
+            if (o.Kind == kind) yield return o;
+    }
+
+    /// <summary>Where something at x, y in tiles stands: with its feet on the middle of that tile.</summary>
+    /// <remarks>Halves are fine, for anything that sits between two tiles.</remarks>
+    private static Vector2 FeetOn(MapObjectLine o) =>
+        new((o.X + 0.5f) * Tilemap.TileSize, (o.Y + 0.5f) * Tilemap.TileSize);
+
+    /// <summary>Whether a point is inside a rectangle.</summary>
+    private static bool Inside(Vector2 point, BoundingRectangle area) =>
+        point.X >= area.Left && point.X < area.Right && point.Y >= area.Top && point.Y < area.Bottom;
+
     /// <summary>An error about one line of a map file.</summary>
-    private static InvalidOperationException Fail(string id, int line, string message) =>
+    /// <param name="id">The map.</param>
+    /// <param name="line">The line, counting from 1.</param>
+    /// <param name="message">What's wrong.</param>
+    internal static InvalidOperationException Fail(string id, int line, string message) =>
         new($"Maps/{id}.map line {line}: {message}.");
 
     /// <summary>An error about a map file as a whole.</summary>

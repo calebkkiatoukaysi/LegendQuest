@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using LegendQuest.World;
 
 namespace LegendQuest.Save;
@@ -33,7 +34,12 @@ public static class SaveSystem
     public const int CurrentVersion = 1;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
-    private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
+    /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
+    private static readonly JsonSerializerOptions Options = new()
+    {
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter(allowIntegerValues: false) },
+    };
 
     /// <summary>Why the last read, write or erase failed, or null if it did not.</summary>
     public static string LastError { get; private set; }
@@ -87,6 +93,7 @@ public static class SaveSystem
             // Loading it would mean walking onto a map that isn't there.
             if (!MapCatalog.Contains(data.MapId)) return Unreadable(slot, "it's on a map called " + data.MapId + ", which this build doesn't have");
 
+            Mend(data);
             return new SaveSlot { Index = slot, State = SaveSlotState.Occupied, Data = Upgrade(data) };
         }
         catch (JsonException e)
@@ -186,6 +193,17 @@ public static class SaveSystem
     {
         data.Version = CurrentVersion;
         return data;
+    }
+
+    /// <summary>Puts back any list a hand-edited file set to null, so nothing that reads the save has to check.</summary>
+    /// <param name="data">The save as it was read off disk.</param>
+    private static void Mend(SaveData data)
+    {
+        data.Flags ??= new();
+        data.Opened ??= new();
+        data.Triggered ??= new();
+        data.Waypoints ??= new();
+        data.Seen ??= new();
     }
 
     /// <summary>Deletes a file if it is there, and says nothing if it is not.</summary>

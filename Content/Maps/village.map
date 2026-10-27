@@ -1,9 +1,11 @@
 ; The village. The hub: the elder's house on the north side of the square, the well in the
-; middle of it, a road south out of the village and one east toward the old road.
+; middle of it, the waypoint stone by it, a road south out of the village and one east to the
+; old road.
 
 [map]
 id = village
 name = The Village
+world = 260 330
 tileset = village
 size = 56 36
 dark = no
@@ -142,9 +144,12 @@ _ = roof-eave
 ........................................................
 ........................................................
 
-; kind id x y, in tiles. Things stand with their feet on the middle of the tile.
+; kind id x y, in tiles, then any settings. Things stand with their feet on the middle of the tile.
 [objects]
 spawn start 28 25
+spawn east 53 17 facing=left
+exit road 55 16 h=3 to=road
+waypoint stone 34 13
 prop well 27.5 17
 prop barrel 22 9
 prop barrel 33 9

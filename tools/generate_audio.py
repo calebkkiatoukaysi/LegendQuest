@@ -1156,6 +1156,97 @@ def sfx_footstep_grass(rng):
 
 
 # --------------------------------------------------------------------------- #
+# Using things
+# --------------------------------------------------------------------------- #
+
+#: A wooden plank, knocked. (ratio, gain, tau)
+WOOD_KNOCK = ((1.0, 1.0, 0.012), (2.7, 0.5, 0.006), (5.1, 0.25, 0.003))
+
+#: A small coin, flicked. (ratio, gain, tau)
+COIN = ((1.0, 1.0, 0.09), (2.76, 0.6, 0.05), (5.4, 0.35, 0.03), (8.9, 0.2, 0.015))
+
+
+def creak(dur, f_start, f_end, rng, body=420.0):
+    """Wood rubbing on wood: a run of tiny slips, getting quicker or slower as it goes, each one
+    knocking the plank. It's how a hinge creaks (stick and slip), so it's built that way."""
+    x = silence(sec(dur + 0.05))
+    t = 0.0
+    while t < dur:
+        f = f_start + (f_end - f_start) * (t / dur)
+        g = (0.4 + 0.6 * math.sin(math.pi * t / dur)) * rng.uniform(0.6, 1.0)
+        place(x, modes(WOOD_KNOCK, sec(0.03), R, body * rng.uniform(0.95, 1.05)), t, g)
+        t += 1.0 / (f * rng.uniform(0.85, 1.15))
+    return x
+
+
+def sfx_door(rng):
+    """A heavy door dragging open: the hinges creaking, stone grinding under it, and the thud as it stops."""
+    x = silence(sec(1.6))
+    place(x, creak(0.9, 55.0, 30.0, rng, 320.0), 0.0, 0.7)
+    n = sec(1.0)
+    rough = lines([(0.05 * k, rng.uniform(0.45, 1.0)) for k in range(21)], n, R)
+    grind = shaped(norm(lowpass(lowpass(noise(n, rng), 500.0, R), 500.0, R)), envelope(n, R, attack=0.15, gate=0.8, release=0.08))
+    place(x, shaped(grind, rough), 0.02, 0.5)
+    place(x, thump(85.0, 50.0, 0.4, 0.09), 0.92, 0.9)
+    place(x, burst(0.12, 0.04, rng, "lp", 700.0), 0.92, 0.3)
+    return room(x, 1.2, 2200.0, 0.3)
+
+
+def sfx_door_locked(rng):
+    """Trying a locked door: the latch rattling against the lock, and the door not moving."""
+    x = silence(sec(0.6))
+    for t, f, g in ((0.0, 700.0, 0.7), (0.09, 760.0, 0.9), (0.2, 720.0, 0.6)):
+        place(x, strike(IRON_LATCH, f, 0.2, rng, decay_scale=0.7, click=0.5), t, g)
+        place(x, thump(110.0, 75.0, 0.12, 0.03), t, 0.4)
+    return room(x, 0.6, 2500.0, 0.2)
+
+
+def sfx_chest(rng):
+    """A chest lid: a short creak up on its hinges, and the knock as it falls back against them."""
+    x = silence(sec(0.8))
+    place(x, creak(0.28, 70.0, 110.0, rng, 650.0), 0.0, 0.6)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.15), R, 240.0)), 0.3, 0.8)
+    place(x, thump(130.0, 80.0, 0.2, 0.05), 0.3, 0.6)
+    place(x, strike(IRON_LATCH, 980.0, 0.15, rng, decay_scale=0.5, click=0.2), 0.31, 0.25)
+    return room(x, 0.5, 3000.0, 0.15)
+
+
+def sfx_lever(rng):
+    """A heavy iron lever: the catch clicking over a few teeth, the clunk at the bottom, and a chain
+    somewhere taking up the slack."""
+    x = silence(sec(1.0))
+    for i in range(4):
+        place(x, strike(IRON_LATCH, 1300.0 + 60.0 * i, 0.06, rng, decay_scale=0.3, click=0.6), 0.04 * i, 0.4)
+    place(x, strike(IRON_LATCH, 380.0, 0.4, rng, click=0.7), 0.18, 1.0)
+    place(x, thump(95.0, 55.0, 0.3, 0.07), 0.18, 0.8)
+    for i in range(6):
+        place(x, strike(IRON_LATCH, rng.uniform(1800.0, 2600.0), 0.05, rng, decay_scale=0.25, click=0.4),
+              0.3 + 0.045 * i + rng.uniform(0.0, 0.02), 0.15)
+    return room(x, 0.9, 2400.0, 0.3)
+
+
+def sfx_pickup(rng):
+    """A handful of coins: a few small rings close together, landing on each other."""
+    x = silence(sec(0.55))
+    t = 0.0
+    for _ in range(5):
+        place(x, strike(COIN, rng.uniform(2300.0, 3400.0), 0.3, rng, decay_scale=rng.uniform(0.6, 1.0), click=0.3, click_hp=4000.0),
+              t, rng.uniform(0.4, 0.8))
+        t += rng.uniform(0.03, 0.08)
+    return x
+
+
+def sfx_waypoint(rng):
+    """A waypoint stone waking: a low hum coming up out of the stone, and something like glass ringing over it."""
+    x = silence(sec(2.6))
+    hum = choir([midi_hz(45), midi_hz(52), midi_hz(57)], 0.6, R, rng, "oo", attack=0.35, release=0.6)
+    place(x, norm(hum), 0.0, 0.7)
+    for i, m in enumerate((81, 88, 93)):
+        place(x, norm(modes(((1.0, 1.0, 0.8), (2.01, 0.3, 0.4)), sec(2.0), R, midi_hz(m))), 0.1 + 0.12 * i, 0.25)
+    return room(x, 2.0, 3500.0, 0.4)
+
+
+# --------------------------------------------------------------------------- #
 # Build
 # --------------------------------------------------------------------------- #
 
@@ -1173,6 +1264,12 @@ SFX = {   # name: (folder, peak dBFS, builder)
     "pause": ("Content/Sfx", PEAK_CLICK, sfx_pause),
     "footstep-stone": ("Content/Sfx", PEAK_REPEAT, sfx_footstep_stone),
     "footstep-grass": ("Content/Sfx", PEAK_REPEAT, sfx_footstep_grass),
+    "door": ("Content/Sfx", PEAK_MENU, sfx_door),
+    "door-locked": ("Content/Sfx", PEAK_CLICK, sfx_door_locked),
+    "chest": ("Content/Sfx", PEAK_MENU, sfx_chest),
+    "lever": ("Content/Sfx", PEAK_MENU, sfx_lever),
+    "pickup": ("Content/Sfx", PEAK_CLICK, sfx_pickup),
+    "waypoint": ("Content/Sfx", PEAK_MENU, sfx_waypoint),
 }
 
 

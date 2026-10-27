@@ -8,13 +8,13 @@ using LegendQuest.Collisions;
 namespace LegendQuest.World;
 
 /// <summary>
-/// A map as something to draw and walk into: its tiles cut from the tileset, drawn in three
-/// layers, and the walls built from the solid ones.
+/// A map as something to draw, walk into and see across: its tiles cut from the tileset, drawn in
+/// three layers, the walls built from the solid ones, and which cells stop light and sight.
 /// </summary>
 /// <remarks>
 /// This is the tilemap exercise's Tilemap: cut the tileset into source rectangles in LoadContent,
 /// then draw the map in a double loop. What's new is the three layers, picking a variant per cell,
-/// only drawing the tiles that are on screen, and the walls.
+/// only drawing the tiles that are on screen, the walls, and the line of sight.
 /// </remarks>
 public class Tilemap
 {
@@ -23,6 +23,9 @@ public class Tilemap
 
     private readonly MapDefinition _map;
     private readonly List<BoundingRectangle> _walls = new();
+
+    /// <summary>Cells a shut door is standing in. They stop light and sight like a wall until it opens.</summary>
+    private readonly HashSet<Point> _shut = new();
 
     private Texture2D _sheet;
     private Rectangle[] _frames;
@@ -66,7 +69,8 @@ public class Tilemap
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="spriteBatch">The SpriteBatch to render with, in world space, point-sampled, back to front.</param>
     /// <param name="view">The part of the map on screen, in world pixels.</param>
-    public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle view)
+    /// <param name="tint">Colour multiplied into every tile. White for the map itself; the map screen browns it.</param>
+    public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle view, Color tint)
     {
         int x0 = Math.Max(0, view.Left / TileSize), x1 = Math.Min(_map.Width - 1, view.Right / TileSize);
         int y0 = Math.Max(0, view.Top / TileSize), y1 = Math.Min(_map.Height - 1, view.Bottom / TileSize);
@@ -75,9 +79,9 @@ public class Tilemap
         {
             for (int x = x0; x <= x1; x++)
             {
-                DrawTile(spriteBatch, _map.Ground[x, y], x, y, Layers.GroundTile);
-                DrawTile(spriteBatch, _map.Detail[x, y], x, y, Layers.DetailTile);
-                DrawTile(spriteBatch, _map.Overhead[x, y], x, y, Layers.Overhead);
+                DrawTile(spriteBatch, _map.Ground[x, y], x, y, tint, Layers.GroundTile);
+                DrawTile(spriteBatch, _map.Detail[x, y], x, y, tint, Layers.DetailTile);
+                DrawTile(spriteBatch, _map.Overhead[x, y], x, y, tint, Layers.Overhead);
             }
         }
     }
@@ -86,9 +90,9 @@ public class Tilemap
     /// <param name="world">The point, in world pixels.</param>
     public Surface SurfaceAt(Vector2 world)
     {
-        int x = (int)MathF.Floor(world.X / TileSize), y = (int)MathF.Floor(world.Y / TileSize);
-        if (x < 0 || y < 0 || x >= _map.Width || y >= _map.Height) return Surface.Stone;
-        return _map.Tileset[_map.Ground[x, y]].Surface;
+        Point cell = CellOf(world);
+        if (cell.X < 0 || cell.Y < 0 || cell.X >= _map.Width || cell.Y >= _map.Height) return Surface.Stone;
+        return _map.Tileset[_map.Ground[cell.X, cell.Y]].Surface;
     }
 
     /// <summary>Whether a cell stops people walking: its ground or its detail is solid. Off the map counts as solid.</summary>
@@ -103,13 +107,70 @@ public class Tilemap
         return tiles[_map.Ground[x, y]].Solid || detail != 0 && tiles[detail].Solid;
     }
 
+    /// <summary>Whether a cell stops light and sight: an opaque tile, or a shut door. Off the map counts.</summary>
+    /// <param name="x">The cell's column.</param>
+    /// <param name="y">The cell's row.</param>
+    public bool BlocksSight(int x, int y)
+    {
+        if (x < 0 || y < 0 || x >= _map.Width || y >= _map.Height) return true;
+        if (_shut.Contains(new Point(x, y))) return true;
+
+        TilesetDefinition tiles = _map.Tileset;
+        int detail = _map.Detail[x, y];
+        return tiles[_map.Ground[x, y]].Opaque || detail != 0 && tiles[detail].Opaque;
+    }
+
+    /// <summary>Marks the cells a door stands in as shut (they stop light and sight) or open.</summary>
+    /// <param name="cells">The cells, in tiles.</param>
+    /// <param name="shut">True if the door is shut.</param>
+    public void Shut(Rectangle cells, bool shut)
+    {
+        for (int y = cells.Top; y < cells.Bottom; y++)
+        {
+            for (int x = cells.Left; x < cells.Right; x++)
+            {
+                if (shut) _shut.Add(new Point(x, y));
+                else _shut.Remove(new Point(x, y));
+            }
+        }
+    }
+
+    /// <summary>Whether anything that blocks sight is on the line between two cells, not counting the two ends.</summary>
+    /// <remarks>Bresenham, walked across the tiles. The ends don't count so a wall you're looking at is still seen, and so is a torch on one.</remarks>
+    /// <param name="from">One end, in tiles.</param>
+    /// <param name="to">The other end.</param>
+    public bool LineBlocked(Point from, Point to)
+    {
+        int x0 = from.X, y0 = from.Y, x1 = to.X, y1 = to.Y;
+        int dx = Math.Abs(x1 - x0), dy = -Math.Abs(y1 - y0);
+        int sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
+        int error = dx + dy;
+        int x = x0, y = y0;
+
+        while (x != x1 || y != y1)
+        {
+            int doubled = 2 * error;
+            if (doubled >= dy) { error += dy; x += sx; }
+            if (doubled <= dx) { error += dx; y += sy; }
+
+            if ((x != x1 || y != y1) && BlocksSight(x, y)) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>The cell a point is in.</summary>
+    /// <param name="world">The point, in world pixels.</param>
+    public static Point CellOf(Vector2 world) =>
+        new((int)MathF.Floor(world.X / TileSize), (int)MathF.Floor(world.Y / TileSize));
+
     /// <summary>Draws one cell of one layer, unless it's empty.</summary>
-    private void DrawTile(SpriteBatch spriteBatch, int tile, int x, int y, float layerDepth)
+    private void DrawTile(SpriteBatch spriteBatch, int tile, int x, int y, Color tint, float layerDepth)
     {
         if (tile == 0) return;
 
         Rectangle source = _frames[_map.Tileset.FrameOf(tile, Pick(x, y))];
-        spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, Color.White,
+        spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, tint,
             0f, Vector2.Zero, 1f, SpriteEffects.None, layerDepth);
     }
 

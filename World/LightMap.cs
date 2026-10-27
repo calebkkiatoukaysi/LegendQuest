@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,8 +12,8 @@ namespace LegendQuest.World;
 /// The Black Box's lobby did it this way, and it's built once, not every frame. It's low
 /// resolution and stretched over the map with smooth sampling, so the edges of the pools are soft.
 /// What's new is that light stops at walls, which the lobby (one room) never needed: each texel
-/// looks for a solid tile between itself and the light. Not from a tutorial, just a line walked
-/// across the tiles.
+/// looks for a wall between itself and the light. Not from a tutorial, just a line walked across
+/// the tiles. A shut door stops it too, so opening one means building it again.
 /// </remarks>
 public class LightMap
 {
@@ -59,6 +58,14 @@ public class LightMap
     /// <summary>Builds the darkness texture.</summary>
     /// <param name="graphicsDevice">The device, since the texture is made in code.</param>
     public void LoadContent(GraphicsDevice graphicsDevice) => _shade = Build(graphicsDevice);
+
+    /// <summary>Builds the darkness again, after a door opens or shuts. Not every frame: it walks a line per texel per light.</summary>
+    /// <param name="graphicsDevice">The device, since the texture is made in code.</param>
+    public void Rebuild(GraphicsDevice graphicsDevice)
+    {
+        _shade?.Dispose();
+        _shade = Build(graphicsDevice);
+    }
 
     /// <summary>Disposes the darkness texture, since the content manager didn't load it.</summary>
     public void Unload() => _shade?.Dispose();
@@ -116,35 +123,9 @@ public class LightMap
     /// </remarks>
     private bool Blocked(Vector2 at, Vector2 light)
     {
-        if (!LineBlocked(CellOf(at), CellOf(light))) return false;
+        if (!_tiles.LineBlocked(Tilemap.CellOf(at), Tilemap.CellOf(light))) return false;
         if (SeenFrom(at) is not Point from || SeenFrom(light) is not Point to) return true;
-        return LineBlocked(from, to);
-    }
-
-    /// <summary>The tile a point is in.</summary>
-    private static Point CellOf(Vector2 world) =>
-        new((int)MathF.Floor(world.X / Tilemap.TileSize), (int)MathF.Floor(world.Y / Tilemap.TileSize));
-
-    /// <summary>Whether a solid tile is on the line between two tiles, not counting the two ends.</summary>
-    /// <remarks>Bresenham, walked across the tiles.</remarks>
-    private bool LineBlocked(Point from, Point to)
-    {
-        int x0 = from.X, y0 = from.Y, x1 = to.X, y1 = to.Y;
-        int dx = Math.Abs(x1 - x0), dy = -Math.Abs(y1 - y0);
-        int sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
-        int error = dx + dy;
-        int x = x0, y = y0;
-
-        while (x != x1 || y != y1)
-        {
-            int doubled = 2 * error;
-            if (doubled >= dy) { error += dy; x += sx; }
-            if (doubled <= dx) { error += dx; y += sy; }
-
-            if ((x != x1 || y != y1) && _tiles.IsSolid(x, y)) return true;
-        }
-
-        return false;
+        return _tiles.LineBlocked(from, to);
     }
 
     /// <summary>The tile a point is seen from: its own, or for a wall's face, the floor just in front of it.</summary>
@@ -157,10 +138,10 @@ public class LightMap
     /// <returns>The tile, or null if there's no floor that close below it.</returns>
     private Point? SeenFrom(Vector2 world)
     {
-        Point cell = CellOf(world);
+        Point cell = Tilemap.CellOf(world);
 
         for (int down = 0; down <= FaceRows; down++)
-            if (!_tiles.IsSolid(cell.X, cell.Y + down)) return new Point(cell.X, cell.Y + down);
+            if (!_tiles.BlocksSight(cell.X, cell.Y + down)) return new Point(cell.X, cell.Y + down);
 
         return null;
     }

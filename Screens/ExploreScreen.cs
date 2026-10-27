@@ -15,13 +15,15 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// A map being walked around: the tiles, the props, whoever you are, and the dark if it's a dark map.
+/// A map being walked around: the tiles, the props, the things you can use, whoever you are, and the
+/// dark if it's a dark map.
 /// </summary>
 /// <remarks>
 /// The Black Box's lobby screen, reading its room out of a map file instead of having it in code.
 /// Top down, the map is bigger than the window so the camera follows and stops at the edge, and
-/// everyone on the floor is sorted by how far down the map their feet are. This is the screen the
-/// party, the talking and the fighting all happen on later, each in a partial of its own.
+/// everyone on the floor is sorted by how far down the map their feet are. Using things, triggers
+/// and the ways off the map are in ExploreScreen.World. The party, the talking and the fighting get
+/// partials of their own later.
 /// </remarks>
 public partial class ExploreScreen : GameScreen
 {
@@ -51,7 +53,7 @@ public partial class ExploreScreen : GameScreen
     /// <summary>Where the heading text goes.</summary>
     private const float HeadingY = 14f;
     private const float Margin = 24f;
-    private const string Hint = "WHEEL  ·  ZOOM      ESC  ·  PAUSE";
+    private const string Hint = "M  ·  MAP      WHEEL  ·  ZOOM      ESC  ·  PAUSE";
 
     private readonly InputAction _pause = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
     private readonly InputAction _walkUp = new(new[] { Buttons.DPadUp }, new[] { Keys.W, Keys.Up }, false);
@@ -81,6 +83,8 @@ public partial class ExploreScreen : GameScreen
         _game = game;
         _map = MapCatalog.Get(game.MapId);
         _tilemap = new Tilemap(_map);
+        _world = new WorldState(game, _map);
+        _seen = new Discovery(_map, _tilemap, game);
 
         TransitionOnTime = FadeTime;
         TransitionOffTime = FadeTime;
@@ -94,11 +98,15 @@ public partial class ExploreScreen : GameScreen
             _torches.Add(new TorchSprite(placed.Foot + light.Flame, 1f));
             lights.Add((placed.Foot + light.Pool, light.Reach, light.Strength));
         }
+        foreach (MapLight light in _map.Lights) lights.Add((light.Pool, light.Reach, light.Strength));
+
+        foreach (MapInteractable thing in _map.Interactables)
+            _things.Add((thing, new PropSprite(new MapProp(thing.Look, thing.Foot))));
 
         if (_map.Dark) _lightMap = new LightMap(_tilemap, _map.Ambient, lights);
     }
 
-    /// <summary>Loads the map and everything on it, puts you on the start, and starts the map's song.</summary>
+    /// <summary>Loads the map and everything on it, puts you where the save says, and starts the map's song.</summary>
     public override void Activate()
     {
         _content ??= new ContentManager(ScreenManager.Game.Services, "Content");
@@ -106,15 +114,23 @@ public partial class ExploreScreen : GameScreen
 
         _tilemap.LoadContent(_content);
         foreach (PropSprite prop in _props) prop.LoadContent(_content);
+        foreach ((_, PropSprite sprite) in _things) sprite.LoadContent(_content);
         foreach (TorchSprite torch in _torches) torch.LoadContent(_content);
-        _lightMap?.LoadContent(ScreenManager.GraphicsDevice);
         _detailFont = _content.Load<SpriteFont>("spectral-detail");
+        _toast.LoadContent(_content);
+
+        // Every door starts shut, then the ones the save says are open open. The dark gets built
+        // after that, since a shut door stops the light.
+        foreach ((MapInteractable thing, PropSprite sprite) in _things)
+            if (thing.Kind == InteractableKind.Door) _tilemap.Shut(CellsUnder(sprite), true);
+        MatchSave();
+        _lightMap?.LoadContent(ScreenManager.GraphicsDevice);
 
         // Just the body for now. The paperdoll puts clothes, hair and a face on it later.
         _walker.LoadContent(_content);
         _walker.Sheet = _content.Load<Texture2D>("Paperdoll/body-lean");
-        _walker.Position = _map.Spawns[MapLoader.StartSpawn];
         _walker.Stepped += Footstep;
+        Arrive();
 
         _camera.Bounds = _tilemap.Bounds;
         _camera.SnapTo(_walker.Position);
@@ -129,7 +145,7 @@ public partial class ExploreScreen : GameScreen
         _content?.Unload();
     }
 
-    /// <summary>Walking, zooming and the pause menu.</summary>
+    /// <summary>Walking, using things, zooming, the map and the pause menu.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="input">The input this frame.</param>
     public override void HandleInput(GameTime gameTime, InputState input)
@@ -141,12 +157,24 @@ public partial class ExploreScreen : GameScreen
             return;
         }
 
+        if (_openMap.Occurred(input))
+        {
+            OpenMap(null);
+            return;
+        }
+
+        if (_use.Occurred(input) && _near is not null)
+        {
+            Use(_near);
+            return;
+        }
+
         if (input.WheelTurn != 0) _camera.ZoomBy(input.WheelTurn);
 
         Walk(gameTime, ReadMovement(input));
     }
 
-    /// <summary>Runs everything that moves on its own: you, the torches, the camera and the clock.</summary>
+    /// <summary>Runs everything that moves on its own (you, the torches, the camera and the clock), then checks what you've walked into.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="otherScreenHasFocus">Whether a screen above has the input.</param>
     /// <param name="coveredByOtherScreen">Whether a non-popup screen is on top.</param>
@@ -165,27 +193,28 @@ public partial class ExploreScreen : GameScreen
 
         _walker.Update(gameTime);
         foreach (TorchSprite torch in _torches) torch.Update(gameTime);
+        _toast.Update(gameTime);
         _camera.Follow(_walker.Position, gameTime);
+
+        _seen.LookAround(_walker.Position);
+        _near = Nearest();
+        CheckAreas();
     }
 
-    /// <summary>Draws the map and everyone on it, the dark over them, the torchlight over that, then the heading.</summary>
+    /// <summary>Draws the map and everyone on it, the dark over them, the torchlight over that, then the writing.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
         Matrix world = _camera.Transform;
-        float mapHeight = _tilemap.Bounds.Height;
 
         // 1. The map: the three layers of tiles, and everything on the floor sorted by how far down the map it is.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
-        _tilemap.Draw(gameTime, spriteBatch, _camera.View);
-        foreach (PropSprite prop in _props)
-        {
-            float layer = prop.Definition.Placement == PropPlacement.Wall ? Layers.WorldWall : Layers.OnFloor(prop.Foot.Y, mapHeight);
-            prop.Draw(spriteBatch, layer);
-        }
+        _tilemap.Draw(gameTime, spriteBatch, _camera.View, Color.White);
+        foreach (PropSprite prop in _props) prop.Draw(spriteBatch, LayerOf(prop));
+        foreach ((_, PropSprite sprite) in _things) sprite.Draw(spriteBatch, LayerOf(sprite));
         foreach (TorchSprite torch in _torches) torch.Draw(spriteBatch, Layers.WallFlame);
-        _walker.Draw(spriteBatch, Layers.OnFloor(_walker.Position.Y, mapHeight), _camera.Pixel);
+        _walker.Draw(spriteBatch, Layers.OnFloor(_walker.Position.Y, _tilemap.Bounds.Height), _camera.Pixel);
         spriteBatch.End();
 
         // 2. On a dark map, the dark with the light cut out of it (linear, so the edges are soft), then the
@@ -201,16 +230,22 @@ public partial class ExploreScreen : GameScreen
             spriteBatch.End();
         }
 
-        // 3. The heading.
+        // 3. The writing: the heading, what you can use, and the toast.
         float alpha = TransitionAlpha;
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
         Text.Draw(spriteBatch, _detailFont, _map.Name.ToUpperInvariant(), Margin, HeadingY, Palette.Note * alpha, Palette.Shadow * alpha);
         Text.Draw(spriteBatch, _detailFont, Hint, LegendQuestGame.ScreenWidth - Margin, HeadingY,
             Palette.Note * alpha, Palette.Shadow * alpha, rightAligned: true);
+        DrawPrompt(spriteBatch, alpha);
+        _toast.Draw(spriteBatch, alpha);
         spriteBatch.End();
 
         ScreenManager.FadeBackBufferToBlack(TransitionPosition);
     }
+
+    /// <summary>Where a prop sorts: behind everyone if it's on a wall, otherwise by how far down the map its foot is.</summary>
+    private float LayerOf(PropSprite prop) =>
+        prop.Definition.Placement == PropPlacement.Wall ? Layers.WorldWall : Layers.OnFloor(prop.Foot.Y, _tilemap.Bounds.Height);
 
     /// <summary>Which way you're pushing, from WASD, the arrows, the d-pad or the stick.</summary>
     private Vector2 ReadMovement(InputState input)
@@ -286,12 +321,17 @@ public partial class ExploreScreen : GameScreen
         return at.Y;
     }
 
-    /// <summary>Everything you can't walk through: the walls from the solid tiles, and the props.</summary>
+    /// <summary>Everything you can't walk through: the walls from the solid tiles, the props, and anything you use that isn't an open door.</summary>
     private IEnumerable<BoundingRectangle> Solids()
     {
         foreach (BoundingRectangle wall in _tilemap.Walls) yield return wall;
         foreach (PropSprite prop in _props)
             if (prop.Footprint is BoundingRectangle footprint) yield return footprint;
+        foreach ((MapInteractable thing, PropSprite sprite) in _things)
+        {
+            if (thing.Kind == InteractableKind.Door && _world.IsOpen(thing)) continue;
+            if (sprite.Footprint is BoundingRectangle footprint) yield return footprint;
+        }
     }
 
     /// <summary>The feet box at a position.</summary>

@@ -33,6 +33,9 @@ public static class Layers
     /// <summary>A button's label.</summary>
     public const float ButtonLabel = 0.15f;
 
+    /// <summary>A soft dark smudge behind a line of text, so it reads over anything.</summary>
+    public const float TextBacking = 0.14f;
+
     /// <summary>Offset drop shadow sitting just behind a line of text.</summary>
     public const float TextShadow = 0.12f;
 

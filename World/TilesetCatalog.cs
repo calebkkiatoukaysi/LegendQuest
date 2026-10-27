@@ -61,15 +61,57 @@ public static class TilesetCatalog
             new() { Name = "steps" },
 
             // Walls: the top of one seen from above, then the two rows of its face.
-            new() { Name = "wall-top", Variants = 2, Solid = true },
-            new() { Name = "wall-face", Variants = 3, Solid = true },
-            new() { Name = "wall-niche", Solid = true },
-            new() { Name = "wall-base", Variants = 2, Solid = true },
+            new() { Name = "wall-top", Variants = 2, Solid = true, Opaque = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
+            new() { Name = "wall-niche", Solid = true, Opaque = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
 
             // Detail, drawn over the floor.
             new() { Name = "rubble", Solid = true },
             new() { Name = "bones", Variants = 2 },
             new() { Name = "cobweb" },
+        },
+    };
+
+    /// <summary>The old road: the forest floor and the road through it, the undergrowth, and the trees.</summary>
+    /// <remarks>
+    /// A tree is a trunk on the detail layer with a canopy over it on the overhead layer. The canopy
+    /// comes in nine pieces (four corners, four edges and the middle) so a clump of trees can be any
+    /// size of rectangle.
+    /// </remarks>
+    private static readonly TilesetDefinition Forest = new()
+    {
+        Id = "forest",
+        Texture = "Tiles/forest",
+        Tiles = new TileDefinition[]
+        {
+            // Ground. The thicket is what's under the deep forest: you can't push through it.
+            new() { Name = "leaves", Variants = 4, Surface = Surface.Grass },
+            new() { Name = "road", Variants = 3, Surface = Surface.Grass },
+            new() { Name = "thicket", Variants = 2, Solid = true },
+
+            // Detail, drawn over the ground. Moss and grass are lumps that don't reach the edge of
+            // their tile, so a patch of them has a ragged edge instead of a square one.
+            new() { Name = "moss", Variants = 2 },
+            new() { Name = "tuft", Variants = 2 },
+            new() { Name = "fern", Variants = 2 },
+            new() { Name = "rock", Solid = true },
+            new() { Name = "stump", Solid = true },
+            new() { Name = "log-left", Solid = true },
+            new() { Name = "log-right", Solid = true },
+            new() { Name = "trunk", Solid = true },
+            new() { Name = "bush", Variants = 2, Solid = true },
+
+            // Overhead: the canopy, corners and edges round the middle.
+            new() { Name = "canopy-nw" },
+            new() { Name = "canopy-n", Variants = 2 },
+            new() { Name = "canopy-ne" },
+            new() { Name = "canopy-w", Variants = 2 },
+            new() { Name = "canopy", Variants = 3 },
+            new() { Name = "canopy-e", Variants = 2 },
+            new() { Name = "canopy-sw" },
+            new() { Name = "canopy-s", Variants = 2 },
+            new() { Name = "canopy-se" },
         },
     };
 
@@ -79,7 +121,7 @@ public static class TilesetCatalog
     /// <remarks>Throws on purpose, so a broken tileset is found when the game starts and not on the map that uses it.</remarks>
     static TilesetCatalog()
     {
-        foreach (TilesetDefinition tileset in new[] { Village, Crypt })
+        foreach (TilesetDefinition tileset in new[] { Village, Crypt, Forest })
         {
             tileset.Validate();
             if (!ById.TryAdd(tileset.Id, tileset))
