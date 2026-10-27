@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using LegendQuest.Audio;
+using LegendQuest.Components;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
@@ -26,6 +27,7 @@ public partial class LegendQuestGame : Game
     private readonly GraphicsDeviceManager _graphics;
     private readonly ScreenManager _screenManager;
     private readonly AudioManager _audio;
+    private readonly CursorSprite _cursor = new();
 
     /// <summary>Sets up the window and adds the sound and the screen manager as components and services.</summary>
     public LegendQuestGame()
@@ -36,7 +38,9 @@ public partial class LegendQuestGame : Game
         _graphics.ApplyChanges();
         Content.RootDirectory = "Content";
         Window.Title = "Legend Quest";
-        IsMouseVisible = true;
+
+        // The game draws its own cursor, so it can change shape.
+        IsMouseVisible = false;
 
         // The sound and the screens are components so they keep running no matter what screen is up,
         // and services so any screen can get to them (like the achievement service in the services tutorial).
@@ -47,6 +51,10 @@ public partial class LegendQuestGame : Game
         _screenManager = new ScreenManager(this);
         Components.Add(_screenManager);
         Services.AddService(_screenManager);
+
+        // The cursor isn't a component, since it has to be drawn after the screens and nothing else
+        // about it needs a component. It's a service so the screens can change its shape.
+        Services.AddService(_cursor);
     }
 
     /// <summary>Reads every map, loads all the sounds, then opens the gate and the title.</summary>
@@ -62,6 +70,7 @@ public partial class LegendQuestGame : Game
         if (ProofDirectory is not null) BeginProof();
 
         _audio.LoadContent(Content);
+        _cursor.LoadContent(Content);
 
         _screenManager.AddScreen(new TitleBackgroundScreen());
         _screenManager.AddScreen(new TitleScreen());
@@ -75,7 +84,7 @@ public partial class LegendQuestGame : Game
         base.Update(gameTime);
     }
 
-    /// <summary>Clears to the void and draws the screens, into the proof's render target when a shot is due.</summary>
+    /// <summary>Clears to the void and draws the screens and then the cursor, into the proof's render target when a shot is due.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     protected override void Draw(GameTime gameTime)
     {
@@ -83,6 +92,7 @@ public partial class LegendQuestGame : Game
         GraphicsDevice.Clear(VoidColor);
 
         base.Draw(gameTime);
+        _cursor.Draw(gameTime, _screenManager.SpriteBatch, _screenManager.Input.MousePosition);
 
         EndProofCapture();
     }

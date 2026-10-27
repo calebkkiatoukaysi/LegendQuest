@@ -1,6 +1,6 @@
-; The village. The hub: the elder's house on the north side of the square, the well in the
-; middle of it, the waypoint stone by it, a road south out of the village and one east to the
-; old road.
+; The village. The hub: the elder's house on the north side of the square with the elder out in
+; front of it, the well in the middle of the square, the trader and the waypoint stone either side
+; of it, a road south out of the village and one east to the old road.
 
 [map]
 id = village
@@ -150,6 +150,10 @@ spawn start 28 25
 spawn east 53 17 facing=left
 exit road 55 16 h=3 to=road
 waypoint stone 34 13
+
+; The people. Placeholders: who they are and what they say are mine to write.
+npc elder 29 9 name="The Elder" facing=down skin=4 shirt=3 breeches=1 say="Mind the road east. It isn't what it was."
+npc trader 23 14 name="The Trader" facing=right skin=2 shirt=4 breeches=2 say="Nothing laid out yet. Come back later."
 prop well 27.5 17
 prop barrel 22 9
 prop barrel 33 9

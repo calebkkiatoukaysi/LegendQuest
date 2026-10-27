@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using LegendQuest.Collisions;
 
 namespace LegendQuest.Characters;
 
@@ -32,6 +33,10 @@ public class WalkerSprite
     /// <summary>Seconds per walking frame. Four frames is one full step cycle.</summary>
     private const float StepTime = 0.14f;
 
+    /// <summary>The box round the figure itself, for pointing at it: how wide and how tall, in art pixels, up from the feet.</summary>
+    private const float FigureWidth = 14f;
+    private const float FigureHeight = 42f;
+
     /// <summary>The shadow under the feet: width, height (art pixels) and how dark.</summary>
     private const float ShadowWidth = 16f;
     private const float ShadowHeight = 5f;
@@ -56,6 +61,9 @@ public class WalkerSprite
     /// <summary>Fires when a foot hits the ground.</summary>
     public event Action Stepped;
 
+    /// <summary>The box round the figure, from its feet to the top of its head, for telling when the mouse is over it.</summary>
+    public BoundingRectangle Figure => new(Position.X - FigureWidth / 2f, Position.Y - FigureHeight, FigureWidth, FigureHeight);
+
     /// <summary>Loads the shadow. It's the glow texture squashed flat, same trick as The Black Box.</summary>
     /// <param name="content">The content manager to load with.</param>
     public void LoadContent(ContentManager content) => _shadow = content.Load<Texture2D>("glow");
@@ -77,6 +85,18 @@ public class WalkerSprite
         // The first step happens right away, so even a quick tap makes a footstep.
         if (frame != _frame && (frame == 1 || frame == 3)) Stepped?.Invoke();
         _frame = frame;
+    }
+
+    /// <summary>Turns to face a point, whichever of the four ways is closest.</summary>
+    /// <param name="target">The point, in world pixels.</param>
+    public void Face(Vector2 target)
+    {
+        Vector2 to = target - Position;
+        if (to == Vector2.Zero) return;
+
+        Facing = MathF.Abs(to.X) > MathF.Abs(to.Y)
+            ? to.X < 0f ? Direction.Left : Direction.Right
+            : to.Y < 0f ? Direction.Up : Direction.Down;
     }
 
     /// <summary>Draws the shadow and the sprite at Position.</summary>

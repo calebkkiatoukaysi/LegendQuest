@@ -9,9 +9,10 @@ namespace LegendQuest.Screens;
 /// then out through the pause menu.
 /// </summary>
 /// <remarks>
-/// Movement goes in through the same code the keyboard uses (ReadMovement), and using things goes
-/// through the same Use the E key does, so the shots actually test the collision, the triggers, the
-/// exits and the rules. I only teleport between scenes to keep the run short, like the lobby's
+/// Movement goes in through the same code the keyboard uses (ReadMovement), using things goes
+/// through the same code the E key does, and the mouse is a pretend one in InputState that the
+/// screen reads like the real one, so the shots actually test the collision, the paths, the
+/// triggers, the exits and the rules. I only teleport between scenes to keep the run short, like the lobby's
 /// schedule in The Black Box. Each visit to a map is its own stage, so each gets its own schedule.
 /// </remarks>
 public partial class ExploreScreen
@@ -20,7 +21,7 @@ public partial class ExploreScreen
     private const int Settled = 50;
 
     /// <summary>The last frame of each visit's schedule. Most of them end walking into an exit or travelling, and the next stage picks up on the next map.</summary>
-    internal const int VillageProofEnd = Settled + 346;
+    internal const int VillageProofEnd = Settled + 926;
     internal const int RoadProofEnd = Settled + 267;
     internal const int VillageAgainProofEnd = Settled + 26;
     internal const int RoadAgainProofEnd = Settled + 316;
@@ -29,6 +30,10 @@ public partial class ExploreScreen
     /// <summary>A direction to walk in instead of reading the keyboard, while the proof run is driving.</summary>
     private Vector2? _proofMove;
 
+    /// <summary>A point on the map the pretend mouse stays over, whatever the camera does, and whether its button is down this frame.</summary>
+    private Vector2? _proofAim;
+    private bool _proofPress;
+
     /// <summary>Which map this is, so the proof run can tell one map's screen from the last one's.</summary>
     internal string MapId => _map.Id;
 
@@ -36,16 +41,27 @@ public partial class ExploreScreen
     /// <param name="frame">Which drawn frame this is, counted from the map's first.</param>
     /// <param name="stage">Which part of the run it is, which says which visit to this map it is.</param>
     /// <returns>The file the frame should be written to, or null.</returns>
-    internal string ProofStep(int frame, ProofStage stage) => stage switch
+    internal string ProofStep(int frame, ProofStage stage)
     {
-        ProofStage.Village => VillageStep(frame),
-        ProofStage.Road => RoadStep(frame),
-        ProofStage.VillageAgain => VillageAgainStep(frame),
-        ProofStage.RoadAgain => RoadAgainStep(frame),
-        _ => BarrowStep(frame),
-    };
+        // A click is the button down for one frame and up the next.
+        if (_proofAim is Vector2 aim)
+        {
+            Vector2 screen = _camera.ToScreen(aim);
+            ScreenManager.Input.ProofMouse(new Point((int)screen.X, (int)screen.Y), _proofPress);
+        }
+        _proofPress = false;
 
-    /// <summary>The village: a walk up the road, round behind a roof, both sides of a barrel, along a wall, both zooms, the waypoint, the map, and off east.</summary>
+        return stage switch
+        {
+            ProofStage.Village => VillageStep(frame),
+            ProofStage.Road => RoadStep(frame),
+            ProofStage.VillageAgain => VillageAgainStep(frame),
+            ProofStage.RoadAgain => RoadAgainStep(frame),
+            _ => BarrowStep(frame),
+        };
+    }
+
+    /// <summary>The village: a walk with the party behind you, round behind a roof, both sides of a barrel, along a wall, both zooms, the mouse (a path, a click, the elder, a wall), switching who you control, the others catching up, the waypoint, the map, and off east.</summary>
     private string VillageStep(int frame)
     {
         switch (frame)
@@ -53,7 +69,7 @@ public partial class ExploreScreen
             case Settled:
                 return "village.png";
 
-            // Up the road into the square.
+            // Up the road into the square, with the others falling in behind.
             case Settled + 1:
                 _proofMove = new Vector2(0f, -1f);
                 return null;
@@ -112,41 +128,128 @@ public partial class ExploreScreen
             case Settled + 260:
                 return "village-zoom-4.png";
 
-            // Up to the waypoint stone, close enough that its name and E come up over it.
+            // South of the well, the mouse over the far side of it: the path goes round it.
             case Settled + 262:
                 _camera.ZoomBy(-1);
-                ProofPlace(35.75f, 13.75f, Direction.Left);
+                ProofPlace(27.5f, 21.5f, Direction.Up);
                 return null;
 
-            case Settled + 285:
-                return "village-waypoint.png";
-
-            // Using it finds it, and opens the world to travel. Nowhere else has a waypoint yet.
-            case Settled + 286:
-                ProofUse();
+            case Settled + 270:
+                ProofAimAt(new Vector2(27.5f, 13.5f) * Tilemap.TileSize);
                 return null;
 
-            case Settled + 310:
-                return "map-world-first.png";
+            case Settled + 295:
+                return "village-path.png";
 
-            // Closed, then M for the map of the village, as much as the walk round has seen.
-            case Settled + 311:
-                ProofMap().ExitScreen();
-                return null;
-
-            case Settled + 320:
-                OpenMap(null);
+            // Click, and walk it. The others follow, and the line ends up behind you.
+            case Settled + 296:
+                ProofClick();
                 return null;
 
             case Settled + 340:
-                return "map-village.png";
+                return "village-click-walk.png";
 
-            // Then east into the exit, which autosaves and goes to the old road.
-            case Settled + 341:
+            case Settled + 470:
+                return "village-path-end.png";
+
+            // The mouse on the elder, then a click: you walk up to them and they turn and speak.
+            case Settled + 471:
+                ProofAimAt(ProofNpc("elder") - new Vector2(0f, HeadHeight / 2f));
+                return null;
+
+            case Settled + 495:
+                return "village-hover-npc.png";
+
+            case Settled + 496:
+                ProofClick();
+                return null;
+
+            case Settled + 570:
+                return "village-talk.png";
+
+            // The mouse on a wall: there's no way there.
+            case Settled + 571:
+                ProofAimAt(new Vector2(25.5f, 7.5f) * Tilemap.TileSize);
+                return null;
+
+            case Settled + 585:
+                return "village-invalid.png";
+
+            // Tab to the next in line; the camera eases over to them.
+            case Settled + 586:
+                ProofLetGo();
+                SelectLeader((_game.Leader + 1) % _walkers.Count);
+                return null;
+
+            case Settled + 610:
+                return "village-switch.png";
+
+            // A click on the third card takes control of them.
+            case Settled + 611:
+                ScreenManager.Input.ProofMouse(ProofCard(2), false);
+                return null;
+
+            case Settled + 612:
+                ScreenManager.Input.ProofMouse(ProofCard(2), true);
+                return null;
+
+            case Settled + 613:
+                ScreenManager.Input.ProofMouse(ProofCard(2), false);
+                return null;
+
+            case Settled + 635:
+                return "village-card.png";
+
+            // Back to you, like F1, then off across the village on your own: the others find their way after you.
+            case Settled + 636:
+                ProofLetGo();
+                SelectLeader(0);
+                return null;
+
+            case Settled + 641:
+                ProofPlaceAlone(15.5f, 12.5f, Direction.Down);
+                return null;
+
+            case Settled + 740:
+                return "village-catch-up.png";
+
+            case Settled + 840:
+                return "village-caught-up.png";
+
+            // Beside the waypoint stone, close enough that its name and E come up over it.
+            case Settled + 842:
+                ProofPlace(35.75f, 13.75f, Direction.Left);
+                return null;
+
+            case Settled + 865:
+                return "village-waypoint.png";
+
+            // Using it finds it, and opens the world to travel. Nowhere else has a waypoint yet.
+            case Settled + 866:
+                ProofUse();
+                return null;
+
+            case Settled + 890:
+                return "map-world-first.png";
+
+            // Closed, then M for the map of the village, as much as the walk round has seen.
+            case Settled + 891:
                 ProofMap().ExitScreen();
                 return null;
 
-            case Settled + 346:
+            case Settled + 900:
+                OpenMap(null);
+                return null;
+
+            case Settled + 920:
+                return "map-village.png";
+
+            // Then east into the exit, which autosaves and goes to the old road.
+            case Settled + 921:
+                ProofMap().ExitScreen();
+                return null;
+
+            case Settled + 926:
                 ProofPlace(52.5f, 17f, Direction.Right);
                 _proofMove = new Vector2(1f, 0f);
                 return null;
@@ -416,11 +519,31 @@ public partial class ExploreScreen
         }
     }
 
+    /// <summary>Somewhere the pretend mouse can be that's off the window, so nothing's under it.</summary>
+    private static readonly Point OffScreen = new(-1, -1);
+
     /// <summary>Uses whatever's in reach, the same as pressing E. Does nothing if nothing is, which the next shot shows.</summary>
-    private void ProofUse()
+    private void ProofUse() => UseNearest();
+
+    /// <summary>Keeps the pretend mouse over a point on the map from the next frame on.</summary>
+    /// <param name="world">The point, in world pixels.</param>
+    private void ProofAimAt(Vector2 world) => _proofAim = world;
+
+    /// <summary>Clicks where the pretend mouse is aimed: the button goes down next frame and comes up the one after.</summary>
+    private void ProofClick() => _proofPress = true;
+
+    /// <summary>Takes the pretend mouse off the window.</summary>
+    private void ProofLetGo()
     {
-        if (_near is not null) Use(_near);
+        _proofAim = null;
+        ScreenManager.Input.ProofMouse(OffScreen, false);
     }
+
+    /// <summary>Where someone's feet are, by their id in the map file.</summary>
+    private Vector2 ProofNpc(string id) => _npcs.Find(npc => npc.Definition.Id == id).Walker.Position;
+
+    /// <summary>The middle of one of the party's cards, on screen.</summary>
+    private Point ProofCard(int index) => _strip.ProofCard(index, _game.Leader);
 
     /// <summary>The map screen that's up over this one.</summary>
     private MapScreen ProofMap()
@@ -436,8 +559,20 @@ public partial class ExploreScreen
     /// <param name="facing">Which way to face.</param>
     private void ProofPlace(float x, float y, Direction facing)
     {
-        _walker.Position = new Vector2(x, y) * Tilemap.TileSize;
-        _walker.Facing = facing;
-        _camera.SnapTo(_walker.Position);
+        ProofPlaceAlone(x, y, facing);
+        GatherBehind(Followers());
+        SeedTrail();
+    }
+
+    /// <summary>Puts just you somewhere, and leaves the others where they are to find their own way to you.</summary>
+    /// <param name="x">How far across, in tiles.</param>
+    /// <param name="y">How far down, in tiles.</param>
+    /// <param name="facing">Which way to face.</param>
+    private void ProofPlaceAlone(float x, float y, Direction facing)
+    {
+        Halt();
+        Leader.Position = new Vector2(x, y) * Tilemap.TileSize;
+        Leader.Facing = facing;
+        _camera.SnapTo(Leader.Position);
     }
 }

@@ -1,5 +1,6 @@
 """
-UI art for Legend Quest: the button plates, the panel the forms sit on, and the marks on the map.
+UI art for Legend Quest: the button plates, the panel the forms sit on, the marks on the map, and
+the mouse cursors.
 Run it from the repo root:
 
     python tools/generate_ui.py
@@ -371,9 +372,91 @@ def build_map_marks():
     write_png(os.path.join(OUT, "map-marks.png"), img)
 
 
+# --------------------------------------------------------------------------- #
+# cursors.png -- the mouse cursor's shapes
+# --------------------------------------------------------------------------- #
+#
+# One row of 16x16 frames, blown up 2x in the game, in CursorShape order: an arrow, a ring for
+# walking, a hand for using something, a speech bubble for talking, and a crossed circle where
+# there's no way. Each is filled, lit on its upper left, and has a dark line all the way round so
+# it shows on grass, stone and the dark alike.
+
+CURSOR = 16
+CURSOR_BONE = (226, 216, 200)
+CURSOR_TORCH = (232, 150, 58)
+CURSOR_EMBER = (214, 64, 42)
+CURSOR_INK = (14, 11, 10)
+
+
+def _inside_poly(x, y, points):
+    inside = False
+    for (ax, ay), (bx, by) in zip(points, points[1:] + points[:1]):
+        if (ay > y) != (by > y) and x < ax + (y - ay) * (bx - ax) / (by - ay):
+            inside = not inside
+    return inside
+
+
+def _cursor_frame(img, ox, filled, colour):
+    """Fills a frame from a test of each pixel's middle, shades it from the top left, and puts the dark line round it."""
+    mask = [[filled(x + 0.5, y + 0.5) for x in range(CURSOR)] for y in range(CURSOR)]
+    for y in range(CURSOR):
+        for x in range(CURSOR):
+            if mask[y][x]:
+                lit = (x + y) < 12
+                put(img, ox + x, y, tone(colour, 1.08 if lit else 0.86))
+    for y in range(CURSOR):
+        for x in range(CURSOR):
+            if mask[y][x]:
+                continue
+            near = any(0 <= x + dx < CURSOR and 0 <= y + dy < CURSOR and mask[y + dy][x + dx]
+                       for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            if near:
+                put(img, ox + x, y, CURSOR_INK + (255,))
+
+
+def build_cursors():
+    img = new_image(CURSOR * 5, CURSOR)
+
+    # The arrow, its tip at (1, 1).
+    arrow = [(1.0, 1.0), (1.0, 13.0), (4.2, 10.2), (6.8, 15.0), (9.0, 14.0), (6.6, 9.4), (10.6, 9.4)]
+    _cursor_frame(img, 0, lambda x, y: _inside_poly(x, y, arrow), CURSOR_BONE)
+
+    # A ring with a dot in it: walk here.
+    def ring(x, y):
+        d = ((x - 8) ** 2 + (y - 8) ** 2) ** 0.5
+        return 4.6 < d < 6.6 or d < 1.6
+    _cursor_frame(img, CURSOR, ring, CURSOR_BONE)
+
+    # A hand, one finger up: use it.
+    def hand(x, y):
+        finger = 6.0 < x < 8.6 and 1.5 < y < 9.0
+        knuckles = 6.0 < x < 12.5 and 7.5 < y < 10.5
+        palm = 5.0 < x < 12.5 and 9.5 < y < 14.5
+        thumb = 3.0 < x < 6.5 and 9.0 < y < 11.5
+        return finger or knuckles or palm or thumb
+    _cursor_frame(img, CURSOR * 2, hand, CURSOR_BONE)
+
+    # A speech bubble with three dots in it: talk.
+    def bubble(x, y):
+        body = ((x - 8) / 6.6) ** 2 + ((y - 6.5) / 4.8) ** 2 < 1.0
+        tail = _inside_poly(x, y, [(4.0, 9.0), (8.0, 10.0), (3.0, 14.5)])
+        dots = 5.5 < y < 7.5 and any(abs(x - cx) < 1.0 for cx in (5.0, 8.0, 11.0))
+        return (body or tail) and not dots
+    _cursor_frame(img, CURSOR * 3, bubble, CURSOR_TORCH)
+
+    # A circle crossed through: no way there.
+    def no_way(x, y):
+        d = ((x - 8) ** 2 + (y - 8) ** 2) ** 0.5
+        slash = abs((x - 8) - (y - 8)) < 1.3 and d < 5.5
+        return 4.8 < d < 6.8 or slash
+    _cursor_frame(img, CURSOR * 4, no_way, CURSOR_EMBER)
+
+    write_png(os.path.join(OUT, "cursors.png"), img)
+
 if __name__ == "__main__":
     print("Generating UI for Legend Quest...")
     build_button()
     build_panel()
     build_map_marks()
+    build_cursors()
     print("Done.")

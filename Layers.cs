@@ -18,8 +18,20 @@ public static class Layers
     /// <summary>The dimming pane a form is laid over. Back of the form's batch.</summary>
     public const float Veil = 0.60f;
 
-    /// <summary>The iron slab a form is built on, over the veil.</summary>
+    /// <summary>The iron slab a form is built on, over the veil. The party's cards are too.</summary>
     public const float PanelPlate = 0.50f;
+
+    /// <summary>The torchlit edge round the card of whoever you're controlling.</summary>
+    public const float Selection = 0.45f;
+
+    /// <summary>A face on a card, over the card.</summary>
+    public const float Portrait = 0.30f;
+
+    /// <summary>The empty part of a bar.</summary>
+    public const float BarBack = 0.26f;
+
+    /// <summary>The full part of a bar, over the empty part.</summary>
+    public const float BarFill = 0.25f;
 
     /// <summary>The iron plate of a button.</summary>
     public const float ButtonPlate = 0.18f;

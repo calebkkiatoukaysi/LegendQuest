@@ -21,8 +21,9 @@ one either way, so it's on the near side facing right and the far side facing le
 would swap it.
 
 For now there's the lean body. The paperdoll's other layers (eyes, hair, clothes, armour, weapons)
-and the second build come with the paperdoll. The body is painted in the skin keys, the first row
-of each ramp, so the palette swap can recolour it later.
+and the second build come with the paperdoll. The body is painted in the key ramps for skin, shirt
+and breeches, and character-palettes.png has every preset they can be swapped for, so everyone in
+the game can be the one body in their own colours.
 """
 
 import math
@@ -64,6 +65,31 @@ LINEN = ((86, 78, 66), (124, 114, 96), (160, 150, 128), (188, 178, 156))
 BREECHES = ((40, 35, 32), (60, 53, 47), (82, 72, 63), (102, 92, 80))
 
 BODY_RAMPS = dict(skin=SKIN, linen=LINEN, breeches=BREECHES)
+
+# The presets the palette swap recolours those to, dark to light, in the order CharacterPalettes
+# reads them. The first of each list is the key the sheets are painted in, so it has to be the ramp
+# above. The counts have to match SkinPresets, ShirtPresets and BreechesPresets in CharacterPalettes.
+SKINS = (
+    SKIN,
+    ((96, 66, 60), (152, 108, 98), (204, 160, 142), (232, 196, 178)),     # rosier
+    ((78, 62, 44), (124, 100, 70), (168, 138, 98), (196, 168, 124)),      # olive
+    ((62, 42, 32), (100, 70, 52), (140, 100, 74), (170, 128, 96)),        # brown
+    ((40, 28, 24), (70, 48, 38), (102, 72, 56), (130, 96, 74)),           # dark brown
+)
+SHIRTS = (
+    LINEN,                                                                  # undyed
+    ((36, 46, 70), (56, 72, 104), (82, 102, 140), (110, 132, 168)),       # woad blue
+    ((70, 30, 28), (108, 46, 40), (146, 66, 56), (176, 92, 78)),          # madder red
+    ((38, 56, 38), (58, 82, 54), (82, 110, 72), (108, 138, 94)),          # green
+    ((86, 64, 30), (128, 96, 44), (168, 130, 62), (196, 160, 88)),        # ochre
+    ((30, 30, 36), (46, 46, 54), (66, 66, 76), (88, 88, 100)),            # slate
+)
+BREECHES_DYES = (
+    BREECHES,                                                               # brown
+    ((38, 38, 42), (58, 58, 64), (80, 80, 88), (102, 102, 110)),          # grey
+    ((24, 28, 44), (36, 42, 64), (52, 60, 88), (70, 80, 110)),            # navy
+    ((70, 58, 40), (100, 84, 60), (130, 110, 80), (156, 136, 102)),       # tan
+)
 
 
 # --------------------------------------------------------------------------- #
@@ -493,7 +519,18 @@ def build_sheet(name, layer, ramps, b):
     write_png(os.path.join(OUT, "Paperdoll", name + ".png"), sheet)
 
 
+def build_palettes():
+    """character-palettes.png: one row per preset, four pixels across, dark to light. Skin, then shirts, then breeches."""
+    rows = SKINS + SHIRTS + BREECHES_DYES
+    img = new_image(4, len(rows))
+    for y, ramp in enumerate(rows):
+        for x, c in enumerate(ramp):
+            img[y][x] = [c[0], c[1], c[2], 255]
+    write_png(os.path.join(OUT, "character-palettes.png"), img)
+
+
 if __name__ == "__main__":
     print("Generating character sheets for Legend Quest...")
     build_sheet("body-lean", body_parts, BODY_RAMPS, LEAN)
+    build_palettes()
     print("Done.")

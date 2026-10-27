@@ -38,15 +38,6 @@ public class MapScreen : GameScreen
     private const int MarkSize = 12;
     private const float MarkScale = 3f;
 
-    /// <summary>Which mark is which on map-marks.png, left to right.</summary>
-    private const int PlaceMark = 0;
-    private const int UnknownMark = 1;
-    private const int HereMark = 2;
-    private const int WaypointMark = 3;
-    private const int SelectedMark = 4;
-    private const int YouMark = 5;
-    private const int DotMark = 6;
-
     /// <summary>The world map's roads: how far apart the dots are, and how far short of each place they stop, in screen pixels.</summary>
     private const float DotSpacing = 14f;
     private const float RoadClear = 24f;
@@ -248,8 +239,8 @@ public class MapScreen : GameScreen
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         if (_world.FoundWaypoint(_map) is MapInteractable waypoint)
-            DrawMark(spriteBatch, WaypointMark, drawn.Location.ToVector2() + waypoint.Foot * scale, alpha);
-        DrawMark(spriteBatch, YouMark, drawn.Location.ToVector2() + _you * scale, alpha);
+            DrawMark(spriteBatch, MapMark.Waypoint, drawn.Location.ToVector2() + waypoint.Foot * scale, alpha);
+        DrawMark(spriteBatch, MapMark.You, drawn.Location.ToVector2() + _you * scale, alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
@@ -283,14 +274,14 @@ public class MapScreen : GameScreen
                 MapDefinition other = MapCatalog.Get(id);
                 if (!_world.IsDiscovered(other) || string.CompareOrdinal(map.Id, other.Id) < 0)
                     DrawRoad(spriteBatch, PlaceOf(map), PlaceOf(other), alpha);
-                if (!_world.IsDiscovered(other)) DrawMark(spriteBatch, UnknownMark, PlaceOf(other), alpha);
+                if (!_world.IsDiscovered(other)) DrawMark(spriteBatch, MapMark.Unknown, PlaceOf(other), alpha);
             }
 
-            DrawMark(spriteBatch, PlaceMark, PlaceOf(map), alpha);
-            if (map == _map) DrawMark(spriteBatch, HereMark, PlaceOf(map), alpha);
-            if (_world.FoundWaypoint(map) is not null) DrawMark(spriteBatch, WaypointMark, PlaceOf(map) + WaypointOver, alpha);
+            DrawMark(spriteBatch, MapMark.Place, PlaceOf(map), alpha);
+            if (map == _map) DrawMark(spriteBatch, MapMark.Here, PlaceOf(map), alpha);
+            if (_world.FoundWaypoint(map) is not null) DrawMark(spriteBatch, MapMark.Waypoint, PlaceOf(map) + WaypointOver, alpha);
         }
-        if (_destinations.Count > 0) DrawMark(spriteBatch, SelectedMark, PlaceOf(_destinations[_selected]), alpha);
+        if (_destinations.Count > 0) DrawMark(spriteBatch, MapMark.Selected, PlaceOf(_destinations[_selected]), alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
@@ -320,13 +311,13 @@ public class MapScreen : GameScreen
         Vector2 step = (to - from) / length;
 
         for (int i = 0; i <= dots; i++)
-            DrawMark(spriteBatch, DotMark, from + step * (RoadClear + i * DotSpacing), alpha);
+            DrawMark(spriteBatch, MapMark.Dot, from + step * (RoadClear + i * DotSpacing), alpha);
     }
 
     /// <summary>Draws one mark from map-marks.png, centred on a point.</summary>
-    private void DrawMark(SpriteBatch spriteBatch, int mark, Vector2 centre, float alpha)
+    private void DrawMark(SpriteBatch spriteBatch, MapMark mark, Vector2 centre, float alpha)
     {
-        var source = new Rectangle(mark * MarkSize, 0, MarkSize, MarkSize);
+        var source = new Rectangle((int)mark * MarkSize, 0, MarkSize, MarkSize);
         var at = new Vector2(MathF.Round(centre.X), MathF.Round(centre.Y));
         spriteBatch.Draw(_marks, at, source, Color.White * alpha, 0f, new Vector2(MarkSize / 2f), MarkScale, SpriteEffects.None, 0f);
     }

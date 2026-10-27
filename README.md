@@ -9,9 +9,10 @@ shows on them as they walk. The rules underneath will be 5e's, from the SRD 5.1.
 
 This is the skeleton: every system working end to end on a little content, built so maps,
 characters, items and dialogue can keep being added without rewriting anything. It's being built
-in milestones, and right now the first three are done: the screens around the game, the sound,
-the saves and the proof run; the maps, walking round them, and the dark; and the three maps joined
-up, with things on them to open and pull, the map screen and fast travel.
+in milestones, and right now the first four are done: the screens around the game, the sound, the
+saves and the proof run; the maps, walking round them, and the dark; the three maps joined up, with
+things on them to open and pull, the map screen and fast travel; and the party, following you about,
+with the mouse to walk, point and click.
 [Still to come](#still-to-come) lists the rest.
 
 ## Running it
@@ -28,7 +29,9 @@ dotnet run
 **NEW GAME** opens the save slots, and picking one starts you in the village. **LOAD** opens them
 to carry a game on, **CONTINUE** carries on whichever slot was saved last (it's dead when there
 isn't one), **OPTIONS** has the volumes and the text speed, and **EXIT** and **Esc** close the
-game. On a map, E uses whatever you're standing next to, M is the map, and Esc is the pause menu.
+game. On a map, clicking the ground walks you there, clicking someone or something walks you up to
+them, E uses whatever you're standing next to, Tab changes who you're controlling, M is the map, and
+Esc is the pause menu.
 
 One switch exists for working on the game, and it isn't the game:
 
@@ -38,15 +41,19 @@ dotnet run -- --proof shots       # play through the screens, save a picture of 
 
 It's the same harness as The Black Box's. It goes through the title, the options, the save slots
 for loading (and erases a broken slot the way a player would, ERASE then SURE?), the save slots for
-a new game, then a new game in the village: up the road, round behind a roof, both sides of a
-barrel, into a wall at an angle, both zooms, the waypoint stone, the map, and out east. On the old
+a new game, then a new game in the village: up the road with the party behind, round behind a
+roof, both sides of a barrel, into a wall at an angle, both zooms, the mouse over the far side of
+the well (the path goes round it) and a click to walk it, the mouse on the elder and a click to walk
+up and talk to them, the mouse on a wall where there's no way, Tab, a click on a card, you sent off
+on your own while the others find their way after you, the waypoint stone, the map, and out east. On the old
 road it walks into the trigger before the camp, opens the chest, reads the sign, finds the second
 waypoint and fast travels back to the village, then straight back to the road by it, walks into the
 trigger at the blocked end twice (it goes off every time), and up the path into the barrow. In the
 barrow it tries the locked door and the stone door, pulls the lever that opens the stone door, goes
 through it to the chest, opens the map, stands under a torch, pauses, and goes out through QUIT TO
 TITLE, where the slots show the autosave it made on the way. Moving and using things go in through
-the same code the keyboard does; it only jumps about between scenes. It uses a scratch save folder
+the same code the keyboard does, and the mouse is a pretend one inside `InputState` that the screen
+reads the same as the real one; it only jumps about between scenes. It uses a scratch save folder
 inside `shots/` that it fills with one of every kind of slot, so it never touches a real one, and
 it ignores the real mouse and keyboard so nothing I do while it runs changes the pictures. It's
 silent: every sound it would have played goes in `shots/audio.log` with the frame it was asked for
@@ -60,11 +67,14 @@ lever's pulled. A second switch, `--simulate`, comes with combat.
 | Menus and forms | **Arrows** or **WASD** to move, **Enter** or **Space** to pick, **Esc** to go back. The mouse works too |
 | Options | **Left** and **right** change the selected row |
 | Save slots | **Left** and **right** move between a slot and its ERASE |
-| On a map | **WASD** or the **arrows** to walk, **E**, **Space** or **Enter** to use what you're next to, **M** for the map, the **mouse wheel** to zoom, **Esc** to pause |
+| On a map | **WASD** or the **arrows** to walk, **E**, **Space** or **Enter** to use or talk to what you're next to, **M** for the map, the **mouse wheel** to zoom, **Esc** to pause |
+| On a map, the mouse | **Left click** the ground to walk there (the path shows while you point), or someone or something to walk up to them and talk or use it. Pointing at anything says what it is |
+| The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
 | The map | **Tab** switches between the map you're on and the world. Opened from a waypoint, the **arrows** (or the mouse) pick where to go and **Enter** (or a click) goes. **M** or **Esc** closes it |
 
 A gamepad works anywhere the keyboard does: the d-pad or left stick, A to use, B to back out, Y for
-the map, the shoulders to switch its sides, and Start.
+the map, the right shoulder for the next in the party (and both shoulders to switch the map's sides),
+and Start.
 
 ## Screens
 
@@ -78,7 +88,7 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 | `TitleScreen` | The title, with NEW GAME, CONTINUE, LOAD, OPTIONS and EXIT |
 | `OptionsScreen` | Master, music and sound volume, and how fast text types out. Saved to `settings.json` |
 | `SaveSlotScreen` | The save slots, for a new game or for loading one, with ERASE beside each slot that has something in it |
-| `ExploreScreen` | A map being walked round: the tiles, the props, the things you can use, you, and the dark if it's a dark map. Toasts come up near the top: what was in a chest, what a sign says |
+| `ExploreScreen` | A map being walked round: the tiles, the props, the things you can use, the people, the party, and the dark if it's a dark map. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
 | `MapScreen` | Popup. The map you're on, as much as you've seen of it, and the world: every place you've been and the roads between them. Opened from a waypoint, it's where you pick somewhere to travel to |
 | `PauseMenuScreen` | RESUME, OPTIONS or QUIT TO TITLE. Nothing under it moves while it's up. SAVE and LOAD go on it once there's a game to save |
 | `LoadingScreen` | From the tutorial. Waits for everything to fade out, then adds the next screens. Going onto a map puts its name on the black in between |
@@ -232,6 +242,56 @@ The road is meant to be lit, at dusk. I've made it a dark map with a lot of ambi
 (`ambient = 0.55`) so the campfire throws a pool, rather than giving lit maps a tint setting of
 their own. It reads as dusk, and if it needs to be warmer or bluer that's a colour on the dark.
 
+## The party
+
+Up to four: you, and whoever's with you. A new game starts you with Bren, Vesper and Maren, all
+placeholders I'll rewrite (Corvin is in the data too, for later). That's all four, so the strip and
+the followers can be seen full; once conversations can recruit people, Maren gets recruited instead
+and the start is you and two. Until there's character creation, you're the Wanderer.
+
+| File | What it is |
+| --- | --- |
+| `PartyMember` | Someone in the party, as the save keeps them: name, class, level, ability scores, hit points, look, and where they're standing |
+| `Origins` | Everyone who can be in the party and how they start: class, scores (5e's standard array, 15 14 13 12 10 8, where each class wants it) and look |
+| `ClassCatalog` | The four classes and their hit dice, a d10 for a fighter, a d8 for a rogue or a cleric, a d6 for a wizard |
+| `AbilityScores` | The six scores, and 5e's modifier: half of (score minus 10), rounded down |
+
+Hit points at level 1 are 5e's: the whole hit die plus the Constitution modifier. Everyone stays
+level 1 in the skeleton.
+
+- **Following.** The others walk your trail: wherever your feet have been, a point every few
+  pixels, and each aims for the spot their own distance back along it, 22 art pixels apart, so they
+  go through doors and round corners in single file without thinking about it. If one falls too far
+  behind, or pushes against something for half a second without getting anywhere, they find a path
+  to their spot with A* and go back to the trail when they're there. They never stand in your feet,
+  and you can walk through them. When you arrive on a map, they're put round you, behind you if
+  there's room.
+- **Who you control.** Tab, F1 to F4, clicking a card or clicking one of them. The camera eases over
+  and whoever you were falls in behind. Only your footsteps make a sound, since four sets at once
+  was a lot.
+- **The strip.** A card each along the bottom left with their face, their name and a bar for their
+  hit points; yours sits higher with a torchlit edge. The face is the head and shoulders of their
+  own walking sheet blown up three times, so it always matches how they look. Conditions go on the
+  cards when there's fighting.
+- **The mouse.** Pointing at the ground shows the path you'd walk, a dotted line to a ring, and
+  the walk cursor; where there's no way it's a crossed circle instead. Pointing at someone gives
+  the speech bubble, at something you can use a hand, and either gets a soft pool of light at its
+  feet, which shows in the dark too. A tooltip by the cursor says what it is, or for one of the party,
+  their level, class and hit points. Clicking walks you there, or up to them and then talks or uses
+  it, the same as E. The keys always take over from a path. The game draws its own cursor, so it can
+  change shape.
+- **A\* and the grid.** `NavGrid` knows which tiles can be walked: not solid, and not covered in the
+  middle by a footprint (a prop, a shut door, someone standing there). It's built again when a door
+  opens. `Pathfinder` is plain A*: eight directions, never cutting a corner past a blocked tile,
+  1 for a straight step and √2 for a diagonal with octile distance for the guess, and a
+  `BinaryHeap` for the open list. It can aim for a tile or for anywhere within reach of a point,
+  which is how clicking a chest works. Then the path's pulled straight wherever the feet could walk
+  a straight line, so you don't zigzag across an open square.
+- **People.** `npc` in a map file puts someone there: a name, which way they face, their colours,
+  and a line. They stand, look round every few seconds (never at the wall), and turn to face you
+  when you talk to them; the line goes up over their head on a dark smudge. Conversations take over
+  from the line when there are conversations. The village has the elder and the trader.
+
 ## The walker
 
 Every character sheet is one layout, so the paperdoll's layers can stack: 32x48 frames (the same
@@ -250,8 +310,14 @@ all, with the feet at (16, 46) in every frame.
 
 `WalkerSprite` is The Black Box's on the new layout: it cuts frames from a sheet, walks through
 columns 1 to 4, and fires `Stepped` on 1 and 3, when a foot lands, so the footsteps match the feet.
-The footstep is grass or stone depending on the ground tile under you. For now you walk round as
-just the body, in smallclothes; the paperdoll puts hair, a face and clothes on it later.
+The footstep is grass or stone depending on the ground tile under you. For now everyone is just
+the body, in smallclothes; the paperdoll puts hair, a face and clothes on it later.
+
+Everyone's the same body sheet in their own colours. It's painted in key ramps for the skin, the
+shirt and the breeches, and `CharacterPalettes` swaps each key shade for the same shade of the
+preset someone's look picks, out of `character-palettes.png`: five skins, six shirt dyes and four
+breeches. That's The Black Box's palette swap, done once per look when a map loads with `GetData`
+and `SetData`, not every frame, and two people who look alike share one sheet.
 
 The sheets are drawn off one rig in `tools/generate_characters.py`: where the head, shoulders,
 elbows, hands, hips, knees and feet are in every frame. A layer is shapes hung off those joints, so
@@ -267,7 +333,7 @@ because `bin/` gets deleted by every clean build.
 
 | File | What it is |
 | --- | --- |
-| `SaveData` | The whole save: the map, where you are on it and which way you face, the play time, the gold, the flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
+| `SaveData` | The whole save: the map, the party (each with where they're standing) and which of them you're controlling, the play time, the gold, the flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
 | `SaveSlot` | One slot as the form sees it: empty, occupied or unreadable, plus the line printed on it |
 | `SaveSystem` | Reads, writes and erases slots. The only thing in the project that touches a save file |
 
@@ -280,14 +346,18 @@ The same three decisions as The Black Box:
   quietly drop the fields this build doesn't know about, and so does a save on a map this build
   doesn't have.
 - **Every file carries a `Version`.** `SaveSystem.Upgrade` is where an old file gets brought
-  forward when a field changes. Nothing has needed it yet.
+  forward when a field changes, one version at a time. Version 2 is the party: version 1 had one X,
+  Y and Facing for you, and upgrading gives it the starting party with you standing there. Those
+  old fields only make it as far as `Upgrade` because `SaveData.Extra` keeps whatever this build
+  doesn't have a property for.
 
 Enums go in by name (`"Facing": "Up"`), so reordering one is safe and renaming one breaks saves; a
 number where a name should be makes the slot unreadable. Things on a map are kept as `map/id`, like
 `road/camp` for the chest at the camp, so two maps can each have a chest called chest. What's been
 seen of a map is its bits packed eight to a byte, which JSON writes as base64. A list I've nulled by
-hand comes back empty instead of crashing, and a position off the map or inside a wall puts you on
-the map's start.
+hand comes back empty instead of crashing, a save with nobody in the party gets the starting party,
+hit points get pulled back between 0 and the most someone can have, and a position off the map or
+inside a wall puts you on the map's start. A class the game doesn't have makes the slot unreadable.
 
 A new game only goes in a numbered slot, and it's written as soon as you pick one, so if the slot
 can't be written the form can say so. Picking one that's full asks first (PICK IT AGAIN TO START
@@ -347,8 +417,10 @@ fades the old one out and the new one in.
 | `Tiles/crypt.png` | `Tilemap` | The same layout: floors, the floor in a wall's shadow, steps, the tops of walls, the two rows of a wall's face (one with a burial niche), rubble, bones and a cobweb |
 | `Tiles/forest.png` | `Tilemap` | The same layout: dead leaves, the road, the undergrowth under the deep forest, moss and grass in lumps that don't reach the edge of their tile, ferns, a rock, a stump, a fallen log in two halves, a tree trunk, bushes, and the nine pieces of a tree's crown |
 | `Props/*.png` | `PropSprite` | Standing on the middle of the bottom edge: a barrel, a crate, the well, an urn, a sarcophagus, the iron sconce a torch stands in, a campfire, a bedroll, and the things you use, each a strip of two pictures (shut then open): a chest, a double door and a stone door in their frames, a lever, and the waypoint stone with its mark dark then lit. The sign is one picture |
-| `map-marks.png` | `MapScreen` | 7 marks, 12x12, at 3x: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road |
-| `Paperdoll/body-lean.png` | `WalkerSprite` | The lean body in smallclothes, in the 10x4 layout above. Painted in the skin keys, so it can be recoloured later |
+| `map-marks.png` | `MapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
+| `Paperdoll/body-lean.png` | `WalkerSprite` | The lean body in smallclothes, in the 10x4 layout above. Painted in the key ramps, so `CharacterPalettes` can recolour it for anyone. The cards on the strip are the head and shoulders of its standing frame, blown up |
+| `character-palettes.png` | `CharacterPalettes` | Four pixels by fifteen: one ramp per row, dark to light. Five skins, six shirt dyes, four breeches, each block with its key first |
+| `cursors.png` | `CursorSprite` | 5 cursors, 16x16, at 2x: an arrow, a ring to walk, a hand to use something, a speech bubble to talk, a crossed circle for no way |
 
 Text is drawn with `spectral-title` (Spectral Light, 92pt), `spectral-ui` (Spectral Medium, 26pt)
 and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as The Black Box. The
@@ -360,9 +432,9 @@ and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as Th
 Every PNG in `Content/` is made by a script:
 
 ```
-python tools/generate_ui.py           # button.png, panel.png and map-marks.png
+python tools/generate_ui.py           # button.png, panel.png, map-marks.png and cursors.png
 python tools/generate_world.py        # the tilesets, the props, the title gate, the torch flame, glow.png and mote.png
-python tools/generate_characters.py   # the paperdoll sheets
+python tools/generate_characters.py   # the paperdoll sheets and character-palettes.png
 ```
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's
@@ -384,7 +456,7 @@ In the order they're being built:
 1. ~~The screens around the game, the sound, the saves and the proof run.~~
 2. ~~One map and one walker: the map file format, collision, the camera, walking, the dark with lights in it.~~
 3. ~~The three maps joined up: exits, triggers, chests, doors, levers, the map screen and fast travel.~~
-4. The party: four members, switching between them, followers, click-to-move with A*.
+4. ~~The party: four members, switching between them, followers, click-to-move with A*.~~
 5. The paperdoll and gear: armour you can see, the inventory and the character sheet.
 6. Character creation.
 7. Dialogue with dice rolls, approval, the quest and the journal.
@@ -398,10 +470,11 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
-- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.World.cs` for using things, triggers, exits and travel, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
-- `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one, `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `Camera2D`, and the tileset and prop catalogues.
-- `Characters/` is the walking sprite.
-- `Components/` is every screen element, the torches and the toasts, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
+- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, talking, triggers, exits and travel, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
+- `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one, `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
+- `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`), and how everyone looks (`CharacterLook` and `CharacterPalettes`).
+- `Rules/` is the 5e parts that draw nothing: `AbilityScores`, and the classes in `ClassCatalog`.
+- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards and the cursor, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.
 - `Particles/` is the particle engine and the embers built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.
@@ -412,7 +485,8 @@ the textbook); for now they're copied as text and read at startup, which is enou
 ## Assets
 
 Every picture, song and sound in the game is original: drawn or synthesised by the scripts in
-`tools/`. The only outside work is the Spectral font and the MonoGame template files. See
+`tools/`. The only outside work is the Spectral font, the MonoGame template files, and a few of
+5e's rules from the SRD 5.1, which is credited in there word for word as its licence asks. See
 [ASSETS.md](ASSETS.md) for every file.
 
 ## Author's Note

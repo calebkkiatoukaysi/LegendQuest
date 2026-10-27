@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
+using LegendQuest.Characters;
 using LegendQuest.Collisions;
 
 namespace LegendQuest.World;
@@ -37,7 +38,7 @@ public static class MapLoader
     private static readonly string[] RequiredSettings = { "id", "name", "world", "tileset", "size", "dark", "music" };
 
     /// <summary>Every kind of object, for the error message when a line names one that isn't.</summary>
-    private static readonly string[] Kinds = { "spawn", "prop", "light", "exit", "trigger", "chest", "door", "lever", "sign", "waypoint" };
+    private static readonly string[] Kinds = { "spawn", "prop", "npc", "light", "exit", "trigger", "chest", "door", "lever", "sign", "waypoint" };
 
     /// <summary>Reads and checks one map.</summary>
     /// <param name="id">The map, which is also its file name without the .map.</param>
@@ -133,6 +134,7 @@ public static class MapLoader
             Exits = exits,
             Triggers = triggers,
             Interactables = interactables,
+            Npcs = ReadNpcs(objects, Solid),
         };
     }
 
@@ -364,6 +366,42 @@ public static class MapLoader
         }
 
         return props;
+    }
+
+    /// <summary>The people: npc id x y name=, and facing=, skin=, shirt=, breeches= (each 0 if it isn't set) and say=.</summary>
+    /// <param name="objects">Every object on the map.</param>
+    /// <param name="solid">Whether a tile is solid, for checking they're standing somewhere they could.</param>
+    private static List<MapNpc> ReadNpcs(List<MapObjectLine> objects, Func<int, int, bool> solid)
+    {
+        var npcs = new List<MapNpc>();
+
+        foreach (MapObjectLine o in Of(objects, "npc"))
+        {
+            var look = new CharacterLook
+            {
+                Skin = Preset(o, "skin", CharacterPalettes.SkinPresets),
+                Shirt = Preset(o, "shirt", CharacterPalettes.ShirtPresets),
+                Breeches = Preset(o, "breeches", CharacterPalettes.BreechesPresets),
+            };
+            var npc = new MapNpc(o.Id, o.Required("name"), FeetOn(o), o.Facing("facing", Direction.Down), look, o.Text("say"));
+            o.Done("name, facing, skin, shirt, breeches, say");
+
+            Point cell = Tilemap.CellOf(npc.Feet);
+            if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
+            npcs.Add(npc);
+        }
+
+        return npcs;
+    }
+
+    /// <summary>Takes out a look preset, 0 if it isn't set, and checks there's a preset with that number.</summary>
+    private static int Preset(MapObjectLine o, string key, int count)
+    {
+        string text = o.Text(key);
+        if (text is null) return 0;
+        if (!int.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out int preset) || preset >= count)
+            throw o.Fail($"{key} has to be a preset from 0 to {count - 1}, not {text}");
+        return preset;
     }
 
     /// <summary>The lights that aren't a prop's: light id x y reach=tiles, and strength= (1 if it isn't set).</summary>

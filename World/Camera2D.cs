@@ -75,6 +75,14 @@ public class Camera2D
         ViewSize = viewSize;
     }
 
+    /// <summary>Where a point on the screen is in the world, for working out what the mouse is over.</summary>
+    /// <param name="screen">The point, in screen pixels.</param>
+    public Vector2 ToWorld(Vector2 screen) => Vector2.Transform(screen, Matrix.Invert(Transform));
+
+    /// <summary>Where a point in the world is on the screen, for writing something over it.</summary>
+    /// <param name="world">The point, in world pixels.</param>
+    public Vector2 ToScreen(Vector2 world) => Vector2.Transform(world, Transform);
+
     /// <summary>Jumps the camera straight to a point with no easing. Used on the first frame.</summary>
     /// <param name="target">The world point to look at.</param>
     public void SnapTo(Vector2 target) => Centre = Clamp(target);

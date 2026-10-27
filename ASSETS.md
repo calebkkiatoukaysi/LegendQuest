@@ -1,11 +1,11 @@
 # Assets
 
-Every file the game ships or reads, and where it came from. Nothing here was downloaded or
-recorded: the art is drawn by `tools/generate_ui.py`, `tools/generate_world.py` and
+Every file the game ships or reads, and where it came from. Nothing here was downloaded or recorded:
+the art is drawn by `tools/generate_ui.py`, `tools/generate_world.py` and
 `tools/generate_characters.py`, the music and sound effects are synthesised by
-`tools/generate_audio.py`, the maps are written by hand, and the only outside work is the font and
-the MonoGame template files. `python tools/check_assets.py` fails if this list and the files on
-disk ever disagree.
+`tools/generate_audio.py`, the maps are written by hand, and the only outside work is the font, the
+MonoGame template files, and a few rules from the SRD 5.1 (credited at the end).
+`python tools/check_assets.py` fails if this list and the files on disk ever disagree.
 
 ## Sprites
 
@@ -19,7 +19,9 @@ Content/mote.png - created by Caleb Kiatoukaysi for Legend Quest, the small soft
 
 ## Characters and armour
 
-Content/Paperdoll/body-lean.png - created by Caleb Kiatoukaysi for Legend Quest, the lean body in smallclothes, the bottom layer of the paperdoll, in the 10x4 sheet layout and painted in the skin keys, drawn procedurally by tools/generate_characters.py, released under public domain
+Content/Paperdoll/body-lean.png - created by Caleb Kiatoukaysi for Legend Quest, the lean body in smallclothes, the bottom layer of the paperdoll, in the 10x4 sheet layout and painted in the key ramps for skin, shirt and breeches, drawn procedurally by tools/generate_characters.py, released under public domain
+
+Content/character-palettes.png - created by Caleb Kiatoukaysi for Legend Quest, every skin, shirt and breeches preset the palette swap can recolour a sheet to, one ramp per row, drawn procedurally by tools/generate_characters.py, released under public domain
 
 ## Tiles and props
 
@@ -64,6 +66,8 @@ Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sli
 Content/panel.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron panel the forms sit on, drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/map-marks.png - created by Caleb Kiatoukaysi for Legend Quest, the marks on the map screen (places, where you are, waypoints, roads), drawn procedurally by tools/generate_ui.py, released under public domain
+
+Content/cursors.png - created by Caleb Kiatoukaysi for Legend Quest, the mouse cursors: an arrow, a ring to walk, a hand to use, a speech bubble to talk, and a crossed circle, drawn procedurally by tools/generate_ui.py, released under public domain
 
 ## Maps
 
@@ -128,6 +132,15 @@ Content/spectral-detail.spritefont - written by Caleb Kiatoukaysi for Legend Que
 tools/pixels.py, tools/generate_ui.py, tools/generate_world.py, tools/generate_characters.py, tools/generate_audio.py - every asset above that says "drawn procedurally" or "synthesised" comes out of these; pixels.py is the PNG writer and colour helpers the art scripts share. They need nothing but CPython (3.12 or newer for generate_audio.py), and every one is seeded, so a rerun gives the same files
 
 tools/check_assets.py - written by Caleb Kiatoukaysi for Legend Quest, checks this file, Content/Content.mgcb and the files on disk against each other
+
+## SRD 5.1
+
+The rules use a few things from the 5e System Reference Document: the six ability scores and how a
+score turns into a modifier, the class names Fighter, Rogue, Cleric and Wizard with their hit dice,
+hit points at first level, and the standard array the party's scores are spread from. The names of
+the people and places are mine.
+
+This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
 
 ## From the MonoGame template
 

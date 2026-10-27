@@ -12,9 +12,8 @@ namespace LegendQuest.Components;
 /// </summary>
 /// <remarks>
 /// One at a time, in the order they came in, and a new one cuts short the one that's up, so a run of
-/// them doesn't make the last one wait. It sits on a soft dark smudge so it reads over bright
-/// grass as well as the dark. The smudge is the glow texture again, drawn black and cut in three
-/// (two round ends and a stretched middle) so a long line doesn't fade out at its ends.
+/// them doesn't make the last one wait. It sits on the soft dark smudge from Text.DrawBacking, so
+/// it reads over bright grass as well as the dark.
 /// </remarks>
 public class Toast
 {
@@ -84,17 +83,9 @@ public class Toast
         float shown = MathF.Min(1f, MathF.Min(_clock / FadeInSeconds, (Length(_line) - _clock) / FadeOutSeconds)) * alpha;
         Vector2 size = _font.MeasureString(_line);
 
-        int left = (int)(LegendQuestGame.ScreenWidth / 2f - size.X / 2f);
-        int top = (int)(Top - Spread.Y), height = (int)(size.Y + Spread.Y * 2f);
-        int end = (int)Spread.X, half = _glow.Width / 2;
-        Color backing = BackingColor * shown;
-
-        spriteBatch.Draw(_glow, new Rectangle(left - end, top, end, height), new Rectangle(0, 0, half, _glow.Height),
-            backing, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
-        spriteBatch.Draw(_glow, new Rectangle(left, top, (int)size.X, height), new Rectangle(half - 1, 0, 2, _glow.Height),
-            backing, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
-        spriteBatch.Draw(_glow, new Rectangle(left + (int)size.X, top, end, height), new Rectangle(half, 0, half, _glow.Height),
-            backing, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
+        var area = new Rectangle((int)(LegendQuestGame.ScreenWidth / 2f - size.X / 2f), (int)(Top - Spread.Y),
+            (int)size.X, (int)(size.Y + Spread.Y * 2f));
+        Text.DrawBacking(spriteBatch, _glow, area, (int)Spread.X, BackingColor * shown);
 
         Text.DrawCentered(spriteBatch, _font, _line, Top, Palette.Heading * shown, Palette.Shadow * shown);
     }

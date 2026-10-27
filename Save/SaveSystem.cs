@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using LegendQuest.Characters;
 using LegendQuest.World;
 
 namespace LegendQuest.Save;
@@ -31,7 +32,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 1;
+    public const int CurrentVersion = 2;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -93,8 +94,9 @@ public static class SaveSystem
             // Loading it would mean walking onto a map that isn't there.
             if (!MapCatalog.Contains(data.MapId)) return Unreadable(slot, "it's on a map called " + data.MapId + ", which this build doesn't have");
 
+            data = Upgrade(data);
             Mend(data);
-            return new SaveSlot { Index = slot, State = SaveSlotState.Occupied, Data = Upgrade(data) };
+            return new SaveSlot { Index = slot, State = SaveSlotState.Occupied, Data = data };
         }
         catch (JsonException e)
         {
@@ -184,19 +186,39 @@ public static class SaveSystem
 
     /// <summary>Brings a save written by an older build up to CurrentVersion.</summary>
     /// <remarks>
-    /// Nothing to do yet, this is version 1. When a field changes, a step goes in here that moves
-    /// the file up one version and falls through to the next, like The Black Box's.
+    /// One step per version, each moving the file up one and falling through to the next, like The
+    /// Black Box's. Version 1 had one X, Y and Facing for you, before there was a party; version 2
+    /// gives you the starting party and puts its leader there. The old fields only survive the read
+    /// because of SaveData.Extra.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <returns>The same game, in the shape this build expects.</returns>
     private static SaveData Upgrade(SaveData data)
     {
+        if (data.Version < 2)
+        {
+            data.Party = Origins.StartingParty();
+            data.Leader = 0;
+            if (data.Extra is not null)
+            {
+                if (data.Extra.Remove("X", out JsonElement x) && x.TryGetSingle(out float feetX)) data.LeaderMember.X = feetX;
+                if (data.Extra.Remove("Y", out JsonElement y) && y.TryGetSingle(out float feetY)) data.LeaderMember.Y = feetY;
+                if (data.Extra.Remove("Facing", out JsonElement facing) && facing.ValueKind == JsonValueKind.String
+                    && Enum.TryParse(facing.GetString(), out Direction way))
+                    data.LeaderMember.Facing = way;
+            }
+        }
+
         data.Version = CurrentVersion;
         return data;
     }
 
-    /// <summary>Puts back any list a hand-edited file set to null, so nothing that reads the save has to check.</summary>
-    /// <param name="data">The save as it was read off disk.</param>
+    /// <summary>Puts back anything a hand-edited file left out or set to null, so nothing that reads the save has to check.</summary>
+    /// <remarks>
+    /// A save with nobody in the party gets the starting party, standing nowhere, which puts them on
+    /// the map's start. Hit points out of range get pulled back in.
+    /// </remarks>
+    /// <param name="data">The save, upgraded.</param>
     private static void Mend(SaveData data)
     {
         data.Flags ??= new();
@@ -204,6 +226,20 @@ public static class SaveSystem
         data.Triggered ??= new();
         data.Waypoints ??= new();
         data.Seen ??= new();
+
+        data.Party ??= new();
+        data.Party.RemoveAll(member => member is null);
+        if (data.Party.Count > Origins.PartySize) data.Party.RemoveRange(Origins.PartySize, data.Party.Count - Origins.PartySize);
+        if (data.Party.Count == 0) data.Party = Origins.StartingParty();
+        if (data.Leader < 0 || data.Leader >= data.Party.Count) data.Leader = 0;
+
+        foreach (PartyMember member in data.Party)
+        {
+            member.Name ??= string.Empty;
+            member.Scores ??= new();
+            member.Look ??= new();
+            member.Hp = Math.Clamp(member.Hp, 0, member.MaxHp);
+        }
     }
 
     /// <summary>Deletes a file if it is there, and says nothing if it is not.</summary>

@@ -40,9 +40,12 @@ public class InputState : IInputState
     /// <summary>Whether the first frame has been read yet.</summary>
     private bool _sampled;
 
-    /// <summary>When true every device reads as untouched and the mouse as off the window.</summary>
+    /// <summary>When true every device reads as untouched, and the mouse as off the window unless the proof run has put it somewhere.</summary>
     /// <remarks>The proof run turns this on, so whatever I do with the mouse and keyboard while it runs can't change what it shoots.</remarks>
     public bool IgnoreDevices { get; set; }
+
+    /// <summary>The mouse the proof run is pretending there is, while the real devices are ignored.</summary>
+    private MouseState _proofMouse = NoMouse;
 
     /// <summary>Reads every device and keeps the last frame for comparison.</summary>
     public void Update()
@@ -57,7 +60,7 @@ public class InputState : IInputState
         CurrentKeyboardState = IgnoreDevices ? default : Keyboard.GetState();
 
         _priorMouseState = CurrentMouseState;
-        CurrentMouseState = IgnoreDevices ? NoMouse : Mouse.GetState();
+        CurrentMouseState = IgnoreDevices ? _proofMouse : Mouse.GetState();
 
         // A key that's already held when the game starts shouldn't count as a new press.
         if (!_sampled)
@@ -68,6 +71,14 @@ public class InputState : IInputState
             for (int i = 0; i < MaxInputs; i++) _priorGamePadStates[i] = CurrentGamePadStates[i];
         }
     }
+
+    /// <summary>For the proof run, since it can't move the real mouse: where the pretend mouse is, and whether its left button's down.</summary>
+    /// <remarks>It goes through the same press and release checks as the real one, so hovering and clicking get tested the way they'd happen.</remarks>
+    /// <param name="position">Where, in screen pixels.</param>
+    /// <param name="leftDown">Whether the left button is held.</param>
+    internal void ProofMouse(Point position, bool leftDown) =>
+        _proofMouse = new MouseState(position.X, position.Y, 0, leftDown ? ButtonState.Pressed : ButtonState.Released,
+            ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released);
 
     /// <inheritdoc/>
     public bool IsKeyPressed(Keys key) => CurrentKeyboardState.IsKeyDown(key);

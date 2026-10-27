@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using LegendQuest.Characters;
 using LegendQuest.World;
 
 namespace LegendQuest.Save;
@@ -34,14 +35,11 @@ public class SaveData
     /// <summary>The id of the map the party is on.</summary>
     public string MapId { get; set; } = string.Empty;
 
-    /// <summary>How far across that map your feet are, in world pixels.</summary>
-    public float X { get; set; }
+    /// <summary>Everyone in the party, in order, each with where they're standing on the map.</summary>
+    public List<PartyMember> Party { get; set; } = new();
 
-    /// <summary>How far down that map your feet are, in world pixels.</summary>
-    public float Y { get; set; }
-
-    /// <summary>Which way you're facing.</summary>
-    public Direction Facing { get; set; }
+    /// <summary>Which of the party you're controlling, by their place in Party.</summary>
+    public int Leader { get; set; }
 
     /// <summary>The party's gold.</summary>
     public int Gold { get; set; }
@@ -74,10 +72,18 @@ public class SaveData
     [JsonIgnore]
     public TimeSpan Playtime => TimeSpan.FromSeconds(PlaytimeSeconds);
 
-    /// <summary>The save a new game starts from: at the start of the opening map, with no time played.</summary>
+    /// <summary>Whoever you're controlling.</summary>
+    [JsonIgnore]
+    public PartyMember LeaderMember => Party[Leader];
+
+    /// <summary>The save a new game starts from: the starting party at the start of the opening map, with no time played.</summary>
+    /// <remarks>Only the leader gets put on the start. The map puts the rest round them when it loads.</remarks>
     public static SaveData NewGame()
     {
         MapSpawn start = MapCatalog.Get(MapCatalog.Opening).Spawns[MapLoader.StartSpawn];
-        return new SaveData { MapId = MapCatalog.Opening, X = start.Feet.X, Y = start.Feet.Y, Facing = start.Facing };
+        var game = new SaveData { MapId = MapCatalog.Opening, Party = Origins.StartingParty() };
+        game.LeaderMember.Feet = start.Feet;
+        game.LeaderMember.Facing = start.Facing;
+        return game;
     }
 }

@@ -5,7 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LegendQuest;
 
 /// <summary>
-/// Drawing a line of text over its shadow. Shared by every screen that writes anything.
+/// Drawing a line of text over its shadow, and the dark smudge that goes behind text out on a map.
+/// Shared by every screen that writes anything.
 /// </summary>
 public static class Text
 {
@@ -40,5 +41,27 @@ public static class Text
 
         spriteBatch.DrawString(font, text, position + Palette.ShadowOffset, shadow, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.TextShadow);
         spriteBatch.DrawString(font, text, position, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.Text);
+    }
+
+    /// <summary>Draws a soft dark smudge round some text, so it reads over bright grass as well as the dark.</summary>
+    /// <remarks>
+    /// The glow texture drawn in the backing colour, cut in three: a round end each side and the
+    /// middle stretched between them, so a long line doesn't fade out at its ends the way one
+    /// stretched glow would. Needs a linear sampled batch, or the soft edge comes out in steps.
+    /// </remarks>
+    /// <param name="spriteBatch">The SpriteBatch to render with, linear-sampled, back to front.</param>
+    /// <param name="glow">The glow texture.</param>
+    /// <param name="area">The text and the room round it, in screen pixels. The round ends go outside this.</param>
+    /// <param name="ends">How wide each round end is, in screen pixels.</param>
+    /// <param name="color">The backing's colour, premultiplied, so scale it down to fade it.</param>
+    public static void DrawBacking(SpriteBatch spriteBatch, Texture2D glow, Rectangle area, int ends, Color color)
+    {
+        int half = glow.Width / 2;
+        spriteBatch.Draw(glow, new Rectangle(area.Left - ends, area.Top, ends, area.Height), new Rectangle(0, 0, half, glow.Height),
+            color, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
+        spriteBatch.Draw(glow, area, new Rectangle(half - 1, 0, 2, glow.Height),
+            color, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
+        spriteBatch.Draw(glow, new Rectangle(area.Right, area.Top, ends, area.Height), new Rectangle(half, 0, half, glow.Height),
+            color, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
     }
 }

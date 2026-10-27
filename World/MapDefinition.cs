@@ -66,4 +66,7 @@ public sealed class MapDefinition
 
     /// <summary>Everything on it you can use.</summary>
     public required IReadOnlyList<MapInteractable> Interactables { get; init; }
+
+    /// <summary>Everyone standing on it who isn't in the party.</summary>
+    public required IReadOnlyList<MapNpc> Npcs { get; init; }
 }
