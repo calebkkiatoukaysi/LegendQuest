@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using LegendQuest.World;
 
 namespace LegendQuest.Save;
 
@@ -43,4 +44,7 @@ public class SaveData
     /// <summary>PlaytimeSeconds, in the form the rest of the game wants it.</summary>
     [JsonIgnore]
     public TimeSpan Playtime => TimeSpan.FromSeconds(PlaytimeSeconds);
+
+    /// <summary>The save a new game starts from: on the opening map, with no time played.</summary>
+    public static SaveData NewGame() => new() { MapId = MapCatalog.Opening };
 }

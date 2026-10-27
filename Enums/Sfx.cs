@@ -23,4 +23,12 @@ public enum Sfx
 
     /// <summary>Opening the pause menu.</summary>
     Pause,
+
+    // Walking.
+
+    /// <summary>One step on something hard. The pitch and pan change every step.</summary>
+    FootstepStone,
+
+    /// <summary>One step on grass or dirt.</summary>
+    FootstepGrass,
 }

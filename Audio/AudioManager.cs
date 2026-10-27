@@ -165,6 +165,8 @@ public class AudioManager : GameComponent
     private static string SongName(Track track) => track switch
     {
         Track.Title => "Music/embers",
+        Track.Exploring => "Music/hearthsmoke",
+        Track.Underground => "Music/cold-stone",
         _ => throw new ArgumentOutOfRangeException(nameof(track), track, "There's no song file for this track."),
     };
 

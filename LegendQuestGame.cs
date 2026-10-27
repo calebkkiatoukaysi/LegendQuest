@@ -3,6 +3,7 @@ using LegendQuest.Audio;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
+using LegendQuest.World;
 
 namespace LegendQuest;
 
@@ -48,10 +49,16 @@ public partial class LegendQuestGame : Game
         Services.AddService(_screenManager);
     }
 
-    /// <summary>Loads all the sounds, then opens the gate and the title.</summary>
-    /// <remarks>The first screens get added here instead of the constructor because the gate starts the title music when it opens.</remarks>
+    /// <summary>Reads every map, loads all the sounds, then opens the gate and the title.</summary>
+    /// <remarks>
+    /// The first screens get added here instead of the constructor because the gate starts the title
+    /// music when it opens. The maps are read first, because reading a save checks its map exists,
+    /// and because a broken map file should stop the game here, not when somebody walks onto it.
+    /// </remarks>
     protected override void LoadContent()
     {
+        MapCatalog.LoadAll();
+
         if (ProofDirectory is not null) BeginProof();
 
         _audio.LoadContent(Content);

@@ -34,7 +34,7 @@ public class SaveSlotScreen : GameScreen
     private ContentManager _content;
     private AudioManager _audio;
 
-    /// <summary>Raised once a slot is picked and the form has started to fade, with the game in it (null for a new game).</summary>
+    /// <summary>Raised once a slot is picked and the form has started to fade, with the game in it.</summary>
     public event Action<int, SaveData> SlotChosen;
 
     /// <summary>Raised when the form is backed out of without picking anything.</summary>

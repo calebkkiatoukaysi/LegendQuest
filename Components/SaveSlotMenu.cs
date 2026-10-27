@@ -88,7 +88,7 @@ public class SaveSlotMenu
     /// <summary>How far the form has faded in, 0 to 1.</summary>
     public float Opacity { get; set; } = 1f;
 
-    /// <summary>Raised when the player commits to a slot, with the game in it (null when a new game is going in it).</summary>
+    /// <summary>Raised when the player commits to a slot, with the game in it (a brand new one, already written, for a new game).</summary>
     public event Action<int, SaveData> SlotChosen;
 
     /// <summary>Raised when the player backs out without choosing anything.</summary>
@@ -318,7 +318,14 @@ public class SaveSlotMenu
 
         SaveSlot picked = _slots[slot];
 
-        if (_purpose == SlotPurpose.NewGame && picked.HasGame && !confirmed)
+        if (_purpose == SlotPurpose.Load)
+        {
+            IsOpen = false;
+            SlotChosen?.Invoke(slot, picked.Data);
+            return;
+        }
+
+        if (picked.HasGame && !confirmed)
         {
             _confirmingReplace = slot;
             _slotButtons[slot].Sublabel = ReplaceNote;
@@ -326,8 +333,16 @@ public class SaveSlotMenu
             return;
         }
 
+        // A new game is written straight away, so if the slot can't be written the form can say so.
+        SaveData fresh = SaveData.NewGame();
+        if (!SaveSystem.Write(slot, fresh))
+        {
+            _status = "COULD NOT WRITE " + picked.Name + " -- " + SaveSystem.LastError;
+            return;
+        }
+
         IsOpen = false;
-        SlotChosen?.Invoke(slot, _purpose == SlotPurpose.Load ? picked.Data : null);
+        SlotChosen?.Invoke(slot, fresh);
     }
 
     /// <summary>Erases a slot, on the second click.</summary>

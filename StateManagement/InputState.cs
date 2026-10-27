@@ -121,4 +121,8 @@ public class InputState : IInputState
     /// <summary>Whether the left button came back up this frame.</summary>
     public bool IsLeftReleased =>
         CurrentMouseState.LeftButton == ButtonState.Released && _priorMouseState.LeftButton == ButtonState.Pressed;
+
+    /// <summary>Which way the wheel turned this frame: 1 away from you, -1 toward you, 0 if it didn't.</summary>
+    /// <remarks>Just the sign, not notches. A touchpad sends little bits at a time and would never add up to a whole notch in one frame.</remarks>
+    public int WheelTurn => System.Math.Sign(CurrentMouseState.ScrollWheelValue - _priorMouseState.ScrollWheelValue);
 }

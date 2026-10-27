@@ -39,10 +39,13 @@ SFX_RATE = 44100
 # Sound effects get normalised by peak, quieter for the ones that fire a lot.
 MUSIC_PEAK_DB = -1.0
 TITLE_RMS_DB = -21.0
+EXPLORE_RMS_DB = -22.0  # under everything else that's going on, since it plays the longest
+DARK_RMS_DB = -24.0     # quieter again, so the drips and the footsteps carry
 LIMIT_KNEE = 0.5        # the limiter only touches samples above this (linear)
 
 PEAK_MENU = -6.0        # confirm and back
 PEAK_CLICK = -8.0       # UI clicks
+PEAK_REPEAT = -10.0     # footsteps, which fire constantly
 
 TAU = 2.0 * math.pi
 VERBOSE = False
@@ -677,6 +680,40 @@ def frame_drum(rate, rng):
     return body
 
 
+def flute(freq, beats, rate, rng, vel=0.7):
+    """A wooden flute: mostly the fundamental with a little of the two above it, breath under it,
+    and a vibrato that only comes in once the note has settled. beats is how long it's held, in seconds."""
+    release = 0.25
+    n = int((beats + 3.0 * release) * rate)
+    times = vibrato_time(n, rate, 12.0, rng.uniform(4.8, 5.4), 0.35)
+    w = TAU * freq / rate
+    s = math.sin
+    tone = [s(w * t) + 0.18 * s(2.0 * w * t) + 0.08 * s(3.0 * w * t) for t in times]
+    breath = norm(biquad(noise(n, rng), "bp", min(2.2 * freq, 0.4 * rate), 1.5, rate))
+    mix(tone, breath, 0, 0.12 + 0.1 * (1.0 - vel))
+    return shaped(scale(tone, vel), envelope(n, rate, attack=0.06, gate=beats, release=release))
+
+
+def sweep(f0, f1, n, rate, amp=1.0):
+    """A sine gliding exponentially from f0 to f1 over n samples."""
+    if abs(f1 - f0) < 1e-6 or n < 2:
+        return sine(f0, n, rate, amp)
+    k = math.log(f1 / f0) / n
+    c = TAU * f0 / (rate * k)
+    s, e = math.sin, math.exp
+    return [amp * s(c * (e(k * i) - 1.0)) for i in range(n)]
+
+
+def drip(rate, rng):
+    """A drop of water landing in a puddle: a quick falling blip, and a smaller one as it bounces."""
+    n = int(0.25 * rate)
+    f0 = rng.uniform(1400.0, 2000.0)
+    x = shaped(sweep(f0, f0 * 0.6, n, rate), envelope(n, rate, attack=0.0005, tau=0.025))
+    m = int(0.12 * rate)
+    mix(x, shaped(sweep(f0 * 1.4, f0 * 0.9, m, rate, 0.3), envelope(m, rate, 0.0005, 0.012)), int(0.07 * rate))
+    return x
+
+
 # --------------------------------------------------------------------------- #
 # embers.wav: title theme
 # --------------------------------------------------------------------------- #
@@ -736,18 +773,6 @@ CRACKLE_RATE = 3.5
 WIND_GUSTS = 3
 
 
-def drone_spans():
-    """The drone as (first bar, bars, MIDI): one bow per run of bars on the same chord."""
-    spans = []
-    for bar, (drone, _) in enumerate(EMBERS_BARS_CHORDS, start=1):
-        if spans and spans[-1][2] == drone:
-            first, bars, _ = spans[-1]
-            spans[-1] = (first, bars + 1, drone)
-        else:
-            spans.append((bar, 1, drone))
-    return spans
-
-
 def crackle(length, rate, rng):
     """A fire close by: tiny pops at random, now and then a few at once, and the odd soft knock of
     a log settling. Placed round the loop so the end runs into the start."""
@@ -782,7 +807,7 @@ def build_embers():
 
     # The drone: one bow per chord, starting a second early and ringing over so the changes overlap.
     strings = s.half_track()
-    for first, bars, notes in drone_spans():
+    for first, bars, notes in drone_spans(EMBERS_BARS_CHORDS):
         note = bowed([midi_hz(m) for m in notes], s.secs(4 * bars) + 1.0, H, rng, attack=1.8, release=1.0,
                      vib_cents=5.0, bow=0.06, bright=0.8)
         mix_loop(strings, note, s.half_at(first) - H)
@@ -826,6 +851,172 @@ def build_embers():
 
     s.add_reverb(rt60=3.5, damp_hz=2500.0, size=1.2, gain_db=-9.0)
     s.finish("Content/Music/embers.wav", TITLE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
+# hearthsmoke.wav: walking about on a lit map
+# --------------------------------------------------------------------------- #
+# D Dorian, 66 BPM, 16 bars (about 58 s). Folk rather than dread: the lute rolls through the
+# chords in eighths, a wooden flute plays a tune over the second half, the frame drum keeps a slow
+# walk, and the drone holds it down. The major IV (G) is what makes it Dorian, and keeps it from
+# sounding as sad as the title. Ends on Am into Dm, so the loop resolves.
+
+HEARTH_BPM, HEARTH_BARS = 66, 16
+
+HEARTH_CHORDS = (          # one per bar: (drone MIDI, lute voicing low to high)
+    ((38, 45), (50, 57, 62, 65)), ((38, 45), (50, 57, 62, 65)),     # Dm
+    ((36, 43), (48, 55, 60, 64)), ((36, 43), (48, 55, 60, 64)),     # C
+    ((43, 50), (55, 62, 67, 71)), ((43, 50), (55, 62, 67, 71)),     # G
+    ((38, 45), (50, 57, 62, 65)), ((38, 45), (50, 57, 62, 65)),     # Dm
+    ((41, 48), (53, 60, 65, 69)), ((41, 48), (53, 60, 65, 69)),     # F
+    ((36, 43), (48, 55, 60, 64)), ((36, 43), (48, 55, 60, 64)),     # C
+    ((43, 50), (55, 62, 67, 71)), ((43, 50), (55, 62, 67, 71)),     # G
+    ((45, 52), (57, 64, 69, 72)),                                   # Am
+    ((38, 45), (50, 57, 62, 65)),                                   # Dm
+)
+
+#: Rolling eighths through the voicing, every bar: (beat, which note, velocity).
+HEARTH_PICKING = ((0.0, 0, 0.6), (0.5, 1, 0.4), (1.0, 2, 0.45), (1.5, 3, 0.4),
+                  (2.0, 1, 0.5), (2.5, 2, 0.4), (3.0, 3, 0.45), (3.5, 2, 0.35))
+
+HEARTH_TUNE_FROM = 5       # the flute comes in here, and the lute steps back a little under it
+
+HEARTH_TUNE = (            # (bar, beat, MIDI, beats held)
+    (5, 0.0, 74, 1.5), (5, 1.5, 76, 0.5), (5, 2.0, 74, 1.0), (5, 3.0, 71, 1.0),
+    (6, 0.0, 69, 2.0), (6, 2.0, 71, 1.0), (6, 3.0, 74, 1.0),
+    (7, 0.0, 76, 1.5), (7, 1.5, 77, 0.5), (7, 2.0, 76, 1.0), (7, 3.0, 74, 1.0),
+    (8, 0.0, 74, 3.0),
+    (9, 0.0, 77, 1.0), (9, 1.0, 76, 1.0), (9, 2.0, 74, 1.0), (9, 3.0, 72, 1.0),
+    (10, 0.0, 69, 2.0), (10, 2.0, 72, 2.0),
+    (11, 0.0, 76, 1.5), (11, 1.5, 74, 0.5), (11, 2.0, 72, 1.0), (11, 3.0, 67, 1.0),
+    (12, 0.0, 72, 3.0),
+    (13, 0.0, 71, 1.0), (13, 1.0, 74, 1.0), (13, 2.0, 79, 1.5), (13, 3.5, 77, 0.5),
+    (14, 0.0, 76, 2.0), (14, 2.0, 74, 2.0),
+    (15, 0.0, 72, 1.0), (15, 1.0, 71, 1.0), (15, 2.0, 69, 2.0),
+    (16, 0.0, 74, 3.0),
+)
+
+HEARTH_DRUM = ((0.0, 0.8), (2.0, 0.5))
+HEARTH_DRUM_LATE = ((1.5, 0.25), (3.5, 0.3))     # and these as well once the tune is in
+
+
+def drone_spans(chords):
+    """A song's drone as (first bar, bars, MIDI): one bow per run of bars on the same chord."""
+    spans = []
+    for bar, (drone, _) in enumerate(chords, start=1):
+        if spans and spans[-1][2] == drone:
+            first, bars, _ = spans[-1]
+            spans[-1] = (first, bars + 1, drone)
+        else:
+            spans.append((bar, 1, drone))
+    return spans
+
+
+def build_hearthsmoke():
+    rng = random.Random(6601)
+    s = Song(HEARTH_BPM, HEARTH_BARS)
+    R, L, H = s.rate, s.length, s.rate // 2
+
+    strings = s.half_track()
+    for first, bars, notes in drone_spans(HEARTH_CHORDS):
+        note = bowed([midi_hz(m) for m in notes], s.secs(4 * bars) + 1.0, H, rng, attack=1.4, release=1.0,
+                     vib_cents=6.0, bow=0.06, bright=0.9)
+        mix_loop(strings, note, s.half_at(first) - H)
+    s.add_half(strings, -17.0, send=0.25, label="drone")
+
+    pluck = note_cache(lambda m, vel: lute(midi_hz(m), R, rng, vel, 2.6))
+    picking = s.track()
+    for bar, (_, voicing) in enumerate(HEARTH_CHORDS, start=1):
+        under = 0.7 if bar >= HEARTH_TUNE_FROM else 1.0
+        for beat, which, vel in HEARTH_PICKING:
+            jitter = int(rng.gauss(0.0, 0.008) * R)
+            mix_loop(picking, pluck(voicing[which], vel), s.at(bar, beat) + jitter, under * rng.uniform(0.9, 1.0))
+    s.add(picking, -11.0, pan=-0.15, send=0.3, label="picking")
+
+    tune = s.track()
+    for bar, beat, m, held in HEARTH_TUNE:
+        jitter = int(rng.gauss(0.0, 0.006) * R)
+        mix_loop(tune, flute(midi_hz(m), s.secs(held) * 0.92, R, rng, 0.75), s.at(bar, beat) + jitter)
+    s.add(tune, -10.0, pan=0.15, send=0.45, label="flute")
+
+    hit = frame_drum(R, rng)
+    drum = s.track()
+    for bar in range(1, HEARTH_BARS + 1):
+        for beat, vel in HEARTH_DRUM + (HEARTH_DRUM_LATE if bar >= HEARTH_TUNE_FROM else ()):
+            mix_loop(drum, hit, s.at(bar, beat), vel)
+    s.add(drum, -12.0, send=0.25, label="drum")
+
+    s.add_stereo(wind(L, R, rng), wind(L, R, rng), -30.0, label="wind")
+
+    s.add_reverb(rt60=2.6, damp_hz=3000.0, size=1.0, gain_db=-11.0)
+    s.finish("Content/Music/hearthsmoke.wav", EXPLORE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
+# cold-stone.wav: walking about underground
+# --------------------------------------------------------------------------- #
+# C Phrygian, 48 BPM, 10 bars (50 s). Hardly a tune at all: a low drone on C and G, a choir that
+# swells in and leans on the flat second, a few low notes from the lute far apart, one deep boom,
+# cold air moving, and water dripping somewhere in a long reverb.
+
+COLD_BPM, COLD_BARS = 48, 10
+
+COLD_CHOIR = (             # (first bar, bars, MIDI, vowel)
+    (1, 4, (48, 55), "oo"),
+    (5, 3, (49, 55, 60), "oh"),        # D flat against the C drone
+    (8, 3, (48, 51, 55), "oo"),
+)
+
+COLD_NOTES = (             # (bar, beat, MIDI, velocity) on the lute, far apart
+    (1, 0.0, 48, 0.5), (2, 2.0, 51, 0.45), (3, 1.0, 49, 0.5), (4, 0.0, 48, 0.4),
+    (6, 2.0, 55, 0.45), (7, 0.0, 56, 0.5), (8, 3.0, 53, 0.4), (9, 0.0, 49, 0.5),
+)
+
+COLD_BOOM = (6, 0.0)
+
+#: How many drips land in one loop.
+COLD_DRIPS = 9
+
+
+def build_cold_stone():
+    rng = random.Random(4801)
+    s = Song(COLD_BPM, COLD_BARS)
+    R, L, H = s.rate, s.length, s.rate // 2
+
+    # The drone is the whole loop long and wraps round on itself, so it never changes bow.
+    strings = s.half_track()
+    mix_loop(strings, bowed([midi_hz(36), midi_hz(43)], s.secs(4 * COLD_BARS) + 1.0, H, rng, attack=2.0,
+                            release=1.5, vib_cents=4.0, bow=0.05, bright=0.6), -H)
+    s.add_half(strings, -15.0, send=0.35, label="drone")
+
+    ch = s.half_track()
+    for first, bars, notes, vowel in COLD_CHOIR:
+        c = choir([midi_hz(m) for m in notes], s.secs(4 * bars), H, rng, vowel, attack=4.0, release=2.5)
+        mix_loop(ch, c, s.half_at(first) - H)
+    s.add_half(ch, -12.0, pan=-0.1, send=0.7, label="choir")
+
+    low = s.track()
+    for bar, beat, m, vel in COLD_NOTES:
+        mix_loop(low, lute(midi_hz(m) * 2 ** (-8 / 1200), R, rng, vel, 4.0), s.at(bar, beat))
+    s.add(low, -12.0, pan=0.1, send=0.6, label="lute")
+
+    boom = s.track()
+    n = int(3.5 * R)
+    hit = shaped(glide(58.0, 30.0, 0.4, n, R), envelope(n, R, attack=0.004, tau=0.8))
+    mix(hit, shaped(norm(lowpass(lowpass(noise(n, rng), 120.0, R), 120.0, R)), envelope(n, R, attack=0.01, tau=0.5)), 0, 0.3)
+    mix_loop(boom, hit, s.at(*COLD_BOOM))
+    s.add(boom, -13.0, send=0.5, label="boom")
+
+    drips = s.track()
+    for _ in range(COLD_DRIPS):
+        mix_loop(drips, drip(R, rng), rng.randrange(L), rng.uniform(0.4, 1.0))
+    s.add(drips, -20.0, pan=rng.uniform(-0.5, 0.5), send=1.0, label="drips")
+
+    air = looped(lambda x: lowpass(lowpass(x, 300.0, R), 300.0, R), noise(L, rng), R)
+    s.add(shaped(norm(air), [0.6 + 0.4 * math.sin(TAU * 2 * i / L) ** 2 for i in range(L)]), -26.0, label="air")
+
+    s.add_reverb(rt60=6.0, damp_hz=1800.0, size=1.5, gain_db=-7.0)
+    s.finish("Content/Music/cold-stone.wav", DARK_RMS_DB)
 
 
 # --------------------------------------------------------------------------- #
@@ -940,11 +1131,38 @@ def sfx_pause(rng):
 
 
 # --------------------------------------------------------------------------- #
+# Walking
+# --------------------------------------------------------------------------- #
+
+def sfx_footstep_stone(rng):
+    """One step on stone: heel, a low thump, a little grit, then the toe. The Black Box's concrete step."""
+    x = silence(sec(0.13))
+    heel = lowpass(burst(0.05, 0.012, rng, "lp", 1400.0), 1400.0, R)
+    place(x, norm(heel), 0, 0.8)
+    place(x, thump(110.0, 60.0, 0.11, 0.03, 0.001, 0.02), 0, 0.7)
+    place(x, burst(0.03, 0.008, rng, "bp", 3000.0, 0.8), 0.002, 0.15)
+    place(x, norm(lowpass(burst(0.04, 0.01, rng, "lp", 1100.0), 1100.0, R)), 0.04, 0.35)
+    place(x, burst(0.02, 0.005, rng, "bp", 3500.0, 0.8), 0.041, 0.08)
+    return x
+
+
+def sfx_footstep_grass(rng):
+    """One step on grass: a soft thud, and the blades crushing under it."""
+    x = silence(sec(0.16))
+    place(x, thump(90.0, 55.0, 0.12, 0.035, 0.002, 0.02), 0, 0.6)
+    place(x, burst(0.09, 0.03, rng, "bp", 3200.0, 0.6, attack=0.004), 0.0, 0.5)
+    place(x, burst(0.06, 0.02, rng, "bp", 5200.0, 0.8, attack=0.003), 0.03, 0.25)
+    return x
+
+
+# --------------------------------------------------------------------------- #
 # Build
 # --------------------------------------------------------------------------- #
 
 SONGS = {
     "embers": build_embers,
+    "hearthsmoke": build_hearthsmoke,
+    "cold-stone": build_cold_stone,
 }
 
 SFX = {   # name: (folder, peak dBFS, builder)
@@ -953,6 +1171,8 @@ SFX = {   # name: (folder, peak dBFS, builder)
     "menu-back": ("Content/Sfx", PEAK_MENU, sfx_menu_back),
     "option-change": ("Content/Sfx", PEAK_CLICK, sfx_option_change),
     "pause": ("Content/Sfx", PEAK_CLICK, sfx_pause),
+    "footstep-stone": ("Content/Sfx", PEAK_REPEAT, sfx_footstep_stone),
+    "footstep-grass": ("Content/Sfx", PEAK_REPEAT, sfx_footstep_grass),
 }
 
 

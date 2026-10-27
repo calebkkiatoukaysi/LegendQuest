@@ -38,4 +38,31 @@ public static class Layers
 
     /// <summary>Foreground text.</summary>
     public const float Text = 0.10f;
+
+    // A map. It's one world space batch of its own, sorted by how far down the map things are.
+
+    /// <summary>The ground layer of a map. Behind everything.</summary>
+    public const float GroundTile = 1.00f;
+
+    /// <summary>The detail layer, over the ground: fences, flowers, rubble.</summary>
+    public const float DetailTile = 0.98f;
+
+    /// <summary>Things on walls, like the torches. Behind everyone on the floor.</summary>
+    public const float WorldWall = 0.96f;
+
+    /// <summary>A flame in a wall sconce, over the sconce and still behind everyone on the floor.</summary>
+    public const float WallFlame = 0.95f;
+
+    /// <summary>The back and front of the range that people and props get sorted into.</summary>
+    private const float WorldFar = 0.90f;
+    private const float WorldNear = 0.10f;
+
+    /// <summary>Overhead tiles: roofs and canopies, in front of everyone.</summary>
+    public const float Overhead = 0.04f;
+
+    /// <summary>The layer for something standing on the floor. The further down the map, the more in front it is.</summary>
+    /// <param name="footY">How far down the map its feet are, in world pixels.</param>
+    /// <param name="mapHeight">How tall the map is, in world pixels.</param>
+    public static float OnFloor(float footY, float mapHeight) =>
+        WorldFar - (WorldFar - WorldNear) * System.Math.Clamp(footY / mapHeight, 0f, 1f);
 }

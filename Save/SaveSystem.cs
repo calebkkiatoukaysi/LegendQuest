@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using LegendQuest.World;
 
 namespace LegendQuest.Save;
 
@@ -82,6 +83,9 @@ public static class SaveSystem
 
             // A save from a newer build has fields this one would quietly drop if it wrote the slot back.
             if (data.Version > CurrentVersion) return Unreadable(slot, "it was saved by a newer version of the game");
+
+            // Loading it would mean walking onto a map that isn't there.
+            if (!MapCatalog.Contains(data.MapId)) return Unreadable(slot, "it's on a map called " + data.MapId + ", which this build doesn't have");
 
             return new SaveSlot { Index = slot, State = SaveSlotState.Occupied, Data = Upgrade(data) };
         }

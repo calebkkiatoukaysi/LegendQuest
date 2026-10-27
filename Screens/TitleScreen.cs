@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
+using LegendQuest.World;
 
 namespace LegendQuest.Screens;
 
@@ -22,10 +23,6 @@ public class TitleScreen : MenuScreen
     private const string OptionsLabel = "OPTIONS";
     private const string ExitLabel = "EXIT";
     private const string Hint = "ARROWS  ·  ENTER  ·  ESC TO LEAVE";
-
-    /// <summary>What the loading screen says when a game is picked, until there's a map to go to.</summary>
-    /// <remarks>Goes away with the first map. Picking a slot just comes back to the title for now.</remarks>
-    private const string NothingYetLine = "THERE IS NOTHING PAST THE GATE YET.";
 
     private const float TitleY = 48f;
     private const float HintY = 858f;
@@ -62,7 +59,7 @@ public class TitleScreen : MenuScreen
         var exit = new MenuEntry(ExitLabel, Palette.Ember);
 
         newGame.Selected += () => OpenSlots(SlotPurpose.NewGame);
-        _continue.Selected += Begin;
+        _continue.Selected += Continue;
         load.Selected += () => OpenSlots(SlotPurpose.Load);
         options.Selected += () => ScreenManager.AddScreen(new OptionsScreen());
         exit.Selected += () => ScreenManager.Game.Exit();
@@ -112,7 +109,7 @@ public class TitleScreen : MenuScreen
     private void OpenSlots(SlotPurpose purpose)
     {
         var slots = new SaveSlotScreen(purpose);
-        slots.SlotChosen += (_, _) => Begin();
+        slots.SlotChosen += (_, game) => Begin(game);
 
         // Something may have been erased while it was open.
         slots.Closed += RefreshContinue;
@@ -120,10 +117,24 @@ public class TitleScreen : MenuScreen
         ScreenManager.AddScreen(slots);
     }
 
-    /// <summary>Starts or carries on a game.</summary>
-    /// <remarks>There are no maps yet, so for now it goes through the loading screen and back to the title.</remarks>
-    private void Begin() =>
-        LoadingScreen.Load(ScreenManager, NothingYetLine, new TitleBackgroundScreen(), new TitleScreen());
+    /// <summary>CONTINUE: loads whichever slot was written last.</summary>
+    /// <remarks>Read again here rather than remembered, in case the file changed since the title came up. If it's gone, CONTINUE just goes dead.</remarks>
+    private void Continue()
+    {
+        SaveSlot latest = SaveSystem.Latest();
+        if (latest is null)
+        {
+            RefreshContinue();
+            return;
+        }
+
+        Begin(latest.Data);
+    }
+
+    /// <summary>Goes to the map the game is on, with its name on the black in between.</summary>
+    /// <param name="game">The game, new or loaded.</param>
+    private void Begin(SaveData game) =>
+        LoadingScreen.Load(ScreenManager, MapCatalog.Get(game.MapId).Name.ToUpperInvariant(), new ExploreScreen(game));
 
     /// <summary>Lights CONTINUE if any slot has a game in it, and kills it if none do.</summary>
     private void RefreshContinue() => _continue.Plate.Enabled = SaveSystem.Latest() is not null;

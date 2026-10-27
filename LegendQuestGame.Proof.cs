@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
+using LegendQuest.World;
 
 namespace LegendQuest;
 
@@ -36,9 +37,7 @@ public partial class LegendQuestGame
     private const int ProofNewOpen = 170;
     private const int ProofNewShot = 195;
     private const int ProofNewClose = 196;
-    private const int ProofPauseOpen = 215;
-    private const int ProofPauseShot = 235;
-    private const int ProofPauseQuit = 236;
+    private const int ProofVillage = 215;
 
     /// <summary>The slot the proof breaks on purpose, and then erases.</summary>
     private const int ProofBrokenSlot = 1;
@@ -86,7 +85,7 @@ public partial class LegendQuestGame
         SaveSystem.Folder = saves;
 
         SaveSystem.Write(0, new SaveData { MapId = "village", PlaytimeSeconds = 4320 });
-        SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { MapId = "road", PlaytimeSeconds = 2840 });
+        SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { MapId = "barrow", PlaytimeSeconds = 2840 });
         File.WriteAllText(SaveSystem.PathFor(ProofBrokenSlot), "{ this was never a save");
     }
 
@@ -106,6 +105,14 @@ public partial class LegendQuestGame
                 _proofPending = ProofMenus();
                 break;
 
+            case ProofStage.Village:
+                _proofPending = RunSubject<ExploreScreen>(s => s.ProofStep(Frame()), ExploreScreen.VillageProofEnd, ProofStage.Barrow);
+                break;
+
+            case ProofStage.Barrow:
+                _proofPending = RunSubject<ExploreScreen>(s => s.ProofStep(Frame()), ExploreScreen.BarrowProofEnd, ProofStage.TitleAgain);
+                break;
+
             case ProofStage.TitleAgain:
                 _proofPending = RunSubject<TitleScreen>(_ => Frame() == ProofSettle ? "title-again.png" : null, ProofSettle, ProofStage.Done);
                 break;
@@ -117,7 +124,7 @@ public partial class LegendQuestGame
         }
     }
 
-    /// <summary>The title, options over it, the slots both ways (with an erase), then the pause menu out to the title.</summary>
+    /// <summary>The title, options over it, the slots both ways (with an erase), then a new game.</summary>
     private string ProofMenus()
     {
         switch (_proofFrame)
@@ -165,18 +172,11 @@ public partial class LegendQuestGame
                     if (screen is OptionsScreen or SaveSlotScreen) screen.ExitScreen();
                 return null;
 
-            // There's nothing to pause yet, so the pause menu goes over the title. QUIT TO TITLE takes
-            // the long way round, through the loading screen.
-            case ProofPauseOpen:
-                _screenManager.AddScreen(new PauseMenuScreen());
-                return null;
-
-            case ProofPauseShot:
-                return "pause.png";
-
-            case ProofPauseQuit:
-                Find<PauseMenuScreen>()?.ProofQuitToTitle();
-                _proofStage = ProofStage.TitleAgain;
+            // A new game on a scratch save, the same way the title starts one, minus the slot.
+            case ProofVillage:
+                LoadingScreen.Load(_screenManager, MapCatalog.Get(MapCatalog.Opening).Name.ToUpperInvariant(),
+                    new ExploreScreen(SaveData.NewGame()));
+                _proofStage = ProofStage.Village;
                 return null;
 
             default:

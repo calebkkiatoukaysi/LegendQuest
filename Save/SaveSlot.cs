@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using LegendQuest.World;
 
 namespace LegendQuest.Save;
 
@@ -34,7 +35,7 @@ public class SaveSlot
     {
         SaveSlotState.Occupied =>
             string.Format(CultureInfo.InvariantCulture, "{0}  ·  {1}  ·  {2}",
-                Data.MapId.ToUpperInvariant(), Clock(Data.Playtime),
+                MapCatalog.Get(Data.MapId).Name.ToUpperInvariant(), Clock(Data.Playtime),
                 Data.SavedUtc.ToLocalTime().ToString("d MMM yyyy", CultureInfo.InvariantCulture).ToUpperInvariant()),
 
         // Said plainly. A corrupt slot is the one place to drop the atmosphere and just tell the player.
