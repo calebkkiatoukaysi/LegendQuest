@@ -62,12 +62,13 @@ BUTTON_FRAMES = {
     ],
 }
 
-# Dark iron, a little warm so it sits with the torchlight.
-IRON = (46, 42, 41)
-IRON_LT = (82, 75, 70)
-IRON_DK = (17, 15, 15)
-GROOVE = (9, 7, 7)
-RIVET = (112, 102, 94)
+# Twilight blue enamel with gold studs, the colours of the title's banners, so the menus sit with
+# the bright art instead of the old dark iron.
+IRON = (44, 54, 96)
+IRON_LT = (86, 104, 164)
+IRON_DK = (18, 22, 46)
+GROOVE = (10, 12, 28)
+RIVET = (222, 182, 98)
 OUTLINE = (0, 0, 0, 255)
 
 
@@ -178,8 +179,8 @@ def build_button(seed=3301):
 # panel.png -- the nine-sliceable iron slab every form is built on
 # --------------------------------------------------------------------------- #
 #
-# One frame. A form doesn't react to the cursor, the controls on it do. Same iron as the buttons, a
-# shade darker and hollowed out, with a thin line of old bronze inside the lip.
+# One frame. A form doesn't react to the cursor, the controls on it do. Same enamel as the buttons, a
+# shade darker and hollowed out, with a thin line of gold inside the lip.
 
 PANEL_FRAME = 32
 
@@ -195,12 +196,12 @@ PANEL_TRIM = 5
 #: How far in from the border the corner rivets sit, just inside the bevel.
 PANEL_RIVET = 3
 
-SHELL = (34, 31, 30)
-SHELL_LT = (66, 60, 56)
-SHELL_DK = (13, 11, 11)
-WELL = (17, 15, 15)
-WELL_LT = (35, 31, 30)
-BRONZE = (92, 72, 44)
+SHELL = (38, 46, 84)
+SHELL_LT = (80, 96, 152)
+SHELL_DK = (14, 16, 36)
+WELL = (20, 24, 50)
+WELL_LT = (34, 40, 76)
+BRONZE = (206, 162, 82)
 
 
 def build_panel(seed=4472):

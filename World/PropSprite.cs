@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,8 +21,14 @@ public class PropSprite
     /// <summary>The middle of its bottom edge, in world pixels.</summary>
     public Vector2 Foot { get; }
 
-    /// <summary>The floor it takes up, or null for things you can walk through or that are on a wall.</summary>
-    public BoundingRectangle? Footprint { get; }
+    /// <summary>The floor it takes up: none for things you can walk through, one box for most, and two for an arch, one each side of the way through.</summary>
+    public IReadOnlyList<BoundingRectangle> Footprints { get; }
+
+    /// <summary>How far it's been moved off its foot, in world pixels. Only the arrival moves anything: the ship, sailing in.</summary>
+    public Vector2 Offset { get; set; }
+
+    /// <summary>Whether it's not drawn: the gangplank, till the ship's tied up.</summary>
+    public bool Hidden { get; set; }
 
     /// <summary>Which of its pictures to draw: 0 is shut (or up, or asleep), 1 is open.</summary>
     public int Frame { get; set; }
@@ -37,8 +44,22 @@ public class PropSprite
         Foot = placed.Foot;
 
         Point size = Definition.Footprint;
-        if (size != Point.Zero)
-            Footprint = new BoundingRectangle(Foot.X - size.X / 2f, Foot.Y - size.Y, size.X, size.Y);
+        float left = Foot.X - size.X / 2f, top = Foot.Y - size.Y;
+        var footprints = new List<BoundingRectangle>();
+
+        if (size != Point.Zero && Definition.Gap == 0)
+        {
+            footprints.Add(new BoundingRectangle(left, top, size.X, size.Y));
+        }
+        else if (size != Point.Zero)
+        {
+            // An arch: a box each side of the way through.
+            float side = (size.X - Definition.Gap) / 2f;
+            footprints.Add(new BoundingRectangle(left, top, side, size.Y));
+            footprints.Add(new BoundingRectangle(Foot.X + Definition.Gap / 2f, top, side, size.Y));
+        }
+
+        Footprints = footprints;
     }
 
     /// <summary>Loads the picture.</summary>
@@ -48,18 +69,31 @@ public class PropSprite
     {
         _texture = content.Load<Texture2D>(Definition.Texture);
         if (_texture.Width % Definition.Frames != 0)
-            throw new InvalidOperationException($"{Definition.Texture}.png is {_texture.Width} wide, which doesn't split into {Definition.Frames} pictures. Run tools/generate_world.py.");
+            throw new InvalidOperationException($"{Definition.Texture}.png is {_texture.Width} wide, which doesn't split into {Definition.Frames} pictures. Run tools/generate_world.py, or tools/cut_supplied.py for Questeria's.");
     }
+
+    /// <summary>Where it sorts on its map: behind everyone if it's on a wall, under everyone if it's lying on the ground, otherwise by how far down the map its foot is.</summary>
+    /// <param name="mapHeight">How tall the map is, in world pixels.</param>
+    public float Layer(float mapHeight) => Definition.Placement switch
+    {
+        PropPlacement.Wall => Layers.WorldWall,
+        PropPlacement.Ground => Layers.GroundProp,
+        _ => Layers.OnFloor(Foot.Y + Offset.Y - Definition.SortRise, mapHeight),
+    };
 
     /// <summary>Draws the prop, standing on its foot.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in world space. Point-sampled.</param>
     /// <param name="layerDepth">Where it sorts.</param>
-    public void Draw(SpriteBatch spriteBatch, float layerDepth)
+    /// <param name="tint">What to multiply it by: white on the map itself, the paper colour on the map screen.</param>
+    public void Draw(SpriteBatch spriteBatch, float layerDepth, Color tint)
     {
+        if (Hidden) return;
+
         Point size = Size;
         var source = new Rectangle(Frame * size.X, 0, size.X, size.Y);
         var origin = new Vector2(size.X / 2, size.Y);
-        spriteBatch.Draw(_texture, new Vector2(MathF.Round(Foot.X), MathF.Round(Foot.Y)), source, Color.White,
+        Vector2 at = Foot + Offset;
+        spriteBatch.Draw(_texture, new Vector2(MathF.Round(at.X), MathF.Round(at.Y)), source, tint,
             0f, origin, 1f, SpriteEffects.None, layerDepth);
     }
 }

@@ -1,0 +1,193 @@
+; Questeria, the capital, and the hub. The palace on its terrace to the north with the temple and
+; the guildhall either side of it, the plaza and its fountain in the middle, houses to the west and
+; the inn and the market to the east, the canal, and the avenue south to the city gate and the old
+; road. The harbour's off the west side. Lit, and no fog: everyone knows the capital.
+
+[map]
+id = questeria
+name = Questeria
+world = 300 200
+tileset = questeria
+size = 84 58
+dark = no
+fog = no
+music = Exploring
+
+[legend]
+# = plaza
+= = terrace
+: = cobble
+, = grass
+~ = water
+
+[ground]
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:::::::::::::::::::::::::::::::::::::###########::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+
+; kind id x y, in tiles, then any settings. Exits are rectangles from their top left tile.
+[objects]
+spawn start 42 34 facing=up
+spawn gate 42 55 facing=up
+spawn docks 2 26 facing=right
+exit road 40 57 w=5 to=road at=start
+exit docks 0 23 h=6 to=docks at=city
+
+; Valen, as you come up from the harbour.
+trigger city-gate 4 22 w=2 h=8 talk=valen-city
+
+; The terrace.
+prop temple 18 17
+prop palace 42 17
+prop guildhall 66 17
+prop banner-pink 31 17
+prop banner-blue 53 17
+prop cypress 27 16
+prop cypress 57 16
+prop cherry-tree 4 9
+prop oak 79 9
+prop blossom-tree 5 16.5
+prop cherry-tree-small 79 16
+prop topiary 12 17
+prop topiary 72 17
+
+; The plaza.
+prop fountain 42 28
+prop statue 32 23
+prop statue 52 23
+prop crystal-pillar 36 31
+prop crystal-pillar 48 31
+prop lamp 29 19
+prop lamp 55 19
+prop lamp 29 34
+prop lamp 55 34
+prop bench 38 34.5
+prop bench 46 34.5
+prop planter 30 27
+prop planter 54 27
+waypoint crystal 34 26 look=crystal-stone
+sign board 50 33 look=notice-board name="Notice Board" text="North, the palace. East, the inn and the market. West, the harbour. South, the gate and the old road."
+
+; The houses to the west, and their lawns.
+prop house-ivy 8 31
+prop house-rose 20 31
+prop well-roofed 14 30
+prop flowers-pink 4 34
+prop flowers-white 10 35
+prop flowers-mixed 19 34
+prop bush-flowers 24 35.5
+prop cherry-tree-small 3 36
+prop water-barrel 13.5 31.5
+prop cask 25.5 30
+
+; The inn, and the market along the street in front of it.
+prop inn 68 30
+prop table 61 32
+prop cask 74 31
+prop cask 75 31.5
+prop water-barrel 62 29.5
+prop stall-blue 61 37
+prop stall-pink 67 37
+prop stall-teal 73 37
+prop stall-cloth 79 37
+prop flower-cart 79 32
+prop lamp 58 30
+prop cypress-pot 57.5 36
+
+; Along the canal.
+prop lamp 36 37
+prop lamp 48 37
+prop cypress-pot 2 37
+prop cypress-pot 82 30
+
+; The south: houses either side, gardens by the avenue, and the gate.
+prop house-shop 12 52
+prop house-awning 26 54
+prop house-ivy 58 54
+prop house-rose 73 52
+prop flower-arch 31 46
+prop cherry-tree 29 52
+prop blossom-tree 55 50
+prop topiary 36 43
+prop topiary 48 43
+prop bush-pink 33 56
+prop bush-flowers 51 56
+prop flowers-pink 53 45
+prop flowers-white 28 44
+prop rocks 57 44
+prop city-gate 42 57
+
+; The people. Placeholders: who they are and what they say are mine to write. The ones with
+; wander= walk about that many tiles round where they're put.
+npc innkeeper 64 32 name="The Innkeeper" sheet=baker facing=down say="Rooms upstairs, stew on the fire."
+npc elder 39 32 name="The Elder" sheet=elder facing=down say="Welcome to Questeria. Mind the road past the gate."
+npc old-man 46 31 name="An Old Man" sheet=old-man facing=left wander=3 say="The fountain's older than the palace. So they say."
+npc child 50 26 name="A Child" sheet=child facing=left wander=5 say="Bet you can't catch me."
+npc courier 34 21 name="A Courier" sheet=courier facing=down say="Letters for the guildhall. Mind out."
+npc maid 60 20 name="A Maid" sheet=maid facing=down wander=4 say="The guildhall's busy today."
+npc pilgrim 22 19 name="A Pilgrim" sheet=pilgrim facing=down say="Listen for the temple bells at dusk."
+npc trader 62 35 name="The Trader" sheet=trader facing=down say="Fresh from the coast. Fresh enough."
+npc smith 68 35 name="The Smith" sheet=smith facing=down say="Nothing to mend? Lucky you."
+npc seamstress 80 35 name="The Seamstress" sheet=seamstress facing=down say="Pink's in this year. It's always in."
+npc flower-seller 77 33 name="The Flower Seller" sheet=flower-seller facing=left say="From the palace gardens. Don't tell anyone."
+npc porter 72 26 name="A Porter" sheet=porter facing=right wander=4 say="Crates, barrels, crates. All day."
+npc weaver 16 34 name="The Weaver" sheet=weaver facing=down say="I spun the palace banners."
+npc old-woman 8 37 name="An Old Woman" sheet=old-woman facing=right wander=3 say="Mind the canal. It's deeper than it looks."
+npc farmhand 33 48 name="A Farmhand" sheet=farmhand facing=right wander=4 say="First time in the capital? Me too."
+npc youth 52 47 name="A Youth" sheet=youth facing=left wander=4 say="There's a barrow up the old road. Haunted, probably."
+npc traveller 44 50 name="A Traveller" sheet=traveller facing=down say="Long road out there."

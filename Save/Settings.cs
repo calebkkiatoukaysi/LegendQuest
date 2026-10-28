@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace LegendQuest.Save;
 
 /// <summary>
-/// The settings that aren't part of a game: the three volumes and how fast text types out.
+/// The settings that aren't part of a game: the three volumes, full screen or not, and how fast text types out.
 /// </summary>
 /// <remarks>Not in the save slots on purpose. Turning the music down shouldn't depend on which game you loaded.</remarks>
 public class Settings
@@ -17,6 +17,9 @@ public class Settings
 
     /// <summary>Every sound effect.</summary>
     public float SfxVolume { get; set; } = 0.9f;
+
+    /// <summary>Whether the game takes up the whole screen. F11 switches it too.</summary>
+    public bool FullScreen { get; set; }
 
     /// <summary>How fast dialogue types out, by name.</summary>
     public string TextSpeed { get; set; } = nameof(LegendQuest.TextSpeed.Normal);

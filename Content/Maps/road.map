@@ -1,4 +1,4 @@
-; The old road. In from the village on the west, east through the forest at dusk. A camp off the
+; The old road. In from Questeria on the west, east through the forest at dusk. A camp off the
 ; road to the south with its fire still going, a path north to the barrow where the road forks,
 ; and a tree down across the road further east.
 
@@ -147,7 +147,7 @@ _J/^^\/^^\(@@)./^\/^^\./^\/^\/^^\.(@)(@)(@).(@)(@)L_JL__J.L_
 [objects]
 spawn start 2 16 facing=right
 spawn barrow 40.5 2
-exit village 0 15 h=3 to=village at=east
+exit questeria 0 15 h=3 to=questeria at=gate
 exit barrow 40 0 w=2 to=barrow
 
 ; The camp.
@@ -160,7 +160,7 @@ chest camp 30 22 gold=14
 trigger watched 17 7 h=18 say="Someone has been watching the road." set=road-ambush
 
 ; The fork.
-sign fork 38 13 text="West, the village. North, the barrow."
+sign fork 38 13 text="West, Questeria. North, the barrow."
 waypoint stone 44 11
 
 ; The far end.

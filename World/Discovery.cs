@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using LegendQuest.Save;
 
@@ -9,7 +10,8 @@ namespace LegendQuest.World;
 /// <remarks>
 /// The bits are the save's own array, so there's nothing to copy back before saving. Sight is a
 /// circle round your feet that walls and shut doors cut off, using the same line as the dark map's
-/// light. Not from a tutorial. It only looks again when you step into another tile.
+/// light. Not from a tutorial. It only looks again when you step into another tile. A map with fog
+/// = no in its file is seen all over from the start.
 /// </remarks>
 public class Discovery
 {
@@ -41,6 +43,8 @@ public class Discovery
             _bits = new byte[length];
             game.Seen[map.Id] = _bits;
         }
+
+        if (!map.Fog) Array.Fill(_bits, byte.MaxValue);
     }
 
     /// <summary>Whether a tile has ever been in sight.</summary>

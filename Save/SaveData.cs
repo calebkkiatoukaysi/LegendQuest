@@ -44,6 +44,10 @@ public class SaveData
     /// <summary>The party's gold.</summary>
     public int Gold { get; set; }
 
+    /// <summary>What you're to do next, as the corner of the screen says it, or null for nothing.</summary>
+    /// <remarks>A line for now. The journal and its quests take over from this when dialogue gets its milestone.</remarks>
+    public string Objective { get; set; }
+
     /// <summary>Every flag that's set. Levers, triggers and (later) conversations and quests set them, and doors read them.</summary>
     public HashSet<string> Flags { get; set; } = new();
 
@@ -76,12 +80,15 @@ public class SaveData
     [JsonIgnore]
     public PartyMember LeaderMember => Party[Leader];
 
-    /// <summary>The save a new game starts from: the starting party at the start of the opening map, with no time played.</summary>
+    /// <summary>The save a new game starts from: you and the rest of the starting party at the start of the opening map, with no time played.</summary>
     /// <remarks>Only the leader gets put on the start. The map puts the rest round them when it loads.</remarks>
-    public static SaveData NewGame()
+    /// <param name="you">You, as the creation screen made you.</param>
+    public static SaveData NewGame(PartyMember you)
     {
         MapSpawn start = MapCatalog.Get(MapCatalog.Opening).Spawns[MapLoader.StartSpawn];
-        var game = new SaveData { MapId = MapCatalog.Opening, Party = Origins.StartingParty() };
+        List<PartyMember> party = Origins.StartingParty();
+        party[0] = you;
+        var game = new SaveData { MapId = MapCatalog.Opening, Party = party };
         game.LeaderMember.Feet = start.Feet;
         game.LeaderMember.Facing = start.Facing;
         return game;

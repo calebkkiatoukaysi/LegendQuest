@@ -8,14 +8,20 @@ public enum ProofStage
     /// <summary>The title, the options and the save slots.</summary>
     Menus,
 
-    /// <summary>Walking round the village, finding its waypoint, the map, then out to the east.</summary>
-    Village,
+    /// <summary>The creation screen: you as you start, then named and changed, then BEGIN.</summary>
+    Creation,
 
-    /// <summary>The old road: the trigger, the chest, the sign, the waypoint, and fast travel back to the village.</summary>
+    /// <summary>The harbour: the ship sailing in, the walk off it, Valen, the card, then up to the city.</summary>
+    Docks,
+
+    /// <summary>Walking round Questeria, the innkeeper's work, finding its waypoint, the map, then out through the city gate.</summary>
+    Questeria,
+
+    /// <summary>The old road: the trigger, the chest, the sign, the waypoint, and fast travel back to Questeria.</summary>
     Road,
 
-    /// <summary>Back in the village off the waypoint, and straight back to the road by it.</summary>
-    VillageAgain,
+    /// <summary>Back in Questeria off the waypoint, and straight back to the road by it.</summary>
+    QuesteriaAgain,
 
     /// <summary>On the road again by its waypoint, and up the path into the barrow.</summary>
     RoadAgain,

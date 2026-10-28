@@ -7,43 +7,31 @@ namespace LegendQuest.World;
 /// Every tileset, by the id map files use.
 /// </summary>
 /// <remarks>
-/// The tile lists have to match TILESETS in tools/generate_world.py, in the same order, since that's
-/// the order the tiles are drawn on the sheet. Tilemap throws when it loads a sheet that's the
-/// wrong size, which is what a mismatch looks like.
+/// The tile lists have to match the lists in tools/generate_world.py (and tools/cut_supplied.py for
+/// Questeria), in the same order, since that's the order the tiles are on the sheet. Tilemap throws
+/// when it loads a sheet that's the wrong size, which is what a mismatch looks like.
 /// </remarks>
 public static class TilesetCatalog
 {
-    /// <summary>The village: grass, paths, cobbles, and the houses (walls on the ground, thatch overhead).</summary>
-    private static readonly TilesetDefinition Village = new()
+    /// <summary>Questeria and its harbour: the plaza's slabs, the terrace, cobbles, lawns, sand, water and the boardwalk. Everything standing on them is props.</summary>
+    /// <remarks>
+    /// Drawn by tools/generate_harbour.py, which has to list them in this order too. The lawns have
+    /// a kerb round them, the water a quay wall and a lip of coping, and the boardwalk a beam along
+    /// its front, all drawn by Tilemap wherever they meet something else.
+    /// </remarks>
+    private static readonly TilesetDefinition Questeria = new()
     {
-        Id = "village",
-        Texture = "Tiles/village",
+        Id = "questeria",
+        Texture = "Tiles/questeria",
         Tiles = new TileDefinition[]
         {
-            // Ground.
-            new() { Name = "grass", Variants = 4, Surface = Surface.Grass },
-            new() { Name = "grass-long", Variants = 2, Surface = Surface.Grass },
-            new() { Name = "dirt", Variants = 3, Surface = Surface.Grass },
+            new() { Name = "plaza", Variants = 3 },
+            new() { Name = "terrace", Variants = 2 },
             new() { Name = "cobble", Variants = 3 },
-
-            // Detail, drawn over the ground.
-            new() { Name = "flowers", Variants = 2 },
-            new() { Name = "tuft", Variants = 2 },
-            new() { Name = "pebbles" },
-            new() { Name = "fence", Solid = true },
-            new() { Name = "fence-post", Solid = true },
-
-            // The fronts of the houses, which are two tiles tall. A door is too, so it comes in two halves.
-            new() { Name = "wall-stone", Variants = 2, Solid = true },
-            new() { Name = "wall-plaster", Variants = 2, Solid = true },
-            new() { Name = "window", Solid = true },
-            new() { Name = "door-top", Solid = true },
-            new() { Name = "door", Solid = true },
-
-            // Overhead: thatch, which hangs over the ground behind each house.
-            new() { Name = "roof-ridge" },
-            new() { Name = "roof", Variants = 3 },
-            new() { Name = "roof-eave", Variants = 2 },
+            new() { Name = "grass", Variants = 4, Edged = true, Surface = Surface.Grass },
+            new() { Name = "sand", Variants = 2, Surface = Surface.Grass },
+            new() { Name = "water", Variants = 3, Edged = true, Solid = true },
+            new() { Name = "planks", Variants = 3, Edged = true },
         },
     };
 
@@ -121,7 +109,7 @@ public static class TilesetCatalog
     /// <remarks>Throws on purpose, so a broken tileset is found when the game starts and not on the map that uses it.</remarks>
     static TilesetCatalog()
     {
-        foreach (TilesetDefinition tileset in new[] { Village, Crypt, Forest })
+        foreach (TilesetDefinition tileset in new[] { Questeria, Crypt, Forest })
         {
             tileset.Validate();
             if (!ById.TryAdd(tileset.Id, tileset))

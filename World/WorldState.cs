@@ -117,6 +117,7 @@ public class WorldState
         if (trigger.Once && !_game.Triggered.Add(_map.Id + "/" + trigger.Id)) return null;
         if (trigger.SetFlag is not null) _game.Flags.Add(trigger.SetFlag);
 
+        if (trigger.Talk is not null) return new WorldEvent(WorldEventKind.TriggerTalked, trigger.Talk);
         return trigger.Say is null ? null : new WorldEvent(WorldEventKind.TriggerSaid, trigger.Say);
     }
 

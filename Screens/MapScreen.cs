@@ -18,7 +18,7 @@ namespace LegendQuest.Screens;
 /// waypoint, the world side is where you pick somewhere to travel to.
 /// </summary>
 /// <remarks>
-/// The local map is the real tiles drawn at one screen pixel per art pixel and browned, with the dark
+/// The local map is the real tiles and props drawn at one screen pixel per art pixel and browned, with the dark
 /// laid over what hasn't been seen. The dark is one texel per tile stretched over it with smooth
 /// sampling, the same trick as the dark on a dark map, so the edge of what you've seen is soft.
 /// </remarks>
@@ -26,9 +26,9 @@ public class MapScreen : GameScreen
 {
     private static readonly TimeSpan FadeTime = TimeSpan.FromSeconds(0.2);
 
-    /// <summary>The panel's size, in screen pixels. Big enough for the village at one to one, with room round it.</summary>
+    /// <summary>The panel's size, in screen pixels. Big enough for Questeria at one to one, with room round it.</summary>
     private const int PanelWidth = 1380;
-    private const int PanelHeight = 820;
+    private const int PanelHeight = 860;
 
     /// <summary>The space between the two tab names at the top, and between them and the map under them.</summary>
     private const float TabGap = 90f;
@@ -69,6 +69,7 @@ public class MapScreen : GameScreen
 
     private readonly MapDefinition _map;
     private readonly Tilemap _tiles;
+    private readonly List<PropSprite> _props;
     private readonly Discovery _seen;
     private readonly WorldState _world;
     private readonly Vector2 _you;
@@ -96,11 +97,12 @@ public class MapScreen : GameScreen
     /// <summary>Opens the map on the map you're on, or on the world if you're travelling.</summary>
     /// <param name="map">The map you're on.</param>
     /// <param name="tiles">Its tiles, loaded, to draw the local map with.</param>
+    /// <param name="props">Its props, loaded, drawn over the tiles. Questeria's buildings are all props, so without them it's an empty square.</param>
     /// <param name="seen">What's been seen of it.</param>
     /// <param name="world">The rules, for which places are discovered and which waypoints found.</param>
     /// <param name="you">Where your feet are, in world pixels.</param>
     /// <param name="travelling">True if this was opened from a waypoint, so you can pick somewhere to go.</param>
-    public MapScreen(MapDefinition map, Tilemap tiles, Discovery seen, WorldState world, Vector2 you, bool travelling)
+    public MapScreen(MapDefinition map, Tilemap tiles, IEnumerable<PropSprite> props, Discovery seen, WorldState world, Vector2 you, bool travelling)
     {
         IsPopup = true;
         TransitionOnTime = FadeTime;
@@ -108,6 +110,7 @@ public class MapScreen : GameScreen
 
         _map = map;
         _tiles = tiles;
+        _props = new List<PropSprite>(props);
         _seen = seen;
         _world = world;
         _you = you;
@@ -223,7 +226,7 @@ public class MapScreen : GameScreen
         return string.Format(CultureInfo.InvariantCulture, TravelHint, _destinations[_selected].Name.ToUpperInvariant());
     }
 
-    /// <summary>Draws the map you're on: its tiles, the dark over what hasn't been seen, where the exits go, and you.</summary>
+    /// <summary>Draws the map you're on: its tiles and props, the dark over what hasn't been seen, where the exits go, and you.</summary>
     private void DrawHere(GameTime gameTime, SpriteBatch spriteBatch, float alpha)
     {
         Rectangle drawn = HereBounds(out float scale);
@@ -231,6 +234,7 @@ public class MapScreen : GameScreen
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: place);
         _tiles.Draw(gameTime, spriteBatch, _tiles.Bounds, MapTint * alpha);
+        foreach (PropSprite prop in _props) prop.Draw(spriteBatch, prop.Layer(_tiles.Bounds.Height), MapTint * alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);

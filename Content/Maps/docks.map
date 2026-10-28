@@ -1,0 +1,106 @@
+; Questeria's harbour, where you come in off the ship. The quay street along the top with its
+; warehouses, the boardwalk, and the harbour, with the ship tied up along the boardwalk and a jetty
+; at either end. The city's up the street to the east. Lit, and no fog.
+
+[map]
+id = docks
+name = Questeria Harbour
+world = 230 214
+tileset = questeria
+size = 56 36
+dark = no
+fog = no
+music = Exploring
+
+[legend]
+: = cobble
+, = grass
++ = planks
+~ = water
+
+[ground]
+,,,,,,,,::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
+,,,,,,,,::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
+,,,,,,,,::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
+,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
+~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
+~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
+~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
+~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
+~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[objects]
+spawn start 21.5 16.5 facing=up
+spawn city 53 8 facing=left
+exit city 55 3 h=8 to=questeria at=docks
+
+; The ship you come in on, its gangplank down to the boardwalk, and the boats tied up at the jetties.
+prop ship 24 24
+prop gangplank 21.5 20
+prop rowboat 11.5 21
+prop rowboat 42 21.5
+
+; Along the boardwalk.
+prop bollard 3 17.8
+prop bollard 15 17.8
+prop bollard 28 17.8
+prop bollard 34 17.8
+prop bollard 50 17.8
+prop rope-posts 31 17.6
+prop lantern-post 12 14.4
+prop lantern-post 38 14.4
+prop cargo-crate 5 15.5
+prop cargo-crate 6.4 15.2
+prop cargo-barrel 7.5 16
+prop sacks 40 16
+prop cargo-crate 44 15.6
+prop cargo-barrel 46 15.4
+prop cargo-barrel 47 16
+
+; The quay street and its warehouses.
+prop house-rose 10 12
+prop house-awning 26 12
+prop house-shop 41 12
+prop oak 3 4
+prop cherry-tree-small 51 3
+prop signpost 50 9
+prop cargo-crate 18 12.5
+prop cargo-crate 19.3 12.8
+prop sacks 33 12.6
+prop cargo-barrel 48 12
+prop lamp 17 8
+prop lamp 34 8
+prop bench 30 7.8
+
+; The people on the quay. Placeholders, like Questeria's.
+npc dock-hand 30 15 name="A Dock Hand" sheet=farmhand facing=down wander=4 say="Mind the ropes. They bite."
+npc carrier 45 10 name="A Carrier" sheet=porter facing=left wander=5 say="Another ship, another hundred crates."
+npc old-sailor 9 16 name="An Old Sailor" sheet=old-man facing=down say="Forty years on the water. I still get sick."
+npc harbourmaster 52 13 name="The Harbourmaster" sheet=traveller facing=left say="Names go in the book. Not today, mind. The book's full."

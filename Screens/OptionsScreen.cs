@@ -9,7 +9,7 @@ using LegendQuest.StateManagement;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The three volumes and the text speed, on a form over whatever opened it. Left and right change one.
+/// The three volumes, the text speed and full screen, on a form over whatever opened it. Left and right change one.
 /// </summary>
 /// <remarks>
 /// You hear a volume change right away since AudioManager reads the settings every frame. The file
@@ -24,14 +24,15 @@ public class OptionsScreen : MenuScreen
     private const string MusicLabel = "MUSIC";
     private const string SoundLabel = "SOUND";
     private const string TextSpeedLabel = "TEXT SPEED";
+    private const string DisplayLabel = "DISPLAY";
     private const string BackLabel = "BACK";
 
     /// <summary>How much one press moves a volume.</summary>
     private const float VolumeStep = 0.1f;
 
     private const int PanelWidth = 760;
-    private static readonly Point EntrySize = new(560, 78);
-    private const float EntryGap = 14f;
+    private static readonly Point EntrySize = new(560, 70);
+    private const float EntryGap = 12f;
     private const float HeadingGap = 30f;
 
     private static readonly TimeSpan FadeTime = TimeSpan.FromSeconds(0.25);
@@ -41,13 +42,14 @@ public class OptionsScreen : MenuScreen
     private readonly MenuEntry _music;
     private readonly MenuEntry _sound;
     private readonly MenuEntry _textSpeed;
+    private readonly MenuEntry _display;
 
     private SpriteFont _font;
     private SpriteFont _detailFont;
     private Rectangle _panelBounds;
     private float _noteY;
 
-    /// <summary>Builds the four adjustable entries and BACK.</summary>
+    /// <summary>Builds the five adjustable entries and BACK.</summary>
     public OptionsScreen()
     {
         IsPopup = true;
@@ -58,18 +60,21 @@ public class OptionsScreen : MenuScreen
         _music = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _sound = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _textSpeed = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _display = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         var back = new MenuEntry(BackLabel, Palette.Bone);
 
         _master.Adjusted += step => ChangeVolume(v => Audio.Settings.MasterVolume = v, Audio.Settings.MasterVolume, step);
         _music.Adjusted += step => ChangeVolume(v => Audio.Settings.MusicVolume = v, Audio.Settings.MusicVolume, step);
         _sound.Adjusted += step => ChangeVolume(v => Audio.Settings.SfxVolume = v, Audio.Settings.SfxVolume, step);
         _textSpeed.Adjusted += ChangeTextSpeed;
+        _display.Adjusted += _ => ToggleFullScreen();
         back.Selected += Close;
 
         MenuEntries.Add(_master);
         MenuEntries.Add(_music);
         MenuEntries.Add(_sound);
         MenuEntries.Add(_textSpeed);
+        MenuEntries.Add(_display);
         MenuEntries.Add(back);
     }
 
@@ -137,6 +142,15 @@ public class OptionsScreen : MenuScreen
         Relabel();
     }
 
+    /// <summary>Switches between full screen and a window, straight away.</summary>
+    private void ToggleFullScreen()
+    {
+        ScreenCanvas canvas = ScreenManager.Game.Services.GetService<ScreenCanvas>();
+        canvas.SetFullScreen(!canvas.FullScreen);
+        Audio.Settings.FullScreen = canvas.FullScreen;
+        Relabel();
+    }
+
     /// <summary>Writes each value onto its plate.</summary>
     private void Relabel()
     {
@@ -145,6 +159,7 @@ public class OptionsScreen : MenuScreen
         _music.Text = Row(MusicLabel, Percent(settings.MusicVolume));
         _sound.Text = Row(SoundLabel, Percent(settings.SfxVolume));
         _textSpeed.Text = Row(TextSpeedLabel, settings.Typing.ToString().ToUpperInvariant());
+        _display.Text = Row(DisplayLabel, settings.FullScreen ? "FULL SCREEN" : "WINDOW");
     }
 
     /// <summary>A plate's label: the name, then the value between the arrows.</summary>

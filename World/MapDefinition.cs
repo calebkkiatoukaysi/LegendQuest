@@ -31,6 +31,9 @@ public sealed class MapDefinition
     /// <summary>How much light gets everywhere on a dark map, 0 (none) to 1 (as if it weren't dark).</summary>
     public required float Ambient { get; init; }
 
+    /// <summary>Whether the map screen only shows what you've seen of it. Somewhere you'd know already, like the capital, doesn't.</summary>
+    public required bool Fog { get; init; }
+
     /// <summary>The song that plays on it.</summary>
     public required Track Music { get; init; }
 

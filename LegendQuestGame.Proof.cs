@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+using LegendQuest.Characters;
+using LegendQuest.Rules;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
@@ -37,7 +38,15 @@ public partial class LegendQuestGame
     private const int ProofNewOpen = 170;
     private const int ProofNewShot = 195;
     private const int ProofNewClose = 196;
-    private const int ProofVillage = 215;
+    private const int ProofNewGame = 215;
+
+    // The creation screen by frame, once it's up.
+    private const int ProofCreateShot = 30;
+    private const int ProofCreateChange = 31;
+    private const int ProofCreateChangedShot = 45;
+    private const int ProofCreateBearded = 46;
+    private const int ProofCreateBeardedShot = 60;
+    private const int ProofCreateBegin = 61;
 
     /// <summary>The slot the proof breaks on purpose, and then erases.</summary>
     private const int ProofBrokenSlot = 1;
@@ -61,9 +70,6 @@ public partial class LegendQuestGame
     /// <summary>The file the next frame is to be written to, or null.</summary>
     private string _proofPending;
 
-    /// <summary>The target the frame is being drawn into while a shot is pending.</summary>
-    private RenderTarget2D _proofTarget;
-
     /// <summary>Which part of the run it's on, the screen whose schedule is running, and the frame that screen opened on.</summary>
     private ProofStage _proofStage = ProofStage.Menus;
     private GameScreen _proofSubject;
@@ -86,7 +92,7 @@ public partial class LegendQuestGame
         if (Directory.Exists(saves)) Directory.Delete(saves, recursive: true);
         SaveSystem.Folder = saves;
 
-        SaveSystem.Write(0, new SaveData { MapId = "village", PlaytimeSeconds = 4320 });
+        SaveSystem.Write(0, new SaveData { MapId = "questeria", PlaytimeSeconds = 4320 });
         SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { MapId = "barrow", PlaytimeSeconds = 2840 });
         File.WriteAllText(SaveSystem.PathFor(ProofBrokenSlot), "{ this was never a save");
     }
@@ -107,16 +113,24 @@ public partial class LegendQuestGame
                 _proofPending = ProofMenus();
                 break;
 
-            case ProofStage.Village:
-                _proofPending = RunMap("village", ExploreScreen.VillageProofEnd, ProofStage.Road);
+            case ProofStage.Creation:
+                _proofPending = RunSubject<CharacterCreationScreen>(ProofCreation, ProofCreateBegin, ProofStage.Docks, null);
+                break;
+
+            case ProofStage.Docks:
+                _proofPending = RunMap("docks", ExploreScreen.DocksProofEnd, ProofStage.Questeria);
+                break;
+
+            case ProofStage.Questeria:
+                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaProofEnd, ProofStage.Road);
                 break;
 
             case ProofStage.Road:
-                _proofPending = RunMap("road", ExploreScreen.RoadProofEnd, ProofStage.VillageAgain);
+                _proofPending = RunMap("road", ExploreScreen.RoadProofEnd, ProofStage.QuesteriaAgain);
                 break;
 
-            case ProofStage.VillageAgain:
-                _proofPending = RunMap("village", ExploreScreen.VillageAgainProofEnd, ProofStage.RoadAgain);
+            case ProofStage.QuesteriaAgain:
+                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaAgainProofEnd, ProofStage.RoadAgain);
                 break;
 
             case ProofStage.RoadAgain:
@@ -186,11 +200,43 @@ public partial class LegendQuestGame
                     if (screen is OptionsScreen or SaveSlotScreen) screen.ExitScreen();
                 return null;
 
-            // A new game on a scratch save, the same way the title starts one, minus the slot.
-            case ProofVillage:
-                LoadingScreen.Load(_screenManager, MapCatalog.Get(MapCatalog.Opening).Name.ToUpperInvariant(),
-                    new ExploreScreen(SaveData.NewGame()));
-                _proofStage = ProofStage.Village;
+            // A new game in the first slot, the way the slots hand one to the creation screen.
+            case ProofNewGame:
+                _screenManager.AddScreen(new CharacterCreationScreen(0));
+                _proofStage = ProofStage.Creation;
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>The creation screen: you as you start, then a name and a whole new look and class, then RANDOM, then BEGIN.</summary>
+    private string ProofCreation(CharacterCreationScreen creation)
+    {
+        switch (Frame())
+        {
+            case ProofCreateShot:
+                return "create.png";
+
+            case ProofCreateChange:
+                creation.ProofType("Caleb");
+                creation.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2 }, ClassId.Rogue);
+                return null;
+
+            case ProofCreateChangedShot:
+                return "create-changed.png";
+
+            case ProofCreateBearded:
+                creation.ProofLook(new CharacterLook { Skin = 5, Face = 3, Hair = 1, HairColour = 4, Beard = 4, Vest = 5, LegsColour = 3 }, ClassId.Fighter);
+                return null;
+
+            case ProofCreateBeardedShot:
+                return "create-bearded.png";
+
+            case ProofCreateBegin:
+                creation.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2 }, ClassId.Rogue);
+                creation.ProofBegin();
                 return null;
 
             default:
@@ -275,29 +321,18 @@ public partial class LegendQuestGame
             _proofAudio.Append(_proofFrame).Append(' ').AppendLine(_audio.Log[_proofAudioSeen]);
     }
 
-    /// <summary>Points the frame at a render target if a shot is pending.</summary>
-    private void BeginProofCapture()
-    {
-        if (_proofPending is null) return;
-
-        _proofTarget = new RenderTarget2D(GraphicsDevice, ScreenWidth, ScreenHeight);
-        GraphicsDevice.SetRenderTarget(_proofTarget);
-    }
-
-    /// <summary>Writes the frame out if one was pending, and puts the window back.</summary>
+    /// <summary>Writes the canvas out if a shot was pending. It's the frame at the canvas's own size, whatever size the window is.</summary>
     private void EndProofCapture()
     {
         _proofDrawn = true;
-        if (_proofTarget is null) return;
+        if (_proofPending is null) return;
 
         GraphicsDevice.SetRenderTarget(null);
 
         Directory.CreateDirectory(ProofDirectory);
         using (FileStream file = File.Create(Path.Combine(ProofDirectory, _proofPending)))
-            _proofTarget.SaveAsPng(file, ScreenWidth, ScreenHeight);
+            _canvas.Target.SaveAsPng(file, ScreenWidth, ScreenHeight);
 
-        _proofTarget.Dispose();
-        _proofTarget = null;
         _proofPending = null;
     }
 }

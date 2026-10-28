@@ -5,8 +5,8 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's part of the proof run: the village, the road, fast travel both ways, the barrow,
-/// then out through the pause menu.
+/// The map screen's part of the proof run: the arrival at the harbour, Questeria and the
+/// innkeeper's work, the road, fast travel both ways, the barrow, then out through the pause menu.
 /// </summary>
 /// <remarks>
 /// Movement goes in through the same code the keyboard uses (ReadMovement), using things goes
@@ -21,11 +21,20 @@ public partial class ExploreScreen
     private const int Settled = 50;
 
     /// <summary>The last frame of each visit's schedule. Most of them end walking into an exit or travelling, and the next stage picks up on the next map.</summary>
-    internal const int VillageProofEnd = Settled + 926;
+    internal const int DocksProofEnd = ProofArrivalRead + ProofReadFrames + 302;
+    internal const int QuesteriaProofEnd = Settled + 1466;
     internal const int RoadProofEnd = Settled + 267;
-    internal const int VillageAgainProofEnd = Settled + 26;
+    internal const int QuesteriaAgainProofEnd = Settled + 26;
     internal const int RoadAgainProofEnd = Settled + 316;
     internal const int BarrowProofEnd = Settled + 593;
+
+    /// <summary>When the arrival's conversation is up and gets read, and how: a line every few frames for a while.</summary>
+    private const int ProofArrivalRead = 840;
+    private const int ProofReadEvery = 6;
+    private const int ProofReadFrames = 80;
+
+    /// <summary>When each of Questeria's conversations gets read, after Settled: Valen's, the innkeeper's work, the rosewater, and the pay.</summary>
+    private static readonly int[] ProofReads = { 72, 880, 1006, 1090 };
 
     /// <summary>A direction to walk in instead of reading the keyboard, while the proof run is driving.</summary>
     private Vector2? _proofMove;
@@ -53,204 +62,48 @@ public partial class ExploreScreen
 
         return stage switch
         {
-            ProofStage.Village => VillageStep(frame),
+            ProofStage.Docks => DocksStep(frame),
+            ProofStage.Questeria => QuesteriaStep(frame),
             ProofStage.Road => RoadStep(frame),
-            ProofStage.VillageAgain => VillageAgainStep(frame),
+            ProofStage.QuesteriaAgain => QuesteriaAgainStep(frame),
             ProofStage.RoadAgain => RoadAgainStep(frame),
             _ => BarrowStep(frame),
         };
     }
 
-    /// <summary>The village: a walk with the party behind you, round behind a roof, both sides of a barrel, along a wall, both zooms, the mouse (a path, a click, the elder, a wall), switching who you control, the others catching up, the waypoint, the map, and off east.</summary>
-    private string VillageStep(int frame)
+    /// <summary>The harbour: the ship sailing in, the gangplank, the walk off, Valen talking, the card, then up the street to the city.</summary>
+    /// <remarks>Nothing's driven till the arrival's over; it plays itself. The conversation gets read a line every few frames, like someone pressing Enter.</remarks>
+    private string DocksStep(int frame)
     {
+        if (frame is >= ProofArrivalRead and < ProofArrivalRead + ProofReadFrames && frame % ProofReadEvery == 0)
+        {
+            ProofRead();
+            return null;
+        }
+
         switch (frame)
         {
-            case Settled:
-                return "village.png";
+            case 200:
+                return "arrival-sailing.png";
 
-            // Up the road into the square, with the others falling in behind.
-            case Settled + 1:
-                _proofMove = new Vector2(0f, -1f);
-                return null;
+            case 520:
+                return "arrival-docked.png";
 
-            case Settled + 40:
-                return "village-walk.png";
+            case 640:
+                return "arrival-gangplank.png";
 
-            // Along behind the elder's house, where the thatch hangs over the ground. You should go under it.
-            case Settled + 70:
-                ProofPlace(21.2f, 3.6f, Direction.Right);
-                _proofMove = new Vector2(1f, 0f);
-                return null;
+            case ProofArrivalRead - 10:
+                return "arrival-valen.png";
 
-            case Settled + 125:
-                return "village-behind-roof.png";
+            case ProofArrivalRead + ProofReadFrames + 80:
+                return "arrival-card.png";
 
-            // Just behind a barrel, then just in front of it, to check the sorting.
-            case Settled + 127:
-                _proofMove = null;
-                ProofPlace(22.5f, 8.95f, Direction.Up);
-                return null;
+            case ProofArrivalRead + ProofReadFrames + 300:
+                return "docks.png";
 
-            case Settled + 150:
-                return "village-behind-barrel.png";
-
-            case Settled + 152:
-                ProofPlace(22.5f, 10.1f, Direction.Up);
-                return null;
-
-            case Settled + 170:
-                return "village-front-barrel.png";
-
-            // Into the front of a house at an angle, so you slide along it instead of stopping.
-            case Settled + 172:
-                ProofPlace(12.5f, 10.5f, Direction.Up);
-                _proofMove = new Vector2(0.6f, -1f);
-                return null;
-
-            case Settled + 210:
-                return "village-slide.png";
-
-            // By the well, zoomed all the way out, then all the way in.
-            case Settled + 211:
-                _proofMove = null;
-                ProofPlace(28f, 20.5f, Direction.Down);
-                _camera.ZoomBy(-1);
-                return null;
-
-            case Settled + 235:
-                return "village-zoom-2.png";
-
-            case Settled + 237:
-                _camera.ZoomBy(2);
-                return null;
-
-            case Settled + 260:
-                return "village-zoom-4.png";
-
-            // South of the well, the mouse over the far side of it: the path goes round it.
-            case Settled + 262:
-                _camera.ZoomBy(-1);
-                ProofPlace(27.5f, 21.5f, Direction.Up);
-                return null;
-
-            case Settled + 270:
-                ProofAimAt(new Vector2(27.5f, 13.5f) * Tilemap.TileSize);
-                return null;
-
-            case Settled + 295:
-                return "village-path.png";
-
-            // Click, and walk it. The others follow, and the line ends up behind you.
-            case Settled + 296:
-                ProofClick();
-                return null;
-
-            case Settled + 340:
-                return "village-click-walk.png";
-
-            case Settled + 470:
-                return "village-path-end.png";
-
-            // The mouse on the elder, then a click: you walk up to them and they turn and speak.
-            case Settled + 471:
-                ProofAimAt(ProofNpc("elder") - new Vector2(0f, HeadHeight / 2f));
-                return null;
-
-            case Settled + 495:
-                return "village-hover-npc.png";
-
-            case Settled + 496:
-                ProofClick();
-                return null;
-
-            case Settled + 570:
-                return "village-talk.png";
-
-            // The mouse on a wall: there's no way there.
-            case Settled + 571:
-                ProofAimAt(new Vector2(25.5f, 7.5f) * Tilemap.TileSize);
-                return null;
-
-            case Settled + 585:
-                return "village-invalid.png";
-
-            // Tab to the next in line; the camera eases over to them.
-            case Settled + 586:
-                ProofLetGo();
-                SelectLeader((_game.Leader + 1) % _walkers.Count);
-                return null;
-
-            case Settled + 610:
-                return "village-switch.png";
-
-            // A click on the third card takes control of them.
-            case Settled + 611:
-                ScreenManager.Input.ProofMouse(ProofCard(2), false);
-                return null;
-
-            case Settled + 612:
-                ScreenManager.Input.ProofMouse(ProofCard(2), true);
-                return null;
-
-            case Settled + 613:
-                ScreenManager.Input.ProofMouse(ProofCard(2), false);
-                return null;
-
-            case Settled + 635:
-                return "village-card.png";
-
-            // Back to you, like F1, then off across the village on your own: the others find their way after you.
-            case Settled + 636:
-                ProofLetGo();
-                SelectLeader(0);
-                return null;
-
-            case Settled + 641:
-                ProofPlaceAlone(15.5f, 12.5f, Direction.Down);
-                return null;
-
-            case Settled + 740:
-                return "village-catch-up.png";
-
-            case Settled + 840:
-                return "village-caught-up.png";
-
-            // Beside the waypoint stone, close enough that its name and E come up over it.
-            case Settled + 842:
-                ProofPlace(35.75f, 13.75f, Direction.Left);
-                return null;
-
-            case Settled + 865:
-                return "village-waypoint.png";
-
-            // Using it finds it, and opens the world to travel. Nowhere else has a waypoint yet.
-            case Settled + 866:
-                ProofUse();
-                return null;
-
-            case Settled + 890:
-                return "map-world-first.png";
-
-            // Closed, then M for the map of the village, as much as the walk round has seen.
-            case Settled + 891:
-                ProofMap().ExitScreen();
-                return null;
-
-            case Settled + 900:
-                OpenMap(null);
-                return null;
-
-            case Settled + 920:
-                return "map-village.png";
-
-            // Then east into the exit, which autosaves and goes to the old road.
-            case Settled + 921:
-                ProofMap().ExitScreen();
-                return null;
-
-            case Settled + 926:
-                ProofPlace(52.5f, 17f, Direction.Right);
+            // Then up the quay street and off the east side, into the city.
+            case ProofArrivalRead + ProofReadFrames + 302:
+                ProofPlace(52f, 7f, Direction.Right);
                 _proofMove = new Vector2(1f, 0f);
                 return null;
 
@@ -259,7 +112,240 @@ public partial class ExploreScreen
         }
     }
 
-    /// <summary>The old road: a walk in, the trigger before the camp, the chest, the sign, the waypoint, both sides of the map, and fast travel back to the village.</summary>
+    /// <summary>Questeria, in off the harbour: Valen in the street, the townsfolk about the plaza, behind a roof, both zooms, the path round a statue and a click to walk it, the elder, the canal, Tab and a card, the innkeeper's work start to finish, you off on your own, the waypoint, the map, then out through the city gate.</summary>
+    private string QuesteriaStep(int frame)
+    {
+        foreach (int read in ProofReads)
+        {
+            if (frame >= Settled + read && frame < Settled + read + ProofReadFrames && frame % ProofReadEvery == 0)
+            {
+                ProofRead();
+                return null;
+            }
+        }
+
+        switch (frame)
+        {
+            case Settled:
+                return "questeria.png";
+
+            // East up the street into Valen's trigger: he talks.
+            case Settled + 1:
+                _proofMove = new Vector2(1f, 0f);
+                return null;
+
+            case Settled + 45:
+                _proofMove = null;
+                return null;
+
+            case Settled + 70:
+                return "questeria-valen.png";
+
+            // The plaza, then the same view a few seconds later: the ones who wander have moved.
+            case Settled + 160:
+                ProofPlace(42f, 33f, Direction.Up);
+                return null;
+
+            case Settled + 190:
+                return "questeria-plaza.png";
+
+            case Settled + 400:
+                return "questeria-plaza-later.png";
+
+            // Along behind the ivy house. Its roof should hide you.
+            case Settled + 402:
+                ProofPlace(2.5f, 24.5f, Direction.Right);
+                _proofMove = new Vector2(1f, 0f);
+                return null;
+
+            case Settled + 455:
+                return "questeria-behind-roof.png";
+
+            // In front of the fountain, zoomed all the way out, then all the way in.
+            case Settled + 457:
+                _proofMove = null;
+                ProofPlace(42f, 32.5f, Direction.Down);
+                _camera.ZoomBy(-1);
+                return null;
+
+            case Settled + 480:
+                return "questeria-zoom-2.png";
+
+            case Settled + 482:
+                _camera.ZoomBy(2);
+                return null;
+
+            case Settled + 505:
+                return "questeria-zoom-4.png";
+
+            // South of the west statue, the mouse over the far side of it: the path goes round it.
+            case Settled + 507:
+                _camera.ZoomBy(-1);
+                ProofPlace(32f, 25f, Direction.Up);
+                return null;
+
+            case Settled + 515:
+                ProofAimAt(new Vector2(32f, 20.5f) * Tilemap.TileSize);
+                return null;
+
+            case Settled + 540:
+                return "questeria-path.png";
+
+            // Click, and walk it. Valen follows.
+            case Settled + 541:
+                ProofClick();
+                return null;
+
+            case Settled + 585:
+                return "questeria-click-walk.png";
+
+            case Settled + 680:
+                return "questeria-path-end.png";
+
+            // A few steps from the elder, the mouse on them, then a click: you walk up and they speak.
+            case Settled + 681:
+                ProofLetGo();
+                ProofPlace(36f, 33.5f, Direction.Up);
+                ProofAimAt(ProofNpc("elder") - new Vector2(0f, HeadHeight / 2f));
+                return null;
+
+            case Settled + 705:
+                return "questeria-hover-npc.png";
+
+            case Settled + 706:
+                ProofClick();
+                return null;
+
+            case Settled + 780:
+                return "questeria-talk.png";
+
+            // The mouse on the canal: there's no way there.
+            case Settled + 781:
+                ProofAimAt(new Vector2(20f, 39f) * Tilemap.TileSize);
+                return null;
+
+            case Settled + 795:
+                return "questeria-invalid.png";
+
+            // Tab to Valen; the camera eases over to him. Then a click on your card takes you back.
+            case Settled + 796:
+                ProofLetGo();
+                SelectLeader((_game.Leader + 1) % _walkers.Count);
+                return null;
+
+            case Settled + 820:
+                return "questeria-switch.png";
+
+            case Settled + 821:
+                ScreenManager.Input.ProofMouse(ProofCard(0), false);
+                return null;
+
+            case Settled + 822:
+                ScreenManager.Input.ProofMouse(ProofCard(0), true);
+                return null;
+
+            case Settled + 823:
+                ScreenManager.Input.ProofMouse(ProofCard(0), false);
+                return null;
+
+            case Settled + 845:
+                return "questeria-card.png";
+
+            // The innkeeper: work.
+            case Settled + 846:
+                ProofLetGo();
+                ProofPlace(64f, 33.6f, Direction.Up);
+                return null;
+
+            case Settled + 848:
+                ProofUse();
+                return null;
+
+            case Settled + 875:
+                return "questeria-innkeeper.png";
+
+            case Settled + 975:
+                return "questeria-task.png";
+
+            // The flower seller hands over the rosewater.
+            case Settled + 976:
+                ProofPlace(75.4f, 33f, Direction.Right);
+                return null;
+
+            case Settled + 978:
+                ProofUse();
+                return null;
+
+            case Settled + 1005:
+                return "questeria-flowers.png";
+
+            // Back to the innkeeper, who pays.
+            case Settled + 1060:
+                ProofPlace(64f, 33.6f, Direction.Up);
+                return null;
+
+            case Settled + 1062:
+                ProofUse();
+                return null;
+
+            case Settled + 1180:
+                return "questeria-paid.png";
+
+            // Off on your own across the plaza: Valen finds his way after you.
+            case Settled + 1182:
+                ProofPlaceAlone(50f, 24.5f, Direction.Down);
+                return null;
+
+            case Settled + 1280:
+                return "questeria-catch-up.png";
+
+            case Settled + 1380:
+                return "questeria-caught-up.png";
+
+            // Beside the waypoint crystal, close enough that its name and E come up over it.
+            case Settled + 1382:
+                ProofPlace(35.4f, 26.3f, Direction.Left);
+                return null;
+
+            case Settled + 1405:
+                return "questeria-waypoint.png";
+
+            // Using it finds it, and opens the world to travel.
+            case Settled + 1406:
+                ProofUse();
+                return null;
+
+            case Settled + 1430:
+                return "map-world-first.png";
+
+            // Closed, then M for the map of Questeria, all of it, since the capital has no fog.
+            case Settled + 1431:
+                ProofMap().ExitScreen();
+                return null;
+
+            case Settled + 1440:
+                OpenMap(null);
+                return null;
+
+            case Settled + 1460:
+                return "map-questeria.png";
+
+            // Then south through the city gate into the exit, which autosaves and goes to the old road.
+            case Settled + 1461:
+                ProofMap().ExitScreen();
+                return null;
+
+            case Settled + 1466:
+                ProofPlace(42f, 55.5f, Direction.Down);
+                _proofMove = new Vector2(0f, 1f);
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>The old road: a walk in, the trigger before the camp, the chest, the sign, the waypoint, both sides of the map, and fast travel back to Questeria.</summary>
     private string RoadStep(int frame)
     {
         switch (frame)
@@ -310,7 +396,7 @@ public partial class ExploreScreen
             case Settled + 200:
                 return "road-sign.png";
 
-            // The waypoint: found, so now there are two, and the village is somewhere to go.
+            // The waypoint: found, so now there are two, and Questeria is somewhere to go.
             case Settled + 202:
                 ProofPlace(45.75f, 11.75f, Direction.Left);
                 return null;
@@ -330,7 +416,7 @@ public partial class ExploreScreen
                 return "map-road.png";
 
             case Settled + 267:
-                ProofMap().ProofTravel("village");
+                ProofMap().ProofTravel("questeria");
                 return null;
 
             default:
@@ -338,13 +424,13 @@ public partial class ExploreScreen
         }
     }
 
-    /// <summary>Back in the village, standing at the stone. Straight back to the road by it.</summary>
-    private string VillageAgainStep(int frame)
+    /// <summary>Back in Questeria, standing at the crystal. Straight back to the road by it.</summary>
+    private string QuesteriaAgainStep(int frame)
     {
         switch (frame)
         {
             case Settled:
-                return "village-arrived.png";
+                return "questeria-arrived.png";
 
             case Settled + 2:
                 ProofUse();
@@ -544,6 +630,13 @@ public partial class ExploreScreen
 
     /// <summary>The middle of one of the party's cards, on screen.</summary>
     private Point ProofCard(int index) => _strip.ProofCard(index, _game.Leader);
+
+    /// <summary>Reads the conversation that's up on: the rest of its line, or the next. Does nothing if there isn't one.</summary>
+    private void ProofRead()
+    {
+        foreach (GameScreen screen in ScreenManager.GetScreens())
+            if (screen is DialogueScreen talk && !talk.IsExiting) talk.ProofAdvance();
+    }
 
     /// <summary>The map screen that's up over this one.</summary>
     private MapScreen ProofMap()

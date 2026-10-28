@@ -14,10 +14,26 @@ public static class ClassCatalog
 {
     private static readonly ClassDefinition[] Table =
     {
-        new() { Id = ClassId.Fighter, Name = "Fighter", HitDie = 10 },
-        new() { Id = ClassId.Rogue, Name = "Rogue", HitDie = 8 },
-        new() { Id = ClassId.Cleric, Name = "Cleric", HitDie = 8 },
-        new() { Id = ClassId.Wizard, Name = "Wizard", HitDie = 6 },
+        new()
+        {
+            Id = ClassId.Fighter, Name = "Fighter", HitDie = 10,
+            Recommended = new AbilityScores { Strength = 15, Dexterity = 13, Constitution = 14, Intelligence = 8, Wisdom = 12, Charisma = 10 },
+        },
+        new()
+        {
+            Id = ClassId.Rogue, Name = "Rogue", HitDie = 8,
+            Recommended = new AbilityScores { Strength = 8, Dexterity = 15, Constitution = 14, Intelligence = 12, Wisdom = 10, Charisma = 13 },
+        },
+        new()
+        {
+            Id = ClassId.Cleric, Name = "Cleric", HitDie = 8,
+            Recommended = new AbilityScores { Strength = 13, Dexterity = 10, Constitution = 14, Intelligence = 8, Wisdom = 15, Charisma = 12 },
+        },
+        new()
+        {
+            Id = ClassId.Wizard, Name = "Wizard", HitDie = 6,
+            Recommended = new AbilityScores { Strength = 8, Dexterity = 13, Constitution = 14, Intelligence = 15, Wisdom = 12, Charisma = 10 },
+        },
     };
 
     private static readonly Dictionary<ClassId, ClassDefinition> ById = new();

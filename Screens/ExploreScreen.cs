@@ -59,6 +59,10 @@ public partial class ExploreScreen : GameScreen
     private const float Margin = 24f;
     private const string Hint = "TAB  ·  SWITCH      M  ·  MAP      WHEEL  ·  ZOOM      ESC  ·  PAUSE";
 
+    /// <summary>The smudge behind the heading, and how far it spreads round the text, so it reads on Questeria's paving as well as in the barrow.</summary>
+    private static readonly Color HeadingBacking = Color.Black * 0.8f;
+    private static readonly Vector2 HeadingSpread = new(28f, 12f);
+
     private readonly InputAction _pause = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
     private readonly InputAction _walkUp = new(new[] { Buttons.DPadUp }, new[] { Keys.W, Keys.Up }, false);
     private readonly InputAction _walkDown = new(new[] { Buttons.DPadDown }, new[] { Keys.S, Keys.Down }, false);
@@ -74,17 +78,16 @@ public partial class ExploreScreen : GameScreen
     private readonly List<TorchSprite> _torches = new();
     private readonly List<Npc> _npcs = new();
     private readonly Camera2D _camera = new(new Point(LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight));
-    private readonly CharacterPalettes _palettes = new();
+    private readonly Paperdoll _paperdoll = new();
     private readonly Random _random = new();
 
-    /// <summary>Everyone's recoloured sheet, one per look, so two people who look alike share one.</summary>
-    private readonly Dictionary<(int, int, int), Texture2D> _sheets = new();
+    /// <summary>The party's baked sheets, one per look, so two who look alike share one.</summary>
+    private readonly Dictionary<string, Texture2D> _sheets = new();
 
     private ContentManager _content;
     private AudioManager _audio;
     private SpriteFont _detailFont;
     private Texture2D _glow;
-    private Texture2D _body;
     private bool _stepLeft;
 
     /// <summary>Puts the game on the map its save says it's on.</summary>
@@ -138,14 +141,13 @@ public partial class ExploreScreen : GameScreen
         _tooltip.LoadContent(_content);
         _strip.LoadContent(_content, ScreenManager.GraphicsDevice);
 
-        // Everyone is the one body sheet, recoloured to how they look. The paperdoll dresses them later.
-        _palettes.LoadContent(_content);
-        _body = _content.Load<Texture2D>("Paperdoll/body-lean");
+        // The townsfolk come dressed. The party are baked off the paperdoll, each to how they look.
         foreach (Npc npc in _npcs)
         {
             npc.Walker.LoadContent(_content);
-            npc.Walker.Sheet = SheetFor(npc.Definition.Look);
+            npc.Walker.Sheet = _content.Load<Texture2D>(Townsfolk.Texture(npc.Definition.Sheet));
         }
+        _paperdoll.LoadContent(_content);
         for (int i = 0; i < _walkers.Count; i++)
         {
             WalkerSprite walker = _walkers[i];
@@ -165,11 +167,13 @@ public partial class ExploreScreen : GameScreen
         Arrive();
         _camera.Bounds = _tilemap.Bounds;
         _camera.SnapTo(Leader.Position);
+        _cardFont = _content.Load<SpriteFont>("spectral-title");
+        BeginArrival();
 
         _audio.PlaySong(_map.Music);
     }
 
-    /// <summary>Unloads the map, and disposes everything the content manager didn't make: the dark, the recoloured sheets and the strip's pixel.</summary>
+    /// <summary>Unloads the map, and disposes everything the content manager didn't make: the dark, the baked sheets and the strip's pixel.</summary>
     public override void Unload()
     {
         _lightMap?.Unload();
@@ -183,6 +187,8 @@ public partial class ExploreScreen : GameScreen
     /// <param name="input">The input this frame.</param>
     public override void HandleInput(GameTime gameTime, InputState input)
     {
+        if (HandleArrivalInput(input)) return;
+
         if (_pause.Occurred(input))
         {
             Halt();
@@ -234,11 +240,14 @@ public partial class ExploreScreen : GameScreen
 
         _game.PlaytimeSeconds += gameTime.ElapsedGameTime.TotalSeconds;
 
-        MoveFollowers(gameTime);
-        foreach (WalkerSprite walker in _walkers) walker.Update(gameTime);
+        MoveTownsfolk(gameTime);
         foreach (Npc npc in _npcs) npc.Update(gameTime);
         foreach (TorchSprite torch in _torches) torch.Update(gameTime);
         _toast.Update(gameTime);
+        if (UpdateArrival(gameTime)) return;
+
+        MoveFollowers(gameTime);
+        foreach (WalkerSprite walker in _walkers) walker.Update(gameTime);
         _camera.Follow(Leader.Position, gameTime);
 
         _seen.LookAround(Leader.Position);
@@ -257,8 +266,7 @@ public partial class ExploreScreen : GameScreen
         // 1. The map: the three layers of tiles, and everything on the floor sorted by how far down the map it is.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
         _tilemap.Draw(gameTime, spriteBatch, _camera.View, Color.White);
-        foreach (PropSprite prop in _props) prop.Draw(spriteBatch, LayerOf(prop));
-        foreach ((_, PropSprite sprite) in _things) sprite.Draw(spriteBatch, LayerOf(sprite));
+        foreach (PropSprite prop in AllProps()) prop.Draw(spriteBatch, prop.Layer(_tilemap.Bounds.Height), Color.White);
         foreach (TorchSprite torch in _torches) torch.Draw(spriteBatch, Layers.WallFlame);
         foreach (Npc npc in _npcs) npc.Walker.Draw(spriteBatch, OnFloor(npc.Walker.Position), pixel);
         foreach (WalkerSprite walker in _walkers) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel);
@@ -285,32 +293,53 @@ public partial class ExploreScreen : GameScreen
         DrawPathPreview(spriteBatch);
         spriteBatch.End();
 
-        // 5. The screen: the party's cards (point sampled), then all the writing.
+        // 5. The screen: the party's cards (point sampled), then all the writing. While the arrival
+        //    plays it's the black bars and the card instead.
         float alpha = TransitionAlpha;
+        bool playing = _arriving != Arriving.None;
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
-        _strip.DrawCards(spriteBatch, _game.Party, PartySheets(), _game.Leader, alpha);
+        if (!playing) _strip.DrawCards(spriteBatch, _game.Party, PartySheets(), _game.Leader, alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        Text.Draw(spriteBatch, _detailFont, _map.Name.ToUpperInvariant(), Margin, HeadingY, Palette.Note * alpha, Palette.Shadow * alpha);
-        Text.Draw(spriteBatch, _detailFont, Hint, LegendQuestGame.ScreenWidth - Margin, HeadingY,
-            Palette.Note * alpha, Palette.Shadow * alpha, rightAligned: true);
-        _strip.DrawNames(spriteBatch, _game.Party, _game.Leader, alpha);
-        DrawLines(spriteBatch, alpha);
-        DrawPrompt(spriteBatch, alpha);
+        if (!playing)
+        {
+            DrawHeading(spriteBatch, _map.Name.ToUpperInvariant(), Margin, false, alpha);
+            DrawHeading(spriteBatch, Hint, LegendQuestGame.ScreenWidth - Margin, true, alpha);
+            DrawObjective(spriteBatch, alpha);
+            _strip.DrawNames(spriteBatch, _game.Party, _game.Leader, alpha);
+            DrawLines(spriteBatch, alpha);
+            DrawPrompt(spriteBatch, alpha);
+            DrawTooltip(spriteBatch, alpha);
+        }
+        DrawArrival(spriteBatch, alpha);
         _toast.Draw(spriteBatch, alpha);
-        DrawTooltip(spriteBatch, alpha);
         spriteBatch.End();
 
         ScreenManager.FadeBackBufferToBlack(TransitionPosition);
     }
 
-    /// <summary>The sheet for a look, recoloured the first time it's asked for and kept after that.</summary>
+    /// <summary>One end of the heading, on its smudge.</summary>
+    /// <param name="spriteBatch">The SpriteBatch to render with, linear-sampled, back to front.</param>
+    /// <param name="text">What it says.</param>
+    /// <param name="x">Where it starts, or where it ends if it's right-aligned.</param>
+    /// <param name="rightAligned">Whether x is its right edge.</param>
+    /// <param name="alpha">How faded in the screen is.</param>
+    private void DrawHeading(SpriteBatch spriteBatch, string text, float x, bool rightAligned, float alpha)
+    {
+        Vector2 size = _detailFont.MeasureString(text);
+        float left = rightAligned ? x - size.X : x;
+        var area = new Rectangle((int)left, (int)(HeadingY - HeadingSpread.Y), (int)size.X, (int)(size.Y + HeadingSpread.Y * 2f));
+        Text.DrawBacking(spriteBatch, _glow, area, (int)HeadingSpread.X, HeadingBacking * alpha);
+        Text.Draw(spriteBatch, _detailFont, text, x, HeadingY, Palette.Bone * alpha, Palette.Shadow * alpha, rightAligned: rightAligned);
+    }
+
+    /// <summary>The sheet for a look, baked the first time it's asked for and kept after that.</summary>
     private Texture2D SheetFor(CharacterLook look)
     {
         if (!_sheets.TryGetValue(look.Key, out Texture2D sheet))
         {
-            sheet = _palettes.Recolour(ScreenManager.GraphicsDevice, _body, look);
+            sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, look);
             _sheets[look.Key] = sheet;
         }
         return sheet;
@@ -319,9 +348,12 @@ public partial class ExploreScreen : GameScreen
     /// <summary>Where someone standing at a point sorts.</summary>
     private float OnFloor(Vector2 feet) => Layers.OnFloor(feet.Y, _tilemap.Bounds.Height);
 
-    /// <summary>Where a prop sorts: behind everyone if it's on a wall, otherwise by how far down the map its foot is.</summary>
-    private float LayerOf(PropSprite prop) =>
-        prop.Definition.Placement == PropPlacement.Wall ? Layers.WorldWall : OnFloor(prop.Foot);
+    /// <summary>Every prop on the map, the ones you can use as well, for drawing.</summary>
+    private IEnumerable<PropSprite> AllProps()
+    {
+        foreach (PropSprite prop in _props) yield return prop;
+        foreach ((_, PropSprite sprite) in _things) yield return sprite;
+    }
 
     /// <summary>Which way you're pushing, from WASD, the arrows, the d-pad or the stick.</summary>
     private Vector2 ReadMovement(InputState input)
@@ -409,20 +441,23 @@ public partial class ExploreScreen : GameScreen
     }
 
     /// <summary>Everything standing on the map that can't be walked through: the props, the people, and anything you use that isn't an open door. The NavGrid is built from these.</summary>
-    private IEnumerable<BoundingRectangle> Footprints()
+    /// <param name="standingOnly">Whether to leave out the people who wander.</param>
+    private IEnumerable<BoundingRectangle> Footprints(bool standingOnly = false)
     {
         foreach (PropSprite prop in _props)
-            if (prop.Footprint is BoundingRectangle footprint) yield return footprint;
+            foreach (BoundingRectangle footprint in prop.Footprints) yield return footprint;
         foreach ((MapInteractable thing, PropSprite sprite) in _things)
         {
             if (thing.Kind == InteractableKind.Door && _world.IsOpen(thing)) continue;
-            if (sprite.Footprint is BoundingRectangle footprint) yield return footprint;
+            foreach (BoundingRectangle footprint in sprite.Footprints) yield return footprint;
         }
-        foreach (Npc npc in _npcs) yield return npc.Footprint;
+        foreach (Npc npc in _npcs)
+            if (!standingOnly || npc.Definition.Wander == 0f) yield return npc.Footprint;
     }
 
     /// <summary>Works out again where the pathfinder can go. When the map loads, and when a door opens or shuts.</summary>
-    private void BuildNav() => _nav.Build(Footprints());
+    /// <remarks>Not round the townsfolk who wander: they'd be gone from where it was worked out by the time you got there.</remarks>
+    private void BuildNav() => _nav.Build(Footprints(standingOnly: true));
 
     /// <summary>The feet box at a position.</summary>
     private static BoundingRectangle FeetAt(Vector2 at) =>

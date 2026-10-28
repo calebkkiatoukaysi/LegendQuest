@@ -4,17 +4,11 @@ namespace LegendQuest;
 /// Layer depths for SpriteBatch in BackToFront mode. 1 is the back, 0 is the front.
 /// </summary>
 /// <remarks>
-/// Depth only sorts within one Begin/End. Anything additive (the torch light, the embers) needs
-/// its own batch, so the batch order sorts first and these sort inside each batch.
+/// Depth only sorts within one Begin/End. Anything additive (the torch light, the title's motes)
+/// needs its own batch, so the batch order sorts first and these sort inside each batch.
 /// </remarks>
 public static class Layers
 {
-    /// <summary>The gate behind the title screen. Behind everything.</summary>
-    public const float TitleScene = 1.00f;
-
-    /// <summary>A torch's flame, over the wall its sconce is on.</summary>
-    public const float Flame = 0.90f;
-
     /// <summary>The dimming pane a form is laid over. Back of the form's batch.</summary>
     public const float Veil = 0.60f;
 
@@ -59,8 +53,14 @@ public static class Layers
     /// <summary>The ground layer of a map. Behind everything.</summary>
     public const float GroundTile = 1.00f;
 
+    /// <summary>The edges drawn where one kind of ground meets another: a lawn's kerb, the quay wall.</summary>
+    public const float GroundEdge = 0.99f;
+
     /// <summary>The detail layer, over the ground: fences, flowers, rubble.</summary>
     public const float DetailTile = 0.98f;
+
+    /// <summary>Props lying flat on the ground, like Questeria's flower beds. Over the tiles, under everyone.</summary>
+    public const float GroundProp = 0.97f;
 
     /// <summary>Things on walls, like the torches. Behind everyone on the floor.</summary>
     public const float WorldWall = 0.96f;

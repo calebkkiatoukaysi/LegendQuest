@@ -32,6 +32,9 @@ public abstract class ParticleSystem
     /// <summary>The blend state the batch begins with. Set in InitializeConstants.</summary>
     protected BlendState blendState = BlendState.AlphaBlend;
 
+    /// <summary>The sampler the batch begins with: smooth for soft dots of light, point for anything that's pixel art.</summary>
+    protected SamplerState samplerState = SamplerState.LinearClamp;
+
     /// <summary>The texture to load. Set in InitializeConstants.</summary>
     protected string textureFilename;
 
@@ -53,7 +56,7 @@ public abstract class ParticleSystem
         InitializeConstants();
     }
 
-    /// <summary>Sets textureFilename, minNumParticles, maxNumParticles and blendState.</summary>
+    /// <summary>Sets textureFilename, minNumParticles, maxNumParticles, blendState and samplerState.</summary>
     protected abstract void InitializeConstants();
 
     /// <summary>Starts one particle off at a point. Each system decides how.</summary>
@@ -108,7 +111,7 @@ public abstract class ParticleSystem
     {
         if (_freeParticles.Count == _particles.Length) return;
 
-        spriteBatch.Begin(SpriteSortMode.Deferred, blendState, SamplerState.LinearClamp, transformMatrix: transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, blendState, samplerState, transformMatrix: transform);
 
         foreach (Particle p in _particles)
         {

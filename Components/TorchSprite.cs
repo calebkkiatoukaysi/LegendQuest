@@ -25,7 +25,7 @@ public class TorchSprite
     /// <summary>Seconds per flame frame.</summary>
     private const float FrameTime = 0.09f;
 
-    /// <summary>How far above its base the flame's tip is, in art pixels. Embers start there.</summary>
+    /// <summary>How far above its base the flame's tip is, in art pixels. The light's centred halfway up it.</summary>
     private const float TipHeight = 13f;
 
     /// <summary>The three flicker speeds (radians a second) and how much each one moves the light.</summary>
@@ -49,9 +49,6 @@ public class TorchSprite
 
     /// <summary>How much the art is blown up. Whole numbers only, so the pixels stay square.</summary>
     public float Scale { get; }
-
-    /// <summary>The top of the flame, where embers come off.</summary>
-    public Vector2 Tip => Position - new Vector2(0f, TipHeight * Scale);
 
     /// <summary>Puts a torch somewhere.</summary>
     /// <param name="position">The bottom middle of the flame.</param>

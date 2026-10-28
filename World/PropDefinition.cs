@@ -25,8 +25,14 @@ public sealed class PropDefinition
     /// <summary>How much floor it blocks, width and depth in art pixels, measured up from its foot. Zero to walk through it.</summary>
     public Point Footprint { get; init; }
 
-    /// <summary>Floor or wall.</summary>
+    /// <summary>How wide a gap there is down the middle of the footprint, in art pixels, to walk through an arch. Zero for none.</summary>
+    public int Gap { get; init; }
+
+    /// <summary>Floor, wall or ground.</summary>
     public PropPlacement Placement { get; init; } = PropPlacement.Floor;
+
+    /// <summary>How far up from its foot it sorts against people, in art pixels. Zero for most; the ship sorts from its far rail, so whoever's on its deck is drawn on it.</summary>
+    public int SortRise { get; init; }
 
     /// <summary>The light it gives off, or null if it doesn't.</summary>
     public PropLight Light { get; init; }

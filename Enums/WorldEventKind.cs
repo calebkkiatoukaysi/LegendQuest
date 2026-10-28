@@ -35,4 +35,7 @@ public enum WorldEventKind
 
     /// <summary>A trigger went off with something to say.</summary>
     TriggerSaid,
+
+    /// <summary>A trigger went off that starts a conversation. The text is the conversation's id.</summary>
+    TriggerTalked,
 }

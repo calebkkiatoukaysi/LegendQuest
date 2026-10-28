@@ -14,4 +14,7 @@ public sealed class ClassDefinition
 
     /// <summary>The biggest number on its hit die. At level 1 a character has this many hit points, plus their Constitution modifier.</summary>
     public required int HitDie { get; init; }
+
+    /// <summary>Where 5e's standard array (15, 14, 13, 12, 10, 8) goes for this class. The creation screen starts you on it.</summary>
+    public required AbilityScores Recommended { get; init; }
 }

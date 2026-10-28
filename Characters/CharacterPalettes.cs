@@ -7,87 +7,82 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LegendQuest.Characters;
 
 /// <summary>
-/// The skin and clothing presets from character-palettes.png, and the palette swap that recolours a
+/// The colour presets from character-palettes.png, and the palette swap that recolours a baked
 /// sheet to someone's look.
 /// </summary>
 /// <remarks>
-/// The Black Box's CharacterPalettes. generate_characters.py paints the body sheet in the first
-/// preset of each block (the keys) and writes every preset to the palette PNG, one row each, so I
-/// read the colours from there instead of copying them in here, and the two can't get out of step.
+/// The Black Box's CharacterPalettes, with more parts to swap. generate_paperdoll.py cuts each part
+/// of the youth down to a few key shades and writes every preset to the palette PNG, one row each,
+/// the keys first in each block, so I read the colours from there instead of copying them in here
+/// and the two can't get out of step. The blocks are in the order the script writes them, and each
+/// is as long as its list in LookOptions.
 /// </remarks>
 public class CharacterPalettes
 {
-    /// <summary>How many skin presets there are: the first block of rows. Has to match SKINS in tools/generate_characters.py.</summary>
-    public const int SkinPresets = 5;
+    /// <summary>The blocks of rows, top to bottom, and how many presets each one has.</summary>
+    private static readonly int[] Blocks =
+    {
+        LookOptions.Skins.Count,
+        LookOptions.HairColours.Count,
+        LookOptions.Eyes.Count,
+        LookOptions.Shirts.Count,
+        LookOptions.Vests.Count,
+        LookOptions.LegsColours.Count,
+        // The cloak block has no row for "none".
+        LookOptions.Cloaks.Count - 1,
+    };
 
-    /// <summary>How many shirt dyes there are: the second block. Has to match SHIRTS.</summary>
-    public const int ShirtPresets = 6;
-
-    /// <summary>How many breeches dyes there are: the third block. Has to match BREECHES_DYES.</summary>
-    public const int BreechesPresets = 4;
-
-    private Color[][] _skin;
-    private Color[][] _shirt;
-    private Color[][] _breeches;
+    private Color[][][] _blocks;
 
     /// <summary>Reads every preset out of character-palettes.png.</summary>
-    /// <remarks>Throws if the PNG doesn't have as many rows as there are presets. That means the script and this file don't match, and I'd rather find out right away.</remarks>
+    /// <remarks>Throws if the PNG doesn't have as many rows as there are presets. That means the script and LookOptions don't match, and I'd rather find out right away.</remarks>
     /// <param name="content">The content manager to load with.</param>
     public void LoadContent(ContentManager content)
     {
         Texture2D palettes = content.Load<Texture2D>("character-palettes");
 
-        int rows = SkinPresets + ShirtPresets + BreechesPresets;
+        int rows = 0;
+        foreach (int count in Blocks) rows += count;
         if (palettes.Height != rows)
-            throw new InvalidOperationException($"character-palettes.png has {palettes.Height} rows; the presets need {rows}. Run tools/generate_characters.py.");
+            throw new InvalidOperationException($"character-palettes.png has {palettes.Height} rows; LookOptions needs {rows}. Run tools/generate_paperdoll.py.");
 
         var pixels = new Color[palettes.Width * palettes.Height];
         palettes.GetData(pixels);
 
         int row = 0;
-        _skin = ReadBlock(pixels, palettes.Width, ref row, SkinPresets);
-        _shirt = ReadBlock(pixels, palettes.Width, ref row, ShirtPresets);
-        _breeches = ReadBlock(pixels, palettes.Width, ref row, BreechesPresets);
+        _blocks = new Color[Blocks.Length][][];
+        for (int b = 0; b < Blocks.Length; b++) _blocks[b] = ReadBlock(pixels, palettes.Width, ref row, Blocks[b]);
     }
 
-    /// <summary>Makes a recoloured copy of a sheet for a look.</summary>
+    /// <summary>Recolours a baked sheet's pixels to a look, in place.</summary>
     /// <remarks>
-    /// Every key colour gets swapped for the same shade of the picked preset. It only runs when a
-    /// map loads or someone's look changes, not every frame, and a sheet is small so it's instant.
-    /// (No shader needed, just GetData and SetData like the sprite tutorials.)
+    /// Every key shade gets swapped for the same shade of the picked preset. It only runs when a look
+    /// is baked, not every frame, and a sheet is small so it's instant. (No shader needed, just
+    /// GetData and SetData like the sprite tutorials.)
     /// </remarks>
-    /// <param name="device">The device to make the new texture on.</param>
-    /// <param name="sheet">The sheet in its key colours.</param>
+    /// <param name="pixels">The sheet, in its key colours.</param>
     /// <param name="look">The presets to put on it. Out of range ones wrap round.</param>
-    /// <returns>A new texture. Whoever calls this has to dispose it.</returns>
-    public Texture2D Recolour(GraphicsDevice device, Texture2D sheet, CharacterLook look)
+    public void Recolour(Color[] pixels, CharacterLook look)
     {
-        var swap = new Dictionary<Color, Color>();
-        AddSwap(swap, _skin[0], _skin[Wrap(look.Skin, SkinPresets)]);
-        AddSwap(swap, _shirt[0], _shirt[Wrap(look.Shirt, ShirtPresets)]);
-        AddSwap(swap, _breeches[0], _breeches[Wrap(look.Breeches, BreechesPresets)]);
+        int[] picked =
+        {
+            look.Skin, look.HairColour, look.Eyes, look.Shirt, look.Vest, look.LegsColour,
+            // No cloak means the cape isn't drawn, so its keys never show; any preset will do.
+            Math.Max(0, look.Cloak - 1),
+        };
 
-        var pixels = new Color[sheet.Width * sheet.Height];
-        sheet.GetData(pixels);
+        var swap = new Dictionary<Color, Color>();
+        for (int b = 0; b < Blocks.Length; b++)
+        {
+            Color[] key = _blocks[b][0], chosen = _blocks[b][LookOptions.Wrap(picked[b], Blocks[b])];
+            for (int i = 0; i < key.Length && i < chosen.Length; i++) swap[key[i]] = chosen[i];
+        }
 
         for (int i = 0; i < pixels.Length; i++)
         {
             if (pixels[i].A == byte.MaxValue && swap.TryGetValue(pixels[i], out Color swapped))
                 pixels[i] = swapped;
         }
-
-        var recoloured = new Texture2D(device, sheet.Width, sheet.Height);
-        recoloured.SetData(pixels);
-        return recoloured;
-    }
-
-    /// <summary>Wraps a preset number round, so a save with one that's since gone still gets a colour.</summary>
-    private static int Wrap(int index, int count) => (index % count + count) % count;
-
-    /// <summary>Maps each key shade to the same shade of the picked preset.</summary>
-    private static void AddSwap(Dictionary<Color, Color> swap, IReadOnlyList<Color> key, IReadOnlyList<Color> chosen)
-    {
-        for (int i = 0; i < key.Count && i < chosen.Count; i++) swap[key[i]] = chosen[i];
     }
 
     /// <summary>Reads one block of rows. A transparent pixel ends a ramp early.</summary>

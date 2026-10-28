@@ -3,26 +3,53 @@ using System.Text.Json.Serialization;
 namespace LegendQuest.Characters;
 
 /// <summary>
-/// How someone looks, as far as the body sheet goes: their skin, and the colours of their shirt and
-/// breeches. Each is a preset from character-palettes.png.
+/// How someone looks: their skin, face, eyes, hair and beard, and the colours of what they're
+/// wearing. Every one is a number into one of LookOptions' lists.
 /// </summary>
 /// <remarks>
-/// Saved as preset numbers, not colours, the same as The Black Box's PlayerLook, so I can tweak a
-/// preset later without breaking anyone's save. Hair, eyes and the clothes over the smallclothes
-/// come with the paperdoll.
+/// Saved as numbers, not colours, the same as The Black Box's PlayerLook, so I can tweak a preset
+/// later without breaking anyone's save. A number that's since gone off the end of its list wraps
+/// round. The paperdoll's armour comes on top of this later; this is the person under it.
 /// </remarks>
 public class CharacterLook
 {
-    /// <summary>Which skin preset.</summary>
+    /// <summary>Which skin.</summary>
     public int Skin { get; set; }
+
+    /// <summary>Which face. The first is the face the body sheet's drawn with.</summary>
+    public int Face { get; set; }
+
+    /// <summary>Which eye colour.</summary>
+    public int Eyes { get; set; }
+
+    /// <summary>Which hair style.</summary>
+    public int Hair { get; set; }
+
+    /// <summary>Which hair colour. Beards come out the same colour.</summary>
+    public int HairColour { get; set; }
+
+    /// <summary>Which beard, the first being none.</summary>
+    public int Beard { get; set; }
 
     /// <summary>Which shirt dye.</summary>
     public int Shirt { get; set; }
 
-    /// <summary>Which breeches dye.</summary>
-    public int Breeches { get; set; }
+    /// <summary>Which dye the vest over the shirt is.</summary>
+    public int Vest { get; set; }
 
-    /// <summary>The three numbers together, for keeping one recoloured sheet per look. Not saved; it's the three above.</summary>
+    /// <summary>Breeches or a skirt.</summary>
+    public int Legs { get; set; }
+
+    /// <summary>Which dye the breeches or the skirt are.</summary>
+    public int LegsColour { get; set; }
+
+    /// <summary>Which cloak, the first being none.</summary>
+    public int Cloak { get; set; }
+
+    /// <summary>A copy, so changing one look doesn't change another.</summary>
+    public CharacterLook Copy() => (CharacterLook)MemberwiseClone();
+
+    /// <summary>Every number together, for keeping one baked sheet per look. Not saved; it's everything above.</summary>
     [JsonIgnore]
-    public (int Skin, int Shirt, int Breeches) Key => (Skin, Shirt, Breeches);
+    public string Key => string.Join(",", Skin, Face, Eyes, Hair, HairColour, Beard, Shirt, Vest, Legs, LegsColour, Cloak);
 }

@@ -88,7 +88,7 @@ public class SaveSlotMenu
     /// <summary>How far the form has faded in, 0 to 1.</summary>
     public float Opacity { get; set; } = 1f;
 
-    /// <summary>Raised when the player commits to a slot, with the game in it (a brand new one, already written, for a new game).</summary>
+    /// <summary>Raised when the player commits to a slot, with the game in it to load, or null for a new game (the creation screen makes and writes that).</summary>
     public event Action<int, SaveData> SlotChosen;
 
     /// <summary>Raised when the player backs out without choosing anything.</summary>
@@ -333,16 +333,10 @@ public class SaveSlotMenu
             return;
         }
 
-        // A new game is written straight away, so if the slot can't be written the form can say so.
-        SaveData fresh = SaveData.NewGame();
-        if (!SaveSystem.Write(slot, fresh))
-        {
-            _status = "COULD NOT WRITE " + picked.Name + " -- " + SaveSystem.LastError;
-            return;
-        }
-
+        // A new game isn't written until there's someone in it: the creation screen writes it, and
+        // says so there if the slot can't be written.
         IsOpen = false;
-        SlotChosen?.Invoke(slot, fresh);
+        SlotChosen?.Invoke(slot, null);
     }
 
     /// <summary>Erases a slot, on the second click.</summary>

@@ -44,6 +44,9 @@ public class InputState : IInputState
     /// <remarks>The proof run turns this on, so whatever I do with the mouse and keyboard while it runs can't change what it shoots.</remarks>
     public bool IgnoreDevices { get; set; }
 
+    /// <summary>Maps where the mouse is in the window to where it is on the canvas the screens draw on. Null leaves it alone.</summary>
+    public System.Func<Point, Point> MouseMap { get; set; }
+
     /// <summary>The mouse the proof run is pretending there is, while the real devices are ignored.</summary>
     private MouseState _proofMouse = NoMouse;
 
@@ -60,7 +63,7 @@ public class InputState : IInputState
         CurrentKeyboardState = IgnoreDevices ? default : Keyboard.GetState();
 
         _priorMouseState = CurrentMouseState;
-        CurrentMouseState = IgnoreDevices ? _proofMouse : Mouse.GetState();
+        CurrentMouseState = IgnoreDevices ? _proofMouse : OnCanvas(Mouse.GetState());
 
         // A key that's already held when the game starts shouldn't count as a new press.
         if (!_sampled)
@@ -70,6 +73,16 @@ public class InputState : IInputState
             _priorMouseState = CurrentMouseState;
             for (int i = 0; i < MaxInputs; i++) _priorGamePadStates[i] = CurrentGamePadStates[i];
         }
+    }
+
+    /// <summary>The mouse with its position moved from the window onto the canvas.</summary>
+    private MouseState OnCanvas(MouseState mouse)
+    {
+        if (MouseMap is null) return mouse;
+
+        Point at = MouseMap(mouse.Position);
+        return new MouseState(at.X, at.Y, mouse.ScrollWheelValue, mouse.LeftButton, mouse.MiddleButton, mouse.RightButton,
+            mouse.XButton1, mouse.XButton2, mouse.HorizontalScrollWheelValue);
     }
 
     /// <summary>For the proof run, since it can't move the real mouse: where the pretend mouse is, and whether its left button's down.</summary>

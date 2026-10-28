@@ -13,8 +13,9 @@ namespace LegendQuest.World;
 /// </summary>
 /// <remarks>
 /// This is the tilemap exercise's Tilemap: cut the tileset into source rectangles in LoadContent,
-/// then draw the map in a double loop. What's new is the three layers, picking a variant per cell,
-/// only drawing the tiles that are on screen, the walls, and the line of sight.
+/// then draw the map in a double loop. What's new is the three layers, picking a variant per cell
+/// (and the part of a block), only drawing the tiles that are on screen, the walls, and the line of
+/// sight.
 /// </remarks>
 public class Tilemap
 {
@@ -80,6 +81,7 @@ public class Tilemap
             for (int x = x0; x <= x1; x++)
             {
                 DrawTile(spriteBatch, _map.Ground[x, y], x, y, tint, Layers.GroundTile);
+                DrawEdges(spriteBatch, x, y, tint);
                 DrawTile(spriteBatch, _map.Detail[x, y], x, y, tint, Layers.DetailTile);
                 DrawTile(spriteBatch, _map.Overhead[x, y], x, y, tint, Layers.Overhead);
             }
@@ -169,14 +171,34 @@ public class Tilemap
     {
         if (tile == 0) return;
 
-        Rectangle source = _frames[_map.Tileset.FrameOf(tile, Pick(x, y))];
+        Rectangle source = _frames[_map.Tileset.FrameOf(tile, x, y)];
         spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, tint,
             0f, Vector2.Zero, 1f, SpriteEffects.None, layerDepth);
     }
 
-    /// <summary>A number from a cell's place, the same every time, for picking which variant of a tile it gets.</summary>
-    /// <remarks>The same hash The Black Box's lobby floor used. The low bits repeat, so it's shifted off them.</remarks>
-    private static int Pick(int x, int y) => (int)((uint)(x * 73856093 ^ y * 19349663) >> 7);
+    /// <summary>Draws a ground tile's edges along whichever of its sides meet ground of another kind. Not along the edge of the map.</summary>
+    private void DrawEdges(SpriteBatch spriteBatch, int x, int y, Color tint)
+    {
+        int tile = _map.Ground[x, y];
+        if (tile == 0 || !_map.Tileset[tile].Edged) return;
+
+        for (int side = 0; side < 4; side++)
+        {
+            int nx = x + Across[side], ny = y + Down[side];
+            if (nx < 0 || ny < 0 || nx >= _map.Width || ny >= _map.Height) continue;
+
+            int next = _map.Ground[nx, ny];
+            if (next == 0 || next == tile) continue;
+
+            Rectangle source = _frames[_map.Tileset.EdgeFrame(tile, side)];
+            spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, tint,
+                0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.GroundEdge);
+        }
+    }
+
+    /// <summary>Which way each side is: north, east, south, west.</summary>
+    private static readonly int[] Across = { 0, 1, 0, -1 };
+    private static readonly int[] Down = { -1, 0, 1, 0 };
 
     /// <summary>Merges each row's runs of solid cells into one rectangle each, and walls the outside of the map in.</summary>
     /// <remarks>Same as the lobby: a few dozen rectangles instead of one per tile.</remarks>

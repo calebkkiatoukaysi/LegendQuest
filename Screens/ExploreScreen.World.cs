@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
 using LegendQuest.Components;
+using LegendQuest.Dialogue;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
 using LegendQuest.World;
@@ -146,12 +147,15 @@ public partial class ExploreScreen
         return true;
     }
 
-    /// <summary>Talks to someone: you both turn to face each other, and they say their line.</summary>
+    /// <summary>Talks to someone: you both turn to face each other, and it's a conversation if they've one for now, or their line if not.</summary>
     /// <param name="npc">Who.</param>
     private void Talk(Npc npc)
     {
         Leader.Face(npc.Walker.Position);
-        npc.TalkTo(Leader.Position);
+
+        Conversation conversation = Conversations.For(npc.Definition.Id, _game.Flags);
+        npc.TalkTo(Leader.Position, conversation is null);
+        if (conversation is not null) Converse(conversation, null);
     }
 
     /// <summary>Uses something: turns you to it, cues what happened, and opens the map to travel if it was a waypoint.</summary>
@@ -186,6 +190,12 @@ public partial class ExploreScreen
             WorldEventKind.WaypointFound => Sfx.Waypoint,
             _ => null,
         };
+
+        if (happened.Kind == WorldEventKind.TriggerTalked)
+        {
+            Converse(Conversations.Get(happened.Text), null);
+            return;
+        }
 
         if (sound is Sfx play) _audio.Play(play);
         if (happened.Text is not null) _toast.Show(happened.Text);
@@ -242,7 +252,7 @@ public partial class ExploreScreen
     {
         Halt();
 
-        var map = new MapScreen(_map, _tilemap, _seen, _world, Leader.Position, travelling: waypoint is not null);
+        var map = new MapScreen(_map, _tilemap, AllProps(), _seen, _world, Leader.Position, travelling: waypoint is not null);
         map.Travel += to => Leave(to, _world.FoundWaypoint(to).Beside, Direction.Down);
         ScreenManager.AddScreen(map);
     }

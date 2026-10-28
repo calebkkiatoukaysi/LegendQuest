@@ -32,7 +32,7 @@ public sealed class Origin
             Name = Name,
             Class = Class,
             Scores = Scores,
-            Look = new CharacterLook { Skin = Look.Skin, Shirt = Look.Shirt, Breeches = Look.Breeches },
+            Look = Look.Copy(),
         };
         member.Hp = member.MaxHp;
         return member;

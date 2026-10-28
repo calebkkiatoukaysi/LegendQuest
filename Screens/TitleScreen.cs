@@ -27,23 +27,31 @@ public class TitleScreen : MenuScreen
     private const float TitleY = 48f;
     private const float HintY = 858f;
 
-    /// <summary>Where the row of buttons sits (on the flagstones under the gate) and the gap between them.</summary>
+    /// <summary>Where the row of buttons sits (on the terrace, in front of the balustrade) and the gap between them.</summary>
     private const float ButtonRowY = 806f;
     private const float ButtonGap = 30f;
 
     /// <summary>How long the title takes to fade in and out.</summary>
     private static readonly TimeSpan FadeTime = TimeSpan.FromSeconds(0.5);
 
-    // The title gets a tight shadow the colour of old blood instead of black. The serif is light,
-    // and anything wider ghosts around the strokes.
-    private static readonly Color TitleColor = new(238, 228, 214);
-    private static readonly Color TitleShadow = new(92, 22, 14);
-    private static readonly Color HintColor = new(150, 138, 128);
+    // The title's the warm gold of the lamps on the terrace, with a tight shadow the blue of the night
+    // over the castle, on a soft dark of its own so the spire and the clouds behind don't eat it. The
+    // serif is light, and a wider shadow ghosts around the strokes.
+    private static readonly Color TitleColor = new(255, 238, 196);
+    private static readonly Color TitleShadow = new(26, 22, 64);
+    private static readonly Color TitleBacking = new Color(14, 12, 40) * 0.55f;
+    private static readonly Vector2 TitleSpread = new(80f, 4f);
+
+    /// <summary>The hint along the bottom, and the soft dark it sits on so it reads on the pale terrace: how dark, and how far it reaches past the line.</summary>
+    private static readonly Color HintColor = new(236, 224, 214);
+    private static readonly Color HintBacking = Color.Black * 0.6f;
+    private static readonly Vector2 HintSpread = new(30f, 8f);
 
     private readonly MenuEntry _continue;
 
     private SpriteFont _titleFont;
     private SpriteFont _detailFont;
+    private Texture2D _glow;
 
     /// <summary>Builds the five entries.</summary>
     public TitleScreen()
@@ -78,6 +86,7 @@ public class TitleScreen : MenuScreen
 
         _titleFont = Content.Load<SpriteFont>("spectral-title");
         _detailFont = Content.Load<SpriteFont>("spectral-detail");
+        _glow = Content.Load<Texture2D>("glow");
 
         LayOutRow(new Vector2(LegendQuestGame.ScreenWidth / 2f, ButtonRowY), ButtonGap);
         RefreshContinue();
@@ -89,7 +98,7 @@ public class TitleScreen : MenuScreen
     /// <summary>Escape on the title closes the game.</summary>
     protected override void OnCancel() => ScreenManager.Game.Exit();
 
-    /// <summary>Draws the title and the hint over the gate, then the row of buttons.</summary>
+    /// <summary>Draws the title over the sky and the hint on the terrace, then the row of buttons.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
@@ -97,7 +106,15 @@ public class TitleScreen : MenuScreen
         float alpha = TransitionAlpha;
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
+        Vector2 title = _titleFont.MeasureString(Title);
+        var titleArea = new Rectangle((int)((LegendQuestGame.ScreenWidth - title.X) / 2f), (int)(TitleY + TitleSpread.Y),
+            (int)title.X, (int)(title.Y - TitleSpread.Y * 2f));
+        Text.DrawBacking(spriteBatch, _glow, titleArea, (int)TitleSpread.X, TitleBacking * alpha);
         Text.DrawCentered(spriteBatch, _titleFont, Title, TitleY, TitleColor * alpha, TitleShadow * alpha);
+        Vector2 hint = _detailFont.MeasureString(Hint);
+        var backing = new Rectangle((int)((LegendQuestGame.ScreenWidth - hint.X) / 2f), (int)(HintY - HintSpread.Y),
+            (int)hint.X, (int)(hint.Y + HintSpread.Y * 2f));
+        Text.DrawBacking(spriteBatch, _glow, backing, (int)HintSpread.X, HintBacking * alpha);
         Text.DrawCentered(spriteBatch, _detailFont, Hint, HintY, HintColor * alpha, Palette.Shadow * alpha);
         spriteBatch.End();
 
@@ -105,11 +122,16 @@ public class TitleScreen : MenuScreen
     }
 
     /// <summary>Opens the save slots over the title.</summary>
+    /// <remarks>A slot picked for a new game comes back with no game in it yet; the creation screen makes one.</remarks>
     /// <param name="purpose">Whether a new game is going in a slot or one is coming out.</param>
     private void OpenSlots(SlotPurpose purpose)
     {
         var slots = new SaveSlotScreen(purpose);
-        slots.SlotChosen += (_, game) => Begin(game);
+        slots.SlotChosen += (slot, game) =>
+        {
+            if (game is null) ScreenManager.AddScreen(new CharacterCreationScreen(slot));
+            else Begin(game);
+        };
 
         // Something may have been erased while it was open.
         slots.Closed += RefreshContinue;

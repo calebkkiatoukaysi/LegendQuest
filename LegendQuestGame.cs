@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using LegendQuest.Audio;
 using LegendQuest.Components;
 using LegendQuest.Save;
@@ -28,6 +29,7 @@ public partial class LegendQuestGame : Game
     private readonly ScreenManager _screenManager;
     private readonly AudioManager _audio;
     private readonly CursorSprite _cursor = new();
+    private readonly ScreenCanvas _canvas;
 
     /// <summary>Sets up the window and adds the sound and the screen manager as components and services.</summary>
     public LegendQuestGame()
@@ -36,6 +38,7 @@ public partial class LegendQuestGame : Game
         _graphics.PreferredBackBufferWidth = ScreenWidth;
         _graphics.PreferredBackBufferHeight = ScreenHeight;
         _graphics.ApplyChanges();
+        _canvas = new ScreenCanvas(this, _graphics);
         Content.RootDirectory = "Content";
         Window.Title = "Legend Quest";
 
@@ -55,6 +58,19 @@ public partial class LegendQuestGame : Game
         // The cursor isn't a component, since it has to be drawn after the screens and nothing else
         // about it needs a component. It's a service so the screens can change its shape.
         Services.AddService(_cursor);
+
+        // The options switch full screen on and off through the canvas, and the mouse gets mapped
+        // from the window onto it.
+        Services.AddService(_canvas);
+        _screenManager.Input.MouseMap = _canvas.ToCanvas;
+    }
+
+    /// <summary>Sizes the window for the screen it's on, now the switches are in.</summary>
+    /// <remarks>Not in the constructor, since ProofDirectory is set after it. The proof run gets a window whatever the settings say.</remarks>
+    protected override void Initialize()
+    {
+        _canvas.SetUp(ProofDirectory is null && _audio.Settings.FullScreen);
+        base.Initialize();
     }
 
     /// <summary>Reads every map, loads all the sounds, then opens the gate and the title.</summary>
@@ -71,29 +87,38 @@ public partial class LegendQuestGame : Game
 
         _audio.LoadContent(Content);
         _cursor.LoadContent(Content);
+        _canvas.LoadContent(GraphicsDevice);
 
         _screenManager.AddScreen(new TitleBackgroundScreen());
         _screenManager.AddScreen(new TitleScreen());
     }
 
-    /// <summary>Moves the proof run along if there is one, then updates the components (which is the screens and the sound).</summary>
+    /// <summary>Moves the proof run along if there is one, then updates the components (which is the screens and the sound), then F11 for full screen.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     protected override void Update(GameTime gameTime)
     {
         UpdateProof();
         base.Update(gameTime);
+
+        if (_screenManager.Input.IsNewKeyPress(Keys.F11))
+        {
+            _canvas.SetFullScreen(!_canvas.FullScreen);
+            _audio.Settings.FullScreen = _canvas.FullScreen;
+            SettingsStore.Save(_audio.Settings);
+        }
     }
 
-    /// <summary>Clears to the void and draws the screens and then the cursor, into the proof's render target when a shot is due.</summary>
+    /// <summary>Clears the canvas to the void, draws the screens and then the cursor on it, saves it if a shot is due, and puts it in the window.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     protected override void Draw(GameTime gameTime)
     {
-        BeginProofCapture();
+        _canvas.Begin(GraphicsDevice);
         GraphicsDevice.Clear(VoidColor);
 
         base.Draw(gameTime);
         _cursor.Draw(gameTime, _screenManager.SpriteBatch, _screenManager.Input.MousePosition);
 
         EndProofCapture();
+        _canvas.Present(GraphicsDevice);
     }
 }

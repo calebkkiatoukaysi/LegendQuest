@@ -13,20 +13,32 @@ in milestones, and right now the first four are done: the screens around the gam
 saves and the proof run; the maps, walking round them, and the dark; the three maps joined up, with
 things on them to open and pull, the map screen and fast travel; and the party, following you about,
 with the mouse to walk, point and click.
-[Still to come](#still-to-come) lists the rest.
+[Still to come](#still-to-come) lists the rest. The look has changed since the fourth: the title
+and the capital, Questeria, are cut from pictures I made in a brighter style (see
+[Supplied art](#supplied-art)), and Questeria has taken the village's place as where a new game
+starts.
 
 ## Running it
 
-The window is 1600x900. The art is drawn small and blown up by a whole number so the pixels stay
-square: 3x for the buttons, the panels and the world, 4x for the gate behind the title, which is
-400x225 art pixels and fills the window exactly. The mouse wheel zooms the world between 2x, 3x and
-4x, never anything in between.
+Everything is drawn on a 1600x900 canvas (`ScreenCanvas`), and the canvas is blown up to fill the
+window, keeping its shape. The window opens as big as fits on the screen it's on, can be dragged to
+any size, and **F11** (or DISPLAY on the options) makes it full screen. A whole number of times
+bigger is point sampled; in between, it's blown up to the next whole number and shrunk the rest of
+the way smoothly, so the pixels stay even. On the canvas the art is drawn small and blown up by a
+whole number so the pixels stay square: 3x for the buttons, the panels and the world, 4x for the
+picture behind the title, which is 416x277 art pixels, a little bigger than the canvas so its
+layers can sway. The mouse wheel zooms the world between 2x, 3x and 4x, never anything in between.
 
 ```
 dotnet run
 ```
 
-**NEW GAME** opens the save slots, and picking one starts you in the village. **LOAD** opens them
+**NEW GAME** opens the save slots, and picking one opens the creation screen: your name, your
+class, and how you look (skin, face, eyes, hair and its colour, a beard, the colours of your shirt,
+vest and legs, breeches or a skirt, and a cloak), with you turning round beside it as it changes.
+**BEGIN** writes the game to the slot and opens on the harbour, with the ship you and Valen came
+over on sailing in. Valen shows you round from there: Esc skips the arrival, and talking to the
+innkeeper in Questeria gets you your first work. **LOAD** opens them
 to carry a game on, **CONTINUE** carries on whichever slot was saved last (it's dead when there
 isn't one), **OPTIONS** has the volumes and the text speed, and **EXIT** and **Esc** close the
 game. On a map, clicking the ground walks you there, clicking someone or something walks you up to
@@ -41,13 +53,17 @@ dotnet run -- --proof shots       # play through the screens, save a picture of 
 
 It's the same harness as The Black Box's. It goes through the title, the options, the save slots
 for loading (and erases a broken slot the way a player would, ERASE then SURE?), the save slots for
-a new game, then a new game in the village: up the road with the party behind, round behind a
-roof, both sides of a barrel, into a wall at an angle, both zooms, the mouse over the far side of
-the well (the path goes round it) and a click to walk it, the mouse on the elder and a click to walk
-up and talk to them, the mouse on a wall where there's no way, Tab, a click on a card, you sent off
-on your own while the others find their way after you, the waypoint stone, the map, and out east. On the old
-road it walks into the trigger before the camp, opens the chest, reads the sign, finds the second
-waypoint and fast travels back to the village, then straight back to the road by it, walks into the
+a new game, then the creation screen (you as you start, then named, changed and changed again),
+and BEGIN. On the harbour the arrival plays itself: the ship sailing in, tied up, the walk down the
+gangplank, Valen talking, and the card. Then up the street into Questeria: Valen talking as you
+come in, the plaza and the same view a few seconds on with the townsfolk moved, round behind a
+house, both zooms, the mouse over the far side of a statue (the path goes round it) and a click to
+walk it, the mouse on the elder and a click to walk up and talk to them, the mouse on the canal
+where there's no way, Tab, a click on a card, the innkeeper's work start to finish (the innkeeper,
+the flower seller, and the innkeeper paying), you sent off on your own while Valen finds his way
+after you, the waypoint crystal, the map, and out through the city gate. On the old road it walks into the trigger before the camp, opens the chest,
+reads the sign, finds the second waypoint and fast travels back to Questeria, then straight back to
+the road by it, walks into the
 trigger at the blocked end twice (it goes off every time), and up the path into the barrow. In the
 barrow it tries the locked door and the stone door, pulls the lever that opens the stone door, goes
 through it to the chest, opens the map, stands under a torch, pauses, and goes out through QUIT TO
@@ -70,6 +86,9 @@ lever's pulled. A second switch, `--simulate`, comes with combat.
 | On a map | **WASD** or the **arrows** to walk, **E**, **Space** or **Enter** to use or talk to what you're next to, **M** for the map, the **mouse wheel** to zoom, **Esc** to pause |
 | On a map, the mouse | **Left click** the ground to walk there (the path shows while you point), or someone or something to walk up to them and talk or use it. Pointing at anything says what it is |
 | The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
+| Conversations | **Enter**, **Space**, **E** or a click shows the rest of the line, then the next |
+| The arrival | **Esc** skips it |
+| Anywhere | **F11** switches full screen on and off |
 | The map | **Tab** switches between the map you're on and the world. Opened from a waypoint, the **arrows** (or the mouse) pick where to go and **Enter** (or a click) goes. **M** or **Esc** closes it |
 
 A gamepad works anywhere the keyboard does: the d-pad or left stick, A to use, B to back out, Y for
@@ -84,10 +103,12 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 
 | Screen | What it is |
 | --- | --- |
-| `TitleBackgroundScreen` | The gate at night behind the title and every form on it. It doesn't transition off when something covers it, so it stays up behind all of them |
+| `TitleBackgroundScreen` | Questeria at twilight behind the title and every form on it, moving. It doesn't transition off when something covers it, so it stays up behind all of them |
 | `TitleScreen` | The title, with NEW GAME, CONTINUE, LOAD, OPTIONS and EXIT |
 | `OptionsScreen` | Master, music and sound volume, and how fast text types out. Saved to `settings.json` |
 | `SaveSlotScreen` | The save slots, for a new game or for loading one, with ERASE beside each slot that has something in it |
+| `CharacterCreationScreen` | Making you: a row for your name, your class and every part of your look, with you walking on the spot and turning round beside them, and your face blown up over that. RANDOM, BEGIN and BACK |
+| `DialogueScreen` | Popup. A conversation a line at a time, over the dimmed map: the speaker's face and name, and the line typing out at the text speed. Enter, E or a click goes on |
 | `ExploreScreen` | A map being walked round: the tiles, the props, the things you can use, the people, the party, and the dark if it's a dark map. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
 | `MapScreen` | Popup. The map you're on, as much as you've seen of it, and the world: every place you've been and the roads between them. Opened from a waypoint, it's where you pick somewhere to travel to |
 | `PauseMenuScreen` | RESUME, OPTIONS or QUIT TO TITLE. Nothing under it moves while it's up. SAVE and LOAD go on it once there's a game to save |
@@ -95,16 +116,15 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 
 ## The title
 
-The gate is one picture, `title-scene.png`, drawn by `tools/generate_world.py`: a crenellated
-wall against the night, an arched gate with a barred door, flagstones in front, and an iron sconce
-either side. The light in it is worked out in 3D (the wall stands up, the floor lies down, the
-flames stand a little off the wall) and then cut into dithered bands, so the pools read as pixel
-art and not a smooth gradient. A thin line of light gets out under the door.
-
-The flames aren't in the picture. Each torch is a `TorchSprite`: six frames of flame, and the glow
-texture drawn additively over the stone with a flicker made of three sine waves at speeds that
-never line up. Embers come off the tips (`EmberParticleSystem`, on the particle system tutorial's
-engine), rising, wandering, flickering, and cooling from yellow to a dull red.
+Questeria across a lake at twilight, under a blue and pink sky, from a terrace with blossom trees
+either side. It's layers like the parallax tutorial's, except nothing scrolls: the whole view sways
+slowly from side to side and each layer moves by its own share of that, the sky hardly at all and
+the terrace the most, so it reads as near and far. Clouds drift across, an island floats and bobs
+with a waterfall falling off it, a banner blows either side of the terrace, the crystal on a tower
+pulses, and stars twinkle over the castle. Petals come off the trees (`PetalParticleSystem`) and
+motes of light rise off the water (`SparkleParticleSystem`), both on the particle system tutorial's
+engine. Every picture in it is cut by `tools/cut_supplied.py` (see [Supplied art](#supplied-art)),
+and drawn at 4x.
 
 ## Maps
 
@@ -149,11 +169,14 @@ chest side-chest 4.5 8 gold=40
 Something at x, y stands with its feet on the middle of that tile, and halves are fine. Exits and
 triggers are rectangles instead: x, y is their top left tile and `w` and `h` their size. A value
 with spaces in it goes in double quotes, and it can't have a `;` in it, since that's a comment.
+`fog = no` in `[map]` has the map screen show all of a map from the start, which Questeria does,
+since it's the capital and everyone knows their way round it.
 
 | Kind | What it is | Settings |
 | --- | --- | --- |
 | `spawn` | Somewhere you can arrive. Every map needs one called `start` | `facing` (down if it isn't set) |
 | `prop` | Anything out of `PropCatalog`; the id is which one | none |
+| `npc` | Someone standing there (see People, under [The party](#the-party)) | `name`, `sheet` (one of `Townsfolk`), `facing`, `say` |
 | `light` | A pool of light with nothing drawn for it, like daylight down the barrow's steps | `reach` in tiles, `strength` 0 to 1 |
 | `exit` | Walk into it and you go to another map | `to` the map, `at` a spawn there (`start` if it isn't set), `w`, `h` |
 | `trigger` | Walk into it and it says something or sets a flag | `say`, `set`, `once` (yes if it isn't set), `w`, `h` |
@@ -176,7 +199,11 @@ exists and a spawn on it that does too.
 - **Tiles.** Ids count from 1 and 0 is empty, the same as the exercise. A tileset lists its tiles
   in order, and each one says how many variants it has, whether it's solid and whether it sounds
   like grass or stone. The map picks a variant per cell from where the cell is, so a field of grass
-  doesn't repeat, and it's the same every time.
+  doesn't repeat, and it's the same every time. A tile can be a block of several tiles each way,
+  where each cell shows its part of the block and the variant is picked per block. A tile can also
+  be *edged*: Questeria's lawns, water and boardwalk have four more frames for their north, east,
+  south and west sides, and the tilemap draws them wherever one meets ground of another kind, so a
+  lawn gets its kerb and the water its quay wall without a tile for every corner.
 - **Walls.** Collision comes from the tiles: a cell is solid if its ground or detail tile is, and
   each row's runs of solid cells merge into one `BoundingRectangle` (the collision tutorial's).
   There's a wall all the way round outside the edge too. Walking moves the feet one axis at a time
@@ -187,15 +214,17 @@ exists and a spawn on it that does too.
   footprint). Floor props sort with the people; wall props, like the torch sconces, go behind
   everyone. A sconce or a campfire carries a light: where its flame goes and where its pool lands.
   The things you use are props too, with a picture for each way they can be: shut and open, up
-  and down, asleep and awake.
+  and down, asleep and awake. An arch, like Questeria's gate, has a gap down the middle of its
+  footprint to walk through, and a patch of flowers lies flat under everyone and blocks nothing.
 - **The camera** is The Black Box's `Camera2D`, except the world is in art pixels now and the
   camera does the scaling, so the zoom is just a whole number. It eases after you, stops at the
   edge of the map (or centres the map if it's smaller than the view), and rounds itself to whole
   screen pixels. The walker snaps to whole screen pixels too, or it crawls.
 - **Sorting.** One world batch, back to front. The ground and detail tiles are at the back, wall
   props in front of those, then everyone on the floor sorted by how far down the map their feet
-  are, then the overhead tiles. The houses use that: the thatch hangs over the two rows of ground
-  behind each house, so walking along the back of one, you go under the roof.
+  are, then the overhead tiles. Questeria's buildings use that: each one's footprint is only its
+  front few tiles, so walking along the back of one, it's drawn in front of you and you go behind
+  the roof.
 - **The dark.** A dark map gets The Black Box's lobby trick: one low resolution texture of darkness
   with the pools of light cut out of it, built once when the map loads, stretched over the map with
   smooth sampling and drawn after everything, so you go dark when you walk out of the light. What's
@@ -205,7 +234,8 @@ exists and a spawn on it that does too.
   in front of it, two rows down at most, because my first go walked the line from the face itself,
   every face shut its own torch out of the floor beside it, and the pools came out square. The
   dark only gets built again when a door opens or shuts. The torches flicker without rebuilding
-  anything: the glow texture goes over each pool additively, with the same flicker as the title.
+  anything: the glow texture goes over each pool additively, with a flicker made of three sine
+  waves at speeds that never line up.
 - **Using things.** Whatever's nearest your feet and still has something to do (an open chest
   doesn't) gets its name over it and `E · OPEN` or `PULL` or `READ` or `TRAVEL` under that. Reach
   is a tile and a half, a bit more for a door, which is two tiles wide, and more for a sign, which
@@ -221,10 +251,10 @@ exists and a spawn on it that does too.
   black between.
 - **What's been seen.** Every map keeps one bit per tile for whether it's been in sight: nine tiles
   round your feet, cut off by walls and shut doors with the same line the light uses. It only looks
-  again when you step into another tile. The map screen draws the tiles at one screen pixel per
-  art pixel, browned like an old map, and lays one texel per tile of dark over what hasn't been
-  seen, smooth sampled like the dark on a dark map, so the edge is soft. Where an exit's been seen,
-  it says where it goes.
+  again when you step into another tile. A map with `fog = no` is seen all over from the start. The
+  map screen draws the tiles and the props at one screen pixel per art pixel, browned like an old
+  map, and lays one texel per tile of dark over what hasn't been seen, smooth sampled like the dark
+  on a dark map, so the edge is soft. Where an exit's been seen, it says where it goes.
 - **The world.** Each map says where it is on the world map, and the roads between them are wherever
   the exits go, so the two can't disagree. A map you've been on is a place with its name; a map
   one of those leads to, that you haven't been on yet, is a mark with no name. Using a waypoint finds it, then opens the
@@ -234,8 +264,8 @@ exists and a spawn on it that does too.
 
 | Map | What it is |
 | --- | --- |
-| `village.map` | The hub, lit. The elder's house on the north side of the square, the well in the middle with the waypoint stone beside it, four more houses, a garden, a road south out of the village and one east to the old road |
-| `road.map` | The old road through the forest, at dusk. In from the village on the west; a camp off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road further east. The trees are trunks with their crowns overhead, so you walk under the edges of them |
+| `questeria.map` | The capital and the hub, lit, with no fog. The palace on its terrace to the north with the temple and the guildhall either side, the plaza in the middle with its fountain and the waypoint crystal, houses and gardens to the west, the market to the east, the canals, and the avenue south to the city gate and the old road. Seventeen townsfolk |
+| `road.map` | The old road through the forest, at dusk. In from Questeria on the west; a camp off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road further east. The trees are trunks with their crowns overhead, so you walk under the edges of them |
 | `barrow.map` | Dark, seven torches and a little daylight down the steps. In up the steps, through a short dark passage into the hall, with the locked tomb door in the middle of its north wall, the stone door into the side room at the west end, and the lever that opens it at the east end |
 
 The road is meant to be lit, at dusk. I've made it a dark map with a lot of ambient light
@@ -287,10 +317,10 @@ level 1 in the skeleton.
   `BinaryHeap` for the open list. It can aim for a tile or for anywhere within reach of a point,
   which is how clicking a chest works. Then the path's pulled straight wherever the feet could walk
   a straight line, so you don't zigzag across an open square.
-- **People.** `npc` in a map file puts someone there: a name, which way they face, their colours,
-  and a line. They stand, look round every few seconds (never at the wall), and turn to face you
+- **People.** `npc` in a map file puts someone there: a name, which of the townsfolk's sheets
+  they're drawn from, which way they face, and a line. They stand, look round every few seconds (never at the wall), and turn to face you
   when you talk to them; the line goes up over their head on a dark smudge. Conversations take over
-  from the line when there are conversations. The village has the elder and the trader.
+  from the line when there are conversations. Questeria has seventeen of them.
 
 ## The walker
 
@@ -310,20 +340,24 @@ all, with the feet at (16, 46) in every frame.
 
 `WalkerSprite` is The Black Box's on the new layout: it cuts frames from a sheet, walks through
 columns 1 to 4, and fires `Stepped` on 1 and 3, when a foot lands, so the footsteps match the feet.
-The footstep is grass or stone depending on the ground tile under you. For now everyone is just
-the body, in smallclothes; the paperdoll puts hair, a face and clothes on it later.
+The footstep is grass or stone depending on the ground tile under you. For now the party is just
+the body, in smallclothes; the paperdoll puts hair, a face and clothes on it later. The townsfolk
+have sheets of their own, cut from my pictures already dressed, and since they only stand and
+walk, theirs stop after the first five columns.
 
-Everyone's the same body sheet in their own colours. It's painted in key ramps for the skin, the
-shirt and the breeches, and `CharacterPalettes` swaps each key shade for the same shade of the
-preset someone's look picks, out of `character-palettes.png`: five skins, six shirt dyes and four
-breeches. That's The Black Box's palette swap, done once per look when a map loads with `GetData`
-and `SetData`, not every frame, and two people who look alike share one sheet.
-
-The sheets are drawn off one rig in `tools/generate_characters.py`: where the head, shoulders,
-elbows, hands, hips, knees and feet are in every frame. A layer is shapes hung off those joints, so
-a sleeve or a helmet on another sheet lands on the same arm or head. Facing right isn't facing left
-mirrored, the way The Black Box did it: the sword hand is the right one either way, so it's the near
-arm facing right and the far one facing left.
+The party is all one body: the youth off my townsperson sheet, the best drawn walker I have, so
+everyone looks like they belong with the townsfolk. `tools/generate_paperdoll.py` takes him apart:
+every pixel of him gets sorted into skin, hair, eyes, shirt, vest, breeches or something that never
+changes (his outline, belt and boots), each part gets cut down to a few key shades, and his hair
+comes off onto a layer of its own. The other hair styles (cropped, long, tied back, braided), the
+faces, the beards, the skirt and the cape are drawn onto his frames from where his head, eyes, chin,
+waist and legs turn out to be in each one. `Paperdoll.Compose` lays the sheets someone's look calls
+for over each other in `PaperdollOrder`, and `CharacterPalettes` swaps each key shade for the same
+shade of the preset their look picks, out of `character-palettes.png`: six skins, eight hair
+colours, six eye colours, five shirts, eight vests, six for the legs and six cloaks. That's The Black
+Box's palette swap, done once per look with `GetData` and `SetData`, not every frame, and two
+people who look alike share one sheet. For now his sheets only go as far as the fifth column; the
+fighting columns come with combat.
 
 ## Saving
 
@@ -407,19 +441,24 @@ fades the old one out and the new one in.
 
 | Sprite | Source | Motion |
 | --- | --- | --- |
-| `title-scene.png` | `TitleBackgroundScreen` | Still. The gate, the wall and the flagstones, lit by the torches, at 4x |
-| `torch-flame.png` | `TorchSprite` | 6 frames, 12x20, the base at the bottom middle. Each torch starts at its own frame. On the title and in every sconce |
+| `Title/sky.png`, `Title/city.png`, `Title/foreground.png` | `TitleBackgroundScreen` | The three layers, 416x277 each, at 4x, swaying against each other |
+| `Title/clouds.png`, `Title/island.png` | `TitleBackgroundScreen` | Six clouds, four of them drifting across, and the floating island, which bobs |
+| `Title/waterfall.png`, `Title/spire.png`, `Title/banner.png` | `TitleBackgroundScreen` | Loops: 6 frames of the island's waterfall, 8 of the tower's crystal pulsing, 8 of a banner blowing |
+| `Title/petal.png` | `PetalParticleSystem` | One petal, 5x4, at 4x, swinging from side to side as it falls |
+| `torch-flame.png` | `TorchSprite` | 6 frames, 12x20, the base at the bottom middle. Each torch starts at its own frame. In every sconce and on the campfire |
 | `glow.png` | `TorchSprite`, `WalkerSprite` | A white circle fading to nothing, drawn additively and tinted, so it's whatever colour of light it needs to be. Squashed flat, it's the shadow under the walker |
-| `mote.png` | `EmberParticleSystem` | One ember. Coloured yellow to red as it cools |
+| `mote.png` | `SparkleParticleSystem`, `TitleBackgroundScreen` | A soft dot. The motes rising off the title's lake, and its stars |
 | `button.png` | `ButtonSprite` | Nine-sliced iron plate; a slow smoulder idle, kindles on hover, sinks on press. The bottom band is the groove's light, tinted torch, ember or bone |
 | `panel.png` | `FormPanel` | Nine-sliced iron slab the forms are built on, with a bronze line inside the lip |
-| `Tiles/village.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order: grass, long grass, dirt, cobbles, flowers, tufts, pebbles, fences, stone and plaster house fronts, a window, a door in two halves, and thatch (ridge, roof and eave) |
-| `Tiles/crypt.png` | `Tilemap` | The same layout: floors, the floor in a wall's shadow, steps, the tops of walls, the two rows of a wall's face (one with a burial niche), rubble, bones and a cobweb |
+| `Tiles/questeria.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order, each block of 3x3 tiles one after another: plaza paving, flagstones, cobbles, grass, sand and the canal |
+| `Tiles/crypt.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order: floors, the floor in a wall's shadow, steps, the tops of walls, the two rows of a wall's face (one with a burial niche), rubble, bones and a cobweb |
 | `Tiles/forest.png` | `Tilemap` | The same layout: dead leaves, the road, the undergrowth under the deep forest, moss and grass in lumps that don't reach the edge of their tile, ferns, a rock, a stump, a fallen log in two halves, a tree trunk, bushes, and the nine pieces of a tree's crown |
-| `Props/*.png` | `PropSprite` | Standing on the middle of the bottom edge: a barrel, a crate, the well, an urn, a sarcophagus, the iron sconce a torch stands in, a campfire, a bedroll, and the things you use, each a strip of two pictures (shut then open): a chest, a double door and a stone door in their frames, a lever, and the waypoint stone with its mark dark then lit. The sign is one picture |
+| `Props/*.png` | `PropSprite` | Standing on the middle of the bottom edge: a barrel, a crate, an urn, a sarcophagus, the iron sconce a torch stands in, a campfire, a bedroll, and the things you use, each a strip of two pictures (shut then open): a chest, a double door and a stone door in their frames, a lever, and the waypoint stone with its mark dark then lit. The sign is one picture |
+| Questeria's `Props/*.png` | `PropSprite` | The same, cut from my pictures: the palace, the temple, the guildhall, the city gate, four houses, the fountain, statues, lamps, banners, benches, market stalls, trees, bushes and flowers, the notice board Questeria's sign looks like, and the waypoint crystal, dim then lit |
+| `People/*.png` | `WalkerSprite` | Seventeen townsfolk, cut from my pictures, in the first five columns of the 10x4 layout: standing, and walking |
 | `map-marks.png` | `MapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
-| `Paperdoll/body-lean.png` | `WalkerSprite` | The lean body in smallclothes, in the 10x4 layout above. Painted in the key ramps, so `CharacterPalettes` can recolour it for anyone. The cards on the strip are the head and shoulders of its standing frame, blown up |
-| `character-palettes.png` | `CharacterPalettes` | Four pixels by fifteen: one ramp per row, dark to light. Five skins, six shirt dyes, four breeches, each block with its key first |
+| `Paperdoll/*.png` | `Paperdoll` | The body, five hair styles, five faces, four beards, the skirt, and the cape in two halves, all in the youth's 5x4 layout and his key shades, so they stack and recolour. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
+| `character-palettes.png` | `CharacterPalettes` | Five pixels by forty-five: one ramp per row, dark to light. Skins, hair, eyes, shirts, vests, legs and cloaks, each block with its key first |
 | `cursors.png` | `CursorSprite` | 5 cursors, 16x16, at 2x: an arrow, a ring to walk, a hand to use something, a speech bubble to talk, a crossed circle for no way |
 
 Text is drawn with `spectral-title` (Spectral Light, 92pt), `spectral-ui` (Spectral Medium, 26pt)
@@ -433,18 +472,40 @@ Every PNG in `Content/` is made by a script:
 
 ```
 python tools/generate_ui.py           # button.png, panel.png, map-marks.png and cursors.png
-python tools/generate_world.py        # the tilesets, the props, the title gate, the torch flame, glow.png and mote.png
-python tools/generate_characters.py   # the paperdoll sheets and character-palettes.png
+python tools/generate_world.py        # the crypt and forest tilesets, their props, the torch flame, glow.png and mote.png
+python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship, its gangplank and the rowing boat
+python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, and the townsfolk, out of tools/source/
+python tools/generate_paperdoll.py    # the paperdoll sheets and character-palettes.png, off the youth (after cut_supplied.py's people)
 ```
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's
 `generate_assets.py`), and every drawing is seeded, so running a script again produces the same
 bytes; only what you changed changes. Everything on a map is drawn as if a torch were right on it,
-lit from the top left, and the game does the dark itself. Tiles that lie next to each other (grass,
-cobbles, floors) only vary in ways that meet cleanly at the edges: the cobbles, for one, are a grid
-of stones that wraps round the tile, so one tile's stones carry on into the next. A tree's crown is
-the same idea with round clumps of leaves, the lower clump in front where two overlap, and its edge
-and corner pieces leave out the clumps on the outside, so a crown of any size has a round edge.
+lit from the top left, and the game does the dark itself. Tiles that lie next to each other (the
+leaves, the floors) only vary in ways that meet cleanly at the edges. A tree's crown is a grid of
+round clumps of leaves that wraps round the tile, so one tile's clumps carry on into the next, the
+lower clump in front where two overlap, and its edge and corner pieces leave out the clumps on the
+outside, so a crown of any size has a round edge.
+
+## Supplied art
+
+After the fourth milestone the look changed to a brighter, more mystical fantasy, from pictures I
+made with ChatGPT: the title, the capital, Questeria, and the people in it. They're in
+`tools/source/`, and `tools/cut_supplied.py` cuts them into the game's layouts, the way The Black
+Box's character sheet became its walker. The pictures aren't on a pixel grid (I measured, and
+there's no pitch to find), so every cut says how big it should come out. It finds each thing on its
+sheet, keys out the flat dark backdrop by flooding in from the edge of its box, so a dark outline
+inside it stays, and samples it down to art pixels by taking the middle colour of each cell by
+brightness, which keeps the picture's own colours instead of blurring them together. There's nothing
+random in it, so a rerun writes the same bytes.
+
+- Questeria's ground was painted as square cells about three tiles across, so each one is a block
+  of 3x3 tiles, trimmed of the light line round each cell.
+- Everything standing in Questeria is a prop, buildings included.
+- The townsfolk come off three sheets: twenty people drawn once each way, six walking each way, and
+  one more standing and walking. Three of the twenty turn into someone else when they turn round, so
+  they're left out.
+- The old road, the barrow and the party are still the generated art.
 
 `python tools/check_assets.py` checks that `ASSETS.md`, `Content/Content.mgcb` and the files on
 disk agree, and fails with a list if they don't. I run it before every commit.
@@ -458,7 +519,7 @@ In the order they're being built:
 3. ~~The three maps joined up: exits, triggers, chests, doors, levers, the map screen and fast travel.~~
 4. ~~The party: four members, switching between them, followers, click-to-move with A*.~~
 5. The paperdoll and gear: armour you can see, the inventory and the character sheet.
-6. Character creation.
+6. Character creation. ~~Your name, class and look~~; point buy is still to come.
 7. Dialogue with dice rolls, approval, the quest and the journal.
 8. Combat, and `--simulate`.
 9. Resting, full saving, and the polish.
@@ -472,20 +533,20 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
 - `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, talking, triggers, exits and travel, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
 - `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one, `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
-- `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`), and how everyone looks (`CharacterLook` and `CharacterPalettes`).
+- `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), and how the party looks (`CharacterLook` and `CharacterPalettes`).
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, and the classes in `ClassCatalog`.
 - `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards and the cursor, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.
-- `Particles/` is the particle engine and the embers built on it.
+- `Particles/` is the particle engine, and the title's petals and motes built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.
 - `Enums/` is every enum in the game, one file each.
 - `Layers.cs` is the draw order, `Palette.cs` is the colours more than one screen uses, `Text.cs` draws a line of text with its shadow, and `Blends.cs` is the additive blend for anything that glows.
-- `Content/Maps/` is the map files. `tools/` is the art and sound generators and the asset check.
+- `Content/Maps/` is the map files. `tools/` is the art and sound generators, the cutting script and the asset check, and `tools/source/` is the pictures it cuts.
 
 ## Assets
 
 Every picture, song and sound in the game is original: drawn or synthesised by the scripts in
-`tools/`. The only outside work is the Spectral font, the MonoGame template files, and a few of
+`tools/`, or cut by one of them from pictures I made. The only outside work is the Spectral font, the MonoGame template files, and a few of
 5e's rules from the SRD 5.1, which is credited in there word for word as its licence asks. See
 [ASSETS.md](ASSETS.md) for every file.
 

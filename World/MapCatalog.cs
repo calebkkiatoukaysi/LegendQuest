@@ -14,8 +14,8 @@ namespace LegendQuest.World;
 /// </remarks>
 public static class MapCatalog
 {
-    /// <summary>The map a new game starts on.</summary>
-    public const string Opening = "village";
+    /// <summary>The map a new game starts on: the harbour, where the ship comes in.</summary>
+    public const string Opening = "docks";
 
     /// <summary>How wide the world map is, in the map screen's pixels. A map's world = x y has to be inside it.</summary>
     public const int WorldWidth = 1200;
@@ -24,7 +24,7 @@ public static class MapCatalog
     public const int WorldHeight = 520;
 
     /// <summary>Every map, by id, which is also its file name in Content/Maps. The world map lists them in this order.</summary>
-    private static readonly string[] Ids = { "village", "road", "barrow" };
+    private static readonly string[] Ids = { "docks", "questeria", "road", "barrow" };
 
     private static readonly Dictionary<string, MapDefinition> Loaded = new();
     private static readonly Dictionary<string, List<string>> Linked = new();

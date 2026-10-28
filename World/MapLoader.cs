@@ -5,6 +5,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
+using LegendQuest.Dialogue;
 
 namespace LegendQuest.World;
 
@@ -36,6 +37,7 @@ public static class MapLoader
 
     private static readonly string[] Sections = { "map", "legend", "ground", "detail", "overhead", "objects" };
     private static readonly string[] RequiredSettings = { "id", "name", "world", "tileset", "size", "dark", "music" };
+    private static readonly string[] OptionalSettings = { "ambient", "fog" };
 
     /// <summary>Every kind of object, for the error message when a line names one that isn't.</summary>
     private static readonly string[] Kinds = { "spawn", "prop", "npc", "light", "exit", "trigger", "chest", "door", "lever", "sign", "waypoint" };
@@ -79,6 +81,7 @@ public static class MapLoader
 
         bool dark = ReadYesNo(id, settings["dark"]);
         float ambient = ReadAmbient(id, settings, dark);
+        bool fog = !settings.TryGetValue("fog", out (int Line, string Value) fogSetting) || ReadYesNo(id, fogSetting);
 
         if (!Enum.TryParse(settings["music"].Value, out Track music) || !Enum.IsDefined(music))
             throw Fail(id, settings["music"].Line, $"there's no song called {settings["music"].Value} (the Track names are {string.Join(", ", Enum.GetNames<Track>())})");
@@ -122,6 +125,7 @@ public static class MapLoader
             Tileset = tileset,
             Dark = dark,
             Ambient = ambient,
+            Fog = fog,
             Music = music,
             Width = width,
             Height = height,
@@ -189,7 +193,7 @@ public static class MapLoader
             string key = text[..equals].Trim().ToLowerInvariant();
             string value = text[(equals + 1)..].Trim();
 
-            if (Array.IndexOf(RequiredSettings, key) < 0 && key != "ambient")
+            if (Array.IndexOf(RequiredSettings, key) < 0 && Array.IndexOf(OptionalSettings, key) < 0)
                 throw Fail(id, line, $"[map] has no setting called {key}");
             if (!settings.TryAdd(key, (line, value))) throw Fail(id, line, $"{key} is set twice");
         }
@@ -368,7 +372,7 @@ public static class MapLoader
         return props;
     }
 
-    /// <summary>The people: npc id x y name=, and facing=, skin=, shirt=, breeches= (each 0 if it isn't set) and say=.</summary>
+    /// <summary>The people: npc id x y name= sheet=, and facing= and say=.</summary>
     /// <param name="objects">Every object on the map.</param>
     /// <param name="solid">Whether a tile is solid, for checking they're standing somewhere they could.</param>
     private static List<MapNpc> ReadNpcs(List<MapObjectLine> objects, Func<int, int, bool> solid)
@@ -377,14 +381,16 @@ public static class MapLoader
 
         foreach (MapObjectLine o in Of(objects, "npc"))
         {
-            var look = new CharacterLook
-            {
-                Skin = Preset(o, "skin", CharacterPalettes.SkinPresets),
-                Shirt = Preset(o, "shirt", CharacterPalettes.ShirtPresets),
-                Breeches = Preset(o, "breeches", CharacterPalettes.BreechesPresets),
-            };
-            var npc = new MapNpc(o.Id, o.Required("name"), FeetOn(o), o.Facing("facing", Direction.Down), look, o.Text("say"));
-            o.Done("name, facing, skin, shirt, breeches, say");
+            string sheet = o.Required("sheet");
+            if (!Townsfolk.Contains(sheet))
+                throw o.Fail($"there's no sheet called {sheet} (the townsfolk are {string.Join(", ", Townsfolk.All)})");
+
+            float wander = o.Number("wander", 0f);
+            if (wander < 0f) throw o.Fail("wander can't be less than nothing");
+
+            var npc = new MapNpc(o.Id, o.Required("name"), FeetOn(o), o.Facing("facing", Direction.Down), sheet, o.Text("say"),
+                wander * Tilemap.TileSize);
+            o.Done("name, sheet, facing, say, wander");
 
             Point cell = Tilemap.CellOf(npc.Feet);
             if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
@@ -392,16 +398,6 @@ public static class MapLoader
         }
 
         return npcs;
-    }
-
-    /// <summary>Takes out a look preset, 0 if it isn't set, and checks there's a preset with that number.</summary>
-    private static int Preset(MapObjectLine o, string key, int count)
-    {
-        string text = o.Text(key);
-        if (text is null) return 0;
-        if (!int.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out int preset) || preset >= count)
-            throw o.Fail($"{key} has to be a preset from 0 to {count - 1}, not {text}");
-        return preset;
     }
 
     /// <summary>The lights that aren't a prop's: light id x y reach=tiles, and strength= (1 if it isn't set).</summary>
@@ -461,10 +457,13 @@ public static class MapLoader
     /// <summary>The rest of a trigger: once= (yes if it isn't set), say= a line to show, set= a flag to set. It has to do one of the two.</summary>
     private static MapTrigger ReadTrigger(MapObjectLine o, BoundingRectangle area)
     {
-        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"));
-        o.Done("w, h, once, say, set");
+        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"), o.Text("talk"));
+        o.Done("w, h, once, say, set, talk");
 
-        if (trigger.Say is null && trigger.SetFlag is null) throw o.Fail("this trigger doesn't do anything (it needs say= or set=)");
+        if (trigger.Say is null && trigger.SetFlag is null && trigger.Talk is null)
+            throw o.Fail("this trigger doesn't do anything (it needs say=, set= or talk=)");
+        if (trigger.Talk is not null && Conversations.Get(trigger.Talk) is null)
+            throw o.Fail($"there's no conversation called {trigger.Talk}");
         return trigger;
     }
 
