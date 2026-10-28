@@ -88,8 +88,8 @@ spawn docks 2 26 facing=right
 exit road 40 57 w=5 to=road at=start
 exit docks 0 23 h=6 to=docks at=city
 
-; Valen, as you come up from the harbour.
-trigger city-gate 4 22 w=2 h=8 talk=valen-city
+; The Soul-Bound, as you come up from the harbour.
+trigger city-gate 4 22 w=2 h=8 talk=soulbound-city
 
 ; The terrace.
 prop temple 18 17
@@ -121,7 +121,7 @@ prop bench 46 34.5
 prop planter 30 27
 prop planter 54 27
 waypoint crystal 34 26 look=crystal-stone
-sign board 50 33 look=notice-board name="Notice Board" text="North, the palace. East, the inn and the market. West, the harbour. South, the gate and the old road."
+sign board 58 33 look=notice-board name="Quest Board" text="Monsters on the left, bandits in the middle, lost and found on the right."
 
 ; The houses to the west, and their lawns.
 prop house-ivy 8 31
@@ -135,7 +135,18 @@ prop cherry-tree-small 3 36
 prop water-barrel 13.5 31.5
 prop cask 25.5 30
 
-; The inn, and the market along the street in front of it.
+; The ways into the buildings, each at the bottom of its door.
+entrance flagon 70 30.5 to=gilded-flagon name="The Gilded Flagon"
+entrance ivy-west 6.56 31.5 to=cottage-a name="A Cottage"
+entrance rose-west 20.5 31.5 to=cottage-b name="A Cottage"
+entrance shop-south 13.94 52.5 to=shop name="The Chandler's"
+entrance awning-south 24.1 54.5 to=cottage-a name="A Cottage"
+entrance ivy-south 56.56 54.5 to=cottage-b name="A Cottage"
+entrance rose-south 73.5 52.5 to=cottage-a name="A Cottage"
+
+; The Lantern Market: the Gilded Flagon, the quest board with Fennick by it, and the stalls.
+npc fennick 56.5 34 cast=fennick facing=right
+
 prop inn 68 30
 prop table 61 32
 prop cask 74 31
@@ -174,7 +185,6 @@ prop city-gate 42 57
 
 ; The people. Placeholders: who they are and what they say are mine to write. The ones with
 ; wander= walk about that many tiles round where they're put.
-npc innkeeper 64 32 name="The Innkeeper" sheet=baker facing=down say="Rooms upstairs, stew on the fire."
 npc elder 39 32 name="The Elder" sheet=elder facing=down say="Welcome to Questeria. Mind the road past the gate."
 npc old-man 46 31 name="An Old Man" sheet=old-man facing=left wander=3 say="The fountain's older than the palace. So they say."
 npc child 50 26 name="A Child" sheet=child facing=left wander=5 say="Bet you can't catch me."

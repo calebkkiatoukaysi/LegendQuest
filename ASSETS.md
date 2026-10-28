@@ -54,7 +54,163 @@ Content/Paperdoll/cape-back.png - built by tools/generate_paperdoll.py from tool
 
 Content/Paperdoll/cape-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the part of a cape that goes over whoever's wearing it: the drape and clasp from the front, all of it from behind; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
+Content/Paperdoll/hair-bald.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a bald head: a smooth crown of skin where his hair was, in the skin's key shades; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/ears-pointed.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a Sylvan's long pointed ears, in the skin's key shades; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/ears-wolf.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a Wildkin wolf line's ears on the crown, in the hair's key shades; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/ears-hawk.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a Wildkin hawk line's feathered tufts, in the hair's key shades; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/ears-bear.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a Wildkin bear line's round ears, in the hair's key shades; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/horns-curl.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: an Emberkin's horns, curled round like a ram's, in bone that never changes colour; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/horns-swept.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: an Emberkin's horns, swept back; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/tail-ember-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the half of an Emberkin's tail that hangs behind them: thin, crimson, its tip burning; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/tail-ember-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the half of an Emberkin's tail that shows over them from behind; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/tail-wolf-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the half of a Wildkin wolf line's bushy tail that hangs behind them, in the hair's key shades; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/tail-wolf-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the half of a wolf tail that shows over them from behind; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/hat-bandana.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a bandana knotted at the back, in the vest's key shades (the Red Gulls wear crimson); drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/hat-tricorn.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a captain's tricorn, black with a gold edge; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/hat-helm.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the City Watch's steel helm; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
 Content/character-palettes.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: every preset the palette swap can recolour a sheet to, one ramp a row, the youth's own keys first in each block (skin, hair, eyes, shirt, vest, legs, cloak); the other presets were chosen by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/body.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/body.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hair-tousled.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-tousled.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hair-cropped.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-cropped.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hair-long.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-long.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hair-tail.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-tail.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hair-braid.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-braid.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hair-bald.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-bald.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/face-gentle.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-gentle.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/face-lashed.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-lashed.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/face-stern.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-stern.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/face-freckled.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-freckled.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/face-scarred.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-scarred.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/beard-stubble.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-stubble.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/beard-moustache.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-moustache.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/beard-beard.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-beard.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/beard-full.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-full.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/skirt.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/skirt.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/cape-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/cape-back.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/cape-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/cape-front.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/ears-pointed.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-pointed.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/ears-wolf.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-wolf.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/ears-hawk.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-hawk.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/ears-bear.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-bear.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/horns-curl.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/horns-curl.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/horns-swept.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/horns-swept.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/tail-ember-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-ember-back.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/tail-ember-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-ember-front.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/tail-wolf-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-wolf-back.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/tail-wolf-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-wolf-front.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hat-bandana.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-bandana.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hat-tricorn.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-tricorn.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hat-helm.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-helm.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/body.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/body.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hair-tousled.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-tousled.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hair-cropped.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-cropped.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hair-long.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-long.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hair-tail.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-tail.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hair-braid.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-braid.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hair-bald.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-bald.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/face-gentle.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-gentle.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/face-lashed.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-lashed.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/face-stern.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-stern.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/face-freckled.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-freckled.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/face-scarred.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/face-scarred.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/beard-stubble.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-stubble.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/beard-moustache.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-moustache.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/beard-beard.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-beard.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/beard-full.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/beard-full.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/skirt.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/skirt.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/cape-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/cape-back.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/cape-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/cape-front.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/ears-pointed.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-pointed.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/ears-wolf.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-wolf.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/ears-hawk.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-hawk.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/ears-bear.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/ears-bear.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/horns-curl.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/horns-curl.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/horns-swept.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/horns-swept.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/tail-ember-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-ember-back.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/tail-ember-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-ember-front.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/tail-wolf-back.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-wolf-back.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/tail-wolf-front.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/tail-wolf-front.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hat-bandana.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-bandana.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hat-tricorn.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-tricorn.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hat-helm.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-helm.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 ## Tiles and props
 
@@ -96,6 +252,58 @@ Content/Props/sign.png - created by Caleb Kiatoukaysi for Legend Quest, a finger
 
 Content/Props/waypoint.png - created by Caleb Kiatoukaysi for Legend Quest, a waypoint stone with its mark dark and then lit, drawn procedurally by tools/generate_world.py, released under public domain
 
+Content/Tiles/ship.png - created by Caleb Kiatoukaysi for Legend Quest, the Gull's Wager's deck (boards, the bulwark, the hatch, the sea round it with foam at the hull), drawn procedurally by tools/generate_harbour.py, released under public domain
+
+Content/Props/mast.png - created by Caleb Kiatoukaysi for Legend Quest, the Gull's Wager's mainmast, its sail full and its crow's nest at the top, drawn procedurally by tools/generate_harbour.py, released under public domain
+
+Content/Props/lantern-hanging.png - created by Caleb Kiatoukaysi for Legend Quest, a ship's lantern on a post, a prop that gives off light, drawn procedurally by tools/generate_harbour.py, released under public domain
+
+Content/Props/ship-wheel.png - created by Caleb Kiatoukaysi for Legend Quest, the ship's wheel, drawn procedurally by tools/generate_harbour.py, released under public domain
+
+Content/Props/rope-coil.png - created by Caleb Kiatoukaysi for Legend Quest, a coil of rope on the deck, drawn procedurally by tools/generate_harbour.py, released under public domain
+
+Content/Tiles/interior.png - created by Caleb Kiatoukaysi for Legend Quest, inside Questeria's buildings (wood and stone floors, the rug and its border, the back wall's face and its panelling, the walls' tops), drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/bar-counter.png - created by Caleb Kiatoukaysi for Legend Quest, the Gilded Flagon's bar, tankards along it and a tap, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/round-table.png - created by Caleb Kiatoukaysi for Legend Quest, a round tavern table with tankards and a candle, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/stool.png - created by Caleb Kiatoukaysi for Legend Quest, a three-legged stool, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/hearth.png - created by Caleb Kiatoukaysi for Legend Quest, a stone hearth with its fire, a prop that gives off light, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/keg-stack.png - created by Caleb Kiatoukaysi for Legend Quest, kegs stacked on their sides, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/bed.png - created by Caleb Kiatoukaysi for Legend Quest, a bed with its blanket turned down, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/wardrobe.png - created by Caleb Kiatoukaysi for Legend Quest, a tall wardrobe, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/bookshelf.png - created by Caleb Kiatoukaysi for Legend Quest, a bookshelf full of books, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/shop-counter.png - created by Caleb Kiatoukaysi for Legend Quest, a shop's counter with its goods and a little scale, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/candle-stand.png - created by Caleb Kiatoukaysi for Legend Quest, an iron candle stand, a prop that gives off light, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Paintings/questeria-dawn-sky.png - created by Caleb Kiatoukaysi for Legend Quest, the dawn sky over Questeria for the Prologue's last painting, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/questeria-dawn-city.png - built by tools/generate_paintings.py from tools/source/title-city.png: the title's city, warmed to sunrise; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paintings/questeria-dawn-sea.png - created by Caleb Kiatoukaysi for Legend Quest, the sea at dawn with the sun's road across it, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/questeria-dawn-rail.png - created by Caleb Kiatoukaysi for Legend Quest, the ship's rail in front of it all, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/red-moon-sky.png - created by Caleb Kiatoukaysi for Legend Quest, the night sky for the oath under the red moon, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/red-moon-moon.png - created by Caleb Kiatoukaysi for Legend Quest, the red moon, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/red-moon-figures.png - created by Caleb Kiatoukaysi for Legend Quest, the two of them at sixteen on the shore, palms together, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/pier-memory-sky.png - created by Caleb Kiatoukaysi for Legend Quest, the storm the day you met, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/pier-memory-sea.png - created by Caleb Kiatoukaysi for Legend Quest, the sea and the boat over in it, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/pier-memory-pier.png - created by Caleb Kiatoukaysi for Legend Quest, the pier and the two of you at eight, drawn procedurally by tools/generate_paintings.py, released under public domain
+
 ## UI
 
 Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron plate every button is drawn with and the light in its groove, drawn procedurally by tools/generate_ui.py, released under public domain
@@ -103,6 +311,10 @@ Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sli
 Content/panel.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron panel the forms sit on, drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/map-marks.png - created by Caleb Kiatoukaysi for Legend Quest, the marks on the map screen (places, where you are, waypoints, roads), drawn procedurally by tools/generate_ui.py, released under public domain
+
+Content/dice.png - created by Caleb Kiatoukaysi for Legend Quest, the d20 for checks, eight frames tumbling and one landed, drawn procedurally by tools/generate_ui.py, released under public domain
+
+Content/dialogue-icons.png - created by Caleb Kiatoukaysi for Legend Quest, the icons beside options in a conversation (a die, a heart, a lock, and the three voices), drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/cursors.png - created by Caleb Kiatoukaysi for Legend Quest, the mouse cursors: an arrow, a ring to walk, a hand to use, a speech bubble to talk, and a crossed circle, drawn procedurally by tools/generate_ui.py, released under public domain
 
@@ -115,6 +327,18 @@ Content/Maps/docks.map - written by Caleb Kiatoukaysi for Legend Quest, Questeri
 Content/Maps/road.map - written by Caleb Kiatoukaysi for Legend Quest, the old road through the forest, at dusk, released under public domain
 
 Content/Maps/barrow.map - written by Caleb Kiatoukaysi for Legend Quest, the barrow, a dark map lit by torches, released under public domain
+
+Content/Maps/gulls-wager.map - written by Caleb Kiatoukaysi for Legend Quest, the deck of the Gull's Wager at night, where the Prologue's voyage plays, released under public domain
+
+Content/Maps/gilded-flagon.map - written by Caleb Kiatoukaysi for Legend Quest, inside the Gilded Flagon, the Lantern Market's tavern, released under public domain
+
+Content/Maps/cottage-a.map - written by Caleb Kiatoukaysi for Legend Quest, inside a cottage: a bed, a wardrobe, a bookshelf and a table, released under public domain
+
+Content/Maps/cottage-b.map - written by Caleb Kiatoukaysi for Legend Quest, inside another cottage, with a hearth, released under public domain
+
+Content/Maps/shop.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chandler's shop, released under public domain
+
+Content/Maps/warehouse.map - written by Caleb Kiatoukaysi for Legend Quest, inside a warehouse on the docks, released under public domain
 
 ## Music
 
@@ -152,6 +376,20 @@ Content/Sfx/pickup.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound 
 
 Content/Sfx/waypoint.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
 
+Content/Sfx/dice-roll.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/check-pass.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/check-fail.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/approve.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/disapprove.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/heartbeat.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/ship-bell.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
 ## Text
 
 Content/Spectral/Spectral-Light.ttf - Spectral font created by Production Type, released on Google Fonts (https://fonts.google.com/specimen/Spectral) under the SIL Open Font License
@@ -168,7 +406,7 @@ Content/spectral-detail.spritefont - written by Caleb Kiatoukaysi for Legend Que
 
 ## The scripts
 
-tools/pixels.py, tools/generate_ui.py, tools/generate_world.py, tools/generate_harbour.py, tools/generate_audio.py - every asset above that says "drawn procedurally" or "synthesised" comes out of these; pixels.py is the PNG writer and colour helpers the art scripts share. They need nothing but CPython (3.12 or newer for generate_audio.py), and every one is seeded, so a rerun gives the same files
+tools/pixels.py, tools/generate_ui.py, tools/generate_world.py, tools/generate_harbour.py, tools/generate_interiors.py, tools/generate_paintings.py, tools/generate_audio.py - every asset above that says "drawn procedurally" or "synthesised" comes out of these; pixels.py is the PNG writer and colour helpers the art scripts share. They need nothing but CPython (3.12 or newer for generate_audio.py), and every one is seeded, so a rerun gives the same files
 
 tools/generate_paperdoll.py - written by Caleb Kiatoukaysi for Legend Quest, takes the youth off tools/source/npc-townsperson.png (through cut_supplied.py) apart into the paperdoll: sorts every pixel of him into what it's part of, cuts each part down to key shades, and draws the other hair, the faces, the beards, the skirt and the cape onto his frames. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 

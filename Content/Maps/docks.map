@@ -1,11 +1,11 @@
-; Questeria's harbour, where you come in off the ship. The quay street along the top with its
+; Saltwind Docks, Questeria's harbour, where you come in off the ship. The quay street along the top with its
 ; warehouses, the boardwalk, and the harbour, with the ship tied up along the boardwalk and a jetty
 ; at either end. The city's up the street to the east. Lit, and no fog.
 
 [map]
 id = docks
-name = Questeria Harbour
-world = 230 214
+name = Saltwind Docks
+world = 80 190
 tileset = questeria
 size = 56 36
 dark = no
@@ -84,7 +84,11 @@ prop cargo-crate 44 15.6
 prop cargo-barrel 46 15.4
 prop cargo-barrel 47 16
 
-; The quay street and its warehouses.
+; The quay street and its warehouses, and the ways into them.
+entrance warehouse-west 10.5 12.5 to=warehouse name="A Warehouse"
+entrance warehouse-middle 24.1 12.5 to=warehouse name="A Warehouse"
+entrance chandler 42.94 12.5 to=shop name="The Chandler's"
+
 prop house-rose 10 12
 prop house-awning 26 12
 prop house-shop 41 12
@@ -100,7 +104,18 @@ prop lamp 34 8
 prop bench 30 7.8
 
 ; The people on the quay. Placeholders, like Questeria's.
-npc dock-hand 30 15 name="A Dock Hand" sheet=farmhand facing=down wander=4 say="Mind the ropes. They bite."
+npc dock-hand 38 12 name="A Dock Hand" sheet=farmhand facing=down wander=4 say="Mind the ropes. They bite."
 npc carrier 45 10 name="A Carrier" sheet=porter facing=left wander=5 say="Another ship, another hundred crates."
-npc old-sailor 9 16 name="An Old Sailor" sheet=old-man facing=down say="Forty years on the water. I still get sick."
 npc harbourmaster 52 13 name="The Harbourmaster" sheet=traveller facing=left say="Names go in the book. Not today, mind. The book's full."
+
+; A1-C1-01: the Red Gulls shaking down Old Tomas along the boardwalk, there till they're beaten,
+; Grell till he's dealt with, and the Watch once he has been.
+scene red-gulls 0 0 talk=a1-c1-01 when=arrived
+npc tomas 28 15 cast=tomas facing=left say="Forty years on this harbour. Never paid a dock tax yet."
+npc gull-1 26.5 15.6 cast=red-gull facing=right unless=red-gulls-beaten
+npc gull-2 27 14.2 cast=red-gull facing=right unless=red-gulls-beaten
+npc gull-3 29.6 14.5 cast=red-gull facing=left unless=red-gulls-beaten
+npc grell 30.2 15.8 cast=grell facing=left unless=grell-gone
+npc hale 26 13.4 cast=hale facing=left when=grell-gone say="Lantern Market's up the street and past the fountain. The board's by the inn."
+npc watch-1 27.6 12.8 cast=watch facing=down when=grell-gone say="Captain's orders. Keep it moving."
+npc watch-2 24.4 13 cast=watch facing=down when=grell-gone say="Red Gulls. Every week it's the Red Gulls."

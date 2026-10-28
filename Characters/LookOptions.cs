@@ -7,16 +7,51 @@ namespace LegendQuest.Characters;
 /// Everything a look can be, by name, in the order CharacterLook numbers them.
 /// </summary>
 /// <remarks>
-/// The colours come off character-palettes.png and the faces, hair, beards, skirt and cape off the
-/// sheets in Content/Paperdoll, all made by tools/generate_paperdoll.py. A colour list here is as
-/// long as its block of rows in the palette PNG (CharacterPalettes checks), and a list of layers
-/// names its sheets the way the script saves them. The first of every colour list is the youth as
-/// he was drawn.
+/// The colours come off character-palettes.png and the faces, hair, beards, hats, ears, horns,
+/// tails, skirt and cape off the sheets in Content/Paperdoll, all made by tools/generate_paperdoll.py.
+/// A colour list here is as long as its block of rows in the palette PNG (CharacterPalettes checks),
+/// and a list of layers names its sheets the way the script saves them. The first of every colour
+/// list is the youth as he was drawn.
 /// </remarks>
 public static class LookOptions
 {
     /// <summary>The skins.</summary>
     public static IReadOnlyList<string> Skins { get; } = new[] { "FAIR", "PORCELAIN", "GOLDEN", "TAN", "BROWN", "DEEP" };
+
+    /// <summary>A line about each people, for the creation screen, in Ancestry's order. STORY.md's flavour.</summary>
+    public static IReadOnlyList<string> Peoples { get; } = new[]
+    {
+        "Adaptable, from every corner of Fable.",
+        "Long-lived forest folk who remember old wars.",
+        "Mountain clans, short and broad. Master smiths.",
+        "Born of a pact with a fire spirit. Often mistrusted.",
+        "Clans with a beast's ears and tail: wolf, hawk and bear.",
+        "Small, lucky, and clever with tools.",
+    };
+
+    /// <summary>The lines a people comes in, by their Lineage number: horns for the Emberkin, beasts for the Wildkin. One "—" for a people without lines.</summary>
+    /// <param name="ancestry">Whose.</param>
+    public static IReadOnlyList<string> Lineages(Ancestry ancestry) => ancestry switch
+    {
+        Ancestry.Emberkin => EmberkinHorns,
+        Ancestry.Wildkin => WildkinLines,
+        _ => NoLines,
+    };
+
+    /// <summary>The Emberkin's horns.</summary>
+    private static readonly string[] EmberkinHorns = { "CURLED HORNS", "SWEPT HORNS" };
+
+    /// <summary>The Wildkin's lines.</summary>
+    private static readonly string[] WildkinLines = { "WOLF", "HAWK", "BEAR" };
+
+    /// <summary>Nothing to pick.</summary>
+    private static readonly string[] NoLines = { "—" };
+
+    /// <summary>The hats. The first is none.</summary>
+    public static IReadOnlyList<Option> Hats { get; } = new Option[]
+    {
+        new("NONE", null), new("BANDANA", "hat-bandana"), new("TRICORN", "hat-tricorn"), new("HELM", "hat-helm"),
+    };
 
     /// <summary>The faces. The first is the body sheet's own; each after it is a sheet of its own, face-(name).</summary>
     public static IReadOnlyList<Option> Faces { get; } = new Option[]
@@ -32,7 +67,7 @@ public static class LookOptions
     public static IReadOnlyList<Option> Hair { get; } = new Option[]
     {
         new("TOUSLED", "hair-tousled"), new("CROPPED", "hair-cropped"), new("LONG", "hair-long"),
-        new("TIED BACK", "hair-tail"), new("BRAIDED", "hair-braid"),
+        new("TIED BACK", "hair-tail"), new("BRAIDED", "hair-braid"), new("BALD", "hair-bald"),
     };
 
     /// <summary>The hair colours.</summary>
@@ -76,21 +111,28 @@ public static class LookOptions
 
     /// <summary>A look picked at random, for the creation screen's RANDOM.</summary>
     /// <param name="random">Where the numbers come from.</param>
-    public static CharacterLook Random(Random random) => new()
+    public static CharacterLook Random(Random random)
     {
-        Skin = random.Next(Skins.Count),
-        Face = random.Next(Faces.Count),
-        Eyes = random.Next(Eyes.Count),
-        Hair = random.Next(Hair.Count),
-        HairColour = random.Next(HairColours.Count),
-        // Most people don't have a beard.
-        Beard = random.Next(3) == 0 ? random.Next(1, Beards.Count) : 0,
-        Shirt = random.Next(Shirts.Count),
-        Vest = random.Next(Vests.Count),
-        Legs = random.Next(Legs.Count),
-        LegsColour = random.Next(LegsColours.Count),
-        Cloak = random.Next(2) == 0 ? 0 : random.Next(1, Cloaks.Count),
-    };
+        var ancestry = (Ancestry)random.Next(Enum.GetValues<Ancestry>().Length);
+        return new CharacterLook
+        {
+            Ancestry = ancestry,
+            Lineage = random.Next(Lineages(ancestry).Count),
+            Skin = random.Next(Skins.Count),
+            Face = random.Next(Faces.Count),
+            Eyes = random.Next(Eyes.Count),
+            Hair = random.Next(Hair.Count),
+            HairColour = random.Next(HairColours.Count),
+            // Most people don't have a beard, or a hat.
+            Beard = random.Next(3) == 0 ? random.Next(1, Beards.Count) : 0,
+            Hat = random.Next(4) == 0 ? random.Next(1, Hats.Count) : 0,
+            Shirt = random.Next(Shirts.Count),
+            Vest = random.Next(Vests.Count),
+            Legs = random.Next(Legs.Count),
+            LegsColour = random.Next(LegsColours.Count),
+            Cloak = random.Next(2) == 0 ? 0 : random.Next(1, Cloaks.Count),
+        };
+    }
 
     /// <summary>One choice that comes with a sheet of its own (or doesn't, for the first of some): what the screen calls it and what the sheet's called in Content/Paperdoll.</summary>
     /// <param name="Name">What the screen calls it.</param>

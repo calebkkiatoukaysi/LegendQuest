@@ -1,0 +1,67 @@
+; The deck of the Gull's Wager at night, two days out from Questeria: the Prologue's voyage. Its
+; boards inside the bulwark, the hatch over the hold, the mainmast amidships with the crow's nest
+; at the top, lanterns at the rail, and the wheel at the stern. Dark, with the lanterns lighting it.
+; There's no way off but the end of the Prologue.
+
+[map]
+id = gulls-wager
+name = The Gull's Wager
+tileset = ship
+size = 40 24
+dark = yes
+ambient = 0.35
+fog = no
+music = Title
+
+[legend]
+- = deck
+# = bulwark
+= = hatch
+~ = sea
+
+[ground]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~#########################~~~~~~~
+~~~~~~~~#-----------------------#~~~~~~~
+~~~~~~###-----------------------#~~~~~~~
+~~~~~~#-------------------------#~~~~~~~
+~~~~~~#-----------==------------#~~~~~~~
+~~~~~~#-----------==------------#~~~~~~~
+~~~~~~#-------------------------#~~~~~~~
+~~~~~~###-----------------------#~~~~~~~
+~~~~~~~~#-----------------------#~~~~~~~
+~~~~~~~~#########################~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[objects]
+spawn start 17 9 facing=up
+
+; P-04 plays as soon as you're on deck.
+scene voyage 0 0 talk=p-04
+
+prop mast 20 13.5
+prop lantern-hanging 11 8.4
+prop lantern-hanging 27 8.4
+prop lantern-hanging 14 15
+prop lantern-hanging 24 15
+prop ship-wheel 30 11.5
+prop rope-coil 10 13.6
+prop rope-coil 23 9
+prop cargo-crate 28 14.6
+prop cargo-crate 29.3 14.8
+prop cargo-barrel 9.6 9.6
+prop cargo-barrel 26.5 14.8
+
+npc odelle 29 13 cast=odelle facing=left say="Two days to Questeria, if the sea behaves."

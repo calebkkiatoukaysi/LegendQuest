@@ -36,6 +36,9 @@ public sealed class MapInteractable
     /// <summary>What it looks like. Anything but a sign has two pictures: shut and open, or up and down.</summary>
     public required PropDefinition Look { get; init; }
 
+    /// <summary>When it's there.</summary>
+    public MapPresence Presence { get; init; }
+
     /// <summary>What it's called on screen.</summary>
     public required string Name { get; init; }
 

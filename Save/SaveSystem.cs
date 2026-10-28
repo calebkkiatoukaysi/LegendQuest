@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LegendQuest.Characters;
+using LegendQuest.Dialogue.Scripts;
+using LegendQuest.Story;
 using LegendQuest.World;
 
 namespace LegendQuest.Save;
@@ -32,7 +35,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 2;
+    public const int CurrentVersion = 3;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -188,8 +191,11 @@ public static class SaveSystem
     /// <remarks>
     /// One step per version, each moving the file up one and falling through to the next, like The
     /// Black Box's. Version 1 had one X, Y and Facing for you, before there was a party; version 2
-    /// gives you the starting party and puts its leader there. The old fields only survive the read
-    /// because of SaveData.Extra.
+    /// gives you the starting party and puts its leader there. Version 2's party was you, Valen and
+    /// the four placeholders; version 3 has the Soul-Bound where Valen was, keeping his name and
+    /// he and him, and the placeholders gone, since the story recruits the companions. A version 2 game started on the
+    /// harbour, so the Prologue's behind it: without that flag the ship would never come in. The old
+    /// fields only survive the read because of SaveData.Extra.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <returns>The same game, in the shape this build expects.</returns>
@@ -197,7 +203,7 @@ public static class SaveSystem
     {
         if (data.Version < 2)
         {
-            data.Party = Origins.StartingParty();
+            data.Party = new List<PartyMember> { Origins.Create(Origins.You) };
             data.Leader = 0;
             if (data.Extra is not null)
             {
@@ -209,9 +215,55 @@ public static class SaveSystem
             }
         }
 
+        if (data.Version < 3)
+        {
+            var kept = new List<PartyMember>();
+            PartyMember you = null, soulBound = null;
+
+            // Mend hasn't been at it yet, so a party or a flag list nulled by hand is still null here.
+            data.Party ??= new List<PartyMember>();
+            data.Flags ??= new HashSet<string>();
+            foreach (PartyMember member in data.Party)
+            {
+                if (member?.Id == Origins.You) you = member;
+                else if (member?.Id == OldValen) soulBound = member;
+            }
+
+            you ??= data.Party.Find(member => member is not null) ?? Origins.Create(Origins.You);
+            you.Id = Origins.You;
+            kept.Add(you);
+
+            PartyMember fresh = Origins.Create(Origins.SoulBound);
+            fresh.Pronouns = Pronouns.He;
+            if (soulBound is not null)
+            {
+                fresh.Name = soulBound.Name;
+                fresh.Look = soulBound.Look;
+                fresh.Class = soulBound.Class;
+                fresh.Scores = soulBound.Scores;
+                fresh.Feet = soulBound.Feet;
+            }
+            else
+            {
+                fresh.Name = UpgradedSoulBoundName;
+                fresh.Feet = you.Feet;
+            }
+            kept.Add(fresh);
+
+            data.Party = kept;
+            data.Leader = 0;
+            data.Flags.Add(Prologue.Done);
+        }
+
         data.Version = CurrentVersion;
         return data;
     }
+
+    /// <summary>The id Valen had before the Soul-Bound took his place.</summary>
+    private const string OldValen = "valen";
+
+    /// <summary>What a version 2 save that never had Valen calls its Soul-Bound, since the Soul-Bound has no default name.</summary>
+    private const string UpgradedSoulBoundName = "Valen";
 
     /// <summary>Puts back anything a hand-edited file left out or set to null, so nothing that reads the save has to check.</summary>
     /// <remarks>
@@ -227,10 +279,21 @@ public static class SaveSystem
         data.Waypoints ??= new();
         data.Seen ??= new();
 
+        data.Camp ??= new();
+        data.Items ??= new();
+        data.Meters ??= new();
+        data.Camp.RemoveAll(member => member is null);
+        data.Items.RemoveAll(item => !KeyItems.Exists(item));
+        foreach (string meter in new List<string>(data.Meters.Keys))
+        {
+            if (Meters.Exists(meter)) data.SetMeter(meter, data.Meters[meter]);
+            else data.Meters.Remove(meter);
+        }
+
         data.Party ??= new();
         data.Party.RemoveAll(member => member is null);
         if (data.Party.Count > Origins.PartySize) data.Party.RemoveRange(Origins.PartySize, data.Party.Count - Origins.PartySize);
-        if (data.Party.Count == 0) data.Party = Origins.StartingParty();
+        if (data.Party.Count == 0) data.Party = new List<PartyMember> { Origins.Create(Origins.You), Origins.Create(Origins.SoulBound) };
         if (data.Leader < 0 || data.Leader >= data.Party.Count) data.Leader = 0;
 
         foreach (PartyMember member in data.Party)

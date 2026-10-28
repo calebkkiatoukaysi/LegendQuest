@@ -1247,6 +1247,94 @@ def sfx_waypoint(rng):
 
 
 # --------------------------------------------------------------------------- #
+# Conversations: the dice, and the companions' approval
+# --------------------------------------------------------------------------- #
+
+#: A bone die: hard, small, a bright click and a short ring.
+BONE = ((1.0, 1.0, 0.03), (2.4, 0.6, 0.015), (4.7, 0.3, 0.008))
+
+#: A ship's bell: a long ring with the bell's own out-of-tune partials.
+BELL = ((0.5, 0.5, 2.6), (1.0, 1.0, 2.2), (1.19, 0.5, 1.6), (1.5, 0.45, 1.3), (2.0, 0.35, 1.0), (2.66, 0.25, 0.7), (3.0, 0.2, 0.5))
+
+
+def sfx_dice_roll(rng):
+    """The d20 thrown down and tumbling: a few hard clicks bunched up and spreading out, quieter as it slows."""
+    x = silence(sec(0.9))
+    t, gap, loud = 0.0, 0.035, 1.0
+    for _ in range(9):
+        place(x, strike(BONE, rng.uniform(1700.0, 2600.0), 0.12, rng, click=0.6, click_hp=3000.0), t, loud)
+        t += gap
+        gap *= rng.uniform(1.18, 1.32)
+        loud *= 0.84
+    return room(x, 0.3, 4000.0, 0.15)
+
+
+def sfx_check_pass(rng):
+    """A check passing: two bright notes going up, a fifth apart, like a small bell."""
+    x = silence(sec(1.4))
+    for i, m in enumerate((76, 83)):
+        place(x, norm(modes(((1.0, 1.0, 0.9), (2.0, 0.35, 0.5), (3.01, 0.15, 0.3)), sec(1.2), R, midi_hz(m))), 0.09 * i, 0.6)
+    return room(x, 1.2, 4500.0, 0.3)
+
+
+def sfx_check_fail(rng):
+    """A check failing: a low, dull knock and a note sliding down."""
+    x = silence(sec(1.0))
+    place(x, thump(140.0, 70.0, 0.4, 0.12), 0.0, 0.8)
+    place(x, norm(shaped(glide(midi_hz(64), midi_hz(58), 0.15, sec(0.7), R), envelope(sec(0.7), R, attack=0.01, tau=0.25))), 0.04, 0.4)
+    return room(x, 0.8, 2500.0, 0.25)
+
+
+def sfx_approve(rng):
+    """A companion approving: a soft, warm note that rises a little."""
+    x = silence(sec(1.0))
+    hum = choir([midi_hz(64), midi_hz(71)], 0.3, R, rng, "oo", attack=0.05, release=0.25)
+    place(x, norm(hum), 0.0, 0.5)
+    place(x, norm(modes(((1.0, 1.0, 0.5), (2.0, 0.3, 0.3)), sec(0.8), R, midi_hz(83))), 0.05, 0.3)
+    return room(x, 0.9, 4000.0, 0.3)
+
+
+def sfx_disapprove(rng):
+    """A companion disapproving: the same note, lower and turning down."""
+    x = silence(sec(1.0))
+    hum = choir([midi_hz(57), midi_hz(60)], 0.3, R, rng, "oh", attack=0.05, release=0.25)
+    place(x, norm(hum), 0.0, 0.5)
+    place(x, norm(shaped(glide(midi_hz(69), midi_hz(65), 0.2, sec(0.6), R), envelope(sec(0.6), R, attack=0.01, tau=0.2))), 0.05, 0.25)
+    return room(x, 0.8, 3000.0, 0.25)
+
+
+# --------------------------------------------------------------------------- #
+# The story
+# --------------------------------------------------------------------------- #
+
+def sfx_heartbeat(rng):
+    """The Prologue's card: one heartbeat on its own, then two together, in step."""
+    x = silence(sec(3.2))
+
+    def beat():
+        b = silence(sec(0.5))
+        place(b, thump(70.0, 45.0, 0.3, 0.07), 0.0, 1.0)
+        place(b, thump(62.0, 40.0, 0.3, 0.06), 0.16, 0.7)
+        return lowpass(b, 400.0, R)
+
+    place(x, beat(), 0.0, 0.9)
+    place(x, beat(), 1.3, 0.9)
+    place(x, beat(), 1.36, 0.75)
+    place(x, beat(), 2.2, 0.9)
+    place(x, beat(), 2.26, 0.75)
+    return room(x, 1.2, 1500.0, 0.25)
+
+
+def sfx_ship_bell(rng):
+    """A ship's bell rung for all hands: three quick strokes, ringing on."""
+    x = silence(sec(3.2))
+    for i in range(3):
+        place(x, strike(BELL, 520.0, 2.8, rng, click=0.4, click_hp=2500.0), 0.32 * i, 0.7)
+    return room(x, 2.0, 3500.0, 0.35)
+
+
+
+# --------------------------------------------------------------------------- #
 # Build
 # --------------------------------------------------------------------------- #
 
@@ -1270,6 +1358,13 @@ SFX = {   # name: (folder, peak dBFS, builder)
     "lever": ("Content/Sfx", PEAK_MENU, sfx_lever),
     "pickup": ("Content/Sfx", PEAK_CLICK, sfx_pickup),
     "waypoint": ("Content/Sfx", PEAK_MENU, sfx_waypoint),
+    "dice-roll": ("Content/Sfx", PEAK_CLICK, sfx_dice_roll),
+    "check-pass": ("Content/Sfx", PEAK_MENU, sfx_check_pass),
+    "check-fail": ("Content/Sfx", PEAK_MENU, sfx_check_fail),
+    "approve": ("Content/Sfx", PEAK_CLICK, sfx_approve),
+    "disapprove": ("Content/Sfx", PEAK_CLICK, sfx_disapprove),
+    "heartbeat": ("Content/Sfx", PEAK_MENU, sfx_heartbeat),
+    "ship-bell": ("Content/Sfx", PEAK_MENU, sfx_ship_bell),
 }
 
 

@@ -1,0 +1,44 @@
+; A cottage in Questeria: a bed in the corner, a wardrobe and a bookshelf against the back wall,
+; a table, and a candle stand. Every cottage that's this one inside comes back out its own door.
+
+[map]
+id = cottage-a
+name = A Cottage
+tileset = interior
+size = 14 10
+dark = yes
+ambient = 0.65
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+##############
+#||||||||||||#
+#____________#
+#------------#
+#------------#
+#------------#
+#----rrrr----#
+#----rrrr----#
+#------------#
+######--######
+
+[objects]
+spawn start 6.5 8 facing=up
+exit door 6 9 w=2 to=back
+
+prop bed 3 6.5
+prop wardrobe 6 3.4
+prop bookshelf 10.5 3.4
+prop round-table 9 6.6
+prop stool 7.5 7
+prop stool 10.6 7
+prop candle-stand 12.4 7.5

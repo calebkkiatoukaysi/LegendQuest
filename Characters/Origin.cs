@@ -3,8 +3,8 @@ using LegendQuest.Rules;
 namespace LegendQuest.Characters;
 
 /// <summary>
-/// Where someone in the party starts from: their name, class, scores and look before anything's
-/// happened to them.
+/// Where someone in the party starts from: their name, class and look before anything's happened
+/// to them.
 /// </summary>
 public sealed class Origin
 {
@@ -17,13 +17,10 @@ public sealed class Origin
     /// <summary>Their class.</summary>
     public required ClassId Class { get; init; }
 
-    /// <summary>Their ability scores.</summary>
-    public required AbilityScores Scores { get; init; }
-
     /// <summary>How they look.</summary>
     public required CharacterLook Look { get; init; }
 
-    /// <summary>A new party member from this origin, at full health.</summary>
+    /// <summary>A new party member from this origin, with their class's recommended scores, at full health.</summary>
     public PartyMember Create()
     {
         var member = new PartyMember
@@ -31,7 +28,7 @@ public sealed class Origin
             Id = Id,
             Name = Name,
             Class = Class,
-            Scores = Scores,
+            Scores = ClassCatalog.Get(Class).Recommended,
             Look = Look.Copy(),
         };
         member.Hp = member.MaxHp;

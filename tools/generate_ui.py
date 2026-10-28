@@ -11,6 +11,7 @@ muted look, with dark iron instead of concrete. Only needs CPython, and it's see
 writes the same bytes.
 """
 
+import math
 import os
 import random
 import sys
@@ -454,10 +455,144 @@ def build_cursors():
 
     write_png(os.path.join(OUT, "cursors.png"), img)
 
+# --------------------------------------------------------------------------- #
+# The d20, for checks on screen
+# --------------------------------------------------------------------------- #
+# A d20 seen face on is a hexagon with a triangle in the middle and the faces round it. The sheet
+# is eight frames of it tumbling (the hexagon turning through a sixth, with the facets catching the
+# light differently each frame) and a ninth, landed, with a clear face in the middle for the screen
+# to print the number on. DiceRollOverlay has the same frame size and count.
+
+DIE = 40
+DIE_TUMBLE = 8
+DIE_IVORY = ((112, 96, 110), (168, 150, 150), (214, 200, 188), (244, 236, 222), (255, 252, 244))
+DIE_EDGE = (42, 30, 50)
+
+
+def _die_frame(img, ox, turn, landed):
+    """One frame: the hexagon turned by `turn` (0 to 1 of a sixth), its facets shaded from the top
+    left, edged dark."""
+    cx = cy = DIE / 2 - 0.5
+    radius = DIE / 2 - 2.5
+    corners = []
+    for k in range(6):
+        a = math.pi / 6 + k * math.pi / 3 + turn * math.pi / 3
+        corners.append((cx + radius * math.cos(a), cy + radius * math.sin(a)))
+    inner = []
+    for k in range(3):
+        a = -math.pi / 2 + k * 2 * math.pi / 3 + (0 if landed else turn * math.pi / 3)
+        inner.append((cx + radius * 0.52 * math.cos(a), cy + radius * 0.52 * math.sin(a)))
+
+    light = (-0.7, -0.7)
+    for y in range(DIE):
+        for x in range(DIE):
+            px, py = x + 0.5, y + 0.5
+            if not _inside_poly(px, py, corners):
+                continue
+            if _inside_poly(px, py, inner):
+                tone = 4 if landed else 3
+            else:
+                # Which facet: the angle round the middle, and how much that facet faces the light.
+                a = math.atan2(py - cy, px - cx) - turn * math.pi / 3
+                facet = math.floor(a / (math.pi / 3))
+                mid = (facet + 0.5) * math.pi / 3 + turn * math.pi / 3
+                facing = math.cos(mid) * light[0] + math.sin(mid) * light[1]
+                tone = 1 + round((facing + 1) * 1.4)
+            img[y][ox + x] = list(DIE_IVORY[max(0, min(4, tone))]) + [255]
+    # The edges: round the outside, and the inner triangle's sides.
+    for y in range(DIE):
+        for x in range(DIE):
+            px, py = x + 0.5, y + 0.5
+            if not _inside_poly(px, py, corners):
+                continue
+            near_out = any(not _inside_poly(px + dx, py + dy, corners) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            near_in = _inside_poly(px, py, inner) != any(_inside_poly(px + dx, py + dy, inner) for dx, dy in ((1, 0), (0, 1)))
+            if near_out or near_in and not landed:
+                img[y][ox + x] = list(DIE_EDGE) + [255]
+            elif near_in:
+                img[y][ox + x] = list(DIE_IVORY[1]) + [255]
+
+
+def build_dice():
+    img = new_image(DIE * (DIE_TUMBLE + 1), DIE)
+    for f in range(DIE_TUMBLE):
+        _die_frame(img, f * DIE, f / DIE_TUMBLE, False)
+    _die_frame(img, DIE_TUMBLE * DIE, 0.0, True)
+    write_png(os.path.join(OUT, "dice.png"), img)
+
+
+# --------------------------------------------------------------------------- #
+# The icons beside options in a conversation
+# --------------------------------------------------------------------------- #
+# 12x12, in DialogueScreen's order: a die for a check, a heart for a flirt, a lock for something
+# that needs a flag, and the three voices: a shield for honorable, a coin for pragmatic, a quill for
+# witty.
+
+ICON = 12
+ICON_GOLD = ((150, 104, 40), (222, 182, 98), (252, 230, 160))
+ICON_ROSE = ((128, 34, 60), (214, 76, 104), (250, 160, 180))
+ICON_STEEL = ((70, 74, 96), (140, 148, 172), (214, 220, 232))
+ICON_INK = (24, 18, 30)
+
+
+def _icon(img, ox, inside, ramp):
+    """One icon: whatever's inside, shaded top left to bottom right along its ramp, with a dark edge."""
+    for y in range(ICON):
+        for x in range(ICON):
+            if inside(x + 0.5, y + 0.5):
+                tone = 2 if x + y < 9 else 1 if x + y < 15 else 0
+                img[y][ox + x] = list(ramp[tone]) + [255]
+    for y in range(ICON):
+        for x in range(ICON):
+            if img[y][ox + x][3]:
+                continue
+            if any(0 <= x + dx < ICON and 0 <= y + dy < ICON and img[y + dy][ox + x + dx][3] and img[y + dy][ox + x + dx][:3] != list(ICON_INK)
+                   for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                img[y][ox + x] = list(ICON_INK) + [255]
+
+
+def build_dialogue_icons():
+    img = new_image(ICON * 6, ICON)
+
+    def die(x, y):
+        return _inside_poly(x, y, [(6, 1.2), (10.5, 3.6), (10.5, 8.4), (6, 10.8), (1.5, 8.4), (1.5, 3.6)])
+    _icon(img, 0, die, DIE_IVORY[2:])
+
+    def heart(x, y):
+        return ((x - 4.2) ** 2 + (y - 4.6) ** 2 < 6.0 or (x - 7.8) ** 2 + (y - 4.6) ** 2 < 6.0
+                or _inside_poly(x, y, [(1.7, 5.4), (10.3, 5.4), (6, 10.6)]))
+    _icon(img, ICON, heart, ICON_ROSE)
+
+    def lock(x, y):
+        shackle = 3.2 < ((x - 6) ** 2 + (y - 5) ** 2) ** 0.5 < 4.6 and y < 5.5
+        body = 2.5 < x < 9.5 and 5.0 < y < 10.6
+        return shackle or body
+    _icon(img, ICON * 2, lock, ICON_STEEL)
+
+    def shield(x, y):
+        return _inside_poly(x, y, [(2, 1.5), (10, 1.5), (10, 6), (6, 10.8), (2, 6)])
+    _icon(img, ICON * 3, shield, ICON_STEEL)
+
+    def coin(x, y):
+        return ((x - 6) / 4.4) ** 2 + ((y - 6) / 4.6) ** 2 < 1.0
+    _icon(img, ICON * 4, coin, ICON_GOLD)
+
+    def quill(x, y):
+        vane = _inside_poly(x, y, [(10.5, 1.2), (8.2, 6.5), (5.0, 8.4), (7.0, 4.0)])
+        shaft = abs((x - 2.0) - (10.0 - y)) < 0.8 and 2.0 < x < 6.5
+        return vane or shaft
+    _icon(img, ICON * 5, quill, DIE_IVORY[2:])
+
+    write_png(os.path.join(OUT, "dialogue-icons.png"), img)
+
+
+
 if __name__ == "__main__":
     print("Generating UI for Legend Quest...")
     build_button()
     build_panel()
     build_map_marks()
     build_cursors()
+    build_dice()
+    build_dialogue_icons()
     print("Done.")

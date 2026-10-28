@@ -1,0 +1,68 @@
+; The Gilded Flagon, the Lantern Market's tavern: the bar along the left with the kegs behind it,
+; the hearth in the back wall, tables round a rug, and the keeper behind the bar. Dim, the hearth
+; and the candles lighting it. The door's in the front wall, back out to wherever you came in.
+
+[map]
+id = gilded-flagon
+name = The Gilded Flagon
+tileset = interior
+size = 22 15
+dark = yes
+ambient = 0.55
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+######################
+#||||||||||||||||||||#
+#____________________#
+#--------------------#
+#--------------------#
+#--------------------#
+#--------------------#
+#--------------------#
+#--------rrrrrr------#
+#--------rrrrrr------#
+#--------rrrrrr------#
+#--------------------#
+#--------------------#
+#--------------------#
+##########--##########
+
+[objects]
+spawn start 10.5 13 facing=up
+exit door 10 14 w=2 to=back
+
+; The bar, the kegs behind it, and the keeper.
+prop bar-counter 5 7
+prop keg-stack 3 4
+prop keg-stack 6.5 4
+npc innkeeper 9.5 6 name="The Innkeeper" sheet=baker facing=down say="Rooms upstairs, stew on the fire."
+
+; The hearth, the tables and their stools, and the candles.
+prop hearth 15.5 3.5
+prop round-table 12 7
+prop stool 10.5 7.4
+prop stool 13.6 7.4
+prop round-table 18 8
+prop stool 16.5 8.4
+prop stool 19.6 8.4
+prop round-table 12 11.5
+prop stool 10.5 11.9
+prop round-table 18 12
+prop stool 19.6 12.4
+prop candle-stand 20 4
+prop candle-stand 1.5 12.5
+prop bookshelf 19.5 3.5
+
+; The regulars.
+npc patron-1 13.6 8.6 name="A Regular" sheet=traveller facing=left say="Don't take the corner booth. Somebody always does."
+npc patron-2 16.5 12.6 name="A Drinker" sheet=old-woman facing=right say="The stew's better than it smells. It has to be."

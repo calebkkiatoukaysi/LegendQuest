@@ -15,8 +15,10 @@ things on them to open and pull, the map screen and fast travel; and the party, 
 with the mouse to walk, point and click.
 [Still to come](#still-to-come) lists the rest. The look has changed since the fourth: the title
 and the capital, Questeria, are cut from pictures I made in a brighter style (see
-[Supplied art](#supplied-art)), and Questeria has taken the village's place as where a new game
-starts.
+[Supplied art](#supplied-art)). And the story has started. I've written the whole of it, three acts,
+and it's going in from the beginning in its own order: so far that's the Soul-Bound, the
+conversations the story needs (choices, dice, approval), the Prologue, Act 1's first chapter, and
+buildings you can go into. [The story](#the-story) says what's in.
 
 ## Running it
 
@@ -33,15 +35,11 @@ layers can sway. The mouse wheel zooms the world between 2x, 3x and 4x, never an
 dotnet run
 ```
 
-**NEW GAME** opens the save slots, and picking one opens the creation screen: your name, your
-class, and how you look (skin, face, eyes, hair and its colour, a beard, the colours of your shirt,
-vest and legs, breeches or a skirt, and a cloak), with you turning round beside it as it changes.
-**BEGIN** writes the game to the slot and opens on the harbour, with the ship you and Valen came
-over on sailing in. Valen shows you round from there: Esc skips the arrival, and talking to the
-innkeeper in Questeria gets you your first work. **LOAD** opens them
-to carry a game on, **CONTINUE** carries on whichever slot was saved last (it's dead when there
-isn't one), **OPTIONS** has the volumes and the text speed, and **EXIT** and **Esc** close the
-game. On a map, clicking the ground walks you there, clicking someone or something walks you up to
+**NEW GAME** opens the save slots, and picking one starts the Prologue: you make yourself, then
+the Soul-Bound, your oldest friend, then you sail for Questeria (see [The story](#the-story)).
+**LOAD** opens them to carry a game on, **CONTINUE** carries on whichever slot was saved last (it's
+dead when there isn't one), **OPTIONS** has the volumes and the text speed, and **EXIT** and **Esc**
+close the game. On a map, clicking the ground walks you there, clicking someone or something walks you up to
 them, E uses whatever you're standing next to, Tab changes who you're controlling, M is the map, and
 Esc is the pause menu.
 
@@ -53,15 +51,20 @@ dotnet run -- --proof shots       # play through the screens, save a picture of 
 
 It's the same harness as The Black Box's. It goes through the title, the options, the save slots
 for loading (and erases a broken slot the way a player would, ERASE then SURE?), the save slots for
-a new game, then the creation screen (you as you start, then named, changed and changed again),
-and BEGIN. On the harbour the arrival plays itself: the ship sailing in, tied up, the walk down the
-gangplank, Valen talking, and the card. Then up the street into Questeria: Valen talking as you
-come in, the plaza and the same view a few seconds on with the townsfolk moved, round behind a
-house, both zooms, the mouse over the far side of a statue (the path goes round it) and a click to
-walk it, the mouse on the elder and a click to walk up and talk to them, the mouse on the canal
-where there's no way, Tab, a click on a card, the innkeeper's work start to finish (the innkeeper,
-the flower seller, and the innkeeper paying), you sent off on your own while Valen finds his way
-after you, the waypoint crystal, the map, and out through the city gate. On the old road it walks into the trigger before the camp, opens the chest,
+a new game, then the Prologue: its card, the creation screen (you as you start, then named, and
+each of its tabs), the question that picks your voice, the Soul-Bound as they start and then named,
+and the two paintings, the pier and the red moon. On the deck of the Gull's Wager the voyage plays
+and gets read through, answering its questions, past the sea-wraiths' card to Questeria at dawn. On
+the harbour the arrival plays itself: the ship sailing in, tied up, the walk down the gangplank, and
+Act 1's card. Then the Red Gulls: it tries talking first, the Persuade check comes up on the dice,
+it calls the Soul-Bound off Grell, and Captain Hale arrives. Then up the street into Questeria: the Soul-Bound talking as you come in,
+the plaza and the same view a few seconds on with the townsfolk moved, round behind a house, both
+zooms, the mouse over the far side of a statue (the path goes round it) and a click to walk it, the
+mouse on the elder and a click to walk up and talk to them, the mouse on the canal where there's no
+way, Tab, a click on a card, Fennick and the quest board, you sent off on your own while the
+Soul-Bound finds their way after you, the waypoint crystal, the map, and in through the Gilded
+Flagon's door. Inside it takes the innkeeper's work and goes back out the door, which leaves you on
+the street outside it, then out through the city gate. On the old road it walks into the trigger before the camp, opens the chest,
 reads the sign, finds the second waypoint and fast travels back to Questeria, then straight back to
 the road by it, walks into the
 trigger at the blocked end twice (it goes off every time), and up the path into the barrow. In the
@@ -86,8 +89,10 @@ lever's pulled. A second switch, `--simulate`, comes with combat.
 | On a map | **WASD** or the **arrows** to walk, **E**, **Space** or **Enter** to use or talk to what you're next to, **M** for the map, the **mouse wheel** to zoom, **Esc** to pause |
 | On a map, the mouse | **Left click** the ground to walk there (the path shows while you point), or someone or something to walk up to them and talk or use it. Pointing at anything says what it is |
 | The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
-| Conversations | **Enter**, **Space**, **E** or a click shows the rest of the line, then the next |
-| The arrival | **Esc** skips it |
+| Making a character | **Up** and **down** pick a row, **left** and **right** change it, **Q** and **E** change the tab. On NAME, **Enter** and then type |
+| Conversations | **Enter**, **Space**, **E** or a click shows the rest of the line, then the next. At a question, **1** to **4**, a click, or the **arrows** and **Enter** |
+| The dice | **Space** or a click rolls, and the same again goes on |
+| The ship coming in | **Esc** skips it |
 | Anywhere | **F11** switches full screen on and off |
 | The map | **Tab** switches between the map you're on and the world. Opened from a waypoint, the **arrows** (or the mouse) pick where to go and **Enter** (or a click) goes. **M** or **Esc** closes it |
 
@@ -107,8 +112,9 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 | `TitleScreen` | The title, with NEW GAME, CONTINUE, LOAD, OPTIONS and EXIT |
 | `OptionsScreen` | Master, music and sound volume, and how fast text types out. Saved to `settings.json` |
 | `SaveSlotScreen` | The save slots, for a new game or for loading one, with ERASE beside each slot that has something in it |
-| `CharacterCreationScreen` | Making you: a row for your name, your class and every part of your look, with you walking on the spot and turning round beside them, and your face blown up over that. RANDOM, BEGIN and BACK |
-| `DialogueScreen` | Popup. A conversation a line at a time, over the dimmed map: the speaker's face and name, and the line typing out at the text speed. Enter, E or a click goes on |
+| `CharacterCreationScreen` | Making you, then the Soul-Bound: rows for a name, a people, a class and every part of a look, on three tabs, with them walking on the spot and turning round beside the rows, and their face blown up over that. RANDOM, BEGIN and BACK. The Prologue's first lines play between the two |
+| `DialogueScreen` | Popup. A conversation a line at a time, over the dimmed map or a painting: the speaker's face and name, the line typing out at the text speed, and a question's options numbered under it, with an icon for a check, a flirt or a locked one. Approval, gold and items come up as toasts |
+| `DiceRollOverlay` | Popup, over a conversation. A check: the d20 with the DC and every modifier, a press to roll, the tumble, then the total and SUCCESS or FAILURE |
 | `ExploreScreen` | A map being walked round: the tiles, the props, the things you can use, the people, the party, and the dark if it's a dark map. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
 | `MapScreen` | Popup. The map you're on, as much as you've seen of it, and the world: every place you've been and the roads between them. Opened from a waypoint, it's where you pick somewhere to travel to |
 | `PauseMenuScreen` | RESUME, OPTIONS or QUIT TO TITLE. Nothing under it moves while it's up. SAVE and LOAD go on it once there's a game to save |
@@ -125,6 +131,48 @@ pulses, and stars twinkle over the castle. Petals come off the trees (`PetalPart
 motes of light rise off the water (`SparkleParticleSystem`), both on the particle system tutorial's
 engine. Every picture in it is cut by `tools/cut_supplied.py` (see [Supplied art](#supplied-art)),
 and drawn at 4x.
+
+## The story
+
+The story is mine, written out in full before any of it went in: a prologue and three acts, every
+scene with an id (`P-01`, `A1-C1-01`). It goes into the game in its own order, each step playable
+before the next, and each conversation is named after its scene (`a1-c1-01` is A1-C1-01), the same
+as the proof shots. What's in so far:
+
+- **The Soul-Bound.** You don't arrive alone. Your oldest friend comes with you: the one you met on
+  a pier in a storm when you were eight, and swore an oath with under a red moon at sixteen. You
+  make them too, on the same screen, and they're whoever you make them: their name, their pronouns
+  (he, she or they), their people, their class and their look. They took Valen's place.
+- **The Prologue.** P-01 is a card, then the creation screen makes you. In P-02 the narrator names
+  you and asks what drives you: doing what's right, getting the job done, or a good story. That's
+  your voice (Honorable, Pragmatic or Witty), and some lines and options later depend on it. In P-03
+  the creation screen makes the Soul-Bound, with the pier you met on behind it, then the narrator
+  remembers that day and the oath, each over a painting, and the game is written to its slot. P-04
+  and P-05 are the voyage: the deck of the Gull's Wager at night, two days out, the Soul-Bound
+  talking about the new king, the bell from the crow's nest, the sea-wraiths (a card until there's
+  combat), and Questeria at dawn.
+- **Act 1, Chapter 1: Saltwind Welcome.** The ship comes into Saltwind Docks and Act 1's card comes
+  up. The Red Gulls are shaking old Tomas down for a dock tax that doesn't exist. You can wade in,
+  try talking first (a Persuade check, with advantage for a Skald or an Honorable voice), or say it's
+  not your business, in which case the Soul-Bound goes in anyway. Then their boss, Grell, is on his
+  knees with the Soul-Bound's blade at his throat a beat too long, and what happens to him is up to
+  you. Captain Hale's Watch arrives, and Tomas gives you his lucky hook. Up in the city the
+  Soul-Bound points the way, Fennick talks you through the quest board in the Lantern Market (the
+  Rangers' contract for the Mirewood glows on it), and the innkeeper in the Gilded Flagon has work
+  if you want it.
+
+Everyone in it who isn't in the party is in `Cast`, with the name they go by, which townsfolk sheet
+or paperdoll look they wear, and who's only ever a voice. Captain Odelle, the Red Gulls, Grell,
+Captain Hale, the Watch and Fennick are drawn the party's way, so they can wear bandanas, a tricorn
+or a helm; Old Tomas is one of the townsfolk. The
+story's bookkeeping is in `Story/`: the meters (`Meters`: the bond between you and the Soul-Bound,
+their ambition, each companion's approval, fame, and how far the eclipse has gone, each with where
+it starts and its range), the key items, the paintings and the quest board's postings. Every table
+there throws at startup if a row's wrong.
+
+The fights in the story are cards until combat exists ("The Red Gulls are beaten."), with the
+conversation round them, and each keeps its encounter's id so the fight can go in where the card
+is. The barks in them (the Soul-Bound's one-liners mid-fight) are lines for now too.
 
 ## Maps
 
@@ -274,16 +322,17 @@ their own. It reads as dusk, and if it needs to be warmer or bluer that's a colo
 
 ## The party
 
-Up to four: you, and whoever's with you. A new game starts you with Bren, Vesper and Maren, all
-placeholders I'll rewrite (Corvin is in the data too, for later). That's all four, so the strip and
-the followers can be seen full; once conversations can recruit people, Maren gets recruited instead
-and the start is you and two. Until there's character creation, you're the Wanderer.
+Up to four: you, and whoever's with you. A new game starts you with the Soul-Bound, and the story
+recruits the rest: Sera, Kael, Mira and Brannock are in the data with their peoples, classes and
+looks, ready for the chapters they join in. When there are four of you already, anyone else who
+joins waits at camp.
 
 | File | What it is |
 | --- | --- |
-| `PartyMember` | Someone in the party, as the save keeps them: name, class, level, ability scores, hit points, look, and where they're standing |
-| `Origins` | Everyone who can be in the party and how they start: class, scores (5e's standard array, 15 14 13 12 10 8, where each class wants it) and look |
-| `ClassCatalog` | The four classes and their hit dice, a d10 for a fighter, a d8 for a rogue or a cleric, a d6 for a wizard |
+| `PartyMember` | Someone in the party, as the save keeps them: name, pronouns, class, level, ability scores, hit points, look, and where they're standing |
+| `Origins` | Everyone who can be in the party and how they start: class, scores (5e's standard array, 15 14 13 12 10 8, where their class recommends) and look. You and the Soul-Bound start from theirs and the creation screen does the rest |
+| `ClassCatalog` | The eight classes: the SRD's names in the code and the story's on screen (a Fighter is a Blademaster, a Rogue a Shadowstep, a Cleric a Lightbearer, a Wizard an Arcanist, a Paladin a Warden, a Druid a Wildcaller, a Warlock a Hexblade and a Bard a Skald), each with its role, its hit die and where its scores go |
+| `AbilityCheck` | A check: a d20 plus a modifier against a DC, with or without advantage, and a natural 20 or 1 deciding it whatever the total |
 | `AbilityScores` | The six scores, and 5e's modifier: half of (score minus 10), rounded down |
 
 Hit points at level 1 are 5e's: the whole hit die plus the Constitution modifier. Everyone stays
@@ -320,7 +369,51 @@ level 1 in the skeleton.
 - **People.** `npc` in a map file puts someone there: a name, which of the townsfolk's sheets
   they're drawn from, which way they face, and a line. They stand, look round every few seconds (never at the wall), and turn to face you
   when you talk to them; the line goes up over their head on a dark smudge. Conversations take over
-  from the line when there are conversations. Questeria has seventeen of them.
+  from the line when they have one. Questeria has seventeen of them, and some of the townsfolk
+  stroll: every so often one with `wander` set walks off to somewhere within that many tiles of
+  where they were put, rests, looks round, and goes somewhere else. They give up on a stroll if
+  anything's in the way, and stop and face you when you talk to them.
+
+## Conversations
+
+A conversation is a `DialogueScript`, written in C# in `Dialogue/Scripts/`, a file per chapter. It
+says who it's with, the flags it `Needs` and the ones that stop it (`Unless`), and its lines.
+`DialogueCatalog.For` picks what someone says: the first of theirs that can start. Talking to them
+when there isn't one gets their `say` line over their head instead.
+
+- **A line** has who says it (one of the cast, you, the Soul-Bound, a companion, the narrator in a
+  colour of its own, or a card big in the middle of the screen), what they say, and a stage direction under
+  their name. It can have conditions (it's skipped if they don't hold), effects for when it's said,
+  where it goes next (the next line if it doesn't say), a painting or the quest board behind it, and
+  a sound.
+- **A question** is a line with two to four options. Each has its text, conditions, effects and
+  where it goes. One whose conditions don't hold isn't shown, unless it's `Locked`, when it's greyed
+  with what it needs (WITTY, WARDEN). A `Flirt` option gets a heart.
+- **A check** is an option that rolls: a d20 plus an ability's modifier, against a DC of 12, or 15 when
+  the odds are against you, with advantage when any of the things it names are true (a class, a
+  voice, a flag). A natural 20 always passes and a natural 1 always fails, and it goes one way on a
+  pass and another on a fail. `AbilityCheck` rolls it; the dice on screen only show what it rolled.
+- **A clock.** A question can have seconds on it, and where it goes if they run out. A bar runs
+  down under the options.
+- **Conditions** look at a flag being set or not, a meter at or over a number or under it, your
+  voice, who's in the party, or your class. **Effects** set or clear a flag, add to a meter or set
+  it, hand over gold, give or take a key item, change what you're to do next, have someone join (or
+  wait at camp if there are four of you already), pick your voice, or take you to another map when
+  it's over.
+- **Words in braces** get filled in by `TextTokens`: `{name}` is yours, `{sb}` is the Soul-Bound's,
+  `{sb_they}`, `{sb_them}` and `{sb_their}` are their pronouns, `{race}`, `{class}`, `{sb_race}` and
+  `{sb_class}` are what the two of you are, and `{romance}` is whoever you're with. A capital on the
+  token's first letter capitalises the word it gives.
+
+`DialogueRunner` plays a script against the save the way The Black Box's discussion did: it draws
+nothing and takes its `Random`, and hands back what happened as events (a meter moved, a check
+rolled, someone joined) for `DialogueScreen` to turn into toasts, dice and sounds, and for the map
+under it to catch up with, like the Red Gulls leaving the docks the moment they're beaten. When a
+companion's approval moves while they're in the party, a toast says they approve or disapprove.
+Every script is checked when the game starts, after the maps: every line going somewhere that
+exists, every flag, meter, item, painting and person being real, every check having somewhere to go
+on a pass and a fail, every clock having somewhere to go when it runs out, and every map and spawn
+a conversation travels to existing. A mistake stops the game right there and says which line.
 
 ## The walker
 
@@ -351,7 +444,12 @@ every pixel of him gets sorted into skin, hair, eyes, shirt, vest, breeches or s
 changes (his outline, belt and boots), each part gets cut down to a few key shades, and his hair
 comes off onto a layer of its own. The other hair styles (cropped, long, tied back, braided), the
 faces, the beards, the skirt and the cape are drawn onto his frames from where his head, eyes, chin,
-waist and legs turn out to be in each one. `Paperdoll.Compose` lays the sheets someone's look calls
+waist and legs turn out to be in each one, and so are what makes the peoples look like themselves:
+a Sylvan's pointed ears, a Wildkin's wolf, hawk or bear ears and a wolf's tail, an Emberkin's
+horns (curled or swept) and burning tail, and the hats (a bandana, a tricorn, the Watch's helm). A
+tail comes in two halves, like the cape, since it's behind you facing down and in front of you
+facing up. The Stoneborn and the Hearthling are shorter, so every layer is drawn again for each
+build, with rows taken out of the torso and legs: `Paperdoll/Stout/` and `Paperdoll/Small/`. `Paperdoll.Compose` lays the sheets someone's look calls
 for over each other in `PaperdollOrder`, and `CharacterPalettes` swaps each key shade for the same
 shade of the preset their look picks, out of `character-palettes.png`: six skins, eight hair
 colours, six eye colours, five shirts, eight vests, six for the legs and six cloaks. That's The Black
@@ -367,7 +465,7 @@ because `bin/` gets deleted by every clean build.
 
 | File | What it is |
 | --- | --- |
-| `SaveData` | The whole save: the map, the party (each with where they're standing) and which of them you're controlling, the play time, the gold, the flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
+| `SaveData` | The whole save: the map (and where you came in, while you're inside a building), the party (each with where they're standing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
 | `SaveSlot` | One slot as the form sees it: empty, occupied or unreadable, plus the line printed on it |
 | `SaveSystem` | Reads, writes and erases slots. The only thing in the project that touches a save file |
 
@@ -381,9 +479,11 @@ The same three decisions as The Black Box:
   doesn't have.
 - **Every file carries a `Version`.** `SaveSystem.Upgrade` is where an old file gets brought
   forward when a field changes, one version at a time. Version 2 is the party: version 1 had one X,
-  Y and Facing for you, and upgrading gives it the starting party with you standing there. Those
-  old fields only make it as far as `Upgrade` because `SaveData.Extra` keeps whatever this build
-  doesn't have a property for.
+  Y and Facing for you, and upgrading gives it the starting party with you standing there. Version
+  3 is the Soul-Bound: Valen becomes them, keeping his name and look, the placeholders go, and the
+  Prologue counts as done, since those games started on the harbour. Those old fields only make it
+  as far as `Upgrade` because `SaveData.Extra` keeps whatever this build doesn't have a property
+  for.
 
 Enums go in by name (`"Facing": "Up"`), so reordering one is safe and renaming one breaks saves; a
 number where a name should be makes the slot unreadable. Things on a map are kept as `map/id`, like
@@ -430,7 +530,11 @@ menu, a footstep on stone and one on grass, a heavy door dragging open (a creak 
 hinge makes one, out of a run of tiny slips, over stone grinding), a latch rattling in a lock that
 won't give, a chest lid creaking up and knocking back, an iron lever clicking over its teeth and
 clunking down with a chain taking up somewhere, a handful of coins, and a waypoint stone waking up
-with a low hum and something like glass ringing over it.
+with a low hum and something like glass ringing over it. The story brought seven more: the d20
+thrown down and tumbling, a check passing (two bright notes a fifth apart, like a small bell) and
+failing (a dull knock and a note sliding down), a companion approving (a soft note rising) and
+disapproving (the same, lower and turning down), a heartbeat for the Prologue's card, one on its own
+and then two in step, and a ship's bell rung three times for all hands.
 
 `Audio/AudioManager` is where all of it lives: the same `Content.Load<Song>`, `MediaPlayer` and
 `SoundEffect.Play` calls as the audio tutorial, in one game service any screen can reach, with a
@@ -457,9 +561,15 @@ fades the old one out and the new one in.
 | Questeria's `Props/*.png` | `PropSprite` | The same, cut from my pictures: the palace, the temple, the guildhall, the city gate, four houses, the fountain, statues, lamps, banners, benches, market stalls, trees, bushes and flowers, the notice board Questeria's sign looks like, and the waypoint crystal, dim then lit |
 | `People/*.png` | `WalkerSprite` | Seventeen townsfolk, cut from my pictures, in the first five columns of the 10x4 layout: standing, and walking |
 | `map-marks.png` | `MapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
-| `Paperdoll/*.png` | `Paperdoll` | The body, five hair styles, five faces, four beards, the skirt, and the cape in two halves, all in the youth's 5x4 layout and his key shades, so they stack and recolour. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
+| `Paperdoll/*.png` | `Paperdoll` | The body, six hair styles (one of them bald), five faces, four beards, the skirt, the cape and the two tails in halves, four kinds of ears, two of horns, and three hats, all in the youth's 5x4 layout and his key shades, so they stack and recolour. `Stout/` and `Small/` are every one of them again for the shorter builds. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
 | `character-palettes.png` | `CharacterPalettes` | Five pixels by forty-five: one ramp per row, dark to light. Skins, hair, eyes, shirts, vests, legs and cloaks, each block with its key first |
 | `cursors.png` | `CursorSprite` | 5 cursors, 16x16, at 2x: an arrow, a ring to walk, a hand to use something, a speech bubble to talk, a crossed circle for no way |
+| `dice.png` | `DiceRollOverlay` | The d20, 9 frames of 40x40 at 4x: eight tumbling, then the face it lands on with the number drawn over it |
+| `dialogue-icons.png` | `DialogueScreen` | 6 icons, 12x12, at 2x, beside an option: a die for a check, a heart for a flirt, a lock, and the three voices |
+| `Paintings/*.png` | `PaintingSprite` | The story's paintings, each three or four layers on the title's 416x277 canvas at 4x, swaying against each other like the title: the pier the day you met, the oath under the red moon, and Questeria at dawn from the ship's rail |
+| `Tiles/ship.png` | `Tilemap` | The Gull's Wager's deck: planks, the bulwark round it, the hatch, and the sea, with foam where it meets the hull |
+| `Tiles/interior.png` | `Tilemap` | Inside the buildings: wood and stone floors, a rug with its edges, the back wall's face (plaster over wainscoting, two tiles tall) and the tops of the walls |
+| The ship's and the inside's `Props/*.png` | `PropSprite` | The mast with its sail, the ship's lanterns (which give off light), the wheel and coils of rope; and the bar, round tables, stools, the hearth and candle stands (lit), kegs, a bed, a wardrobe, bookshelves and a shop counter |
 
 Text is drawn with `spectral-title` (Spectral Light, 92pt), `spectral-ui` (Spectral Medium, 26pt)
 and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as The Black Box. The
@@ -471,11 +581,13 @@ and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as Th
 Every PNG in `Content/` is made by a script:
 
 ```
-python tools/generate_ui.py           # button.png, panel.png, map-marks.png and cursors.png
+python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png and dialogue-icons.png
 python tools/generate_world.py        # the crypt and forest tilesets, their props, the torch flame, glow.png and mote.png
-python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship, its gangplank and the rowing boat
+python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship and its deck, its gangplank, mast, lanterns, wheel and rope, and the rowing boat
+python tools/generate_interiors.py    # the inside of the buildings: the interior tileset and the furniture
+python tools/generate_paintings.py    # the story's paintings (after cut_supplied.py, for the title's city)
 python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, and the townsfolk, out of tools/source/
-python tools/generate_paperdoll.py    # the paperdoll sheets and character-palettes.png, off the youth (after cut_supplied.py's people)
+python tools/generate_paperdoll.py    # the paperdoll sheets for all three builds and character-palettes.png, off the youth (after cut_supplied.py's people)
 ```
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's
@@ -485,7 +597,9 @@ lit from the top left, and the game does the dark itself. Tiles that lie next to
 leaves, the floors) only vary in ways that meet cleanly at the edges. A tree's crown is a grid of
 round clumps of leaves that wraps round the tile, so one tile's clumps carry on into the next, the
 lower clump in front where two overlap, and its edge and corner pieces leave out the clumps on the
-outside, so a crown of any size has a round edge.
+outside, so a crown of any size has a round edge. The paintings follow the title: skies dither
+between a few colours instead of blending, anything lit is lit from that picture's own light and
+goes lavender in shadow, and the people in them are silhouettes edged with the light behind them.
 
 ## Supplied art
 
@@ -505,7 +619,10 @@ random in it, so a rerun writes the same bytes.
 - The townsfolk come off three sheets: twenty people drawn once each way, six walking each way, and
   one more standing and walking. Three of the twenty turn into someone else when they turn round, so
   they're left out.
-- The old road, the barrow and the party are still the generated art.
+- The old road and the barrow are still the generated art from before. The ship's deck, the insides
+  of the buildings and the paintings are generated too, drawn to match the pictures (the city in
+  Questeria at dawn is the title's), and the party and the story's people are the youth, taken
+  apart and dressed again by the paperdoll.
 
 `python tools/check_assets.py` checks that `ASSETS.md`, `Content/Content.mgcb` and the files on
 disk agree, and fails with a list if they don't. I run it before every commit.
@@ -519,10 +636,29 @@ In the order they're being built:
 3. ~~The three maps joined up: exits, triggers, chests, doors, levers, the map screen and fast travel.~~
 4. ~~The party: four members, switching between them, followers, click-to-move with A*.~~
 5. The paperdoll and gear: armour you can see, the inventory and the character sheet.
-6. Character creation. ~~Your name, class and look~~; point buy is still to come.
-7. Dialogue with dice rolls, approval, the quest and the journal.
+6. Character creation. ~~Your name, people, class and look, and the Soul-Bound's~~; point buy is still to come.
+7. Dialogue with dice rolls, approval, the quest and the journal. ~~Conversations, choices, checks
+   on the dice, clocks, approval~~; the journal is still to come.
 8. Combat, and `--simulate`.
 9. Resting, full saving, and the polish.
+
+The story goes in alongside them, in its own order:
+
+1. ~~Valen out and the Soul-Bound in: their origin, their pass on the creation screen, pronouns and
+   the tokens, and the meters in the save.~~
+2. ~~The conversations the story needs, and the Prologue and Act 1's first chapter rebuilt on
+   them. Buildings to go into.~~
+3. Act 1, chapters 2 to 4: the Mirewood and the quarry, Thornbridge, the Old Crown Vault, Sunspire
+   Keep and the Rusty Anvil, and the companions joining. This is next: chapter 1 ends with the
+   Rangers' contract taken, and the old road is where the Mirewood will be.
+4. Act 1, chapters 5 to 8, to the end of Act 1.
+5. Act 2, with the eclipse.
+6. Act 3.
+7. Every fight card swapped for its fight, as combat comes in.
+
+The Soul-Link (the two of you fighting as one) comes with combat, and so do the barks in fights.
+The Soul-Bound's idle remarks while you walk come with Act 2, when their ambition starts to show
+in them. The ship's deck borrows the title's song until the sea has one of its own.
 
 The maps could go through the content pipeline with an importer of their own (that's chapter 11 of
 the textbook); for now they're copied as text and read at startup, which is enough to catch mistakes.
@@ -531,11 +667,13 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
-- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, talking, triggers, exits and travel, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
-- `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one, `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
-- `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), and how the party looks (`CharacterLook` and `CharacterPalettes`).
-- `Rules/` is the 5e parts that draw nothing: `AbilityScores`, and the classes in `ClassCatalog`.
-- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards and the cursor, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
+- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
+- `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
+- `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
+- `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, and the scripts themselves in `Dialogue/Scripts/`, a file per chapter.
+- `Story/` is the story's tables: `Meters`, `KeyItems`, `Paintings`, `Cast` and the quest board's `Postings`.
+- `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, and the classes in `ClassCatalog`.
+- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings and the quest board, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.
 - `Particles/` is the particle engine, and the title's petals and motes built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.

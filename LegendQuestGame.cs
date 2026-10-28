@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendQuest.Audio;
 using LegendQuest.Components;
+using LegendQuest.Dialogue;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
@@ -82,6 +83,7 @@ public partial class LegendQuestGame : Game
     protected override void LoadContent()
     {
         MapCatalog.LoadAll();
+        DialogueCatalog.ValidateAll();
 
         if (ProofDirectory is not null) BeginProof();
 

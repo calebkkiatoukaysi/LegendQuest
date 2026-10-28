@@ -36,4 +36,13 @@ public static class Palette
 
     /// <summary>Cold bone, for the choices that don't commit you to anything.</summary>
     public static readonly Color Bone = new(222, 212, 198);
+
+    /// <summary>The narrator's lines: a little cooler than anyone speaking.</summary>
+    public static readonly Color Narration = new(196, 204, 226);
+
+    /// <summary>The gold of the Soul-Bond, a pass, and anything royal.</summary>
+    public static readonly Color Gold = new(240, 200, 104);
+
+    /// <summary>Dark writing on something pale, like the number on a die.</summary>
+    public static readonly Color Ink = new(34, 26, 48);
 }

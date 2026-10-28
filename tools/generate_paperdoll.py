@@ -317,14 +317,6 @@ class Layer:
         if 0 <= x < FRAME_W and 0 <= y < FRAME_H:
             self.frames[r][c][y][x] = [0, 0, 0, 0]
 
-    def save(self, rel):
-        sheet = new_image(FRAME_W * PEOPLE_COLUMNS, FRAME_H * 4)
-        for r in range(4):
-            for c in range(PEOPLE_COLUMNS):
-                for y in range(FRAME_H):
-                    sheet[r * FRAME_H + y][c * FRAME_W:(c + 1) * FRAME_W] = self.frames[r][c][y]
-        write_png(os.path.join(OUT, rel), sheet)
-        return sheet
 
 
 def hair_of(f):
@@ -539,7 +531,7 @@ def hair_styles(frames, base, keys):
                     tail(f, layer, r, c, ramp)
                 elif style == "braid":
                     braid(f, layer, r, c, ramp)
-        layer.save("Paperdoll/hair-" + style + ".png")
+        keep("hair-" + style, layer)
 
 
 # --------------------------------------------------------------------------- #
@@ -598,7 +590,7 @@ def faces(frames, keys, shade_of):
                             x, y = x0 + 2 - i // 2, y0 - 2 + i
                             if f.part.get((x, y)) == "skin":
                                 layer.put(r, c, x, y, skin_at(f, keys, shade_of, x, y, 2))
-        layer.save("Paperdoll/face-" + face + ".png")
+        keep("face-" + face, layer)
 
 
 BEARDS = ("stubble", "moustache", "beard", "full")
@@ -655,7 +647,7 @@ def beards(frames, keys, shade_of):
                 for x, y in drawn:
                     if (x, y + 1) not in drawn and f.part.get((x, y + 1)) not in ("skin",):
                         layer.put(r, c, x, y + 1, OUTLINE)
-        layer.save("Paperdoll/beard-" + beard + ".png")
+        keep("beard-" + beard, layer)
 
 
 # --------------------------------------------------------------------------- #
@@ -694,7 +686,7 @@ def skirt(frames, keys):
                         if y == hem - 1:
                             colour = ramp[1 if lit else 0]
                     layer.put(r, c, x, y, colour)
-    layer.save("Paperdoll/skirt.png")
+    keep("skirt", layer)
 
 
 def cape(frames, keys):
@@ -756,8 +748,332 @@ def cape(frames, keys):
                 for i in range(3):
                     front.put(r, c, edge - i * away, f.neck, ramp[2])
                 front.put(r, c, edge + away, f.neck, OUTLINE)
-    back.save("Paperdoll/cape-back.png")
-    front.save("Paperdoll/cape-front.png")
+    keep("cape-back", back)
+    keep("cape-front", front)
+
+
+# --------------------------------------------------------------------------- #
+# The peoples: ears, horns and tails, and a bald head
+# --------------------------------------------------------------------------- #
+
+#: Horn, from dark to light: old bone going ivory at the tips. Horns never change colour.
+HORN = ((62, 44, 56), (110, 86, 92), (166, 140, 130), (214, 196, 176))
+
+#: An Emberkin's tail: crimson, the tip burning from red through orange to yellow.
+EMBER_TAIL = ((70, 22, 40), (128, 34, 48), (184, 58, 56))
+EMBER_TIP = ((222, 96, 40), (248, 160, 56), (255, 226, 120))
+
+#: Iron and steel for the Watch's helm, and the leather and gold of a captain's tricorn. Neither changes colour.
+STEEL = ((56, 60, 78), (98, 106, 128), (150, 160, 180), (206, 214, 226))
+TRICORN = ((24, 20, 30), (44, 36, 46), (70, 58, 66))
+TRIM = ((176, 128, 50), (236, 196, 104))
+
+
+def head_box(f, hair, r, c):
+    """His head in a frame: the top, the eye row, the head's middle across, and how wide it is at
+    the eyes, from the hair and the face together."""
+    eyes = eye_row(f)
+    span = head_span(f, hair, r, c, eyes - 1) or head_span(f, hair, r, c, eyes)
+    return f.top, eyes, (span[0] + span[1]) / 2.0, span
+
+
+def paint(layer, r, c, cells, ramp, lit_left=True):
+    """Fills a set of cells with a ramp, lit from the top left: the light side gets the light end,
+    the far side the dark end, and an outline goes round the outside below and to the sides."""
+    if not cells:
+        return
+    xs = [x for x, _ in cells]
+    ys = [y for _, y in cells]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    top = len(ramp) - 1
+    for x, y in cells:
+        u = (x - x0) / max(1, x1 - x0) if lit_left else 1 - (x - x0) / max(1, x1 - x0)
+        v = (y - y0) / max(1, y1 - y0)
+        level = round(top - (u * 0.6 + v * 0.6) * top)
+        layer.put(r, c, x, y, ramp[max(0, min(top, level))])
+    for x, y in cells:
+        for n in ((x - 1, y), (x + 1, y), (x, y + 1), (x, y - 1)):
+            if n not in cells and layer.get(r, c, *n) is None:
+                layer.put(r, c, n[0], n[1], OUTLINE)
+
+
+def mirrored(points, cx):
+    """Points flipped across a column, for the other side of a head."""
+    return [(round(2 * cx - x), y) for x, y in points]
+
+
+def bald(frames, hair, keys):
+    """Bald: a smooth crown of skin where the hair was, lit on top, edged like the rest of him."""
+    ramp = keys["skin"]
+    layer = Layer()
+    for r in range(4):
+        for c in range(PEOPLE_COLUMNS):
+            f = frames[r][c]
+            top, eyes, cx, span = head_box(f, hair, r, c)
+            cy = eyes - 1
+            rx = (span[1] - span[0]) / 2.0 - 0.5
+            ry = cy - top - 2.0
+            cells = set()
+            for y in range(top, cy + 1):
+                for x in range(FRAME_W):
+                    inside = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1.0
+                    if inside and f.part.get((x, y)) not in ("skin", "eyes", "shine"):
+                        cells.add((x, y))
+            paint(layer, r, c, cells, ramp[1:])
+            # The brow and the ears where the hair used to hide them.
+            for x, y in cells:
+                if y == cy and f.part.get((x, y + 1)) == "skin":
+                    layer.put(r, c, x, y, ramp[2])
+    keep("hair-bald", layer)
+
+
+def ears(frames, hair, keys):
+    """The peoples' ears: the Sylvan's long points, and the Wildkin's wolf, hawk and bear ears on
+    top of the head. Points are the colour of the skin; beast ears are the hair's."""
+    skin, fur = keys["skin"], keys["hair"]
+    for kind in ("pointed", "wolf", "hawk", "bear"):
+        layer = Layer()
+        for r in range(4):
+            for c in range(PEOPLE_COLUMNS):
+                f = frames[r][c]
+                top, eyes, cx, span = head_box(f, hair, r, c)
+                if kind == "pointed":
+                    # From the side of the head at the eyes, out and up to a point.
+                    shape = [(0, 0), (0, -1), (-1, -1), (-1, -2), (-2, -2), (-2, -3), (-3, -4), (0, 1)]
+                    left = [(span[0] + dx, eyes - 1 + dy) for dx, dy in shape]
+                    sides = {DOWN: (left, mirrored(left, cx)), UP: (left, mirrored(left, cx)),
+                             LEFT: (mirrored(left, cx),), RIGHT: (left,)}[r]
+                    for side in sides:
+                        paint(layer, r, c, set(side), skin[1:])
+                    continue
+
+                # Beast ears sit on the crown, either side of the middle, and from the side only one shows.
+                if kind == "wolf":
+                    shape = [(0, 0), (1, 0), (2, 0), (3, 0), (0, -1), (1, -1), (2, -1), (1, -2), (2, -2), (1, -3)]
+                    inner = [(1, 0), (2, 0), (1, -1)]
+                elif kind == "hawk":
+                    shape = [(0, 0), (1, 0), (2, 0), (0, -1), (1, -1), (-1, -2), (0, -2), (-1, -3), (-2, -4)]
+                    inner = []
+                else:
+                    shape = [(0, 0), (1, 0), (2, 0), (3, 0), (0, -1), (1, -1), (2, -1), (3, -1), (1, -2), (2, -2)]
+                    inner = [(1, 0), (2, 0)]
+                base_y = top + 2
+                left_x = round(cx) - 5
+                left = [(left_x + dx, base_y + dy) for dx, dy in shape]
+                right = mirrored(left, cx)
+                if r == LEFT:
+                    pairs = [(mirrored(left, cx), mirrored([(left_x + dx, base_y + dy) for dx, dy in inner], cx))]
+                elif r == RIGHT:
+                    pairs = [(left, [(left_x + dx, base_y + dy) for dx, dy in inner])]
+                else:
+                    pairs = [(left, [(left_x + dx, base_y + dy) for dx, dy in inner]),
+                             (right, mirrored([(left_x + dx, base_y + dy) for dx, dy in inner], cx))]
+                for outside, middle in pairs:
+                    paint(layer, r, c, set(outside), fur[1:])
+                    if r != UP:
+                        for x, y in middle:
+                            layer.put(r, c, x, y, skin[2])
+        keep("ears-" + kind, layer)
+
+
+def horns(frames, hair):
+    """The Emberkin's horns, out of the hair at the temples: curled round like a ram's, or swept
+    back in a long curve."""
+    for kind in ("curl", "swept"):
+        layer = Layer()
+        for r in range(4):
+            for c in range(PEOPLE_COLUMNS):
+                f = frames[r][c]
+                top, eyes, cx, span = head_box(f, hair, r, c)
+                base_y = top + 4
+                if kind == "curl":
+                    shape = [(0, 0), (-1, 0), (-1, -1), (-2, -1), (-3, -1), (-3, 0), (-4, 0), (-4, 1), (-4, 2), (-3, 3), (-2, 3)]
+                else:
+                    shape = [(0, 0), (1, 0), (0, -1), (1, -1), (-1, -2), (0, -2), (-1, -3), (-2, -3), (-2, -4), (-3, -5)]
+                left = [(span[0] + 3 + dx, base_y + dy) for dx, dy in shape]
+                right = mirrored(left, cx)
+                if r == LEFT:
+                    sides = [mirrored(left, cx)] if kind == "curl" else [[(round(cx) - 1 - dx, base_y + dy) for dx, dy in shape]]
+                elif r == RIGHT:
+                    sides = [left] if kind == "curl" else [[(round(cx) + 1 + dx, base_y + dy) for dx, dy in shape]]
+                else:
+                    sides = [left, right]
+                for side in sides:
+                    paint(layer, r, c, set(side), HORN)
+        keep("horns-" + kind, layer)
+
+
+def tails(frames, keys):
+    """Tails, out of the small of the back: the Emberkin's thin one with a burning tip, and the
+    wolf line's bushy one. Each comes in two halves like the cape: what hangs behind, and what shows
+    over the body from behind."""
+    fur = keys["hair"]
+    for kind in ("ember", "wolf"):
+        back, front = Layer(), Layer()
+        for r in range(4):
+            for c in range(PEOPLE_COLUMNS):
+                f = frames[r][c]
+                waist = f.waist
+                body = f.row_span(waist, None)
+                cx = (body[0] + body[1]) / 2.0
+                sway = (0, 1, 0, -1, 0)[c]
+                if r == UP:
+                    path = [(round(cx) + i // 3 + sway * (i > 4), waist - 1 + i) for i in range(9)]
+                    layer, away = front, 1
+                elif r == DOWN:
+                    path = [(body[1] + 1 + i // 2, waist + 1 + i - (i > 5) * (i - 5)) for i in range(8)]
+                    layer, away = back, 1
+                else:
+                    away = 1 if r == LEFT else -1
+                    edge = body[1] if r == LEFT else body[0]
+                    path = [(edge + away * (1 + i // 2), waist + 1 + i // 2 + (i > 6)) for i in range(10)]
+                    layer = back
+                cells = set()
+                for i, (x, y) in enumerate(path):
+                    # The ember tail's a line; the wolf's is bushy, fattest in the middle.
+                    width = 1 if kind == "ember" else 2 + (1 if 1 < i < len(path) - 2 else 0)
+                    for w in range(width):
+                        cells.add((x + w * away if r != UP else x + w - 1, y))
+                        if kind == "wolf" and 2 < i < len(path) - 1:
+                            cells.add((x + w * away if r != UP else x + w - 1, y - 1))
+                if kind == "ember":
+                    body_cells = set(list(cells)[:])
+                    tip = set(path[-3:])
+                    paint(layer, r, c, body_cells - tip, EMBER_TAIL)
+                    for i, (x, y) in enumerate(path[-3:]):
+                        layer.put(r, c, x, y, EMBER_TIP[i])
+                    x, y = path[-1]
+                    layer.put(r, c, x, y + 1, EMBER_TIP[1])
+                else:
+                    paint(layer, r, c, cells, fur[1:])
+                    x, y = path[-1]
+                    layer.put(r, c, x, y, fur[4])
+        keep("tail-" + kind + "-back", back)
+        keep("tail-" + kind + "-front", front)
+
+
+# --------------------------------------------------------------------------- #
+# Hats
+# --------------------------------------------------------------------------- #
+
+def hats(frames, hair, keys):
+    """Hats over the hair: a bandana in the vest's dye, knotted at the back (the Red Gulls wear
+    crimson ones); a captain's tricorn, black with a gold edge; and the Watch's steel helm."""
+    for kind in ("bandana", "tricorn", "helm"):
+        layer = Layer()
+        for r in range(4):
+            for c in range(PEOPLE_COLUMNS):
+                f = frames[r][c]
+                top, eyes, cx, span = head_box(f, hair, r, c)
+                brow = eyes - 3
+                cells = set()
+                for y in range(top + (1 if kind == "tricorn" else 0), brow + 1):
+                    widths = [x for x in range(FRAME_W) if hair.get(r, c, x, max(y, top)) is not None or f.part.get((x, max(y, top))) == "skin"]
+                    if not widths:
+                        continue
+                    x0, x1 = min(widths), max(widths)
+                    if kind == "helm" and y < top + 2:
+                        x0, x1 = x0 + (top + 2 - y), x1 - (top + 2 - y)
+                    if kind == "tricorn":
+                        x0, x1 = x0 + 1, x1 - 1
+                    for x in range(x0, x1 + 1):
+                        cells.add((x, y))
+                if kind == "bandana":
+                    paint(layer, r, c, cells, keys["top"][1:])
+                    if r in (LEFT, RIGHT, UP):
+                        knot_x = (span[1] + 1) if r == LEFT else (span[0] - 1) if r == RIGHT else round(cx)
+                        for i in range(4):
+                            dx = (1 if r == LEFT else -1) * (i // 2) if r != UP else (i % 2) * 2 - 1
+                            layer.put(r, c, knot_x + dx, brow + i, keys["top"][2 if i % 2 else 1])
+                elif kind == "tricorn":
+                    paint(layer, r, c, cells, TRICORN)
+                    brim_y = brow
+                    xs = [x for x, y in cells if y == brim_y]
+                    x0, x1 = min(xs) - 3, max(xs) + 3
+                    for x in range(x0, x1 + 1):
+                        layer.put(r, c, x, brim_y, TRIM[1] if x % 3 else TRIM[0])
+                        layer.put(r, c, x, brim_y + 1, OUTLINE)
+                    # The corners turned up, the way a tricorn's are.
+                    for x in (x0, x1):
+                        layer.put(r, c, x, brim_y - 1, TRICORN[2])
+                        layer.put(r, c, x, brim_y - 2, OUTLINE)
+                else:
+                    paint(layer, r, c, cells, STEEL)
+                    xs = [x for x, y in cells if y == brow]
+                    for x in range(min(xs) - 1, max(xs) + 2):
+                        layer.put(r, c, x, brow, STEEL[1])
+                        layer.put(r, c, x, brow + 1, OUTLINE)
+                    if r == DOWN:
+                        layer.put(r, c, round(cx), top, STEEL[3])
+        keep("hat-" + kind, layer)
+
+
+# --------------------------------------------------------------------------- #
+# The bodies, and saving
+# --------------------------------------------------------------------------- #
+
+#: Every sheet, by name, before it's saved for each body.
+SHEETS = {}
+
+
+def keep(name, layer):
+    """Holds a finished sheet till every body's been made from it."""
+    SHEETS[name] = layer
+
+
+#: The bodies: the folder each one's sheets go in, the rows taken out of the torso and the legs
+#: (counting down from his neck and his waist), and how many columns wider the torso goes. The
+#: Stoneborn are a head shorter than him and broad with it; the Hearthlings are smaller again.
+BUILDS = (
+    ("Paperdoll", (), (), 0),
+    ("Paperdoll/Stout", (4,), (2, 3, 4, 5), 4),
+    ("Paperdoll/Small", (3, 4, 5), (2, 3, 4, 5, 6), 0),
+)
+
+
+def built(frame_pixels, f, torso, legs, wider):
+    """One frame of a sheet made for another body: the rows taken out, everything above them
+    dropped to stand on the same feet, and the torso widened down its middle."""
+    dropped = {f.neck + d for d in torso} | {f.waist + d for d in legs}
+    rows = [frame_pixels[y] for y in range(FRAME_H) if y not in dropped]
+    out = [[[0, 0, 0, 0] for _ in range(FRAME_W)] for _ in range(FRAME_H)]
+    shift = FRAME_H - len(rows)
+    neck = f.neck + shift
+    for y, line in enumerate(rows):
+        out[y + shift] = [list(px) for px in line]
+    if wider:
+        # The middle of his body, from his own frame, so every layer widens down the same column.
+        body = [x for x, y in f.drawn if y >= f.neck]
+        cx = round(sum(body) / len(body))
+        for y in range(max(0, neck), FRAME_H):
+            line = out[y]
+            new = [[0, 0, 0, 0] for _ in range(FRAME_W)]
+            for x in range(FRAME_W):
+                if x < cx:
+                    src = x + wider // 2
+                elif x > cx + wider - 1:
+                    src = x - wider // 2
+                else:
+                    src = cx
+                if 0 <= src < FRAME_W:
+                    new[x] = list(line[src])
+            out[y] = new
+    return out
+
+
+def save_builds(frames):
+    """Every sheet, for every body."""
+    for folder, torso, legs, wider in BUILDS:
+        for name, layer in SHEETS.items():
+            sheet = new_image(FRAME_W * PEOPLE_COLUMNS, FRAME_H * 4)
+            for r in range(4):
+                for c in range(PEOPLE_COLUMNS):
+                    frame = layer.frames[r][c]
+                    if torso or legs or wider:
+                        frame = built(frame, frames[r][c], torso, legs, wider)
+                    for y in range(FRAME_H):
+                        sheet[r * FRAME_H + y][c * FRAME_W:(c + 1) * FRAME_W] = frame[y]
+            write_png(os.path.join(OUT, folder, name + ".png"), sheet)
 
 
 # --------------------------------------------------------------------------- #
@@ -785,11 +1101,17 @@ if __name__ == "__main__":
     frames = youth()
     keys, shade_of = make_keys(frames)
     body, hair = body_and_hair(frames, keys, shade_of)
-    body.save("Paperdoll/body.png")
+    keep("body", body)
     hair_styles(frames, hair, keys)
+    bald(frames, hair, keys)
     faces(frames, keys, shade_of)
     beards(frames, keys, shade_of)
     skirt(frames, keys)
     cape(frames, keys)
+    ears(frames, hair, keys)
+    horns(frames, hair)
+    tails(frames, keys)
+    hats(frames, hair, keys)
+    save_builds(frames)
     palettes(keys)
     print("Done.")

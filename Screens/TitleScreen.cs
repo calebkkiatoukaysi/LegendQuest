@@ -129,7 +129,7 @@ public class TitleScreen : MenuScreen
         var slots = new SaveSlotScreen(purpose);
         slots.SlotChosen += (slot, game) =>
         {
-            if (game is null) ScreenManager.AddScreen(new CharacterCreationScreen(slot));
+            if (game is null) CharacterCreationScreen.Begin(ScreenManager, slot);
             else Begin(game);
         };
 

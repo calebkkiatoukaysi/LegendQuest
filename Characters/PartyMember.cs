@@ -37,6 +37,9 @@ public class PartyMember
     /// <summary>How they look.</summary>
     public CharacterLook Look { get; set; } = new();
 
+    /// <summary>Which pronouns the lines use for them. Only the Soul-Bound's are ever read.</summary>
+    public Pronouns Pronouns { get; set; }
+
     /// <summary>How far across the map their feet are, in world pixels.</summary>
     public float X { get; set; }
 

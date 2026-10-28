@@ -9,8 +9,11 @@ public sealed class ClassDefinition
     /// <summary>Which class this is.</summary>
     public required ClassId Id { get; init; }
 
-    /// <summary>What it's called on screen.</summary>
+    /// <summary>What the story calls it on screen. The ClassId is the SRD's name for it.</summary>
     public required string Name { get; init; }
+
+    /// <summary>What it's for, in a few words, for the creation screen.</summary>
+    public required string Role { get; init; }
 
     /// <summary>The biggest number on its hit die. At level 1 a character has this many hit points, plus their Constitution modifier.</summary>
     public required int HitDie { get; init; }

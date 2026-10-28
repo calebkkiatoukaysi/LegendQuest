@@ -8,14 +8,23 @@ public enum ProofStage
     /// <summary>The title, the options and the save slots.</summary>
     Menus,
 
-    /// <summary>The creation screen: you as you start, then named and changed, then BEGIN.</summary>
+    /// <summary>A new game: the Prologue's card, you made, your voice, the Soul-Bound made, the memory and the oath.</summary>
     Creation,
 
-    /// <summary>The harbour: the ship sailing in, the walk off it, Valen, the card, then up to the city.</summary>
+    /// <summary>The deck of the Gull's Wager at night: the Prologue's voyage, the sea-wraiths, and Questeria at dawn.</summary>
+    Voyage,
+
+    /// <summary>The harbour: the ship sailing in, the walk off it, Act 1's card, the Red Gulls and Captain Hale, then up to the city.</summary>
     Docks,
 
-    /// <summary>Walking round Questeria, the innkeeper's work, finding its waypoint, the map, then out through the city gate.</summary>
+    /// <summary>Walking round Questeria, Fennick's board, finding its waypoint, the map, then into the Gilded Flagon.</summary>
     Questeria,
+
+    /// <summary>Inside the Gilded Flagon: the innkeeper's errand, and out through the door.</summary>
+    Flagon,
+
+    /// <summary>Outside the Flagon's door again, then out through the city gate.</summary>
+    QuesteriaOut,
 
     /// <summary>The old road: the trigger, the chest, the sign, the waypoint, and fast travel back to Questeria.</summary>
     Road,

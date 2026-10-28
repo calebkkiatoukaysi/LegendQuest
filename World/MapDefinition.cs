@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace LegendQuest.World;
 
 /// <summary>
-/// One map, as read out of its .map file: what it's called, where it is on the world map, its tiles
+/// One map, as read out of its .map file: what it's called, where it is on the world map (if it is), its tiles
 /// in three layers, how it's lit, what plays on it, and everything placed on it.
 /// </summary>
 /// <remarks>
@@ -19,8 +19,8 @@ public sealed class MapDefinition
     /// <summary>What it's called on screen.</summary>
     public required string Name { get; init; }
 
-    /// <summary>Where it is on the world map, in the map screen's pixels from the top left of the world.</summary>
-    public required Point World { get; init; }
+    /// <summary>Where it is on the world map, in the map screen's pixels from the top left of the world, or null if it isn't on it: inside a building, which is part of the place outside, or out at sea.</summary>
+    public required Point? World { get; init; }
 
     /// <summary>The tileset every layer is drawn from.</summary>
     public required TilesetDefinition Tileset { get; init; }
@@ -72,4 +72,7 @@ public sealed class MapDefinition
 
     /// <summary>Everyone standing on it who isn't in the party.</summary>
     public required IReadOnlyList<MapNpc> Npcs { get; init; }
+
+    /// <summary>The conversations that play by themselves once you're on it.</summary>
+    public required IReadOnlyList<MapScene> Scenes { get; init; }
 }

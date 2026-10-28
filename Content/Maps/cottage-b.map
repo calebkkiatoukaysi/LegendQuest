@@ -1,0 +1,42 @@
+; Another cottage: the hearth in the back wall, the bed on the right, a table by the fire.
+
+[map]
+id = cottage-b
+name = A Cottage
+tileset = interior
+size = 14 10
+dark = yes
+ambient = 0.65
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+##############
+#||||||||||||#
+#____________#
+#------------#
+#------------#
+#------------#
+#-----rrrr---#
+#-----rrrr---#
+#------------#
+######--######
+
+[objects]
+spawn start 6.5 8 facing=up
+exit door 6 9 w=2 to=back
+
+prop hearth 4 3.5
+prop bed 11 6.5
+prop round-table 5 7
+prop stool 3.5 7.4
+prop stool 6.6 7.4
+prop wardrobe 8.5 3.4

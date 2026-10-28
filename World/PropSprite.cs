@@ -21,6 +21,9 @@ public class PropSprite
     /// <summary>The middle of its bottom edge, in world pixels.</summary>
     public Vector2 Foot { get; }
 
+    /// <summary>When it's on the map.</summary>
+    public MapPresence Presence { get; }
+
     /// <summary>The floor it takes up: none for things you can walk through, one box for most, and two for an arch, one each side of the way through.</summary>
     public IReadOnlyList<BoundingRectangle> Footprints { get; }
 
@@ -42,6 +45,7 @@ public class PropSprite
     {
         Definition = placed.Prop;
         Foot = placed.Foot;
+        Presence = placed.Presence;
 
         Point size = Definition.Footprint;
         float left = Foot.X - size.X / 2f, top = Foot.Y - size.Y;

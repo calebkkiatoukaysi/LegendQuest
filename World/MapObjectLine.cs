@@ -125,6 +125,9 @@ internal sealed class MapObjectLine
         return facing;
     }
 
+    /// <summary>Takes out when= and unless=, which any object can have, for when it's on the map.</summary>
+    public MapPresence Presence() => new(Text("when"), Text("unless"));
+
     /// <summary>Checks every setting on the line got used.</summary>
     /// <param name="allowed">The settings this kind has, for the message.</param>
     /// <exception cref="InvalidOperationException">If one didn't, which means it's spelled wrong or on the wrong kind.</exception>

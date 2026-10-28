@@ -40,13 +40,8 @@ public partial class LegendQuestGame
     private const int ProofNewClose = 196;
     private const int ProofNewGame = 215;
 
-    // The creation screen by frame, once it's up.
-    private const int ProofCreateShot = 30;
-    private const int ProofCreateChange = 31;
-    private const int ProofCreateChangedShot = 45;
-    private const int ProofCreateBearded = 46;
-    private const int ProofCreateBeardedShot = 60;
-    private const int ProofCreateBegin = 61;
+    /// <summary>The frame the new game's run from the slots to the ship ends on, counted from when it starts.</summary>
+    private const int ProofNewGameEnd = 442;
 
     /// <summary>The slot the proof breaks on purpose, and then erases.</summary>
     private const int ProofBrokenSlot = 1;
@@ -114,7 +109,11 @@ public partial class LegendQuestGame
                 break;
 
             case ProofStage.Creation:
-                _proofPending = RunSubject<CharacterCreationScreen>(ProofCreation, ProofCreateBegin, ProofStage.Docks, null);
+                _proofPending = ProofNewGameFlow();
+                break;
+
+            case ProofStage.Voyage:
+                _proofPending = RunMap("gulls-wager", ExploreScreen.VoyageProofEnd, ProofStage.Docks);
                 break;
 
             case ProofStage.Docks:
@@ -122,7 +121,15 @@ public partial class LegendQuestGame
                 break;
 
             case ProofStage.Questeria:
-                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaProofEnd, ProofStage.Road);
+                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaProofEnd, ProofStage.Flagon);
+                break;
+
+            case ProofStage.Flagon:
+                _proofPending = RunMap("gilded-flagon", ExploreScreen.FlagonProofEnd, ProofStage.QuesteriaOut);
+                break;
+
+            case ProofStage.QuesteriaOut:
+                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaOutProofEnd, ProofStage.Road);
                 break;
 
             case ProofStage.Road:
@@ -202,8 +209,9 @@ public partial class LegendQuestGame
 
             // A new game in the first slot, the way the slots hand one to the creation screen.
             case ProofNewGame:
-                _screenManager.AddScreen(new CharacterCreationScreen(0));
+                CharacterCreationScreen.Begin(_screenManager, 0);
                 _proofStage = ProofStage.Creation;
+                _proofSubjectStart = _proofFrame;
                 return null;
 
             default:
@@ -211,32 +219,115 @@ public partial class LegendQuestGame
         }
     }
 
-    /// <summary>The creation screen: you as you start, then a name and a whole new look and class, then RANDOM, then BEGIN.</summary>
-    private string ProofCreation(CharacterCreationScreen creation)
+    /// <summary>A new game from the slots to the ship: the Prologue's card, you made (on every tab), what drives you, the Soul-Bound made from the memory, what you remember, and the red moon.</summary>
+    /// <remarks>Every step goes through the screens' own proof hooks, so it's the same code a player's keys and clicks reach.</remarks>
+    private string ProofNewGameFlow()
     {
-        switch (Frame())
+        int frame = Frame();
+        DialogueScreen talk = Find<DialogueScreen>();
+        CharacterCreationScreen creation = Find<CharacterCreationScreen>();
+
+        switch (frame)
         {
-            case ProofCreateShot:
+            case 40:
+                return "prologue-card.png";
+
+            case 41:
+                talk?.ProofAdvance();
+                return null;
+
+            case 90:
                 return "create.png";
 
-            case ProofCreateChange:
-                creation.ProofType("Caleb");
-                creation.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2 }, ClassId.Rogue);
+            case 91:
+                creation?.ProofType("Caleb");
+                creation?.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2 }, ClassId.Rogue);
                 return null;
 
-            case ProofCreateChangedShot:
-                return "create-changed.png";
+            case 110:
+                return "create-who.png";
 
-            case ProofCreateBearded:
-                creation.ProofLook(new CharacterLook { Skin = 5, Face = 3, Hair = 1, HairColour = 4, Beard = 4, Vest = 5, LegsColour = 3 }, ClassId.Fighter);
+            case 111:
+                creation?.ProofPage(1);
                 return null;
 
-            case ProofCreateBeardedShot:
-                return "create-bearded.png";
+            case 130:
+                return "create-face.png";
 
-            case ProofCreateBegin:
-                creation.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2 }, ClassId.Rogue);
-                creation.ProofBegin();
+            case 131:
+                creation?.ProofPage(2);
+                return null;
+
+            case 150:
+                return "create-dress.png";
+
+            case 151:
+                creation?.ProofBegin();
+                return null;
+
+            // The narrator names you, then asks what drives you: witty.
+            case 190:
+                talk?.ProofAdvance();
+                return null;
+
+            case 191:
+                talk?.ProofAdvance();
+                return null;
+
+            case 230:
+                return "prologue-voice.png";
+
+            case 231:
+                talk?.ProofChoose(2);
+                return null;
+
+            // The Soul-Bound, remembered: nameless at first, then Wren, a Sylvan, she/her.
+            case 290:
+                return "create-soulbound.png";
+
+            case 291:
+                creation?.ProofType("Wren");
+                creation?.ProofPronouns(Pronouns.She);
+                creation?.ProofLook(new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 2, Eyes = 4, Hair = 4, HairColour = 4, Shirt = 2, Vest = 1, LegsColour = 2, Cloak = 3 }, ClassId.Druid);
+                return null;
+
+            case 320:
+                return "create-soulbound-named.png";
+
+            case 321:
+                creation?.ProofBegin();
+                return null;
+
+            // The pier, what you remember (that she always wanted more), and the red moon.
+            case 360:
+                talk?.ProofAdvance();
+                return null;
+
+            case 361:
+                talk?.ProofAdvance();
+                return null;
+
+            case 400:
+                return "prologue-memory.png";
+
+            case 401:
+                talk?.ProofChoose(1);
+                return null;
+
+            case 430:
+                talk?.ProofFinishLine();
+                return null;
+
+            case 440:
+                return "prologue-red-moon.png";
+
+            case 441:
+                talk?.ProofAdvance();
+                return null;
+
+            case ProofNewGameEnd:
+                _proofStage = ProofStage.Voyage;
+                _proofSubject = null;
                 return null;
 
             default:
@@ -301,7 +392,7 @@ public partial class LegendQuestGame
             return null;
         }
 
-        if (Frame() > end)
+        if (Frame() > end || subject.IsExiting)
         {
             _proofStage = next;
             _proofSubject = null;

@@ -7,4 +7,5 @@ namespace LegendQuest.World;
 /// </summary>
 /// <param name="Prop">What it is.</param>
 /// <param name="Foot">The middle of its bottom edge, in world pixels.</param>
-public sealed record MapProp(PropDefinition Prop, Vector2 Foot);
+/// <param name="Presence">When it's there.</param>
+public sealed record MapProp(PropDefinition Prop, Vector2 Foot, MapPresence Presence);

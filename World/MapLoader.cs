@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
 using LegendQuest.Dialogue;
+using LegendQuest.Story;
 
 namespace LegendQuest.World;
 
@@ -36,11 +37,15 @@ public static class MapLoader
     public const string StartSpawn = "start";
 
     private static readonly string[] Sections = { "map", "legend", "ground", "detail", "overhead", "objects" };
-    private static readonly string[] RequiredSettings = { "id", "name", "world", "tileset", "size", "dark", "music" };
-    private static readonly string[] OptionalSettings = { "ambient", "fog" };
+    private static readonly string[] RequiredSettings = { "id", "name", "tileset", "size", "dark", "music" };
+    private static readonly string[] OptionalSettings = { "world", "ambient", "fog" };
 
     /// <summary>Every kind of object, for the error message when a line names one that isn't.</summary>
-    private static readonly string[] Kinds = { "spawn", "prop", "npc", "light", "exit", "trigger", "chest", "door", "lever", "sign", "waypoint" };
+    private static readonly string[] Kinds = { "spawn", "prop", "npc", "light", "exit", "entrance", "trigger", "scene", "chest", "door", "lever", "sign", "waypoint" };
+
+    /// <summary>The doorway an entrance makes, in art pixels: wide enough to walk into, and so shallow you have to be walking into the door to go through.</summary>
+    private const float DoorwayWidth = 18f;
+    private const float DoorwayDepth = 4f;
 
     /// <summary>Reads and checks one map.</summary>
     /// <param name="id">The map, which is also its file name without the .map.</param>
@@ -75,9 +80,14 @@ public static class MapLoader
         (int width, int height) = ReadPair(id, settings["size"], "size", "the width and height in tiles, like 40 30");
         if (width < 1 || height < 1) throw Fail(id, settings["size"].Line, "a map has to be at least one tile each way");
 
-        (int worldX, int worldY) = ReadPair(id, settings["world"], "world", "where it is on the world map, like 300 200");
-        if (worldX > MapCatalog.WorldWidth || worldY > MapCatalog.WorldHeight)
-            throw Fail(id, settings["world"].Line, $"world has to be inside the world map, which is {MapCatalog.WorldWidth} by {MapCatalog.WorldHeight}");
+        Point? world = null;
+        if (settings.TryGetValue("world", out (int Line, string Value) worldSetting))
+        {
+            (int worldX, int worldY) = ReadPair(id, worldSetting, "world", "where it is on the world map, like 300 200");
+            if (worldX > MapCatalog.WorldWidth || worldY > MapCatalog.WorldHeight)
+                throw Fail(id, worldSetting.Line, $"world has to be inside the world map, which is {MapCatalog.WorldWidth} by {MapCatalog.WorldHeight}");
+            world = new Point(worldX, worldY);
+        }
 
         bool dark = ReadYesNo(id, settings["dark"]);
         float ambient = ReadAmbient(id, settings, dark);
@@ -108,6 +118,7 @@ public static class MapLoader
 
         Dictionary<string, MapSpawn> spawns = ReadSpawns(id, objects);
         List<MapExit> exits = ReadAreas(objects, "exit", width, height, ReadExit);
+        exits.AddRange(ReadEntrances(objects));
         List<MapTrigger> triggers = ReadAreas(objects, "trigger", width, height, ReadTrigger);
         List<MapInteractable> interactables = ReadInteractables(objects, Solid);
 
@@ -117,11 +128,15 @@ public static class MapLoader
                 if (Inside(spawn.Feet, exit.Area)) throw Fail(id, $"spawn {name} is inside exit {exit.Id}; move it a tile or so in from the way out");
         }
 
+        // Fast travel picks a waypoint by where its map is on the world map.
+        if (world is null && interactables.Exists(thing => thing.Kind == InteractableKind.Waypoint))
+            throw Fail(id, "there's a waypoint on a map that isn't on the world map (it needs world =)");
+
         return new MapDefinition
         {
             Id = id,
             Name = settings["name"].Value,
-            World = new Point(worldX, worldY),
+            World = world,
             Tileset = tileset,
             Dark = dark,
             Ambient = ambient,
@@ -139,7 +154,24 @@ public static class MapLoader
             Triggers = triggers,
             Interactables = interactables,
             Npcs = ReadNpcs(objects, Solid),
+            Scenes = ReadScenes(objects),
         };
+    }
+
+    /// <summary>The scenes: scene id x y talk=, and when= and unless=. Where it is doesn't matter; it plays wherever you are.</summary>
+    private static List<MapScene> ReadScenes(List<MapObjectLine> objects)
+    {
+        var scenes = new List<MapScene>();
+
+        foreach (MapObjectLine o in Of(objects, "scene"))
+        {
+            string talk = o.Required("talk");
+            if (DialogueCatalog.Get(talk) is null) throw o.Fail($"there's no conversation called {talk}");
+            scenes.Add(new MapScene(o.Id, talk, o.Presence()));
+            o.Done("talk, when, unless");
+        }
+
+        return scenes;
     }
 
     /// <summary>Splits the file into its sections, dropping comments and blank lines. Every line is trimmed.</summary>
@@ -365,14 +397,15 @@ public static class MapLoader
         foreach (MapObjectLine o in Of(objects, "prop"))
         {
             if (!PropCatalog.TryGet(o.Id, out PropDefinition prop)) throw o.Fail($"there's no prop called {o.Id}");
-            o.Done(string.Empty);
-            props.Add(new MapProp(prop, FeetOn(o)));
+            MapPresence presence = o.Presence();
+            o.Done("when, unless");
+            props.Add(new MapProp(prop, FeetOn(o), presence));
         }
 
         return props;
     }
 
-    /// <summary>The people: npc id x y name= sheet=, and facing= and say=.</summary>
+    /// <summary>The people: npc id x y, then sheet= and name= for townsfolk or cast= for the story's people, and facing=, say=, wander=, when= and unless=.</summary>
     /// <param name="objects">Every object on the map.</param>
     /// <param name="solid">Whether a tile is solid, for checking they're standing somewhere they could.</param>
     private static List<MapNpc> ReadNpcs(List<MapObjectLine> objects, Func<int, int, bool> solid)
@@ -381,16 +414,28 @@ public static class MapLoader
 
         foreach (MapObjectLine o in Of(objects, "npc"))
         {
-            string sheet = o.Required("sheet");
-            if (!Townsfolk.Contains(sheet))
-                throw o.Fail($"there's no sheet called {sheet} (the townsfolk are {string.Join(", ", Townsfolk.All)})");
+            string castId = o.Text("cast");
+            string sheet = o.Text("sheet");
+            string name = o.Text("name");
+            if (castId is not null)
+            {
+                CastMember cast = Cast.Get(castId) ?? throw o.Fail($"there's nobody in the cast called {castId}");
+                if (cast.Look is null && cast.Sheet is null) throw o.Fail($"{castId} is only ever a voice, and can't stand on a map");
+                name ??= cast.Name;
+            }
+            else
+            {
+                if (sheet is null || name is null) throw o.Fail("someone who isn't in the cast needs sheet= and name=");
+                if (!Townsfolk.Contains(sheet))
+                    throw o.Fail($"there's no sheet called {sheet} (the townsfolk are {string.Join(", ", Townsfolk.All)})");
+            }
 
             float wander = o.Number("wander", 0f);
             if (wander < 0f) throw o.Fail("wander can't be less than nothing");
 
-            var npc = new MapNpc(o.Id, o.Required("name"), FeetOn(o), o.Facing("facing", Direction.Down), sheet, o.Text("say"),
-                wander * Tilemap.TileSize);
-            o.Done("name, sheet, facing, say, wander");
+            var npc = new MapNpc(o.Id, name, FeetOn(o), o.Facing("facing", Direction.Down), castId is null ? sheet : null, castId,
+                o.Text("say"), wander * Tilemap.TileSize, o.Presence());
+            o.Done("name, sheet, cast, facing, say, wander, when, unless");
 
             Point cell = Tilemap.CellOf(npc.Feet);
             if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
@@ -449,20 +494,37 @@ public static class MapLoader
     /// <remarks>Whether that map and that spawn exist gets checked once every map is read, in MapCatalog.</remarks>
     private static MapExit ReadExit(MapObjectLine o, BoundingRectangle area)
     {
-        var exit = new MapExit(o.Id, area, o.Required("to"), o.Text("at") ?? StartSpawn);
-        o.Done("w, h, to, at");
+        var exit = new MapExit(o.Id, area, o.Required("to"), o.Text("at") ?? StartSpawn, o.Presence());
+        o.Done("w, h, to, at, when, unless");
+        if (exit.ToMap == MapExit.Back && o.Text("at") is not null) throw o.Fail("an exit back out of a building goes back where you came in; it can't say at=");
         return exit;
     }
 
-    /// <summary>The rest of a trigger: once= (yes if it isn't set), say= a line to show, set= a flag to set. It has to do one of the two.</summary>
+    /// <summary>The ways into buildings: entrance id x y to= at= name=, where x y is the middle of the bottom of the door, in tiles. Walking into the door goes through it.</summary>
+    private static List<MapExit> ReadEntrances(List<MapObjectLine> objects)
+    {
+        var entrances = new List<MapExit>();
+
+        foreach (MapObjectLine o in Of(objects, "entrance"))
+        {
+            var door = new Vector2(o.X * Tilemap.TileSize, o.Y * Tilemap.TileSize);
+            var area = new BoundingRectangle(door.X - DoorwayWidth / 2f, door.Y - 1f, DoorwayWidth, DoorwayDepth);
+            entrances.Add(new MapExit(o.Id, area, o.Required("to"), o.Text("at") ?? StartSpawn, o.Presence(), o.Required("name")));
+            o.Done("to, at, name, when, unless");
+        }
+
+        return entrances;
+    }
+
+    /// <summary>The rest of a trigger: once= (yes if it isn't set), say= a line to show, set= a flag to set, talk= a conversation to start. It has to do at least one of them.</summary>
     private static MapTrigger ReadTrigger(MapObjectLine o, BoundingRectangle area)
     {
-        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"), o.Text("talk"));
-        o.Done("w, h, once, say, set, talk");
+        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"), o.Text("talk"), o.Presence());
+        o.Done("w, h, once, say, set, talk, when, unless");
 
         if (trigger.Say is null && trigger.SetFlag is null && trigger.Talk is null)
             throw o.Fail("this trigger doesn't do anything (it needs say=, set= or talk=)");
-        if (trigger.Talk is not null && Conversations.Get(trigger.Talk) is null)
+        if (trigger.Talk is not null && DialogueCatalog.Get(trigger.Talk) is null)
             throw o.Fail($"there's no conversation called {trigger.Talk}");
         return trigger;
     }
@@ -496,6 +558,7 @@ public static class MapLoader
                 Id = o.Id,
                 Foot = FeetOn(o),
                 Look = look,
+                Presence = o.Presence(),
                 Name = o.Text("name") ?? kind.ToString(),
                 Gold = kind == InteractableKind.Chest ? o.Count("gold", 0) : 0,
                 Locked = kind == InteractableKind.Door && o.YesNo("locked", false),
@@ -505,11 +568,11 @@ public static class MapLoader
 
             o.Done(kind switch
             {
-                InteractableKind.Chest => "look, name, gold",
-                InteractableKind.Door => "look, name, locked, flag",
-                InteractableKind.Lever => "look, name, flag",
-                InteractableKind.Sign => "look, name, text",
-                _ => "look, name",
+                InteractableKind.Chest => "look, name, gold, when, unless",
+                InteractableKind.Door => "look, name, locked, flag, when, unless",
+                InteractableKind.Lever => "look, name, flag, when, unless",
+                InteractableKind.Sign => "look, name, text, when, unless",
+                _ => "look, name, when, unless",
             });
 
             if (kind == InteractableKind.Lever && thing.Flag is null) throw o.Fail("a lever has to set flag, the flag it pulls");

@@ -35,6 +35,42 @@ public static class TilesetCatalog
         },
     };
 
+    /// <summary>The Gull's Wager's deck: its boards, the bulwark round it, the hatch, and the sea all round.</summary>
+    /// <remarks>Drawn by tools/generate_harbour.py in daylight colours; the deck's map is dark, and its lanterns light it.</remarks>
+    private static readonly TilesetDefinition Ship = new()
+    {
+        Id = "ship",
+        Texture = "Tiles/ship",
+        Tiles = new TileDefinition[]
+        {
+            new() { Name = "deck", Variants = 3 },
+            new() { Name = "bulwark", Variants = 2, Solid = true },
+            new() { Name = "hatch" },
+            new() { Name = "sea", Variants = 3, Edged = true, Solid = true },
+        },
+    };
+
+    /// <summary>Inside Questeria's buildings: wood and stone floors, the rug, and the walls.</summary>
+    /// <remarks>
+    /// Drawn by tools/generate_interiors.py. The back wall shows its face, two tiles of it (plaster
+    /// with a beam, over panelling), and the other walls only their tops, so a room's open towards
+    /// you. The rug has a border, drawn wherever it meets the floor.
+    /// </remarks>
+    private static readonly TilesetDefinition Interior = new()
+    {
+        Id = "interior",
+        Texture = "Tiles/interior",
+        Tiles = new TileDefinition[]
+        {
+            new() { Name = "floor-wood", Variants = 3 },
+            new() { Name = "floor-stone", Variants = 2 },
+            new() { Name = "rug", Edged = true },
+            new() { Name = "wall-top", Solid = true, Opaque = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
+        },
+    };
+
     /// <summary>The barrow: stone floors, walls seen from above and from the front, and what's lying about.</summary>
     private static readonly TilesetDefinition Crypt = new()
     {
@@ -109,7 +145,7 @@ public static class TilesetCatalog
     /// <remarks>Throws on purpose, so a broken tileset is found when the game starts and not on the map that uses it.</remarks>
     static TilesetCatalog()
     {
-        foreach (TilesetDefinition tileset in new[] { Questeria, Crypt, Forest })
+        foreach (TilesetDefinition tileset in new[] { Questeria, Ship, Interior, Crypt, Forest })
         {
             tileset.Validate();
             if (!ById.TryAdd(tileset.Id, tileset))

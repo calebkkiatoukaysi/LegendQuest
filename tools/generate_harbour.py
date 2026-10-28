@@ -1,6 +1,7 @@
 """
 Questeria's ground, and its harbour: every tile of the Questeria tileset, the ship you arrive on,
-its gangplank, and the rowing boat moored by the quay.
+its gangplank, and the rowing boat moored by the quay; and the deck of the Gull's Wager, the ship
+the Prologue's on, with its own tileset, its mast, its lanterns and its wheel.
 
     python tools/generate_harbour.py
 
@@ -545,6 +546,191 @@ def rowboat():
     return c.img
 
 
+# --------------------------------------------------------------------------- #
+# The Gull's Wager: the deck you sail in on, at night
+# --------------------------------------------------------------------------- #
+# Drawn in daylight colours like everything else; the map's dark and its lanterns make it night.
+# The deck's boards run the length of the ship, the bulwark round it is the top of the rail seen
+# from above, and the sea round the hull breaks white against it.
+
+DECK = ((92, 58, 50), (132, 88, 62), (168, 120, 80), (200, 156, 104), (228, 190, 134))
+RAIL = ((60, 36, 40), (98, 62, 50), (146, 100, 68), (190, 142, 92))
+IRON = ((40, 40, 52), (78, 80, 96), (130, 134, 150))
+
+
+def deck(variant):
+    """Boards running across the tile, four to a tile, their ends staggered, a nail at each end."""
+    img = tile()
+    for row in range(4):
+        y0 = row * 4
+        join = (3 + row * 7 + variant * 5) % T
+        for dy in range(4):
+            for x in range(T):
+                y = y0 + dy
+                if dy == 3:
+                    put(img, x, y, DECK[0])
+                elif x == join:
+                    put(img, x, y, DECK[1])
+                else:
+                    c = 3 if dy == 0 else 2
+                    if hash01(x // 4, y, 91 + variant) < 0.12:
+                        c = 1
+                    put(img, x, y, DECK[c])
+        put(img, join + 1, y0 + 1, DECK[0])
+    return img
+
+
+def bulwark(variant):
+    """The rail round the deck from above: a thick capping plank with the posts' tops showing on it."""
+    img = tile()
+    for y in range(T):
+        for x in range(T):
+            if y < 2 or y > 13:
+                c = 0
+            elif y < 4:
+                c = 3
+            elif y < 11:
+                c = 2 if (x + variant) % 8 else 1
+            else:
+                c = 1
+            put(img, x, y, RAIL[c])
+    for x in (3, 11):
+        put(img, x + variant % 2, 6, IRON[2])
+        put(img, x + variant % 2, 7, IRON[1])
+    return img
+
+
+def hatch():
+    """A grating over the hold: iron-banded slats with the dark below showing between them."""
+    img = tile()
+    for y in range(T):
+        for x in range(T):
+            edge = x in (0, 15) or y in (0, 15)
+            slat = (x % 4) != 3 and (y % 4) != 3
+            put(img, x, y, RAIL[2] if edge and (x + y) % 2 else RAIL[1] if edge else DECK[2] if slat else (20, 14, 22))
+    return img
+
+
+def night_sea(variant):
+    """Open sea: the same water as the harbour's, swells running across it."""
+    img = water(variant)
+    for x in range(T):
+        y = (x // 2 + variant * 5) % T
+        put(img, x, y, WATER[3])
+    return img
+
+
+SHIP_TILES = (
+    ("deck", [deck(v) for v in range(3)], None),
+    ("bulwark", [bulwark(v) for v in range(2)], None),
+    ("hatch", [hatch()], None),
+    ("sea", [night_sea(v) for v in range(3)], water_edges()),
+)
+
+
+def build_ship_tiles():
+    frames = []
+    for _, variants, edges in SHIP_TILES:
+        frames += variants
+        frames += edges or []
+    columns = 8
+    sheet = new_image(columns * T, (len(frames) + columns - 1) // columns * T)
+    for i, f in enumerate(frames):
+        for y in range(T):
+            for x in range(T):
+                if f[y][x][3]:
+                    sheet[(i // columns) * T + y][(i % columns) * T + x] = list(f[y][x])
+    write_png(os.path.join(OUT, "Tiles", "ship.png"), sheet)
+
+
+def mast():
+    """The mainmast from the deck: its foot in a collar of rope, the pole going up past the yard,
+    the sail full and pulling, and the crow's nest near the top, where the lookout shouts from."""
+    c = Canvas(96, 176)
+    foot = 170
+    c.box(45, 18, 50, foot, WOOD[2])
+    c.box(45, 18, 45, foot, WOOD[3])
+    c.box(50, 18, 50, foot, WOOD[1])
+    # The collar of rope round its foot.
+    for y in range(foot - 6, foot + 1):
+        for x in range(41, 55):
+            if (x - 48) ** 2 / 49 + (y - foot + 3) ** 2 / 9 <= 1.0:
+                c.put(x, y, (190, 160, 110) if (x + y) % 3 else (130, 104, 72))
+    # The yard and the sail, bellied out and lit on its left.
+    c.box(6, 60, 89, 62, WOOD[1])
+    top, bottom = 63, 132
+    for y in range(top, bottom + 1):
+        t = (y - top) / (bottom - top)
+        belly = int(5 * math.sin(t * math.pi))
+        x0, x1 = 8 - belly, 87 + belly
+        for x in range(x0, x1 + 1):
+            u = (x - x0) / max(1, x1 - x0)
+            shade = 2 if u < 0.55 else 1 if dither(x, y, (u - 0.55) * 2) else 2
+            if u < 0.1:
+                shade = 3
+            colour = SAILCLOTH[shade]
+            if 92 < y < 97:
+                colour = WOAD[1] if y > 94 else WOAD[2]
+            c.put(x, y, colour)
+    for dx, dy in ((0, 0), (0, -1), (0, 1), (-1, 0), (1, 0), (0, -2), (0, 2), (-2, 0), (2, 0)):
+        c.put(48 + dx, 112 + dy, GOLD[2] if dx == 0 or dy == 0 else GOLD[1])
+    # The crow's nest: a barrel on the mast, its rim lit.
+    for y in range(4, 18):
+        for x in range(36, 60):
+            c.put(x, y, WOOD[3] if y == 4 else WOOD[2] if x < 44 else WOOD[1] if y > 14 else WOOD[2])
+    c.box(36, 9, 59, 9, IRON[1])
+    # The rigging down to the rail on either side.
+    c.line(46, 20, 2, 150, WOOD[0])
+    c.line(49, 20, 93, 150, WOOD[0])
+    c.outline()
+    return c.img
+
+
+def lantern():
+    """A ship's lantern hung from a hook on a short post at the rail, its glass lit."""
+    c = Canvas(14, 40)
+    c.box(6, 6, 7, 39, WOOD[1])
+    c.box(6, 6, 6, 39, WOOD[2])
+    c.box(7, 6, 12, 7, WOOD[1])
+    c.box(10, 8, 10, 10, IRON[1])
+    c.box(8, 11, 12, 18, IRON[0])
+    c.box(9, 12, 11, 17, (255, 214, 120))
+    c.box(9, 12, 10, 14, (255, 246, 200))
+    c.box(8, 19, 12, 19, IRON[1])
+    c.outline()
+    return c.img
+
+
+def wheel():
+    """The ship's wheel on its post: a ring of spokes, lit along the top."""
+    c = Canvas(28, 34)
+    c.box(12, 18, 15, 33, WOOD[1])
+    c.box(12, 18, 12, 33, WOOD[2])
+    for y in range(28):
+        for x in range(28):
+            d = math.hypot(x - 13.5, y - 13.5)
+            angle = math.atan2(y - 13.5, x - 13.5)
+            spoke = d < 13.5 and min(abs(math.sin(angle * 4)), 1) < 0.18
+            if 9.5 < d < 12.0 or spoke or d < 2.5:
+                c.put(x, y, WOOD[3] if y < 12 else WOOD[2] if d < 12 else WOOD[1])
+    c.outline()
+    return c.img
+
+
+def rope_coil():
+    """A coil of rope on the deck, flat, in rings."""
+    c = Canvas(20, 12)
+    for y in range(12):
+        for x in range(20):
+            d = math.hypot((x - 9.5) / 9.5, (y - 5.5) / 5.5)
+            if d <= 1.0:
+                ring = int(d * 4)
+                c.put(x, y, (214, 186, 132) if ring % 2 == 0 else (150, 120, 84))
+    c.outline()
+    return c.img
+
+
+
 def side_by_side(frames):
     w, h = len(frames[0][0]), len(frames[0])
     sheet = new_image(w * len(frames), h)
@@ -560,4 +746,9 @@ if __name__ == "__main__":
     write_png(os.path.join(OUT, "Props", "ship.png"), side_by_side([ship(False), ship(True)]))
     write_png(os.path.join(OUT, "Props", "gangplank.png"), gangplank())
     write_png(os.path.join(OUT, "Props", "rowboat.png"), rowboat())
+    build_ship_tiles()
+    write_png(os.path.join(OUT, "Props", "mast.png"), mast())
+    write_png(os.path.join(OUT, "Props", "lantern-hanging.png"), lantern())
+    write_png(os.path.join(OUT, "Props", "ship-wheel.png"), wheel())
+    write_png(os.path.join(OUT, "Props", "rope-coil.png"), rope_coil())
     print("Done.")

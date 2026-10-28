@@ -17,6 +17,15 @@ public static class PropCatalog
     /// <summary>How far a sconce's torch light reaches. Four tiles, so a hall wants one every eight or so.</summary>
     private const float TorchReach = 64f;
 
+    /// <summary>How far a ship's lantern's light reaches: a little over two tiles, so the deck between them stays dark.</summary>
+    private const float LanternReach = 40f;
+
+    /// <summary>How far a hearth's light reaches: most of a tavern.</summary>
+    private const float HearthReach = 120f;
+
+    /// <summary>How far a candle stand's light reaches.</summary>
+    private const float CandleReach = 52f;
+
     /// <summary>How far a campfire's light reaches. Further than a torch, and it's out in the open.</summary>
     private const float FireReach = 88f;
 
@@ -104,6 +113,35 @@ public static class PropCatalog
         new() { Id = "signpost", Texture = "Props/signpost", Footprint = new Point(8, 4) },
         new() { Id = "ship", Texture = "Props/ship", Frames = 2, SortRise = 70 },
         new() { Id = "gangplank", Texture = "Props/gangplank", Placement = PropPlacement.Ground },
+        // The Gull's Wager's deck. The lanterns light it; their glass is 26 art pixels up their post.
+        new() { Id = "mast", Texture = "Props/mast", Footprint = new Point(14, 6) },
+        new()
+        {
+            Id = "lantern-hanging", Texture = "Props/lantern-hanging", Footprint = new Point(4, 3),
+            Light = new PropLight(new Vector2(3f, -24f), new Vector2(0f, 6f), LanternReach, 1f),
+        },
+        new() { Id = "ship-wheel", Texture = "Props/ship-wheel", Footprint = new Point(14, 6) },
+        new() { Id = "rope-coil", Texture = "Props/rope-coil", Placement = PropPlacement.Ground },
+        // Inside: the Gilded Flagon, the cottages, the shops and the warehouses. The hearth and the
+        // candle stands light the rooms, which are dim.
+        new() { Id = "bar-counter", Texture = "Props/bar-counter", Footprint = new Point(108, 14) },
+        new() { Id = "round-table", Texture = "Props/round-table", Footprint = new Point(30, 10) },
+        new() { Id = "stool", Texture = "Props/stool", Footprint = new Point(8, 4) },
+        new()
+        {
+            Id = "hearth", Texture = "Props/hearth", Footprint = new Point(48, 8),
+            Light = new PropLight(new Vector2(0f, -14f), new Vector2(0f, 14f), HearthReach, 1f),
+        },
+        new() { Id = "keg-stack", Texture = "Props/keg-stack", Footprint = new Point(36, 12) },
+        new() { Id = "bed", Texture = "Props/bed", Footprint = new Point(30, 34) },
+        new() { Id = "wardrobe", Texture = "Props/wardrobe", Footprint = new Point(26, 10) },
+        new() { Id = "bookshelf", Texture = "Props/bookshelf", Footprint = new Point(34, 10) },
+        new() { Id = "shop-counter", Texture = "Props/shop-counter", Footprint = new Point(60, 14) },
+        new()
+        {
+            Id = "candle-stand", Texture = "Props/candle-stand", Footprint = new Point(6, 4),
+            Light = new PropLight(new Vector2(0f, -36f), new Vector2(0f, 4f), CandleReach, 0.8f),
+        },
         new() { Id = "rowboat", Texture = "Props/rowboat", Placement = PropPlacement.Ground },
         // What Questeria's sign and waypoint look like: the notice board, and the crystal on its
         // plinth, dim and then lit.

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +11,7 @@ using LegendQuest.Collisions;
 using LegendQuest.Components;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
+using LegendQuest.Story;
 using LegendQuest.World;
 
 namespace LegendQuest.Screens;
@@ -75,8 +77,10 @@ public partial class ExploreScreen : GameScreen
     private readonly NavGrid _nav;
     private readonly LightMap _lightMap;
     private readonly List<PropSprite> _props = new();
+    private readonly List<PropSprite> _everyProp = new();
     private readonly List<TorchSprite> _torches = new();
     private readonly List<Npc> _npcs = new();
+    private readonly List<Npc> _everyNpc = new();
     private readonly Camera2D _camera = new(new Point(LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight));
     private readonly Paperdoll _paperdoll = new();
     private readonly Random _random = new();
@@ -107,7 +111,7 @@ public partial class ExploreScreen : GameScreen
         var lights = new List<(Vector2 Pool, float Reach, float Strength)>();
         foreach (MapProp placed in _map.Props)
         {
-            _props.Add(new PropSprite(placed));
+            _everyProp.Add(new PropSprite(placed));
             if (placed.Prop.Light is not { } light) continue;
 
             _torches.Add(new TorchSprite(placed.Foot + light.Flame, 1f));
@@ -116,9 +120,10 @@ public partial class ExploreScreen : GameScreen
         foreach (MapLight light in _map.Lights) lights.Add((light.Pool, light.Reach, light.Strength));
 
         foreach (MapInteractable thing in _map.Interactables)
-            _things.Add((thing, new PropSprite(new MapProp(thing.Look, thing.Foot))));
-        foreach (MapNpc npc in _map.Npcs) _npcs.Add(new Npc(npc));
+            _everyThing.Add((thing, new PropSprite(new MapProp(thing.Look, thing.Foot, thing.Presence))));
+        foreach (MapNpc npc in _map.Npcs) _everyNpc.Add(new Npc(npc));
         foreach (PartyMember _ in game.Party) _walkers.Add(new WalkerSprite());
+        RefreshPresence();
 
         if (_map.Dark) _lightMap = new LightMap(_tilemap, _map.Ambient, lights);
     }
@@ -131,8 +136,8 @@ public partial class ExploreScreen : GameScreen
         _cursor = ScreenManager.Game.Services.GetService<CursorSprite>();
 
         _tilemap.LoadContent(_content);
-        foreach (PropSprite prop in _props) prop.LoadContent(_content);
-        foreach ((_, PropSprite sprite) in _things) sprite.LoadContent(_content);
+        foreach (PropSprite prop in _everyProp) prop.LoadContent(_content);
+        foreach ((_, PropSprite sprite) in _everyThing) sprite.LoadContent(_content);
         foreach (TorchSprite torch in _torches) torch.LoadContent(_content);
         _detailFont = _content.Load<SpriteFont>("spectral-detail");
         _glow = _content.Load<Texture2D>("glow");
@@ -141,24 +146,19 @@ public partial class ExploreScreen : GameScreen
         _tooltip.LoadContent(_content);
         _strip.LoadContent(_content, ScreenManager.GraphicsDevice);
 
-        // The townsfolk come dressed. The party are baked off the paperdoll, each to how they look.
-        foreach (Npc npc in _npcs)
+        // The townsfolk come dressed. The party and the story's cast are baked off the paperdoll, each
+        // to how they look, unless one of the cast is drawn from a townsfolk sheet.
+        _paperdoll.LoadContent(_content);
+        foreach (Npc npc in _everyNpc)
         {
             npc.Walker.LoadContent(_content);
-            npc.Walker.Sheet = _content.Load<Texture2D>(Townsfolk.Texture(npc.Definition.Sheet));
+            npc.Walker.Sheet = NpcSheet(npc.Definition);
         }
-        _paperdoll.LoadContent(_content);
-        for (int i = 0; i < _walkers.Count; i++)
-        {
-            WalkerSprite walker = _walkers[i];
-            walker.LoadContent(_content);
-            walker.Sheet = SheetFor(_game.Party[i].Look);
-            walker.Stepped += () => Footstep(walker);
-        }
+        for (int i = 0; i < _walkers.Count; i++) DressWalker(_walkers[i], _game.Party[i]);
 
         // Every door starts shut, then the ones the save says are open open. The dark gets built
         // after that, since a shut door stops the light.
-        foreach ((MapInteractable thing, PropSprite sprite) in _things)
+        foreach ((MapInteractable thing, PropSprite sprite) in _everyThing)
             if (thing.Kind == InteractableKind.Door) _tilemap.Shut(CellsUnder(sprite), true);
         MatchSave();
         BuildNav();
@@ -167,7 +167,7 @@ public partial class ExploreScreen : GameScreen
         Arrive();
         _camera.Bounds = _tilemap.Bounds;
         _camera.SnapTo(Leader.Position);
-        _cardFont = _content.Load<SpriteFont>("spectral-title");
+        _cardFont = _content.Load<SpriteFont>("spectral-ui");
         BeginArrival();
 
         _audio.PlaySong(_map.Music);
@@ -245,6 +245,7 @@ public partial class ExploreScreen : GameScreen
         foreach (TorchSprite torch in _torches) torch.Update(gameTime);
         _toast.Update(gameTime);
         if (UpdateArrival(gameTime)) return;
+        if (PlayScenes()) return;
 
         MoveFollowers(gameTime);
         foreach (WalkerSprite walker in _walkers) walker.Update(gameTime);
@@ -332,6 +333,43 @@ public partial class ExploreScreen : GameScreen
         var area = new Rectangle((int)left, (int)(HeadingY - HeadingSpread.Y), (int)size.X, (int)(size.Y + HeadingSpread.Y * 2f));
         Text.DrawBacking(spriteBatch, _glow, area, (int)HeadingSpread.X, HeadingBacking * alpha);
         Text.Draw(spriteBatch, _detailFont, text, x, HeadingY, Palette.Bone * alpha, Palette.Shadow * alpha, rightAligned: rightAligned);
+    }
+
+    /// <summary>Gets a party member's walker ready to walk: its shadow, their baked sheet, and their footsteps.</summary>
+    private void DressWalker(WalkerSprite walker, PartyMember member)
+    {
+        walker.LoadContent(_content);
+        walker.Sheet = SheetFor(member.Look);
+        walker.Stepped += () => Footstep(walker);
+    }
+
+    /// <summary>Someone on the map's sheet: their townsfolk sheet, or their cast member's, baked if they're a look.</summary>
+    private Texture2D NpcSheet(MapNpc npc)
+    {
+        if (npc.Cast is null) return _content.Load<Texture2D>(Townsfolk.Texture(npc.Sheet));
+
+        CastMember cast = Cast.Get(npc.Cast);
+        return cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : SheetFor(cast.Look);
+    }
+
+    /// <summary>Works out who and what's on the map with the flags as they are now. Builds the paths again if anything came or went.</summary>
+    /// <returns>True if anything changed.</returns>
+    private bool RefreshPresence()
+    {
+        List<PropSprite> props = _everyProp.FindAll(prop => prop.Presence.Holds(_game.Flags));
+        List<Npc> npcs = _everyNpc.FindAll(npc => npc.Definition.Presence.Holds(_game.Flags));
+        var things = _everyThing.FindAll(each => each.Thing.Presence.Holds(_game.Flags));
+        bool changed = !props.SequenceEqual(_props) || !npcs.SequenceEqual(_npcs) || !things.SequenceEqual(_things);
+
+        _props.Clear();
+        _props.AddRange(props);
+        _npcs.Clear();
+        _npcs.AddRange(npcs);
+        _things.Clear();
+        _things.AddRange(things);
+
+        if (changed && _content is not null) BuildNav();
+        return changed;
     }
 
     /// <summary>The sheet for a look, baked the first time it's asked for and kept after that.</summary>

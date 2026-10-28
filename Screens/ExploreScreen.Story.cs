@@ -6,28 +6,34 @@ using Microsoft.Xna.Framework.Input;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
 using LegendQuest.Dialogue;
+using LegendQuest.Dialogue.Scripts;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
+using LegendQuest.Story;
 using LegendQuest.World;
 
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The story on a map: conversations, what you're to do next in the corner of the screen, the
-/// townsfolk strolling about, and the arrival, the scene a new game opens on.
+/// The story on a map: conversations, the scenes that play by themselves, what you're to do next in
+/// the corner of the screen, the townsfolk strolling about, and the ship coming in.
 /// </summary>
 /// <remarks>
-/// The arrival plays on the harbour the first time you're there: the ship sails in with you and
-/// Valen on its deck, ties up, the gangplank goes down, you both walk off onto the boardwalk, he
-/// talks, and a card says your new life's beginning. It's steps on a clock, not a general cutscene
-/// system; that can come when there's a second one to make it worth it. Nothing you press moves you
-/// while it plays, but Escape skips it.
+/// The ship comes into the harbour once the Prologue's over: it sails in with you and the Soul-Bound
+/// on its deck, ties up, the gangplank goes down, you both walk off onto the boardwalk, and Act 1's
+/// card comes up. Then the harbour's own scene takes over (the Red Gulls). It's steps on a clock,
+/// not a general cutscene system; the scenes are data, in the map files. Nothing you press moves you
+/// while the ship's coming in, but Escape skips it.
 /// </remarks>
 public partial class ExploreScreen
 {
     private const string SkipHint = "ESC  ·  SKIP";
-    private const string Card = "A NEW LIFE BEGINS";
+    private const string ActCard = "ACT 1  ·  THE HUNGER AT THE HEART";
+    private const string ChapterCard = "Chapter 1  ·  Saltwind Welcome";
     private const string ControlsLine = "WASD or click to walk  ·  E to talk  ·  M for the map";
+
+    /// <summary>The flag the ship coming in sets once you're off it.</summary>
+    public const string Arrived = "arrived";
 
     /// <summary>Where what you're to do next goes, under the map's name.</summary>
     private const float ObjectiveY = 50f;
@@ -36,15 +42,15 @@ public partial class ExploreScreen
     private const float SailFrom = 560f;
     private const float SailSeconds = 7.5f;
 
-    /// <summary>When, after it's in, the sail comes in and then the gangplank goes down, and when Valen sets off down it.</summary>
+    /// <summary>When, after it's in, the sail comes in and then the gangplank goes down, and when the Soul-Bound sets off down it.</summary>
     private const float FurlAt = 0.3f;
     private const float PlankAt = 0.9f;
     private const float OffAt = 1.6f;
 
-    /// <summary>How far behind Valen you set off, how fast you both walk off (art pixels a second), and how long the card's up.</summary>
+    /// <summary>How far behind the Soul-Bound you set off, how fast you both walk off (art pixels a second), and how long the act's card is up.</summary>
     private const float FollowGap = 0.7f;
     private const float DisembarkSpeed = 34f;
-    private const float CardSeconds = 3.6f;
+    private const float CardSeconds = 4.2f;
 
     /// <summary>How much the ship rocks up and down, in art pixels, and how fast.</summary>
     private const float Bob = 1.2f;
@@ -54,16 +60,20 @@ public partial class ExploreScreen
     private const int BarHeight = 70;
     private const float BarSeconds = 0.8f;
 
-    /// <summary>Where you and Valen stand on the deck, from the ship's foot, and the way off: the foot of the gangplank, its top, and where each of you ends up on the boardwalk.</summary>
+    /// <summary>The smudge behind the act's card, and how far it spreads.</summary>
+    private static readonly Color CardBacking = Color.Black * 0.55f;
+    private static readonly Vector2 CardSpread = new(90f, 20f);
+
+    /// <summary>Where you and the Soul-Bound stand on the deck, from the ship's foot, and the way off: the foot of the gangplank, its top, and where each of you ends up on the boardwalk.</summary>
     private static readonly Vector2 YouOnDeck = new(-22f, -56f);
-    private static readonly Vector2 ValenOnDeck = new(-58f, -60f);
-    private static readonly Vector2[] ValenOff = { new(-40f, -62f), new(-40f, -102f), new(-56f, -112f) };
+    private static readonly Vector2 SoulBoundOnDeck = new(-58f, -60f);
+    private static readonly Vector2[] SoulBoundOff = { new(-40f, -62f), new(-40f, -102f), new(-56f, -112f) };
     private static readonly Vector2[] YouOff = { new(-40f, -62f), new(-40f, -100f), new(-22f, -110f) };
 
     private readonly InputAction _skip = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
 
     /// <summary>Which part of the arrival is playing, or None when it isn't.</summary>
-    private enum Arriving { None, Sailing, Docked, Disembarking, Talking, Card }
+    private enum Arriving { None, Sailing, Docked, Disembarking, Card }
 
     private Arriving _arriving;
     private float _arrivalClock;
@@ -71,16 +81,17 @@ public partial class ExploreScreen
     private PropSprite _ship;
     private PropSprite _gangplank;
     private SpriteFont _cardFont;
+    private bool _talking;
 
     /// <summary>Who's walking off the ship and the way they're going, a point at a time.</summary>
     private readonly List<(WalkerSprite Walker, Queue<Vector2> Way, float Wait)> _disembarking = new();
 
-    /// <summary>Starts the arrival if this is the harbour and you've not arrived yet: the ship out at sea with you both on it.</summary>
+    /// <summary>Starts the ship coming in if this is the harbour, the Prologue's over, and you've not landed yet.</summary>
     private void BeginArrival()
     {
-        if (_game.Flags.Contains(Conversations.Arrived) || _map.Id != MapCatalog.Opening) return;
+        if (_map.Id != "docks" || !_game.Flags.Contains(Prologue.Done) || _game.Flags.Contains(Arrived)) return;
 
-        foreach (PropSprite prop in _props)
+        foreach (PropSprite prop in _everyProp)
         {
             if (prop.Definition.Id == "ship") _ship = prop;
             if (prop.Definition.Id == "gangplank") _gangplank = prop;
@@ -96,7 +107,7 @@ public partial class ExploreScreen
         _camera.SnapTo(ShipView());
     }
 
-    /// <summary>Esc skips the arrival. Nothing else does anything while it plays.</summary>
+    /// <summary>Esc skips the ship coming in. Nothing else does anything while it plays.</summary>
     /// <returns>True if it's playing, so nothing else should look at the input.</returns>
     private bool HandleArrivalInput(InputState input)
     {
@@ -106,7 +117,7 @@ public partial class ExploreScreen
         return true;
     }
 
-    /// <summary>Runs the arrival a frame on.</summary>
+    /// <summary>Runs the ship coming in a frame on.</summary>
     /// <returns>True if it's playing, so the party and the camera are its to move.</returns>
     private bool UpdateArrival(GameTime gameTime)
     {
@@ -150,10 +161,9 @@ public partial class ExploreScreen
                 _ship.Offset = Vector2.Zero;
                 if (Disembark(gameTime))
                 {
-                    Next(Arriving.Talking);
                     _walkers[1].Face(_walkers[0].Position);
                     _walkers[0].Face(_walkers[1].Position);
-                    Converse(Conversations.Get(Conversations.ArrivalId), () => Next(Arriving.Card));
+                    Next(Arriving.Card);
                 }
                 break;
 
@@ -178,22 +188,22 @@ public partial class ExploreScreen
     /// <summary>The middle of the ship's deck, which the camera keeps on while it sails in.</summary>
     private Vector2 ShipView() => _ship.Foot + _ship.Offset + new Vector2(-30f, -70f);
 
-    /// <summary>Stands you and Valen on the deck, wherever the ship's got to.</summary>
+    /// <summary>Stands you and the Soul-Bound on the deck, wherever the ship's got to.</summary>
     private void PlaceOnDeck()
     {
         Vector2 deck = _ship.Foot + _ship.Offset;
         _walkers[0].Position = deck + YouOnDeck;
-        _walkers[1].Position = deck + ValenOnDeck;
+        _walkers[1].Position = deck + SoulBoundOnDeck;
         _walkers[0].Facing = Direction.Up;
         _walkers[1].Facing = Direction.Left;
     }
 
-    /// <summary>Sets Valen off down the gangplank, and you after him.</summary>
+    /// <summary>Sets the Soul-Bound off down the gangplank, and you after them.</summary>
     private void StartDisembarking()
     {
         Next(Arriving.Disembarking);
         _disembarking.Clear();
-        _disembarking.Add((_walkers[1], Way(ValenOff), 0f));
+        _disembarking.Add((_walkers[1], Way(SoulBoundOff), 0f));
         _disembarking.Add((_walkers[0], Way(YouOff), FollowGap));
     }
 
@@ -237,28 +247,28 @@ public partial class ExploreScreen
         return done;
     }
 
-    /// <summary>Ends the arrival, whether it played out or got skipped: the ship tied up, you both on the boardwalk, and you in charge.</summary>
+    /// <summary>Ends the ship coming in, whether it played out or got skipped: tied up, you both on the boardwalk, and the harbour's scene next.</summary>
     private void EndArrival()
     {
         _ship.Offset = Vector2.Zero;
         _ship.Frame = 1;
         _gangplank.Hidden = false;
-        _walkers[1].Position = _ship.Foot + ValenOff[^1];
+        _walkers[1].Position = _ship.Foot + SoulBoundOff[^1];
         _walkers[0].Position = _ship.Foot + YouOff[^1];
         foreach (WalkerSprite walker in _walkers) walker.IsWalking = false;
         _walkers[0].Facing = Direction.Up;
         _walkers[1].Facing = Direction.Up;
         _arriving = Arriving.None;
 
-        _game.Flags.Add(Conversations.Arrived);
-        _game.Objective = Conversations.FirstObjective;
+        _game.Flags.Add(Arrived);
         SelectLeader(0);
         SeedTrail();
+        RefreshPresence();
         _toast.Show(ControlsLine);
         if (!Autosave()) _toast.Show(AutosaveFailedLine);
     }
 
-    /// <summary>Writes the autosave with everyone where they're stood, so a game quit on the boardwalk doesn't sail in again.</summary>
+    /// <summary>Writes the autosave with everyone where they're stood.</summary>
     private bool Autosave()
     {
         Leader.IsWalking = false;
@@ -270,49 +280,82 @@ public partial class ExploreScreen
         return SaveSystem.Write(SaveSystem.AutoSlot, _game);
     }
 
-    /// <summary>Starts a conversation over the map. Once it's read, its flags, task and gold are handed out, then whatever's to happen next does.</summary>
-    /// <param name="conversation">What gets said.</param>
-    /// <param name="then">What happens after, or null.</param>
-    private void Converse(Conversation conversation, Action then)
+    /// <summary>Plays the first of the map's scenes that can play and hasn't, if nothing else is going on.</summary>
+    /// <returns>True if one started.</returns>
+    private bool PlayScenes()
     {
-        if (conversation is null) return;
+        if (_talking) return false;
+
+        foreach (MapScene scene in _map.Scenes)
+        {
+            string key = _map.Id + "/" + scene.Id;
+            if (_game.Triggered.Contains(key) || !scene.Presence.Holds(_game.Flags)) continue;
+
+            _game.Triggered.Add(key);
+            Converse(DialogueCatalog.Get(scene.Talk), null);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>Starts a conversation over the map. When it's over, whatever's to happen next does, and if it sends the party somewhere, it goes.</summary>
+    /// <param name="script">What gets said.</param>
+    /// <param name="then">What happens after, or null.</param>
+    private void Converse(DialogueScript script, Action then)
+    {
+        if (script is null || _talking) return;
 
         Halt();
-        var talk = new DialogueScreen(conversation, Speaker, _game.Party[0].Name);
-        talk.Finished += () =>
+        _talking = true;
+        var talk = new DialogueScreen(script, _game, Speaker, _random);
+        talk.Happened += OnDialogue;
+        talk.Finished += travel =>
         {
-            Settle(conversation);
+            _talking = false;
             then?.Invoke();
+            if (travel is null) return;
+
+            string[] where = travel.Split(' ');
+            MapDefinition to = MapCatalog.Get(where[0]);
+            MapSpawn spawn = to.Spawns[where[1]];
+            Leave(to, spawn.Feet, spawn.Facing);
         };
         ScreenManager.AddScreen(talk);
     }
 
-    /// <summary>Hands out what a conversation gives once it's over.</summary>
-    private void Settle(Conversation conversation)
+    /// <summary>Catches the map up with something a conversation did: people coming and going with the flags, and someone joining the party.</summary>
+    private void OnDialogue(DialogueEvent happened)
     {
-        foreach (string flag in conversation.Sets) _game.Flags.Add(flag);
-
-        if (conversation.Gold > 0)
+        switch (happened.Kind)
         {
-            _game.Gold += conversation.Gold;
-            _audio.Play(Sfx.Pickup);
-            _toast.Show(conversation.Gold + " gold");
-        }
+            case DialogueEventKind.Flag:
+                RefreshPresence();
+                break;
 
-        if (conversation.Objective is not null && conversation.Objective != _game.Objective)
-        {
-            _game.Objective = conversation.Objective;
-            _audio.Play(Sfx.Waypoint);
+            case DialogueEventKind.Recruited when happened.Amount == 1:
+                var walker = new WalkerSprite { Position = Leader.Position, Facing = Leader.Facing };
+                DressWalker(walker, _game.Member(happened.Id));
+                _walkers.Add(walker);
+                GatherBehind(new List<WalkerSprite> { walker });
+                SeedTrail();
+                break;
         }
     }
 
     /// <summary>Who a speaker id in a conversation is: their name and the sheet their face comes off.</summary>
+    /// <remarks>The party first, then whoever's on the map, then the story's cast wherever they are.</remarks>
     private (string Name, Texture2D Sheet) Speaker(string id)
     {
         for (int i = 0; i < _game.Party.Count; i++)
             if (_game.Party[i].Id == id) return (_game.Party[i].Name, _walkers[i].Sheet);
-        foreach (Npc npc in _npcs)
-            if (npc.Definition.Id == id) return (npc.Definition.Name, npc.Walker.Sheet);
+        foreach (Npc npc in _everyNpc)
+            if (npc.Definition.Id == id || npc.Definition.Cast == id) return (npc.Definition.Name, npc.Walker.Sheet);
+        if (Cast.Get(id) is CastMember cast)
+        {
+            Texture2D sheet = cast.Look is not null ? SheetFor(cast.Look)
+                : cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : null;
+            return (cast.Name, sheet);
+        }
         return (id, null);
     }
 
@@ -362,7 +405,7 @@ public partial class ExploreScreen
         return false;
     }
 
-    /// <summary>The black bars, the skip hint and the card while the arrival plays.</summary>
+    /// <summary>The black bars, the skip hint and the act's card while the ship comes in.</summary>
     private void DrawArrival(SpriteBatch spriteBatch, float alpha)
     {
         if (_bars <= 0f) return;
@@ -377,13 +420,16 @@ public partial class ExploreScreen
             Text.Draw(spriteBatch, _detailFont, SkipHint, LegendQuestGame.ScreenWidth - Margin, LegendQuestGame.ScreenHeight - height / 2f - _detailFont.LineSpacing / 2f,
                 Palette.Note * alpha, Palette.Shadow * alpha, rightAligned: true);
 
-        if (_arriving == Arriving.Card)
-        {
-            float t = _arrivalClock / CardSeconds;
-            float shown = MathHelper.Clamp(MathF.Min(t * 4f, (1f - t) * 3f), 0f, 1f) * alpha;
-            float y = (LegendQuestGame.ScreenHeight - _cardFont.LineSpacing) / 2f - 40f;
-            Text.DrawCentered(spriteBatch, _cardFont, Card, y, Palette.Bone * shown, Palette.Shadow * shown);
-        }
+        if (_arriving != Arriving.Card) return;
+
+        float t = _arrivalClock / CardSeconds;
+        float shown = MathHelper.Clamp(MathF.Min(t * 4f, (1f - t) * 3f), 0f, 1f) * alpha;
+        float y = LegendQuestGame.ScreenHeight / 2f - 80f;
+        Vector2 act = _detailFont.MeasureString(ChapterCard);
+        var area = new Rectangle((int)((LegendQuestGame.ScreenWidth - act.X * 2f) / 2f), (int)y, (int)(act.X * 2f), 140);
+        Text.DrawBacking(spriteBatch, _glow, area, (int)CardSpread.X, CardBacking * shown);
+        Text.DrawCentered(spriteBatch, _detailFont, ActCard, y, Palette.Gold * shown, Palette.Shadow * shown);
+        Text.DrawCentered(spriteBatch, _cardFont, ChapterCard, y + _detailFont.LineSpacing + 10f, Palette.Bone * shown, Palette.Shadow * shown);
     }
 
     /// <summary>What you're to do next, under the map's name, on its smudge.</summary>

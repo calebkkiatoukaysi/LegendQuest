@@ -1,0 +1,52 @@
+; One of the warehouses on the docks: stone floor, crates and barrels stacked along the walls,
+; sacks, and a hand moving them about.
+
+[map]
+id = warehouse
+name = A Warehouse
+tileset = interior
+size = 18 12
+dark = yes
+ambient = 0.6
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+##################
+#||||||||||||||||#
+#________________#
+#ssssssssssssssss#
+#ssssssssssssssss#
+#ssssssssssssssss#
+#ssssssssssssssss#
+#ssssssssssssssss#
+#ssssssssssssssss#
+#ssssssssssssssss#
+#ssssssssssssssss#
+########ss########
+
+[objects]
+spawn start 8.5 10 facing=up
+exit door 8 11 w=2 to=back
+
+prop cargo-crate 2.6 4
+prop cargo-crate 3.8 4.2
+prop cargo-crate 2.6 5.2
+prop cargo-barrel 6 4
+prop cargo-barrel 7 4.2
+prop sacks 11 4.4
+prop cargo-crate 14.6 4
+prop cargo-crate 15.4 5
+prop cargo-barrel 15.4 8.4
+prop sacks 3.4 9.4
+prop cargo-crate 14.4 10.2
+prop candle-stand 9 4.2
+npc warehand 9 7.5 name="A Warehand" sheet=porter facing=down wander=3 say="Mind your feet. Half this is glass."

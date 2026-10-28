@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 namespace LegendQuest.Characters;
 
 /// <summary>
-/// How someone looks: their skin, face, eyes, hair and beard, and the colours of what they're
-/// wearing. Every one is a number into one of LookOptions' lists.
+/// How someone looks: their people, skin, face, eyes, hair and beard, their hat, and the colours of
+/// what they're wearing. Every one but the people is a number into one of LookOptions' lists.
 /// </summary>
 /// <remarks>
 /// Saved as numbers, not colours, the same as The Black Box's PlayerLook, so I can tweak a preset
@@ -13,6 +13,12 @@ namespace LegendQuest.Characters;
 /// </remarks>
 public class CharacterLook
 {
+    /// <summary>Who their people are.</summary>
+    public Ancestry Ancestry { get; set; }
+
+    /// <summary>Which line of their people: an Emberkin's horns, or a Wildkin's beast. Ignored for the rest.</summary>
+    public int Lineage { get; set; }
+
     /// <summary>Which skin.</summary>
     public int Skin { get; set; }
 
@@ -30,6 +36,9 @@ public class CharacterLook
 
     /// <summary>Which beard, the first being none.</summary>
     public int Beard { get; set; }
+
+    /// <summary>Which hat, the first being none.</summary>
+    public int Hat { get; set; }
 
     /// <summary>Which shirt dye.</summary>
     public int Shirt { get; set; }
@@ -51,5 +60,5 @@ public class CharacterLook
 
     /// <summary>Every number together, for keeping one baked sheet per look. Not saved; it's everything above.</summary>
     [JsonIgnore]
-    public string Key => string.Join(",", Skin, Face, Eyes, Hair, HairColour, Beard, Shirt, Vest, Legs, LegsColour, Cloak);
+    public string Key => string.Join(",", Ancestry, Lineage, Skin, Face, Eyes, Hair, HairColour, Beard, Hat, Shirt, Vest, Legs, LegsColour, Cloak);
 }

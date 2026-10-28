@@ -14,5 +14,6 @@ namespace LegendQuest.World;
 /// <param name="Once">True if it only ever goes off once; false if it goes off every time you walk in.</param>
 /// <param name="Say">A line to show, or null.</param>
 /// <param name="SetFlag">A flag to set, or null.</param>
-/// <param name="Talk">A conversation to start, by its id in Conversations, or null.</param>
-public sealed record MapTrigger(string Id, BoundingRectangle Area, bool Once, string Say, string SetFlag, string Talk);
+/// <param name="Talk">A conversation to start, by its id in DialogueCatalog, or null.</param>
+/// <param name="Presence">When it's there.</param>
+public sealed record MapTrigger(string Id, BoundingRectangle Area, bool Once, string Say, string SetFlag, string Talk, MapPresence Presence);

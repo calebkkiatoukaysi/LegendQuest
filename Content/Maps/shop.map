@@ -1,0 +1,46 @@
+; A chandler's: the counter across the middle with the shopkeeper behind it, shelves along the
+; back wall, and stock about the floor.
+
+[map]
+id = shop
+name = The Chandler's
+tileset = interior
+size = 16 10
+dark = yes
+ambient = 0.7
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+################
+#||||||||||||||#
+#______________#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#######ss#######
+
+[objects]
+spawn start 7.5 8 facing=up
+exit door 7 9 w=2 to=back
+
+prop shop-counter 8 6
+prop bookshelf 4 3.4
+prop bookshelf 12 3.4
+prop cargo-crate 2.6 7.6
+prop cargo-crate 2.6 8.4
+prop cargo-barrel 13.4 7.8
+prop sacks 12.4 8.4
+prop candle-stand 1.6 4.4
+npc shopkeeper 8 4.4 name="The Chandler" sheet=trader facing=down say="Rope, wax, lamp oil. Everything a ship needs but the sea."

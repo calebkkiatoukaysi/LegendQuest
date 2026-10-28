@@ -39,6 +39,9 @@ public partial class ExploreScreen
     /// <summary>What comes up on the next map if the autosave on the way there couldn't be written.</summary>
     private const string AutosaveFailedLine = "The autosave couldn't be written";
 
+    /// <summary>How far back out of a doorway, in art pixels, you're put when you come back out of the building.</summary>
+    private const float BackStep = 10f;
+
     private readonly InputAction _use = new(new[] { Buttons.A }, new[] { Keys.E, Keys.Space, Keys.Enter }, true);
     private readonly InputAction _openMap = new(new[] { Buttons.Y }, new[] { Keys.M }, true);
 
@@ -48,6 +51,7 @@ public partial class ExploreScreen
 
     /// <summary>Everything on the map you can use, with the picture drawn for it.</summary>
     private readonly List<(MapInteractable Thing, PropSprite Sprite)> _things = new();
+    private readonly List<(MapInteractable Thing, PropSprite Sprite)> _everyThing = new();
 
     /// <summary>The exits and triggers your feet are in, by id, so each one only goes off as you walk into it.</summary>
     private readonly HashSet<string> _inside = new();
@@ -72,7 +76,7 @@ public partial class ExploreScreen
 
         foreach (MapTrigger trigger in _map.Triggers)
         {
-            if (!Entered(trigger.Id, trigger.Area, feet)) continue;
+            if (!trigger.Presence.Holds(_game.Flags) || !Entered(trigger.Id, trigger.Area, feet)) continue;
 
             if (_world.Enter(trigger) is WorldEvent said) Cue(said);
             Refresh();
@@ -80,13 +84,38 @@ public partial class ExploreScreen
 
         foreach (MapExit exit in _map.Exits)
         {
-            if (!Entered(exit.Id, exit.Area, feet)) continue;
+            if (!exit.Presence.Holds(_game.Flags) || !Entered(exit.Id, exit.Area, feet)) continue;
+
+            if (exit.ToMap == MapExit.Back)
+            {
+                GoBack();
+                return;
+            }
+
+            // Somewhere to come back to, a step back out of the doorway, the way you came.
+            _game.BackMap = _map.Id;
+            _game.BackX = Leader.Position.X - Ahead(Leader.Facing).X * BackStep;
+            _game.BackY = Leader.Position.Y - Ahead(Leader.Facing).Y * BackStep;
 
             MapDefinition to = MapCatalog.Get(exit.ToMap);
             MapSpawn spawn = to.Spawns[exit.ToSpawn];
             Leave(to, spawn.Feet, spawn.Facing);
             return;
         }
+    }
+
+    /// <summary>Out of a building, back where you came in, facing away from its door. If the save doesn't know where that was (an old one), it's Questeria's start.</summary>
+    private void GoBack()
+    {
+        if (_game.BackMap is string back && MapCatalog.Contains(back))
+        {
+            Leave(MapCatalog.Get(back), new Vector2(_game.BackX, _game.BackY), Direction.Down);
+            return;
+        }
+
+        MapDefinition city = MapCatalog.Get("questeria");
+        MapSpawn start = city.Spawns[MapLoader.StartSpawn];
+        Leave(city, start.Feet, start.Facing);
     }
 
     /// <summary>Whether the feet have just walked into an area: they're in it now, and weren't last frame.</summary>
@@ -153,9 +182,9 @@ public partial class ExploreScreen
     {
         Leader.Face(npc.Walker.Position);
 
-        Conversation conversation = Conversations.For(npc.Definition.Id, _game.Flags);
-        npc.TalkTo(Leader.Position, conversation is null);
-        if (conversation is not null) Converse(conversation, null);
+        DialogueScript script = DialogueCatalog.For(npc.Definition.Id, _game.Flags);
+        npc.TalkTo(Leader.Position, script is null);
+        if (script is not null) Converse(script, null);
     }
 
     /// <summary>Uses something: turns you to it, cues what happened, and opens the map to travel if it was a waypoint.</summary>
@@ -193,7 +222,7 @@ public partial class ExploreScreen
 
         if (happened.Kind == WorldEventKind.TriggerTalked)
         {
-            Converse(Conversations.Get(happened.Text), null);
+            Converse(DialogueCatalog.Get(happened.Text), null);
             return;
         }
 

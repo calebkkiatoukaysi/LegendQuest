@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using LegendQuest.Dialogue;
+using LegendQuest.Dialogue.Scripts;
 using LegendQuest.StateManagement;
 using LegendQuest.World;
 
@@ -21,20 +24,31 @@ public partial class ExploreScreen
     private const int Settled = 50;
 
     /// <summary>The last frame of each visit's schedule. Most of them end walking into an exit or travelling, and the next stage picks up on the next map.</summary>
-    internal const int DocksProofEnd = ProofArrivalRead + ProofReadFrames + 302;
-    internal const int QuesteriaProofEnd = Settled + 1466;
+    internal const int VoyageProofEnd = Settled + 4000;
+    internal const int DocksProofEnd = Settled + 4000;
+    internal const int QuesteriaProofEnd = Settled + 1600;
+    internal const int FlagonProofEnd = Settled + 400;
+    internal const int QuesteriaOutProofEnd = Settled + 300;
     internal const int RoadProofEnd = Settled + 267;
     internal const int QuesteriaAgainProofEnd = Settled + 26;
     internal const int RoadAgainProofEnd = Settled + 316;
     internal const int BarrowProofEnd = Settled + 593;
 
-    /// <summary>When the arrival's conversation is up and gets read, and how: a line every few frames for a while.</summary>
-    private const int ProofArrivalRead = 840;
+    /// <summary>How often a conversation gets a press while the proof run's reading it, how long a window of reading lasts, and how long a line's held for its shot.</summary>
     private const int ProofReadEvery = 6;
     private const int ProofReadFrames = 80;
+    private const int ProofHoldFrames = 20;
 
-    /// <summary>When each of Questeria's conversations gets read, after Settled: Valen's, the innkeeper's work, the rosewater, and the pay.</summary>
-    private static readonly int[] ProofReads = { 72, 880, 1006, 1090 };
+    /// <summary>The choices still to make at this visit's questions, the clock the presses go by, the shots taken, the shot a line's being held for, and a frame to count on from.</summary>
+    private readonly Queue<int> _proofChoices = new();
+    private readonly HashSet<string> _proofShots = new();
+    private int _proofTalkClock;
+    private string _proofHolding;
+    private int _proofHoldClock;
+    private int _proofMark;
+
+    /// <summary>When each of Questeria's conversations gets read, after Settled: the Soul-Bound's as you come in, and Fennick's.</summary>
+    private static readonly int[] ProofReads = { 72, 880 };
 
     /// <summary>A direction to walk in instead of reading the keyboard, while the proof run is driving.</summary>
     private Vector2? _proofMove;
@@ -62,8 +76,11 @@ public partial class ExploreScreen
 
         return stage switch
         {
+            ProofStage.Voyage => VoyageStep(frame),
             ProofStage.Docks => DocksStep(frame),
             ProofStage.Questeria => QuesteriaStep(frame),
+            ProofStage.Flagon => FlagonStep(frame),
+            ProofStage.QuesteriaOut => QuesteriaOutStep(frame),
             ProofStage.Road => RoadStep(frame),
             ProofStage.QuesteriaAgain => QuesteriaAgainStep(frame),
             ProofStage.RoadAgain => RoadAgainStep(frame),
@@ -71,16 +88,28 @@ public partial class ExploreScreen
         };
     }
 
-    /// <summary>The harbour: the ship sailing in, the gangplank, the walk off, Valen talking, the card, then up the street to the city.</summary>
-    /// <remarks>Nothing's driven till the arrival's over; it plays itself. The conversation gets read a line every few frames, like someone pressing Enter.</remarks>
-    private string DocksStep(int frame)
+    /// <summary>The deck at night: the Prologue's voyage plays by itself as the map comes up, and gets read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE WITH YOU), then the sea-wraiths and Questeria at dawn, and off to the harbour.</summary>
+    private string VoyageStep(int frame)
     {
-        if (frame is >= ProofArrivalRead and < ProofArrivalRead + ProofReadFrames && frame % ProofReadEvery == 0)
+        if (frame == Settled) return "voyage.png";
+        if (frame < Settled) return null;
+        if (frame == Settled + 1) ProofChoices(1, 0);
+
+        DialogueScreen talk = ProofDialogue();
+        if (talk is not null && talk.ProofAsking && ProofOnce("voyage-choice.png")) return "voyage-choice.png";
+        if (talk?.ProofLine is DialogueNode line)
         {
-            ProofRead();
-            return null;
+            if (line.Speaker == Speakers.Card && line.Line.StartsWith("The sea-wraiths") && ProofOnce("voyage-wraiths.png")) return "voyage-wraiths.png";
+            if (line.Painting == "questeria-dawn" && line.Speaker == "odelle" && ProofHold(talk, "voyage-dawn.png")) return "voyage-dawn.png";
         }
 
+        ProofTalk();
+        return null;
+    }
+
+    /// <summary>The harbour: the ship sailing in with the two of you on deck, tied up, the gangplank, Act 1's card, then the Red Gulls (talked down, with the dice, and Grell let off), Captain Hale, and up the street into the city.</summary>
+    private string DocksStep(int frame)
+    {
         switch (frame)
         {
             case 200:
@@ -92,19 +121,73 @@ public partial class ExploreScreen
             case 640:
                 return "arrival-gangplank.png";
 
-            case ProofArrivalRead - 10:
-                return "arrival-valen.png";
-
-            case ProofArrivalRead + ProofReadFrames + 80:
+            case 840:
                 return "arrival-card.png";
 
-            case ProofArrivalRead + ProofReadFrames + 300:
-                return "docks.png";
+            case 841:
+                ProofChoices(1, 0);
+                return null;
+        }
+        if (frame < 841 || _arriving != Arriving.None) return null;
 
-            // Then up the quay street and off the east side, into the city.
-            case ProofArrivalRead + ProofReadFrames + 302:
-                ProofPlace(52f, 7f, Direction.Right);
-                _proofMove = new Vector2(1f, 0f);
+        DialogueScreen talk = ProofDialogue();
+        DiceRollOverlay dice = ProofDice();
+        if (dice is not null && dice.ProofLanded && ProofOnce("docks-check.png")) return "docks-check.png";
+        if (talk?.ProofLine is DialogueNode line)
+        {
+            if (line.Speaker == "red-gull" && ProofHold(talk, "docks-gulls.png")) return "docks-gulls.png";
+            if (line.Speaker == "hale" && ProofHold(talk, "docks-hale.png")) return "docks-hale.png";
+        }
+
+        if (talk is not null || dice is not null)
+        {
+            ProofTalk();
+            return null;
+        }
+
+        if (!_game.Flags.Contains(Act1Chapter1.DocksDone)) return null;
+        if (ProofOnce("docks-after"))
+        {
+            _proofMark = frame;
+            return null;
+        }
+        if (frame == _proofMark + 40) return "docks.png";
+        if (frame == _proofMark + 42)
+        {
+            ProofPlace(52f, 7f, Direction.Right);
+            _proofMove = new Vector2(1f, 0f);
+        }
+        return null;
+    }
+
+    /// <summary>Inside the Gilded Flagon: the tavern, the keeper's errand taken, and back out through the door.</summary>
+    private string FlagonStep(int frame)
+    {
+        if (frame is >= Settled + 32 and < Settled + 120)
+        {
+            ProofTalk();
+            return null;
+        }
+
+        switch (frame)
+        {
+            case Settled:
+                return "flagon.png";
+
+            case Settled + 2:
+                ProofPlace(9.5f, 8f, Direction.Up);
+                return null;
+
+            case Settled + 4:
+                ProofUse();
+                return null;
+
+            case Settled + 30:
+                return "flagon-innkeeper.png";
+
+            case Settled + 130:
+                ProofPlace(10.5f, 13f, Direction.Down);
+                _proofMove = new Vector2(0f, 1f);
                 return null;
 
             default:
@@ -112,16 +195,91 @@ public partial class ExploreScreen
         }
     }
 
-    /// <summary>Questeria, in off the harbour: Valen in the street, the townsfolk about the plaza, behind a roof, both zooms, the path round a statue and a click to walk it, the elder, the canal, Tab and a card, the innkeeper's work start to finish, you off on your own, the waypoint, the map, then out through the city gate.</summary>
+    /// <summary>Back out of the Flagon, outside its door, then south through the city gate to the old road.</summary>
+    private string QuesteriaOutStep(int frame)
+    {
+        switch (frame)
+        {
+            case Settled:
+                return "questeria-outside.png";
+
+            case Settled + 2:
+                ProofPlace(42f, 55.5f, Direction.Down);
+                _proofMove = new Vector2(0f, 1f);
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>The choices to make, in order, at the next questions in this visit's conversations.</summary>
+    private void ProofChoices(params int[] choices)
+    {
+        _proofChoices.Clear();
+        foreach (int choice in choices) _proofChoices.Enqueue(choice);
+    }
+
+    /// <summary>Reads on whatever conversation's up, a press every few frames: the rest of a line, the next line, the next of the choices at a question, and the dice rolled and put away.</summary>
+    private void ProofTalk()
+    {
+        if (_proofHolding is not null || ++_proofTalkClock % ProofReadEvery != 0) return;
+
+        if (ProofDice() is DiceRollOverlay dice)
+        {
+            dice.ProofPress();
+            return;
+        }
+
+        if (ProofDialogue() is not DialogueScreen talk) return;
+        if (talk.ProofAsking) talk.ProofChoose(_proofChoices.Count > 0 ? _proofChoices.Dequeue() : 0);
+        else talk.ProofAdvance();
+    }
+
+    /// <summary>Whether a shot hasn't been taken yet this run, marking it taken.</summary>
+    private bool ProofOnce(string shot) => _proofShots.Add(shot);
+
+    /// <summary>For a shot of a line: finishes typing it the first time it's seen, and says to take the shot a few frames later, once.</summary>
+    private bool ProofHold(DialogueScreen talk, string shot)
+    {
+        if (_proofHolding != shot)
+        {
+            if (_proofShots.Contains(shot)) return false;
+            _proofHolding = shot;
+            _proofHoldClock = 0;
+            talk.ProofFinishLine();
+            return false;
+        }
+
+        if (++_proofHoldClock < ProofHoldFrames) return false;
+        _proofHolding = null;
+        return ProofOnce(shot);
+    }
+
+    /// <summary>The conversation that's up over this screen, or null.</summary>
+    private DialogueScreen ProofDialogue()
+    {
+        foreach (GameScreen screen in ScreenManager.GetScreens())
+            if (screen is DialogueScreen talk && !talk.IsExiting) return talk;
+        return null;
+    }
+
+    /// <summary>The dice that are up over this screen, or null.</summary>
+    private DiceRollOverlay ProofDice()
+    {
+        foreach (GameScreen screen in ScreenManager.GetScreens())
+            if (screen is DiceRollOverlay dice && !dice.IsExiting) return dice;
+        return null;
+    }
+
+    /// <summary>Questeria, in off the harbour: the Soul-Bound in the street, the townsfolk about the plaza, behind a roof, both zooms, the path round a statue and a click to walk it, the elder, the canal, Tab and a card, Fennick and the quest board, you off on your own, the waypoint, the map, then in through the Gilded Flagon's door.</summary>
     private string QuesteriaStep(int frame)
     {
         foreach (int read in ProofReads)
         {
-            if (frame >= Settled + read && frame < Settled + read + ProofReadFrames && frame % ProofReadEvery == 0)
-            {
-                ProofRead();
-                return null;
-            }
+            if (frame < Settled + read || frame >= Settled + read + ProofReadFrames) continue;
+            ProofTalk();
+            return null;
         }
 
         switch (frame)
@@ -129,7 +287,7 @@ public partial class ExploreScreen
             case Settled:
                 return "questeria.png";
 
-            // East up the street into Valen's trigger: he talks.
+            // East up the street into the Soul-Bound's trigger: they talk.
             case Settled + 1:
                 _proofMove = new Vector2(1f, 0f);
                 return null;
@@ -139,7 +297,7 @@ public partial class ExploreScreen
                 return null;
 
             case Settled + 70:
-                return "questeria-valen.png";
+                return "questeria-soulbound.png";
 
             // The plaza, then the same view a few seconds later: the ones who wander have moved.
             case Settled + 160:
@@ -191,7 +349,7 @@ public partial class ExploreScreen
             case Settled + 540:
                 return "questeria-path.png";
 
-            // Click, and walk it. Valen follows.
+            // Click, and walk it. The Soul-Bound follows.
             case Settled + 541:
                 ProofClick();
                 return null;
@@ -227,7 +385,7 @@ public partial class ExploreScreen
             case Settled + 795:
                 return "questeria-invalid.png";
 
-            // Tab to Valen; the camera eases over to him. Then a click on your card takes you back.
+            // Tab to the Soul-Bound; the camera eases over. Then a click on your card takes you back.
             case Settled + 796:
                 ProofLetGo();
                 SelectLeader((_game.Leader + 1) % _walkers.Count);
@@ -251,10 +409,10 @@ public partial class ExploreScreen
             case Settled + 845:
                 return "questeria-card.png";
 
-            // The innkeeper: work.
+            // Fennick at the quest board: the board, his lines, and the Mirewood's contract taken.
             case Settled + 846:
                 ProofLetGo();
-                ProofPlace(64f, 33.6f, Direction.Up);
+                ProofPlace(56.5f, 35.5f, Direction.Up);
                 return null;
 
             case Settled + 848:
@@ -262,36 +420,12 @@ public partial class ExploreScreen
                 return null;
 
             case Settled + 875:
-                return "questeria-innkeeper.png";
+                return "questeria-board.png";
 
             case Settled + 975:
                 return "questeria-task.png";
 
-            // The flower seller hands over the rosewater.
-            case Settled + 976:
-                ProofPlace(75.4f, 33f, Direction.Right);
-                return null;
-
-            case Settled + 978:
-                ProofUse();
-                return null;
-
-            case Settled + 1005:
-                return "questeria-flowers.png";
-
-            // Back to the innkeeper, who pays.
-            case Settled + 1060:
-                ProofPlace(64f, 33.6f, Direction.Up);
-                return null;
-
-            case Settled + 1062:
-                ProofUse();
-                return null;
-
-            case Settled + 1180:
-                return "questeria-paid.png";
-
-            // Off on your own across the plaza: Valen finds his way after you.
+            // Off on your own across the plaza: the Soul-Bound finds their way after you.
             case Settled + 1182:
                 ProofPlaceAlone(50f, 24.5f, Direction.Down);
                 return null;
@@ -330,14 +464,14 @@ public partial class ExploreScreen
             case Settled + 1460:
                 return "map-questeria.png";
 
-            // Then south through the city gate into the exit, which autosaves and goes to the old road.
+            // Then into the Gilded Flagon, through its door.
             case Settled + 1461:
                 ProofMap().ExitScreen();
                 return null;
 
             case Settled + 1466:
-                ProofPlace(42f, 55.5f, Direction.Down);
-                _proofMove = new Vector2(0f, 1f);
+                ProofPlace(70f, 31.4f, Direction.Up);
+                _proofMove = new Vector2(0f, -1f);
                 return null;
 
             default:
@@ -630,13 +764,6 @@ public partial class ExploreScreen
 
     /// <summary>The middle of one of the party's cards, on screen.</summary>
     private Point ProofCard(int index) => _strip.ProofCard(index, _game.Leader);
-
-    /// <summary>Reads the conversation that's up on: the rest of its line, or the next. Does nothing if there isn't one.</summary>
-    private void ProofRead()
-    {
-        foreach (GameScreen screen in ScreenManager.GetScreens())
-            if (screen is DialogueScreen talk && !talk.IsExiting) talk.ProofAdvance();
-    }
 
     /// <summary>The map screen that's up over this one.</summary>
     private MapScreen ProofMap()

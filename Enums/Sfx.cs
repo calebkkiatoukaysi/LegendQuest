@@ -51,4 +51,29 @@ public enum Sfx
 
     /// <summary>A waypoint stone waking up the first time it's found.</summary>
     Waypoint,
+
+    // Conversations.
+
+    /// <summary>The d20 thrown across the panel.</summary>
+    DiceRoll,
+
+    /// <summary>A check passing.</summary>
+    CheckPass,
+
+    /// <summary>A check failing.</summary>
+    CheckFail,
+
+    /// <summary>A companion approving of what you said.</summary>
+    Approve,
+
+    /// <summary>A companion disapproving.</summary>
+    Disapprove,
+
+    // The story.
+
+    /// <summary>One heartbeat, then two in rhythm: the Prologue's title card.</summary>
+    Heartbeat,
+
+    /// <summary>A ship's bell rung in alarm.</summary>
+    ShipBell,
 }

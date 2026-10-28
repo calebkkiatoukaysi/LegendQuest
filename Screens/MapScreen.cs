@@ -56,6 +56,9 @@ public class MapScreen : GameScreen
     private static readonly Color Unseen = new(17, 15, 15);
 
     private const string WorldName = "THE WORLD";
+
+    /// <summary>What a building's way out says on the map of the inside of it.</summary>
+    private const string OutLabel = "OUT";
     private const string HereHint = "TAB  ·  THE WORLD      M  ·  CLOSE";
     private const string WorldHint = "TAB  ·  THIS MAP      M  ·  CLOSE";
     private const string TravelHint = "ARROWS  ·  CHOOSE      ENTER  ·  TRAVEL TO {0}      ESC  ·  STAY";
@@ -252,7 +255,7 @@ public class MapScreen : GameScreen
         {
             if (!AnySeen(exit)) continue;
 
-            string name = MapCatalog.Get(exit.ToMap).Name.ToUpperInvariant();
+            string name = (exit.Name ?? (exit.ToMap == MapExit.Back ? OutLabel : MapCatalog.Get(exit.ToMap).Name)).ToUpperInvariant();
             Vector2 size = _detailFont.MeasureString(name);
             var middle = new Vector2(exit.Area.X + exit.Area.Width / 2f, exit.Area.Y + exit.Area.Height / 2f) * scale + drawn.Location.ToVector2();
 
@@ -270,7 +273,7 @@ public class MapScreen : GameScreen
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         foreach (MapDefinition map in MapCatalog.All)
         {
-            if (!_world.IsDiscovered(map)) continue;
+            if (!_world.IsDiscovered(map) || map.World is null) continue;
 
             // Each road once: from a place to anywhere it leads that isn't discovered, or that comes later in the list.
             foreach (string id in MapCatalog.Links(map.Id))
@@ -291,7 +294,7 @@ public class MapScreen : GameScreen
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
         foreach (MapDefinition map in MapCatalog.All)
         {
-            if (!_world.IsDiscovered(map)) continue;
+            if (!_world.IsDiscovered(map) || map.World is null) continue;
 
             bool picked = _destinations.Count > 0 && _destinations[_selected] == map;
             Color colour = picked ? Palette.Torch : map == _map ? Palette.Heading : Palette.Bone;
@@ -326,10 +329,10 @@ public class MapScreen : GameScreen
         spriteBatch.Draw(_marks, at, source, Color.White * alpha, 0f, new Vector2(MarkSize / 2f), MarkScale, SpriteEffects.None, 0f);
     }
 
-    /// <summary>Where a map is on the world side, in screen pixels.</summary>
+    /// <summary>Where a map is on the world side, in screen pixels. Only for maps that are on it.</summary>
     private Vector2 PlaceOf(MapDefinition map) => new(
-        _area.Center.X - MapCatalog.WorldWidth / 2f + map.World.X,
-        _area.Center.Y - MapCatalog.WorldHeight / 2f + map.World.Y);
+        _area.Center.X - MapCatalog.WorldWidth / 2f + map.World.Value.X,
+        _area.Center.Y - MapCatalog.WorldHeight / 2f + map.World.Value.Y);
 
     /// <summary>Which of the places you can go the mouse is over, or null.</summary>
     private int? DestinationAt(Point mouse)
