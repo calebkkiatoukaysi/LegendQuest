@@ -293,14 +293,15 @@ public class CharacterCreationScreen : MenuScreen
         string heading = _soulBound ? SoulBoundHeading : YouHeading;
         Text.Draw(spriteBatch, _font, heading, OptionsPanel.Center.X, OptionsPanel.Top + FormPanel.Padding,
             Palette.Heading * alpha, Palette.FormShadow * alpha, centred: true);
-        if (_soulBound)
-            Text.Draw(spriteBatch, _detailFont, SoulBoundLine, OptionsPanel.Center.X, OptionsPanel.Top + FormPanel.Padding + _font.LineSpacing,
-                Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true);
-
         string shownName = Typed().Length > 0 ? Typed().ToUpperInvariant() : "?";
         Text.Draw(spriteBatch, _font, shownName, NameAt.X, NameAt.Y, Palette.Heading * alpha, Palette.FormShadow * alpha, centred: true);
         Text.Draw(spriteBatch, _detailFont, Summary(), NameAt.X, NameAt.Y + _font.LineSpacing + 6f,
             Palette.Bone * alpha, Palette.FormShadow * alpha, centred: true);
+
+        // Under them on the left, since the tabs fill the line under the heading on the right.
+        if (_soulBound)
+            Text.Draw(spriteBatch, _detailFont, SoulBoundLine, PreviewPanel.Center.X, NameAt.Y + _font.LineSpacing + 6f + _detailFont.LineSpacing * 2f,
+                Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true);
         Text.Draw(spriteBatch, _detailFont, Scores(), PreviewPanel.Center.X, FigureFeet.Y + 40f,
             Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
         Text.Draw(spriteBatch, _detailFont, About(), OptionsPanel.Center.X, ButtonsY - ButtonSize.Y / 2f - 18f - _detailFont.LineSpacing,

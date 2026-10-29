@@ -1,0 +1,61 @@
+; A bakery in Questeria: two ovens going in the back wall on the bakehouse's flagstones, the pans on
+; their rack, the kneading table and the sacks of flour, and the counter across the shop with the baker
+; behind it and a customer in front. Every bakery that's this one inside comes back out its own door.
+
+[map]
+id = bakery
+name = The Bakery
+tileset = interior
+size = 16 11
+dark = yes
+ambient = 0.65
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+################
+#||||||||||||||#
+#______________#
+#ssssssss------#
+#ssssssss------#
+#ssssssss------#
+#--------------#
+#-------rrrr---#
+#-------rrrr---#
+#--------------#
+#######--#######
+
+[objects]
+spawn start 7.5 9 facing=up
+exit door 7 10 w=2 to=back
+
+; The bakehouse: the ovens, the pans, the kneading table and the flour.
+prop hearth 2.6 4.4
+prop hearth 5.6 4.4
+prop utensil-rack 8.4 3.3
+prop table 4.2 6.8
+prop barrel-water 1.6 6
+prop sacks 1.9 8.2
+prop crate-apples 5.6 8.8
+
+; The shop: the shelves, the counter, the day's prices, and more flour.
+prop bookshelf 11.2 3.4
+prop potted-plant 13.6 3.3
+prop shop-counter 10.5 6.4
+prop chalkboard 13.2 6.8
+prop sack-pile 13.3 8.6
+prop candle-stand 14.2 5.2
+prop candle-stand 1.4 9.2
+npc baker 10.5 5.2 look=911 name="The Baker" facing=down say="Fresh loaves! Well. This morning's loaves.|Mind the ovens. They bite.|Flour in my hair, flour in my tea, flour in my dreams.|The palace orders forty rolls a day. They eat twelve."
+npc customer 9.4 7.6 look=509 name="A Customer" facing=up say="The honey buns go by noon. Every day.|I came for bread. I'm leaving with cake. Again.|Don't tell anyone. I'm meant to be at the guildhall."
+
+; The smell, coming in.
+trigger smell 6 7 w=4 h=2 say="Warm bread and cinnamon. Somebody's been up since before dawn."

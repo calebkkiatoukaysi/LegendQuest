@@ -124,9 +124,11 @@ public static class Act1Chapter1
         Id = "a1-c1-02",
         With = "fennick",
         Unless = new[] { BoardRead },
+        Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
-            new() { Speaker = "fennick", Board = true, Line = "New faces! Contracts are posted by the city, the guilds, and anyone with a coin and a problem. Monsters on the left, bandits in the middle, lost-and-found on the right." },
+            new() { Speaker = "fennick", Board = true, Line = "New faces! Contracts are posted by the city, the guilds, and anyone with a coin and a problem." },
+            new() { Speaker = "fennick", Board = true, Line = "Monsters on the left, bandits in the middle, lost-and-found on the right." },
             new() { Speaker = Speakers.Narrator, Board = true, Line = "One posting glows among the rest." },
             new() { Speaker = "fennick", Board = true, Line = "That one's from the Rangers' Lodge. Something's wrong in the Mirewood. Animals gone mad, woodcutters missing. Pays triple." },
             new()

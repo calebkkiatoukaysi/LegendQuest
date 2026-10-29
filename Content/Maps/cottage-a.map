@@ -1,5 +1,6 @@
-; A cottage in Questeria: a bed in the corner, a wardrobe and a bookshelf against the back wall,
-; a table, and a candle stand. Every cottage that's this one inside comes back out its own door.
+; A cottage in Questeria: the bed in the corner with its table, a wardrobe, a tapestry and a bookshelf
+; along the back wall, a table on the rug, an armchair, a plant and a candle stand. Every cottage
+; that's this one inside comes back out its own door.
 
 [map]
 id = cottage-a
@@ -25,9 +26,9 @@ _ = wall-base
 #____________#
 #------------#
 #------------#
-#------------#
-#----rrrr----#
-#----rrrr----#
+#-----rrrrr--#
+#-----rrrrr--#
+#-----rrrrr--#
 #------------#
 ######--######
 
@@ -35,10 +36,17 @@ _ = wall-base
 spawn start 6.5 8 facing=up
 exit door 6 9 w=2 to=back
 
-prop bed 3 6.5
+prop bed 1.6 5.4
+prop side-table 3.6 3.4
 prop wardrobe 6 3.4
+prop tapestry 8.2 2.6
 prop bookshelf 10.5 3.4
-prop round-table 9 6.6
-prop stool 7.5 7
-prop stool 10.6 7
-prop candle-stand 12.4 7.5
+prop round-table 8.5 6.4
+prop chair 10 6.4
+prop stool 7.2 6.6
+prop armchair 11.6 7.8
+prop candle-stand 12.3 5.4
+prop potted-plant 1.6 8
+
+; Walking in on somebody's house.
+trigger bark-cottage-snoop 5 6 w=4 h=2 bark=cottage-snoop

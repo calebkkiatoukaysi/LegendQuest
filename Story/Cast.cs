@@ -32,6 +32,31 @@ public static class Cast
             new CharacterLook { Skin = 2, Hair = 1, HairColour = 0, Hat = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 1 }),
         new("fennick", "Questmaster Fennick", null,
             new CharacterLook { Skin = 1, Face = 1, Eyes = 4, Hair = 1, HairColour = 4, Beard = 2, Shirt = 4, Vest = 5, LegsColour = 4 }),
+
+        // The townspeople who'll stop and talk (Townspeople's conversations). Mine, not the story's,
+        // but for Sergeant Brisk, who's in the Watch's helm and blue like the rest of it.
+        new("netty", "Netty the Net-Mender", null,
+            new CharacterLook { Skin = 3, Face = 4, Eyes = 2, Hair = 4, HairColour = 4, Shirt = 4, Vest = 1, Legs = 1, LegsColour = 2 }),
+        new("maud", "Maud Tolley", null,
+            new CharacterLook { Skin = 0, Face = 1, Eyes = 4, Hair = 3, HairColour = 4, Shirt = 0, Vest = 6, Legs = 1, LegsColour = 1, Cloak = 4 }),
+        new("pip", "Pip the Potboy", null,
+            new CharacterLook { Ancestry = Ancestry.Hearthling, Skin = 0, Face = 4, Eyes = 1, Hair = 0, HairColour = 3, Shirt = 1, Vest = 5, LegsColour = 0 }),
+        new("osric", "Osric Penhallow", null,
+            new CharacterLook { Skin = 1, Face = 0, Eyes = 1, Hair = 1, HairColour = 5, Beard = 2, Shirt = 1, Vest = 4, LegsColour = 5, Cloak = 6 }),
+        new("brisk", "Sergeant Brisk", null,
+            new CharacterLook { Skin = 4, Face = 3, Eyes = 1, Hair = 1, HairColour = 1, Beard = 2, Hat = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 1 }),
+        new("wren", "Wren", null,
+            new CharacterLook { Ancestry = Ancestry.Hearthling, Skin = 4, Face = 4, Eyes = 3, Hair = 3, HairColour = 1, Shirt = 4, Vest = 6, LegsColour = 0, Cloak = 4 }),
+        new("lark", "Lark the Busker", null,
+            new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 2, Eyes = 5, Hair = 2, HairColour = 6, Shirt = 3, Vest = 7, LegsColour = 4, Cloak = 6 }),
+        new("ilsa", "Ilsa Fenwright", null,
+            new CharacterLook { Skin = 2, Face = 1, Eyes = 2, Hair = 4, HairColour = 2, Shirt = 2, Vest = 0, Legs = 1, LegsColour = 2, Cloak = 1 }),
+        new("tamsin", "Ranger Tamsin", null,
+            new CharacterLook { Ancestry = Ancestry.Wildkin, Lineage = 1, Skin = 3, Face = 5, Eyes = 3, Hair = 3, HairColour = 0, Shirt = 4, Vest = 2, LegsColour = 3, Cloak = 3 }),
+        new("oswin", "Guardsman Oswin", null,
+            new CharacterLook { Skin = 0, Face = 0, Eyes = 0, Hair = 1, HairColour = 2, Hat = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 5 }),
+        new("hesper", "Sister Hesper", null,
+            new CharacterLook { Skin = 5, Face = 1, Eyes = 1, Hair = 2, HairColour = 4, Shirt = 1, Vest = 5, Legs = 1, LegsColour = 4, Cloak = 5 }),
     };
 
     private static readonly Dictionary<string, CastMember> ById = new();

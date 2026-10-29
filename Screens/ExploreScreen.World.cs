@@ -32,10 +32,6 @@ public partial class ExploreScreen
     /// <summary>How far above someone's feet the top of their head is, in art pixels, for writing over it.</summary>
     private const float HeadHeight = 44f;
 
-    /// <summary>How far the smudge behind what someone's saying reaches past it, across and up and down.</summary>
-    private static readonly Vector2 LineSpread = new(12f, 6f);
-    private static readonly Color LineBacking = Color.Black * 0.75f;
-
     /// <summary>What comes up on the next map if the autosave on the way there couldn't be written.</summary>
     private const string AutosaveFailedLine = "The autosave couldn't be written";
 
@@ -69,7 +65,10 @@ public partial class ExploreScreen
     }
 
     /// <summary>Sets off any trigger you've just walked into, then takes you off the map if you've walked into an exit.</summary>
-    /// <remarks>Only your feet count. The others follow you through.</remarks>
+    /// <remarks>
+    /// Only your feet count. The others follow you through. A trigger that does nothing but start a
+    /// banter doesn't go off at all while its banter can't play, so it's still there for when it can.
+    /// </remarks>
     private void CheckAreas()
     {
         BoundingRectangle feet = FeetAt(Leader.Position);
@@ -78,7 +77,11 @@ public partial class ExploreScreen
         {
             if (!trigger.Presence.Holds(_game.Flags) || !Entered(trigger.Id, trigger.Area, feet)) continue;
 
+            bool barks = trigger.Bark is not null && !Used(trigger) && CanBark(trigger);
+            if (trigger.OnlyBarks && !barks) continue;
+
             if (_world.Enter(trigger) is WorldEvent said) Cue(said);
+            if (barks) Bark(trigger);
             Refresh();
         }
 
@@ -129,6 +132,9 @@ public partial class ExploreScreen
         _inside.Remove(id);
         return false;
     }
+
+    /// <summary>Whether a trigger that only goes off once already has. The save keeps it as map/id, the same as WorldState does.</summary>
+    private bool Used(MapTrigger trigger) => trigger.Once && _game.Triggered.Contains(_map.Id + "/" + trigger.Id);
 
     /// <summary>Finds the nearest thing you're close enough to use that there's still something to do with, or the nearest person you're close enough to talk to, whichever's nearer.</summary>
     /// <remarks>Measured from your feet to its foot, so it doesn't matter how tall it is.</remarks>
@@ -230,9 +236,10 @@ public partial class ExploreScreen
         if (happened.Text is not null) _toast.Show(happened.Text);
     }
 
-    /// <summary>Catches the pictures up with the save after something's been used, and if a door moved, plays it and lets the light, the sight and the paths through again.</summary>
+    /// <summary>Catches the pictures and the markers up with the save after something's been used or walked into, and if a door moved, plays it and lets the light, the sight and the paths through again.</summary>
     private void Refresh()
     {
+        RefreshMarkers();
         if (!MatchSave()) return;
 
         _audio.Play(Sfx.Door);
@@ -281,7 +288,7 @@ public partial class ExploreScreen
     {
         Halt();
 
-        var map = new MapScreen(_map, _tilemap, AllProps(), _seen, _world, Leader.Position, travelling: waypoint is not null);
+        var map = new MapScreen(_map, _tilemap, AllProps(), _seen, _world, Leader.Position, MapMarkers(), travelling: waypoint is not null);
         map.Travel += to => Leave(to, _world.FoundWaypoint(to).Beside, Direction.Down);
         ScreenManager.AddScreen(map);
     }
@@ -312,54 +319,47 @@ public partial class ExploreScreen
         LoadingScreen.Load(ScreenManager, to.Name.ToUpperInvariant(), next);
     }
 
-    /// <summary>Writes the name of whoever or whatever you're next to over them, and the key and the word for using it.</summary>
+    /// <summary>What goes over whoever or whatever you're next to: their name, the key and the word for using it, and where the middle of the top of them is on screen.</summary>
     /// <remarks>Not over someone who's already saying something, since their line goes there.</remarks>
-    private void DrawPrompt(SpriteBatch spriteBatch, float alpha)
+    /// <returns>The prompt, or null if there's nothing to prompt for.</returns>
+    private (string Name, string Use, Vector2 Top)? Prompting()
     {
-        string name, prompt;
-        Vector2 top;
-
         if (_nearNpc is Npc npc)
         {
-            if (npc.Line is not null) return;
-            name = npc.Definition.Name;
-            prompt = "TALK";
-            top = npc.Walker.Position - new Vector2(0f, HeadHeight);
+            if (npc.Line is not null || SayingBanter(npc.Walker)) return null;
+            return (npc.Definition.Name.ToUpperInvariant(), "E  ·  TALK", _camera.ToScreen(npc.Walker.Position - new Vector2(0f, HeadHeight)));
         }
-        else if (_near is MapInteractable thing)
-        {
-            PropSprite sprite = null;
-            foreach ((MapInteractable each, PropSprite drawn) in _things)
-                if (each == thing) sprite = drawn;
 
-            name = thing.Name;
-            prompt = thing.Prompt;
-            top = thing.Foot - new Vector2(0f, sprite.Size.Y);
-        }
-        else return;
+        if (_near is not MapInteractable thing) return null;
 
-        Vector2 at = _camera.ToScreen(top);
-        float y = at.Y - PromptGap - _detailFont.LineSpacing * 2f;
-        Text.Draw(spriteBatch, _detailFont, name.ToUpperInvariant(), at.X, y, Palette.Bone * alpha, Palette.Shadow * alpha, centred: true);
-        Text.Draw(spriteBatch, _detailFont, "E  ·  " + prompt, at.X, y + _detailFont.LineSpacing,
-            Palette.Torch * alpha, Palette.Shadow * alpha, centred: true);
+        PropSprite sprite = null;
+        foreach ((MapInteractable each, PropSprite drawn) in _things)
+            if (each == thing) sprite = drawn;
+        return (thing.Name.ToUpperInvariant(), "E  ·  " + thing.Prompt, _camera.ToScreen(thing.Foot - new Vector2(0f, sprite.Size.Y)));
     }
 
-    /// <summary>Writes what anyone's saying over their head, on a dark smudge, fading out as it ends.</summary>
-    private void DrawLines(SpriteBatch spriteBatch, float alpha)
+    /// <summary>The room the prompt takes up on screen, so the lines and markers over people's heads keep out of its way.</summary>
+    /// <returns>Its room, or null if there's no prompt.</returns>
+    private Rectangle? PromptBox()
     {
-        foreach (Npc npc in _npcs)
-        {
-            if (npc.Line is not string line) continue;
+        if (Prompting() is not { } prompt) return null;
 
-            float shown = npc.LineAlpha * alpha;
-            Vector2 head = _camera.ToScreen(npc.Walker.Position - new Vector2(0f, HeadHeight));
-            Vector2 size = _detailFont.MeasureString(line);
-            float y = head.Y - PromptGap - size.Y;
+        float width = MathF.Max(_detailFont.MeasureString(prompt.Name).X, _detailFont.MeasureString(prompt.Use).X);
+        float height = _detailFont.LineSpacing * 2f;
+        return new Rectangle((int)(prompt.Top.X - width / 2f), (int)(prompt.Top.Y - PromptGap - height), (int)width, (int)height);
+    }
 
-            var area = new Rectangle((int)(head.X - size.X / 2f), (int)(y - LineSpread.Y), (int)size.X, (int)(size.Y + LineSpread.Y * 2f));
-            Text.DrawBacking(spriteBatch, _glow, area, (int)LineSpread.X, LineBacking * shown);
-            Text.Draw(spriteBatch, _detailFont, line, head.X, y, Palette.Bone * shown, Palette.Shadow * shown, centred: true);
-        }
+    /// <summary>Writes the name of whoever or whatever you're next to over them, and the key and the word for using it, on the same dark smudge as what people say.</summary>
+    private void DrawPrompt(SpriteBatch spriteBatch, float alpha)
+    {
+        if (Prompting() is not { } prompt || PromptBox() is not Rectangle box) return;
+
+        box.Inflate(0, (int)LineSpread.Y);
+        Text.DrawBacking(spriteBatch, _glow, box, (int)LineSpread.X, LineBacking * alpha);
+
+        float y = prompt.Top.Y - PromptGap - _detailFont.LineSpacing * 2f;
+        Text.Draw(spriteBatch, _detailFont, prompt.Name, prompt.Top.X, y, Palette.Bone * alpha, Palette.Shadow * alpha, centred: true);
+        Text.Draw(spriteBatch, _detailFont, prompt.Use, prompt.Top.X, y + _detailFont.LineSpacing,
+            Palette.Torch * alpha, Palette.Shadow * alpha, centred: true);
     }
 }

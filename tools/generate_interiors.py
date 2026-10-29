@@ -1,6 +1,5 @@
 """
-Inside Questeria's buildings: the interior tileset, and the furniture for the Gilded Flagon, the
-cottages, the shops and the warehouses on the docks.
+Inside Questeria's buildings: the interior tileset, and the bed for the cottages.
 
     python tools/generate_interiors.py
 
@@ -8,18 +7,22 @@ The same camera as outside: you see the floor from above and the back wall from 
 tiles tall (plaster with a beam over wainscoting), and the side and front walls as their tops
 only, so the room's open towards you. Warm wood and cream plaster, lit from the top left and
 shadowed lavender, in the colours of my style sheet. The rug has edges the tilemap draws wherever it
-meets the floor, like the lawns outside. The furniture stands on its feet like every other prop.
+meets the floor, like the lawns outside.
+
+The rest of the furniture (the bar, the tables, the hearth and the shelves) used to be drawn here
+too, but my props sheet has better of all of it, so tools/cut_supplied.py cuts it from there now
+under the same names. There's no bed on the sheet, so the bed's still drawn here, standing on its
+foot like every other prop.
 
 Only needs CPython. Every bit of noise is hash01 on where it is, so a rerun writes the same bytes.
 """
 
-import math
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pixels import OUT, hash01, new_image, write_png  # noqa: E402
-from generate_harbour import OUTLINE, T, Canvas, dither, put, tile, turned  # noqa: E402
+from generate_harbour import T, Canvas, dither, put, tile, turned  # noqa: E402
 
 FLOOR = ((106, 66, 50), (146, 96, 64), (184, 130, 84), (214, 166, 108), (236, 198, 140))
 STONE = ((112, 104, 116), (150, 140, 146), (184, 174, 172), (212, 204, 196))
@@ -28,8 +31,6 @@ BEAM = ((60, 38, 36), (96, 62, 48), (132, 90, 62), (168, 120, 80))
 RUG = ((92, 24, 40), (138, 36, 52), (176, 58, 64), (208, 92, 84))
 GOLD = ((150, 104, 40), (214, 166, 74), (246, 214, 130))
 GLASS = ((84, 130, 176), (140, 188, 226), (210, 236, 250))
-FIRE = ((196, 70, 30), (244, 140, 50), (255, 210, 110), (255, 246, 200))
-IRON = ((40, 40, 52), (78, 80, 96), (130, 134, 150))
 CLOTH = ((60, 70, 120), (86, 104, 160), (140, 156, 206), (200, 210, 236))
 PAGE = ((150, 120, 90), (206, 180, 140))
 
@@ -214,107 +215,6 @@ def shade_box(c, x0, y0, x1, y1, ramp, top_rows=2):
             c.put(x, y, ramp[max(0, min(len(ramp) - 1, tone))])
 
 
-def tankard(c, x, y):
-    """A tankard: pewter with a head of foam."""
-    c.box(x, y, x + 2, y + 3, IRON[1])
-    c.box(x, y, x, y + 3, IRON[2])
-    c.box(x, y - 1, x + 2, y - 1, (250, 244, 230))
-    c.put(x + 3, y + 1, IRON[0])
-
-
-def bar_counter():
-    """The Flagon's bar: a long polished counter, its top lit, its front panelled, tankards along it and a tap."""
-    c = Canvas(112, 34)
-    shade_box(c, 1, 8, 110, 32, BEAM, top_rows=8)
-    for x in range(1, 111, 14):
-        c.box(x, 18, x, 31, BEAM[0])
-    c.box(1, 15, 110, 15, GOLD[1])
-    for x in (12, 30, 64, 92):
-        tankard(c, x, 9)
-    # The tap at one end, brass.
-    c.box(100, 2, 102, 10, GOLD[1])
-    c.box(97, 2, 104, 3, GOLD[2])
-    c.outline()
-    return c.img
-
-
-def round_table():
-    """A round tavern table: its top lit, two tankards and a candle on it, its one leg under."""
-    c = Canvas(36, 28)
-    c.box(16, 14, 19, 27, BEAM[1])
-    for y in range(18):
-        for x in range(36):
-            d = ((x - 17.5) / 17) ** 2 + ((y - 8) / 8) ** 2
-            if d <= 1.0:
-                c.put(x, y, BEAM[3] if y < 7 and x < 22 else BEAM[2] if y < 13 else BEAM[1])
-    tankard(c, 9, 6)
-    tankard(c, 23, 8)
-    c.box(17, 2, 18, 6, (240, 230, 210))
-    c.put(17, 1, FIRE[2])
-    c.put(17, 0, FIRE[3])
-    c.outline()
-    return c.img
-
-
-def stool():
-    """A three-legged stool."""
-    c = Canvas(12, 14)
-    for y in range(4):
-        for x in range(12):
-            if ((x - 5.5) / 5.5) ** 2 + ((y - 1.5) / 2) ** 2 <= 1.0:
-                c.put(x, y, BEAM[3] if y < 2 else BEAM[2])
-    for x in (2, 6, 9):
-        c.box(x, 4, x, 13, BEAM[1])
-    c.outline()
-    return c.img
-
-
-def hearth():
-    """A stone hearth against the back wall: its chimney breast, the arch, the fire in it, and a pot hung over."""
-    c = Canvas(52, 56)
-    for y in range(56):
-        for x in range(52):
-            stone = ((x // 8 + (y // 6) % 2) % 2 == 0)
-            if y % 6 == 5 or x % 8 == 7 and (y // 6) % 2 == 0 or (x + 4) % 8 == 7 and (y // 6) % 2 == 1:
-                c.put(x, y, STONE[0])
-            else:
-                c.put(x, y, STONE[3] if x < 10 else STONE[2] if stone else STONE[1])
-    # The firebox, dark inside the arch, and the fire.
-    for y in range(24, 52):
-        for x in range(10, 42):
-            if ((x - 26) / 16) ** 2 + ((y - 34) / 12) ** 2 <= 1.0 or y >= 34 and 10 <= x <= 41:
-                c.put(x, y, (24, 16, 20))
-    for y in range(36, 52):
-        for x in range(14, 38):
-            heat = (52 - y) / 16 - abs(x - 26) / 14 + (hash01(x, y, 331) - 0.5) * 0.3
-            if heat > 0.15:
-                c.put(x, y, FIRE[min(3, int(heat * 4))])
-    c.box(12, 50, 40, 51, BEAM[0])
-    c.box(10, 18, 42, 20, BEAM[2])
-    c.box(10, 18, 42, 18, BEAM[3])
-    c.outline()
-    return c.img
-
-
-def keg_stack():
-    """Kegs on their sides, two down and one on top, their hoops catching the light."""
-    c = Canvas(40, 34)
-
-    def keg(cx, cy):
-        for y in range(cy - 7, cy + 8):
-            for x in range(cx - 9, cx + 10):
-                if ((x - cx) / 9) ** 2 + ((y - cy) / 7.5) ** 2 <= 1.0:
-                    hoop = abs(abs(x - cx) - 5) < 1
-                    c.put(x, y, IRON[1] if hoop else BEAM[3] if y < cy - 2 else BEAM[2] if y < cy + 3 else BEAM[1])
-        c.box(cx - 1, cy - 1, cx + 1, cy + 1, BEAM[0])
-
-    keg(10, 24)
-    keg(29, 24)
-    keg(19, 10)
-    c.outline()
-    return c.img
-
-
 def bed():
     """A bed seen from the foot: its headboard against the wall, the blanket turned down, a pillow."""
     c = Canvas(34, 46)
@@ -331,80 +231,9 @@ def bed():
     return c.img
 
 
-def wardrobe():
-    """A tall wardrobe: two doors with brass handles, a cornice on top."""
-    c = Canvas(28, 48)
-    shade_box(c, 1, 2, 26, 47, BEAM, top_rows=3)
-    c.box(1, 0, 26, 2, BEAM[3])
-    c.box(13, 6, 14, 44, BEAM[0])
-    c.put(11, 26, GOLD[2])
-    c.put(16, 26, GOLD[2])
-    c.outline()
-    return c.img
-
-
-def bookshelf():
-    """A bookshelf against the wall: four shelves of spines in a few colours, leaning here and there."""
-    c = Canvas(36, 50)
-    shade_box(c, 1, 1, 34, 49, BEAM, top_rows=2)
-    colours = ((150, 40, 50), (50, 80, 130), (60, 110, 70), (180, 140, 60), (110, 60, 110))
-    for shelf in range(4):
-        y0 = 5 + shelf * 11
-        c.box(3, y0 + 9, 32, y0 + 9, BEAM[0])
-        x = 3
-        i = 0
-        while x < 31:
-            w = 2 + int(hash01(x, shelf, 341) * 2)
-            h = 6 + int(hash01(shelf, x, 342) * 3)
-            colour = colours[int(hash01(x, shelf, 343) * len(colours))]
-            c.box(x, y0 + 9 - h, min(31, x + w - 1), y0 + 8, colour)
-            c.box(x, y0 + 9 - h, x, y0 + 8, tuple(min(255, v + 40) for v in colour))
-            x += w + (1 if i % 3 == 2 else 0)
-            i += 1
-    c.outline()
-    return c.img
-
-
-def shop_counter():
-    """A shop's counter: a wide top with goods laid out on a cloth, and a little scale."""
-    c = Canvas(64, 30)
-    shade_box(c, 1, 6, 62, 29, BEAM, top_rows=7)
-    c.box(8, 6, 40, 11, CLOTH[2])
-    c.box(8, 11, 40, 12, CLOTH[0])
-    for x in (12, 20, 28, 36):
-        c.box(x, 7, x + 3, 10, (200, 120, 90) if x % 8 else (230, 200, 120))
-    c.box(50, 0, 51, 8, GOLD[1])
-    c.box(46, 2, 55, 2, GOLD[2])
-    c.outline()
-    return c.img
-
-
-def candle_stand():
-    """A tall iron candle stand with three candles burning."""
-    c = Canvas(16, 40)
-    c.box(7, 8, 8, 38, IRON[1])
-    c.box(7, 8, 7, 38, IRON[2])
-    c.box(3, 36, 12, 39, IRON[0])
-    c.box(2, 10, 13, 11, IRON[1])
-    for x in (2, 7, 12):
-        c.box(x, 4, x + 1, 9, (240, 230, 210))
-        c.put(x, 3, FIRE[2])
-        c.put(x, 2, FIRE[3])
-    c.outline()
-    return c.img
-
-
+#: The furniture drawn here: just what my props sheet hasn't got.
 FURNITURE = {
-    "bar-counter": bar_counter,
-    "round-table": round_table,
-    "stool": stool,
-    "hearth": hearth,
-    "keg-stack": keg_stack,
     "bed": bed,
-    "wardrobe": wardrobe,
-    "bookshelf": bookshelf,
-    "shop-counter": shop_counter,
-    "candle-stand": candle_stand,
 }
 
 

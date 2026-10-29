@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,17 +15,17 @@ namespace LegendQuest.Components;
 public class QuestBoardSprite
 {
     /// <summary>Where the board goes, and how thick its frame is.</summary>
-    private static readonly Rectangle Bounds = new(230, 40, 1140, 500);
+    private static readonly Rectangle Bounds = new(230, 40, 1140, 540);
     private const int Frame = 18;
 
     /// <summary>The headers along the top, in PostingColumn's order.</summary>
     private static readonly string[] Headers = { "MONSTERS", "BANDITS", "LOST AND FOUND" };
 
-    /// <summary>A note: its size, the gap between notes, and how far down the board they start.</summary>
-    private static readonly Point NoteSize = new(340, 150);
+    /// <summary>A note: how wide it is (as wide as a column leaves; each is as tall as what's written on it), the gap between notes, and how far down the board they start.</summary>
+    private const int NoteWidth = 352;
     private const int NoteGap = 14;
     private const int NotesTop = 56;
-    private const int NoteInset = 14;
+    private const int NoteInset = 12;
 
     /// <summary>The colours: the frame, the cork, the paper, the pin, and the main quest's glow.</summary>
     private static readonly Color Wood = new(78, 48, 36);
@@ -73,13 +74,15 @@ public class QuestBoardSprite
         for (int c = 0; c < Headers.Length; c++)
             Text.Draw(spriteBatch, _detailFont, Headers[c], cork.X + column * c + column / 2f, cork.Y + 18f, Palette.Ink * alpha, Color.Transparent, centred: true);
 
-        var placed = new int[Headers.Length];
+        var down = new int[Headers.Length];
         float pulse = 0.5f + 0.5f * MathF.Sin(_clock * PulseRate * MathHelper.TwoPi);
         foreach (Posting posting in Postings.All)
         {
             int c = (int)posting.Column;
-            var note = new Rectangle(cork.X + column * c + (column - NoteSize.X) / 2, cork.Y + NotesTop + placed[c] * (NoteSize.Y + NoteGap), NoteSize.X, NoteSize.Y);
-            placed[c]++;
+            List<string> rows = Wrap(posting.Text, NoteWidth - NoteInset * 2);
+            int height = NoteInset + 6 + _detailFont.LineSpacing + 2 + _detailFont.LineSpacing + 4 + rows.Count * _detailFont.LineSpacing + NoteInset;
+            var note = new Rectangle(cork.X + column * c + (column - NoteWidth) / 2, cork.Y + NotesTop + down[c], NoteWidth, height);
+            down[c] += height + NoteGap;
 
             if (posting.Main) Fill(spriteBatch, Grow(note, 6), Glow * (alpha * (0.35f + 0.45f * pulse)));
             Fill(spriteBatch, new Rectangle(note.X + 4, note.Y + 5, note.Width, note.Height), PaperShadow * alpha);
@@ -91,7 +94,7 @@ public class QuestBoardSprite
             y += _detailFont.LineSpacing + 2f;
             Text.Draw(spriteBatch, _detailFont, posting.Giver, note.X + NoteInset, y, Palette.Note * alpha, Color.Transparent);
             y += _detailFont.LineSpacing + 4f;
-            foreach (string row in Wrap(posting.Text, NoteSize.X - NoteInset * 2))
+            foreach (string row in rows)
             {
                 Text.Draw(spriteBatch, _detailFont, row, note.X + NoteInset, y, Palette.Ink * alpha, Color.Transparent);
                 y += _detailFont.LineSpacing;
@@ -106,9 +109,9 @@ public class QuestBoardSprite
     private static Rectangle Grow(Rectangle area, int by) => new(area.X - by, area.Y - by, area.Width + by * 2, area.Height + by * 2);
 
     /// <summary>Breaks a line into rows that fit a width, at the spaces.</summary>
-    private System.Collections.Generic.List<string> Wrap(string text, float width)
+    private List<string> Wrap(string text, float width)
     {
-        var rows = new System.Collections.Generic.List<string>();
+        var rows = new List<string>();
         string row = string.Empty;
         foreach (string word in text.Split(' '))
         {

@@ -1,6 +1,8 @@
 ; The old road. In from Questeria on the west, east through the forest at dusk. A camp off the
 ; road to the south with its fire still going, a path north to the barrow where the road forks,
-; and a tree down across the road further east.
+; and a tree down across the road further east. The wood is props standing in the undergrowth, so
+; their crowns overlap and overhang the verges; the ground is grass, fallen leaves at the edge of
+; the trees, and the road with its ruts.
 
 [map]
 id = road
@@ -13,135 +15,90 @@ ambient = 0.55          ; dusk, not night: the dark is only to make the fire cou
 music = Exploring
 
 [legend]
-, = leaves
+, = grass
+l = leaves
 : = road
-T = thicket
+U = undergrowth
 m = moss
 v = tuft
 f = fern
-o = rock
-s = stump
-< = log-left
-> = log-right
-| = trunk
-b = bush
-/ = canopy-nw
-^ = canopy-n
-\ = canopy-ne
-( = canopy-w
-@ = canopy
-) = canopy-e
-L = canopy-sw
-_ = canopy-s
-J = canopy-se
+* = flowers
+o = pebbles
+r = roots
+= = ruts
+% = litter
 
 [ground]
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTT,,,,,,TTTTTTTTTTTTT,,,,,T::TTTTTTTTTTTTTTTTTT
-TTTTTTTTTT,,,,,,,,,,,,TTTTTTTTTT,,,,,,,,::TT,,,,,,,TTTTTTTTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,,,,,TTT
-:::::::::::::::,,,,,,,,,,,,,,,,:::::::::::::::::::::::::::::
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU::UUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::lUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::lUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::lUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::UUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::UUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::UUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU::UUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUllllUUUUUUUUUUUUUUUUllll::lUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUllUlllllUUUUUUUUUUUUlllll,,,::llllllUUUUUUUUUUUU
+UUUUUUUUUUUlllll,,,lllllUUUUlllllll,,,,,::,,,lllllllUUUUUUUU
+UUUUUUUlllllll,,,,,,,,,lllUUl,,,,,,,,,,,::,,,,,,,,,lUUUUUUUU
+UUUlllUl,,,,,,,,,,,,,,,,,llll,,,,,,,,,,,::,,,,,,,,,lllUUUUUU
+llll,lll,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,lUUUUUU
+l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,lUUUUUU
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-,,,,,,,,,,,,,,,::::::::::::::::,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTT
-,,,TTTTTTTT,,,TTTT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TTTTTTTT
-TTTTTTTTTTTTTTTTTT,,,,,,,,,,,,,,,,T,,,,,,,,,,,TTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTT,,,,,,,,,,,,,,,,TTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+l,,,,l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,lUUUUUU
+llllllllll,,,llll,,,,,,,,,,,,,,,,,ll,,,,,,,,,,,ll,,,llUUUUUU
+UUUUUUUUUlllllUUllll,,,,,,,,,,,,lllllllllllllllllllllUUUUUUU
+UUUUUUUUUUllUUUUUUUl,,,,:::::,,,lUUUlUUUUUUlUUllUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUll,,:::::::,,lUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUll,,:::::::,,lUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUl,,,:::::::,llUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUlll,,,::::,,,lUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUl,,,,,,,,lllUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUllllllllllUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
 
 [detail]
-..........................................b.................
-..........................................b.................
-..........................................b.................
-.......................................b..b.................
+............................................................
+..........................................v.................
+..........................................%.................
 ............................................................
 ............................................................
-............................................................
-...............mmmm|m..............|v.|b....................
-..........|..|....m.m...........|....vv...b.....|mm.........
-...|mm|mmmm.......mmmm.|v...|.......v..v.........mmmm|mmm...
-.....mmmmm.mv.......mm.vv..........vv.vv..........mmmm.mm...
-vvvvmm.mo...v......mmm.vf..........vf.v..........mm.mmmmm...
-.v.vmmfm...vvv......mm.vv....o.....vvv.v.......s.mmmmmmmm...
-...mmmmm..v.vv....mmm.mvvv.........vvv...........mfmmmmmm...
-...mmmmv.v........mmmmm..v.........v.v...........mmmm.mmm...
-..................mmmm.vvv.............................ob...
-.......................................................<>...
-.......................................................bo...
-.................................vv.........v.vv.v..........
-..............mmmmvv...............vv....v....fvv...........
-...............mmv.vvvvv....vvvv..v.vv..v.....v..v..f.......
-...........f...mm..vvv..........vf.vvvv..v.....vvo..........
-...f....v......f...................vvv......................
-....v...v.....vv.ovv.............v...........m..............
-...vvvvvv.....vvv..vv............v.....mmmm.mmmm............
-mm.................v............v.....mmmmmmm.mmmm..........
-...................v.v.........vv.....m.mmmmmm..............
-..................v.v.vv.vv.vvvvv...........................
+.......................................%....................
 ............................................................
 ............................................................
+.................%..........................................
+............r..%..........................%...%.............
+...........%fr......r%.%....m..............fv.r....m........
+.............%..fv.............%..................o.........
+.......r.*......%...m........f.....v..........v.%....v......
+..v..r...f...om.v..v....%.f......%.v........................
+..v.........mv........*.*%.fv...f.f.........................
+=========================...===========.....=============...
+.......o...........o.............o.............o....o.......
+=========================...===========.....=============...
+f........*...........v.v*..o.........%........%.....o.......
+.fr..f%.....................................................
+.........f.......%..f.................%..%....r.%...........
+..........%.........v..v.....v.*...............m............
 ............................................................
-............................................................
-............................................................
-............................................................
-
-[overhead]
-/^\(@)..(@)(@)/^\.L_J/^\/^\/^\L_JL_J./^\.....L_JL_J../^\..L_
-(@)L_J..L_JL_J(@)./^\(@)(@)(@)/^\/^^\(@).../^\./^^\..(@)/^\/
-L_J./^\/^^\/^\L_J.(@)L_JL_JL_J(@)(@@)L_J...(@).(@@)..L_J(@)(
-^\..(@)(@@)(@)./^\L_J/^\/^\/^\L_JL__J......L_J.(@@)/^^\.L_JL
-@)..L_JL__JL_J.(@)/^\(@)(@)(@)..../^\/^\../^\..L__J(@@)/^^\/
-_J/^\/^^\/^\/^\L_J(@)L_JL_JL_J./^\(@)(@)..(@)../^^\L__J(@@)(
-^\(@)(@@)(@)(@)...L_J./^\../^^\(@)L_JL_J..(@)..(@@)./^\(@@)L
-@)(@)(@@)L_JL_J.......(@)..(@@)L_J........L_J..L__J.(@)L__J.
-_JL_JL__J.............L_J..L__J.....................L_J.../^
-..........................................................(@
-..........................................................L_
-........................................................./^\
-.........................................................(@)
-.........................................................(@)
-.........................................................L_J
+......................v.........%...........................
+...................m............%...........................
+....................f.......................................
+.....................m.ov..v..%.............................
+.....................r.r..r..fr.............................
 ............................................................
 ............................................................
 ............................................................
 ............................................................
-.........................................................../
-...........................................................(
-...........................................................L
-........................................................./^\
-.........................................................(@)
-.........................................................L_J
-..../^\/^\..../^^\................................../^\./^^\
-/^\.(@)(@)/^^\(@@)............................/^\/^\(@).(@@)
-(@).L_JL_J(@@)L__J................../^\../^^\.(@)(@)L_J.L__J
-L_J/^^\/^\L__J../^\/^\../^^\../^^\..(@)..(@@).L_JL_J./^^\./^
-^\.(@@)(@)/^^\..(@)(@)..(@@)..(@@)..L_J..L__J../^\/^\(@@).(@
-@).L__JL_J(@@)..L_JL_J..L__J..L__J/^\/^\/^\./^\(@)(@)(@@).(@
-_J/^^\/^^\(@@)./^\/^^\./^\/^\/^^\.(@)(@)(@).(@)(@)L_JL__J.L_
-^\(@@)(@@)L__J.(@)(@@).(@)(@)(@@).(@)L_J(@).L_JL_J/^\./^\./^
-@)(@@)L__J./^\.L_J(@@).L_JL_JL__J.L_J/^\L_J/^\/^\.(@).(@).(@
+............................................................
+............................................................
 
 ; kind id x y, in tiles, then any settings. Exits and triggers are rectangles from their top left tile.
 [objects]
@@ -150,12 +107,137 @@ spawn barrow 40.5 2
 exit questeria 0 15 h=3 to=questeria at=gate
 exit barrow 40 0 w=2 to=barrow
 
-; The camp.
+; The wood north of the road: the trees along its edge stand with their trunks at the verge and
+; their crowns over the undergrowth, and the ones behind them are deeper and bluer.
+prop oak-light 7 0.8
+prop oak-deep 12 1
+prop oak 24 1.5
+prop oak-light 52 1
+prop fir 37.5 1.5
+prop fir 58.5 2
+prop fir-deep 20.5 3
+prop oak 15 3.5
+prop oak-deep 34.5 3.5
+prop oak-deep 46.5 3.5
+prop fir-deep 6.5 4
+prop fir-deep 30.5 4
+prop oak-deep 10.5 5
+prop oak-deep 54 5
+prop oak-deep 26 5.5
+prop fir-deep 49.5 6
+prop oak-deep 3 6.5
+prop fir-deep 15.5 7.4
+prop oak-pale 19 7.4
+prop fir-deep 36.5 7.4
+prop oak-deep 23 8.3
+prop oak-amber 33.5 8.3
+prop fir 43.5 8.3
+prop oak-light 12.5 8.4
+prop oak-light 47 8.4
+prop oak-deep 58 9
+prop oak 8 9.3
+prop oak 29.5 9.3
+prop oak-deep 51 9.4
+prop fir 26 10.3
+prop fir 53.5 11.3
+prop fir 4.5 11.4
+prop oak-deep 1 12.3
+prop oak 56.5 14.3
+
+; Two standing out in the verge, so the road goes under their crowns.
+prop oak-pale 14.8 12.4
+prop fir 31.2 12.6
+
+; Along the north verge.
+prop mushrooms-pale 42.2 2.3
+prop mushrooms-pale 39.3 4.6
+prop grass-tall 37.2 8.3
+prop mushrooms 17.3 8.4
+prop fern 35 9.1
+prop bush-small 14 9.2
+prop fern 21.5 9.2
+prop bush 45.3 9.3
+prop bush-deep 31.4 10.2
+prop grass-tall 9.7 10.3
+prop fern 49.5 10.3
+prop stump 27.6 10.5
+prop rocks-mossy 24.6 11.2
+prop fern 6.2 12.2
+prop bush-small 52.4 12.2
+prop bush 2.5 12.6
+
+; In the corners where the edge of the wood steps.
+prop grass-tall 9 20.7
+prop fern 11 9.4
+prop bush-small 20 9.4
+prop mushrooms 44 20.7
+
+; Where the path goes up to the barrow: a dead tree, a snag and stones either side of its mouth.
+prop rocks-mossy 38 0.6
+prop rocks-mossy 43.5 0.6
+prop snag 42.8 3
+prop dead-tree 38.3 6.5
+
+; The wood south of the road, far enough back that its crowns only overhang the verge.
+prop fir-deep 57.5 21.5
+prop fir 1.5 22.5
+prop fir 5 23.4
+prop fir 50.5 23.5
+prop fir 38.5 23.6
+prop fir-deep 12 24.5
+prop fir-deep 44.5 24.5
+prop oak-deep 54 25
+prop oak 1 25.5
+prop oak-deep 8.5 25.5
+prop oak-light 15.5 26
+prop oak-deep 35 26
+prop oak-light 41.5 26
+prop oak 47.5 26.5
+prop oak-deep 59 27.5
+prop oak 16.5 28.5
+prop fir-deep 53 28.5
+prop fir-deep 7 29.5
+prop fir 19.5 29.5
+prop fir-deep 40 29.5
+prop fir 47.5 29.5
+prop fir-deep 27.5 30
+prop oak-deep 2 31
+prop oak-deep 56.5 31
+prop oak 10.5 31.5
+prop oak 50 31.5
+prop oak-light 37 32
+prop oak-deep 23.5 32.5
+prop oak-pale 32.5 32.5
+prop oak-deep 44 32.5
+prop oak-deep 13.5 33.4
+
+; Along the south verge.
+prop fern 53.2 19.3
+prop bush-small 52.5 20.2
+prop fern 7.3 20.3
+prop fern 38.5 20.3
+prop grass-tall 15 20.4
+prop bush-small 4 20.6
+prop bush 17.8 21.2
+prop bush-deep 42.5 21.2
+prop stump 49.2 21.3
+prop mushrooms 13.2 21.4
+prop mushrooms 45.5 21.5
+prop log 11 21.6
+prop rocks-mossy 36 21.6
+
+; The camp, off the road to the south, with its fire still going: a log to sit on by it, two
+; bedrolls, the crate and the barrel they brought, and a stump at the back.
 prop campfire 26 23
+prop log 26.5 20.6
 prop bedroll 22.5 21.5
 prop bedroll 29 25
-prop crate 21 26
-prop barrel 22 26
+prop crate 20.3 21.6
+prop barrel 20.6 22.9
+prop stump 31.5 24.2
+prop bush 33.5 22.6
+prop mushrooms 19.3 24.5
+prop bush-small 19.2 25.4
 chest camp 30 22 gold=14
 trigger watched 17 7 h=18 say="Someone has been watching the road." set=road-ambush
 
@@ -163,5 +245,17 @@ trigger watched 17 7 h=18 say="Someone has been watching the road." set=road-amb
 sign fork 38 13 text="West, Questeria. North, the barrow."
 waypoint stone 44 11
 
-; The far end.
+; The far end, where a tree's come down across the road.
+prop fallen-tree 55 18.5
+prop dead-tree 58.5 13.6
+prop bush-deep 58.4 18.6
 trigger blocked 53 14 h=5 once=no say="No way through to the east."
+
+; What the two of you say on the way: setting out, at the camp (once Brisk has said there are
+; highwaymen, it's their camp), at the fork, and on the path up to the barrow, far enough short of it
+; to get a word in.
+trigger bark-road-out 4 15 w=2 h=3 bark=road-out
+trigger bark-road-camp 21 20 w=10 h=6 bark=road-camp
+trigger bark-road-camp-bandits 21 20 w=10 h=6 bark=road-camp-bandits
+trigger bark-road-fork 37 15 w=5 h=3 bark=road-fork
+trigger bark-barrow-mouth 40 7 w=2 h=2 bark=barrow-mouth

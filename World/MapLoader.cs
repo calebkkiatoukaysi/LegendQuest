@@ -405,7 +405,7 @@ public static class MapLoader
         return props;
     }
 
-    /// <summary>The people: npc id x y, then sheet= and name= for townsfolk or cast= for the story's people, and facing=, say=, wander=, when= and unless=.</summary>
+    /// <summary>The people: npc id x y, then sheet= and name= for townsfolk, look= and name= for a crowd, or cast= for the story's people, and facing=, say=, wander=, when= and unless=.</summary>
     /// <param name="objects">Every object on the map.</param>
     /// <param name="solid">Whether a tile is solid, for checking they're standing somewhere they could.</param>
     private static List<MapNpc> ReadNpcs(List<MapObjectLine> objects, Func<int, int, bool> solid)
@@ -416,16 +416,28 @@ public static class MapLoader
         {
             string castId = o.Text("cast");
             string sheet = o.Text("sheet");
+            string seed = o.Text("look");
             string name = o.Text("name");
+            if ((castId is null ? 0 : 1) + (sheet is null ? 0 : 1) + (seed is null ? 0 : 1) > 1)
+                throw o.Fail("someone's drawn from one of cast=, sheet= or look=, not two of them");
+
+            CharacterLook look = null;
             if (castId is not null)
             {
                 CastMember cast = Cast.Get(castId) ?? throw o.Fail($"there's nobody in the cast called {castId}");
                 if (cast.Look is null && cast.Sheet is null) throw o.Fail($"{castId} is only ever a voice, and can't stand on a map");
                 name ??= cast.Name;
             }
+            else if (seed is not null)
+            {
+                if (!int.TryParse(seed, NumberStyles.Integer, CultureInfo.InvariantCulture, out int picked))
+                    throw o.Fail($"look has to be a whole number, the seed their look is picked from, not {seed}");
+                if (name is null) throw o.Fail("someone drawn from look= needs name= too, since there's no telling who they are");
+                look = LookOptions.Random(new Random(picked));
+            }
             else
             {
-                if (sheet is null || name is null) throw o.Fail("someone who isn't in the cast needs sheet= and name=");
+                if (sheet is null || name is null) throw o.Fail("someone who isn't in the cast needs name=, and sheet= or look= for how they look");
                 if (!Townsfolk.Contains(sheet))
                     throw o.Fail($"there's no sheet called {sheet} (the townsfolk are {string.Join(", ", Townsfolk.All)})");
             }
@@ -433,9 +445,9 @@ public static class MapLoader
             float wander = o.Number("wander", 0f);
             if (wander < 0f) throw o.Fail("wander can't be less than nothing");
 
-            var npc = new MapNpc(o.Id, name, FeetOn(o), o.Facing("facing", Direction.Down), castId is null ? sheet : null, castId,
-                o.Text("say"), wander * Tilemap.TileSize, o.Presence());
-            o.Done("name, sheet, cast, facing, say, wander, when, unless");
+            var npc = new MapNpc(o.Id, name, FeetOn(o), o.Facing("facing", Direction.Down), sheet, castId, look,
+                ReadLines(o, "say"), wander * Tilemap.TileSize, o.Presence());
+            o.Done("name, sheet, look, cast, facing, say, wander, when, unless");
 
             Point cell = Tilemap.CellOf(npc.Feet);
             if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
@@ -443,6 +455,24 @@ public static class MapLoader
         }
 
         return npcs;
+    }
+
+    /// <summary>Takes out a setting that's several lines with a | between each, like say="Morning.|Mind the step."</summary>
+    /// <param name="o">The object's line.</param>
+    /// <param name="key">The setting.</param>
+    /// <returns>The lines, trimmed, or none if it isn't set.</returns>
+    private static IReadOnlyList<string> ReadLines(MapObjectLine o, string key)
+    {
+        string text = o.Text(key);
+        if (text is null) return Array.Empty<string>();
+
+        string[] lines = text.Split('|');
+        for (int i = 0; i < lines.Length; i++)
+        {
+            lines[i] = lines[i].Trim();
+            if (lines[i].Length == 0) throw o.Fail($"{key} has an empty line in it (two |s together, or one at an end)");
+        }
+        return lines;
     }
 
     /// <summary>The lights that aren't a prop's: light id x y reach=tiles, and strength= (1 if it isn't set).</summary>
@@ -516,16 +546,19 @@ public static class MapLoader
         return entrances;
     }
 
-    /// <summary>The rest of a trigger: once= (yes if it isn't set), say= a line to show, set= a flag to set, talk= a conversation to start. It has to do at least one of them.</summary>
+    /// <summary>The rest of a trigger: once= (yes if it isn't set), say= a line to show, set= a flag to set, talk= a conversation to start, bark= a banter to play. It has to do at least one of them. mark=yes puts a red "!" over it.</summary>
     private static MapTrigger ReadTrigger(MapObjectLine o, BoundingRectangle area)
     {
-        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"), o.Text("talk"), o.Presence());
-        o.Done("w, h, once, say, set, talk, when, unless");
+        var trigger = new MapTrigger(o.Id, area, o.YesNo("once", true), o.Text("say"), o.Text("set"), o.Text("talk"), o.Text("bark"),
+            o.YesNo("mark", false), o.Presence());
+        o.Done("w, h, once, say, set, talk, bark, mark, when, unless");
 
-        if (trigger.Say is null && trigger.SetFlag is null && trigger.Talk is null)
-            throw o.Fail("this trigger doesn't do anything (it needs say=, set= or talk=)");
+        if (trigger.Say is null && trigger.SetFlag is null && trigger.Talk is null && trigger.Bark is null)
+            throw o.Fail("this trigger doesn't do anything (it needs say=, set=, talk= or bark=)");
         if (trigger.Talk is not null && DialogueCatalog.Get(trigger.Talk) is null)
             throw o.Fail($"there's no conversation called {trigger.Talk}");
+        if (trigger.Bark is not null && !Banters.Exists(trigger.Bark))
+            throw o.Fail($"there's no banter called {trigger.Bark}");
         return trigger;
     }
 

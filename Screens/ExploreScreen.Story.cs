@@ -19,11 +19,12 @@ namespace LegendQuest.Screens;
 /// the corner of the screen, the townsfolk strolling about, and the ship coming in.
 /// </summary>
 /// <remarks>
-/// The ship comes into the harbour once the Prologue's over: it sails in with you and the Soul-Bound
-/// on its deck, ties up, the gangplank goes down, you both walk off onto the boardwalk, and Act 1's
-/// card comes up. Then the harbour's own scene takes over (the Red Gulls). It's steps on a clock,
-/// not a general cutscene system; the scenes are data, in the map files. Nothing you press moves you
-/// while the ship's coming in, but Escape skips it.
+/// The ship comes into the harbour once the Prologue's over: she sails in along the pier with you and
+/// the Soul-Bound on her foredeck, her sail coming in as she slows, ties up clear of the boardwalk,
+/// the gangplank slides out of her rail and down onto the pier, you both walk off along the pier and
+/// up the jetty to the boardwalk, and Act 1's card comes up. Then the harbour's own scene takes over
+/// (the Red Gulls). It's steps on a clock, not a general cutscene system; the scenes are data, in the
+/// map files. Nothing you press moves you while the ship's coming in, but Escape skips it.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -38,23 +39,48 @@ public partial class ExploreScreen
     /// <summary>Where what you're to do next goes, under the map's name.</summary>
     private const float ObjectiveY = 50f;
 
-    /// <summary>How far east of where it ties up the ship starts, and how long it takes to sail in.</summary>
+    /// <summary>How far east of where she ties up the ship starts, and how long she takes to sail in.</summary>
     private const float SailFrom = 560f;
-    private const float SailSeconds = 7.5f;
+    private const float SailSeconds = 8f;
 
-    /// <summary>When, after it's in, the sail comes in and then the gangplank goes down, and when the Soul-Bound sets off down it.</summary>
-    private const float FurlAt = 0.3f;
-    private const float PlankAt = 0.9f;
-    private const float OffAt = 1.6f;
+    /// <summary>How fast she's still going, as a share of her top speed, when her sail starts coming in, when it's nearly up, and when it's furled.</summary>
+    private const float HaulAt = 0.3f;
+    private const float NearlyUpAt = 0.08f;
+    private const float FurledAt = 0.01f;
+
+    /// <summary>How long each of the two pictures of her wake is up while she's moving.</summary>
+    private const float WakeSeconds = 0.22f;
+
+    /// <summary>When, after she stops, her lines go ashore, the gate in her rail opens and the plank starts sliding out, how long each push of it takes, and when the Soul-Bound sets off down it.</summary>
+    private const float TieUpAt = 0.5f;
+    private const float GateAt = 0.9f;
+    private const float PlankAt = 1.1f;
+    private const float PlankStepSeconds = 0.14f;
+    private const float OffAt = 1.9f;
 
     /// <summary>How far behind the Soul-Bound you set off, how fast you both walk off (art pixels a second), and how long the act's card is up.</summary>
-    private const float FollowGap = 0.7f;
-    private const float DisembarkSpeed = 34f;
+    private const float FollowGap = 0.8f;
+    private const float DisembarkSpeed = 52f;
     private const float CardSeconds = 4.2f;
 
-    /// <summary>How much the ship rocks up and down, in art pixels, and how fast.</summary>
+    /// <summary>How much the ship rocks up and down, in art pixels, how fast, and how long she takes to settle once she's stopped.</summary>
     private const float Bob = 1.2f;
     private const float BobRate = 1.8f;
+    private const float SettleSeconds = 0.8f;
+
+    /// <summary>The ship's pictures, as tools/generate_harbour.py's SHIP_FRAMES has them: tied up, then the sail full with her wake behind her (two of those), the sail being hauled up (two), nearly up, and furled with her lines not ashore yet.</summary>
+    private const int ShipMoored = 0;
+    private const int ShipFullSail = 1;
+    private const int ShipHauling = 3;
+    private const int ShipNearlyUp = 5;
+    private const int ShipFurled = 6;
+
+    /// <summary>Her near rail's pictures, as RAIL_FRAMES has them: the plank down on the pier, the gate in the rail shut, the gate open, then the plank sliding out, a picture a push.</summary>
+    private const int PlankDown = 0;
+    private const int GateShut = 1;
+    private const int GateOpen = 2;
+    private const int PlankSliding = 3;
+    private const int PlankPushes = 3;
 
     /// <summary>The black bars across the top and bottom while it plays, and how fast they come and go.</summary>
     private const int BarHeight = 70;
@@ -64,11 +90,19 @@ public partial class ExploreScreen
     private static readonly Color CardBacking = Color.Black * 0.55f;
     private static readonly Vector2 CardSpread = new(90f, 20f);
 
-    /// <summary>Where you and the Soul-Bound stand on the deck, from the ship's foot, and the way off: the foot of the gangplank, its top, and where each of you ends up on the boardwalk.</summary>
-    private static readonly Vector2 YouOnDeck = new(-22f, -56f);
-    private static readonly Vector2 SoulBoundOnDeck = new(-58f, -60f);
-    private static readonly Vector2[] SoulBoundOff = { new(-40f, -62f), new(-40f, -102f), new(-56f, -112f) };
-    private static readonly Vector2[] YouOff = { new(-40f, -62f), new(-40f, -100f), new(-22f, -110f) };
+    /// <summary>Where the camera looks while she sails in, from the ship's foot: the middle of her deck.</summary>
+    private static readonly Vector2 ShipViewOffset = new(-40f, -50f);
+
+    /// <summary>
+    /// Where you and the Soul-Bound stand on her foredeck, from the ship's foot, close enough to her
+    /// near rail that it hides your feet; and the way off: along the deck to the gangway, down the plank
+    /// onto the pier, along the pier to the jetty, up the jetty to the boardwalk, and a step along it.
+    /// Nobody goes behind her mast, her sail or her rigging, which are all north of the deck.
+    /// </summary>
+    private static readonly Vector2 YouOnDeck = new(-80f, -46f);
+    private static readonly Vector2 SoulBoundOnDeck = new(-56f, -37f);
+    private static readonly Vector2[] SoulBoundOff = { new(-44f, -34f), new(-44f, 20f), new(-152f, 20f), new(-152f, -154f), new(-120f, -168f) };
+    private static readonly Vector2[] YouOff = { new(-44f, -34f), new(-44f, 20f), new(-164f, 20f), new(-164f, -146f), new(-140f, -156f) };
 
     private readonly InputAction _skip = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
 
@@ -87,6 +121,7 @@ public partial class ExploreScreen
     private readonly List<(WalkerSprite Walker, Queue<Vector2> Way, float Wait)> _disembarking = new();
 
     /// <summary>Starts the ship coming in if this is the harbour, the Prologue's over, and you've not landed yet.</summary>
+    /// <remarks>Otherwise she's left as the map has her: tied up, with her plank down on the pier.</remarks>
     private void BeginArrival()
     {
         if (_map.Id != "docks" || !_game.Flags.Contains(Prologue.Done) || _game.Flags.Contains(Arrived)) return;
@@ -101,8 +136,9 @@ public partial class ExploreScreen
         _arriving = Arriving.Sailing;
         _arrivalClock = 0f;
         _bars = 1f;
-        _ship.Frame = 0;
-        _gangplank.Hidden = true;
+        _ship.Frame = ShipFullSail;
+        _gangplank.Frame = GateShut;
+        MoveShip(new Vector2(SailFrom, 0f));
         PlaceOnDeck();
         _camera.SnapTo(ShipView());
     }
@@ -127,38 +163,28 @@ public partial class ExploreScreen
             return false;
         }
 
-        float seconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        _arrivalClock += seconds;
-        _ship.Offset = new Vector2(_ship.Offset.X, MathF.Round(MathF.Sin(_arrivalClock * BobRate) * Bob));
+        _arrivalClock += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         switch (_arriving)
         {
             case Arriving.Sailing:
-                float t = MathF.Min(1f, _arrivalClock / SailSeconds);
-                float eased = 1f - (1f - t) * (1f - t) * (1f - t);
-                _ship.Offset = new Vector2(MathF.Round(SailFrom * (1f - eased)), _ship.Offset.Y);
+                // She comes in fast and slows to a stop (an ease out), and how fast she's still
+                // going says how much of her sail's up and how much wake she's leaving.
+                float left = 1f - MathF.Min(1f, _arrivalClock / SailSeconds);
+                MoveShip(new Vector2(MathF.Round(SailFrom * left * left * left), Rock(_arrivalClock, 1f)));
+                _ship.Frame = SailingFrame(left * left);
                 PlaceOnDeck();
-                if (t >= 1f) Next(Arriving.Docked);
+                if (left <= 0f) Next(Arriving.Docked);
                 break;
 
             case Arriving.Docked:
-                _ship.Offset = new Vector2(0f, _ship.Offset.Y);
+                MoveShip(new Vector2(0f, Rock(SailSeconds + _arrivalClock, MathF.Max(0f, 1f - _arrivalClock / SettleSeconds))));
                 PlaceOnDeck();
-                if (_arrivalClock >= FurlAt && _ship.Frame == 0)
-                {
-                    _ship.Frame = 1;
-                    _audio.Play(Sfx.OptionChange);
-                }
-                if (_arrivalClock >= PlankAt && _gangplank.Hidden)
-                {
-                    _gangplank.Hidden = false;
-                    _audio.Play(Sfx.Door);
-                }
+                TieUp();
                 if (_arrivalClock >= OffAt) StartDisembarking();
                 break;
 
             case Arriving.Disembarking:
-                _ship.Offset = Vector2.Zero;
                 if (Disembark(gameTime))
                 {
                     _walkers[1].Face(_walkers[0].Position);
@@ -168,7 +194,6 @@ public partial class ExploreScreen
                 break;
 
             case Arriving.Card:
-                _ship.Offset = Vector2.Zero;
                 if (_arrivalClock >= CardSeconds) EndArrival();
                 break;
         }
@@ -185,10 +210,52 @@ public partial class ExploreScreen
         _arrivalClock = 0f;
     }
 
-    /// <summary>The middle of the ship's deck, which the camera keeps on while it sails in.</summary>
-    private Vector2 ShipView() => _ship.Foot + _ship.Offset + new Vector2(-30f, -70f);
+    /// <summary>How far up or down the swell has the ship, in whole art pixels, at a moment of the arrival.</summary>
+    /// <param name="seconds">How long since she started sailing in. It carries on from sailing into tying up, so she doesn't jump.</param>
+    /// <param name="size">How much of the rocking's left: all of it while she's sailing, dying away as she settles.</param>
+    private static float Rock(float seconds, float size) => MathF.Round(MathF.Sin(seconds * BobRate) * Bob * size);
 
-    /// <summary>Stands you and the Soul-Bound on the deck, wherever the ship's got to.</summary>
+    /// <summary>Which picture of the ship goes with how fast she's going, as a share of her top speed: the sail full and her wake churning while she's making way, then the sail coming in as she slows, and furled by the time she stops.</summary>
+    private int SailingFrame(float speed)
+    {
+        int wake = (int)(_arrivalClock / WakeSeconds) % 2;
+        if (speed > HaulAt) return ShipFullSail + wake;
+        if (speed > NearlyUpAt) return ShipHauling + wake;
+        return speed > FurledAt ? ShipNearlyUp : ShipFurled;
+    }
+
+    /// <summary>Ties her up a step at a time once she's stopped: her lines ashore with the bell, the gate in her rail open, then the plank sliding out a push at a time and down onto the pier.</summary>
+    private void TieUp()
+    {
+        if (_arrivalClock >= TieUpAt && _ship.Frame != ShipMoored)
+        {
+            _ship.Frame = ShipMoored;
+            _audio.Play(Sfx.ShipBell);
+        }
+
+        int push = (int)((_arrivalClock - PlankAt) / PlankStepSeconds);
+        int frame = _arrivalClock < GateAt ? GateShut
+            : _arrivalClock < PlankAt ? GateOpen
+            : push < PlankPushes ? PlankSliding + push
+            : PlankDown;
+        if (frame == _gangplank.Frame) return;
+
+        _gangplank.Frame = frame;
+        if (frame == GateOpen) _audio.Play(Sfx.Lever);
+        if (frame == PlankDown) _audio.Play(Sfx.Door);
+    }
+
+    /// <summary>Moves the ship off where she ties up, and her near rail with her.</summary>
+    private void MoveShip(Vector2 offset)
+    {
+        _ship.Offset = offset;
+        _gangplank.Offset = offset;
+    }
+
+    /// <summary>The middle of the ship's deck, which the camera keeps on while she sails in.</summary>
+    private Vector2 ShipView() => _ship.Foot + _ship.Offset + ShipViewOffset;
+
+    /// <summary>Stands you and the Soul-Bound on her foredeck, wherever she's got to: you looking up at the city, the Soul-Bound out ahead.</summary>
     private void PlaceOnDeck()
     {
         Vector2 deck = _ship.Foot + _ship.Offset;
@@ -202,6 +269,7 @@ public partial class ExploreScreen
     private void StartDisembarking()
     {
         Next(Arriving.Disembarking);
+        MoveShip(Vector2.Zero);
         _disembarking.Clear();
         _disembarking.Add((_walkers[1], Way(SoulBoundOff), 0f));
         _disembarking.Add((_walkers[0], Way(YouOff), FollowGap));
@@ -247,17 +315,17 @@ public partial class ExploreScreen
         return done;
     }
 
-    /// <summary>Ends the ship coming in, whether it played out or got skipped: tied up, you both on the boardwalk, and the harbour's scene next.</summary>
+    /// <summary>Ends the ship coming in, whether it played out or got skipped: tied up with her plank down, you both on the boardwalk looking along it at the trouble, and the harbour's scene next.</summary>
     private void EndArrival()
     {
-        _ship.Offset = Vector2.Zero;
-        _ship.Frame = 1;
-        _gangplank.Hidden = false;
+        MoveShip(Vector2.Zero);
+        _ship.Frame = ShipMoored;
+        _gangplank.Frame = PlankDown;
         _walkers[1].Position = _ship.Foot + SoulBoundOff[^1];
         _walkers[0].Position = _ship.Foot + YouOff[^1];
         foreach (WalkerSprite walker in _walkers) walker.IsWalking = false;
-        _walkers[0].Facing = Direction.Up;
-        _walkers[1].Facing = Direction.Up;
+        _walkers[0].Facing = Direction.Right;
+        _walkers[1].Facing = Direction.Right;
         _arriving = Arriving.None;
 
         _game.Flags.Add(Arrived);

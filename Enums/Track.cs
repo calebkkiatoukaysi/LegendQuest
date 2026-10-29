@@ -14,4 +14,7 @@ public enum Track
 
     /// <summary>"Cold Stone": walking about in the dark, underground.</summary>
     Underground,
+
+    /// <summary>"Salt and Lanterns": on board the Gull's Wager, at sea.</summary>
+    Sea,
 }

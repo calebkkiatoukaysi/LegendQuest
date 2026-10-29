@@ -1,6 +1,7 @@
-; The Gilded Flagon, the Lantern Market's tavern: the bar along the left with the kegs behind it,
-; the hearth in the back wall, tables round a rug, and the keeper behind the bar. Dim, the hearth
-; and the candles lighting it. The door's in the front wall, back out to wherever you came in.
+; The Gilded Flagon, the Lantern Market's tavern: the bar along the left with the keeper behind it and
+; the kegs and the crockery behind them on the flagstones, the hearth in the back wall with the bard in
+; front of it on the rug, tables round the room, and the regulars. Dim, the hearth and the candles
+; lighting it. The door's in the front wall, back out to wherever you came in.
 
 [map]
 id = gilded-flagon
@@ -24,14 +25,14 @@ _ = wall-base
 ######################
 #||||||||||||||||||||#
 #____________________#
+#sssssssssss---------#
+#sssssssssss---------#
+#sssssssssssrrrrrrr--#
+#sssssssssssrrrrrrr--#
+#-----------rrrrrrr--#
 #--------------------#
 #--------------------#
 #--------------------#
-#--------------------#
-#--------------------#
-#--------rrrrrr------#
-#--------rrrrrr------#
-#--------rrrrrr------#
 #--------------------#
 #--------------------#
 #--------------------#
@@ -41,28 +42,56 @@ _ = wall-base
 spawn start 10.5 13 facing=up
 exit door 10 14 w=2 to=back
 
-; The bar, the kegs behind it, and the keeper.
-prop bar-counter 5 7
-prop keg-stack 3 4
-prop keg-stack 6.5 4
+; The bar, with the keeper behind it, the bottles, the kegs and the crockery behind them, stools along
+; it, and Pip at the end of it, jumpy about the cellar.
+prop bar-counter 7.5 7
+prop bookshelf 2.4 3.4
+prop keg-stack 5 3.4
+prop keg-stack 7.4 3.4
+prop utensil-rack 9.8 3.3
+prop stool 5.2 7.9
+prop stool 6.8 7.9
+prop chalkboard 11.4 8
 npc innkeeper 9.5 6 name="The Innkeeper" sheet=baker facing=down say="Rooms upstairs, stew on the fire."
+npc pip 3.4 7.2 cast=pip wander=2 say="Coming through! Hot! Not really, but move!|Don't go down the cellar.|I'm not scared. I'm careful. There's a difference."
 
-; The hearth, the tables and their stools, and the candles.
-prop hearth 15.5 3.5
-prop round-table 12 7
-prop stool 10.5 7.4
-prop stool 13.6 7.4
-prop round-table 18 8
-prop stool 16.5 8.4
-prop stool 19.6 8.4
-prop round-table 12 11.5
-prop stool 10.5 11.9
-prop round-table 18 12
-prop stool 19.6 12.4
-prop candle-stand 20 4
+; The hearth in the back wall, an armchair either side of it, the bard playing to the room in front of
+; it, and the tapestries.
+prop hearth 15.5 4.4
+prop armchair 13.2 5.4
+prop armchair 17.8 5.4
+prop tapestry 12.2 2.6
+prop tapestry 19 2.6
+npc bard 15.5 6.4 look=424 name="Merrin the Bard" facing=down say="A song for a copper! Two coppers and I stop.|This one's about a sailor and a mermaid. It ends badly.|I know eleven songs about the sea and one about cheese."
+
+; The tables, their chairs and stools, and the regulars round them: two at the near tables, two at
+; cards by the hearth, and the barmaid going between.
+prop round-table 13.5 9
+prop stool 12.2 9.2
+prop chair 14.9 9
+prop round-table 18 8.4
+prop chair 19.4 8.4
+prop round-table 13.5 12
+prop stool 12.2 12.2
+prop chair 14.9 12
+prop round-table 18 11.8
+prop stool 16.7 12
+prop chair 19.4 11.8
+prop bench 4.5 10
+prop table 4.5 11
+npc patron-1 13.5 8.2 name="A Regular" sheet=traveller facing=down say="Don't take the corner booth. Somebody always does.|Something scratched under the floor last night.|Best stew in the Lantern Market. Only stew, but still."
+npc patron-2 13.5 11.2 name="A Drinker" sheet=old-woman facing=down say="The stew's better than it smells. It has to be.|Rats don't stare. These stare.|Another round, and keep the cellar door shut."
+npc patron-3 18 7.6 look=418 name="A Card Player" facing=down say="You're blocking my light. And my luck.|Three crowns on the table. Nobody touch it.|The rats downstairs cheat less than this lot."
+npc patron-4 16.6 8.6 look=442 name="A Card Player" facing=right say="Deal me in. No, out. No, in.|Lost my boots last week. Won them back. Lost them again.|Don't drink the house red. Trust me."
+npc barmaid 16 10.4 look=435 name="A Barmaid" wander=3 say="Mind the floor, it's sticky on purpose.|Stew's on. It's always on.|Pip's been jumpy all week. Something in the cellar, he says."
+
+; The candles, and the plants.
+prop candle-stand 20 4.6
 prop candle-stand 1.5 12.5
-prop bookshelf 19.5 3.5
+prop candle-stand 8.4 12.4
+prop potted-plant 20 3.3
+prop potted-plant 1.6 9.6
 
-; The regulars.
-npc patron-1 13.6 8.6 name="A Regular" sheet=traveller facing=left say="Don't take the corner booth. Somebody always does."
-npc patron-2 16.5 12.6 name="A Drinker" sheet=old-woman facing=right say="The stew's better than it smells. It has to be."
+; What the two of you say coming in, and the regulars talking about the cellar.
+trigger bark-flagon-inside 9 11 w=4 h=2 bark=flagon-inside
+trigger bark-flagon-regulars 12 9 w=5 h=3 bark=flagon-regulars once=no

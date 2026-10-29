@@ -29,7 +29,7 @@ public static class LookOptions
         "Small, lucky, and clever with tools.",
     };
 
-    /// <summary>The lines a people comes in, by their Lineage number: horns for the Emberkin, beasts for the Wildkin. One "—" for a people without lines.</summary>
+    /// <summary>The lines a people comes in, by their Lineage number: horns for the Emberkin, beasts for the Wildkin. NONE for a people without lines.</summary>
     /// <param name="ancestry">Whose.</param>
     public static IReadOnlyList<string> Lineages(Ancestry ancestry) => ancestry switch
     {
@@ -45,7 +45,7 @@ public static class LookOptions
     private static readonly string[] WildkinLines = { "WOLF", "HAWK", "BEAR" };
 
     /// <summary>Nothing to pick.</summary>
-    private static readonly string[] NoLines = { "—" };
+    private static readonly string[] NoLines = { "NONE" };
 
     /// <summary>The hats. The first is none.</summary>
     public static IReadOnlyList<Option> Hats { get; } = new Option[]

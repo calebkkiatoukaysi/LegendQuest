@@ -1,0 +1,60 @@
+; A smithy in Questeria: the forge fire in the back wall with a tool rack either side of it, the anvil
+; in front of it with the smith at work, the quenching barrel, the apprentice at the bellows, and iron
+; stock and charcoal along the walls. The fire's most of the light. Every smithy that's this one inside
+; comes back out its own door.
+
+[map]
+id = forge
+name = The Smithy
+tileset = interior
+size = 16 11
+dark = yes
+ambient = 0.55
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+################
+#||||||||||||||#
+#______________#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#######ss#######
+
+[objects]
+spawn start 7.5 9 facing=up
+exit door 7 10 w=2 to=back
+
+; The forge, the anvil, and the barrel to quench in.
+prop tool-rack 3.2 3.2
+prop hearth 7.5 4.4
+prop tool-rack 11.8 3.2
+prop anvil 7.5 6.8
+prop barrel-water 5.2 6.6
+prop side-table 3.6 5.6
+npc smith 9.4 6.3 look=719 name="The Blacksmith" facing=left say="Hot iron. Mind your elbows.|Half the Watch's blades came through that door. Half of them went east.|A horseshoe for luck, a sword for everything else.|Don't touch anything orange."
+npc apprentice 5.6 8 look=557 name="The Apprentice" facing=up say="Pump the bellows, I'm told. Pump them harder, I'm told.|I made a nail today. A whole nail.|The smith's never wrong. Ask the smith."
+
+; The stock: iron, charcoal, and the orders chalked up.
+prop cargo-barrel 1.6 5.6
+prop sacks 2.2 8.4
+prop cargo-crate 13.8 6.4
+prop crate-stack 13.4 8.4
+prop chalkboard 10.6 8.6
+prop candle-stand 14.2 3.6
+
+; The heat, coming in.
+trigger heat 6 7 w=4 h=2 say="The heat hits like a wall. Coal smoke, hot iron, and a hammer that doesn't stop."

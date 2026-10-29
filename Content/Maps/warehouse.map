@@ -1,5 +1,5 @@
-; One of the warehouses on the docks: stone floor, crates and barrels stacked along the walls,
-; sacks, and a hand moving them about.
+; One of the warehouses on the docks: stone floor, crates, barrels and sacks stacked along the walls,
+; the tally clerk counting it all at a desk under a candle, and a hand moving it all about.
 
 [map]
 id = warehouse
@@ -37,16 +37,33 @@ _ = wall-base
 spawn start 8.5 10 facing=up
 exit door 8 11 w=2 to=back
 
-prop cargo-crate 2.6 4
-prop cargo-crate 3.8 4.2
-prop cargo-crate 2.6 5.2
-prop cargo-barrel 6 4
-prop cargo-barrel 7 4.2
-prop sacks 11 4.4
-prop cargo-crate 14.6 4
-prop cargo-crate 15.4 5
-prop cargo-barrel 15.4 8.4
-prop sacks 3.4 9.4
-prop cargo-crate 14.4 10.2
-prop candle-stand 9 4.2
-npc warehand 9 7.5 name="A Warehand" sheet=porter facing=down wander=3 say="Mind your feet. Half this is glass."
+; Stacked along the back wall.
+prop crate-stack 2.4 3.4
+prop crate-stack 4.2 3.4
+prop cargo-barrel 6.1 3.4
+prop sack-pile 8.4 3.4
+prop cargo-crate 10.4 3.4
+prop crate-stack 14.4 3.4
+prop crate-stack 15.6 4.6
+
+; Down the left wall, and in the middle.
+prop cargo-crate 1.8 6
+prop cargo-crate 1.8 7.3
+prop barrel-salt 1.8 9
+prop crate-stack 6 5.6
+prop cargo-barrel 7.6 5.8
+prop crate-open 6 6.6
+prop crate-apples 4 9.4
+prop crate-onions 5.3 9.6
+
+; The tally clerk's corner, and down the right wall.
+prop desk 12 6.4
+prop candle-stand 14 6.2
+prop chalkboard 10.2 6.8
+prop barrel-water 15.6 8
+prop sack-pile 15.4 9.6
+npc tally-clerk 12 5.2 look=431 name="A Tally Clerk" facing=down say="Ninety-eight, ninety-nine... don't talk to me... one hundred.|Every crate counted. Twice. By me. Alone.|Somebody's crates went missing last week. Red Gulls, probably."
+npc warehand 9 7.5 name="A Warehand" sheet=porter facing=down wander=3 say="Mind your feet. Half this is glass.|Who stacked these crates? Me. Sorry.|The Red Gulls never touch this warehouse. Funny, that."
+
+; What the two of you make of it.
+trigger bark-warehouse-inside 7 8 w=4 h=2 bark=warehouse-inside

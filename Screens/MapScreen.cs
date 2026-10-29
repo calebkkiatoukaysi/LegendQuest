@@ -38,6 +38,10 @@ public class MapScreen : GameScreen
     private const int MarkSize = 12;
     private const float MarkScale = 3f;
 
+    /// <summary>One cell of markers.png, in art pixels, and how much the "!"s are blown up on the local map: smaller than out on the map, so they mark the spot without hiding it. Has to match MARKER in tools/generate_ui.py.</summary>
+    private const int MarkerCell = 14;
+    private const float MarkerScale = 2f;
+
     /// <summary>The world map's roads: how far apart the dots are, and how far short of each place they stop, in screen pixels.</summary>
     private const float DotSpacing = 14f;
     private const float RoadClear = 24f;
@@ -76,6 +80,7 @@ public class MapScreen : GameScreen
     private readonly Discovery _seen;
     private readonly WorldState _world;
     private readonly Vector2 _you;
+    private readonly List<(Vector2 At, MarkerKind Kind)> _marked;
     private readonly bool _travelling;
     private readonly List<MapDefinition> _destinations;
     private readonly FormPanel _panel = new();
@@ -85,6 +90,7 @@ public class MapScreen : GameScreen
     private SpriteFont _font;
     private SpriteFont _detailFont;
     private Texture2D _marks;
+    private Texture2D _markers;
     private Texture2D _unseen;
 
     private Rectangle _panelBounds;
@@ -104,8 +110,10 @@ public class MapScreen : GameScreen
     /// <param name="seen">What's been seen of it.</param>
     /// <param name="world">The rules, for which places are discovered and which waypoints found.</param>
     /// <param name="you">Where your feet are, in world pixels.</param>
+    /// <param name="marked">The gold and red "!"s on the map you're on, and where they are in world pixels.</param>
     /// <param name="travelling">True if this was opened from a waypoint, so you can pick somewhere to go.</param>
-    public MapScreen(MapDefinition map, Tilemap tiles, IEnumerable<PropSprite> props, Discovery seen, WorldState world, Vector2 you, bool travelling)
+    public MapScreen(MapDefinition map, Tilemap tiles, IEnumerable<PropSprite> props, Discovery seen, WorldState world, Vector2 you,
+        IEnumerable<(Vector2 At, MarkerKind Kind)> marked, bool travelling)
     {
         IsPopup = true;
         TransitionOnTime = FadeTime;
@@ -117,6 +125,7 @@ public class MapScreen : GameScreen
         _seen = seen;
         _world = world;
         _you = you;
+        _marked = new List<(Vector2 At, MarkerKind Kind)>(marked);
         _travelling = travelling;
         _destinations = travelling ? world.Destinations() : new List<MapDefinition>();
         _view = travelling ? MapView.World : MapView.Here;
@@ -132,6 +141,7 @@ public class MapScreen : GameScreen
         _font = _content.Load<SpriteFont>("spectral-ui");
         _detailFont = _content.Load<SpriteFont>("spectral-detail");
         _marks = _content.Load<Texture2D>("map-marks");
+        _markers = _content.Load<Texture2D>("markers");
 
         LayOut();
         _unseen = BuildUnseen();
@@ -229,7 +239,7 @@ public class MapScreen : GameScreen
         return string.Format(CultureInfo.InvariantCulture, TravelHint, _destinations[_selected].Name.ToUpperInvariant());
     }
 
-    /// <summary>Draws the map you're on: its tiles and props, the dark over what hasn't been seen, where the exits go, and you.</summary>
+    /// <summary>Draws the map you're on: its tiles and props, the dark over what hasn't been seen, where the exits go, the "!"s, and you.</summary>
     private void DrawHere(GameTime gameTime, SpriteBatch spriteBatch, float alpha)
     {
         Rectangle drawn = HereBounds(out float scale);
@@ -247,6 +257,8 @@ public class MapScreen : GameScreen
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         if (_world.FoundWaypoint(_map) is MapInteractable waypoint)
             DrawMark(spriteBatch, MapMark.Waypoint, drawn.Location.ToVector2() + waypoint.Foot * scale, alpha);
+        foreach ((Vector2 at, MarkerKind kind) in _marked)
+            DrawMarker(spriteBatch, kind, drawn.Location.ToVector2() + at * scale, alpha);
         DrawMark(spriteBatch, MapMark.You, drawn.Location.ToVector2() + _you * scale, alpha);
         spriteBatch.End();
 
@@ -327,6 +339,14 @@ public class MapScreen : GameScreen
         var source = new Rectangle((int)mark * MarkSize, 0, MarkSize, MarkSize);
         var at = new Vector2(MathF.Round(centre.X), MathF.Round(centre.Y));
         spriteBatch.Draw(_marks, at, source, Color.White * alpha, 0f, new Vector2(MarkSize / 2f), MarkScale, SpriteEffects.None, 0f);
+    }
+
+    /// <summary>Draws one "!" from markers.png standing on a point, the way it stands over someone's head out on the map.</summary>
+    private void DrawMarker(SpriteBatch spriteBatch, MarkerKind kind, Vector2 foot, float alpha)
+    {
+        var source = new Rectangle(0, ((int)kind - 1) * MarkerCell, MarkerCell, MarkerCell);
+        var at = new Vector2(MathF.Round(foot.X), MathF.Round(foot.Y));
+        spriteBatch.Draw(_markers, at, source, Color.White * alpha, 0f, new Vector2(MarkerCell / 2f, MarkerCell), MarkerScale, SpriteEffects.None, 0f);
     }
 
     /// <summary>Where a map is on the world side, in screen pixels. Only for maps that are on it.</summary>

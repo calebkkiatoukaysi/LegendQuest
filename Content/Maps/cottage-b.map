@@ -1,4 +1,5 @@
-; Another cottage: the hearth in the back wall, the bed on the right, a table by the fire.
+; Another cottage: the hearth in the back wall with the pots by it and an armchair drawn up to it, a
+; table on the rug by the fire, the wardrobe, and the bed on the right with its table at the foot.
 
 [map]
 id = cottage-b
@@ -22,11 +23,11 @@ _ = wall-base
 ##############
 #||||||||||||#
 #____________#
-#------------#
-#------------#
-#------------#
-#-----rrrr---#
-#-----rrrr---#
+#sssssss-----#
+#sssssss-----#
+#--rrrrr-----#
+#--rrrrr-----#
+#--rrrrr-----#
 #------------#
 ######--######
 
@@ -34,9 +35,18 @@ _ = wall-base
 spawn start 6.5 8 facing=up
 exit door 6 9 w=2 to=back
 
-prop hearth 4 3.5
-prop bed 11 6.5
-prop round-table 5 7
-prop stool 3.5 7.4
-prop stool 6.6 7.4
+prop utensil-rack 1.6 3.3
+prop hearth 4 4.4
+prop armchair 6.6 5.6
+prop potted-plant 7 3.3
 prop wardrobe 8.5 3.4
+prop tapestry 10.8 2.6
+prop bed 11.4 5.4
+prop side-table 11.4 7.6
+prop round-table 4 7
+prop stool 2.6 7.4
+prop chair 5.4 7.2
+prop candle-stand 1.4 8.4
+
+; The fire's still going.
+trigger bark-cottage-hearth 5 6 w=4 h=2 bark=cottage-hearth

@@ -37,6 +37,7 @@ public static class Questeria
         With = "innkeeper",
         Needs = new[] { Act1Chapter1.DocksDone },
         Unless = new[] { WorkTaken },
+        Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new() { Speaker = "innkeeper", Line = "Off the morning ship, the pair of you? You've the look." },
@@ -67,6 +68,7 @@ public static class Questeria
         With = "flower-seller",
         Needs = new[] { WorkTaken },
         Unless = new[] { RosewaterGot },
+        Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new() { Speaker = "flower-seller", Line = "From the Flagon? Here. Carry it level, it's the good stuff." },
@@ -85,6 +87,7 @@ public static class Questeria
         With = "innkeeper",
         Needs = new[] { RosewaterGot },
         Unless = new[] { WorkDone },
+        Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new() { Speaker = "innkeeper", Line = "That's the one. Here, for your legs. Come back tomorrow and there'll be more." },

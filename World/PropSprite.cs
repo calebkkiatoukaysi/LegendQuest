@@ -27,13 +27,10 @@ public class PropSprite
     /// <summary>The floor it takes up: none for things you can walk through, one box for most, and two for an arch, one each side of the way through.</summary>
     public IReadOnlyList<BoundingRectangle> Footprints { get; }
 
-    /// <summary>How far it's been moved off its foot, in world pixels. Only the arrival moves anything: the ship, sailing in.</summary>
+    /// <summary>How far it's been moved off its foot, in world pixels. Only the arrival moves anything: the ship sailing in, and its near rail with the gangplank going with it.</summary>
     public Vector2 Offset { get; set; }
 
-    /// <summary>Whether it's not drawn: the gangplank, till the ship's tied up.</summary>
-    public bool Hidden { get; set; }
-
-    /// <summary>Which of its pictures to draw: 0 is shut (or up, or asleep), 1 is open.</summary>
+    /// <summary>Which of its pictures to draw: 0 is shut (or up, or asleep), 1 is open. The ship and the gangplank have more, which the arrival steps through.</summary>
     public int Frame { get; set; }
 
     /// <summary>How big one of its pictures is, in art pixels. Only known once it's loaded.</summary>
@@ -91,8 +88,6 @@ public class PropSprite
     /// <param name="tint">What to multiply it by: white on the map itself, the paper colour on the map screen.</param>
     public void Draw(SpriteBatch spriteBatch, float layerDepth, Color tint)
     {
-        if (Hidden) return;
-
         Point size = Size;
         var source = new Rectangle(Frame * size.X, 0, size.X, size.Y);
         var origin = new Vector2(size.X / 2, size.Y);

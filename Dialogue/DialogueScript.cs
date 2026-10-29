@@ -38,6 +38,9 @@ public sealed class DialogueScript
     /// <summary>Flags that stop talking to them starting it. A script that sets one of these only plays once.</summary>
     public IReadOnlyList<string> Unless { get; init; } = new string[0];
 
+    /// <summary>The marker over whoever it's with, while talking to them would start it: a gold "!" for work or a quest, a red one for an event, or none.</summary>
+    public MarkerKind Marker { get; init; }
+
     /// <summary>Every line, in order. It starts on the first.</summary>
     public required IReadOnlyList<DialogueNode> Nodes { get; init; }
 

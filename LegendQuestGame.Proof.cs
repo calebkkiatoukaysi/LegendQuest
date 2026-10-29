@@ -23,6 +23,9 @@ public partial class LegendQuestGame
     /// <summary>Where the shots go, or null when the game is being played.</summary>
     public string ProofDirectory { get; init; }
 
+    /// <summary>The part of the run to stop after, so I can look at one part without sitting through the rest. Done runs all of it.</summary>
+    public ProofStage ProofLast { get; init; } = ProofStage.Done;
+
     // The menus by frame. Each one gets time to fade in before its shot.
     private const int ProofTitleShot = 60;
     private const int ProofOptionsOpen = 61;
@@ -102,6 +105,14 @@ public partial class LegendQuestGame
         _proofFrame++;
         RecordProofAudio();
 
+        ProofStage was = _proofStage;
+        RunProofStage();
+        if (was == ProofLast && _proofStage != was) _proofStage = ProofStage.Done;
+    }
+
+    /// <summary>One frame of whichever part of the run it's on.</summary>
+    private void RunProofStage()
+    {
         switch (_proofStage)
         {
             case ProofStage.Menus:

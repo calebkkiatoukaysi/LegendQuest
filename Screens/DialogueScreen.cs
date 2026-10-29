@@ -21,8 +21,10 @@ namespace LegendQuest.Screens;
 /// </summary>
 /// <remarks>
 /// It only shows what DialogueRunner says; the runner has the rules. A check opens the dice over it
-/// and the next line waits till they're put away. A painting can sit behind a line, and a card
-/// line is big in the middle of the screen. Approval, gold, items and whoever joins come up as
+/// and the next line waits till they're put away. A painting can sit behind a line, with the panel
+/// kept as small as the words let it so the painting shows, and a card line is big in the middle of
+/// the screen. If a painting has the two of you in it, you and the Soul-Bound are baked when it
+/// opens and handed to the painting. Approval, gold, items and whoever joins come up as
 /// toasts, and everything the runner did goes out through Happened as it happens, so the map under
 /// it can catch up (someone leaving, someone joining). Nothing under it moves while it's up.
 /// </remarks>
@@ -94,6 +96,7 @@ public class DialogueScreen : GameScreen
     private readonly Func<string, (string Name, Texture2D Sheet)> _speaker;
     private readonly FormPanel _panel = new();
     private readonly PaintingSprite _paintings = new();
+    private readonly Paperdoll _paperdoll = new();
     private readonly QuestBoardSprite _board = new();
     private readonly Toast _toast = new();
 
@@ -137,13 +140,14 @@ public class DialogueScreen : GameScreen
         TransitionOffTime = FadeTime;
     }
 
-    /// <summary>Loads the panel, the fonts, the icons and the paintings, and starts the first line.</summary>
+    /// <summary>Loads the panel, the fonts, the icons and the paintings (with the two of you, if you're in one), and starts the first line.</summary>
     public override void Activate()
     {
         _content ??= new ContentManager(ScreenManager.Game.Services, "Content");
         _audio = ScreenManager.Game.Services.GetService<AudioManager>();
         _panel.LoadContent(_content, ScreenManager.GraphicsDevice);
         _paintings.LoadContent(_content);
+        if (ShowsFigures()) BakeFigures();
         _board.LoadContent(_content, ScreenManager.GraphicsDevice);
         _toast.LoadContent(_content);
         _font = _content.Load<SpriteFont>("spectral-ui");
@@ -155,10 +159,11 @@ public class DialogueScreen : GameScreen
         _paintingAlpha = _painting is null ? 0f : 1f;
     }
 
-    /// <summary>Unloads everything, and the board's pixel.</summary>
+    /// <summary>Unloads everything, the board's pixel and the painting's silhouettes.</summary>
     public override void Unload()
     {
         _board.Unload();
+        _paintings.Unload();
         _content?.Unload();
     }
 
@@ -269,7 +274,7 @@ public class DialogueScreen : GameScreen
         {
             _panel.Draw(spriteBatch, panel, alpha);
             DrawPortrait(spriteBatch, node, panel, alpha);
-            DrawIcons(spriteBatch, panel, alpha);
+            DrawIcons(spriteBatch, node, panel, alpha);
             DrawClock(spriteBatch, node, panel, alpha);
         }
         spriteBatch.End();
@@ -419,6 +424,26 @@ public class DialogueScreen : GameScreen
         Finished?.Invoke(_travel);
     }
 
+    /// <summary>Whether any line of this conversation shows a painting the two of you are in.</summary>
+    private bool ShowsFigures()
+    {
+        foreach (DialogueNode node in _runner.Script.Nodes)
+            if (node.Painting is not null && Paintings.Get(node.Painting).Figures.Count > 0) return true;
+        return false;
+    }
+
+    /// <summary>Bakes you and the Soul-Bound off the paperdoll and hands your sheets to the paintings for your silhouettes. The sheets go once they have.</summary>
+    private void BakeFigures()
+    {
+        PartyMember soulBound = _game.Member(Origins.SoulBound);
+        if (soulBound is null) return;
+
+        _paperdoll.LoadContent(_content);
+        using Texture2D you = _paperdoll.Compose(ScreenManager.GraphicsDevice, _game.You.Look);
+        using Texture2D them = _paperdoll.Compose(ScreenManager.GraphicsDevice, soulBound.Look);
+        _paintings.SetFigures(you, them);
+    }
+
     /// <summary>The first option that can be picked, or 0.</summary>
     private int FirstOpen()
     {
@@ -428,11 +453,12 @@ public class DialogueScreen : GameScreen
     }
 
     /// <summary>The panel: as tall as the name, the line and the options need, from the bottom of the screen up.</summary>
+    /// <remarks>Without a painting there's always room for three rows of words, so it doesn't jump about from line to line. Over a painting or the quest board it's only as tall as the line, so as much of what's behind shows as can.</remarks>
     private Rectangle PanelBounds(DialogueNode node)
     {
-        int text = Math.Max(3, _wrapped.Count) * _font.LineSpacing;
+        int rows = node.Painting is null && !node.Board ? Math.Max(3, _wrapped.Count) : Math.Max(1, _wrapped.Count);
         int options = _options.Count == 0 ? 0 : 12 + _options.Count * OptionRow;
-        int height = Inset * 2 + _detailFont.LineSpacing + 8 + text + options + _detailFont.LineSpacing;
+        int height = Inset + 4 + LineTop(node) + rows * _font.LineSpacing + options + _detailFont.LineSpacing;
         int portrait = (int)(Bust.Height * PortraitScale) + Inset * 2;
         if (node.Speaker != Speakers.Narrator) height = Math.Max(height, portrait);
         return new Rectangle(PanelLeft, PanelBottom - height, PanelWidth, height);
@@ -451,13 +477,13 @@ public class DialogueScreen : GameScreen
     }
 
     /// <summary>The icon beside each option that has one: a die for a check, a heart for a flirt, the voice for a voice's, a lock for the rest that need something.</summary>
-    private void DrawIcons(SpriteBatch spriteBatch, Rectangle panel, float alpha)
+    private void DrawIcons(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
         if (_shown < Length()) return;
         for (int i = 0; i < _options.Count; i++)
         {
             if (IconFor(_options[i]) is not Icon icon) continue;
-            var at = new Rectangle(panel.Left + TextLeft + 34, OptionTop(panel) + i * OptionRow + (OptionRow - IconSize) / 2, IconSize, IconSize);
+            var at = new Rectangle(panel.Left + TextLeft + 34, OptionTop(panel, node) + i * OptionRow + (OptionRow - IconSize) / 2, IconSize, IconSize);
             var source = new Rectangle((int)icon * IconCell, 0, IconCell, IconCell);
             spriteBatch.Draw(_icons, at, source, Color.White * (_options[i].Open ? alpha : alpha * 0.5f));
         }
@@ -490,7 +516,7 @@ public class DialogueScreen : GameScreen
         }
 
         int letters = (int)_shown;
-        float y = top + _detailFont.LineSpacing + 8f;
+        float y = panel.Top + LineTop(node);
         Color words = narrator ? Palette.Narration : Palette.Bone;
         foreach (string row in _wrapped)
         {
@@ -506,7 +532,7 @@ public class DialogueScreen : GameScreen
             for (int i = 0; i < _options.Count; i++)
             {
                 ShownOption option = _options[i];
-                float rowY = OptionTop(panel) + i * OptionRow + (OptionRow - _detailFont.LineSpacing) / 2f;
+                float rowY = OptionTop(panel, node) + i * OptionRow + (OptionRow - _detailFont.LineSpacing) / 2f;
                 Color colour = !option.Open ? Palette.Note : i == _selected ? Palette.Torch : Palette.Bone;
                 string text = (i + 1) + ".";
                 Text.Draw(spriteBatch, _detailFont, text, panel.Left + TextLeft, rowY, colour * alpha, Palette.FormShadow * alpha);
@@ -544,16 +570,23 @@ public class DialogueScreen : GameScreen
             Palette.Note * alpha, Palette.Shadow * alpha);
     }
 
+    /// <summary>How far down the panel the line starts: under the speaker's name, or right at the top for the narrator over a painting, who has no name to make room for.</summary>
+    private int LineTop(DialogueNode node)
+    {
+        bool named = node.Speaker != Speakers.Narrator || node.Painting is null;
+        return Inset - 4 + (named ? _detailFont.LineSpacing + 8 : 0);
+    }
+
     /// <summary>Where the options start on the panel: under the line.</summary>
-    private int OptionTop(Rectangle panel) =>
-        panel.Top + Inset - 4 + _detailFont.LineSpacing + 8 + Math.Max(1, _wrapped.Count) * _font.LineSpacing + 12;
+    private int OptionTop(Rectangle panel, DialogueNode node) =>
+        panel.Top + LineTop(node) + Math.Max(1, _wrapped.Count) * _font.LineSpacing + 12;
 
     /// <summary>Which option the mouse is over, or -1.</summary>
     private int OptionAt(Point mouse)
     {
         if (_shownNode is null || _options.Count == 0) return -1;
         Rectangle panel = PanelBounds(_shownNode);
-        int top = OptionTop(panel);
+        int top = OptionTop(panel, _shownNode);
         for (int i = 0; i < _options.Count; i++)
             if (new Rectangle(panel.Left + TextLeft, top + i * OptionRow, TextWidth, OptionRow).Contains(mouse)) return i;
         return -1;

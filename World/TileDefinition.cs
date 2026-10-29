@@ -8,7 +8,8 @@ namespace LegendQuest.World;
 /// Variants are drawn one after another on the sheet, and the map picks one per cell from where the
 /// cell is, so a field of grass doesn't repeat. That's how The Black Box's lobby floor worked. A
 /// tile can also be a block of several tiles each way, drawn as one picture: then each cell shows
-/// the part of the block for where it is on the map, and the variant is picked per block.
+/// the part of the block for where it is on the map, and the variant is picked per block. And a
+/// tile can move: each variant is then a few frames in a row, shown one after another.
 /// </remarks>
 public sealed class TileDefinition
 {
@@ -17,6 +18,13 @@ public sealed class TileDefinition
 
     /// <summary>How many versions of it are on the sheet, side by side.</summary>
     public int Variants { get; init; } = 1;
+
+    /// <summary>How many frames each variant goes through, one after another on the sheet. 1 for a tile that keeps still.</summary>
+    /// <remarks>The water ripples and the ship's lanterns swing. Every cell (or block) starts on a frame of its own, so a whole harbour doesn't ripple in step.</remarks>
+    public int Frames { get; init; } = 1;
+
+    /// <summary>How long each frame of a tile that moves is up, in seconds.</summary>
+    public float FrameSeconds { get; init; }
 
     /// <summary>How many tiles across (and down) one picture of it is. 1 for an ordinary tile.</summary>
     /// <remarks>Questeria's ground is blocks of 3, because the paving and the grass were painted three tiles across and cutting them smaller lost the pattern.</remarks>

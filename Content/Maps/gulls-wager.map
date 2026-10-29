@@ -1,67 +1,125 @@
-; The deck of the Gull's Wager at night, two days out from Questeria: the Prologue's voyage. Its
-; boards inside the bulwark, the hatch over the hold, the mainmast amidships with the crow's nest
-; at the top, lanterns at the rail, and the wheel at the stern. Dark, with the lanterns lighting it.
-; There's no way off but the end of the Prologue.
+; The deck of the Gull's Wager at night, two days out from Questeria: the Prologue's voyage. She lies
+; along the map with her bow to the west: the bowsprit and the gilt gull under it, the north rail with
+; lanterns swinging on it, the hatch over the hold, the mainmast amidships with its sails furled for
+; the night and the crow's nest at the top, crates and rope about, and the wheel at the stern. Her bow
+; and stern are blocks on the detail layer; the ground under them is deck where you can stand. Dark,
+; with the lanterns lighting it. There's no way off but the end of the Prologue.
 
 [map]
 id = gulls-wager
 name = The Gull's Wager
 tileset = ship
-size = 40 24
+size = 45 27
 dark = yes
 ambient = 0.35
 fog = no
-music = Title
+music = Sea
 
 [legend]
-- = deck
-# = bulwark
-= = hatch
 ~ = sea
+- = deck
+# = rail-n
+= = rail-s
+_ = hull
+o = hatch
+< = bow
+> = stern
+/ = bowsprit
+* = lantern
 
 [ground]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~#########################~~~~~~~
-~~~~~~~~#-----------------------#~~~~~~~
-~~~~~~###-----------------------#~~~~~~~
-~~~~~~#-------------------------#~~~~~~~
-~~~~~~#-----------==------------#~~~~~~~
-~~~~~~#-----------==------------#~~~~~~~
-~~~~~~#-------------------------#~~~~~~~
-~~~~~~###-----------------------#~~~~~~~
-~~~~~~~~#-----------------------#~~~~~~~
-~~~~~~~~#########################~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~#################~~~~~~~~~~~~
+~~~~~~~~~~~~~####---------------##~~~~~~~~~~~
+~~~~~~~~~~~##---------------------#~~~~~~~~~~
+~~~~~~~~~~#-------------oo---------~~~~~~~~~~
+~~~~~~~~~~#-------------oo---------~~~~~~~~~~
+~~~~~~~~~~###---------------------#~~~~~~~~~~
+~~~~~~~~~~~######---------------###~~~~~~~~~~
+~~~~~~~~~~~~~#####=========#######~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~#_________######~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[detail]
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+......///<<<<<<<<<.*.....*.>>>>>>>>>.........
+......///<<<<<<<<<.........>>>>>>>>>.........
+......///<<<<<<<<<.........>>>>>>>>>.........
+.........<<<<<<<<<.........>>>>>>>>>.........
+.........<<<<<<<<<.........>>>>>>>>>.........
+.........<<<<<<<<<.........>>>>>>>>>.........
+.........<<<<<<<<<.........>>>>>>>>>.........
+.........<<<<<<<<<.........>>>>>>>>>.........
+.........<<<<<<<<<.........>>>>>>>>>.........
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
+.............................................
 
 [objects]
-spawn start 17 9 facing=up
+spawn start 18 10.2 facing=up
 
-; P-04 plays as soon as you're on deck.
-scene voyage 0 0 talk=p-04
+; P-04 starts when you walk up to the bow, where the two of you stand and look out at the sea, with a
+; red ! over it till then, so you get to walk the deck first.
+trigger voyage 11 11 w=3 h=4 talk=p-04 mark=yes
 
-prop mast 20 13.5
-prop lantern-hanging 11 8.4
-prop lantern-hanging 27 8.4
-prop lantern-hanging 14 15
-prop lantern-hanging 24 15
-prop ship-wheel 30 11.5
-prop rope-coil 10 13.6
-prop rope-coil 23 9
-prop cargo-crate 28 14.6
-prop cargo-crate 29.3 14.8
-prop cargo-barrel 9.6 9.6
-prop cargo-barrel 26.5 14.8
+prop mast 22 12.5
+prop ship-wheel 32.5 12
+prop lantern-hanging 13.5 12.2
+prop lantern-hanging 21 15.3
+prop lantern-hanging 29.5 15.3
+prop rope-coil 15 14.4
+prop rope-coil 26.5 10.6
+prop cargo-crate 28 14.7
+prop cargo-crate 29.3 14.9
+prop cargo-barrel 14.6 14.2
+prop cargo-barrel 27.4 11.4
+prop cargo-barrel 19.6 14.9
+prop sacks 17.6 14.4
+prop cask 30.6 11
+prop bedroll 23.6 14.8
 
-npc odelle 29 13 cast=odelle facing=left say="Two days to Questeria, if the sea behaves."
+; The lanterns swinging on the rail are tiles, and so are the two painted on the stern, so they light
+; the deck with lights of their own.
+light rail-lamp-1 19 10 reach=3 strength=0.9
+light rail-lamp-2 25 10 reach=3 strength=0.9
+light stern-lamp 34.5 11.5 reach=2.5 strength=0.8
+light quarter-lamp 34 14 reach=2 strength=0.7
+
+; The captain at the wheel, and the two on watch by the mast.
+npc odelle 31 12.6 cast=odelle facing=left say="Two days to Questeria, if the sea behaves.|She creaks like an old aunt, and holds like one too.|Get some sleep. Or don't. The sea's prettier at night."
+npc sailor-a 24 9.9 look=146 name="A Deckhand" facing=right say="Two days to port. Two days of beans.|Mind the hatch, it bites ankles.|Captain's in a mood. Captain's always in a mood.|Hear that? No, me neither. That's what worries me."
+npc sailor-b 25.5 10.2 look=122 name="A Deckhand" facing=left say="Coil the rope clockwise or the sea gets ideas.|Questeria by Thursday, if the wind likes us.|I've seen wraiths once. Once was plenty."
+
+; What the two of you say on deck before the voyage starts, and the watch talking it over.
+trigger bark-deck-night 16 10 w=2 h=5 bark=deck-night
+trigger bark-deck-sailors 21 9 w=7 h=3 bark=deck-sailors once=no

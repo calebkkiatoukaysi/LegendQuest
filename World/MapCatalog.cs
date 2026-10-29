@@ -28,7 +28,7 @@ public static class MapCatalog
     private static readonly string[] Ids =
     {
         "gulls-wager", "docks", "questeria", "road", "barrow",
-        "gilded-flagon", "cottage-a", "cottage-b", "shop", "warehouse",
+        "gilded-flagon", "cottage-a", "cottage-b", "shop", "warehouse", "bakery", "forge", "chapel",
     };
 
     private static readonly Dictionary<string, MapDefinition> Loaded = new();

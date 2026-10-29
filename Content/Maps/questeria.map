@@ -1,14 +1,17 @@
 ; Questeria, the capital, and the hub. The palace on its terrace to the north with the temple and
-; the guildhall either side of it, the plaza and its fountain in the middle, houses to the west and
-; the inn and the market to the east, the canal, and the avenue south to the city gate and the old
-; road. The harbour's off the west side. Lit, and no fog: everyone knows the capital.
+; the guildhall either side of it, the plaza and its fountain in the middle, houses to the west with
+; the chapel in its garden above them, and the Lantern Market to the east: the Gilded Flagon, the
+; stalls, and the bakery and the forge at its far end, with gardens and two houses past them. Then
+; the canal, with a footbridge over to the washing yard, the avenue south to the city gate and the
+; old road, and houses all along the south side. The Watch has a post by the gate and another where
+; the harbour road comes in off the west side. Lit, and no fog: everyone knows the capital.
 
 [map]
 id = questeria
 name = Questeria
 world = 300 200
 tileset = questeria
-size = 84 58
+size = 108 58
 dark = no
 fog = no
 music = Exploring
@@ -21,66 +24,66 @@ music = Exploring
 ~ = water
 
 [ground]
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-,,,,,,,,,,================================================================,,,,,,,,,,
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::
-::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::
-::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::
-::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::
-::,,,,,,,,,,,:::,,,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-:::::::::::::::::::::::::::::::::::::###########::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
-::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,================================================================,,,,,,,,,,::::::::::::::::::::::::
+,,,,,,,,,,================================================================,,,,,,,,,,::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::#############################:::::::::::::::::::::::::::::::::::::::::::::::::::
+::,,,,,,,,,,,:::,,,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~###########~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~####~~~~~~~~~~~~~~~~~~
+:::::::::::::::::::::::::::::::::::::###########::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::,,,,,,,,,,:###########:,,,,,,,,,,:::::::::::::::::::::::::::::::::::::::::::::::::
 
-; kind id x y, in tiles, then any settings. Exits are rectangles from their top left tile.
+; kind id x y, in tiles, then any settings. Exits and triggers are rectangles from their top left tile.
 [objects]
 spawn start 42 34 facing=up
 spawn gate 42 55 facing=up
@@ -88,8 +91,9 @@ spawn docks 2 26 facing=right
 exit road 40 57 w=5 to=road at=start
 exit docks 0 23 h=6 to=docks at=city
 
-; The Soul-Bound, as you come up from the harbour.
-trigger city-gate 4 22 w=2 h=8 talk=soulbound-city
+; The Soul-Bound, as you come up from the harbour. It's the first thing that happens in the city, so it
+; gets the red mark.
+trigger city-gate 4 22 w=2 h=8 talk=soulbound-city mark=yes
 
 ; The terrace.
 prop temple 18 17
@@ -99,12 +103,18 @@ prop banner-pink 31 17
 prop banner-blue 53 17
 prop cypress 27 16
 prop cypress 57 16
-prop cherry-tree 4 9
-prop oak 79 9
-prop blossom-tree 5 16.5
-prop cherry-tree-small 79 16
 prop topiary 12 17
-prop topiary 72 17
+prop topiary 74 17
+
+; The chapel in its garden west of the temple, and the Watch's post where the harbour road comes in.
+prop chapel-pink 5 11
+prop watch-post 3 22
+prop flowers-pink 2 14
+prop flowers-white 7.5 13.5
+prop flowers-mixed 4 16
+prop planter-pink 9 15.5
+prop bench-iron 2.5 16.5
+prop signpost-arrows 9 19.5
 
 ; The plaza.
 prop fountain 42 28
@@ -134,6 +144,113 @@ prop bush-flowers 24 35.5
 prop cherry-tree-small 3 36
 prop water-barrel 13.5 31.5
 prop cask 25.5 30
+prop washing-line 7 34.5
+prop bench-iron 21 35.5
+prop planter-long 22 37
+prop sewer-grate 26.5 24
+
+; The Lantern Market: the quest board with Fennick by it, the Gilded Flagon with a table out front, its
+; sign by the door and the flower cart down by the water, and past it the square, two rows of stalls
+; with their keepers out in front of them. The Flagon stands so its door, 45 art pixels right of its
+; foot, is where the old inn's was.
+npc fennick 56.5 34 cast=fennick facing=right
+
+prop gilded-flagon 66.69 30
+prop gilded-flagon-sign 72 30.6
+prop lamp 58 30
+prop lantern-small 61.6 29.6
+prop cypress-pot 57.5 36
+prop table 66.5 32.5
+prop flower-cart 64 36.2
+prop stall-blue 74 26
+prop stall-pink 80 26
+prop stall-teal 74 35.5
+prop stall-cloth 80 35.5
+prop crate-stack 76.6 19.6
+prop sacks 79.4 19.8
+prop cargo-barrel 81.6 19.9
+prop crate-open 83.2 20.4
+prop cask 83 29
+prop cask 83.6 29.5
+
+; The bakery, the forge and a townhouse, at the market's east end.
+prop bakery-pink 88 30
+prop forge-plum 95 30
+prop townhouse-teal 102 30
+prop barrel-water 92.4 30.3
+prop crate-apples 85.2 31.4
+prop chalkboard 87 31.3
+prop lamp-double 99.5 32
+prop barrel-flowers 106 30
+prop lamp-arm 106 35
+prop sewer-grate 98 34
+
+; The gardens north of the market, with two houses in them.
+prop oak 79 9
+prop cherry-tree 84.5 7
+prop blossom-tree 95 7
+prop cherry-tree-small 105.5 11
+prop cottage-plum 87.5 16
+prop house-rose-blue 101 16
+prop well-flowers 94.5 15
+prop flowers-pink 91.5 16.5
+prop flowers-white 97.5 16.8
+prop bush-pink 82 15
+prop flowers-mixed 80.5 12
+prop flowers-white 88 10.5
+prop bench-plain 92 9.5
+prop flowers-pink 103 9
+
+; Along the canal.
+prop lamp 36 37
+prop lamp 48 37
+prop cypress-pot 2 37
+prop rowboat 33.5 39.2
+prop rowboat 58 39.2
+prop rowboat 95 39.2
+prop lamp 12 41
+prop lamp 28 41
+prop lamp 56 41
+prop lamp 72 41
+prop lamp 97 41
+
+; The footbridge east of the market, over to the washing yard.
+prop lamp 85 37
+prop lamp 90 37
+prop washing-line 85.2 46
+prop washing-line 90 48
+prop washtub 90.2 45
+prop well-flowers 88 53
+prop bench-plain 85.5 55.5
+prop flowers-white 90.5 55.5
+prop flowers-pink 84.8 50.5
+
+; The south: houses all along it, gardens by the avenue, and the gate with the Watch's post beside it.
+prop turret-house-teal 3 53
+prop house-shop 12 52
+prop house-awning 26 54
+prop washing-line 19.5 50
+prop water-pump 19.5 53.5
+prop watch-post 51 52
+prop house-ivy 58 54
+prop townhouse-plum 65.4 53
+prop house-rose 73 52
+prop turret-house 80.5 53
+prop house-awning-pink 96 53
+prop townhouse 104 52
+prop flower-arch 31 46
+prop topiary 36 43
+prop topiary 48 43
+prop bush-pink 33 56
+prop bush-flowers 51 56
+prop flowers-pink 53 45
+prop flowers-white 28 44
+prop rocks 57 44
+prop city-gate 42 57
+prop handcart 33.5 51
+prop flower-box 6.5 54
+prop flower-box 65 54.2
+prop sewer-grate 53 41.8
 
 ; The ways into the buildings, each at the bottom of its door.
 entrance flagon 70 30.5 to=gilded-flagon name="The Gilded Flagon"
@@ -143,61 +260,97 @@ entrance shop-south 13.94 52.5 to=shop name="The Chandler's"
 entrance awning-south 24.1 54.5 to=cottage-a name="A Cottage"
 entrance ivy-south 56.56 54.5 to=cottage-b name="A Cottage"
 entrance rose-south 73.5 52.5 to=cottage-a name="A Cottage"
+entrance chapel 5.5 11.5 to=chapel name="The Chapel of the Dawn"
+entrance bakery 90 30.5 to=bakery name="The Rising Loaf"
+entrance forge 95 30.5 to=forge name="Halden's Forge"
+entrance townhouse-market 103.5 30.5 to=cottage-b name="A Townhouse"
+entrance cottage-garden 88.13 16.5 to=cottage-a name="A Cottage"
+entrance rose-garden 101.5 16.5 to=cottage-b name="A Cottage"
+entrance turret-south 4.44 53.5 to=cottage-b name="A Turret House"
+entrance townhouse-south 66.9 53.5 to=cottage-a name="A Townhouse"
+entrance turret-east 81.94 53.5 to=cottage-b name="A Turret House"
+entrance awning-east 94.1 53.5 to=cottage-b name="A Cottage"
+entrance townhouse-east 105.5 52.5 to=cottage-a name="A Townhouse"
 
-; The Lantern Market: the Gilded Flagon, the quest board with Fennick by it, and the stalls.
-npc fennick 56.5 34 cast=fennick facing=right
+; Banter: walk into one and the party talks among themselves, or the people there do. The ones that
+; are two of the townsfolk can come round again.
+trigger bark-city-fountain 38 30 w=9 h=2 bark=city-fountain
+trigger bark-city-waypoint 33 25 w=3 h=3 bark=city-waypoint
+trigger bark-city-market 58 22 w=2 h=9 bark=city-market
+trigger bark-city-board 57 32 w=4 h=4 bark=city-board
+trigger bark-city-board-taken 57 32 w=4 h=4 bark=city-board-taken
+trigger bark-city-terrace 28 17 w=4 h=3 bark=city-terrace
+trigger bark-city-terrace-crown 53 17 w=4 h=3 bark=city-terrace-crown
+trigger bark-city-temple 18 18 w=6 h=2 bark=city-temple
+trigger bark-city-guildhall 62 18 w=9 h=2 bark=city-guildhall
+trigger bark-city-canal 37 38 w=11 h=3 bark=city-canal
+trigger bark-city-houses-west 10 32 w=6 h=2 bark=city-houses-west
+trigger bark-city-houses-south 3 42 w=10 h=5 bark=city-houses-south
+trigger bark-city-gate 39 52 w=7 h=2 bark=city-gate
+trigger bark-city-gate-mirewood 39 52 w=7 h=2 bark=city-gate-mirewood
+trigger bark-city-vendors 77 27 w=6 h=4 bark=city-vendors once=no
+trigger bark-city-watch 53 22 w=5 h=4 bark=city-watch once=no
+trigger bark-city-kids 15 42 w=8 h=5 bark=city-kids once=no
+trigger bark-city-old-couple 44 34 w=5 h=3 bark=city-old-couple once=no
+trigger bark-city-busker 35 21 w=4 h=4 bark=city-busker once=no
+trigger bark-city-acolytes 11 18 w=6 h=3 bark=city-acolytes once=no
 
-prop inn 68 30
-prop table 61 32
-prop cask 74 31
-prop cask 75 31.5
-prop water-barrel 62 29.5
-prop stall-blue 61 37
-prop stall-pink 67 37
-prop stall-teal 73 37
-prop stall-cloth 79 37
-prop flower-cart 79 32
-prop lamp 58 30
-prop cypress-pot 57.5 36
+; The people. The ones with wander= walk about that many tiles round where they're put. The ones with
+; a cast= have conversations, and a yellow mark when one's a job.
+;
+; The terrace and the temple steps.
+npc oswin 40.5 18.5 cast=oswin facing=down say="Touch nothing, climb nothing, pick no flowers.|The King walks the terrace at dusk.|Move along, kindly."
+npc courtier 47 19 look=160 name="A Courtier" facing=down wander=3 say="One does not simply walk onto the terrace. Oh. You did.|Lord Chancellor Crane hosts a supper tonight. You're not invited.|The Princess missed council again. Riding, apparently."
+npc gardener 27.5 18.5 look=467 name="The Palace Gardener" wander=3 say="Mind the roses. They're older than you.|Thirty years I've clipped these hedges. They still argue.|The King likes the pink ones. He says they look surprised."
+npc hesper 18 18.5 cast=hesper facing=down say="The door's open to all.|Muddy boots are welcome. Mostly.|The bells will ring at dusk, if the boy remembers."
+npc pilgrim 22 19 name="A Pilgrim" sheet=pilgrim facing=down say="Listen for the temple bells at dusk.|I walked from the river farms to pray here.|The bells were sweeter last year, they tell me."
+npc acolyte-a 13 19 look=192 name="An Acolyte" facing=down say="Sun's blessing on you, traveller.|The bells ring at dusk. Probably. Mostly.|Mind the steps. Sister Hesper just swept them."
+npc acolyte-b 14.5 19.5 look=230 name="An Acolyte" facing=down say="The temple's open to all. Even the muddy.|We pray for the soldiers sent east. Every morning.|Shh. The new bellringer is practising. Badly."
+npc courier 49 20.5 name="A Courier" sheet=courier facing=right say="Letters for the guildhall. Mind out.|Three for the guildhall, one for the Spire, none for me.|If I'm late again, I'm a fisherman."
+npc ilsa 64.5 19 cast=ilsa facing=down wander=2 say="Don't jostle me, these are sealed. Well. Officially.|The Archmage is never wrong. Never.|Scrolls, scrolls, more scrolls."
+npc guild-clerk 63 19.5 look=449 name="A Guild Clerk" facing=down say="Guild business only. Have you got guild business?|Masons, merchants and mages. The mages never fill in forms.|The Arcanum Spire sends a runner every hour lately."
+npc maid 60 20 name="A Maid" sheet=maid facing=down wander=4 say="The guildhall's busy today.|Mages tracking ash on my clean floors again.|Polish, sweep, polish. Then the mages come back."
 
-; Along the canal.
-prop lamp 36 37
-prop lamp 48 37
-prop cypress-pot 2 37
-prop cypress-pot 82 30
+; The plaza: the elder, Lark and her critic, the Watch by the east statue, the old couple at the bench.
+npc elder 39 32 name="The Elder" sheet=elder facing=down say="Welcome to Questeria. Mind the road past the gate.|Forty years I've watched this fountain. It still surprises me.|The Lantern Market's east. Follow the smell of bread."
+npc old-man 46 31 name="An Old Man" sheet=old-man facing=left wander=3 say="The fountain's older than the palace. So they say.|My knees say rain by Thursday.|In my day we had one lantern and we shared it."
+npc lark 34.8 23.5 cast=lark facing=right say="A verse for a copper, a chorus for two!|Ohh, the lanterns of the harbour...|Everybody's a critic. Mostly him."
+npc heckler 36.8 23 look=446 name="A Heckler" facing=left say="Learn a new song!|Six times! She's sung that line six times!|I'm not heckling. I'm reviewing."
+npc watch-a 54.5 24 cast=watch facing=right say="Keep it moving, citizens.|Double shift again. My feet have filed a complaint.|See a red bandana, tell the Watch."
+npc watch-b 56 24.5 cast=watch facing=left say="Half the barracks is in Greywatch. The other half is me.|We're not stretched thin. We're see-through.|No running by the fountain. Captain's orders."
+npc old-a 45.3 35.5 look=131 name="Old Bram" facing=down say="Forty years of peace. Forty.|In my day the fountain was a puddle with ambitions.|The King waved at me once. I waved back. We're friends now."
+npc old-b 46.7 35.5 look=102 name="Old Edda" facing=down say="Don't mind Bram. He's grumbled since the coronation.|You've a kind face. Eat something.|Ash on the wind from the east, my sister writes. I don't like it."
+npc tamsin 53.5 34.5 cast=tamsin facing=right say="Stay on the paths.|The Lodge is three rangers short.|If the birds go quiet, so do you."
 
-; The south: houses either side, gardens by the avenue, and the gate.
-prop house-shop 12 52
-prop house-awning 26 54
-prop house-ivy 58 54
-prop house-rose 73 52
-prop flower-arch 31 46
-prop cherry-tree 29 52
-prop blossom-tree 55 50
-prop topiary 36 43
-prop topiary 48 43
-prop bush-pink 33 56
-prop bush-flowers 51 56
-prop flowers-pink 53 45
-prop flowers-white 28 44
-prop rocks 57 44
-prop city-gate 42 57
+; The west houses.
+npc neighbour 9.5 32.5 look=403 name="A Neighbour" facing=down say="Mind my flower boxes, they're prize-winning.|Well. They will be. Next year.|Lovely day for it. Whatever it is you're doing."
+npc weaver 16 34 name="The Weaver" sheet=weaver facing=down say="I spun the palace banners.|Navy and gold for the King. Pink and gold for the Princess.|Thread's dear this year. Everything's dear."
+npc old-woman 8 37 name="An Old Woman" sheet=old-woman facing=right wander=3 say="Mind the canal. It's deeper than it looks.|My husband fell in on our wedding day. Still damp.|You've a look of the sea about you."
 
-; The people. Placeholders: who they are and what they say are mine to write. The ones with
-; wander= walk about that many tiles round where they're put.
-npc elder 39 32 name="The Elder" sheet=elder facing=down say="Welcome to Questeria. Mind the road past the gate."
-npc old-man 46 31 name="An Old Man" sheet=old-man facing=left wander=3 say="The fountain's older than the palace. So they say."
-npc child 50 26 name="A Child" sheet=child facing=left wander=5 say="Bet you can't catch me."
-npc courier 34 21 name="A Courier" sheet=courier facing=down say="Letters for the guildhall. Mind out."
-npc maid 60 20 name="A Maid" sheet=maid facing=down wander=4 say="The guildhall's busy today."
-npc pilgrim 22 19 name="A Pilgrim" sheet=pilgrim facing=down say="Listen for the temple bells at dusk."
-npc trader 62 35 name="The Trader" sheet=trader facing=down say="Fresh from the coast. Fresh enough."
-npc smith 68 35 name="The Smith" sheet=smith facing=down say="Nothing to mend? Lucky you."
-npc seamstress 80 35 name="The Seamstress" sheet=seamstress facing=down say="Pink's in this year. It's always in."
-npc flower-seller 77 33 name="The Flower Seller" sheet=flower-seller facing=left say="From the palace gardens. Don't tell anyone."
-npc porter 72 26 name="A Porter" sheet=porter facing=right wander=4 say="Crates, barrels, crates. All day."
-npc weaver 16 34 name="The Weaver" sheet=weaver facing=down say="I spun the palace banners."
-npc old-woman 8 37 name="An Old Woman" sheet=old-woman facing=right wander=3 say="Mind the canal. It's deeper than it looks."
-npc farmhand 33 48 name="A Farmhand" sheet=farmhand facing=right wander=4 say="First time in the capital? Me too."
-npc youth 52 47 name="A Youth" sheet=youth facing=left wander=4 say="There's a barrow up the old road. Haunted, probably."
-npc traveller 44 50 name="A Traveller" sheet=traveller facing=down say="Long road out there."
+; The market: the lantern seller and the flower seller by the Flagon, Wren working the crowd, and in
+; the square the keepers in front of their stalls, two of them gossiping over the fruit.
+npc lantern-seller 60 29 look=437 name="A Lantern Seller" facing=down say="Lanterns! The market's named for them, you know.|Light one at dusk and the whole street glows.|Paper, glass or brass. Brass lasts. Paper's prettier."
+npc trader 74 27 name="The Trader" sheet=trader facing=down say="Fresh from the coast. Fresh enough.|Everything's half price. Half of a higher price.|The east ships stopped coming. Don't ask me why."
+npc gossip-a 79.2 27 look=464 name="A Cheesemonger" facing=right say="Cheese from the river farms! Smells worse than it tastes!|Chancellor Crane's got a new carriage. Gold wheels, if you please.|The Princess bought a wedge off me once. Paid double."
+npc gossip-b 80.8 27 look=419 name="A Fruit Seller" facing=left say="Apples, pears, river plums!|Plums are late. The Mirewood farms say the bees went odd.|Don't squeeze the pears. They bruise like courtiers."
+npc spice-seller 74 36.5 look=438 name="A Spice Seller" facing=down say="Pepper, saffron, ember-salt!|Ember-salt makes you sweat in a good way.|The eastern spice ships stopped coming. Prices doubled."
+npc osric 80 36.5 cast=osric facing=down say="Silk from the south! Linen from the river farms!|Has anybody seen a green book? Brass corners?|Fifteen years. Fifteen years in that book."
+npc seamstress 82.2 36.5 name="The Seamstress" sheet=seamstress facing=left say="Pink's in this year. It's always in.|The Princess wears riding leathers. Nobody can stop her.|Mind the pins. I count them."
+npc wren 64.5 33.5 cast=wren wander=3 say="Spare a copper? No? Worth asking.|Nice belt. Very secure.|The Watch never looks down. I'm down here."
+npc flower-seller 66.6 36.2 name="The Flower Seller" sheet=flower-seller facing=left say="From the palace gardens. Don't tell anyone.|Roses for love, lilies for sorry, daisies for I forgot.|The gardener and I have an understanding."
+npc porter 77 31 name="A Porter" sheet=porter facing=right wander=4 say="Crates, barrels, crates. All day.|Lift with your legs, they say. My legs say no.|Mind your toes, this one's heavy."
+npc smith 97.5 32 name="The Smith" sheet=smith facing=left say="Nothing to mend? Lucky you.|Half the Watch's blades went east with the Watch.|A good edge never asks where you're going."
+npc farmhand 94 18 name="A Farmhand" sheet=farmhand facing=right wander=4 say="First time in the capital? Me too.|The river farms are too quiet, my da says.|Everything's so clean here. I keep wiping my boots."
+
+; Along the canal, and south of it.
+npc boatman 33.5 37 look=106 name="A Boatman" facing=down say="Canal ride? A copper to the harbour, two if you talk.|The canals run all the way down to the sea.|Don't lean over the side. The fish here are nosy."
+npc kid-a 18 45.5 look=186 name="A Child" wander=5 say="You're it!|I'm a Hollowed! Grrr!|My dad says the east is all ash now.|Bet I can jump the canal. Bet you."
+npc kid-b 20 46 look=144 name="A Child" wander=5 say="No fair, you always pick!|When I grow up I'm joining the Mages Guild.|Have you got a sword? Can I hold it? Please?"
+npc youth 51 43 name="A Youth" sheet=youth facing=left wander=4 say="There's a barrow up the old road. Haunted, probably.|Dared my brother to go in. He came back very fast.|They say a king's buried in it. Or a cook. Somebody important."
+npc washerwoman 88.3 45 look=411 name="A Washerwoman" facing=down say="Out the way, love, wet sheets coming through.|Palace linen. You'd think kings sweat gold.|Canal water's for washing, not drinking. Learned that the hard way."
+npc child 85.5 49 name="A Child" sheet=child facing=left wander=5 say="Bet you can't catch me.|You're slow! Slower than my gran!|Are you an adventurer? Have you killed a dragon?"
+
+; The avenue and the gate: Brisk of the Watch just inside it.
+npc traveller 43 45 name="A Traveller" sheet=traveller facing=down say="Long road out there.|Bandits on the Mirewood road, they say.|Questeria's grand. Shame about the prices."
+npc carter 34.8 53 look=409 name="A Carter" facing=right say="Wagon's empty. Bandits on the Mirewood road took the rest.|Took my cargo and charged me a toll for the privilege.|Brisk says he's got no men. He's got a dog, though."
+npc brisk 49 53.5 cast=brisk facing=left say="Gate's open. Mind the road.|Two recruits and a dog. The dog's the best of us.|Highwaymen on the Mirewood road. Travel in pairs."

@@ -222,15 +222,15 @@ Content/Props/gangplank.png - created by Caleb Kiatoukaysi for Legend Quest, the
 
 Content/Props/rowboat.png - created by Caleb Kiatoukaysi for Legend Quest, a rowing boat moored by the jetty, drawn procedurally by tools/generate_harbour.py, released under public domain
 
-Content/Tiles/crypt.png - created by Caleb Kiatoukaysi for Legend Quest, the barrow's tileset: floors, steps, walls from above and from the front, rubble, bones and a cobweb, drawn procedurally by tools/generate_world.py, released under public domain
+Content/Tiles/crypt.png - created by Caleb Kiatoukaysi for Legend Quest, the barrow's tileset: cold slate floors of every size of slab, worn and in shadow, steps, the walls from above and from the front with carvings and niches, rubble, bones and cobwebs, drawn procedurally by tools/generate_world.py, released under public domain
 
-Content/Tiles/forest.png - created by Caleb Kiatoukaysi for Legend Quest, the old road's tileset: dead leaves, the road, undergrowth, moss, grass, ferns, a rock, a stump, a fallen log, a tree trunk, bushes, and the nine pieces of a tree's crown, drawn procedurally by tools/generate_world.py, released under public domain
+Content/Tiles/forest.png - created by Caleb Kiatoukaysi for Legend Quest, the old road's tileset: grass, dead leaves, the road with its ruts, the undergrowth under the wood, and moss, tufts, ferns, flowers, pebbles, roots and litter to lie on them, drawn procedurally by tools/generate_world.py, released under public domain
 
-Content/Props/barrel.png - created by Caleb Kiatoukaysi for Legend Quest, a prop, drawn procedurally by tools/generate_world.py, released under public domain
+Content/Props/barrel.png - built by tools/generate_world.py from tools/source/questeria-props-2.png: a barrel, a prop, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/crate.png - created by Caleb Kiatoukaysi for Legend Quest, a prop, drawn procedurally by tools/generate_world.py, released under public domain
+Content/Props/crate.png - built by tools/generate_world.py from tools/source/questeria-props-2.png: a crate, a prop, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/urn.png - created by Caleb Kiatoukaysi for Legend Quest, a prop, drawn procedurally by tools/generate_world.py, released under public domain
+Content/Props/urn.png - built by tools/generate_world.py from tools/source/questeria-props-2.png: a funerary urn in the barrow, a prop, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Props/sarcophagus.png - created by Caleb Kiatoukaysi for Legend Quest, a prop, drawn procedurally by tools/generate_world.py, released under public domain
 
@@ -240,7 +240,7 @@ Content/Props/campfire.png - created by Caleb Kiatoukaysi for Legend Quest, a ri
 
 Content/Props/bedroll.png - created by Caleb Kiatoukaysi for Legend Quest, a blanket laid out by the campfire, a prop, drawn procedurally by tools/generate_world.py, released under public domain
 
-Content/Props/chest.png - created by Caleb Kiatoukaysi for Legend Quest, a chest shut and open, drawn procedurally by tools/generate_world.py, released under public domain
+Content/Props/chest.png - built by tools/generate_world.py from tools/source/questeria-props-2.png: a chest, shut and open, a prop, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Props/door.png - created by Caleb Kiatoukaysi for Legend Quest, a double door in its stone frame, shut and open, drawn procedurally by tools/generate_world.py, released under public domain
 
@@ -264,45 +264,59 @@ Content/Props/rope-coil.png - created by Caleb Kiatoukaysi for Legend Quest, a c
 
 Content/Tiles/interior.png - created by Caleb Kiatoukaysi for Legend Quest, inside Questeria's buildings (wood and stone floors, the rug and its border, the back wall's face and its panelling, the walls' tops), drawn procedurally by tools/generate_interiors.py, released under public domain
 
-Content/Props/bar-counter.png - created by Caleb Kiatoukaysi for Legend Quest, the Gilded Flagon's bar, tankards along it and a tap, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/bar-counter.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: the Gilded Flagon's bar: the market stall's counter twice end to end, a prop put together from parts of the sheet, sampled at 3 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/round-table.png - created by Caleb Kiatoukaysi for Legend Quest, a round tavern table with tankards and a candle, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/round-table.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a round tavern table, a prop, keyed off its backdrop and sampled to 24 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/stool.png - created by Caleb Kiatoukaysi for Legend Quest, a three-legged stool, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/stool.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a stool, a prop, keyed off its backdrop and sampled to 13 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/hearth.png - created by Caleb Kiatoukaysi for Legend Quest, a stone hearth with its fire, a prop that gives off light, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/hearth.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a stone oven-hearth with its fire, giving off light, a prop, keyed off its backdrop and sampled to 44 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/keg-stack.png - created by Caleb Kiatoukaysi for Legend Quest, kegs stacked on their sides, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/keg-stack.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: kegs, one behind two, a prop put together from parts of the sheet, sampled at 3 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/bed.png - created by Caleb Kiatoukaysi for Legend Quest, a bed with its blanket turned down, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/bed.png - unchanged entry; regenerated by tools/generate_interiors.py (its outline colour comes from tools/generate_harbour.py's OUTLINE, which the harbour agent changed)
 
-Content/Props/wardrobe.png - created by Caleb Kiatoukaysi for Legend Quest, a tall wardrobe, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/wardrobe.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a cupboard of jars with flowers on top, a prop, keyed off its backdrop and sampled to 29 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/bookshelf.png - created by Caleb Kiatoukaysi for Legend Quest, a bookshelf full of books, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/bookshelf.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a shelf of jars and bottles, a prop, keyed off its backdrop and sampled to 44 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/shop-counter.png - created by Caleb Kiatoukaysi for Legend Quest, a shop's counter with its goods and a little scale, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/shop-counter.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a shop counter, the market stall's counter with pots and a cloth on it, a prop, keyed off its backdrop and sampled to 60 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Props/candle-stand.png - created by Caleb Kiatoukaysi for Legend Quest, an iron candle stand, a prop that gives off light, drawn procedurally by tools/generate_interiors.py, released under public domain
+Content/Props/candle-stand.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a candelabra with three candles, giving off light, a prop, keyed off its backdrop and sampled to 18 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/questeria-dawn-sky.png - created by Caleb Kiatoukaysi for Legend Quest, the dawn sky over Questeria for the Prologue's last painting, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/questeria-dawn-sky.png - built by tools/generate_paintings.py from tools/source/title-sky.png: its sky, warmed to sunrise, the sun coming up over the mountains and the stars and moons fading; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/questeria-dawn-city.png - built by tools/generate_paintings.py from tools/source/title-city.png: the title's city, warmed to sunrise; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+Content/Paintings/questeria-dawn-city.png - built by tools/generate_paintings.py from tools/source/title-city.png: the title's city and its lake, warmed to sunrise; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/questeria-dawn-sea.png - created by Caleb Kiatoukaysi for Legend Quest, the sea at dawn with the sun's road across it, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/questeria-dawn-rail.png - built by tools/generate_paintings.py from tools/source/questeria-props-2.png: the ship's rail in front of it all (varnished wood, brass caps, a rope coil and a pennant, drawn here) with the lantern off my props sheet; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/questeria-dawn-rail.png - created by Caleb Kiatoukaysi for Legend Quest, the ship's rail in front of it all, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/red-moon-sky.png - built by tools/generate_paintings.py from tools/source/title-sky.png: its sky, recoloured to a crimson night; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/red-moon-sky.png - created by Caleb Kiatoukaysi for Legend Quest, the night sky for the oath under the red moon, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/red-moon-moon.png - built by tools/generate_paintings.py from tools/source/title-sky.png: its big moon, turned blood red, with a halo; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/red-moon-moon.png - created by Caleb Kiatoukaysi for Legend Quest, the red moon, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/pier-memory-sky.png - built by tools/generate_paintings.py from tools/source/title-sky.png and title-clouds.png: the storm the day you met, the sky and its clouds recoloured slate; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/red-moon-figures.png - created by Caleb Kiatoukaysi for Legend Quest, the two of them at sixteen on the shore, palms together, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/pier-memory-sea.png - built by tools/generate_paintings.py from tools/source/title-city.png: the rough sea, its lake's water recoloured with the waves, the capsized boat and the coast drawn over it; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/pier-memory-sky.png - created by Caleb Kiatoukaysi for Legend Quest, the storm the day you met, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/pier-memory-pier.png - built by tools/generate_paintings.py from tools/source/npc-villagers.png: the pier in the storm, drawn here, and a child off my villagers sheet running down it; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/pier-memory-sea.png - created by Caleb Kiatoukaysi for Legend Quest, the sea and the boat over in it, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/questeria-dawn-clouds.png - built by tools/generate_paintings.py from tools/source/title-clouds.png: two of its clouds, lit gold by the dawn; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
-Content/Paintings/pier-memory-pier.png - created by Caleb Kiatoukaysi for Legend Quest, the pier and the two of you at eight, drawn procedurally by tools/generate_paintings.py, released under public domain
+Content/Paintings/questeria-dawn-gulls.png - created by Caleb Kiatoukaysi for Legend Quest, three gulls over the sea at dawn, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/red-moon-shore.png - built by tools/generate_paintings.py from tools/source/title-far.png: the mountains and the lake at night under the red moon, with its reflection and mist; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paintings/red-moon-headland.png - created by Caleb Kiatoukaysi for Legend Quest, the headland the two of them stand on, rocks and pines as silhouettes against the moon, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/weather.png - created by Caleb Kiatoukaysi for Legend Quest, a white flash and the near and far raindrops for the storm, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/bolts.png - created by Caleb Kiatoukaysi for Legend Quest, two lightning bolts, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/sigil.png - created by Caleb Kiatoukaysi for Legend Quest, the Soul-Bond's glow and its mark, between the two of them under the red moon, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/glint.png - created by Caleb Kiatoukaysi for Legend Quest, three frames of a glint on the water, drawn procedurally by tools/generate_paintings.py, released under public domain
+
+Content/Paintings/lantern.png - built by tools/generate_paintings.py from tools/source/questeria-props-2.png: the pier's lantern, five frames of it swinging; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 ## UI
 
@@ -311,6 +325,8 @@ Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sli
 Content/panel.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron panel the forms sit on, drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/map-marks.png - created by Caleb Kiatoukaysi for Legend Quest, the marks on the map screen (places, where you are, waypoints, roads), drawn procedurally by tools/generate_ui.py, released under public domain
+
+Content/markers.png - created by Caleb Kiatoukaysi for Legend Quest, the gold and red "!" markers over people with a quest or an event and the arrows to them at the screen's edge, drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/dice.png - created by Caleb Kiatoukaysi for Legend Quest, the d20 for checks, eight frames tumbling and one landed, drawn procedurally by tools/generate_ui.py, released under public domain
 
@@ -340,6 +356,12 @@ Content/Maps/shop.map - written by Caleb Kiatoukaysi for Legend Quest, inside th
 
 Content/Maps/warehouse.map - written by Caleb Kiatoukaysi for Legend Quest, inside a warehouse on the docks, released under public domain
 
+Content/Maps/bakery.map - written by Caleb Kiatoukaysi for Legend Quest, inside the bakery in the Lantern Market: its counters, the shelves of loaves, the sacks of flour and the oven, released under public domain
+
+Content/Maps/forge.map - written by Caleb Kiatoukaysi for Legend Quest, inside the forge in the Lantern Market: the anvil, the tool racks and the forge fire, released under public domain
+
+Content/Maps/chapel.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chapel by the temple: benches for pews, candles and a tapestry, released under public domain
+
 ## Music
 
 Content/Music/embers.wav - created by Caleb Kiatoukaysi for Legend Quest, "Embers", the title theme, composed and synthesised by tools/generate_audio.py, released under public domain
@@ -347,6 +369,8 @@ Content/Music/embers.wav - created by Caleb Kiatoukaysi for Legend Quest, "Ember
 Content/Music/hearthsmoke.wav - created by Caleb Kiatoukaysi for Legend Quest, "Hearthsmoke", for walking about on a lit map, composed and synthesised by tools/generate_audio.py, released under public domain
 
 Content/Music/cold-stone.wav - created by Caleb Kiatoukaysi for Legend Quest, "Cold Stone", for walking about underground, composed and synthesised by tools/generate_audio.py, released under public domain
+
+Content/Music/salt-and-lanterns.wav - created by Caleb Kiatoukaysi for Legend Quest, "Salt and Lanterns", for the Gull's Wager at sea, composed and synthesised by tools/generate_audio.py, released under public domain
 
 ## Sound effects
 
@@ -537,6 +561,238 @@ Content/Props/lantern-post.png - built by tools/cut_supplied.py from tools/sourc
 Content/Props/signpost.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a signpost, a prop, keyed off its backdrop and sampled to 40 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Props/crystal-stone.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: the waypoint, a crystal on a plinth, dim and then glowing, each keyed off the glow round it and lined up on the plinth; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/harbour-bell.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: the harbour bell on its gallows post, a prop, keyed off its backdrop and sampled to 26 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/crate-open.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: an open crate, a prop, keyed off its backdrop and sampled to 20 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/crate-apples.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a crate of apples, a prop, keyed off its backdrop and sampled to 18 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/crate-onions.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a crate of onions, a prop, keyed off its backdrop and sampled to 16 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/crate-stack.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: two crates stacked, a prop, keyed off its backdrop and sampled to 28 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/barrel-water.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a water barrel with a blue lid, a prop, keyed off its backdrop and sampled to 19 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/barrel-salt.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: an open barrel of salt, a prop, keyed off its backdrop and sampled to 17 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/sack-pile.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a pile of grain sacks, a prop, keyed off its backdrop and sampled to 28 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/washing-line.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a washing line with washing on it, a prop, keyed off its backdrop and sampled to 40 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/water-pump.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a water pump with a bucket, a prop, keyed off its backdrop and sampled to 22 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/trough.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a stone water trough with a spout, a prop, keyed off its backdrop and sampled to 34 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/washtub.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a wooden washtub, a prop, keyed off its backdrop and sampled to 23 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/well-flowers.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a roofed well grown over with flowers, a prop, keyed off its backdrop and sampled to 56 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/quest-board.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: the quest board, roofed and hung with flowers, a prop, keyed off its backdrop and sampled to 44 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/signpost-arrows.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a signpost with painted arrows, a prop, keyed off its backdrop and sampled to 28 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/planter-stone.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a round stone planter, a prop, keyed off its backdrop and sampled to 23 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/lamp-arm.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a street lamp, its lantern hung from an arm, a prop, keyed off its backdrop and sampled to 36 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/lamp-double.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a street lamp with two lanterns, a prop, keyed off its backdrop and sampled to 28 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/lantern-small.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a lantern on the ground, a prop, keyed off its backdrop and sampled to 14 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/planter-long.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a long planter of flowers and lavender, a prop, keyed off its backdrop and sampled to 38 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/planter-pink.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a planter of pink flowers, a prop, keyed off its backdrop and sampled to 34 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/flower-box.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a small box of flowers, a prop, keyed off its backdrop and sampled to 17 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/barrel-flowers.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a barrel of flowers, a prop, keyed off its backdrop and sampled to 20 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bench-iron.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a bench with iron arms, a prop, keyed off its backdrop and sampled to 41 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bench-plain.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a wooden bench, a prop, keyed off its backdrop and sampled to 41 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/handcart.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a handcart of flowers, a prop, keyed off its backdrop and sampled to 31 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fence-iron.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: an iron railing, blue and gold, a prop, keyed off its backdrop and sampled to 68 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/sewer-grate.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a sewer grate, lying on the ground, a prop, keyed off its backdrop and sampled to 23 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/chalkboard.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: a café's chalkboard, a prop, keyed off its backdrop and sampled to 19 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/chair.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a chair with a pink cushion, a prop, keyed off its backdrop and sampled to 24 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/armchair.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a blue armchair, a prop, keyed off its backdrop and sampled to 26 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/tapestry.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a pink tapestry, hung on a wall, a prop, keyed off its backdrop and sampled to 34 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/anvil.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: an anvil on its block, a prop, keyed off its backdrop and sampled to 31 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/tool-rack.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a smith's rack of tongs, a prop, keyed off its backdrop and sampled to 28 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/desk.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a desk with a map and a candle, a prop, keyed off its backdrop and sampled to 47 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/side-table.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a small table with a candle, a prop, keyed off its backdrop and sampled to 28 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/utensil-rack.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a rack of ladles and tongs over a basin, a prop, keyed off its backdrop and sampled to 31 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/book-crate.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a crate with books on it, a prop, keyed off its backdrop and sampled to 21 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/potted-plant.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a potted lily, a prop, keyed off its backdrop and sampled to 21 art pixels across; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/townhouse.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: a tall narrow townhouse: a gabled garret, a floor of flower boxes, a door beside a slit window, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/townhouse-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/townhouse.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/townhouse-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/townhouse.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/townhouse-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/townhouse.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/cottage.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: a one-floor cottage under a hipped roof, a gabled porch door between window boxes, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/cottage-pink.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/cottage.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/cottage-teal.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/cottage.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/cottage-plum.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/cottage.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/turret-house.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: a gabled house with a round turret up its corner, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/turret-house-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/turret-house.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/turret-house-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/turret-house.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/turret-house-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/turret-house.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bakery.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: the baker's: a shop window under a pink striped awning, a loaf on its hanging sign, a prop put together from parts of the sheet and painted on, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bakery-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/bakery.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bakery-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/bakery.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bakery-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/bakery.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/chapel.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: a little chapel: a gothic door under a gable, stained glass under a gable each side, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/chapel-pink.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/chapel.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/chapel-teal.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/chapel.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/chapel-plum.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/chapel.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/forge.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: the smithy: an open arch with the forge glowing inside, a chimney, the anvil sign on its post, giving off light, a prop put together from parts of the sheet and painted on, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/forge-pink.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/forge.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/forge-teal.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/forge.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/forge-plum.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: Content/Props/forge.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/watch-post.png - built by tools/cut_supplied.py from tools/source/questeria-grand.png and tools/source/questeria-houses.png: the Watch's post: a battlemented guardroom with a blue door, a corner tower, the Watch's banner on its stand, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/warehouse.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: a twin-gabled warehouse for the docks, wide doors and an open doorway, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/warehouse-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/warehouse.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/warehouse-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/warehouse.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/warehouse-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/warehouse.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/gilded-flagon.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: the Gilded Flagon inn: two floors, a front gable over its door, a gold flagon on its hanging sign, a prop put together from parts of the sheet and painted on, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/gilded-flagon-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/gilded-flagon.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/gilded-flagon-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/gilded-flagon.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/gilded-flagon-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/gilded-flagon.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/rusty-anvil.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: the Rusty Anvil, a dockside tavern: two gables, a wide door, its anvil sign on a post, a prop put together from parts of the sheet, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/rusty-anvil-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/rusty-anvil.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/rusty-anvil-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/rusty-anvil.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/rusty-anvil-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/rusty-anvil.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fishmonger.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: the fishmonger's: a timber shop front under a blue striped awning, a fish on its sign, a prop put together from parts of the sheet and painted on, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fishmonger-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/fishmonger.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fishmonger-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/fishmonger.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fishmonger-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/fishmonger.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/gilded-flagon-sign.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: the Gilded Flagon's sign on its own post, a gold flagon painted over the smith's sign, a prop put together from parts of the sheet and painted on, sampled at 2.1 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fish-stall.png - built by tools/cut_supplied.py from tools/source/questeria-props-1.png: the fishmonger's stall: the blue striped stall with the day's catch painted on ice, a prop put together from parts of the sheet and painted on, sampled at 2.4 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/net-rack.png - built by tools/cut_supplied.py from tools/source/questeria-props-2.png: a rack of fishing net hung to dry: the washing line with a net painted over it, a prop put together from parts of the sheet and painted on, sampled at 3 sheet pixels an art pixel; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-ivy-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-ivy.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-ivy-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-ivy.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-ivy-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-ivy.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-awning-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-awning.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-awning-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-awning.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-awning-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-awning.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-rose-blue.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-rose.png with a blue roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-rose-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-rose.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-rose-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-rose.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-shop-blue.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-shop.png with a blue roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-shop-pink.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-shop.png with a pink roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-shop-teal.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-shop.png with a teal roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/house-shop-plum.png - built by tools/cut_supplied.py from tools/source/questeria-houses.png: Content/Props/house-shop.png with a plum roof, recoloured by tools/cut_supplied.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/oak-light.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a green oak, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/oak-pale.png - built by tools/generate_world.py from tools/source/questeria-trees.png: an oak with pale bark, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/oak-amber.png - built by tools/generate_world.py from tools/source/questeria-trees.png: an oak in autumn, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/oak-deep.png - built by tools/generate_world.py from tools/source/questeria-trees.png: the oak, deepened for the wood, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fir.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a fir, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fir-deep.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a fir, deepened for the wood, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/stump.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a hollow stump, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/snag.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a broken trunk, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/dead-tree.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a bare dead tree, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bush.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a bush, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bush-deep.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a bush, deepened for the wood, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/bush-small.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a small bush, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/fern.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a fern, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/grass-tall.png - built by tools/generate_world.py from tools/source/questeria-trees.png: a tuft of long grass, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/rocks-mossy.png - built by tools/generate_world.py from tools/source/questeria-trees.png: mossy rocks, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/urn-blue.png - built by tools/generate_world.py from tools/source/questeria-props-2.png: a blue funerary urn in the barrow, a prop, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/log.png - created by Caleb Kiatoukaysi for Legend Quest, a fallen log by the road, drawn procedurally by tools/generate_world.py, released under public domain
+
+Content/Props/fallen-tree.png - created by Caleb Kiatoukaysi for Legend Quest, a tree down across the road, drawn procedurally by tools/generate_world.py, released under public domain
+
+Content/Props/mushrooms.png - created by Caleb Kiatoukaysi for Legend Quest, red toadstools, drawn procedurally by tools/generate_world.py, released under public domain
+
+Content/Props/mushrooms-pale.png - created by Caleb Kiatoukaysi for Legend Quest, pale blue toadstools, drawn procedurally by tools/generate_world.py, released under public domain
 
 Content/People/elder.png - built by tools/cut_supplied.py from tools/source/npc-customization.png: the elder, template D1, the one picture each way, in all five columns, sampled to 32x48 frames with the feet on the same row (the first five columns of the 10x4 layout); the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 

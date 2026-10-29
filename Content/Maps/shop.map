@@ -1,5 +1,6 @@
-; A chandler's: the counter across the middle with the shopkeeper behind it, shelves along the
-; back wall, and stock about the floor.
+; A chandler's: the counter across the middle with the shopkeeper behind it and the prices chalked up
+; beside it, shelves and racks along the back wall, crates, sacks and barrels of stock about the floor,
+; a rug for the customers, and a ship's captain haggling.
 
 [map]
 id = shop
@@ -27,20 +28,35 @@ _ = wall-base
 #ssssssssssssss#
 #ssssssssssssss#
 #ssssssssssssss#
-#ssssssssssssss#
-#ssssssssssssss#
+#sssrrrrrrrrsss#
+#sssrrrrrrrrsss#
 #######ss#######
 
 [objects]
 spawn start 7.5 8 facing=up
 exit door 7 9 w=2 to=back
 
+; Behind the counter: the shelves, the rope and tools on their rack, and a plant.
+prop bookshelf 3.5 3.3
+prop tool-rack 6 3.2
+prop potted-plant 10 3.2
+prop bookshelf 12.5 3.3
 prop shop-counter 8 6
-prop bookshelf 4 3.4
-prop bookshelf 12 3.4
-prop cargo-crate 2.6 7.6
-prop cargo-crate 2.6 8.4
-prop cargo-barrel 13.4 7.8
-prop sacks 12.4 8.4
-prop candle-stand 1.6 4.4
-npc shopkeeper 8 4.4 name="The Chandler" sheet=trader facing=down say="Rope, wax, lamp oil. Everything a ship needs but the sea."
+prop chalkboard 11.2 6.4
+npc shopkeeper 8 4.4 name="The Chandler" sheet=trader facing=down say="Rope, wax, lamp oil. Everything a ship needs but the sea.|Candles in every size. Even the big ones.|The east ships stopped buying. The west ones never did."
+
+; The stock, and the candles.
+prop crate-stack 2.2 8.2
+prop cargo-crate 1.8 6.2
+prop book-crate 4 5
+prop sacks 12 8.4
+prop cargo-barrel 13.9 7
+prop barrel-water 13.9 5
+prop candle-stand 1.4 4.4
+prop candle-stand 14.2 3.6
+
+; A customer.
+npc ship-captain 5 6.5 look=405 name="A Ship's Captain" facing=right say="Wax, rope, oil. And the patience to pay for them.|Three weeks to the southern isles, if the wind's honest.|Chandlers are the only honest pirates in this city."
+
+; What the two of you make of the place.
+trigger bark-shop-inside 6 7 w=4 h=1 bark=shop-inside

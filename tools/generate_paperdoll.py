@@ -956,55 +956,91 @@ def tails(frames, keys):
 # Hats
 # --------------------------------------------------------------------------- #
 
+#: Where a hat's brim sits, in rows above his eyes: on his hairline, so his brows and eyes show
+#: under it. The first hats came down to his brows, and in a close-up the brim went across his eyes.
+BRIM_ABOVE_EYES = 5
+
+#: How many rows a tricorn's crown and a helm's dome stand up over the top of his head, so they
+#: sit on it rather than being painted into his hair.
+CROWN_RISE = 1
+
+
+def hat_anchor(f, hair, r, c):
+    """Where a hat goes in a frame: the top of his head, the brim's row, his head's middle across,
+    and its span on the brim's row. Facing away there are no eyes to measure from, and the guess
+    from his chin wobbles from step to step, so it's measured up from his neck instead, which is
+    where his eyes are from it facing down."""
+    top, eyes, cx, span = head_box(f, hair, r, c)
+    if r == UP:
+        eyes = f.neck - 3
+    brim = eyes - BRIM_ABOVE_EYES
+    return top, brim, cx, head_span(f, hair, r, c, brim) or span
+
+
+#: How many rows down from the top of his head his skull is wide enough to shape a hat's dome on.
+#: Above that, it's the tufts of his hair, which a hat flattens.
+DOME_ROWS = 2
+
+
+def crown(f, hair, r, c, top, brim, rise, narrower):
+    """The cells a hat covers, from `rise` rows over his head down to its brim: as wide as his head
+    on each row (less `narrower` each side), and rounded over the top, more each row up."""
+    cells = set()
+    base = top + DOME_ROWS
+    for y in range(top - rise, brim + 1):
+        span = head_span(f, hair, r, c, max(y, base))
+        if span is None:
+            continue
+        up = max(0, base - y)
+        inset = narrower + up * (up + 1) // 4
+        cells.update((x, y) for x in range(span[0] + inset, span[1] - inset + 1))
+    return cells
+
+
 def hats(frames, hair, keys):
-    """Hats over the hair: a bandana in the vest's dye, knotted at the back (the Red Gulls wear
-    crimson ones); a captain's tricorn, black with a gold edge; and the Watch's steel helm."""
+    """Hats over the hair, sitting on his crown with the brim on his hairline: a bandana in the
+    vest's dye, knotted at the back (the Red Gulls wear crimson ones); a captain's tricorn, black
+    with a gold edge; and the Watch's steel helm. Each is worked out from his head in that frame,
+    so it bobs with him, and the Stout and Small bodies get it on the same head."""
     for kind in ("bandana", "tricorn", "helm"):
         layer = Layer()
         for r in range(4):
             for c in range(PEOPLE_COLUMNS):
                 f = frames[r][c]
-                top, eyes, cx, span = head_box(f, hair, r, c)
-                brow = eyes - 3
-                cells = set()
-                for y in range(top + (1 if kind == "tricorn" else 0), brow + 1):
-                    widths = [x for x in range(FRAME_W) if hair.get(r, c, x, max(y, top)) is not None or f.part.get((x, max(y, top))) == "skin"]
-                    if not widths:
-                        continue
-                    x0, x1 = min(widths), max(widths)
-                    if kind == "helm" and y < top + 2:
-                        x0, x1 = x0 + (top + 2 - y), x1 - (top + 2 - y)
-                    if kind == "tricorn":
-                        x0, x1 = x0 + 1, x1 - 1
-                    for x in range(x0, x1 + 1):
-                        cells.add((x, y))
+                top, brim, cx, span = hat_anchor(f, hair, r, c)
                 if kind == "bandana":
-                    paint(layer, r, c, cells, keys["top"][1:])
+                    paint(layer, r, c, crown(f, hair, r, c, top, brim, 0, 0), keys["top"][1:])
                     if r in (LEFT, RIGHT, UP):
                         knot_x = (span[1] + 1) if r == LEFT else (span[0] - 1) if r == RIGHT else round(cx)
                         for i in range(4):
                             dx = (1 if r == LEFT else -1) * (i // 2) if r != UP else (i % 2) * 2 - 1
-                            layer.put(r, c, knot_x + dx, brow + i, keys["top"][2 if i % 2 else 1])
+                            layer.put(r, c, knot_x + dx, brim + i, keys["top"][2 if i % 2 else 1])
                 elif kind == "tricorn":
-                    paint(layer, r, c, cells, TRICORN)
-                    brim_y = brow
-                    xs = [x for x, y in cells if y == brim_y]
-                    x0, x1 = min(xs) - 3, max(xs) + 3
+                    paint(layer, r, c, crown(f, hair, r, c, top, brim - 1, CROWN_RISE, 1), TRICORN)
+                    # The brim: gold-edged, past his head both sides, cocked up at the corners
+                    # (two rows at the tips, one next to them), and its point coming down a row
+                    # over the way he's facing.
+                    x0, x1 = span[0] - 2, span[1] + 2
                     for x in range(x0, x1 + 1):
-                        layer.put(r, c, x, brim_y, TRIM[1] if x % 3 else TRIM[0])
-                        layer.put(r, c, x, brim_y + 1, OUTLINE)
-                    # The corners turned up, the way a tricorn's are.
+                        layer.put(r, c, x, brim, TRIM[1] if x % 3 else TRIM[0])
+                        layer.put(r, c, x, brim + 1, OUTLINE)
+                    for x, lift in ((x0, 2), (x1, 2), (x0 + 1, 1), (x1 - 1, 1)):
+                        for y in range(brim - lift, brim):
+                            layer.put(r, c, x, y, TRICORN[2] if x in (x0, x0 + 1) else TRICORN[1])
+                        layer.put(r, c, x, brim - lift - 1, OUTLINE)
                     for x in (x0, x1):
-                        layer.put(r, c, x, brim_y - 1, TRICORN[2])
-                        layer.put(r, c, x, brim_y - 2, OUTLINE)
+                        layer.put(r, c, x, brim - 2, TRIM[1])
+                    point = {DOWN: round(cx), LEFT: x0 + 1, RIGHT: x1 - 1}.get(r)
+                    if point is not None:
+                        layer.put(r, c, point, brim + 1, TRIM[0])
+                        layer.put(r, c, point, brim + 2, OUTLINE)
                 else:
-                    paint(layer, r, c, cells, STEEL)
-                    xs = [x for x, y in cells if y == brow]
-                    for x in range(min(xs) - 1, max(xs) + 2):
-                        layer.put(r, c, x, brow, STEEL[1])
-                        layer.put(r, c, x, brow + 1, OUTLINE)
+                    paint(layer, r, c, crown(f, hair, r, c, top, brim, CROWN_RISE, 0), STEEL)
+                    for x in range(span[0] - 1, span[1] + 2):
+                        layer.put(r, c, x, brim, STEEL[1])
+                        layer.put(r, c, x, brim + 1, OUTLINE)
                     if r == DOWN:
-                        layer.put(r, c, round(cx), top, STEEL[3])
+                        layer.put(r, c, round(cx), top - CROWN_RISE + 1, STEEL[3])
         keep("hat-" + kind, layer)
 
 

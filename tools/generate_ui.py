@@ -1,6 +1,6 @@
 """
-UI art for Legend Quest: the button plates, the panel the forms sit on, the marks on the map, and
-the mouse cursors.
+UI art for Legend Quest: the button plates, the panel the forms sit on, the marks on the map, the
+"!" markers over people, and the mouse cursors.
 Run it from the repo root:
 
     python tools/generate_ui.py
@@ -375,6 +375,141 @@ def build_map_marks():
 
 
 # --------------------------------------------------------------------------- #
+# markers.png -- the "!" over someone with something for you, and the arrows to one off the screen
+# --------------------------------------------------------------------------- #
+#
+# Two rows of 14x14 cells, drawn at 3x out on the map like everything else: gold for someone with
+# work or a quest for you, red for an event. In each row, the "!" (8 wide, in the middle of its
+# cell: a tall bar that narrows, and a round dot under it), then the arrow that sits at the edge of
+# the screen pointing right, then the same arrow pointing down and right. The game turns the arrows a quarter at a time for the other six ways,
+# which keeps their pixels square. The "!" is lit from the top left like the rest of the art, with
+# a bright streak, a glint and a little sparkle off its shoulder. The arrows are lit down their
+# middle instead, so they look the same whichever way they're turned.
+
+MARKER = 14
+BANG_WIDTH = 8
+
+#: The "!" itself: '#' is filled, and the dark outline goes round whatever is.
+BANG = (
+    "........",
+    "...##...",
+    "..####..",
+    "..####..",
+    "..####..",
+    "..####..",
+    "...##...",
+    "...##...",
+    "........",
+    "........",
+    "..####..",
+    "..####..",
+    "...##...",
+    "........",
+)
+
+#: Deep shadow, shadow, base, light, highlight, glint. The gold is the style sheet's gold row; the
+#: red is its crimson pushed brighter, so it reads as a warning next to the roofs' pinks.
+MARKER_GOLD = ((167, 101, 58), (207, 140, 69), (238, 183, 87), (250, 216, 139), (253, 240, 204), (255, 253, 244))
+MARKER_RED = ((116, 28, 50), (172, 44, 64), (220, 72, 80), (246, 134, 124), (255, 210, 198), (255, 248, 242))
+
+#: Dark outlines, not black: a warm brown round the gold, a plum round the red.
+MARKER_GOLD_EDGE = (70, 38, 30)
+MARKER_RED_EDGE = (62, 18, 38)
+
+#: The arrow, pointing right, round the middle of its cell: a dart with a notch in its back.
+ARROW = ((5.6, 0.0), (-4.2, 5.0), (-1.4, 0.0), (-4.2, -5.0))
+
+#: The diagonal arrow is the same dart turned an eighth, and a shade smaller so it still fits its cell.
+ARROW_DIAGONAL_SCALE = 0.86
+
+
+def _outline(img, ox, oy, mask, edge):
+    """Puts the dark outline on every empty pixel of a cell next to (not across a corner from) a filled one."""
+    for y in range(MARKER):
+        for x in range(MARKER):
+            if mask[y][x]:
+                continue
+            if any(0 <= x + dx < MARKER and 0 <= y + dy < MARKER and mask[y + dy][x + dx]
+                   for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                put(img, ox + x, oy + y, edge + (255,))
+
+
+def _marker_bang(img, oy, ramp, edge):
+    """The "!", lit from the top left: light down its left side, shadow down its right, a bright
+    streak and a glint near the top, and a four-pointed sparkle off its right shoulder."""
+    left = (MARKER - BANG_WIDTH) // 2
+    mask = [[False] * MARKER for _ in range(MARKER)]
+    for y, row in enumerate(BANG):
+        for x, c in enumerate(row):
+            mask[y][left + x] = c == "#"
+
+    for y in range(MARKER):
+        filled = [x for x in range(MARKER) if mask[y][x]]
+        if not filled:
+            continue
+        # The top row of the bar or the dot catches the light; the bottom row of each is in shadow.
+        first, last = filled[0], filled[-1]
+        top = not any(mask[y - 1])
+        bottom = y + 1 >= MARKER or not any(mask[y + 1])
+        for x in filled:
+            shade = 3 if x == first else 1 if x == last else 2
+            if top:
+                shade = min(shade + 1, 3)
+            if bottom:
+                shade = max(shade - 1, 0)
+            put(img, x, oy + y, tone(ramp[shade], 1.0))
+
+    # The streak down the bar, just in from its lit side as it narrows, the glint at the top of it,
+    # and a fleck of the same on the dot.
+    for y in range(2, 6):
+        first = BANG[y].index("#")
+        put(img, left + first + 1, oy + y, tone(ramp[4], 1.0))
+    put(img, left + 2, oy + 2, tone(ramp[5], 1.0))
+    put(img, left + 3, oy + 11, tone(ramp[4], 1.0))
+
+    _outline(img, 0, oy, mask, edge)
+
+    # The sparkle: a bright middle and four soft points, off the top right of the bar.
+    sx, sy = left + BANG_WIDTH + 1, oy + 1
+    put(img, sx, sy, tone(ramp[5], 1.0))
+    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        put(img, sx + dx, sy + dy, ramp[4] + (150,))
+
+
+def _marker_arrow(img, ox, oy, ramp, edge, turn, scale):
+    """The arrow, turned `turn` radians clockwise and scaled, lit along its middle: brightest down
+    the spine, a glint just behind the point, darker toward the edges, and the dark outline round it."""
+    c = (MARKER - 1) / 2.0
+    cos_t, sin_t = math.cos(turn), math.sin(turn)
+    points = [(c + scale * (x * cos_t - y * sin_t), c + scale * (x * sin_t + y * cos_t)) for x, y in ARROW]
+
+    mask = [[_inside_poly(x + 0.5, y + 0.5, points) for x in range(MARKER)] for y in range(MARKER)]
+    for y in range(MARKER):
+        for x in range(MARKER):
+            if not mask[y][x]:
+                continue
+            # Where the pixel is along the arrow (u, toward the point) and out from its spine (v).
+            px, py = x + 0.5 - c, y + 0.5 - c
+            u = (px * cos_t + py * sin_t) / scale
+            v = abs(-px * sin_t + py * cos_t) / scale
+            shade = 3 if v < 1.1 else 2 if v < 2.6 else 1
+            if 1.0 < u < 2.6 and v < 1.1:
+                shade = 4
+            put(img, ox + x, oy + y, tone(ramp[shade], 1.0))
+    _outline(img, ox, oy, mask, edge)
+
+
+def build_markers():
+    img = new_image(MARKER * 3, MARKER * 2)
+    for row, (ramp, edge) in enumerate(((MARKER_GOLD, MARKER_GOLD_EDGE), (MARKER_RED, MARKER_RED_EDGE))):
+        oy = row * MARKER
+        _marker_bang(img, oy, ramp, edge)
+        _marker_arrow(img, MARKER, oy, ramp, edge, 0.0, 1.0)
+        _marker_arrow(img, MARKER * 2, oy, ramp, edge, math.pi / 4, ARROW_DIAGONAL_SCALE)
+    write_png(os.path.join(OUT, "markers.png"), img)
+
+
+# --------------------------------------------------------------------------- #
 # cursors.png -- the mouse cursor's shapes
 # --------------------------------------------------------------------------- #
 #
@@ -592,6 +727,7 @@ if __name__ == "__main__":
     build_button()
     build_panel()
     build_map_marks()
+    build_markers()
     build_cursors()
     build_dice()
     build_dialogue_icons()

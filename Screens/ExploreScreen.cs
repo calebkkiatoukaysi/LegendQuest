@@ -25,8 +25,9 @@ namespace LegendQuest.Screens;
 /// Top down, the map is bigger than the window so the camera follows and stops at the edge, and
 /// everyone on the floor is sorted by how far down the map their feet are. It's in partials: this
 /// one walks and draws, ExploreScreen.Party has the party and the followers, ExploreScreen.Pointer
-/// has the mouse, and ExploreScreen.World has using things, talking, triggers and the ways off the
-/// map. The fighting gets a partial of its own later.
+/// has the mouse, ExploreScreen.World has using things, talking, triggers and the ways off the map,
+/// ExploreScreen.Banter has the banter and the lines over people's heads, and ExploreScreen.Markers
+/// has the "!"s. The fighting gets a partial of its own later.
 /// </remarks>
 public partial class ExploreScreen : GameScreen
 {
@@ -65,6 +66,14 @@ public partial class ExploreScreen : GameScreen
     private static readonly Color HeadingBacking = Color.Black * 0.8f;
     private static readonly Vector2 HeadingSpread = new(28f, 12f);
 
+    /// <summary>The soft dark band across the top of the screen that the heading, the keys and the objective sit on, so they read over busy roofs: how dark it is, how far down it stays that dark (past the objective), and how far under that it takes to fade to nothing. Screen pixels.</summary>
+    private const float BandDarkness = 0.6f;
+    private const int BandSolid = 82;
+    private const int BandFade = 72;
+
+    /// <summary>How far down from where they'd be the toasts go on a map, in screen pixels, so they're under the band and never on the objective.</summary>
+    private const float ToastDrop = 44f;
+
     private readonly InputAction _pause = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
     private readonly InputAction _walkUp = new(new[] { Buttons.DPadUp }, new[] { Keys.W, Keys.Up }, false);
     private readonly InputAction _walkDown = new(new[] { Buttons.DPadDown }, new[] { Keys.S, Keys.Down }, false);
@@ -92,6 +101,7 @@ public partial class ExploreScreen : GameScreen
     private AudioManager _audio;
     private SpriteFont _detailFont;
     private Texture2D _glow;
+    private Texture2D _band;
     private bool _stepLeft;
 
     /// <summary>Puts the game on the map its save says it's on.</summary>
@@ -142,6 +152,8 @@ public partial class ExploreScreen : GameScreen
         _detailFont = _content.Load<SpriteFont>("spectral-detail");
         _glow = _content.Load<Texture2D>("glow");
         _marks = _content.Load<Texture2D>("map-marks");
+        _markers = _content.Load<Texture2D>("markers");
+        _band ??= BuildBand();
         _toast.LoadContent(_content);
         _tooltip.LoadContent(_content);
         _strip.LoadContent(_content, ScreenManager.GraphicsDevice);
@@ -173,10 +185,11 @@ public partial class ExploreScreen : GameScreen
         _audio.PlaySong(_map.Music);
     }
 
-    /// <summary>Unloads the map, and disposes everything the content manager didn't make: the dark, the baked sheets and the strip's pixel.</summary>
+    /// <summary>Unloads the map, and disposes everything the content manager didn't make: the dark, the band across the top, the baked sheets and the strip's pixel.</summary>
     public override void Unload()
     {
         _lightMap?.Unload();
+        _band?.Dispose();
         foreach (Texture2D sheet in _sheets.Values) sheet.Dispose();
         _strip.Unload();
         _content?.Unload();
@@ -223,7 +236,7 @@ public partial class ExploreScreen : GameScreen
         }
     }
 
-    /// <summary>Runs everything that moves on its own (the party, the people, the torches, the camera and the clock), then checks what you've walked into.</summary>
+    /// <summary>Runs everything that moves on its own (the party, the people, the torches, the camera and the clock), checks what you've walked into, then runs the banter and lets the townsfolk talk.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="otherScreenHasFocus">Whether a screen above has the input.</param>
     /// <param name="coveredByOtherScreen">Whether a non-popup screen is on top.</param>
@@ -231,10 +244,11 @@ public partial class ExploreScreen : GameScreen
     {
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
-        // Paused, so nothing moves, not even the clock.
+        // Paused, so nothing moves, not even the clock, and the banter's line waits to be read.
         if (!IsActive)
         {
             foreach (WalkerSprite walker in _walkers) walker.IsWalking = false;
+            HoldBanter();
             return;
         }
 
@@ -254,9 +268,11 @@ public partial class ExploreScreen : GameScreen
         _seen.LookAround(Leader.Position);
         FindNearest();
         CheckAreas();
+        UpdateBanter(gameTime);
+        Chatter();
     }
 
-    /// <summary>Draws the map and everyone on it, the dark over them, the light over that, then what's on the screen itself.</summary>
+    /// <summary>Draws the map and everyone on it, the dark over them, the light over that, the markers over everything, then what's on the screen itself.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
@@ -294,10 +310,31 @@ public partial class ExploreScreen : GameScreen
         DrawPathPreview(spriteBatch);
         spriteBatch.End();
 
-        // 5. The screen: the party's cards (point sampled), then all the writing. While the arrival
-        //    plays it's the black bars and the card instead.
+        // 5. The screen. First the soft dark band across the top that the heading sits on. While the
+        //    arrival plays it's the black bars and the card instead.
         float alpha = TransitionAlpha;
         bool playing = _arriving != Arriving.None;
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
+        if (!playing) spriteBatch.Draw(_band, new Rectangle(0, 0, LegendQuestGame.ScreenWidth, _band.Height), Color.White * alpha);
+        spriteBatch.End();
+
+        // 6. What's over people's heads, laid out so none of it sits on anything else, and none of it
+        //    while a conversation's up. The markers and the arrows to the ones off the screen go
+        //    first, point sampled at the map's zoom, over the roofs and the dark.
+        bool overheads = !playing && !_talking;
+        var bubbles = new List<(Rectangle Box, List<string> Rows, Color Colour, float Shown)>();
+        var marks = new List<(Rectangle Box, MarkerKind Kind, float Phase)>();
+        if (overheads) LayOutOverheads(bubbles, marks);
+
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+        if (overheads)
+        {
+            DrawMarkers(spriteBatch, marks, gameTime, alpha);
+            DrawArrows(spriteBatch, gameTime, alpha);
+        }
+        spriteBatch.End();
+
+        // 7. The party's cards (point sampled), then all the writing.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
         if (!playing) _strip.DrawCards(spriteBatch, _game.Party, PartySheets(), _game.Leader, alpha);
         spriteBatch.End();
@@ -309,11 +346,17 @@ public partial class ExploreScreen : GameScreen
             DrawHeading(spriteBatch, Hint, LegendQuestGame.ScreenWidth - Margin, true, alpha);
             DrawObjective(spriteBatch, alpha);
             _strip.DrawNames(spriteBatch, _game.Party, _game.Leader, alpha);
-            DrawLines(spriteBatch, alpha);
-            DrawPrompt(spriteBatch, alpha);
+            DrawBubbles(spriteBatch, bubbles, alpha);
+            if (overheads) DrawPrompt(spriteBatch, alpha);
             DrawTooltip(spriteBatch, alpha);
         }
         DrawArrival(spriteBatch, alpha);
+        spriteBatch.End();
+
+        // 8. The toasts, in a batch of their own moved down under the band, so a long one (the
+        //    controls after the arrival) never sits on the objective.
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp,
+            transformMatrix: Matrix.CreateTranslation(0f, ToastDrop, 0f));
         _toast.Draw(spriteBatch, alpha);
         spriteBatch.End();
 
@@ -335,6 +378,21 @@ public partial class ExploreScreen : GameScreen
         Text.Draw(spriteBatch, _detailFont, text, x, HeadingY, Palette.Bone * alpha, Palette.Shadow * alpha, rightAligned: rightAligned);
     }
 
+    /// <summary>Builds the band across the top: one column of pixels, dark down past the objective and then easing off to nothing, which gets stretched across the screen.</summary>
+    private Texture2D BuildBand()
+    {
+        var texels = new Color[BandSolid + BandFade];
+        for (int y = 0; y < texels.Length; y++)
+        {
+            float t = MathHelper.Clamp((y - BandSolid) / (float)BandFade, 0f, 1f);
+            texels[y] = Color.Black * (BandDarkness * (1f - t * t * (3f - 2f * t)));
+        }
+
+        var band = new Texture2D(ScreenManager.GraphicsDevice, 1, texels.Length);
+        band.SetData(texels);
+        return band;
+    }
+
     /// <summary>Gets a party member's walker ready to walk: its shadow, their baked sheet, and their footsteps.</summary>
     private void DressWalker(WalkerSprite walker, PartyMember member)
     {
@@ -343,17 +401,18 @@ public partial class ExploreScreen : GameScreen
         walker.Stepped += () => Footstep(walker);
     }
 
-    /// <summary>Someone on the map's sheet: their townsfolk sheet, or their cast member's, baked if they're a look.</summary>
+    /// <summary>Someone on the map's sheet: the one baked for their look if they're one of a crowd, their townsfolk sheet, or their cast member's, baked if they're a look.</summary>
     private Texture2D NpcSheet(MapNpc npc)
     {
+        if (npc.Look is not null) return SheetFor(npc.Look);
         if (npc.Cast is null) return _content.Load<Texture2D>(Townsfolk.Texture(npc.Sheet));
 
         CastMember cast = Cast.Get(npc.Cast);
         return cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : SheetFor(cast.Look);
     }
 
-    /// <summary>Works out who and what's on the map with the flags as they are now. Builds the paths again if anything came or went.</summary>
-    /// <returns>True if anything changed.</returns>
+    /// <summary>Works out who and what's on the map with the flags as they are now, and who's marked. Builds the paths again if anything came or went.</summary>
+    /// <returns>True if anything came or went.</returns>
     private bool RefreshPresence()
     {
         List<PropSprite> props = _everyProp.FindAll(prop => prop.Presence.Holds(_game.Flags));
@@ -369,6 +428,7 @@ public partial class ExploreScreen : GameScreen
         _things.AddRange(things);
 
         if (changed && _content is not null) BuildNav();
+        RefreshMarkers();
         return changed;
     }
 

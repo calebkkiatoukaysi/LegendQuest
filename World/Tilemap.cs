@@ -66,7 +66,7 @@ public class Tilemap
         }
     }
 
-    /// <summary>Draws the three layers of whatever is on screen.</summary>
+    /// <summary>Draws the three layers of whatever is on screen, the tiles that move on the frame the clock says.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="spriteBatch">The SpriteBatch to render with, in world space, point-sampled, back to front.</param>
     /// <param name="view">The part of the map on screen, in world pixels.</param>
@@ -75,15 +75,16 @@ public class Tilemap
     {
         int x0 = Math.Max(0, view.Left / TileSize), x1 = Math.Min(_map.Width - 1, view.Right / TileSize);
         int y0 = Math.Max(0, view.Top / TileSize), y1 = Math.Min(_map.Height - 1, view.Bottom / TileSize);
+        float seconds = (float)gameTime.TotalGameTime.TotalSeconds;
 
         for (int y = y0; y <= y1; y++)
         {
             for (int x = x0; x <= x1; x++)
             {
-                DrawTile(spriteBatch, _map.Ground[x, y], x, y, tint, Layers.GroundTile);
+                DrawTile(spriteBatch, _map.Ground[x, y], x, y, seconds, tint, Layers.GroundTile);
                 DrawEdges(spriteBatch, x, y, tint);
-                DrawTile(spriteBatch, _map.Detail[x, y], x, y, tint, Layers.DetailTile);
-                DrawTile(spriteBatch, _map.Overhead[x, y], x, y, tint, Layers.Overhead);
+                DrawTile(spriteBatch, _map.Detail[x, y], x, y, seconds, tint, Layers.DetailTile);
+                DrawTile(spriteBatch, _map.Overhead[x, y], x, y, seconds, tint, Layers.Overhead);
             }
         }
     }
@@ -167,11 +168,11 @@ public class Tilemap
         new((int)MathF.Floor(world.X / TileSize), (int)MathF.Floor(world.Y / TileSize));
 
     /// <summary>Draws one cell of one layer, unless it's empty.</summary>
-    private void DrawTile(SpriteBatch spriteBatch, int tile, int x, int y, Color tint, float layerDepth)
+    private void DrawTile(SpriteBatch spriteBatch, int tile, int x, int y, float seconds, Color tint, float layerDepth)
     {
         if (tile == 0) return;
 
-        Rectangle source = _frames[_map.Tileset.FrameOf(tile, x, y)];
+        Rectangle source = _frames[_map.Tileset.FrameOf(tile, x, y, seconds)];
         spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, tint,
             0f, Vector2.Zero, 1f, SpriteEffects.None, layerDepth);
     }

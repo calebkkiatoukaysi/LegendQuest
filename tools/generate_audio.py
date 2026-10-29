@@ -953,6 +953,103 @@ def build_hearthsmoke():
 
 
 # --------------------------------------------------------------------------- #
+# salt-and-lanterns.wav: the ship at night
+# --------------------------------------------------------------------------- #
+# E minor, 60 BPM with every beat in three, so it rocks like a hull (12/8 in all but name), 16 bars
+# (64 s). The lute picks low-high-middle in each beat, the flute comes in at bar 5 with a tune that
+# keeps lifting to the G and coming back, a frame drum knocks like the hull on a swell, and under
+# it all the sea rolls in and out, four long waves to a loop. Ends on Em, so it goes round.
+
+SEA_BPM, SEA_BARS = 60, 16
+
+SEA_CHORDS = (             # one per bar: (drone MIDI, lute voicing low to high)
+    ((40, 47), (52, 59, 64, 67)), ((36, 43), (48, 55, 60, 64)),     # Em, C
+    ((43, 50), (55, 59, 62, 67)), ((38, 45), (50, 57, 62, 66)),     # G, D
+    ((40, 47), (52, 59, 64, 67)), ((36, 43), (48, 55, 60, 64)),     # Em, C
+    ((38, 45), (50, 57, 62, 66)), ((38, 45), (50, 57, 62, 66)),     # D, D
+    ((40, 47), (52, 59, 64, 67)), ((36, 43), (48, 55, 60, 64)),     # Em, C
+    ((43, 50), (55, 59, 62, 67)), ((38, 45), (50, 57, 62, 66)),     # G, D
+    ((36, 43), (48, 55, 60, 64)), ((38, 45), (50, 57, 62, 66)),     # C, D
+    ((40, 47), (52, 59, 64, 67)), ((40, 47), (52, 59, 64, 67)),     # Em, Em
+)
+
+#: Each beat in three: the low note on the beat, then the top, then the middle. (beat part, which note, velocity)
+SEA_PICKING = ((0.0, 0, 0.55), (1 / 3, 3, 0.35), (2 / 3, 2, 0.3))
+
+SEA_TUNE_FROM = 5
+
+SEA_TUNE = (               # (bar, beat, MIDI, beats held)
+    (5, 0.0, 71, 4 / 3), (5, 4 / 3, 74, 2 / 3), (5, 2.0, 76, 4 / 3), (5, 10 / 3, 74, 2 / 3),
+    (6, 0.0, 72, 2.0), (6, 2.0, 71, 1.0), (6, 3.0, 67, 1.0),
+    (7, 0.0, 66, 4 / 3), (7, 4 / 3, 69, 2 / 3), (7, 2.0, 74, 2.0),
+    (8, 0.0, 69, 3.0), (8, 3.0, 66, 1.0),
+    (9, 0.0, 71, 4 / 3), (9, 4 / 3, 74, 2 / 3), (9, 2.0, 79, 4 / 3), (9, 10 / 3, 78, 2 / 3),
+    (10, 0.0, 76, 2.0), (10, 2.0, 72, 1.0), (10, 3.0, 71, 1.0),
+    (11, 0.0, 74, 4 / 3), (11, 4 / 3, 71, 2 / 3), (11, 2.0, 67, 1.0), (11, 3.0, 71, 1.0),
+    (12, 0.0, 69, 4.0),
+    (13, 0.0, 72, 4 / 3), (13, 4 / 3, 71, 2 / 3), (13, 2.0, 69, 1.0), (13, 3.0, 67, 1.0),
+    (14, 0.0, 66, 4 / 3), (14, 4 / 3, 69, 2 / 3), (14, 2.0, 74, 2.0),
+    (15, 0.0, 71, 4 / 3), (15, 4 / 3, 69, 2 / 3), (15, 2.0, 67, 1.0), (15, 3.0, 66, 1.0),
+    (16, 0.0, 64, 3.5),
+)
+
+#: The hull knocking on the swell: (beat, velocity).
+SEA_DRUM = ((0.0, 0.55), (2.0, 0.35))
+
+#: How many waves roll in and out in one loop. It has to be whole, so the loop has no seam.
+SEA_WAVES = 4
+
+
+def sea_swell(length, rate, rng):
+    """The sea against the hull: low-passed noise, rising and falling in long waves."""
+    x = looped(lambda y: lowpass(lowpass(y, 420.0, rate), 420.0, rate), noise(length, rng), rate)
+    waves = [0.2 + 0.8 * math.sin(math.pi * SEA_WAVES * i / length) ** 2 for i in range(length)]
+    return shaped(norm(x), waves)
+
+
+def build_salt_and_lanterns():
+    rng = random.Random(6002)
+    s = Song(SEA_BPM, SEA_BARS)
+    R, L, H = s.rate, s.length, s.rate // 2
+
+    strings = s.half_track()
+    for first, bars, notes in drone_spans(SEA_CHORDS):
+        note = bowed([midi_hz(m) for m in notes], s.secs(4 * bars) + 1.0, H, rng, attack=1.6, release=1.2,
+                     vib_cents=5.0, bow=0.05, bright=0.7)
+        mix_loop(strings, note, s.half_at(first) - H)
+    s.add_half(strings, -18.0, send=0.35, label="drone")
+
+    pluck = note_cache(lambda m, vel: lute(midi_hz(m), R, rng, vel, 2.4))
+    picking = s.track()
+    for bar, (_, voicing) in enumerate(SEA_CHORDS, start=1):
+        under = 0.7 if bar >= SEA_TUNE_FROM else 1.0
+        for beat in range(4):
+            for part, which, vel in SEA_PICKING:
+                jitter = int(rng.gauss(0.0, 0.008) * R)
+                mix_loop(picking, pluck(voicing[which], vel), s.at(bar, beat + part) + jitter, under * rng.uniform(0.88, 1.0))
+    s.add(picking, -12.0, pan=-0.2, send=0.35, label="picking")
+
+    tune = s.track()
+    for bar, beat, m, held in SEA_TUNE:
+        jitter = int(rng.gauss(0.0, 0.006) * R)
+        mix_loop(tune, flute(midi_hz(m), s.secs(held) * 0.92, R, rng, 0.7), s.at(bar, beat) + jitter)
+    s.add(tune, -11.0, pan=0.2, send=0.55, label="flute")
+
+    hit = frame_drum(R, rng)
+    drum = s.track()
+    for bar in range(SEA_TUNE_FROM, SEA_BARS + 1):
+        for beat, vel in SEA_DRUM:
+            mix_loop(drum, hit, s.at(bar, beat), vel)
+    s.add(drum, -16.0, send=0.3, label="drum")
+
+    s.add_stereo(sea_swell(L, R, rng), sea_swell(L, R, rng), -19.0, label="sea")
+    s.add_stereo(wind(L, R, rng), wind(L, R, rng), -32.0, label="wind")
+
+    s.add_reverb(rt60=3.0, damp_hz=2800.0, size=1.0, gain_db=-10.0)
+    s.finish("Content/Music/salt-and-lanterns.wav", EXPLORE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
 # cold-stone.wav: walking about underground
 # --------------------------------------------------------------------------- #
 # C Phrygian, 48 BPM, 10 bars (50 s). Hardly a tune at all: a low drone on C and G, a choir that
@@ -1342,6 +1439,7 @@ SONGS = {
     "embers": build_embers,
     "hearthsmoke": build_hearthsmoke,
     "cold-stone": build_cold_stone,
+    "salt-and-lanterns": build_salt_and_lanterns,
 }
 
 SFX = {   # name: (folder, peak dBFS, builder)

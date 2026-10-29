@@ -1,0 +1,74 @@
+; A chapel in Questeria, smaller and older than the temple: the altar at the far end under its tapestry
+; with a candle either side, the keeper in front of it, a runner up the aisle between the pews, two at
+; prayer, and the hymn books on their shelf. Every chapel that's this one inside comes back out its own
+; door.
+
+[map]
+id = chapel
+name = The Chapel
+tileset = interior
+size = 18 12
+dark = yes
+ambient = 0.6
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+r = rug
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+##################
+#||||||||||||||||#
+#________________#
+#ssssssssssssssss#
+#ssssssrrrrssssss#
+#ssssssrrrrssssss#
+#ssssssrrrrssssss#
+#ssssssrrrrssssss#
+#ssssssrrrrssssss#
+#ssssssrrrrssssss#
+#ssssssrrrrssssss#
+########ss########
+
+[objects]
+spawn start 8.5 10 facing=up
+exit door 8 11 w=2 to=back
+
+; The altar end.
+prop tapestry 8.5 2.6
+prop tapestry 3.4 2.6
+prop tapestry 13.6 2.6
+prop table 8.5 4.4
+prop candle-stand 6.2 4.2
+prop candle-stand 10.8 4.2
+prop potted-plant 1.6 3.3
+prop potted-plant 15.4 3.3
+prop bookshelf 4.2 3.6
+prop book-crate 12.8 3.8
+prop candle-stand 1.4 10.4
+prop candle-stand 15.6 10.4
+npc keeper 8.5 5.4 look=895 name="The Chapel Keeper" facing=down say="Come in, come in. Mind the third pew, it wobbles.|We're smaller than the temple, but we're closer to the bakery.|Light a candle if you like. Candles are free. Donations aren't, but they're welcome.|I pray for the soldiers sent east. Every morning, and twice on market days."
+
+; The pews, two either side of the aisle in each row, and the two at prayer in them.
+prop bench 2.1875 6.2
+prop bench 4.8125 6.2
+prop bench 12.1875 6.2
+prop bench 14.8125 6.2
+prop bench 2.1875 7.8
+prop bench 4.8125 7.8
+prop bench 12.1875 7.8
+prop bench 14.8125 7.8
+prop bench 2.1875 9.4
+prop bench 4.8125 9.4
+prop bench 12.1875 9.4
+prop bench 14.8125 9.4
+npc worshipper-a 4 7 look=506 name="An Old Worshipper" facing=up say="Shh. I'm praying.|Still praying.|...For my knees, mostly."
+npc worshipper-b 13.6 8.6 look=517 name="A Worshipper" facing=up say="Forty years I've sat in this pew. It still doesn't fit.|The keeper's sermons are short. That's why I come."
+
+; The hush, coming in.
+trigger hush 7 8 w=4 h=2 say="Candle smoke and old stone. Even your footsteps come out quiet in here."

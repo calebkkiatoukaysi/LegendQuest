@@ -47,17 +47,19 @@ One switch exists for working on the game, and it isn't the game:
 
 ```
 dotnet run -- --proof shots       # play through the screens, save a picture of each to shots/, and quit
+dotnet run -- --proof shots Docks # the same, but stop after that part of the run (a ProofStage)
 ```
 
 It's the same harness as The Black Box's. It goes through the title, the options, the save slots
 for loading (and erases a broken slot the way a player would, ERASE then SURE?), the save slots for
 a new game, then the Prologue: its card, the creation screen (you as you start, then named, and
 each of its tabs), the question that picks your voice, the Soul-Bound as they start and then named,
-and the two paintings, the pier and the red moon. On the deck of the Gull's Wager the voyage plays
-and gets read through, answering its questions, past the sea-wraiths' card to Questeria at dawn. On
-the harbour the arrival plays itself: the ship sailing in, tied up, the walk down the gangplank, and
-Act 1's card. Then the Red Gulls: it tries talking first, the Persuade check comes up on the dice,
-it calls the Soul-Bound off Grell, and Captain Hale arrives. Then up the street into Questeria: the Soul-Bound talking as you come in,
+and the two paintings, the pier and the red moon. On the deck of the Gull's Wager it walks up to
+the red "!" at the bow, and the voyage gets read through, answering its questions, past the
+sea-wraiths' card to Questeria at dawn. On the harbour the arrival plays itself: the ship sailing in,
+the sail coming in, tied up, the plank sliding out, the walk ashore up the jetty, and Act 1's card.
+Then the red "!" over the Red Gulls, and a walk up to them: it tries talking first, the Persuade
+check comes up on the dice, it calls the Soul-Bound off Grell, and Captain Hale arrives. Then up the street into Questeria: the Soul-Bound talking as you come in,
 the plaza and the same view a few seconds on with the townsfolk moved, round behind a house, both
 zooms, the mouse over the far side of a statue (the path goes round it) and a click to walk it, the
 mouse on the elder and a click to walk up and talk to them, the mouse on the canal where there's no
@@ -91,7 +93,7 @@ lever's pulled. A second switch, `--simulate`, comes with combat.
 | The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
 | Making a character | **Up** and **down** pick a row, **left** and **right** change it, **Q** and **E** change the tab. On NAME, **Enter** and then type |
 | Conversations | **Enter**, **Space**, **E** or a click shows the rest of the line, then the next. At a question, **1** to **4**, a click, or the **arrows** and **Enter** |
-| The dice | **Space** or a click rolls, and the same again goes on |
+| The dice | **Space**, **Enter** or a click rolls, and the same again goes on |
 | The ship coming in | **Esc** skips it |
 | Anywhere | **F11** switches full screen on and off |
 | The map | **Tab** switches between the map you're on and the world. Opened from a waypoint, the **arrows** (or the mouse) pick where to go and **Enter** (or a click) goes. **M** or **Esc** closes it |
@@ -148,11 +150,13 @@ as the proof shots. What's in so far:
   your voice (Honorable, Pragmatic or Witty), and some lines and options later depend on it. In P-03
   the creation screen makes the Soul-Bound, with the pier you met on behind it, then the narrator
   remembers that day and the oath, each over a painting, and the game is written to its slot. P-04
-  and P-05 are the voyage: the deck of the Gull's Wager at night, two days out, the Soul-Bound
+  and P-05 are the voyage: the deck of the Gull's Wager at night, two days out, where you can walk
+  about and hear the crew before you go to the rail at the bow (the red "!"), then the Soul-Bound
   talking about the new king, the bell from the crow's nest, the sea-wraiths (a card until there's
   combat), and Questeria at dawn.
 - **Act 1, Chapter 1: Saltwind Welcome.** The ship comes into Saltwind Docks and Act 1's card comes
-  up. The Red Gulls are shaking old Tomas down for a dock tax that doesn't exist. You can wade in,
+  up. Across the boardwalk, under a red "!", the Red Gulls are shaking old Tomas down for a dock tax
+  that doesn't exist, and it starts when you walk up to them. You can wade in,
   try talking first (a Persuade check, with advantage for a Skald or an Honorable voice), or say it's
   not your business, in which case the Soul-Bound goes in anyway. Then their boss, Grell, is on his
   knees with the Soul-Bound's blade at his throat a beat too long, and what happens to him is up to
@@ -160,6 +164,12 @@ as the proof shots. What's in so far:
   Soul-Bound points the way, Fennick talks you through the quest board in the Lantern Market (the
   Rangers' contract for the Mirewood glows on it), and the innkeeper in the Gilded Flagon has work
   if you want it.
+- **Round the edges.** The city and the harbour are full of people with something to say: a dozen
+  you can stop and talk to (`Townspeople`), each with a few choices and something new the second
+  time, and four with work for you, marked in gold, that are the side quests' hooks (rats with black
+  eyes in the Flagon's cellar, a merchant's stolen ledger, highwaymen on the Mirewood road, a
+  widow's ring in the harbour). Forty-odd more say things as you pass, and the two of you talk about
+  wherever you are as you walk in.
 
 Everyone in it who isn't in the party is in `Cast`, with the name they go by, which townsfolk sheet
 or paperdoll look they wear, and who's only ever a voice. Captain Odelle, the Red Gulls, Grell,
@@ -188,7 +198,7 @@ there with the file and the line, instead of when somebody walks onto it.
 [map]
 id = barrow              ; has to match the file name
 name = The Barrow        ; what the heading and the loading screen say
-world = 860 110          ; where it is on the world map
+world = 860 110          ; where it is on the world map; a map without it isn't on it
 tileset = crypt          ; from TilesetCatalog
 size = 40 30             ; width and height in tiles; every layer has to be exactly this
 dark = yes
@@ -218,16 +228,22 @@ Something at x, y stands with its feet on the middle of that tile, and halves ar
 triggers are rectangles instead: x, y is their top left tile and `w` and `h` their size. A value
 with spaces in it goes in double quotes, and it can't have a `;` in it, since that's a comment.
 `fog = no` in `[map]` has the map screen show all of a map from the start, which Questeria does,
-since it's the capital and everyone knows their way round it.
+since it's the capital and everyone knows their way round it. A map with no `world` isn't on the
+world map: the inside of a building is part of the place it's in, and the ship's deck is out at sea.
+Anything on a map can have `when=` a flag, to only be there once it's set, or `unless=` a flag, to
+go once it is (lights and spawns can't). That's how one map shows the story going on: the Red Gulls
+stand on the docks until they're beaten, and the Watch only turns up after.
 
 | Kind | What it is | Settings |
 | --- | --- | --- |
 | `spawn` | Somewhere you can arrive. Every map needs one called `start` | `facing` (down if it isn't set) |
 | `prop` | Anything out of `PropCatalog`; the id is which one | none |
-| `npc` | Someone standing there (see People, under [The party](#the-party)) | `name`, `sheet` (one of `Townsfolk`), `facing`, `say` |
+| `npc` | Someone standing there (see People, under [The party](#the-party)) | `cast` (one of the story's people, from `Cast`), or `name` with `sheet` (one of `Townsfolk`) or `look` (a number: someone the paperdoll dresses at random from it, for crowds); `facing`, `say` (several lines go between `\|`, said in turn), and `wander` (how far they stroll, in tiles) |
 | `light` | A pool of light with nothing drawn for it, like daylight down the barrow's steps | `reach` in tiles, `strength` 0 to 1 |
-| `exit` | Walk into it and you go to another map | `to` the map, `at` a spawn there (`start` if it isn't set), `w`, `h` |
-| `trigger` | Walk into it and it says something or sets a flag | `say`, `set`, `once` (yes if it isn't set), `w`, `h` |
+| `exit` | Walk into it and you go to another map | `to` the map, `at` a spawn there (`start` if it isn't set), `w`, `h`. `to=back` goes back out to wherever you came in from, which is how every building's door works |
+| `entrance` | A building's door: walk into it and you go in. x, y is the middle of the bottom of the door | `to`, `at`, and `name`, what the door says on the map screen |
+| `trigger` | Walk into it and it says something, sets a flag, starts a conversation or plays a banter | `say`, `set`, `talk`, `bark` (a banter from `Banters`, said in bubbles while you walk), `mark` (a red "!" over it while it's waiting), `once` (yes if it isn't set), `w`, `h` |
+| `scene` | A conversation that plays by itself as soon as the map's up and it's there (it needs a `when`, or it'd play on every visit until it's done) | `talk` |
 | `chest` | Opens once, and gives up what's in it | `gold`, and `look` and `name` like all of these |
 | `door` | Opens and stays open, unless it's locked or a flag works it | `locked`, or `flag` (it's open while the flag is set, and won't move by hand) |
 | `lever` | Sets its flag, or clears it if it's set | `flag` |
@@ -240,9 +256,10 @@ exercise took the id list on trust, and a short one read straight past the end).
 tile that isn't in the legend, a legend tile that isn't in the tileset, a prop that isn't in the
 catalogue, an object off the edge of the map, `ambient` on a map that isn't dark, a setting a kind
 doesn't have (so `glod=12` is caught, and so is `gold=12` on a door), two objects with the same id,
-a trigger that does nothing, a spawn inside an exit, a waypoint with no room beside it, and a quote
-that's never closed. Once every map is read, `MapCatalog` checks every exit goes to a map that
-exists and a spawn on it that does too.
+a trigger that does nothing, a conversation that doesn't exist, someone off a sheet that doesn't
+exist, a spawn inside an exit, a waypoint with no room beside it or on a map that isn't on the
+world map, and a quote that's never closed. Once every map is read, `MapCatalog` checks every exit
+goes to a map that exists and a spawn on it that does too.
 
 - **Tiles.** Ids count from 1 and 0 is empty, the same as the exercise. A tileset lists its tiles
   in order, and each one says how many variants it has, whether it's solid and whether it sounds
@@ -251,7 +268,9 @@ exists and a spawn on it that does too.
   where each cell shows its part of the block and the variant is picked per block. A tile can also
   be *edged*: Questeria's lawns, water and boardwalk have four more frames for their north, east,
   south and west sides, and the tilemap draws them wherever one meets ground of another kind, so a
-  lawn gets its kerb and the water its quay wall without a tile for every corner.
+  lawn gets its kerb and the water its quay wall without a tile for every corner. And a tile can be
+  *animated*: the water and the sea have four frames each, which the tilemap steps through by the
+  clock, every cell starting on a frame of its own so the whole harbour doesn't ripple in step.
 - **Walls.** Collision comes from the tiles: a cell is solid if its ground or detail tile is, and
   each row's runs of solid cells merge into one `BoundingRectangle` (the collision tutorial's).
   There's a wall all the way round outside the edge too. Walking moves the feet one axis at a time
@@ -297,6 +316,11 @@ exists and a spawn on it that does too.
   if you arrive standing in one. A trigger that goes off once is kept in the save as used. An exit
   writes the autosave, then the loading screen takes you to the other map with its name on the
   black between.
+- **Going inside.** An `entrance` is a shallow strip across the bottom of a building's door, so you
+  go in by walking into the door, not by brushing past it. Going through one keeps where you were in
+  the save, and the building's way out is an exit `to=back`, which puts you back outside that door,
+  a step out from it and facing away. Several doors can share one inside: Questeria's cottages are
+  two insides between five houses.
 - **What's been seen.** Every map keeps one bit per tile for whether it's been in sight: nine tiles
   round your feet, cut off by walls and shut doors with the same line the light uses. It only looks
   again when you step into another tile. A map with `fog = no` is seen all over from the start. The
@@ -304,7 +328,7 @@ exists and a spawn on it that does too.
   map, and lays one texel per tile of dark over what hasn't been seen, smooth sampled like the dark
   on a dark map, so the edge is soft. Where an exit's been seen, it says where it goes.
 - **The world.** Each map says where it is on the world map, and the roads between them are wherever
-  the exits go, so the two can't disagree. A map you've been on is a place with its name; a map
+  the exits go, so the two can't disagree. A door into a building isn't a road. A map you've been on is a place with its name; a map
   one of those leads to, that you haven't been on yet, is a mark with no name. Using a waypoint finds it, then opens the
   world to travel from it to any other waypoint you've found. Fast travel autosaves the same as an
   exit, and puts you beside the stone you've travelled to, since in front of it you'd be standing
@@ -312,9 +336,16 @@ exists and a spawn on it that does too.
 
 | Map | What it is |
 | --- | --- |
-| `questeria.map` | The capital and the hub, lit, with no fog. The palace on its terrace to the north with the temple and the guildhall either side, the plaza in the middle with its fountain and the waypoint crystal, houses and gardens to the west, the market to the east, the canals, and the avenue south to the city gate and the old road. Seventeen townsfolk |
-| `road.map` | The old road through the forest, at dusk. In from Questeria on the west; a camp off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road further east. The trees are trunks with their crowns overhead, so you walk under the edges of them |
-| `barrow.map` | Dark, seven torches and a little daylight down the steps. In up the steps, through a short dark passage into the hall, with the locked tomb door in the middle of its north wall, the stone door into the side room at the west end, and the lever that opens it at the east end |
+| `gulls-wager.map` | The deck of the Gull's Wager at night, two days out from Questeria: a ship's deck with its bow, rails and swinging lanterns, the mast with its sails furled, the wheel, the crew, and the sea all round. Where a new game starts. The voyage starts when you go to the rail |
+| `docks.map` | Saltwind Docks: the boardwalk, a jetty out to the pier the ship ties up at, fish stalls, net racks and the harbour bell, the fishmonger's, warehouses, the Rusty Anvil and the chandler's, a crowd, and the street up to the city. Where the ship comes in, and where the Red Gulls are shaking down Old Tomas |
+| `questeria.map` | The capital and the hub, lit, with no fog. The palace on its terrace to the north with the temple and the guildhall either side, and a chapel in its garden past the temple. The plaza in the middle with its fountain and the waypoint crystal. Houses to the west, and a Watch post where the harbour road comes in. The Lantern Market to the east: the Gilded Flagon, Fennick's quest board, two rows of stalls, the bakery, the forge, and gardens and cottages past it. The canal with a footbridge to a washing yard, a row of houses along the south of it, and the avenue to the city gate, with its own Watch post, and the old road. Twenty buildings, a door into most of them, and forty-five people |
+| `gilded-flagon.map` | Inside the Gilded Flagon: the bar, its kegs, tables and stools, the hearth, the innkeeper and the regulars |
+| `cottage-a.map`, `cottage-b.map` | Inside a cottage: a bed, a wardrobe, books, a table, and in the second a hearth |
+| `shop.map` | Inside the chandler's: the counter and the shelves |
+| `warehouse.map` | Inside a warehouse on the docks: crates, barrels and kegs |
+| `bakery.map`, `forge.map`, `chapel.map` | Inside the bakery, the forge and the chapel in Questeria |
+| `road.map` | The old road through a wood of oaks, firs, bushes and ferns, at dusk, their crowns hanging over the verges. In from Questeria on the west; a camp in a clearing off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road further east |
+| `barrow.map` | Dark and cold slate, seven torches and a little daylight down the steps. In up the steps, through a short dark passage into the hall, with the locked tomb door in the middle of its north wall, the stone door into the side room at the west end, and the lever that opens it at the east end |
 
 The road is meant to be lit, at dusk. I've made it a dark map with a lot of ambient light
 (`ambient = 0.55`) so the campfire throws a pool, rather than giving lit maps a tint setting of
@@ -366,13 +397,24 @@ level 1 in the skeleton.
   `BinaryHeap` for the open list. It can aim for a tile or for anywhere within reach of a point,
   which is how clicking a chest works. Then the path's pulled straight wherever the feet could walk
   a straight line, so you don't zigzag across an open square.
-- **People.** `npc` in a map file puts someone there: a name, which of the townsfolk's sheets
-  they're drawn from, which way they face, and a line. They stand, look round every few seconds (never at the wall), and turn to face you
-  when you talk to them; the line goes up over their head on a dark smudge. Conversations take over
-  from the line when they have one. Questeria has seventeen of them, and some of the townsfolk
-  stroll: every so often one with `wander` set walks off to somewhere within that many tiles of
-  where they were put, rests, looks round, and goes somewhere else. They give up on a stroll if
-  anything's in the way, and stop and face you when you talk to them.
+- **People.** `npc` in a map file puts someone there: a name, what they're drawn from (one of the
+  townsfolk's sheets, one of the story's cast, or a number the paperdoll dresses someone at random
+  from, which is how the crowds are made), which way they face, and their lines. They stand, look
+  round every few seconds (never at the wall), and turn to face you when you talk to them; a line
+  goes up over their head on a dark smudge, the next one each time you talk to them. Conversations
+  take over from the lines when they have one. Some stroll: every so often one with `wander` set
+  walks off to somewhere within that many tiles of where they were put, rests, looks round, and
+  goes somewhere else. They give up on a stroll if anything's in the way, and stop and face you
+  when you talk to them.
+- **Chatter.** When you're within five tiles of someone with lines, now and then they say one
+  without being asked, each on their own clock of nine to eighteen seconds, and never more than two
+  at once, so a market sounds busy without the screen filling up. Bubbles that would overlap move up
+  out of each other's way, and none of it shows while a conversation's up.
+- **Markers.** Someone whose conversation is marked as work for you has a gold "!" bobbing over
+  their head, someone with an event has a red one, and so does a trigger marked `mark=yes` while
+  it's waiting for you. They draw over the roofs and the dark, they show on the map screen, and one
+  that's off the screen gets an arrow at its edge pointing the way. Who's marked is only worked out
+  again when a flag changes.
 
 ## Conversations
 
@@ -413,7 +455,20 @@ companion's approval moves while they're in the party, a toast says they approve
 Every script is checked when the game starts, after the maps: every line going somewhere that
 exists, every flag, meter, item, painting and person being real, every check having somewhere to go
 on a pass and a fail, every clock having somewhere to go when it runs out, and every map and spawn
-a conversation travels to existing. A mistake stops the game right there and says which line.
+a conversation travels to existing. A mistake stops the game right there and says which line. A
+script can be marked as work (`MarkerKind.Quest`) or an event (`MarkerKind.Event`), which puts the
+gold or red "!" over whoever has it.
+
+**Banter** is the talk that doesn't stop you: `Story/Banters.cs` has the short exchanges, a few lines
+each, that play in bubbles over the speakers' heads while you keep walking, when you walk into a
+trigger with `bark=` on it. The party comments on where they are (the fish on the docks, the
+fountain, the board, the Flagon, someone's cottage you've walked into uninvited), and townsfolk talk
+to each other: sailors, fishwives, two of the Watch, gossiping stall-keepers, an old couple. A
+banter can need flags or be stopped by them, so the docks sound different once the Red Gulls are
+gone. A speaker who isn't there is skipped, only one plays at a time with one more waiting, and one
+that can play again (`once=no`) waits a while first. `Dialogue/Scripts/Townspeople.cs` has the
+people you can stop and talk to round the city, each with a few choices, a check or two, and
+something different to say the second time, and the side-quest hooks the board's postings hint at.
 
 ## The walker
 
@@ -521,6 +576,7 @@ python tools/generate_audio.py embers pause    # just these
 | *Embers* | Title, options, save slots | 56 BPM in A minor, 12 bars. A lute picking slow broken chords over a bowed drone (Am, F, Dm, Em, then F, G and an E major that pulls back round to the A), a melody on the lute an octave up for the second half, a quiet choir, a frame drum on the downbeats, wind, and a fire crackling close by |
 | *Hearthsmoke* | Lit maps | 66 BPM in D Dorian, 16 bars. Folk rather than dread: the lute rolls through the chords in eighths, a wooden flute plays a tune over the second half, and the frame drum keeps a slow walk. The major IV is what makes it Dorian, and keeps it from sounding as sad as the title |
 | *Cold Stone* | Underground | 48 BPM in C Phrygian, 10 bars. Hardly a tune: a low drone on C and G, a choir that leans on the flat second, a few low lute notes far apart, one deep boom, cold air, and water dripping somewhere in a long reverb |
+| *Salt and Lanterns* | The Gull's Wager | 60 BPM in E minor with every beat in three, so it rocks like a hull, 16 bars. The lute picks low, high, middle in each beat, a flute tune that keeps lifting to the G comes in at bar 5, a frame drum knocks like the hull on a swell, and the sea rolls in and out under it all, four long waves to a loop |
 
 Each song is an exact number of bars long and wraps its own echoes round to the start, so it loops
 under `MediaPlayer.IsRepeating` without a seam. A map's file says which song plays on it. The sound
@@ -554,11 +610,11 @@ fades the old one out and the new one in.
 | `mote.png` | `SparkleParticleSystem`, `TitleBackgroundScreen` | A soft dot. The motes rising off the title's lake, and its stars |
 | `button.png` | `ButtonSprite` | Nine-sliced iron plate; a slow smoulder idle, kindles on hover, sinks on press. The bottom band is the groove's light, tinted torch, ember or bone |
 | `panel.png` | `FormPanel` | Nine-sliced iron slab the forms are built on, with a bronze line inside the lip |
-| `Tiles/questeria.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order, each block of 3x3 tiles one after another: plaza paving, flagstones, cobbles, grass, sand and the canal |
-| `Tiles/crypt.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order: floors, the floor in a wall's shadow, steps, the tops of walls, the two rows of a wall's face (one with a burial niche), rubble, bones and a cobweb |
-| `Tiles/forest.png` | `Tilemap` | The same layout: dead leaves, the road, the undergrowth under the deep forest, moss and grass in lumps that don't reach the edge of their tile, ferns, a rock, a stump, a fallen log in two halves, a tree trunk, bushes, and the nine pieces of a tree's crown |
-| `Props/*.png` | `PropSprite` | Standing on the middle of the bottom edge: a barrel, a crate, an urn, a sarcophagus, the iron sconce a torch stands in, a campfire, a bedroll, and the things you use, each a strip of two pictures (shut then open): a chest, a double door and a stone door in their frames, a lever, and the waypoint stone with its mark dark then lit. The sign is one picture |
-| Questeria's `Props/*.png` | `PropSprite` | The same, cut from my pictures: the palace, the temple, the guildhall, the city gate, four houses, the fountain, statues, lamps, banners, benches, market stalls, trees, bushes and flowers, the notice board Questeria's sign looks like, and the waypoint crystal, dim then lit |
+| `Tiles/questeria.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order: flagstones of every size with moss in the joints, the odd crack and a petal or two, the terrace's slabs, rounded cobbles, grass with tufts and tiny flowers, sand, the boardwalk's planks with their grain and nails, and the water, four frames of cyan ripples and glints over deep blue, with the quay's edges |
+| `Tiles/crypt.png` | `Tilemap` | 16x16 tiles, eight to a row, in `TilesetCatalog` order: cold slate floors in blocks of 2x2 tiles, slabs of every size, worn ones and ones in a wall's shadow, steps, the tops of walls, the two rows of a wall's face (with a burial niche, and with a carving), rubble, bones and cobwebs |
+| `Tiles/forest.png` | `Tilemap` | The same layout: grass, dead leaves, the road (its edges where it meets the rest), the undergrowth under the deep wood, and what lies on them: moss, tufts, ferns, flowers, pebbles, roots, ruts and litter |
+| `Props/*.png` | `PropSprite` | Standing on the middle of the bottom edge. The old road's wood: oaks (green, pale, amber, and deepened), firs, bushes, a stump, a snag, a dead tree, ferns, long grass, mossy rocks, a log, a fallen tree, toadstools, the campfire and a bedroll. The barrow's: urns, a sarcophagus, the iron sconce a torch stands in, and the things you use, each a strip of two pictures (shut then open): a chest, a double door and a stone door in their frames, a lever, and the waypoint stone with its mark dark then lit. The sign is one picture |
+| Questeria's `Props/*.png` | `PropSprite` | The same, cut from my pictures: the palace, the temple, the guildhall, the city gate, the fountain, statues, lamps, banners, benches, market stalls, trees, bushes and flowers, the quest board, and the waypoint crystal, dim then lit. The houses: the four I painted whole, and townhouses, cottages, turret houses, a bakery, a chapel, a forge, a Watch post, warehouses, the Gilded Flagon with its sign, the Rusty Anvil and a fishmonger's, put together by `cut_supplied.py` from the walls, roofs, doors and shop fronts on my sheets, each in blue, pink, teal and plum roofs. The docks' fish stalls, net racks and harbour bell, crates, sacks and barrels, wells, pumps, washing lines, carts and planters |
 | `People/*.png` | `WalkerSprite` | Seventeen townsfolk, cut from my pictures, in the first five columns of the 10x4 layout: standing, and walking |
 | `map-marks.png` | `MapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
 | `Paperdoll/*.png` | `Paperdoll` | The body, six hair styles (one of them bald), five faces, four beards, the skirt, the cape and the two tails in halves, four kinds of ears, two of horns, and three hats, all in the youth's 5x4 layout and his key shades, so they stack and recolour. `Stout/` and `Small/` are every one of them again for the shorter builds. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
@@ -566,10 +622,11 @@ fades the old one out and the new one in.
 | `cursors.png` | `CursorSprite` | 5 cursors, 16x16, at 2x: an arrow, a ring to walk, a hand to use something, a speech bubble to talk, a crossed circle for no way |
 | `dice.png` | `DiceRollOverlay` | The d20, 9 frames of 40x40 at 4x: eight tumbling, then the face it lands on with the number drawn over it |
 | `dialogue-icons.png` | `DialogueScreen` | 6 icons, 12x12, at 2x, beside an option: a die for a check, a heart for a flirt, a lock, and the three voices |
-| `Paintings/*.png` | `PaintingSprite` | The story's paintings, each three or four layers on the title's 416x277 canvas at 4x, swaying against each other like the title: the pier the day you met, the oath under the red moon, and Questeria at dawn from the ship's rail |
-| `Tiles/ship.png` | `Tilemap` | The Gull's Wager's deck: planks, the bulwark round it, the hatch, and the sea, with foam where it meets the hull |
+| `markers.png` | `ExploreScreen`, `MapScreen` | Two rows of 14x14 cells at 3x, gold then red: the "!" that bobs over someone with work for you (gold) or an event (red), and the arrows at the edge of the screen pointing to one that's off it, which the game turns a quarter at a time for every direction |
+| `Paintings/*.png` | `PaintingSprite` | The story's paintings, each three to five layers on the title's 416x277 canvas at 4x, swaying against each other like the title: the pier in the storm the day you met, the oath under the red moon, and Questeria at dawn from the ship's rail. `weather.png`, `bolts.png`, `sigil.png`, `glint.png` and `lantern.png` are what moves over them: the rain and the lightning, the Soul-Bond's glow, glints on the water, and the pier's lantern swinging. Under the red moon the two figures are your own sheet and the Soul-Bound's, drawn black with the moon on their edges |
+| `Tiles/ship.png` | `Tilemap` | The Gull's Wager's deck: planks, the rails, the hull, the hatch, the bow and the stern in blocks, the bowsprit, a lantern on the rail that swings, and the night sea, animated |
 | `Tiles/interior.png` | `Tilemap` | Inside the buildings: wood and stone floors, a rug with its edges, the back wall's face (plaster over wainscoting, two tiles tall) and the tops of the walls |
-| The ship's and the inside's `Props/*.png` | `PropSprite` | The mast with its sail, the ship's lanterns (which give off light), the wheel and coils of rope; and the bar, round tables, stools, the hearth and candle stands (lit), kegs, a bed, a wardrobe, bookshelves and a shop counter |
+| The ship's and the inside's `Props/*.png` | `PropSprite` | The ship you arrive on, seven frames: under full sail with its wake, the sail hauling up, furled, and moored with its lines ashore. Its near rail with the gangplank, six frames of the gate opening and the plank sliding out. The rowing boat, the mast with its sails furled and the crow's nest, the lanterns, the wheel and coils of rope. Inside: the bar, tables, chairs and stools, the hearth and candle stands (lit), kegs, a wardrobe, bookshelves, a desk, an anvil and tool racks, tapestries and plants, cut from my props sheet, and a bed |
 
 Text is drawn with `spectral-title` (Spectral Light, 92pt), `spectral-ui` (Spectral Medium, 26pt)
 and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as The Black Box. The
@@ -581,12 +638,13 @@ and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as Th
 Every PNG in `Content/` is made by a script:
 
 ```
-python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png and dialogue-icons.png
-python tools/generate_world.py        # the crypt and forest tilesets, their props, the torch flame, glow.png and mote.png
+python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png, dialogue-icons.png and markers.png
+python tools/generate_world.py        # the crypt and forest tilesets, their props (cut or drawn), the torch flame, glow.png and mote.png
 python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship and its deck, its gangplank, mast, lanterns, wheel and rope, and the rowing boat
-python tools/generate_interiors.py    # the inside of the buildings: the interior tileset and the furniture
-python tools/generate_paintings.py    # the story's paintings (after cut_supplied.py, for the title's city)
-python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, and the townsfolk, out of tools/source/
+python tools/generate_interiors.py    # the inside of the buildings: the interior tileset and the bed
+python tools/generate_paintings.py    # the story's paintings and what moves over them, out of the title's pictures
+python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, the houses, the furniture and the townsfolk, out of tools/source/
+python tools/cut_supplied.py buildings  # just the houses (or name props to cut just those)
 python tools/generate_paperdoll.py    # the paperdoll sheets for all three builds and character-palettes.png, off the youth (after cut_supplied.py's people)
 ```
 
@@ -594,12 +652,9 @@ They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied fr
 `generate_assets.py`), and every drawing is seeded, so running a script again produces the same
 bytes; only what you changed changes. Everything on a map is drawn as if a torch were right on it,
 lit from the top left, and the game does the dark itself. Tiles that lie next to each other (the
-leaves, the floors) only vary in ways that meet cleanly at the edges. A tree's crown is a grid of
-round clumps of leaves that wraps round the tile, so one tile's clumps carry on into the next, the
-lower clump in front where two overlap, and its edge and corner pieces leave out the clumps on the
-outside, so a crown of any size has a round edge. The paintings follow the title: skies dither
-between a few colours instead of blending, anything lit is lit from that picture's own light and
-goes lavender in shadow, and the people in them are silhouettes edged with the light behind them.
+leaves, the floors) only vary in ways that meet cleanly at the edges. The trees on the old road are
+props, cut from my trees sheet and some of them recoloured deeper, so the wood's crowns overlap and
+hang over the road the way the city's trees do.
 
 ## Supplied art
 
@@ -613,16 +668,26 @@ inside it stays, and samples it down to art pixels by taking the middle colour o
 brightness, which keeps the picture's own colours instead of blurring them together. There's nothing
 random in it, so a rerun writes the same bytes.
 
-- Questeria's ground was painted as square cells about three tiles across, so each one is a block
-  of 3x3 tiles, trimmed of the light line round each cell.
-- Everything standing in Questeria is a prop, buildings included.
+- The ground isn't cut: my ground sheet painted its cobbles on the diagonal, which reads as a
+  different camera to everything standing on it, so `generate_harbour.py` draws the ground straight
+  on in the sheet's colours, and the cut props stand on it.
+- Everything standing in Questeria is a prop, buildings included. Past the five houses I painted
+  whole, the rest are put together from the parts on my houses and grand sheets (walls with their
+  windows, roofs, doors, shop fronts, signs), laid out back to front and then sampled once, so the
+  joins don't show. Their roofs are recoloured for variety; nothing's flipped, since that would put
+  the light on the wrong side.
 - The townsfolk come off three sheets: twenty people drawn once each way, six walking each way, and
   one more standing and walking. Three of the twenty turn into someone else when they turn round, so
   they're left out.
-- The old road and the barrow are still the generated art from before. The ship's deck, the insides
-  of the buildings and the paintings are generated too, drawn to match the pictures (the city in
-  Questeria at dawn is the title's), and the party and the story's people are the youth, taken
-  apart and dressed again by the paperdoll.
+- The paintings are built from the title's pictures: `generate_paintings.py` samples the sky, the
+  clouds, the mountains and the city and recolours them with gradient maps (each pixel's brightness
+  looked up on a new ramp, with some of its own colour kept), so all of the detail survives in the
+  new light: sunrise, a crimson night, a slate storm. What isn't in them (the ship's rail, the waves,
+  the pier) is drawn to match.
+- The furniture inside is cut from my props sheet too, and so are the old road's trees and bushes
+  and the barrow's urns and chest. The ground under them, the ship, its deck and the water are
+  drawn to sit beside the cut props. The party and the story's people are the youth, taken apart
+  and dressed again by the paperdoll.
 
 `python tools/check_assets.py` checks that `ASSETS.md`, `Content/Content.mgcb` and the files on
 disk agree, and fails with a list if they don't. I run it before every commit.
@@ -657,8 +722,9 @@ The story goes in alongside them, in its own order:
 7. Every fight card swapped for its fight, as combat comes in.
 
 The Soul-Link (the two of you fighting as one) comes with combat, and so do the barks in fights.
-The Soul-Bound's idle remarks while you walk come with Act 2, when their ambition starts to show
-in them. The ship's deck borrows the title's song until the sea has one of its own.
+The Soul-Bound's remarks turning colder as their ambition grows come with Act 2. The side quests'
+hooks are in, and the quests behind them come with the chapters they belong to.
+The Rusty Anvil is on the docks, but its door opens in chapter 4, with Brannock.
 
 The maps could go through the content pipeline with an importer of their own (that's chapter 11 of
 the textbook); for now they're copied as text and read at startup, which is enough to catch mistakes.
@@ -667,11 +733,11 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
-- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
+- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
 - `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
 - `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
 - `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, and the scripts themselves in `Dialogue/Scripts/`, a file per chapter.
-- `Story/` is the story's tables: `Meters`, `KeyItems`, `Paintings`, `Cast` and the quest board's `Postings`.
+- `Story/` is the story's tables: `Meters`, `KeyItems`, `Paintings`, `Cast`, the quest board's `Postings`, and `Banters`.
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, and the classes in `ClassCatalog`.
 - `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings and the quest board, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.

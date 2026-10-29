@@ -13,11 +13,18 @@ namespace LegendQuest.World;
 /// </remarks>
 public static class TilesetCatalog
 {
+    /// <summary>How long each frame of the water's ripples is up, in seconds. The harbour's and the night sea's are the same.</summary>
+    private const float WaterFrameSeconds = 0.35f;
+
+    /// <summary>How long each frame of a lantern swinging on the Gull's Wager's rail is up, in seconds.</summary>
+    private const float LanternFrameSeconds = 0.3f;
+
     /// <summary>Questeria and its harbour: the plaza's slabs, the terrace, cobbles, lawns, sand, water and the boardwalk. Everything standing on them is props.</summary>
     /// <remarks>
     /// Drawn by tools/generate_harbour.py, which has to list them in this order too. The lawns have
     /// a kerb round them, the water a quay wall and a lip of coping, and the boardwalk a beam along
-    /// its front, all drawn by Tilemap wherever they meet something else.
+    /// its front, all drawn by Tilemap wherever they meet something else. The water ripples: four
+    /// frames a variant.
     /// </remarks>
     private static readonly TilesetDefinition Questeria = new()
     {
@@ -25,28 +32,39 @@ public static class TilesetCatalog
         Texture = "Tiles/questeria",
         Tiles = new TileDefinition[]
         {
-            new() { Name = "plaza", Variants = 3 },
+            new() { Name = "plaza", Variants = 6 },
             new() { Name = "terrace", Variants = 2 },
             new() { Name = "cobble", Variants = 3 },
             new() { Name = "grass", Variants = 4, Edged = true, Surface = Surface.Grass },
             new() { Name = "sand", Variants = 2, Surface = Surface.Grass },
-            new() { Name = "water", Variants = 3, Edged = true, Solid = true },
-            new() { Name = "planks", Variants = 3, Edged = true },
+            new() { Name = "water", Variants = 3, Frames = 4, FrameSeconds = WaterFrameSeconds, Edged = true, Solid = true },
+            new() { Name = "planks", Variants = 4, Edged = true },
         },
     };
 
-    /// <summary>The Gull's Wager's deck: its boards, the bulwark round it, the hatch, and the sea all round.</summary>
-    /// <remarks>Drawn by tools/generate_harbour.py in daylight colours; the deck's map is dark, and its lanterns light it.</remarks>
+    /// <summary>The Gull's Wager: the night sea all round her, her deck, her rails and her side, the hatch, her bow and stern, the bowsprit, and the lanterns swinging on her rail.</summary>
+    /// <remarks>
+    /// Drawn by tools/generate_harbour.py in daylight colours; the deck's map is dark, and its
+    /// lanterns light it. The bow and stern are blocks of nine tiles each way that go on the detail
+    /// layer, painted whole so her rails curve round them; the ground under them says where you can
+    /// stand. The bowsprit is a block of three that carries on from the bow, and the hatch a block of two.
+    /// </remarks>
     private static readonly TilesetDefinition Ship = new()
     {
         Id = "ship",
         Texture = "Tiles/ship",
         Tiles = new TileDefinition[]
         {
+            new() { Name = "sea", Variants = 3, Frames = 4, FrameSeconds = WaterFrameSeconds, Solid = true },
             new() { Name = "deck", Variants = 3 },
-            new() { Name = "bulwark", Variants = 2, Solid = true },
-            new() { Name = "hatch" },
-            new() { Name = "sea", Variants = 3, Edged = true, Solid = true },
+            new() { Name = "rail-n", Variants = 2, Solid = true },
+            new() { Name = "rail-s", Variants = 2, Solid = true },
+            new() { Name = "hull", Variants = 2, Solid = true },
+            new() { Name = "hatch", Block = 2, Solid = true },
+            new() { Name = "bow", Block = 9 },
+            new() { Name = "stern", Block = 9 },
+            new() { Name = "bowsprit", Block = 3 },
+            new() { Name = "lantern", Frames = 4, FrameSeconds = LanternFrameSeconds },
         },
     };
 
@@ -72,6 +90,12 @@ public static class TilesetCatalog
     };
 
     /// <summary>The barrow: stone floors, walls seen from above and from the front, and what's lying about.</summary>
+    /// <remarks>
+    /// Drawn by tools/generate_world.py, which has to list them in this order too. The floors are
+    /// blocks of two tiles each way, so the slabs can be every size; the worn floor and the floor
+    /// in a wall's shadow are the same blocks, so they carry on into the floor round them, and
+    /// they need the same number of variants as the floor for that.
+    /// </remarks>
     private static readonly TilesetDefinition Crypt = new()
     {
         Id = "crypt",
@@ -79,29 +103,34 @@ public static class TilesetCatalog
         Tiles = new TileDefinition[]
         {
             // Ground.
-            new() { Name = "floor", Variants = 4 },
-            new() { Name = "floor-worn", Variants = 2 },
-            new() { Name = "floor-shadow", Variants = 2 },
+            new() { Name = "floor", Variants = 4, Block = 2 },
+            new() { Name = "floor-worn", Variants = 4, Block = 2 },
+            new() { Name = "floor-shadow", Variants = 4, Block = 2 },
             new() { Name = "steps" },
 
-            // Walls: the top of one seen from above, then the two rows of its face.
+            // Walls: the top of one seen from above, then the two rows of its face. The niche and
+            // the carving go in the upper row.
             new() { Name = "wall-top", Variants = 2, Solid = true, Opaque = true },
             new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
             new() { Name = "wall-niche", Solid = true, Opaque = true },
+            new() { Name = "wall-carving", Solid = true, Opaque = true },
             new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
 
-            // Detail, drawn over the floor.
+            // Detail, drawn over the floor. The cobwebs go in a room's top left and top right corners.
             new() { Name = "rubble", Solid = true },
             new() { Name = "bones", Variants = 2 },
             new() { Name = "cobweb" },
+            new() { Name = "cobweb-ne" },
         },
     };
 
-    /// <summary>The old road: the forest floor and the road through it, the undergrowth, and the trees.</summary>
+    /// <summary>The old road: grass, fallen leaves, the road and the undergrowth, and what's lying about on them.</summary>
     /// <remarks>
-    /// A tree is a trunk on the detail layer with a canopy over it on the overhead layer. The canopy
-    /// comes in nine pieces (four corners, four edges and the middle) so a clump of trees can be any
-    /// size of rectangle.
+    /// Drawn by tools/generate_world.py, which has to list them in this order too. The leaves, the
+    /// road and the undergrowth have edges, which Tilemap draws wherever they meet other ground:
+    /// grass reaching over the leaves, a verge along the road, and the top and face of the
+    /// undergrowth. The trees, bushes, stumps and logs are props, standing on their feet, so their
+    /// crowns overlap and the ones in front of you hide you.
     /// </remarks>
     private static readonly TilesetDefinition Forest = new()
     {
@@ -109,33 +138,22 @@ public static class TilesetCatalog
         Texture = "Tiles/forest",
         Tiles = new TileDefinition[]
         {
-            // Ground. The thicket is what's under the deep forest: you can't push through it.
-            new() { Name = "leaves", Variants = 4, Surface = Surface.Grass },
-            new() { Name = "road", Variants = 3, Surface = Surface.Grass },
-            new() { Name = "thicket", Variants = 2, Solid = true },
+            // Ground. The undergrowth is what's under the deep wood: you can't push through it.
+            new() { Name = "grass", Variants = 4, Surface = Surface.Grass },
+            new() { Name = "leaves", Variants = 4, Edged = true, Surface = Surface.Grass },
+            new() { Name = "road", Variants = 3, Edged = true, Surface = Surface.Grass },
+            new() { Name = "undergrowth", Variants = 2, Edged = true, Solid = true },
 
-            // Detail, drawn over the ground. Moss and grass are lumps that don't reach the edge of
-            // their tile, so a patch of them has a ragged edge instead of a square one.
+            // Detail, drawn over the ground. All of it stays off the edges of its tile, so a patch of
+            // it has a ragged edge, apart from the ruts, which run on along the road.
             new() { Name = "moss", Variants = 2 },
             new() { Name = "tuft", Variants = 2 },
             new() { Name = "fern", Variants = 2 },
-            new() { Name = "rock", Solid = true },
-            new() { Name = "stump", Solid = true },
-            new() { Name = "log-left", Solid = true },
-            new() { Name = "log-right", Solid = true },
-            new() { Name = "trunk", Solid = true },
-            new() { Name = "bush", Variants = 2, Solid = true },
-
-            // Overhead: the canopy, corners and edges round the middle.
-            new() { Name = "canopy-nw" },
-            new() { Name = "canopy-n", Variants = 2 },
-            new() { Name = "canopy-ne" },
-            new() { Name = "canopy-w", Variants = 2 },
-            new() { Name = "canopy", Variants = 3 },
-            new() { Name = "canopy-e", Variants = 2 },
-            new() { Name = "canopy-sw" },
-            new() { Name = "canopy-s", Variants = 2 },
-            new() { Name = "canopy-se" },
+            new() { Name = "flowers", Variants = 2 },
+            new() { Name = "pebbles", Variants = 2 },
+            new() { Name = "roots", Variants = 2 },
+            new() { Name = "ruts", Variants = 2 },
+            new() { Name = "litter", Variants = 2 },
         },
     };
 

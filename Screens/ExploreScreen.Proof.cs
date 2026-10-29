@@ -88,14 +88,20 @@ public partial class ExploreScreen
         };
     }
 
-    /// <summary>The deck at night: the Prologue's voyage plays by itself as the map comes up, and gets read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE WITH YOU), then the sea-wraiths and Questeria at dawn, and off to the harbour.</summary>
+    /// <summary>The deck at night, with the red "!" at the bow: a walk up to it, then the Prologue's voyage read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE WITH YOU), the sea-wraiths and Questeria at dawn, and off to the harbour.</summary>
     private string VoyageStep(int frame)
     {
         if (frame == Settled) return "voyage.png";
         if (frame < Settled) return null;
-        if (frame == Settled + 1) ProofChoices(1, 0);
+        if (frame == Settled + 1)
+        {
+            ProofChoices(1, 0);
+            ProofPlace(15f, 13f, Direction.Left);
+            _proofMove = new Vector2(-1f, 0f);
+        }
 
         DialogueScreen talk = ProofDialogue();
+        if (talk is not null) _proofMove = Vector2.Zero;
         if (talk is not null && talk.ProofAsking && ProofOnce("voyage-choice.png")) return "voyage-choice.png";
         if (talk?.ProofLine is DialogueNode line)
         {
@@ -107,7 +113,7 @@ public partial class ExploreScreen
         return null;
     }
 
-    /// <summary>The harbour: the ship sailing in with the two of you on deck, tied up, the gangplank, Act 1's card, then the Red Gulls (talked down, with the dice, and Grell let off), Captain Hale, and up the street into the city.</summary>
+    /// <summary>The harbour: the ship sailing in with the two of you on deck, the sail coming in, tied up, the plank going out, the walk ashore, Act 1's card, then the red "!" over the Red Gulls and a walk up to them (talked down, with the dice, and Grell let off), Captain Hale, and up the street into the city.</summary>
     private string DocksStep(int frame)
     {
         switch (frame)
@@ -115,23 +121,33 @@ public partial class ExploreScreen
             case 200:
                 return "arrival-sailing.png";
 
+            case 300:
+                return "arrival-furling.png";
+
             case 520:
                 return "arrival-docked.png";
+
+            case 560:
+                return "arrival-plank.png";
 
             case 640:
                 return "arrival-gangplank.png";
 
-            case 840:
+            case 900:
+                return "arrival-ashore.png";
+
+            case 1200:
                 return "arrival-card.png";
 
-            case 841:
+            case 1201:
                 ProofChoices(1, 0);
                 return null;
         }
-        if (frame < 841 || _arriving != Arriving.None) return null;
+        if (frame < 1201 || _arriving != Arriving.None) return null;
 
         DialogueScreen talk = ProofDialogue();
         DiceRollOverlay dice = ProofDice();
+        if (talk is not null) _proofMove = Vector2.Zero;
         if (dice is not null && dice.ProofLanded && ProofOnce("docks-check.png")) return "docks-check.png";
         if (talk?.ProofLine is DialogueNode line)
         {
@@ -145,7 +161,25 @@ public partial class ExploreScreen
             return null;
         }
 
-        if (!_game.Flags.Contains(Act1Chapter1.DocksDone)) return null;
+        // Before the Red Gulls: stand off to the west of them, the red "!" over Tomas, then walk east into them.
+        if (!_game.Flags.Contains(Act1Chapter1.DocksDone))
+        {
+            if (ProofOnce("docks-approach"))
+            {
+                ProofPlace(24.5f, 15.5f, Direction.Right);
+                _proofMark = frame;
+            }
+            else if (frame == _proofMark + 30)
+            {
+                return "docks-event.png";
+            }
+            else if (frame == _proofMark + 31)
+            {
+                _proofMove = new Vector2(1f, 0f);
+            }
+            return null;
+        }
+
         if (ProofOnce("docks-after"))
         {
             _proofMark = frame;
@@ -154,7 +188,7 @@ public partial class ExploreScreen
         if (frame == _proofMark + 40) return "docks.png";
         if (frame == _proofMark + 42)
         {
-            ProofPlace(52f, 7f, Direction.Right);
+            ProofPlace(72f, 7f, Direction.Right);
             _proofMove = new Vector2(1f, 0f);
         }
         return null;

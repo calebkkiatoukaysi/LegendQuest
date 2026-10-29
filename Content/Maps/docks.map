@@ -1,13 +1,16 @@
-; Saltwind Docks, Questeria's harbour, where you come in off the ship. The quay street along the top with its
-; warehouses, the boardwalk, and the harbour, with the ship tied up along the boardwalk and a jetty
-; at either end. The city's up the street to the east. Lit, and no fog.
+; Saltwind Docks, Questeria's harbour, where you come in off the ship. The quay street along the top, lined
+; with Netty's cottage, the warehouses, the Rusty Anvil, the fishmonger's, a townhouse, the chandler's and
+; the Watch's post; the boardwalk in front of them, busy with stalls, nets, cargo and people; and the
+; harbour: a jetty out from the boardwalk to a long pier, with the ship tied up along the pier in the
+; water between it and the boardwalk, clear of both, a little landing stage to the west with a boat at
+; it, and another jetty to the east. The city's up the road at the east end. Lit, and no fog.
 
 [map]
 id = docks
 name = Saltwind Docks
 world = 80 190
 tileset = questeria
-size = 56 36
+size = 76 36
 dark = no
 fog = no
 music = Exploring
@@ -15,107 +18,200 @@ music = Exploring
 [legend]
 : = cobble
 , = grass
+# = plaza
 + = planks
 ~ = water
 
 [ground]
-,,,,,,,,::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
-,,,,,,,,::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
-,,,,,,,,::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
-,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
-~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
-~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
-~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
-~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
-~~~~~~++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~++++~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::::::::::::,,,,,,,,,,
+,,,,,,,,::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#########
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::,,,,,
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::,,,,,
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::,,,,,
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+~~~~~+++~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+++~~~~~~~~~~~~~
+~~~~~+++~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+++~~~~~~~~~~~~~
+~~~~~+++~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+++~~~~~~~~~~~~~
+~~~~~+++~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+++~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+++~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~+++++++++++++++++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~+++++++++++++++++++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [objects]
 spawn start 21.5 16.5 facing=up
-spawn city 53 8 facing=left
-exit city 55 3 h=8 to=questeria at=docks
+spawn city 73 8 facing=left
+exit city 75 3 h=8 to=questeria at=docks
 
-; The ship you come in on, its gangplank down to the boardwalk, and the boats tied up at the jetties.
-prop ship 24 24
-prop gangplank 21.5 20
-prop rowboat 11.5 21
-prop rowboat 42 21.5
+; The ship you come in on, tied up along the pier, with her near rail and the gangplank down onto the
+; pier, the bollards her lines go to, and the boats. The ship and her rail have to stay a tile apart,
+; one above the other, since the arrival walks you off by where they are.
+prop ship 27.5 26.5
+prop gangplank 27.5 27.5
+prop bollard 21.5 27
+prop bollard 34 27
+prop rowboat 10 20
+prop rowboat 24 31
+prop rowboat 65 20.5
 
-; Along the boardwalk.
+; Along the front of the boardwalk, and the harbour bell at the top of the jetty, kept clear of the
+; way up it from the ship.
 prop bollard 3 17.8
 prop bollard 15 17.8
 prop bollard 28 17.8
 prop bollard 34 17.8
+prop bollard 42 17.8
 prop bollard 50 17.8
+prop bollard 59 17.8
+prop bollard 63.5 17.8
+prop bollard 70 17.8
 prop rope-posts 31 17.6
+prop rope-posts 46 17.6
+prop harbour-bell 13.4 17.4
 prop lantern-post 12 14.4
 prop lantern-post 38 14.4
+prop lantern-post 57.5 14.4
+
+; The west end: Netty's cottage with the washing out, her nets, and the landing stage where Maud
+; comes to feed the gulls.
+prop oak 3 4
+prop cottage-teal 3.5 12
+entrance netty-cottage 4.125 12.5 to=cottage-b name="A Cottage"
+prop washing-line 0.9 13.4
+prop barrel-water 6.8 13.1
+prop net-rack 9.5 14.4
 prop cargo-crate 5 15.5
 prop cargo-crate 6.4 15.2
 prop cargo-barrel 7.5 16
-prop sacks 40 16
-prop cargo-crate 44 15.6
-prop cargo-barrel 46 15.4
-prop cargo-barrel 47 16
+npc netty 10 15.4 cast=netty facing=down say="Mind the hooks, love.|Nets, nets, nets. My fingers dream in knots.|The Red Gulls took my best net last spring. Wore it as a cape."
+npc maud 6 21 cast=maud facing=down say="He loved the gulls, my Edric.|By the posts. It's somewhere by the posts.|Thirty years of bells, and now it's so quiet."
+npc harbour-brat 8 16.4 look=523 name="A Harbour Brat" wander=3 say="Bet I can spit further than you!|The Red Gulls took my cap. Then my brother's cap.|Gulls are just rats that went to sea."
 
-; The quay street and its warehouses, and the ways into them.
-entrance warehouse-west 10.5 12.5 to=warehouse name="A Warehouse"
-entrance warehouse-middle 24.1 12.5 to=warehouse name="A Warehouse"
-entrance chandler 42.94 12.5 to=shop name="The Chandler's"
+; The west warehouse, a porter, and the cook off the Gull's Wager buying for the next voyage.
+prop warehouse 11.5 12
+entrance warehouse-west 11.8125 12.5 to=warehouse name="A Warehouse"
+prop sack-pile 9 13.1
+prop crate-stack 14.4 13.1
+prop barrel-salt 15.7 13.4
+npc porter 13.4 14.2 look=553 name="A Porter" facing=left say="Mind your toes, coming through.|Warehouse is full. Warehouse is always full.|They pay by the crate, not the hour. So, quick."
+npc ships-cook 15.2 15.6 look=432 name="The Ship's Cook" facing=right say="Off the Gull's Wager? Then you've had my stew. Sorry.|Buying salt pork. Two weeks of it. Pray for us.|Captain Marsh says hello. Actually she says hurry up."
 
-prop house-rose 10 12
-prop house-awning 26 12
-prop house-shop 41 12
-prop oak 3 4
-prop cherry-tree-small 51 3
-prop signpost 50 9
-prop cargo-crate 18 12.5
-prop cargo-crate 19.3 12.8
-prop sacks 33 12.6
-prop cargo-barrel 48 12
-prop lamp 17 8
-prop lamp 34 8
-prop bench 30 7.8
+; The Rusty Anvil, Brannock's bar, dim even by day. Nobody goes in yet. Then the pie seller and the
+; cart, just short of the trouble.
+prop rusty-anvil-plum 19.5 12
+prop lamp-arm 17.3 13.2
+prop handcart 23.6 13.2
+npc pie-seller 22.6 13.8 look=443 name="A Pie Seller" facing=down say="Hot pies! Fish, eel, or mystery!|Mystery's the popular one.|Keep it away from the gulls. They're organised."
 
-; The people on the quay. Placeholders, like Questeria's.
-npc dock-hand 38 12 name="A Dock Hand" sheet=farmhand facing=down wander=4 say="Mind the ropes. They bite."
-npc carrier 45 10 name="A Carrier" sheet=porter facing=left wander=5 say="Another ship, another hundred crates."
-npc harbourmaster 52 13 name="The Harbourmaster" sheet=traveller facing=left say="Names go in the book. Not today, mind. The book's full."
+; The fishmonger's, where the Red Gulls are shaking down Old Tomas, with the fish stall next door and
+; the fishwives watching. A1-C1-01 starts when you walk up to them, with a red ! over them till then.
+; There's a way round behind the fishmonger's, so the second trigger, with no mark, catches anyone who
+; goes that way. The two never touch, so they can't both go off at once.
+prop cherry-tree 27.5 3
+prop fishmonger-pink 27.5 12
+prop crate-open 26.2 12.9
+prop crate-open 29.6 12.9
+trigger red-gulls 26 9 w=6 h=9 talk=a1-c1-01 mark=yes when=arrived unless=red-gulls-beaten
+trigger red-gulls-behind 27 0 w=2 h=9 talk=a1-c1-01 when=arrived unless=red-gulls-beaten
+npc tomas 28.5 15.5 cast=tomas facing=left say="Forty years on this harbour. Never paid a dock tax yet."
+npc gull-1 27 15.8 cast=red-gull facing=right unless=red-gulls-beaten
+npc gull-2 27.2 14.6 cast=red-gull facing=right unless=red-gulls-beaten
+npc gull-3 30 14.6 cast=red-gull facing=left unless=red-gulls-beaten
+npc grell 30.6 16.2 cast=grell facing=left unless=grell-gone
+npc hale 26 13.4 cast=hale facing=left when=grell-gone say="Lantern Market's up the street and past the fountain. The board's by the inn.|Good work today. Don't make me regret saying it.|Greywatch. Don't ask."
+npc watch-1 27.6 12.8 cast=watch facing=down when=grell-gone say="Captain's orders. Keep it moving.|Red Gulls in the water. Best morning in months."
+npc watch-2 25 13.6 cast=watch facing=down when=grell-gone say="Red Gulls. Every week it's the Red Gulls.|Not this week, though. Thanks to you."
 
-; A1-C1-01: the Red Gulls shaking down Old Tomas along the boardwalk, there till they're beaten,
-; Grell till he's dealt with, and the Watch once he has been.
-scene red-gulls 0 0 talk=a1-c1-01 when=arrived
-npc tomas 28 15 cast=tomas facing=left say="Forty years on this harbour. Never paid a dock tax yet."
-npc gull-1 26.5 15.6 cast=red-gull facing=right unless=red-gulls-beaten
-npc gull-2 27 14.2 cast=red-gull facing=right unless=red-gulls-beaten
-npc gull-3 29.6 14.5 cast=red-gull facing=left unless=red-gulls-beaten
-npc grell 30.2 15.8 cast=grell facing=left unless=grell-gone
-npc hale 26 13.4 cast=hale facing=left when=grell-gone say="Lantern Market's up the street and past the fountain. The board's by the inn."
-npc watch-1 27.6 12.8 cast=watch facing=down when=grell-gone say="Captain's orders. Keep it moving."
-npc watch-2 24.4 13 cast=watch facing=down when=grell-gone say="Red Gulls. Every week it's the Red Gulls."
+; The fish stall, the fishwives at it, and the gutter.
+prop fish-stall 32 13.7
+prop barrel-salt 36.2 14.3
+prop crate-open 34.4 17.1
+npc fishmonger-a 32.4 14.6 look=104 name="A Fishwife" facing=right say="Herring! Mackerel! Eels as long as your leg!|Fresh this morning. Well. This week.|The Red Gulls never paid for a fish in their lives.|Don't poke the eels. They poke back."
+npc fishmonger-b 34.4 14.6 look=236 name="A Fishmonger" facing=left say="Crab, live crab, very angry crab!|Two for a copper, and I'll throw in the smell.|Hale's lot used to walk the boardwalk. Not lately."
+npc gutter 36 15.8 look=545 name="A Fish Gutter" facing=left say="Gut, scale, slap it on the board.|Mind your boots. The fish don't.|Tomas brings the best catch. Don't tell him I said."
+
+; The middle warehouse, its cargo, and the hands moving it.
+prop warehouse-teal 39.5 12
+entrance warehouse-middle 39.8125 12.5 to=warehouse name="A Warehouse"
+prop crate-stack 36.6 13.1
+prop cargo-crate 42.4 13.2
+prop cargo-barrel 43.6 13.4
+prop sack-pile 40.6 17.1
+npc dock-hand 41.2 14.4 name="A Dock Hand" sheet=farmhand facing=down wander=3 say="Mind the ropes. They bite.|Ship in, ship out. The sea never stops.|Saw you two sort the Red Gulls. Nicely done."
+npc gull-victim 38 16 look=416 name="A Gull-Robbed Traveller" wander=3 say="A gull took my pie. My whole pie.|It looked me in the eye while it did it.|I'm going home. Your harbour is lawless.|Don't feed them. They remember faces."
+
+; A townhouse, the ropemaker at the rope posts, and the carrier going back and forth.
+prop townhouse-pink 46.5 12
+prop barrel-flowers 45.3 13.1
+prop lamp-double 48.9 13.3
+npc ropemaker 46.4 16.3 look=402 name="The Ropemaker" facing=down say="Good rope's the only thing that holds in this town.|Mind the coil. It's longer than it looks.|A sailor's best friend. After the bottle."
+npc carrier 50 15.2 name="A Carrier" sheet=porter facing=left wander=4 say="Another ship, another hundred crates.|My back is a rumour. I carry crates on it anyway.|Don't stand there. Stand anywhere else."
+
+; The chandler's, and a sailor stocking up.
+prop house-shop 54.5 12
+entrance chandler 56.44 12.5 to=shop name="The Chandler's"
+prop sacks 51.6 13.3
+prop cargo-barrel 59.4 13.2
+prop net-rack 54.6 17.3
+npc sailor-e 53 14.8 look=615 name="A Sailor" facing=up say="Rope, tar, biscuit, and something for my nerves.|The chandler's prices would make a pirate blush.|Off on the evening tide. Wish me a dull voyage."
+
+; The Watch's post at the foot of the road, the customs clerk, the harbourmaster with the book, and
+; the sailors in off the east jetty.
+prop watch-post 63.5 12
+prop chalkboard 68.2 13.3
+prop crate-stack 61.2 13.3
+npc customs-clerk 67 13.6 look=447 name="A Customs Clerk" facing=left say="Cargo? Declare it. Contraband? Also declare it.|The harbourmaster's book is full. So is mine.|Every crate's a story. Most of them are lies."
+npc harbourmaster 64 15.4 name="The Harbourmaster" sheet=traveller facing=left say="Names go in the book. Not today, mind. The book's full.|Ships from the east come in grey with ash. Odd times.|Captain Marsh is the only captain who docks on time."
+npc sailor-c 60.4 18.6 look=196 name="A Sailor" facing=right say="Back from the east. Never again, I said. Said it twice.|The sky over the Strait's gone the colour of old porridge.|Shore leave at last. I could kiss these planks."
+npc sailor-d 61.8 19.2 look=111 name="A Sailor" facing=left say="Don't whistle on the dock. Bad luck.|Lost a hat to a gull this morning. Good hat.|They say Greywatch eats soldiers. Rumours, mind."
+npc bosun 61 22 look=616 name="A Bosun" facing=down say="Lines fore and aft, and smartly!|Never trust a calm harbour.|Lost three hands to the city last night. They'll be back when the coin runs out."
+
+; The road up to the city, paved like the city, with the signpost at the bottom of it, lamps along
+; it, and flowers on the grass either side.
+prop signpost 68.6 12.6
+prop lamp 68 2.4
+prop lamp 73 2.4
+prop lamp 72 11.2
+prop bush-pink 70.5 1.6
+prop flowers-pink 75 1
+prop flowers-white 66.6 0.6
+prop bush-flowers 74 12.6
+prop flowers-mixed 72.4 12.8
+prop cherry-tree-small 66.6 5
+
+; What the two of you say as you go, and what the townsfolk say to each other. The Red Gulls up
+; ahead as you come off the jetty; after them, the mess the fight left, the fish, the fishwives
+; talking it over, the warehouses, the gulls on the landing stage and the boardwalk; the sailors in
+; from the east; and the city, just before the road up to it.
+trigger bark-docks-gulls-ahead 21 13 w=3 h=5 bark=docks-gulls-ahead
+trigger bark-docks-boardwalk 10 14 w=4 h=4 bark=docks-boardwalk
+trigger bark-docks-boardwalk-grell 10 14 w=4 h=4 bark=docks-boardwalk-grell
+trigger bark-docks-fight-mess 27 15 w=4 h=3 bark=docks-fight-mess
+trigger bark-docks-fish 27 12 w=4 h=3 bark=docks-fish
+trigger bark-docks-fishwives 32 13 w=4 h=5 bark=docks-fishwives once=no
+trigger bark-docks-gulls 4 16 w=5 h=2 bark=docks-gulls
+trigger bark-docks-warehouses 36 13 w=7 h=2 bark=docks-warehouses
+trigger bark-docks-sailors-ash 59 16 w=5 h=4 bark=docks-sailors-ash once=no
+trigger bark-docks-up-to-city 66 3 w=2 h=15 bark=docks-up-to-city
