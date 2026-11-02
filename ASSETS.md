@@ -82,6 +82,12 @@ Content/Paperdoll/hat-tricorn.png - built by tools/generate_paperdoll.py from to
 
 Content/Paperdoll/hat-helm.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the City Watch's steel helm; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
+Content/Paperdoll/hat-crown.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: King Leon's small gold crown, three points and a ruby in front, sat on top of the head over the hair, in gold that never changes colour; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/hat-hood.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a deep travelling hood in the cloak's key shades, open on the face and falling onto the shoulders; Paperdoll leaves the hair and ears off under it; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/hat-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a slim gold circlet over the hair at the hairline, a sapphire on the brow; drawn procedurally by tools/generate_paperdoll.py onto the youth's frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
 Content/character-palettes.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: every preset the palette swap can recolour a sheet to, one ramp a row, the youth's own keys first in each block (skin, hair, eyes, shirt, vest, legs, cloak); the other presets were chosen by Caleb Kiatoukaysi for Legend Quest
 
 Content/Paperdoll/Stout/body.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/body.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
@@ -148,6 +154,12 @@ Content/Paperdoll/Stout/hat-tricorn.png - built by tools/generate_paperdoll.py f
 
 Content/Paperdoll/Stout/hat-helm.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-helm.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
+Content/Paperdoll/Stout/hat-crown.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-crown.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hat-hood.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-hood.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/hat-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-circlet.png redrawn for the Stoneborn's stout body: a head shorter and broader, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
 Content/Paperdoll/Small/body.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/body.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Paperdoll/Small/hair-tousled.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hair-tousled.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
@@ -211,6 +223,24 @@ Content/Paperdoll/Small/hat-bandana.png - built by tools/generate_paperdoll.py f
 Content/Paperdoll/Small/hat-tricorn.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-tricorn.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Paperdoll/Small/hat-helm.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-helm.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hat-crown.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-crown.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hat-hood.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-hood.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/hat-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-circlet.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Creatures/gloomfang.png - created by Caleb Kiatoukaysi for Legend Quest, the gloomfang, a lean near-black wolf of the Mirewood, violet eyes with black smoke leaking up off them; standing, four steps, wind-up, strike, howl, hurt and downed each way, 48x32 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
+
+Content/Creatures/thornmother.png - created by Caleb Kiatoukaysi for Legend Quest, the Thornmother, a huge corrupted she-bear with brambles grown through her fur, black crystal out of her shoulders and haunch and violet veins under her coat; standing, four steps, rearing, slam, roar, hurt and downed each way, 96x80 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
+
+Content/Creatures/hollowed-footman.png - created by Caleb Kiatoukaysi for Legend Quest, a Hollowed footman, ash-grey with empty pale eyes, in cracked Doomward plate and a crimson tabard with a kettle helm and a short sword; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
+
+Content/Creatures/hollowed-hexer.png - created by Caleb Kiatoukaysi for Legend Quest, a Hollowed hexer in a faded scholar's robe and a deep hood, a staff of black crystal in its hand; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
+
+Content/Creatures/hollowed-sapper.png - created by Caleb Kiatoukaysi for Legend Quest, a stooping Hollowed sapper in a leather cap and jerkin with one cracked pauldron, a pick over its shoulder and a lit lantern; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
+
+Content/Creatures/vault-construct.png - created by Caleb Kiatoukaysi for Legend Quest, a vault construct, a guardian of dressed stone banded with gold, the Old Crown's points on its helm and a gold sun in its chest; standing, four steps and the five fighting frames each way, 48x64 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
 
 ## Tiles and props
 
@@ -318,6 +348,134 @@ Content/Paintings/glint.png - created by Caleb Kiatoukaysi for Legend Quest, thr
 
 Content/Paintings/lantern.png - built by tools/generate_paintings.py from tools/source/questeria-props-2.png: the pier's lantern, five frames of it swinging; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
+Content/Tiles/keep.png - created by Caleb Kiatoukaysi for Legend Quest, Sunspire Keep's tileset (polished cream and lavender marble, marble with gold in its joints, the royal blue carpet and its crimson-and-gold border, the dais and its gold rim, the steps up to it, the walls' tops, the three rows of their faces with the gold cornice and the blue dado, and the tall arched windows), drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/sun-throne.png - created by Caleb Kiatoukaysi for Legend Quest, King Leon's throne, gold and royal blue with the sun blazing behind it, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/sun-banner.png - created by Caleb Kiatoukaysi for Legend Quest, a banner of the Aurelian sun hanging on a wall, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/pillar-marble.png - created by Caleb Kiatoukaysi for Legend Quest, a marble column with a gilded capital, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/guard-statue.png - created by Caleb Kiatoukaysi for Legend Quest, a knight of the old war in marble on a plinth, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/brazier.png - created by Caleb Kiatoukaysi for Legend Quest, a gold brazier of coals on three legs, giving off light (the game draws the flame on it), a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/keep-arch.png - created by Caleb Kiatoukaysi for Legend Quest, the arch from the great hall into the throne room, its gilded doors standing open, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/light-shaft.png - created by Caleb Kiatoukaysi for Legend Quest, the sun through a pair of tall windows lying across the floor, see-through, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/sun-inlay.png - created by Caleb Kiatoukaysi for Legend Quest, the Aurelian sun laid into the floor in gold before the dais, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/war-table.png - created by Caleb Kiatoukaysi for Legend Quest, the war table with the map of Fable spread across it and the markers on it, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/royal-desk.png - created by Caleb Kiatoukaysi for Legend Quest, a gilded walnut writing desk with letters, a book and an inkwell on it, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/wine-table.png - created by Caleb Kiatoukaysi for Legend Quest, a little marble table with a decanter of wine and two goblets, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/vault-stair-shut.png - created by Caleb Kiatoukaysi for Legend Quest, the stair down to the Old Crown Vault in Questeria's terrace with its iron gate locked, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/vault-stair.png - created by Caleb Kiatoukaysi for Legend Quest, the stair down to the Old Crown Vault with its gate standing open, a prop, drawn procedurally by tools/generate_keep.py, released under public domain
+
+Content/Props/tankard-table.png - created by Caleb Kiatoukaysi for Legend Quest, an oak tavern table with tankards on it, one knocked over, and a candle, a prop, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Props/booth.png - created by Caleb Kiatoukaysi for Legend Quest, a high-backed tavern booth with a crimson cushion, a prop, drawn procedurally by tools/generate_interiors.py, released under public domain
+
+Content/Tiles/vault.png - created by Caleb Kiatoukaysi for Legend Quest, the Old Crown Vault's tileset: pale polished flagstones in courses, in a wall's shadow and cracked, the runner of marble lozenges with its gold border, the sun crest, the pressure plates, the pit with its far wall and lips, raw earth with the broken floor round it and the tunnels' floor, the stair, the walls from above and from the front with the gilded cornice, crests and niches, the earth banks, and coins, rubble, grit, spent darts, bones and cobwebs, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/vault-sconce.png - created by Caleb Kiatoukaysi for Legend Quest, a gilded lamp on the wall, a prop (the game draws the flame on it), drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/vault-brazier.png - created by Caleb Kiatoukaysi for Legend Quest, a gold brazier of glowing coals on three legs, a prop (the game draws the flame on it), drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/vault-door.png - created by Caleb Kiatoukaysi for Legend Quest, the vault's great doors of blued steel and gold in their gilded portal, shut and open, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/vault-lever.png - created by Caleb Kiatoukaysi for Legend Quest, a gilded lever on a stone wall plate, up and down, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/vault-chest.png - created by Caleb Kiatoukaysi for Legend Quest, a royal strongbox bound in gold, shut, and open with its gold showing, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/gold-pile.png - created by Caleb Kiatoukaysi for Legend Quest, a heap of the crown's gold with a goblet, a sword and gems in it, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/gold-pile-small.png - created by Caleb Kiatoukaysi for Legend Quest, a small heap of gold coins, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/relic-shelf.png - created by Caleb Kiatoukaysi for Legend Quest, a cabinet of the old kings' relics, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/relic-case.png - created by Caleb Kiatoukaysi for Legend Quest, a crown on a cushion under glass, on a plinth, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/relic-case-orb.png - created by Caleb Kiatoukaysi for Legend Quest, a gold orb on a cushion under glass, on a plinth, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/dart-trap.png - created by Caleb Kiatoukaysi for Legend Quest, a dart trap in a wall, carved as the sun, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/sunheart-pedestal.png - created by Caleb Kiatoukaysi for Legend Quest, the empty pedestal where the Sunheart sat, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/sun-mosaic.png - created by Caleb Kiatoukaysi for Legend Quest, the sun of the old kings inlaid in a floor, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/rubble-heap.png - created by Caleb Kiatoukaysi for Legend Quest, a heap of broken stone and earth where a roof came down, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Props/sapper-hole.png - created by Caleb Kiatoukaysi for Legend Quest, the hole the Hollowed sappers broke up through a floor, a prop, drawn procedurally by tools/generate_vault.py, released under public domain
+
+Content/Tiles/mirewood.png - created by Caleb Kiatoukaysi for Legend Quest, the Mirewood's tileset: grass lush, wilting and rotten, fallen leaves and black-veined ones, gloom moss, the rangers' trail, the tar-streaked stream, the undergrowth green and rotten, the rock the quarry's cut into, and tufts, flowers, ferns, pebbles, roots, litter, veins, dead grass, toadstools, tar and brambles to lie on them, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Tiles/quarry.png - created by Caleb Kiatoukaysi for Legend Quest, the Old Quarry's tileset: cut limestone floors, in shadow and veined with the black crystal, ground the roots have broken up, tar welling up, the ramp, the walls from above and from the front with roots and crystal coming through them, rubble, gravel, roots, crystal shards, fungus that glows and the quarrymen's tools, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/tar-pool.png - created by Caleb Kiatoukaysi for Legend Quest, a pool of tar in the Mirewood, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/gloom-mushroom.png - created by Caleb Kiatoukaysi for Legend Quest, ink caps and pale gloom mushrooms in a cluster, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/gloom-mushroom-small.png - created by Caleb Kiatoukaysi for Legend Quest, a few gloom mushrooms, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/ranger-sign.png - created by Caleb Kiatoukaysi for Legend Quest, the rangers' waymark with its antlers and green ribbon, a prop and what the Mirewood's signs look like, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/woodcutter-stump.png - created by Caleb Kiatoukaysi for Legend Quest, a felled oak's stump with the axe left in it, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/ranger-bridge.png - created by Caleb Kiatoukaysi for Legend Quest, the rangers' footbridge over the stream, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/quarry-mouth.png - created by Caleb Kiatoukaysi for Legend Quest, the timbered way into the old quarry, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/bones.png - created by Caleb Kiatoukaysi for Legend Quest, an animal's skull and bones, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/root-wall.png - created by Caleb Kiatoukaysi for Legend Quest, roots grown across a way through, tangled and then parted, what the quarry's root walls look like, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/black-crystal.png - created by Caleb Kiatoukaysi for Legend Quest, the black crystal spike, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/black-crystal-shattered.png - created by Caleb Kiatoukaysi for Legend Quest, the black crystal smashed, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/black-crystal-purified.png - created by Caleb Kiatoukaysi for Legend Quest, the black crystal made clean, white and gold, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/courier-body.png - created by Caleb Kiatoukaysi for Legend Quest, the dead Doomward courier, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Props/satchel.png - created by Caleb Kiatoukaysi for Legend Quest, the courier's satchel with his letter in it, a prop, drawn procedurally by tools/generate_mirewood.py, released under public domain
+
+Content/Tiles/meadow.png - created by Caleb Kiatoukaysi for Legend Quest, the meadows' tileset, the old road's and Thornbridge's: grass and long grass, the footpaths and the road, ploughed fields, the stream and the ford across it, hedges and the top of the city wall, with the edges the tilemap draws where they meet, and flowers, clover, tufts, pebbles, ruts, reeds, lilies, crops, stepping stones and petals to lie on them, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/windmill.png - created by Caleb Kiatoukaysi for Legend Quest, the farm's windmill, its sails across its front, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/hay-bale.png - created by Caleb Kiatoukaysi for Legend Quest, a bale of hay, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/haystack.png - created by Caleb Kiatoukaysi for Legend Quest, a haystack with a pitchfork stuck in it, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/fence-wood.png - created by Caleb Kiatoukaysi for Legend Quest, two tiles of farm fence, a post and two split rails, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/fence-wood-post.png - created by Caleb Kiatoukaysi for Legend Quest, a farm fence's post on its own, for the end of a run, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/fence-wood-side.png - created by Caleb Kiatoukaysi for Legend Quest, a tile of farm fence running up the screen, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/stone-bridge.png - created by Caleb Kiatoukaysi for Legend Quest, the old stone bridge that takes the road over the stream, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/wheat.png - created by Caleb Kiatoukaysi for Legend Quest, two tiles of ripe wheat, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/scarecrow.png - created by Caleb Kiatoukaysi for Legend Quest, a scarecrow, with a crow on his arm, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/tent-ragged.png - created by Caleb Kiatoukaysi for Legend Quest, a patched tent in the refugees' camp, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/tent-ragged-2.png - created by Caleb Kiatoukaysi for Legend Quest, a lower patched tent with a blanket over its door, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/cookfire.png - created by Caleb Kiatoukaysi for Legend Quest, a cooking fire with a pot hung over it (the game draws the flame on it), a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/cot.png - created by Caleb Kiatoukaysi for Legend Quest, a camp bed, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/healer-station.png - created by Caleb Kiatoukaysi for Legend Quest, Mira's table of bottles, bandages and herbs, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
+Content/Props/refugee-bundle.png - created by Caleb Kiatoukaysi for Legend Quest, a refugee's bundle, rolled blanket and pot, a prop, drawn procedurally by tools/generate_meadow.py, released under public domain
+
 ## UI
 
 Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron plate every button is drawn with and the light in its groove, drawn procedurally by tools/generate_ui.py, released under public domain
@@ -340,7 +498,7 @@ Content/Maps/questeria.map - written by Caleb Kiatoukaysi for Legend Quest, Ques
 
 Content/Maps/docks.map - written by Caleb Kiatoukaysi for Legend Quest, Questeria's harbour, where a new game opens with the ship coming in, released under public domain
 
-Content/Maps/road.map - written by Caleb Kiatoukaysi for Legend Quest, the old road through the forest, at dusk, released under public domain
+Content/Maps/road.map - written by Caleb Kiatoukaysi for Legend Quest, the old road through the meadows at noon: the farm, the stream and its bridge, the camp, the fork to the barrow, and the wood thickening toward the Mirewood, released under public domain
 
 Content/Maps/barrow.map - written by Caleb Kiatoukaysi for Legend Quest, the barrow, a dark map lit by torches, released under public domain
 
@@ -362,6 +520,18 @@ Content/Maps/forge.map - written by Caleb Kiatoukaysi for Legend Quest, inside t
 
 Content/Maps/chapel.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chapel by the temple: benches for pews, candles and a tapestry, released under public domain
 
+Content/Maps/sunspire-keep.map - written by Caleb Kiatoukaysi for Legend Quest, inside Sunspire Keep: the throne room and the great hall on the way out, released under public domain
+
+Content/Maps/rusty-anvil.map - written by Caleb Kiatoukaysi for Legend Quest, inside the Rusty Anvil, Brannock's bar on the docks, released under public domain
+
+Content/Maps/old-crown-vault.map - written by Caleb Kiatoukaysi for Legend Quest, the Old Crown Vault under the Sunspire: the antechamber and its constructs, the trapped hall, the sappers' tunnel and the warden's room, the treasury, and the relic gallery where Kael is, a dark map lit by lamps and braziers, released under public domain
+
+Content/Maps/mirewood.map - written by Caleb Kiatoukaysi for Legend Quest, the Mirewood, bright at its west edge and rotten toward the old quarry, at twilight, released under public domain
+
+Content/Maps/mirewood-quarry.map - written by Caleb Kiatoukaysi for Legend Quest, the Old Quarry under the Mirewood, a dark map lit by fungus and the black crystal, down to the Thornmother's den, released under public domain
+
+Content/Maps/thornbridge.map - written by Caleb Kiatoukaysi for Legend Quest, Thornbridge, the meadow outside Questeria's east gate, the old bridge over the river, and the refugees' camp, released under public domain
+
 ## Music
 
 Content/Music/embers.wav - created by Caleb Kiatoukaysi for Legend Quest, "Embers", the title theme, composed and synthesised by tools/generate_audio.py, released under public domain
@@ -371,6 +541,10 @@ Content/Music/hearthsmoke.wav - created by Caleb Kiatoukaysi for Legend Quest, "
 Content/Music/cold-stone.wav - created by Caleb Kiatoukaysi for Legend Quest, "Cold Stone", for walking about underground, composed and synthesised by tools/generate_audio.py, released under public domain
 
 Content/Music/salt-and-lanterns.wav - created by Caleb Kiatoukaysi for Legend Quest, "Salt and Lanterns", for the Gull's Wager at sea, composed and synthesised by tools/generate_audio.py, released under public domain
+
+Content/Music/meadowlark.wav - created by Caleb Kiatoukaysi for Legend Quest, "Meadowlark", for the sunny green fields round Questeria, composed and synthesised by tools/generate_audio.py, released under public domain
+
+Content/Music/sunspire.wav - created by Caleb Kiatoukaysi for Legend Quest, "Sunspire", for the royal keep, composed and synthesised by tools/generate_audio.py, released under public domain
 
 ## Sound effects
 
@@ -414,6 +588,16 @@ Content/Sfx/heartbeat.wav - created by Caleb Kiatoukaysi for Legend Quest, a sou
 
 Content/Sfx/ship-bell.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
 
+Content/Sfx/wolf-howl.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/crystal-pulse.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/war-horn.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/bowshot.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/coin.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
 ## Text
 
 Content/Spectral/Spectral-Light.ttf - Spectral font created by Production Type, released on Google Fonts (https://fonts.google.com/specimen/Spectral) under the SIL Open Font License
@@ -437,6 +621,16 @@ tools/generate_paperdoll.py - written by Caleb Kiatoukaysi for Legend Quest, tak
 tools/cut_supplied.py - written by Caleb Kiatoukaysi for Legend Quest, cuts the pictures in tools/source/ into the title's layers and loops, Questeria's and the harbour's props and the townsfolk's sheets (see The pictures the generators read). It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 
 tools/check_assets.py - written by Caleb Kiatoukaysi for Legend Quest, checks this file, Content/Content.mgcb and the files on disk against each other
+
+tools/generate_keep.py - written by Caleb Kiatoukaysi for Legend Quest, draws Sunspire Keep: its tileset, its furniture, the sunlight from its windows, and the stair down to the Old Crown Vault in Questeria's terrace. It needs nothing but CPython, and every bit of noise in it is seeded, so a rerun gives the same files
+
+tools/generate_vault.py - written by Caleb Kiatoukaysi for Legend Quest, draws the Old Crown Vault: its tileset, its doors, lamps, braziers and lever, its treasure, relic shelves and cases, the dart traps, the Sunheart's empty pedestal, and the Hollowed sappers' rubble and hole. It needs nothing but CPython, and every bit of noise in it is seeded, so a rerun gives the same files
+
+tools/generate_mirewood.py - written by Caleb Kiatoukaysi for Legend Quest, draws the Mirewood's and the Old Quarry's tilesets and props, and cuts the black-veined trees off tools/source/questeria-trees.png (through cut_supplied.py) and turns them. It needs nothing but CPython, and it's seeded, so a rerun gives the same files
+
+tools/generate_creatures.py - written by Caleb Kiatoukaysi for Legend Quest, draws the creatures' sheets (the gloomfang, the Thornmother, the three Hollowed and the vault construct) out of shaded round parts posed frame by frame. It needs nothing but CPython, and every bit of noise in it is seeded on where it is, so a rerun gives the same files
+
+tools/generate_meadow.py - written by Caleb Kiatoukaysi for Legend Quest, draws the meadows' tileset and the farm's, the bridge's and the refugees' camp's props, and cuts the great oak, the wild flowers, the farmhouse, the east gate and the city wall off tools/source/ (through cut_supplied.py). It needs nothing but CPython, and every bit of noise in it is seeded, so a rerun gives the same files
 
 ## The pictures the generators read
 
@@ -865,6 +1059,28 @@ tools/source/npc-villagers.png - townsfolk: heads, hair, clothes, a row of peopl
 tools/source/npc-townsperson.png - a young man standing and walking each way, supplied by Caleb Kiatoukaysi for Legend Quest; tools/cut_supplied.py cuts the youth from it
 
 tools/source/npc-customization.png - skin, faces, hair, clothes and twenty people each way (templates A1 to D5), supplied by Caleb Kiatoukaysi for Legend Quest; tools/cut_supplied.py cuts ten of them from it, and leaves out A1, B5 and D5, who change when they turn round
+
+Content/Props/tree-blackvein.png - built by tools/generate_mirewood.py from tools/source/questeria-trees.png: an oak gone grey with black veins through its bark and its leaves, a prop in the Mirewood, keyed off its backdrop, sampled down and turned; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/tree-blackvein-pale.png - built by tools/generate_mirewood.py from tools/source/questeria-trees.png: an oak with pale bark gone grey, black-veined, a prop in the Mirewood, keyed off its backdrop, sampled down and turned; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/tree-blackvein-bare.png - built by tools/generate_mirewood.py from tools/source/questeria-trees.png: a bare dead tree, black-veined, a prop in the Mirewood, keyed off its backdrop, sampled down and turned; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/oak-turning.png - built by tools/generate_mirewood.py from tools/source/questeria-trees.png: the deep oak beginning to turn, a vein up its trunk, a prop in the Mirewood, keyed off its backdrop, sampled down and turned; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/great-oak.png - built by tools/generate_meadow.py from tools/source/questeria-trees.png: the great oak, the oak with two more crowns behind it and the widest trunk in front, put together from the sheet's parts, a prop on the old road, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/wildflowers.png - built by tools/generate_meadow.py from tools/source/questeria-trees.png: lupins, a prop in the meadows, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/wildflowers-yellow.png - built by tools/generate_meadow.py from tools/source/questeria-trees.png: tall cream and yellow flowers, a prop in the meadows, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/wildflowers-blue.png - built by tools/generate_meadow.py from tools/source/questeria-trees.png: a clump of blue flowers, a prop in the meadows, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/east-gate.png - built by tools/generate_meadow.py from tools/source/questeria-grand.png: Questeria's east gate, the city gate with the road through it cleared so whoever walks it shows, a prop at Thornbridge, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/city-wall.png - built by tools/generate_meadow.py from tools/source/questeria-grand.png: a stretch of the city wall with flowers along it, a prop at Thornbridge, keyed off its backdrop and sampled down; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Props/farmhouse.png - built by tools/generate_meadow.py from tools/source/questeria-houses.png and tools/source/questeria-grand.png: the farmhouse, the cottage's parts put together with a chimney on its roof, and the roof turned red, a prop on the old road; the pictures were supplied by Caleb Kiatoukaysi for Legend Quest
 
 ## SRD 5.1
 

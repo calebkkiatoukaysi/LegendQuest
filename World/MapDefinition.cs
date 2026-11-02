@@ -31,6 +31,9 @@ public sealed class MapDefinition
     /// <summary>How much light gets everywhere on a dark map, 0 (none) to 1 (as if it weren't dark).</summary>
     public required float Ambient { get; init; }
 
+    /// <summary>The colour of the light on it: the ground, the props and everyone on it are multiplied by it, and nothing on the screen over them is. White for the world as it's drawn; the Mirewood's is a cool grey-violet.</summary>
+    public required Color Tint { get; init; }
+
     /// <summary>Whether the map screen only shows what you've seen of it. Somewhere you'd know already, like the capital, doesn't.</summary>
     public required bool Fog { get; init; }
 
@@ -72,6 +75,9 @@ public sealed class MapDefinition
 
     /// <summary>Everyone standing on it who isn't in the party.</summary>
     public required IReadOnlyList<MapNpc> Npcs { get; init; }
+
+    /// <summary>Where whoever's waiting at camp stands, in order. Empty on every map but the one the camp's on.</summary>
+    public required IReadOnlyList<MapCamp> Camp { get; init; }
 
     /// <summary>The conversations that play by themselves once you're on it.</summary>
     public required IReadOnlyList<MapScene> Scenes { get; init; }

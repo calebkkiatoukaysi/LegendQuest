@@ -1,0 +1,79 @@
+; The Rusty Anvil, Brannock's bar on Saltwind Docks: a low, smoky room that's never been aired. The
+; bar along the back with its kegs and its bottles, the barkeep behind it polishing the same mug,
+; stools along it, a few tables of dockhands and sailors, and in the far corner the biggest man in
+; the room asleep over a tankard. Dim, and smoke-dark: a few candles and nothing else. The door's in
+; the front wall, back out onto the docks.
+
+[map]
+id = rusty-anvil
+name = The Rusty Anvil
+tileset = interior
+size = 16 12
+dark = yes
+ambient = 0.45
+tint = 214 186 164
+fog = no
+music = Exploring
+
+[legend]
+- = floor-wood
+s = floor-stone
+# = wall-top
+| = wall-face
+_ = wall-base
+
+[ground]
+################
+#||||||||||||||#
+#______________#
+#--------ssssss#
+#--------ssssss#
+#--------ssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#ssssssssssssss#
+#######ss#######
+
+[objects]
+spawn start 7.5 9.5 facing=up
+spawn door 7.5 9.5 facing=up
+exit door 7 11 w=2 to=back
+
+; The bar along the back: the kegs and the bottles behind it, the barkeep, the stools in front, and
+; the one candle the barkeep can be bothered with.
+prop keg-stack 1.9 3.4
+prop bookshelf 4.6 3.4
+prop keg-stack 7.4 3.4
+prop bar-counter 4.5 5.6
+prop stool 2 6.6
+prop stool 4 6.6
+prop stool 6 6.6
+prop candle-stand 9 3.8
+npc barkeep 5.2 4.6 cast=anvil-barkeep facing=down say="Drink, or door.|We don't do stew. We don't do anything.|Mind the big one in the corner. He bites when he's woken."
+
+; Brannock's corner: his table, the tankards he's emptied, the stub of candle that's lighting him, and
+; a torch guttering on the wall over the sacks.
+prop tankard-table 13 6.4
+prop cargo-barrel 14.1 4
+prop sconce 11.5 2.4
+prop sacks 11.8 3.6
+npc brannock 13 5.6 cast=brannock facing=down unless=brannock-recruited
+light corner-candle 13 5.8 reach=2.5 strength=0.8
+
+; The tables: sailors at one under a ship's lantern, dockhands at the other, and the crates nobody
+; ever moved.
+prop tankard-table 4 9
+prop stool 2.6 9.2
+prop tankard-table 11 8.8
+prop stool 12.4 9
+prop crate-stack 1.8 10.4
+prop barrel 14 10.2
+prop lantern-hanging 1.4 7.8
+npc sailor 4 8.3 look=902 name="A Sailor" facing=down say="Don't stare at the big one. He notices.|Used to be the King's man, they say. Look at him now.|Three ships in and not one of them paying."
+npc dockhand-a 10.4 8.2 look=917 name="A Dockhand" facing=right say="Shift's over when the ale's gone. Ale's never gone.|The Watch doesn't come in here. Nobody asked them to."
+npc dockhand-b 11.8 8.1 look=933 name="A Dockhand" facing=left say="He held Greywatch, you know. The big one. Forty men.|Buy him a drink and he'll tell you about it. Then he'll cry."
+
+; What the two of you say coming in.
+trigger bark-anvil-in 6 8 w=4 h=2 bark=anvil-in

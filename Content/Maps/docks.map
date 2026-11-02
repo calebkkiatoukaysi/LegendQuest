@@ -118,9 +118,12 @@ prop barrel-salt 15.7 13.4
 npc porter 13.4 14.2 look=553 name="A Porter" facing=left say="Mind your toes, coming through.|Warehouse is full. Warehouse is always full.|They pay by the crate, not the hour. So, quick."
 npc ships-cook 15.2 15.6 look=432 name="The Ship's Cook" facing=right say="Off the Gull's Wager? Then you've had my stew. Sorry.|Buying salt pork. Two weeks of it. Pray for us.|Captain Marsh says hello. Actually she says hurry up."
 
-; The Rusty Anvil, Brannock's bar, dim even by day. Nobody goes in yet. Then the pie seller and the
-; cart, just short of the trouble.
+; The Rusty Anvil, Brannock's bar, dim even by day. It's barred till the King sends you to find him,
+; and after that its door, 19 right of its foot, goes in. Then the pie seller and the cart, just short
+; of the trouble.
 prop rusty-anvil-plum 19.5 12
+entrance anvil 21.1875 12.5 to=rusty-anvil name="The Rusty Anvil" when=a1-c4-03
+trigger anvil-shut 20 12 w=2 say="Barred from the inside. Somebody in there shouts that they're shut, and that they're always shut." once=no unless=a1-c4-03
 prop lamp-arm 17.3 13.2
 prop handcart 23.6 13.2
 npc pie-seller 22.6 13.8 look=443 name="A Pie Seller" facing=down say="Hot pies! Fish, eel, or mystery!|Mystery's the popular one.|Keep it away from the gulls. They're organised."

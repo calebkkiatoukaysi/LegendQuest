@@ -17,4 +17,10 @@ public enum Track
 
     /// <summary>"Salt and Lanterns": on board the Gull's Wager, at sea.</summary>
     Sea,
+
+    /// <summary>"Meadowlark": out in the sunny green fields round Questeria, on the Old Road.</summary>
+    Meadow,
+
+    /// <summary>"Sunspire": the royal keep, all gold light and old ceremony.</summary>
+    Court,
 }

@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendQuest;
 
 /// <summary>
-/// Drawing a line of text over its shadow, and the dark smudge that goes behind text out on a map.
-/// Shared by every screen that writes anything.
+/// Drawing a line of text over its shadow, the dark smudge that goes behind text out on a map, and
+/// breaking a line into rows that fit. Shared by every screen that writes anything.
 /// </summary>
 public static class Text
 {
@@ -63,5 +65,30 @@ public static class Text
             color, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
         spriteBatch.Draw(glow, new Rectangle(area.Right, area.Top, ends, area.Height), new Rectangle(half, 0, half, glow.Height),
             color, 0f, Vector2.Zero, SpriteEffects.None, Layers.TextBacking);
+    }
+
+    /// <summary>Breaks a line into rows that fit a width, at the spaces. A word wider than the width on its own gets a row to itself.</summary>
+    /// <param name="text">The line.</param>
+    /// <param name="font">The SpriteFont it'll be drawn in.</param>
+    /// <param name="width">The widest a row can be, in screen pixels.</param>
+    public static List<string> Wrap(string text, SpriteFont font, float width)
+    {
+        var rows = new List<string>();
+        var row = new StringBuilder();
+        foreach (string word in text.Split(' '))
+        {
+            string tried = row.Length == 0 ? word : row + " " + word;
+            if (row.Length > 0 && font.MeasureString(tried).X > width)
+            {
+                rows.Add(row.ToString());
+                row.Clear().Append(word);
+            }
+            else
+            {
+                row.Clear().Append(tried);
+            }
+        }
+        if (row.Length > 0) rows.Add(row.ToString());
+        return rows;
     }
 }

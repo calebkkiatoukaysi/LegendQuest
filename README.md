@@ -17,8 +17,10 @@ with the mouse to walk, point and click.
 and the capital, Questeria, are cut from pictures I made in a brighter style (see
 [Supplied art](#supplied-art)). And the story has started. I've written the whole of it, three acts,
 and it's going in from the beginning in its own order: so far that's the Soul-Bound, the
-conversations the story needs (choices, dice, approval), the Prologue, Act 1's first chapter, and
-buildings you can go into. [The story](#the-story) says what's in.
+conversations the story needs (choices, dice, approval), the Prologue, Act 1's first four chapters,
+the companions who join in them, and buildings you can go into. Outside the walls the country is
+bright, green farmland now, the way a capital's fields should look at noon. [The story](#the-story)
+says what's in, and [COMPANIONS.md](COMPANIONS.md) is the companions' bible.
 
 ## Running it
 
@@ -68,8 +70,15 @@ Soul-Bound finds their way after you, the waypoint crystal, the map, and in thro
 Flagon's door. Inside it takes the innkeeper's work and goes back out the door, which leaves you on
 the street outside it, then out through the city gate. On the old road it walks into the trigger before the camp, opens the chest,
 reads the sign, finds the second waypoint and fast travels back to Questeria, then straight back to
-the road by it, walks into the
-trigger at the blocked end twice (it goes off every time), and up the path into the barrow. In the
+the road by it and east into the Mirewood. From there it plays Act 1's chapters 2 to 4 through: the
+gloomfangs and Sera, the quarry's roots, the courier's letter, the Thornmother and the crystal, the
+night camp and a word with Sera, Fennick paying out, Thornbridge's gate (talked open on the dice),
+Mira and her errands, the Hollowed raid, the royal messenger, the hooded woman in the Flagon, the
+Old Crown Vault's traps and Kael, the audience with the King and Crane in the great hall, Brannock in
+the Rusty Anvil, and Kael and Brannock waiting at the Flagon, with Kael swapped in for Sera. Those
+visits are queues of beats (walk into this, talk to them, read it through) rather than frames,
+since a conversation's length depends on its answers (`ExploreScreen.ProofBeats.cs` and
+`ExploreScreen.ProofChapters.cs`). Then back to the road and up the path into the barrow. In the
 barrow it tries the locked door and the stone door, pulls the lever that opens the stone door, goes
 through it to the chest, opens the map, stands under a torch, pauses, and goes out through QUIT TO
 TITLE, where the slots show the autosave it made on the way. Moving and using things go in through
@@ -91,6 +100,7 @@ lever's pulled. A second switch, `--simulate`, comes with combat.
 | On a map | **WASD** or the **arrows** to walk, **E**, **Space** or **Enter** to use or talk to what you're next to, **M** for the map, the **mouse wheel** to zoom, **Esc** to pause |
 | On a map, the mouse | **Left click** the ground to walk there (the path shows while you point), or someone or something to walk up to them and talk or use it. Pointing at anything says what it is |
 | The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
+| Talking to the party | **E** (with nobody and nothing else in reach) or a **click** on one of them talks to them, when they've something to say: the cursor's a speech bubble, the tooltip ends TALK, and a gold "!" floats over anyone with something new |
 | Making a character | **Up** and **down** pick a row, **left** and **right** change it, **Q** and **E** change the tab. On NAME, **Enter** and then type |
 | Conversations | **Enter**, **Space**, **E** or a click shows the rest of the line, then the next. At a question, **1** to **4**, a click, or the **arrows** and **Enter** |
 | The dice | **Space**, **Enter** or a click rolls, and the same again goes on |
@@ -164,6 +174,35 @@ as the proof shots. What's in so far:
   Soul-Bound points the way, Fennick talks you through the quest board in the Lantern Market (the
   Rangers' contract for the Mirewood glows on it), and the innkeeper in the Gilded Flagon has work
   if you want it.
+- **Act 1, Chapter 2: The Rot in the Mirewood.** The Rangers' contract takes you east down the old
+  road, past where the woodcutters have sawn through the fallen tree, into the Mirewood: green at
+  its edge, and rotting further in, with black in the bark and tar in the stream. Gloomfangs with
+  smoke leaking from their eyes, then Sera's arrow, and Sera, who joins you. In the Old Quarry she
+  talks two walls of roots apart, a dead Doomward courier's letter says an army is coming, and the
+  Thornmother guards the black crystal. Then the party's first argument: purify it Sera's way,
+  smash it the Soul-Bound's, or hold the quarry while Sera works. A night camp after, where Sera
+  watches the Soul-Bound from the dark, and Fennick pays triple back in the city.
+- **Act 1, Chapter 3: Ashes at Thornbridge.** Out of the east gate, a tent camp of Doomward
+  refugees has swollen overnight in the meadows, and Sergeant Brisk won't let them in. Mira
+  Ashgrove is healing the sick: help her with her errands, hear about her teacher Maleficio, then
+  the Hollowed come out of the trees. After the raid the Soul-Bound can calm down, or give the camp a
+  speech it won't forget. Mira joins.
+- **Act 1, Chapter 4: The Sunheart.** A royal messenger sends you into the Gilded Flagon, where a
+  hooded Princess Elara wants the Sunheart back from the Old Crown Vault before anyone knows it's
+  gone. Down there are pressure plates, dart traps, dormant constructs, and Kael Duskmantle up a
+  relic shelf; then Hollowed sappers break in from below and it's a truce. Kael's black-iron coin
+  says someone near the crown is paid by Doomward. King Leon thanks you in the Sunspire, the
+  Soul-Bound speaks out of turn, the King sends you to Greywatch with a caravan, and Chancellor Crane
+  has a quiet word with the Soul-Bound on the way out. Brannock Ironvein, drinking in the Rusty Anvil,
+  makes six.
+- **The companions.** Sera, Mira, Kael and Brannock each have their own conversations as the
+  chapters go: talk to them (a gold "!" says when there's something new) and you learn who they are,
+  why, and what they'd want from you; each ends this stretch with their personal quest's hook. With
+  four of you already, the rest wait at the Gilded Flagon and can swap in there. They talk among
+  themselves too while you walk, once everyone in the conversation is with you.
+  [COMPANIONS.md](COMPANIONS.md) is their bible: the research behind them, each one's want, need,
+  wound and lie, how they talk, what they approve of, their arcs through all three acts, their
+  personal quests and romances, and what each does when the Soul-Bound turns.
 - **Round the edges.** The city and the harbour are full of people with something to say: a dozen
   you can stop and talk to (`Townspeople`), each with a few choices and something new the second
   time, and four with work for you, marked in gold, that are the side quests' hooks (rats with black
@@ -203,6 +242,7 @@ tileset = crypt          ; from TilesetCatalog
 size = 40 30             ; width and height in tiles; every layer has to be exactly this
 dark = yes
 ambient = 0.07           ; how much light gets everywhere (dark maps only)
+tint = 196 188 226       ; optional: the colour of the light, red green blue from 0 to 255 (white if it isn't set)
 music = Underground      ; a Track name
 
 [legend]                 ; one character per tile, by the tile's name in the tileset
@@ -231,14 +271,14 @@ with spaces in it goes in double quotes, and it can't have a `;` in it, since th
 since it's the capital and everyone knows their way round it. A map with no `world` isn't on the
 world map: the inside of a building is part of the place it's in, and the ship's deck is out at sea.
 Anything on a map can have `when=` a flag, to only be there once it's set, or `unless=` a flag, to
-go once it is (lights and spawns can't). That's how one map shows the story going on: the Red Gulls
-stand on the docks until they're beaten, and the Watch only turns up after.
+go once it is (lights, spawns and camp places can't). That's how one map shows the story going on:
+the Red Gulls stand on the docks until they're beaten, and the Watch only turns up after.
 
 | Kind | What it is | Settings |
 | --- | --- | --- |
 | `spawn` | Somewhere you can arrive. Every map needs one called `start` | `facing` (down if it isn't set) |
 | `prop` | Anything out of `PropCatalog`; the id is which one | none |
-| `npc` | Someone standing there (see People, under [The party](#the-party)) | `cast` (one of the story's people, from `Cast`), or `name` with `sheet` (one of `Townsfolk`) or `look` (a number: someone the paperdoll dresses at random from it, for crowds); `facing`, `say` (several lines go between `\|`, said in turn), and `wander` (how far they stroll, in tiles) |
+| `npc` | Someone standing there (see People, under [The party](#the-party)), or a creature | `cast` (one of the story's people, from `Cast`), `name` with `sheet` (one of `Townsfolk`) or `look` (a number: someone the paperdoll dresses at random from it, for crowds), or `creature` (one of `Creatures`, called what it is unless `name` says otherwise), never two of them; `facing`, `say` (several lines go between `\|`, said in turn), `talk` (the conversation talking to them starts, while it can, instead of looking theirs up by their id), and `wander` (how far they stroll, in tiles) |
 | `light` | A pool of light with nothing drawn for it, like daylight down the barrow's steps | `reach` in tiles, `strength` 0 to 1 |
 | `exit` | Walk into it and you go to another map | `to` the map, `at` a spawn there (`start` if it isn't set), `w`, `h`. `to=back` goes back out to wherever you came in from, which is how every building's door works |
 | `entrance` | A building's door: walk into it and you go in. x, y is the middle of the bottom of the door | `to`, `at`, and `name`, what the door says on the map screen |
@@ -249,17 +289,20 @@ stand on the docks until they're beaten, and the Watch only turns up after.
 | `lever` | Sets its flag, or clears it if it's set | `flag` |
 | `sign` | Has something written on it | `text` |
 | `waypoint` | A stone you travel between. One a map at most | none |
+| `camp` | A place for someone waiting for a place in the party to stand: whoever's first waiting stands at the first, and so on. The camp's in the Gilded Flagon | `facing` |
 
 The loader keeps the two fixes from the exercise: it trims every line (the exercise left the `\r`
 from Windows line endings on each one), and it checks every row against the map's size (the
 exercise took the id list on trust, and a short one read straight past the end). It also refuses a
 tile that isn't in the legend, a legend tile that isn't in the tileset, a prop that isn't in the
-catalogue, an object off the edge of the map, `ambient` on a map that isn't dark, a setting a kind
-doesn't have (so `glod=12` is caught, and so is `gold=12` on a door), two objects with the same id,
-a trigger that does nothing, a conversation that doesn't exist, someone off a sheet that doesn't
-exist, a spawn inside an exit, a waypoint with no room beside it or on a map that isn't on the
-world map, and a quote that's never closed. Once every map is read, `MapCatalog` checks every exit
-goes to a map that exists and a spawn on it that does too.
+catalogue, an object off the edge of the map, `ambient` on a map that isn't dark, a `tint` that isn't
+three whole numbers from 0 to 255, a setting a kind doesn't have (so `glod=12` is caught, and so is
+`gold=12` on a door), two objects with the same id, a trigger that does nothing, a conversation that
+doesn't exist, someone off a sheet that doesn't exist or drawn from two things at once, a creature
+that doesn't exist, someone or a camp place standing on a solid tile, a spawn inside an exit, a
+waypoint with no room beside it or on a map that isn't on the world map, and a quote that's never
+closed. Once every map is read, `MapCatalog` checks every exit goes to a map that exists and a spawn
+on it that does too, and that the camp's map has somewhere for whoever's waiting to stand.
 
 - **Tiles.** Ids count from 1 and 0 is empty, the same as the exercise. A tileset lists its tiles
   in order, and each one says how many variants it has, whether it's solid and whether it sounds
@@ -344,19 +387,29 @@ goes to a map that exists and a spawn on it that does too.
 | `shop.map` | Inside the chandler's: the counter and the shelves |
 | `warehouse.map` | Inside a warehouse on the docks: crates, barrels and kegs |
 | `bakery.map`, `forge.map`, `chapel.map` | Inside the bakery, the forge and the chapel in Questeria |
-| `road.map` | The old road through a wood of oaks, firs, bushes and ferns, at dusk, their crowns hanging over the verges. In from Questeria on the west; a camp in a clearing off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road further east |
+| `road.map` | The old road through Questeria's farmland at noon: hay, a wheat field and a scarecrow, a farmhouse, a windmill, a stream under a stone bridge, a great oak, blossom and wildflowers, and the wood thickening to the east. In from Questeria on the west; a camp off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road to the east, which the woodcutters have sawn through once the Rangers' contract is taken, opening the way to the Mirewood |
+| `mirewood.map` | The Mirewood under a grey-violet twilight: green and flowering at its west edge, then black-veined trees, gloom moss, tar pools and a tar-streaked stream further in. The gloomfangs' clearing, the ranger trail with its bridge, Sera's camp with a waypoint, and the quarry's mouth |
+| `mirewood-quarry.map` | The Old Quarry: cut stone, roots and black crystal veins, two walls of roots Sera opens, the courier's body, and the Thornmother's den with the crystal spike |
+| `thornbridge.map` | The meadows outside Questeria's east gate, with the white wall along the west edge: the river and the old bridge, and a ragged tent camp of Doomward refugees, a healer's station, cookfires, and the treeline the Hollowed come out of |
+| `old-crown-vault.map` | Under the Sunspire: stone and gold, plates and dart traps, a pit and a ledge, the collapsed end of a hall where sappers dug in, treasuries, constructs at the doors, the Crown Door and its lever, the relic gallery and the Sunheart's empty pedestal |
+| `sunspire-keep.map` | The throne room (the sun throne on its dais, tall windows, banners) where the King gives audience, and the great hall with the war table on the way out |
+| `rusty-anvil.map` | A dark dockside dive in a smoky tint: the bar, the regulars, and Brannock at the corner table |
 | `barrow.map` | Dark and cold slate, seven torches and a little daylight down the steps. In up the steps, through a short dark passage into the hall, with the locked tomb door in the middle of its north wall, the stone door into the side room at the west end, and the lever that opens it at the east end |
 
-The road is meant to be lit, at dusk. I've made it a dark map with a lot of ambient light
-(`ambient = 0.55`) so the campfire throws a pool, rather than giving lit maps a tint setting of
-their own. It reads as dusk, and if it needs to be warmer or bluer that's a colour on the dark.
+`tint` is the colour of the light on a map. The ground, the props and everyone standing on it, the
+party too, are multiplied by it in the one world batch, so it costs nothing, and nothing on the
+screen over them is: the heading, the prompts, the markers and the cards stay their own colours. The
+flames aren't tinted either, since they're the light and not what it falls on, so a campfire still
+burns warm in a cold wood. It goes on a dark map as well as a lit one: the tint is the colour of the
+light, and the dark is how much of it there is. The Mirewood is both, a cool grey-violet twilight
+(`tint = 196 188 226`) that the campfires cut through.
 
 ## The party
 
 Up to four: you, and whoever's with you. A new game starts you with the Soul-Bound, and the story
-recruits the rest: Sera, Kael, Mira and Brannock are in the data with their peoples, classes and
-looks, ready for the chapters they join in. When there are four of you already, anyone else who
-joins waits at camp.
+recruits the rest: Sera in the Mirewood, Mira at Thornbridge, Kael in the Old Crown Vault and
+Brannock in the Rusty Anvil, each with their people, class and look. When there are four of you
+already, anyone else who joins waits at camp, which is the Gilded Flagon.
 
 | File | What it is |
 | --- | --- |
@@ -379,6 +432,21 @@ level 1 in the skeleton.
 - **Who you control.** Tab, F1 to F4, clicking a card or clicking one of them. The camera eases over
   and whoever you were falls in behind. Only your footsteps make a sound, since four sets at once
   was a lot.
+- **Talking to them.** One of the party with something to say has a conversation in
+  `DialogueCatalog` that's with their origin id (`soulbound`, `sera`, `mira`, `kael`, `brannock`)
+  and can start. Then E talks to them when they're the nearest and there's nobody and nothing else
+  in reach (they're always at your elbow, so they'd take E off the chest you're standing at
+  otherwise), and clicking them talks instead of taking control: the cursor's the speech bubble and
+  the tooltip ends TALK. Someone with something new, a conversation marked `MarkerKind.Quest`, has
+  the gold "!" over their head as they walk. Never whoever you're controlling.
+- **The camp.** Anyone recruited with four of you already goes to wait at the Gilded Flagon, and a
+  toast says so. They stand at the Flagon's `camp` places, dressed as themselves, the first to wait
+  at the first, and you can talk to them. Their own conversation plays if they have one that can
+  start; if not, they offer to take the place of a companion with you (never you or the
+  Soul-Bound), or to come along if there's room, or to wait. A swap is an effect like any other a
+  conversation has, so it's in the save the moment it's picked: the two of them change places in
+  the party and the camp, the one coming in stands where the one going stood, and the strip
+  changes with them.
 - **The strip.** A card each along the bottom left with their face, their name and a bar for their
   hit points; yours sits higher with a torchlit edge. The face is the head and shoulders of their
   own walking sheet blown up three times, so it always matches how they look. Conditions go on the
@@ -405,7 +473,14 @@ level 1 in the skeleton.
   take over from the lines when they have one. Some stroll: every so often one with `wander` set
   walks off to somewhere within that many tiles of where they were put, rests, looks round, and
   goes somewhere else. They give up on a stroll if anything's in the way, and stop and face you
-  when you talk to them.
+  when you talk to them. `talk=` gives someone a conversation of their own by id, which wins over
+  any that's with them while it can start.
+- **Creatures.** `npc ... creature=gloomfang` puts down one of `Creatures`: the Gloomfang wolves, the
+  Thornmother, the Hollowed (footman, hexer and sapper) and the vault's constructs. A creature is
+  someone on the map like anyone else, so it looks round, faces you, can wander, can be clicked and
+  talked to, and its tooltip is its name; it's only bigger. Each has its own frame size, where its
+  feet are, the box you point at, its shadow and the floor it blocks, and it can be talked to from
+  as much further off as it's broader than a person.
 - **Chatter.** When you're within five tiles of someone with lines, now and then they say one
   without being asked, each on their own clock of nine to eighteen seconds, and never more than two
   at once, so a market sounds busy without the screen filling up. Bubbles that would overlap move up
@@ -414,7 +489,7 @@ level 1 in the skeleton.
   their head, someone with an event has a red one, and so does a trigger marked `mark=yes` while
   it's waiting for you. They draw over the roofs and the dark, they show on the map screen, and one
   that's off the screen gets an arrow at its edge pointing the way. Who's marked is only worked out
-  again when a flag changes.
+  again when a flag changes, the party does, or you take control of someone else.
 
 ## Conversations
 
@@ -424,7 +499,8 @@ says who it's with, the flags it `Needs` and the ones that stop it (`Unless`), a
 when there isn't one gets their `say` line over their head instead.
 
 - **A line** has who says it (one of the cast, you, the Soul-Bound, a companion, the narrator in a
-  colour of its own, or a card big in the middle of the screen), what they say, and a stage direction under
+  colour of its own, a card big in the middle of the screen, or a chapter's card, the chapter's name
+  under the act the way the ship coming in ends on Chapter 1's), what they say, and a stage direction under
   their name. It can have conditions (it's skipped if they don't hold), effects for when it's said,
   where it goes next (the next line if it doesn't say), a painting or the quest board behind it, and
   a sound.
@@ -485,6 +561,12 @@ all, with the feet at (16, 46) in every frame.
 | 7 | Cast | |
 | 8 | Hurt | |
 | 9 | Downed, lying on their back | |
+
+A creature's sheet (`Content/Creatures/`) is the same ten columns and four rows in a frame of its
+own size, with its feet in the middle of the bottom, two pixels up: a Gloomfang is 48x32, the
+Thornmother 96x80, a vault construct 48x64, and the Hollowed are 32x48 like a person. `WalkerShape`
+says how big someone's frames are, where their feet are in them, and the box, shadow and footprint
+that go with them; everyone who's a person has the one shape, and `Creatures` has the rest.
 
 `WalkerSprite` is The Black Box's on the new layout: it cuts frames from a sheet, walks through
 columns 1 to 4, and fires `Stepped` on 1 and 3, when a foot lands, so the footsteps match the feet.
@@ -565,7 +647,7 @@ sines, wavetables, noise and a few filters, in CPython (3.12 or newer) and nothi
 oscillators, filters, reverb and song mixer are The Black Box's.
 
 ```
-python tools/generate_audio.py                 # everything (about three minutes)
+python tools/generate_audio.py                 # everything (about five minutes)
 python tools/generate_audio.py music           # the songs
 python tools/generate_audio.py sfx             # every sound effect
 python tools/generate_audio.py embers pause    # just these
@@ -576,6 +658,8 @@ python tools/generate_audio.py embers pause    # just these
 | *Embers* | Title, options, save slots | 56 BPM in A minor, 12 bars. A lute picking slow broken chords over a bowed drone (Am, F, Dm, Em, then F, G and an E major that pulls back round to the A), a melody on the lute an octave up for the second half, a quiet choir, a frame drum on the downbeats, wind, and a fire crackling close by |
 | *Hearthsmoke* | Lit maps | 66 BPM in D Dorian, 16 bars. Folk rather than dread: the lute rolls through the chords in eighths, a wooden flute plays a tune over the second half, and the frame drum keeps a slow walk. The major IV is what makes it Dorian, and keeps it from sounding as sad as the title |
 | *Cold Stone* | Underground | 48 BPM in C Phrygian, 10 bars. Hardly a tune: a low drone on C and G, a choir that leans on the flat second, a few low lute notes far apart, one deep boom, cold air, and water dripping somewhere in a long reverb |
+| *Meadowlark* | The Old Road and the fields round Questeria | 136 BPM in G major, in three, 48 bars. The only waltz: the lute goes low-strum-strum under a flute tune that leaps up a sixth and skips back down like a lark going up, the middle climbs to the high E over held strings, and the last time round chimes ring an octave over the tune with a tambourine. A frame drum on the downbeats, small birds either side and a breeze |
+| *Sunspire* | Sunspire Keep | 72 BPM in D major leaning Mixolydian, 18 bars. Far-off bells and two horns calling while the timpani roll in, then a trumpet plays a stately tune in dotted steps over held horn chords with a harp running up every chord; the second time the violins take it to the high D over a choir, chimes and a field drum walking it like a procession. Ends C to A, back round to D |
 | *Salt and Lanterns* | The Gull's Wager | 60 BPM in E minor with every beat in three, so it rocks like a hull, 16 bars. The lute picks low, high, middle in each beat, a flute tune that keeps lifting to the G comes in at bar 5, a frame drum knocks like the hull on a swell, and the sea rolls in and out under it all, four long waves to a loop |
 
 Each song is an exact number of bars long and wraps its own echoes round to the start, so it loops
@@ -590,7 +674,11 @@ with a low hum and something like glass ringing over it. The story brought seven
 thrown down and tumbling, a check passing (two bright notes a fifth apart, like a small bell) and
 failing (a dull knock and a note sliding down), a companion approving (a soft note rising) and
 disapproving (the same, lower and turning down), a heartbeat for the Prologue's card, one on its own
-and then two in step, and a ship's bell rung three times for all hands.
+and then two in step, and a ship's bell rung three times for all hands. The road east brought five more:
+a gloomfang howling and another answering, the black crystal's hum (two notes rubbing a semitone
+apart, throbbing three times and sagging flat at each throb), war horns a long way off grinding a
+semitone apart, a bow loosed and the arrow hissing away, and a coin flipped, caught and set down
+on another.
 
 `Audio/AudioManager` is where all of it lives: the same `Content.Load<Song>`, `MediaPlayer` and
 `SoundEffect.Play` calls as the audio tutorial, in one game service any screen can reach, with a
@@ -641,7 +729,12 @@ Every PNG in `Content/` is made by a script:
 python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png, dialogue-icons.png and markers.png
 python tools/generate_world.py        # the crypt and forest tilesets, their props (cut or drawn), the torch flame, glow.png and mote.png
 python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship and its deck, its gangplank, mast, lanterns, wheel and rope, and the rowing boat
-python tools/generate_interiors.py    # the inside of the buildings: the interior tileset and the bed
+python tools/generate_interiors.py    # the inside of the buildings: the interior tileset, the bed, and the taverns' tables and booth
+python tools/generate_meadow.py       # the meadow tileset and the farmland's props, the refugee camp, and the east gate from outside
+python tools/generate_mirewood.py     # the Mirewood's and the quarry's tilesets, the black-veined trees, the roots, the crystal and the rest
+python tools/generate_keep.py         # Sunspire Keep's tileset, the throne and the court's props
+python tools/generate_vault.py        # the Old Crown Vault's tileset, its doors, shelves, gold, traps and the Sunheart's pedestal
+python tools/generate_creatures.py    # the creatures' sheets: gloomfangs, the Thornmother, the Hollowed and the vault's constructs
 python tools/generate_paintings.py    # the story's paintings and what moves over them, out of the title's pictures
 python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, the houses, the furniture and the townsfolk, out of tools/source/
 python tools/cut_supplied.py buildings  # just the houses (or name props to cut just those)
@@ -713,10 +806,10 @@ The story goes in alongside them, in its own order:
    the tokens, and the meters in the save.~~
 2. ~~The conversations the story needs, and the Prologue and Act 1's first chapter rebuilt on
    them. Buildings to go into.~~
-3. Act 1, chapters 2 to 4: the Mirewood and the quarry, Thornbridge, the Old Crown Vault, Sunspire
-   Keep and the Rusty Anvil, and the companions joining. This is next: chapter 1 ends with the
-   Rangers' contract taken, and the old road is where the Mirewood will be.
-4. Act 1, chapters 5 to 8, to the end of Act 1.
+3. ~~Act 1, chapters 2 to 4: the Mirewood and the quarry, Thornbridge, the Old Crown Vault, Sunspire
+   Keep and the Rusty Anvil, and the companions joining.~~
+4. Act 1, chapters 5 to 8, to the end of Act 1. This is next: chapter 4 ends with Brannock in the
+   party and the caravan for Greywatch leaving from the east gate at dawn.
 5. Act 2, with the eclipse.
 6. Act 3.
 7. Every fight card swapped for its fight, as combat comes in.
@@ -724,7 +817,8 @@ The story goes in alongside them, in its own order:
 The Soul-Link (the two of you fighting as one) comes with combat, and so do the barks in fights.
 The Soul-Bound's remarks turning colder as their ambition grows come with Act 2. The side quests'
 hooks are in, and the quests behind them come with the chapters they belong to.
-The Rusty Anvil is on the docks, but its door opens in chapter 4, with Brannock.
+The companions' personal quests have their hooks set in this stretch (see COMPANIONS.md), and
+the quests themselves come with the chapters they belong to.
 
 The maps could go through the content pipeline with an importer of their own (that's chapter 11 of
 the textbook); for now they're copied as text and read at startup, which is enough to catch mistakes.
@@ -733,13 +827,13 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
-- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, and `ExploreScreen.Proof.cs` for its part of the proof schedule.
+- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
 - `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
-- `Characters/` is the walking sprite, the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
+- `Characters/` is the walking sprite and the shape of its frames (`WalkerSprite` and `WalkerShape`), the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), the beasts (`Creature` and `Creatures`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
 - `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, and the scripts themselves in `Dialogue/Scripts/`, a file per chapter.
 - `Story/` is the story's tables: `Meters`, `KeyItems`, `Paintings`, `Cast`, the quest board's `Postings`, and `Banters`.
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, and the classes in `ClassCatalog`.
-- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings and the quest board, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
+- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board and the chapters' card, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.
 - `Particles/` is the particle engine, and the title's petals and motes built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.

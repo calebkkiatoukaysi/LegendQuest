@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LegendQuest.Characters;
@@ -296,7 +297,7 @@ public static class SaveSystem
         if (data.Party.Count == 0) data.Party = new List<PartyMember> { Origins.Create(Origins.You), Origins.Create(Origins.SoulBound) };
         if (data.Leader < 0 || data.Leader >= data.Party.Count) data.Leader = 0;
 
-        foreach (PartyMember member in data.Party)
+        foreach (PartyMember member in data.Party.Concat(data.Camp))
         {
             member.Name ??= string.Empty;
             member.Scores ??= new();

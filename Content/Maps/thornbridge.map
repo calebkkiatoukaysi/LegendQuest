@@ -1,0 +1,221 @@
+; Thornbridge, the meadow outside Questeria's east gate, named for the old bridge the road takes
+; over the river. The gate's in the north-west, in the white wall that comes down the west edge,
+; and the Watch are on it. Overnight the meadow in front of it has filled with tents: the refugees
+; from Doomward, with their fires and their bundles and their sick, and Mira at her table in the
+; middle of them. Over the river the meadow runs on to the trees, and that's where the Hollowed
+; come from. It's a beautiful day, which makes it worse.
+
+[map]
+id = thornbridge
+name = Thornbridge
+world = 430 140
+tileset = meadow
+size = 40 30
+dark = no
+music = Exploring
+
+[legend]
+, = grass
+" = long-grass
+- = path
+: = road
+~ = stream
+H = hedge
+# = wall
+* = flowers
+c = clover
+v = tuft
+o = pebbles
+= = ruts
+r = reeds
+l = lilies
+p = petals
+
+[ground]
+####################,,,,~~~,,,"""","""",
+####################,,,,~~~,""""""""""""
+####################,,,,~~~,""""",""""""
+####################,,,,~~~,,,""",""""""
+####################,,,,~~~,,,,,,,""""""
+########::::########,,,,~~~,,,,,,,""""""
+########::::####,,,,,,,,~~~,,,,,,,""""""
+########::::####,,,,,,,,,~~~,,,,,,""""""
+########::::####----,,,,,~~~,,,,,,""""""
+########::::####------,,,~~~,,,,,,""""""
+###,,,,,::::,,,,-----,,,,~~~,,,,,,""""""
+###,,,,,::::,,,,,,,,,,,,,~~~,,,,,,""""""
+###,,,,,::::::::::::::::::::::::::::::::
+###,,,,,::::::::::::::::::::::::::::::::
+###,,,,,::::::::::::::::::::::::::::::::
+###,,,---,,,,,,,,,,,,,,,,~~~,,,,,,""""""
+###,,-----,,,,,,,,,,,,,,,~~~,,,,,"""""""
+###,-------,,------,,,,,,~~~,,,,,"""""""
+###,,,,,,,,---------,,,,,~~~,,,,,"""""""
+###,,,,,------------,,,,,,~~~,,,,"""""""
+###,,,,-------------,,,,,,~~~,,,,"""""""
+###,,,,-------------,,,,,,~~~,,,,,""""""
+###,,,,,,,----------,,,,,,~~~,,,,,""""""
+###,,,,,,,,,,,-----,,,,,,,~~~,,,,,""""""
+###,,,,--,,,,,,,,,,,,,,,,,~~~,,,,,""""""
+###,,,------,,,,,,,,,,,,,,~~~HHHHH""""""
+###,,,------,,,,,,,,,,,,,,~~~HHHHH""""""
+###,,,,--,,,,,,,,,,,,,,,,,~~~"""""""""""
+###,,,,,,,,,,,,,,,,,,,,,,,~~~"""""""""""
+###,,,,,,,,,,,,,,,,,,,,,,,~~~""",,""""",
+
+[detail]
+.......................r.....c..........
+.....................*.............v....
+.....................*.....r............
+.....................p.r.l........v.....
+.......................*...r...*......v.
+.......................r....*....*......
+.............................*..........
+.......................*..l......*......
+.......................*....r*...*......
+........................r........*......
+.............v.........*....r...........
+...................v....r...............
+........................................
+............=..===..===.......===..===..
+........................................
+............................r...........
+........................r....*..........
+..................................v.....
+............................r...*.......
+.............................r*.........
+....................v....r....v.........
+.............................r....v.....
+.....................c...r.l.c..........
+................o...............c.......
+.............................r..........
+.....................c...r..............
+...p.................c..v.l.............
+..........**.............r......v.......
+.....*..................................
+....p.*.............c..*.....r..........
+
+; kind id x y, in tiles, then any settings. Exits and triggers are rectangles from their top left tile.
+[objects]
+spawn start 9.5 9 facing=down
+spawn gate 9.5 9 facing=down
+exit questeria 8 6 w=4 to=questeria at=east-gate
+
+; The east gate, in the wall. Its way through is the road between its towers; the way back into
+; the city is the dark of its arch.
+prop east-gate 9.5 10.75
+prop city-wall 1.75 5.5
+prop city-wall 17.25 5.5
+
+; The city's gardens behind the wall, the tops of their cypresses showing over it.
+prop cypress 1.4 3.2
+prop cypress 2.8 2.6
+prop cypress 16.9 2.8
+prop cypress 18.5 3.4
+
+; The Watch on the gate, Brisk in front of it, and the mother and her child begging him. They're
+; all still here after the raid; they've more to say then.
+scene a1-c3-01 9.5 11 talk=a1-c3-01 when=a1-c2-04 unless=a1-c3-01
+npc brisk 11.4 12.4 cast=brisk facing=left
+npc watch-a 6.8 11.6 cast=watch facing=down say="Orders from the Chancellor. Nobody comes in.|Step back from the gate, please.|I don't like it either. Doesn't change it."
+npc watch-b 12.6 11.4 cast=watch facing=down say="Sickness or spies, they say. Look at them.|Half the Watch is in Greywatch. We can't hold a crowd.|Keep it moving."
+npc refugee-mother 9.6 14.2 cast=refugee-mother facing=up
+npc refugee-child 8.5 14.6 cast=refugee-child facing=up
+
+; The camp, swollen overnight: tents pitched wherever there was room, cooking fires between them,
+; bundles left where people dropped, and in the middle Mira's table, with the sick on cots round it
+; and the supplies she's been sent stacked by it.
+prop tent-ragged 18.6 9.6
+prop tent-ragged-2 22.8 10.8
+prop cookfire 16.4 11
+prop refugee-bundle 20.6 11.6
+prop tent-ragged 5.4 17.2
+prop tent-ragged-2 10 17
+prop cookfire 7.2 19.8
+prop refugee-bundle 3.8 19.8
+prop tent-ragged 20.8 18.2
+prop refugee-bundle 17.6 16.4
+prop tent-ragged-2 5.6 22.6
+prop tent-ragged 4.8 27.4
+prop cookfire 9 26.2
+prop refugee-bundle 7.4 24.6
+prop tent-ragged-2 12 28.8
+prop tent-ragged 17.2 28.4
+prop tent-ragged-2 21.8 27.4
+prop cookfire 19.6 25
+prop refugee-bundle 22.6 22
+prop refugee-bundle 13.6 26.2
+prop healer-station 14.5 19.4
+prop crate 17.6 19.4
+prop sacks 18.8 20.4
+prop barrel-water 10.6 19.6
+prop cot 10.6 23
+prop cot 14.6 23.6
+prop cot 18.6 22.8
+npc mira 12.4 19.4 cast=mira facing=right when=a1-c3-01 unless=mira-recruited
+npc sick-1 9.2 23.4 cast=refugee-1 facing=right
+npc sick-2 14.6 24.8 cast=refugee-2 facing=up
+npc sick-3 20.2 22 cast=refugee-3 facing=left
+
+; The rest of them.
+npc refugee-a 17.4 12.4 look=513 name="A Refugee" facing=left say="Three weeks walking. My boots gave up in the first.|They burned the mill at Ashford. Then the houses.|The bread's gone by noon. Every day."
+npc refugee-b 19.8 12.2 look=527 name="A Doomward Farmer" facing=down say="We had a farm. Forty acres. Now I've a blanket.|The Watch won't look at us. Like we're weather.|Ash on everything, back home. Even the snow."
+npc refugee-c 5.6 19.8 look=539 name="An Old Woman" facing=right say="I was born in Doomward. I'll not die in a field.|Sit, love. There's no chairs, but sit.|My grandson's still back there. Somewhere."
+npc refugee-d 8 24.2 look=552 name="A Child" wander=2 say="Are you a soldier? You don't look like a soldier.|Mum says the city's made of gold inside.|I'm not hungry. I'm just saying I'm not."
+npc refugee-e 10.4 26.6 look=561 name="A Cook" facing=left say="Turnip stew. It was turnip stew yesterday too.|There's always enough for one more spoon.|Don't ask what's in it. I didn't."
+npc refugee-f 4.6 13.8 look=574 name="A Refugee" facing=right say="They've let the merchants through all morning.|A wall that big, and no room behind it.|I carried that girl forty miles. Now we wait."
+npc refugee-g 21.2 24.2 look=588 name="A Refugee" facing=up say="Mira's been at it since dawn. She'll drop before she stops.|My brother's on that cot. He's better than he was.|Thank you for coming out. Nobody comes out."
+npc refugee-h 16.2 15.4 look=595 name="A Boy" wander=2 say="Is that a real sword?|We saw grey men on the road. They didn't talk.|Mum says don't go near the trees."
+
+; The river and the old bridge the place is named for, wild roses at its four corners, and
+; reeds and lilies along the water.
+prop stone-bridge 26 16.375
+prop bush-pink 23.8 11.2
+prop bush-pink 28.2 11.2
+prop bush-pink 23.4 16.4
+prop bush-pink 28.6 16.4
+prop wildflowers-blue 23 6.4
+prop wildflowers 29.4 20.4
+
+; The meadow, either side of the camp and over the river: blossom by the wall, flowers in the
+; grass, and the hedge along the far field.
+prop cherry-tree-small 22.2 4.4
+prop blossom-tree 21.2 1.8
+prop wildflowers-yellow 4 11.6
+prop flowers-pink 20.6 6.4
+prop blossom-tree 3.6 29.4
+prop wildflowers 13.8 15.8
+prop oak-light 24.6 29.4
+prop blossom-tree 30.6 4.8
+prop wildflowers-yellow 32.4 9
+prop flowers-white 29.8 23.2
+prop wildflowers-blue 32.6 18.6
+prop cherry-tree 31.8 29
+prop rocks 29.4 1.6
+
+; The trees on the far side, where the road goes in, and the Hollowed coming out of them once
+; Mira's done with the supplies. Walk up to them and the raid starts.
+prop oak 35.6 3.4
+prop oak-light 38.8 7.2
+prop oak-deep 35.4 10.6
+prop fir 38.6 10.8
+prop oak-light 35.8 19.8
+prop oak-deep 38.8 18
+prop fir 34.4 23.2
+prop oak 37.6 25.2
+prop oak-deep 35.4 29.4
+prop fir-deep 39 28.8
+prop bush-deep 33.8 8.4
+prop bush 33.8 17
+prop fern 36.6 13.8
+prop mushrooms 37.8 21.6
+npc hollowed-1 34.4 11.6 creature=hollowed-footman facing=left when=mira-supplies-done unless=hollowed-raid-beaten
+npc hollowed-2 35.2 13.6 creature=hollowed-footman facing=left when=mira-supplies-done unless=hollowed-raid-beaten
+npc hollowed-3 34.2 16.4 creature=hollowed-footman facing=left when=mira-supplies-done unless=hollowed-raid-beaten
+npc hollowed-4 36.8 14.8 creature=hollowed-hexer facing=left when=mira-supplies-done unless=hollowed-raid-beaten
+trigger raid 31 9 w=2 h=10 talk=a1-c3-02-raid when=mira-supplies-done unless=hollowed-raid-beaten mark=yes
+
+; What the party says: walking into the camp, at the bridge, and in the camp after the raid.
+trigger bark-thornbridge-camp 13 12 w=2 h=3 bark=thornbridge-camp
+trigger bark-thornbridge-river 22 12 w=2 h=3 bark=thornbridge-river
+trigger bark-thornbridge-after-raid 15 15 w=6 h=3 bark=thornbridge-after-raid when=hollowed-raid-beaten

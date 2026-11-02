@@ -259,6 +259,140 @@ public static class PropCatalog
         // plinth, dim and then lit.
         new() { Id = "notice-board", Texture = "Props/notice-board", Footprint = new Point(36, 8) },
         new() { Id = "crystal-stone", Texture = "Props/crystal-stone", Frames = 2, Footprint = new Point(14, 6) },
+
+        // The meadows round Questeria, out of tools/generate_meadow.py. The farm: the farmhouse, the
+        // cottage under a red roof, so it blocks what the cottage does, its door 2 right of the foot;
+        // the windmill, which blocks its tower and not its sails; hay; and fences, a length two tiles
+        // across with its post at the left end, a post on its own to end a run, and a tile of fence
+        // running up the screen, one a tile down the side of a field. The wheat and the wild flowers
+        // you walk through, and the scarecrow only blocks its post.
+        new() { Id = "farmhouse", Texture = "Props/farmhouse", Footprint = new Point(80, 62) },
+        new() { Id = "windmill", Texture = "Props/windmill", Footprint = new Point(52, 22) },
+        new() { Id = "hay-bale", Texture = "Props/hay-bale", Footprint = new Point(22, 9) },
+        new() { Id = "haystack", Texture = "Props/haystack", Footprint = new Point(42, 14) },
+        new() { Id = "fence-wood", Texture = "Props/fence-wood", Footprint = new Point(32, 4) },
+        new() { Id = "fence-wood-post", Texture = "Props/fence-wood-post", Footprint = new Point(6, 4) },
+        new() { Id = "fence-wood-side", Texture = "Props/fence-wood-side", Footprint = new Point(6, 16) },
+        new() { Id = "wheat", Texture = "Props/wheat" },
+        new() { Id = "scarecrow", Texture = "Props/scarecrow", Footprint = new Point(6, 4) },
+        new() { Id = "wildflowers", Texture = "Props/wildflowers" },
+        new() { Id = "wildflowers-yellow", Texture = "Props/wildflowers-yellow" },
+        new() { Id = "wildflowers-blue", Texture = "Props/wildflowers-blue" },
+        // The great oak by the fork blocks its trunk, which is a wide one, and you walk under its crown.
+        new() { Id = "great-oak", Texture = "Props/great-oak", Footprint = new Point(36, 12) },
+        // The stone bridge carries the road over the stream. Its deck is three tiles deep, the road's
+        // width, and the water either side of the road stops you walking off it. It blocks its two
+        // ends, where they stand on the banks in front of the deck, and like the ship it sorts from
+        // its far side, 78 up from its foot, so whoever's on it is drawn on it.
+        new() { Id = "stone-bridge", Texture = "Props/stone-bridge", Footprint = new Point(80, 30), Gap = 48, SortRise = 78 },
+        // Thornbridge: Questeria's east gate, which blocks its towers back to where the wall stands
+        // and has the way through down the middle, and a stretch of the wall to stand either side of
+        // it, which sorts from its own foot, so whoever's in front of it is drawn in front of it.
+        // Then the refugees' camp. The cooking fire's flame is under its pot.
+        new() { Id = "east-gate", Texture = "Props/east-gate", Footprint = new Point(184, 84), Gap = 44 },
+        new() { Id = "city-wall", Texture = "Props/city-wall", Footprint = new Point(68, 8) },
+        new() { Id = "tent-ragged", Texture = "Props/tent-ragged", Footprint = new Point(56, 20) },
+        new() { Id = "tent-ragged-2", Texture = "Props/tent-ragged-2", Footprint = new Point(62, 20) },
+        new()
+        {
+            Id = "cookfire", Texture = "Props/cookfire", Footprint = new Point(18, 6),
+            Light = new PropLight(new Vector2(0f, -6f), new Vector2(0f, -2f), FireReach, 1f),
+        },
+        new() { Id = "cot", Texture = "Props/cot", Footprint = new Point(32, 8) },
+        new() { Id = "healer-station", Texture = "Props/healer-station", Footprint = new Point(46, 10) },
+        new() { Id = "refugee-bundle", Texture = "Props/refugee-bundle", Footprint = new Point(22, 6) },
+
+        // The Mirewood: the trees tools/generate_mirewood.py cuts off my trees sheet and turns, with
+        // black running through their bark and their leaves gone grey (the oak's only turning), and
+        // the rest it draws to match. A tree only blocks its trunk, like the road's. The tar pools and
+        // the bones lie flat under everyone; you can't walk into a pool. The bridge lies over the
+        // stream with the trail under it, so you walk across it. The quarry's mouth is an arch: its
+        // two posts block, and the dark between them is the way in.
+        new() { Id = "tree-blackvein", Texture = "Props/tree-blackvein", Footprint = new Point(18, 7) },
+        new() { Id = "tree-blackvein-pale", Texture = "Props/tree-blackvein-pale", Footprint = new Point(18, 7) },
+        new() { Id = "tree-blackvein-bare", Texture = "Props/tree-blackvein-bare", Footprint = new Point(12, 6) },
+        new() { Id = "oak-turning", Texture = "Props/oak-turning", Footprint = new Point(18, 7) },
+        new() { Id = "tar-pool", Texture = "Props/tar-pool", Footprint = new Point(38, 16), Placement = PropPlacement.Ground },
+        new() { Id = "gloom-mushroom", Texture = "Props/gloom-mushroom", Footprint = new Point(12, 5) },
+        new() { Id = "gloom-mushroom-small", Texture = "Props/gloom-mushroom-small" },
+        new() { Id = "ranger-sign", Texture = "Props/ranger-sign", Footprint = new Point(6, 4) },
+        new() { Id = "woodcutter-stump", Texture = "Props/woodcutter-stump", Footprint = new Point(32, 10) },
+        new() { Id = "ranger-bridge", Texture = "Props/ranger-bridge", Placement = PropPlacement.Ground },
+        new() { Id = "quarry-mouth", Texture = "Props/quarry-mouth", Footprint = new Point(72, 8), Gap = 36 },
+        new() { Id = "bones", Texture = "Props/bones", Placement = PropPlacement.Ground },
+
+        // The Old Quarry. A root wall is a door with the roots tangled across it and then parted, two
+        // tiles wide like the barrow's doors; Sera parts them, which sets its flag. The crystal is a
+        // spike three ways: whole, smashed and made clean, each standing where the last did. Its glow
+        // is painted round it, and its light is the map's, since a prop's light comes with a torch's
+        // flame. The courier and his satchel lie flat under everyone.
+        new() { Id = "root-wall", Texture = "Props/root-wall", Frames = 2, Footprint = new Point(32, 6) },
+        new() { Id = "black-crystal", Texture = "Props/black-crystal", Footprint = new Point(28, 10) },
+        new() { Id = "black-crystal-shattered", Texture = "Props/black-crystal-shattered", Footprint = new Point(28, 8) },
+        new() { Id = "black-crystal-purified", Texture = "Props/black-crystal-purified", Footprint = new Point(28, 10) },
+        new() { Id = "courier-body", Texture = "Props/courier-body", Placement = PropPlacement.Ground },
+        new() { Id = "satchel", Texture = "Props/satchel", Placement = PropPlacement.Ground },
+
+        // Sunspire Keep, drawn by tools/generate_keep.py. The throne blocks the step it stands on, so
+        // the King stands in front of it; the banners hang on the wall and the sunlight from the
+        // windows lies on the floor, so neither blocks anything. The arch between the throne room
+        // and the great hall has the way through down its middle. The braziers' coals are 21 up.
+        new() { Id = "sun-throne", Texture = "Props/sun-throne", Footprint = new Point(44, 14) },
+        new() { Id = "sun-banner", Texture = "Props/sun-banner", Placement = PropPlacement.Wall },
+        new() { Id = "pillar-marble", Texture = "Props/pillar-marble", Footprint = new Point(18, 8) },
+        new() { Id = "guard-statue", Texture = "Props/guard-statue", Footprint = new Point(26, 10) },
+        new()
+        {
+            Id = "brazier", Texture = "Props/brazier", Footprint = new Point(14, 6),
+            Light = new PropLight(new Vector2(0f, -21f), new Vector2(0f, 6f), FireReach, 1f),
+        },
+        new() { Id = "keep-arch", Texture = "Props/keep-arch", Footprint = new Point(72, 8), Gap = 40 },
+        new() { Id = "light-shaft", Texture = "Props/light-shaft", Placement = PropPlacement.Ground },
+        new() { Id = "sun-inlay", Texture = "Props/sun-inlay", Placement = PropPlacement.Ground },
+        new() { Id = "war-table", Texture = "Props/war-table", Footprint = new Point(62, 14) },
+        new() { Id = "royal-desk", Texture = "Props/royal-desk", Footprint = new Point(48, 14) },
+        new() { Id = "wine-table", Texture = "Props/wine-table", Footprint = new Point(22, 8) },
+        // The stair down to the Old Crown Vault, in the terrace beside the palace: its gate shut, and
+        // standing open. The whole well's blocked; the way down is the map's entrance at its foot.
+        new() { Id = "vault-stair-shut", Texture = "Props/vault-stair-shut", Footprint = new Point(48, 38) },
+        new() { Id = "vault-stair", Texture = "Props/vault-stair", Footprint = new Point(48, 38) },
+        // The taverns' furniture my props sheet hasn't got, drawn by tools/generate_interiors.py: a
+        // table with the tankards on it, and a high-backed booth. Whoever's in the booth stands just
+        // in front of its seat, with a table in front of them.
+        new() { Id = "tankard-table", Texture = "Props/tankard-table", Footprint = new Point(28, 9) },
+        new() { Id = "booth", Texture = "Props/booth", Footprint = new Point(56, 12) },
+
+        // The Old Crown Vault's, drawn by tools/generate_vault.py. The gilded lamps go on the lower
+        // row of a wall's face like the barrow's sconces, with their flame fourteen up, and the dart
+        // traps beside them; the braziers stand on the floor with their coals twenty up. The great
+        // doors are four tiles wide and three tall, with the way through the two tiles in the
+        // middle, so that's all they block. The relic shelves stand against a wall and sort sixteen
+        // up, so Kael can stand on the lowest shelf of one and still be drawn in front of it. The sun
+        // mosaic and the sappers' hole lie flat under everyone, and nobody can walk into the hole.
+        // The relic cases are a crown and an orb under glass, each on its plinth.
+        new()
+        {
+            Id = "vault-sconce", Texture = "Props/vault-sconce", Placement = PropPlacement.Wall,
+            Light = new PropLight(new Vector2(0f, -14f), new Vector2(0f, 14f), TorchReach, 1f),
+        },
+        new()
+        {
+            Id = "vault-brazier", Texture = "Props/vault-brazier", Footprint = new Point(12, 5),
+            Light = new PropLight(new Vector2(0f, -20f), new Vector2(0f, 2f), FireReach, 1f),
+        },
+        new() { Id = "vault-door", Texture = "Props/vault-door", Frames = 2, Footprint = new Point(32, 6) },
+        new() { Id = "vault-lever", Texture = "Props/vault-lever", Frames = 2, Placement = PropPlacement.Wall },
+        new() { Id = "vault-chest", Texture = "Props/vault-chest", Frames = 2, Footprint = new Point(16, 6) },
+        new() { Id = "relic-shelf", Texture = "Props/relic-shelf", Footprint = new Point(44, 10), SortRise = 16 },
+        new() { Id = "gold-pile", Texture = "Props/gold-pile", Footprint = new Point(34, 10) },
+        new() { Id = "gold-pile-small", Texture = "Props/gold-pile-small", Footprint = new Point(20, 6) },
+        new() { Id = "dart-trap", Texture = "Props/dart-trap", Placement = PropPlacement.Wall },
+        new() { Id = "sunheart-pedestal", Texture = "Props/sunheart-pedestal", Footprint = new Point(22, 8) },
+        new() { Id = "sun-mosaic", Texture = "Props/sun-mosaic", Placement = PropPlacement.Ground },
+        new() { Id = "rubble-heap", Texture = "Props/rubble-heap", Footprint = new Point(42, 12) },
+        new() { Id = "sapper-hole", Texture = "Props/sapper-hole", Placement = PropPlacement.Ground, Footprint = new Point(30, 20) },
+        new() { Id = "relic-case", Texture = "Props/relic-case", Footprint = new Point(16, 6) },
+        new() { Id = "relic-case-orb", Texture = "Props/relic-case-orb", Footprint = new Point(16, 6) },
     };
 
     /// <summary>The roof colours a house can have. The one it's drawn in is its plain id; each of the

@@ -10,4 +10,7 @@ public static class Speakers
 
     /// <summary>A card: the line big in the middle of the screen, like a title or a fight that's over.</summary>
     public const string Card = "card";
+
+    /// <summary>A chapter's card: the line is the chapter's name, like "Chapter 2  ·  The Rot in the Mirewood", big in the middle of the screen under the act, the way the ship coming in ends on Chapter 1's.</summary>
+    public const string Chapter = "chapter";
 }

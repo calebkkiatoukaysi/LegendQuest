@@ -13,6 +13,18 @@ namespace LegendQuest.Dialogue;
 /// <param name="Amount">The number a meter is checked against. Unused otherwise.</param>
 public readonly record struct DialogueCondition(ConditionKind Kind, string Id, int Amount = 0)
 {
+    /// <summary>A flag is set.</summary>
+    public static DialogueCondition Is(string flag) => new(ConditionKind.Flag, flag);
+
+    /// <summary>A flag isn't set.</summary>
+    public static DialogueCondition Not(string flag) => new(ConditionKind.NotFlag, flag);
+
+    /// <summary>A meter is at this or over it.</summary>
+    public static DialogueCondition AtLeast(string meter, int amount) => new(ConditionKind.MeterAtLeast, meter, amount);
+
+    /// <summary>Someone's in the party (not waiting at camp).</summary>
+    public static DialogueCondition With(string origin) => new(ConditionKind.InParty, origin);
+
     /// <summary>You talk in this voice.</summary>
     public static DialogueCondition Speaks(Voice voice) => new(ConditionKind.Voice, voice.ToString());
 

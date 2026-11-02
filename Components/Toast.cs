@@ -12,8 +12,9 @@ namespace LegendQuest.Components;
 /// </summary>
 /// <remarks>
 /// One at a time, in the order they came in, and a new one cuts short the one that's up, so a run of
-/// them doesn't make the last one wait. It sits on the soft dark smudge from Text.DrawBacking, so
-/// it reads over bright grass as well as the dark.
+/// them doesn't make the last one wait. A long one (a trigger describing a room) wraps onto more
+/// rows, each centred, rather than running off the sides. It sits on the soft dark smudge from
+/// Text.DrawBacking, so it reads over bright grass as well as the dark.
 /// </remarks>
 public class Toast
 {
@@ -28,6 +29,9 @@ public class Toast
     /// <summary>Where the top of the line is, in screen pixels. Under the map's name.</summary>
     private const float Top = 84f;
 
+    /// <summary>The widest a row gets before the line wraps, in screen pixels: most of the screen, clear of the smudge's ends.</summary>
+    private const float RowWidth = 1240f;
+
     /// <summary>How far the smudge reaches past the line, across and up and down, in screen pixels.</summary>
     private static readonly Vector2 Spread = new(70f, 26f);
 
@@ -38,6 +42,7 @@ public class Toast
     private SpriteFont _font;
     private Texture2D _glow;
     private string _line;
+    private List<string> _rows;
     private float _clock;
 
     /// <summary>Loads the font and the glow the smudge is made from.</summary>
@@ -66,6 +71,7 @@ public class Toast
         {
             if (_waiting.Count == 0) return;
             _line = _waiting.Dequeue();
+            _rows = Text.Wrap(_line, _font, RowWidth);
             _clock = 0f;
         }
 
@@ -73,7 +79,7 @@ public class Toast
         if (_clock >= Length(_line)) _line = null;
     }
 
-    /// <summary>Draws the line that's up, if there is one, centred across the screen.</summary>
+    /// <summary>Draws the line that's up, if there is one, centred across the screen a row at a time.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in screen space, back to front, linear-sampled.</param>
     /// <param name="alpha">How far the screen it's on has faded in, 0 to 1.</param>
     public void Draw(SpriteBatch spriteBatch, float alpha)
@@ -81,13 +87,16 @@ public class Toast
         if (_line is null) return;
 
         float shown = MathF.Min(1f, MathF.Min(_clock / FadeInSeconds, (Length(_line) - _clock) / FadeOutSeconds)) * alpha;
-        Vector2 size = _font.MeasureString(_line);
+        float widest = 0f;
+        foreach (string row in _rows) widest = MathF.Max(widest, _font.MeasureString(row).X);
+        float height = _rows.Count * _font.LineSpacing;
 
-        var area = new Rectangle((int)(LegendQuestGame.ScreenWidth / 2f - size.X / 2f), (int)(Top - Spread.Y),
-            (int)size.X, (int)(size.Y + Spread.Y * 2f));
+        var area = new Rectangle((int)(LegendQuestGame.ScreenWidth / 2f - widest / 2f), (int)(Top - Spread.Y),
+            (int)widest, (int)(height + Spread.Y * 2f));
         Text.DrawBacking(spriteBatch, _glow, area, (int)Spread.X, BackingColor * shown);
 
-        Text.DrawCentered(spriteBatch, _font, _line, Top, Palette.Heading * shown, Palette.Shadow * shown);
+        for (int i = 0; i < _rows.Count; i++)
+            Text.DrawCentered(spriteBatch, _font, _rows[i], Top + i * _font.LineSpacing, Palette.Heading * shown, Palette.Shadow * shown);
     }
 
     /// <summary>How long a line stays up altogether, fades included.</summary>

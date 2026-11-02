@@ -29,8 +29,11 @@ public enum EffectKind
     /// <summary>Changes what you're to do next.</summary>
     Objective,
 
-    /// <summary>Someone joins the party, or waits at camp if it's full.</summary>
+    /// <summary>Someone joins the party, or waits at camp if it's full. Someone already waiting comes along once there's room.</summary>
     Recruit,
+
+    /// <summary>Someone waiting at camp takes a companion's place in the party, and the companion waits in their seat: the id is "waiting member", both origin ids. Only the camp's offer does it, so it has no DialogueEffect of its own.</summary>
+    Swap,
 
     /// <summary>Picks the voice you talk in.</summary>
     Voice,

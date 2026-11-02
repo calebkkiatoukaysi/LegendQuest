@@ -18,6 +18,9 @@ public static class MapCatalog
     /// <summary>The map a new game starts on: the deck of the Gull's Wager, two days out from Questeria.</summary>
     public const string Opening = "gulls-wager";
 
+    /// <summary>The map the camp's on: anyone recruited with the party full waits in the Gilded Flagon, at its camp places, until they're wanted.</summary>
+    public const string Camp = "gilded-flagon";
+
     /// <summary>How wide the world map is, in the map screen's pixels. A map's world = x y has to be inside it.</summary>
     public const int WorldWidth = 1200;
 
@@ -27,8 +30,9 @@ public static class MapCatalog
     /// <summary>Every map, by id, which is also its file name in Content/Maps. The world map lists them in this order.</summary>
     private static readonly string[] Ids =
     {
-        "gulls-wager", "docks", "questeria", "road", "barrow",
+        "gulls-wager", "docks", "questeria", "road", "barrow", "thornbridge", "mirewood", "mirewood-quarry",
         "gilded-flagon", "cottage-a", "cottage-b", "shop", "warehouse", "bakery", "forge", "chapel",
+        "sunspire-keep", "old-crown-vault", "rusty-anvil",
     };
 
     private static readonly Dictionary<string, MapDefinition> Loaded = new();
@@ -43,14 +47,20 @@ public static class MapCatalog
         }
     }
 
-    /// <summary>Reads and checks every map, then checks every exit goes somewhere. Call it once, before anything asks for a map.</summary>
+    /// <summary>Reads and checks every map, then checks the camp has somewhere to wait and every exit goes somewhere. Call it once, before anything asks for a map.</summary>
     /// <exception cref="InvalidOperationException">If any map file is wrong. The message says which and where.</exception>
     public static void LoadAll()
     {
         if (Array.IndexOf(Ids, Opening) < 0)
             throw new InvalidOperationException($"The opening map, {Opening}, isn't in the map list.");
+        if (Array.IndexOf(Ids, Camp) < 0)
+            throw new InvalidOperationException($"The camp's map, {Camp}, isn't in the map list.");
 
         foreach (string id in Ids) Loaded[id] = MapLoader.Load(id);
+
+        // Recruiting into a full party says they'll wait here, so there has to be somewhere to wait.
+        if (Loaded[Camp].Camp.Count == 0)
+            throw new InvalidOperationException($"Maps/{Camp}.map: the camp's on this map, and it has no camp places for anyone waiting to stand at.");
 
         foreach (MapDefinition map in Loaded.Values)
         {

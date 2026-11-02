@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
+using LegendQuest.Components;
 using LegendQuest.Dialogue;
 using LegendQuest.Dialogue.Scripts;
 using LegendQuest.Save;
@@ -29,8 +30,7 @@ namespace LegendQuest.Screens;
 public partial class ExploreScreen
 {
     private const string SkipHint = "ESC  ·  SKIP";
-    private const string ActCard = "ACT 1  ·  THE HUNGER AT THE HEART";
-    private const string ChapterCard = "Chapter 1  ·  Saltwind Welcome";
+    private const string FirstChapter = "Chapter 1  ·  Saltwind Welcome";
     private const string ControlsLine = "WASD or click to walk  ·  E to talk  ·  M for the map";
 
     /// <summary>The flag the ship coming in sets once you're off it.</summary>
@@ -86,10 +86,6 @@ public partial class ExploreScreen
     private const int BarHeight = 70;
     private const float BarSeconds = 0.8f;
 
-    /// <summary>The smudge behind the act's card, and how far it spreads.</summary>
-    private static readonly Color CardBacking = Color.Black * 0.55f;
-    private static readonly Vector2 CardSpread = new(90f, 20f);
-
     /// <summary>Where the camera looks while she sails in, from the ship's foot: the middle of her deck.</summary>
     private static readonly Vector2 ShipViewOffset = new(-40f, -50f);
 
@@ -106,6 +102,9 @@ public partial class ExploreScreen
 
     private readonly InputAction _skip = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
 
+    /// <summary>Chapter 1's card, which the arrival ends on.</summary>
+    private readonly ChapterCard _chapterCard = new();
+
     /// <summary>Which part of the arrival is playing, or None when it isn't.</summary>
     private enum Arriving { None, Sailing, Docked, Disembarking, Card }
 
@@ -114,7 +113,6 @@ public partial class ExploreScreen
     private float _bars;
     private PropSprite _ship;
     private PropSprite _gangplank;
-    private SpriteFont _cardFont;
     private bool _talking;
 
     /// <summary>Who's walking off the ship and the way they're going, a point at a time.</summary>
@@ -391,7 +389,7 @@ public partial class ExploreScreen
         ScreenManager.AddScreen(talk);
     }
 
-    /// <summary>Catches the map up with something a conversation did: people coming and going with the flags, and someone joining the party.</summary>
+    /// <summary>Catches the map up with something a conversation did: people coming and going with the flags, and someone joining the party, going to wait at camp, or swapping places with someone waiting.</summary>
     private void OnDialogue(DialogueEvent happened)
     {
         switch (happened.Kind)
@@ -400,24 +398,27 @@ public partial class ExploreScreen
                 RefreshPresence();
                 break;
 
-            case DialogueEventKind.Recruited when happened.Amount == 1:
-                var walker = new WalkerSprite { Position = Leader.Position, Facing = Leader.Facing };
-                DressWalker(walker, _game.Member(happened.Id));
-                _walkers.Add(walker);
-                GatherBehind(new List<WalkerSprite> { walker });
-                SeedTrail();
+            case DialogueEventKind.Recruited:
+                CatchUpParty();
                 break;
         }
     }
 
     /// <summary>Who a speaker id in a conversation is: their name and the sheet their face comes off.</summary>
-    /// <remarks>The party first, then whoever's on the map, then the story's cast wherever they are.</remarks>
+    /// <remarks>
+    /// The party first, then whoever's on the map (whoever's waiting at camp too), then the story's
+    /// cast wherever they are. A creature has no face to give: its sheet isn't a person's, so the
+    /// portrait's crop would come off the wrong part of it, and its frame is left empty.
+    /// </remarks>
     private (string Name, Texture2D Sheet) Speaker(string id)
     {
         for (int i = 0; i < _game.Party.Count; i++)
             if (_game.Party[i].Id == id) return (_game.Party[i].Name, _walkers[i].Sheet);
         foreach (Npc npc in _everyNpc)
-            if (npc.Definition.Id == id || npc.Definition.Cast == id) return (npc.Definition.Name, npc.Walker.Sheet);
+        {
+            if (npc.Definition.Id == id || npc.Definition.Cast == id)
+                return (npc.Definition.Name, npc.Definition.Creature is null ? npc.Walker.Sheet : null);
+        }
         if (Cast.Get(id) is CastMember cast)
         {
             Texture2D sheet = cast.Look is not null ? SheetFor(cast.Look)
@@ -455,12 +456,12 @@ public partial class ExploreScreen
         }
     }
 
-    /// <summary>Whether a townsperson's feet would bump into anything at a point: a wall, a prop, someone else, or the party.</summary>
+    /// <summary>Whether a townsperson's feet (or a creature's) would bump into anything at a point: a wall, a prop, someone else, or the party.</summary>
     private bool Crowded(Npc mover, Vector2 at)
     {
         if (!_tilemap.Bounds.Contains(at)) return true;
 
-        BoundingRectangle feet = FeetAt(at);
+        BoundingRectangle feet = mover.FootprintAt(at);
         foreach (BoundingRectangle solid in _tilemap.Walls)
             if (feet.CollidesWith(solid)) return true;
         foreach (PropSprite prop in AllProps())
@@ -492,12 +493,7 @@ public partial class ExploreScreen
 
         float t = _arrivalClock / CardSeconds;
         float shown = MathHelper.Clamp(MathF.Min(t * 4f, (1f - t) * 3f), 0f, 1f) * alpha;
-        float y = LegendQuestGame.ScreenHeight / 2f - 80f;
-        Vector2 act = _detailFont.MeasureString(ChapterCard);
-        var area = new Rectangle((int)((LegendQuestGame.ScreenWidth - act.X * 2f) / 2f), (int)y, (int)(act.X * 2f), 140);
-        Text.DrawBacking(spriteBatch, _glow, area, (int)CardSpread.X, CardBacking * shown);
-        Text.DrawCentered(spriteBatch, _detailFont, ActCard, y, Palette.Gold * shown, Palette.Shadow * shown);
-        Text.DrawCentered(spriteBatch, _cardFont, ChapterCard, y + _detailFont.LineSpacing + 10f, Palette.Bone * shown, Palette.Shadow * shown);
+        _chapterCard.Draw(spriteBatch, FirstChapter, shown);
     }
 
     /// <summary>What you're to do next, under the map's name, on its smudge.</summary>

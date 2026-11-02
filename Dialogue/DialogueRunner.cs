@@ -12,9 +12,9 @@ namespace LegendQuest.Dialogue;
 /// </summary>
 /// <remarks>
 /// The Black Box's DiscussionPeriod pattern: it draws nothing and takes its Random, so a script can
-/// be played through without a window. Every flag, meter, item and recruit it changes goes straight
-/// into the save, and it hands back what happened as events for the screen to turn into toasts,
-/// dice and sounds. Not from a tutorial.
+/// be played through without a window. Every flag, meter, item, recruit and swap it changes goes
+/// straight into the save, and it hands back what happened as events for the screen to turn into
+/// toasts, dice and sounds. Not from a tutorial.
 /// </remarks>
 public sealed class DialogueRunner
 {
@@ -193,6 +193,10 @@ public sealed class DialogueRunner
                     Recruit(effect.Id);
                     break;
 
+                case EffectKind.Swap:
+                    if (effect.Id.Split(' ') is [string waiting, string member]) Swap(waiting, member);
+                    break;
+
                 case EffectKind.Voice:
                     _game.Voice = Enum.Parse<Voice>(effect.Id);
                     break;
@@ -204,17 +208,33 @@ public sealed class DialogueRunner
         }
     }
 
-    /// <summary>Someone joins: into the party if there's room, to wait at camp if not. Nobody joins twice.</summary>
+    /// <summary>Someone joins: into the party if there's room, to wait at camp if not. Someone already waiting at camp comes out of it once there's room, and stays where they are until there is. Nobody joins twice.</summary>
     private void Recruit(string id)
     {
         if (_game.InParty(id)) return;
-        foreach (PartyMember waiting in _game.Camp)
-            if (waiting.Id == id) return;
 
-        PartyMember member = Origins.Create(id);
+        PartyMember waiting = _game.Camp.Find(each => each.Id == id);
         bool joins = _game.Party.Count < Origins.PartySize;
+        if (waiting is not null && !joins) return;
+
+        if (waiting is not null) _game.Camp.Remove(waiting);
+        PartyMember member = waiting ?? Origins.Create(id);
         if (joins) _game.Party.Add(member);
         else _game.Camp.Add(member);
         _events.Add(new DialogueEvent(DialogueEventKind.Recruited, id, joins ? 1 : 0));
+    }
+
+    /// <summary>Someone waiting at camp takes a companion's place in the party, and the companion goes to wait in their seat, so the party and the camp stay in the same order. Never you or the Soul-Bound: the story's about the two of you.</summary>
+    /// <param name="waiting">Who's waiting, by origin id.</param>
+    /// <param name="member">Whose place they take, by origin id.</param>
+    private void Swap(string waiting, string member)
+    {
+        int seat = _game.Camp.FindIndex(each => each.Id == waiting);
+        int place = _game.Party.FindIndex(each => each.Id == member);
+        if (seat < 0 || place < 0 || _game.Party[place] == _game.You || member == Origins.SoulBound) return;
+
+        (_game.Camp[seat], _game.Party[place]) = (_game.Party[place], _game.Camp[seat]);
+        _events.Add(new DialogueEvent(DialogueEventKind.Recruited, member, 0));
+        _events.Add(new DialogueEvent(DialogueEventKind.Recruited, waiting, 1));
     }
 }

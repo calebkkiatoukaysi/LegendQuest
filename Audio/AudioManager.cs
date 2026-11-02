@@ -168,6 +168,8 @@ public class AudioManager : GameComponent
         Track.Exploring => "Music/hearthsmoke",
         Track.Underground => "Music/cold-stone",
         Track.Sea => "Music/salt-and-lanterns",
+        Track.Meadow => "Music/meadowlark",
+        Track.Court => "Music/sunspire",
         _ => throw new ArgumentOutOfRangeException(nameof(track), track, "There's no song file for this track."),
     };
 

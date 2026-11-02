@@ -76,4 +76,19 @@ public enum Sfx
 
     /// <summary>A ship's bell rung in alarm.</summary>
     ShipBell,
+
+    /// <summary>A gloomfang howling in the trees, and another answering it.</summary>
+    WolfHowl,
+
+    /// <summary>The black crystal's hum: deep, wrong, and throbbing three times.</summary>
+    CrystalPulse,
+
+    /// <summary>War horns a long way off: the Hollowed coming.</summary>
+    WarHorn,
+
+    /// <summary>A bow loosed, and the arrow hissing away.</summary>
+    Bowshot,
+
+    /// <summary>A coin flipped and caught, or pay counted into a hand.</summary>
+    Coin,
 }

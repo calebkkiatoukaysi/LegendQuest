@@ -1,7 +1,8 @@
 ; The Gilded Flagon, the Lantern Market's tavern: the bar along the left with the keeper behind it and
 ; the kegs and the crockery behind them on the flagstones, the hearth in the back wall with the bard in
-; front of it on the rug, tables round the room, and the regulars. Dim, the hearth and the candles
-; lighting it. The door's in the front wall, back out to wherever you came in.
+; front of it on the rug, tables round the room, the corner booth, and the regulars. Dim, the hearth
+; and the candles lighting it. The door's in the front wall, back out to wherever you came in. The
+; companions you're not travelling with wait here, at the tables.
 
 [map]
 id = gilded-flagon
@@ -77,13 +78,25 @@ prop chair 14.9 12
 prop round-table 18 11.8
 prop stool 16.7 12
 prop chair 19.4 11.8
-prop bench 4.5 10
-prop table 4.5 11
 npc patron-1 13.5 8.2 name="A Regular" sheet=traveller facing=down say="Don't take the corner booth. Somebody always does.|Something scratched under the floor last night.|Best stew in the Lantern Market. Only stew, but still."
 npc patron-2 13.5 11.2 name="A Drinker" sheet=old-woman facing=down say="The stew's better than it smells. It has to be.|Rats don't stare. These stare.|Another round, and keep the cellar door shut."
 npc patron-3 18 7.6 look=418 name="A Card Player" facing=down say="You're blocking my light. And my luck.|Three crowns on the table. Nobody touch it.|The rats downstairs cheat less than this lot."
 npc patron-4 16.6 8.6 look=442 name="A Card Player" facing=right say="Deal me in. No, out. No, in.|Lost my boots last week. Won them back. Lost them again.|Don't drink the house red. Trust me."
 npc barmaid 16 10.4 look=435 name="A Barmaid" wander=3 say="Mind the floor, it's sticky on purpose.|Stew's on. It's always on.|Pip's been jumpy all week. Something in the cellar, he says."
+
+; The corner booth, which somebody always takes, and a table of tankards in front of it. From the
+; summons on, the somebody's Princess Elara, cloaked and hooded and waiting for you.
+prop booth 4 9.8
+prop tankard-table 4 10.9
+npc elara 4 10.1 cast=elara-hooded facing=down when=a1-c3 unless=a1-c4-01
+
+; Where the companions who aren't in the party wait: one at a table of their own by the booth, and
+; three at the round tables. They take the spots in order, the first by the booth.
+prop tankard-table 7.5 10.6
+camp seat-1 7.5 9.9 facing=down
+camp seat-2 18 11.05 facing=down
+camp seat-3 13.5 9.9 facing=up
+camp seat-4 18 9.2 facing=up
 
 ; The candles, and the plants.
 prop candle-stand 20 4.6

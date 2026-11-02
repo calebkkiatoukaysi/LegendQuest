@@ -11,7 +11,7 @@ script. Run it from the repo root:
 Only needs CPython (3.12 or newer, for math.sumprod). No samples are used: everything is built from
 sines, wavetables, noise and a few filters, and every random number is seeded, so a rerun writes
 the exact same files. The oscillators, filters, reverb and song mixer are The Black Box's, copied
-over. The lute and the frame drum are new.
+over. The lute, the frame drum, the brass, the timpani, the chimes and the birds are new.
 
 Music is 16-bit stereo at 32 kHz and loops cleanly with MediaPlayer.IsRepeating. Sound effects are
 16-bit mono at 44.1 kHz and already balanced against each other, so the game can play them all at
@@ -479,12 +479,13 @@ class Song:
     """One looping song: the beat grid, and the layers that get summed into the left and right
     channels and the reverb send."""
 
-    def __init__(self, bpm, bars, rate=MUSIC_RATE):
+    def __init__(self, bpm, bars, beats=4, rate=MUSIC_RATE):
         self.rate = rate
         # The beat is snapped to a whole number of samples (a multiple of 12, so swung eighths and
-        # triplets land on samples too). The loop is then exactly `bars` bars long.
+        # triplets land on samples too). The loop is then exactly `bars` bars long, `beats` to a bar.
         self.beat = 12 * round(rate * 60.0 / bpm / 12)
-        self.bar = 4 * self.beat
+        self.beats = beats
+        self.bar = beats * self.beat
         self.length = bars * self.bar
         self.layers = []    # (samples, left gain, right gain, reverb send gain)
 
@@ -711,6 +712,152 @@ def drip(rate, rng):
     x = shaped(sweep(f0, f0 * 0.6, n, rate), envelope(n, rate, attack=0.0005, tau=0.025))
     m = int(0.12 * rate)
     mix(x, shaped(sweep(f0 * 1.4, f0 * 0.9, m, rate, 0.3), envelope(m, rate, 0.0005, 0.012)), int(0.07 * rate))
+    return x
+
+
+#: How far flat a brass note starts, in cents, before the lips pull it up to pitch.
+BRASS_SCOOP_CENTS = 30.0
+
+#: How quickly a brass note's scoop settles, in seconds (a time constant).
+BRASS_SCOOP_S = 0.03
+
+#: How long the extra brightness at the front of a brass note lasts, in seconds (a time constant).
+BRASS_BLARE_S = 0.12
+
+#: How quickly a brass note sags once the breath goes, if it's asked to, in seconds (a time constant).
+BRASS_FALL_S = 0.25
+
+#: The furthest a brass note's low-pass ever opens, in Hz. Any brighter and the saws start to buzz.
+BRASS_BRIGHTEST_HZ = 5000.0
+
+#: A small bright bar struck with a hard mallet, nearly in tune with itself, like a celesta. (ratio, gain, tau)
+CHIME = ((1.0, 1.0, 0.9), (2.0, 0.2, 0.4), (3.0, 0.07, 0.25), (4.1, 0.05, 0.12))
+
+#: A timpani head. The kettle under it pulls its modes nearly into tune with each other. (ratio, gain, tau)
+TIMPANI = ((1.0, 1.0, 1.0), (1.5, 0.5, 0.7), (1.98, 0.3, 0.5), (2.44, 0.18, 0.35), (2.94, 0.1, 0.25))
+
+#: A tower bell cast with a major third in it instead of the usual minor one, so it rings in the
+#: key instead of against it. (ratio, gain, tau)
+TOWER_BELL = ((0.5, 0.45, 3.2), (1.0, 1.0, 2.6), (1.25, 0.4, 1.8), (1.5, 0.4, 1.5), (2.0, 0.35, 1.2),
+              (2.52, 0.2, 0.8), (3.0, 0.18, 0.6))
+
+#: A tambourine's zils, the little cymbals round its rim. (ratio, gain, tau)
+ZILS = ((1.0, 1.0, 0.08), (1.47, 0.6, 0.06), (2.09, 0.35, 0.04))
+
+
+def swept_lowpass(x, cutoffs, rate):
+    """One-pole low-pass whose cutoff (Hz) can be different for every sample."""
+    k = -TAU / rate
+    e = math.exp
+    y = 0.0
+    return [y := y + (1.0 - e(k * fc)) * (v - y) for v, fc in zip(x, cutoffs)]
+
+
+def brass(freqs, dur, rate, rng, vel=0.8, attack=0.05, release=0.3, vib_cents=5.0, fall_cents=0.0):
+    """Brass: two saws a few cents apart per note, through a low-pass that opens as the note
+    swells, so it gets brighter the harder it's blown, with a little blare at the front. Every note
+    starts a shade flat and lips up to pitch, there's breath in it, and a vibrato comes in once it's
+    held. dur is how long it's blown (s). With fall_cents it sags that far once the breath goes."""
+    n = int((dur + 3.0 * release) * rate)
+    times = vibrato_time(n, rate, vib_cents, rng.uniform(4.8, 5.6), min(0.5, 0.6 * dur))
+    # Reading the saw at warped times bends its pitch: a time that runs slow is a note that's flat.
+    lift = BRASS_SCOOP_S * rate * (1.0 - 2.0 ** (-BRASS_SCOOP_CENTS / 1200.0))
+    times = [t - lift * (1.0 - d) for t, d in zip(times, decay(n, BRASS_SCOOP_S, rate))]
+    g = int(dur * rate)
+    if fall_cents and g < n:
+        drop = 1.0 - 2.0 ** (-fall_cents / 1200.0)
+        tau = BRASS_FALL_S * rate
+        sag = decay(n - g, BRASS_FALL_S, rate)
+        times[g:] = [t - drop * (k - tau * (1.0 - d)) for k, (t, d) in enumerate(zip(times[g:], sag))]
+    x = silence(n)
+    for f in freqs:
+        for c in (-3.0, 3.0):
+            mix(x, saw_at(f * 2 ** (c / 1200), times, rate, 0.5, rng.random()))
+    env = envelope(n, rate, attack=attack, gate=dur, release=release)
+    top = min(0.45 * rate, BRASS_BRIGHTEST_HZ)
+    low = min(freqs)
+    reach = 2.0 + 8.0 * vel
+    cut = [min(top, low * (1.2 + reach * e * (1.0 + 0.4 * b))) for e, b in zip(env, decay(n, BRASS_BLARE_S, rate))]
+    x = swept_lowpass(swept_lowpass(x, cut, rate), cut, rate)
+    breath = shaped(norm(biquad(noise(n, rng), "bp", min(3.0 * low, 0.4 * rate), 1.0, rate)), decay(n, 0.08, rate))
+    mix(x, breath, 0, 0.05 * len(freqs))
+    return shaped(x, env)
+
+
+def chime(freq, rate, rng, vel=0.7, length=2.2):
+    """A chime: the bar's modes, and the tick of the mallet."""
+    n = int(length * rate)
+    x = modes(CHIME, n, rate, freq, vel)
+    m = int(0.003 * rate)
+    tick = shaped(highpass(noise(m, rng), 3000.0, rate), envelope(m, rate, 0.0002, 0.0006))
+    mix(x, norm(tick), 0, 0.06 * vel)
+    return fade(x, rate, 0.0005, 0.3)
+
+
+def timpani(freq, rate, rng):
+    """A timpani stroke: the head ringing at its pitch, the thud of the felt mallet dropping onto
+    it, and a little skin noise."""
+    n = int(2.4 * rate)
+    x = norm(modes(TIMPANI, n, rate, freq))
+    mix(x, shaped(glide(2.0 * freq, freq, 0.02, n, rate), envelope(n, rate, attack=0.002, tau=0.07)), 0, 0.7)
+    m = int(0.06 * rate)
+    mix(x, shaped(norm(lowpass(noise(m, rng), 1200.0, rate)), envelope(m, rate, attack=0.001, tau=0.015)), 0, 0.3)
+    return fade(lowpass(x, 2500.0, rate), rate, 0.0005, 0.3)
+
+
+def side_drum(rate, rng):
+    """A field drum tapped softly, the snares buzzing under the head."""
+    n = int(0.5 * rate)
+    x = shaped(glide(260.0, 190.0, 0.02, n, rate), envelope(n, rate, attack=0.001, tau=0.05))
+    snares = shaped(norm(biquad(noise(n, rng), "bp", 3200.0, 0.6, rate)), envelope(n, rate, attack=0.001, tau=0.09))
+    mix(x, snares, 0, 0.6)
+    return lowpass(x, 5000.0, rate)
+
+
+def jingle(rate, rng):
+    """A tambourine tapped once: a rattle of noise, and the zils ringing over it, each a little late."""
+    n = int(0.35 * rate)
+    x = shaped(norm(highpass(noise(n, rng), 6000.0, rate)), envelope(n, rate, attack=0.001, tau=0.05))
+    for _ in range(4):
+        mix(x, modes(ZILS, n, rate, rng.uniform(5000.0, 7000.0)), int(rng.uniform(0.0, 0.012) * rate), 0.3)
+    return x
+
+
+def tower_bell(freq, rate, rng):
+    """A bell in a tower a long way off: struck once, ringing on, the top of it lost on the way."""
+    n = int(5.0 * rate)
+    x = norm(modes(TOWER_BELL, n, rate, freq))
+    m = int(0.005 * rate)
+    mix(x, norm(shaped(highpass(noise(m, rng), 1500.0, rate), envelope(m, rate, 0.0003, 0.001))), 0, 0.2)
+    return fade(lowpass(lowpass(x, 2400.0, rate), 2400.0, rate), rate, 0.0005, 0.5)
+
+
+def birdsong(length, rate, rng, songs):
+    """A small bird somewhere out in the grass: little runs of whistled chirps sliding up or down,
+    and now and then a trill instead. Placed round the loop so the end runs into the start."""
+    x = silence(length)
+    s = math.sin
+    for _ in range(songs):
+        at = rng.randrange(length)
+        base = rng.uniform(2800.0, 4400.0)
+        if rng.random() < 0.3:
+            # A trill: one whistle warbling fast, swelling up and stopping.
+            n = int(rng.uniform(0.35, 0.6) * rate)
+            fm = rng.uniform(22.0, 32.0)
+            w, u, v = TAU * base / rate, TAU * fm / rate, rng.uniform(300.0, 600.0) / fm
+            call = [s(w * i + v * s(u * i)) for i in range(n)]
+            mix_loop(x, shaped(call, envelope(n, rate, attack=0.08, gate=n / rate - 0.06, release=0.02)), at,
+                     rng.uniform(0.4, 0.8))
+            continue
+        up = rng.random() < 0.6
+        t = 0
+        for _ in range(rng.randint(2, 6)):
+            n = int(rng.uniform(0.035, 0.08) * rate)
+            f0 = base * rng.uniform(0.94, 1.06)
+            f1 = f0 * (rng.uniform(1.25, 1.6) if up else rng.uniform(0.6, 0.8))
+            chirp = shaped(sweep(f0, f1, n, rate), envelope(n, rate, attack=0.004, tau=0.4 * n / rate))
+            mix_loop(x, chirp, at + t, rng.uniform(0.5, 1.0))
+            t += n + int(rng.uniform(0.03, 0.09) * rate)
     return x
 
 
@@ -1117,6 +1264,419 @@ def build_cold_stone():
 
 
 # --------------------------------------------------------------------------- #
+# meadowlark.wav: out in the green fields round Questeria
+# --------------------------------------------------------------------------- #
+# G major, 136 BPM in three, 48 bars (about 64 s). The only waltz: the lute goes low-strum-strum
+# under a flute tune that leaps up a sixth and skips back down, like a lark going up, and says it
+# twice, once out to D and once home to G. The middle climbs in sequences to the high E over held
+# strings while the lute rolls in eighths, then the tune comes round a last time with chimes an
+# octave over it and a tambourine. A frame drum on the downbeats, small birds out in the grass
+# either side, a breeze. The chimes call the lark's leap once more, and the D7 brings it home.
+
+MEADOW_BPM, MEADOW_BARS, MEADOW_BEATS = 136, 48, 3
+
+MEADOW_VOICINGS = {        # chord: (strings MIDI, lute voicing low to high)
+    "G": ((43, 50), (55, 59, 62, 67)),
+    "C": ((48, 55), (48, 55, 60, 64)),
+    "D": ((38, 45), (50, 57, 62, 66)),
+    "D7": ((38, 45), (50, 57, 60, 66)),
+    "Em": ((40, 47), (52, 59, 64, 67)),
+    "Am": ((45, 52), (57, 60, 64, 69)),
+    "Bm": ((47, 54), (47, 54, 59, 62)),
+}
+
+MEADOW_BARS_CHORDS = (     # one chord a bar
+    "G", "C", "G", "D7",                                # 1-4: the lute on its own
+    "G", "G", "C", "Am", "D", "Em", "Am", "D7",         # 5-12: the tune, out to D
+    "G", "G", "C", "Am", "D", "Am", "D7", "G",          # 13-20: and home to G
+    "C", "D", "Bm", "Em", "C", "D7", "Em", "D7",        # 21-28: the middle, climbing
+    "C", "G", "Am", "Em", "Am", "D", "C", "D7",         # 29-36: and down again
+    "G", "G", "C", "Am", "D", "Am", "D7", "G",          # 37-44: the tune with the chimes on it
+    "G", "C", "Am", "D7",                               # 45-48: the lark's call, and round again
+)
+
+#: The lute's waltz, every bar: the low note on the beat, then two strings strummed together on
+#: each of the other two. (beat, which notes, velocity)
+MEADOW_WALTZ = ((0.0, (0,), 0.62), (1.0, (2, 3), 0.42), (2.0, (1, 3), 0.36))
+
+#: Rolling eighths up and back down the voicing, for the middle. (beat, which notes, velocity)
+MEADOW_ROLL = ((0.0, (0,), 0.6), (0.5, (1,), 0.38), (1.0, (2,), 0.42), (1.5, (3,), 0.4), (2.0, (2,), 0.4),
+               (2.5, (1,), 0.34))
+
+#: How far apart the strings of a strum sound, in seconds.
+MEADOW_STRUM_S = 0.014
+
+MEADOW_TUNE_BARS = range(5, 45)      # the flute's in, and the lute steps back a little under it
+MEADOW_ROLLING = range(21, 37)       # the lute rolls in eighths instead of waltzing
+MEADOW_HELD = range(21, 45)          # the strings hold the chord, and the drum fills in the waltz
+MEADOW_BRIGHT = range(37, 45)        # chimes on the tune, and the tambourine
+
+#: How loud the held chord is against the strings' low notes.
+MEADOW_HELD_LEVEL = 0.6
+
+MEADOW_HEAD = (             # the first five bars of the tune: (bar from its start, beat, MIDI, beats held)
+    (0, 0.0, 74, 1.0), (0, 1.0, 83, 1.5), (0, 2.5, 81, 0.5),
+    (1, 0.0, 79, 2.0), (1, 2.0, 74, 1.0),
+    (2, 0.0, 76, 1.0), (2, 1.0, 84, 1.5), (2, 2.5, 83, 0.5),
+    (3, 0.0, 81, 2.0), (3, 2.0, 76, 1.0),
+    (4, 0.0, 78, 1.0), (4, 1.0, 81, 1.0), (4, 2.0, 86, 1.0),
+)
+
+MEADOW_OUT = (              # its first ending, stopping on the D7
+    (5, 0.0, 83, 1.5), (5, 1.5, 81, 0.5), (5, 2.0, 79, 1.0),
+    (6, 0.0, 76, 1.5), (6, 1.5, 78, 0.5), (6, 2.0, 79, 1.0),
+    (7, 0.0, 81, 1.0), (7, 1.0, 78, 1.5),
+)
+
+MEADOW_HOME = (             # its second ending, down the D7 and home to G
+    (5, 0.0, 84, 1.5), (5, 1.5, 83, 0.5), (5, 2.0, 81, 1.0),
+    (6, 0.0, 86, 1.0), (6, 1.0, 84, 1.0), (6, 2.0, 81, 0.5), (6, 2.5, 78, 0.5),
+    (7, 0.0, 79, 2.5),
+)
+
+#: Where the tune starts each time round, and which ending it takes.
+MEADOW_TUNE_AT = ((5, MEADOW_OUT), (13, MEADOW_HOME), (37, MEADOW_HOME))
+
+MEADOW_MIDDLE = (           # (bar, beat, MIDI, beats held)
+    (21, 0.0, 76, 2.0), (21, 2.0, 79, 1.0),
+    (22, 0.0, 78, 2.0), (22, 2.0, 81, 1.0),
+    (23, 0.0, 83, 1.5), (23, 1.5, 81, 0.5), (23, 2.0, 78, 1.0),
+    (24, 0.0, 79, 2.0), (24, 2.0, 76, 1.0),
+    (25, 0.0, 79, 1.0), (25, 1.0, 84, 1.5), (25, 2.5, 83, 0.5),
+    (26, 0.0, 81, 1.0), (26, 1.0, 86, 1.5), (26, 2.5, 84, 0.5),
+    (27, 0.0, 83, 1.0), (27, 1.0, 88, 2.0),                       # the high E, the top of the song
+    (28, 0.0, 86, 1.0), (28, 1.0, 84, 1.0), (28, 2.0, 81, 1.0),
+    (29, 0.0, 76, 1.0), (29, 1.0, 79, 1.0), (29, 2.0, 84, 1.0),
+    (30, 0.0, 83, 2.0), (30, 2.0, 79, 1.0),
+    (31, 0.0, 81, 1.0), (31, 1.0, 84, 1.0), (31, 2.0, 88, 1.0),
+    (32, 0.0, 86, 1.5), (32, 1.5, 83, 0.5), (32, 2.0, 79, 1.0),
+    (33, 0.0, 81, 1.5), (33, 1.5, 79, 0.5), (33, 2.0, 76, 1.0),
+    (34, 0.0, 78, 2.0), (34, 2.0, 74, 1.0),
+    (35, 0.0, 76, 1.0), (35, 1.0, 79, 1.0), (35, 2.0, 84, 1.0),
+    (36, 0.0, 81, 1.5), (36, 1.5, 79, 0.5), (36, 2.0, 78, 0.5), (36, 2.5, 76, 0.5),   # running down into the tune
+)
+
+MEADOW_LARK = (             # the chimes calling the tune's leap at the end: (bar, beat, MIDI, velocity)
+    (45, 0.0, 86, 0.7), (45, 1.0, 95, 0.6), (45, 2.5, 93, 0.5), (46, 0.0, 91, 0.6),
+)
+
+MEADOW_DRUM = ((0.0, 0.6),)                       # (beat, velocity), every bar once the tune's in
+MEADOW_DRUM_LILT = ((1.0, 0.2), (2.0, 0.2))       # and these as well while the strings hold
+MEADOW_JINGLE = ((1.0, 0.7), (2.0, 0.55))         # the tambourine, the last time through the tune
+
+#: How loud the tambourine is against the drum.
+MEADOW_JINGLE_LEVEL = 0.25
+
+#: How many little songs each bird sings in one loop.
+MEADOW_BIRD_SONGS = 9
+
+#: How loud the breeze is against the birds.
+MEADOW_BREEZE = 0.5
+
+
+def meadow_tune():
+    """The flute's whole part as (bar, beat, MIDI, beats held): the head of the tune with each of
+    its endings where they come, and the middle as written."""
+    notes = []
+    for first, ending in MEADOW_TUNE_AT:
+        notes += [(first + bar, beat, m, held) for bar, beat, m, held in MEADOW_HEAD + ending]
+    return notes + list(MEADOW_MIDDLE)
+
+
+def build_meadowlark():
+    rng = random.Random(13601)
+    s = Song(MEADOW_BPM, MEADOW_BARS, MEADOW_BEATS)
+    R, L, H = s.rate, s.length, s.rate // 2
+    chords = [MEADOW_VOICINGS[name] for name in MEADOW_BARS_CHORDS]
+
+    # The strings: the chord's two low notes bowed lightly under everything, one bow per run of
+    # bars on the same chord, and in the middle the rest of the chord held over them, a bow a bar.
+    strings = s.half_track()
+    for first, bars, notes in drone_spans(chords):
+        note = bowed([midi_hz(m) for m in notes], s.secs(s.beats * bars) + 0.25, H, rng, attack=0.5, release=0.6,
+                     vib_cents=5.0, bow=0.05, bright=1.0)
+        mix_loop(strings, note, s.half_at(first) - H // 4)
+    for bar in MEADOW_HELD:
+        _, voicing = chords[bar - 1]
+        note = bowed([midi_hz(m) for m in voicing[1:]], s.secs(s.beats) + 0.15, H, rng, attack=0.35, release=0.5,
+                     vib_cents=8.0, bow=0.08, bright=1.2)
+        mix_loop(strings, note, s.half_at(bar) - int(0.15 * H), MEADOW_HELD_LEVEL)
+    s.add_half(strings, -19.0, send=0.3, label="strings")
+    # Every finished layer is dropped as soon as it's added, here and below. The song keeps its own
+    # copy, and holding on to them all doubles what the run needs.
+    del strings, note
+
+    # The lute: the waltz, rolling eighths in the middle, every strum a little spread.
+    pluck = note_cache(lambda m, vel: lute(midi_hz(m), R, rng, vel, 2.2))
+    strum = int(MEADOW_STRUM_S * R)
+    picking = s.track()
+    for bar, (_, voicing) in enumerate(chords, start=1):
+        under = 0.7 if bar in MEADOW_TUNE_BARS else 1.0
+        for beat, which, vel in MEADOW_ROLL if bar in MEADOW_ROLLING else MEADOW_WALTZ:
+            at = s.at(bar, beat) + int(rng.gauss(0.0, 0.007) * R)
+            g = under * rng.uniform(0.9, 1.0)
+            for k, w in enumerate(which):
+                mix_loop(picking, pluck(voicing[w], vel), at + k * strum, g)
+    s.add(picking, -12.5, pan=-0.15, send=0.3, label="picking")
+    del picking, pluck
+
+    tune = s.track()
+    for bar, beat, m, held in meadow_tune():
+        jitter = int(rng.gauss(0.0, 0.006) * R)
+        vel = 0.8 if beat == 0.0 else 0.72
+        mix_loop(tune, flute(midi_hz(m), s.secs(held) * 0.9, R, rng, vel), s.at(bar, beat) + jitter)
+    s.add(tune, -9.0, pan=0.12, send=0.4, label="flute")
+    del tune
+
+    # The chimes: the tune an octave up the last time round, then the lark's call on its own.
+    ring = note_cache(lambda m, vel: chime(midi_hz(m), R, rng, vel))
+    bells = s.track()
+    for bar, beat, m, _ in meadow_tune():
+        if bar in MEADOW_BRIGHT:
+            mix_loop(bells, ring(m + 12, 0.6), s.at(bar, beat))
+    for bar, beat, m, vel in MEADOW_LARK:
+        mix_loop(bells, ring(m, vel), s.at(bar, beat))
+    s.add(bells, -17.0, pan=-0.25, send=0.5, label="chimes")
+    del bells, ring
+
+    # The frame drum, and the tambourine with it at the end.
+    hit = frame_drum(R, rng)
+    shakes = [jingle(R, rng) for _ in range(3)]
+    drums = s.track()
+    for bar in range(MEADOW_TUNE_BARS.start, MEADOW_BARS + 1):
+        for beat, vel in MEADOW_DRUM + (MEADOW_DRUM_LILT if bar in MEADOW_HELD else ()):
+            mix_loop(drums, hit, s.at(bar, beat), vel)
+        if bar in MEADOW_BRIGHT:
+            for beat, vel in MEADOW_JINGLE:
+                mix_loop(drums, rng.choice(shakes), s.at(bar, beat), vel * MEADOW_JINGLE_LEVEL)
+    s.add(drums, -14.0, send=0.25, label="drums")
+    del drums
+
+    # A bird either side, and the breeze under them.
+    left = birdsong(L, R, rng, MEADOW_BIRD_SONGS)
+    right = birdsong(L, R, rng, MEADOW_BIRD_SONGS)
+    mix(left, wind(L, R, rng), 0, MEADOW_BREEZE)
+    mix(right, wind(L, R, rng), 0, MEADOW_BREEZE)
+    s.add_stereo(left, right, -24.0, send=0.4, label="birds")
+    del left, right
+
+    s.add_reverb(rt60=2.2, damp_hz=3500.0, size=0.9, gain_db=-12.0)
+    s.finish("Content/Music/meadowlark.wav", EXPLORE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
+# sunspire.wav: the royal keep
+# --------------------------------------------------------------------------- #
+# D major leaning Mixolydian (the C major chord is the old colour, like a chant), 72 BPM, 18 bars
+# (60 s). Bells toll a long way off and two horns call over the strings while the timpani roll in.
+# Then a trumpet plays a stately tune in dotted steps over held horn chords, a harp runs up at every
+# change and the timpani mark one and three. The second time the violins take the tune up to the
+# high D, the trumpet goes under them in long notes, a choir comes in, chimes ring on the downbeats
+# and a field drum walks it like a procession. It ends going C to A, so the loop comes round to D.
+
+COURT_BPM, COURT_BARS = 72, 18
+
+COURT_VOICINGS = {         # chord: (bass MIDI, horns low to high, strings low to high)
+    "D": (38, (62, 66, 69), (50, 57, 62, 66)),
+    "Asus": (45, (62, 64, 69), (52, 57, 62, 64)),
+    "A": (45, (61, 64, 69), (52, 57, 61, 64)),
+    "G": (43, (62, 67, 71), (50, 55, 59, 62)),
+    "Bm": (47, (62, 66, 71), (54, 59, 62, 66)),
+    "C": (48, (60, 64, 67), (52, 55, 60, 64)),
+    "Em": (40, (59, 64, 67), (52, 59, 64, 67)),
+}
+
+COURT_BARS_CHORDS = (      # one chord a bar, or two for a bar that changes halfway
+    ("D",), ("Asus", "A"),                                                    # 1-2: the horns' call
+    ("D",), ("G",), ("D",), ("A",), ("Bm",), ("G",), ("C",), ("Asus", "A"),   # 3-10: the trumpet's tune
+    ("D",), ("G",), ("Bm",), ("G",), ("C",), ("Em",), ("C",), ("Asus", "A"),  # 11-18: the violins take it up
+)
+
+COURT_THEME_FROM = 3       # the tune starts here, and the horns hold the chords from here
+COURT_STRINGS_FROM = 11    # the violins have it from here, with the choir and the field drum
+
+COURT_CALL = (             # the two horns calling: (bar, beat, MIDI, beats held)
+    (1, 0.0, (62, 69), 1.5), (1, 1.5, (62, 69), 0.5), (1, 2.0, (66, 74), 2.0),
+    (2, 0.0, (69, 76), 1.5), (2, 1.5, (69, 76), 0.5), (2, 2.0, (69, 73), 2.0),
+)
+
+COURT_THEME = (            # the trumpet: (bar, beat, MIDI, beats held)
+    (3, 0.0, 74, 1.5), (3, 1.5, 69, 0.5), (3, 2.0, 74, 1.0), (3, 3.0, 78, 1.0),
+    (4, 0.0, 79, 2.0), (4, 2.0, 78, 1.0), (4, 3.0, 76, 1.0),
+    (5, 0.0, 78, 1.5), (5, 1.5, 76, 0.5), (5, 2.0, 74, 1.0), (5, 3.0, 69, 1.0),
+    (6, 0.0, 71, 1.0), (6, 1.0, 73, 1.0), (6, 2.0, 76, 2.0),
+    (7, 0.0, 74, 1.5), (7, 1.5, 73, 0.5), (7, 2.0, 71, 1.0), (7, 3.0, 78, 1.0),
+    (8, 0.0, 79, 1.5), (8, 1.5, 78, 0.5), (8, 2.0, 76, 1.0), (8, 3.0, 74, 1.0),
+    (9, 0.0, 76, 1.5), (9, 1.5, 74, 0.5), (9, 2.0, 72, 1.0), (9, 3.0, 76, 1.0),     # the C natural
+    (10, 0.0, 74, 2.0), (10, 2.0, 73, 2.0),
+)
+
+COURT_VIOLINS = (          # the tune again, climbing: (bar, beat, MIDI, beats held)
+    (11, 0.0, 74, 1.5), (11, 1.5, 69, 0.5), (11, 2.0, 74, 1.0), (11, 3.0, 78, 1.0),
+    (12, 0.0, 79, 2.0), (12, 2.0, 83, 1.0), (12, 3.0, 81, 1.0),
+    (13, 0.0, 78, 1.5), (13, 1.5, 79, 0.5), (13, 2.0, 81, 1.0), (13, 3.0, 83, 1.0),
+    (14, 0.0, 86, 2.0), (14, 2.0, 83, 1.0), (14, 3.0, 79, 1.0),                      # the high D
+    (15, 0.0, 84, 1.5), (15, 1.5, 83, 0.5), (15, 2.0, 81, 1.0), (15, 3.0, 79, 1.0),
+    (16, 0.0, 83, 1.5), (16, 1.5, 81, 0.5), (16, 2.0, 79, 1.0), (16, 3.0, 74, 1.0),
+    (17, 0.0, 76, 1.0), (17, 1.0, 79, 1.0), (17, 2.0, 84, 2.0),
+    (18, 0.0, 86, 2.0), (18, 2.0, 85, 2.0),
+)
+
+COURT_COUNTER = (          # the trumpet under the violins, in long notes: (bar, beat, MIDI, beats held)
+    (11, 0.0, 66, 2.0), (11, 2.0, 69, 2.0), (12, 0.0, 71, 4.0),
+    (13, 0.0, 71, 2.0), (13, 2.0, 74, 2.0), (14, 0.0, 74, 4.0),
+    (15, 0.0, 76, 2.0), (15, 2.0, 72, 2.0), (16, 0.0, 71, 2.0), (16, 2.0, 67, 2.0),
+    (17, 0.0, 67, 2.0), (17, 2.0, 72, 2.0), (18, 0.0, 74, 2.0), (18, 2.0, 73, 2.0),
+)
+
+COURT_BELLS = ((1, 0.0, 62, 1.0), (1, 2.0, 57, 0.8), (2, 0.0, 62, 0.65))   # (bar, beat, MIDI, velocity)
+
+COURT_TIMPANI = ((0.0, 0.9), (2.0, 0.5))          # (beat, velocity), every bar once the tune's in
+COURT_TIMPANI_LATE = ((3.5, 0.35),)               # and this as well with the violins, leading on
+
+#: The timpani roll into the tune: how many strokes across bar 2, and how loud the first and last are.
+COURT_ROLL_STROKES = 24
+COURT_ROLL_FROM, COURT_ROLL_TO = 0.1, 0.55
+
+COURT_SIDE_DRUM = ((0.0, 0.5), (1.5, 0.22), (1.75, 0.22), (2.0, 0.45), (3.0, 0.3))
+
+#: How fast the harp runs up a chord, in beats a note.
+COURT_HARP_STEP = 1 / 6
+
+#: How loud the strings' chord is against their bass, the held horns against the call, the
+#: trumpet's long notes against its tune, the chimes against the harp and the field drum against
+#: the timpani.
+COURT_UPPER_STRINGS = 0.7
+COURT_HELD_HORNS = 0.55
+COURT_COUNTER_LEVEL = 0.5
+COURT_CHIME_LEVEL = 0.5
+COURT_SIDE_DRUM_LEVEL = 0.35
+
+
+def court_spans():
+    """Every chord in the song as (bar, beat, beats, chord): one per bar, or two for a bar that
+    changes halfway."""
+    spans = []
+    for bar, names in enumerate(COURT_BARS_CHORDS, start=1):
+        beats = 4.0 / len(names)
+        spans += [(bar, k * beats, beats, name) for k, name in enumerate(names)]
+    return spans
+
+
+def build_sunspire():
+    rng = random.Random(7201)
+    s = Song(COURT_BPM, COURT_BARS)
+    R, L, H = s.rate, s.length, s.rate // 2
+
+    # The strings: the bass in octaves and the chord over it, bowed again at every change.
+    strings = s.half_track()
+    for bar, beat, beats, name in court_spans():
+        bass, _, upper = COURT_VOICINGS[name]
+        at = s.half_at(bar, beat) - int(0.2 * H)
+        low = bowed([midi_hz(bass), midi_hz(bass + 12)], s.secs(beats) + 0.2, H, rng, attack=0.4, release=0.7,
+                    vib_cents=4.0, bow=0.05, bright=0.8)
+        high = bowed([midi_hz(m) for m in upper], s.secs(beats) + 0.2, H, rng, attack=0.5, release=0.8,
+                     vib_cents=7.0, bow=0.07, bright=1.1)
+        mix_loop(strings, low, at)
+        mix_loop(strings, high, at, COURT_UPPER_STRINGS)
+    s.add_half(strings, -17.5, send=0.35, label="strings")
+    # Every finished layer is dropped as soon as it's added, here and below. The song keeps its own
+    # copy, and holding on to them all doubles what the run needs.
+    del strings, low, high
+
+    # The violins, from bar 11.
+    violins = s.half_track()
+    for bar, beat, m, held in COURT_VIOLINS:
+        jitter = int(rng.gauss(0.0, 0.005) * H)
+        note = bowed([midi_hz(m)], s.secs(held) * 0.95, H, rng, attack=0.08, release=0.35, vib_cents=14.0, bow=0.1,
+                     bright=0.9)
+        mix_loop(violins, note, s.half_at(bar, beat) + jitter)
+    s.add_half(violins, -8.5, pan=0.2, send=0.5, label="violins")
+    del violins, note
+
+    # The horns: the call at the top, then soft held chords under the tune.
+    horns = s.half_track()
+    for bar, beat, notes, held in COURT_CALL:
+        mix_loop(horns, brass([midi_hz(m) for m in notes], s.secs(held) * 0.9, H, rng, 0.75, attack=0.04, release=0.25),
+                 s.half_at(bar, beat))
+    for bar, beat, beats, name in court_spans():
+        if bar >= COURT_THEME_FROM:
+            _, chord, _ = COURT_VOICINGS[name]
+            note = brass([midi_hz(m) for m in chord], s.secs(beats) * 0.95, H, rng, 0.45, attack=0.25, release=0.4)
+            mix_loop(horns, note, s.half_at(bar, beat), COURT_HELD_HORNS)
+    s.add_half(horns, -15.0, pan=-0.2, send=0.45, label="horns")
+    del horns, note
+
+    # The trumpet: the tune, then the long notes under the violins.
+    blow = note_cache(lambda m, held, vel: brass([midi_hz(m)], held, H, rng, vel, attack=0.035, release=0.22,
+                                                 vib_cents=6.0))
+    trumpet = s.half_track()
+    for bar, beat, m, held in COURT_THEME:
+        jitter = int(rng.gauss(0.0, 0.005) * H)
+        mix_loop(trumpet, blow(m, s.secs(held) * 0.88, 0.9 if beat == 0.0 else 0.8), s.half_at(bar, beat) + jitter)
+    for bar, beat, m, held in COURT_COUNTER:
+        mix_loop(trumpet, blow(m, s.secs(held) * 0.95, 0.6), s.half_at(bar, beat), COURT_COUNTER_LEVEL)
+    s.add_half(trumpet, -8.0, pan=0.1, send=0.4, label="trumpet")
+    del trumpet, blow
+
+    # The harp running up every chord from the tune on, and the chimes on the violins' downbeats.
+    pluck = note_cache(lambda m, vel: lute(midi_hz(m), R, rng, vel, 2.6))
+    ring = note_cache(lambda m, vel: chime(midi_hz(m), R, rng, vel, 3.0))
+    harp = s.track()
+    for bar, beat, beats, name in court_spans():
+        if bar >= COURT_THEME_FROM:
+            _, chord, _ = COURT_VOICINGS[name]
+            run = chord + tuple(note + 12 for note in chord)
+            for k, m in enumerate(run):
+                mix_loop(harp, pluck(m, 0.5 + 0.05 * k), s.at(bar, beat + k * COURT_HARP_STEP))
+    for bar, beat, m, _ in COURT_VIOLINS:
+        if beat == 0.0:
+            mix_loop(harp, ring(m + 12, 0.6), s.at(bar), COURT_CHIME_LEVEL)
+    s.add(harp, -19.0, pan=-0.3, send=0.55, label="harp")
+    del harp, pluck, ring
+
+    ch = s.half_track()
+    for bar, beat, beats, name in court_spans():
+        if bar >= COURT_STRINGS_FROM:
+            _, chord, _ = COURT_VOICINGS[name]
+            c = choir([midi_hz(m) for m in chord], s.secs(beats), H, rng, "oh", attack=0.8, release=0.8)
+            mix_loop(ch, c, s.half_at(bar, beat) - int(0.3 * H))
+    s.add_half(ch, -11.0, pan=0.15, send=0.6, label="choir")
+    del ch, c
+
+    # The timpani, tuned to each chord's bass: the roll into the tune, then one and three. The
+    # field drum walks under the violins.
+    kettle = note_cache(lambda m: timpani(midi_hz(m), R, rng))
+    drums = s.track()
+    for i in range(COURT_ROLL_STROKES):
+        vel = COURT_ROLL_FROM + (COURT_ROLL_TO - COURT_ROLL_FROM) * i / (COURT_ROLL_STROKES - 1)
+        jitter = int(rng.gauss(0.0, 0.004) * R)
+        mix_loop(drums, kettle(45), s.at(2, 4.0 * i / COURT_ROLL_STROKES) + jitter, vel * rng.uniform(0.85, 1.0))
+    for bar, beat, beats, name in court_spans():
+        if bar >= COURT_THEME_FROM:
+            bass = COURT_VOICINGS[name][0]
+            for b, vel in COURT_TIMPANI + (COURT_TIMPANI_LATE if bar >= COURT_STRINGS_FROM else ()):
+                if beat <= b < beat + beats:
+                    mix_loop(drums, kettle(bass), s.at(bar, b), vel)
+    snare = side_drum(R, rng)
+    for bar in range(COURT_STRINGS_FROM, COURT_BARS + 1):
+        for beat, vel in COURT_SIDE_DRUM:
+            jitter = int(rng.gauss(0.0, 0.004) * R)
+            mix_loop(drums, snare, s.at(bar, beat) + jitter, vel * COURT_SIDE_DRUM_LEVEL)
+    s.add(drums, -13.0, send=0.35, label="drums")
+    del drums, kettle
+
+    toll = s.track()
+    for bar, beat, m, vel in COURT_BELLS:
+        mix_loop(toll, tower_bell(midi_hz(m), R, rng), s.at(bar, beat), vel)
+    s.add(toll, -15.0, pan=-0.35, send=0.9, label="bells")
+    del toll
+
+    s.add_reverb(rt60=3.6, damp_hz=2800.0, size=1.3, gain_db=-8.0)
+    s.finish("Content/Music/sunspire.wav", EXPLORE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
 # Sound-effect helpers
 # --------------------------------------------------------------------------- #
 
@@ -1430,6 +1990,134 @@ def sfx_ship_bell(rng):
     return room(x, 2.0, 3500.0, 0.35)
 
 
+# --------------------------------------------------------------------------- #
+# The road east: the Mirewood, Thornbridge and the keep
+# --------------------------------------------------------------------------- #
+
+#: The black crystal's hum: two notes a semitone apart an octave down, and the same an octave up
+#: with a tritone between, so it beats and never settles. (Hz, gain)
+CRYSTAL_HUM = ((55.0, 1.0), (58.27, 0.8), (77.78, 0.5), (110.0, 0.45), (116.54, 0.35))
+
+#: The glass in the crystal: partials that belong to no note. (ratio, gain, tau)
+CRYSTAL_GLASS = ((1.0, 1.0, 1.2), (1.41, 0.6, 0.9), (2.13, 0.4, 0.6), (2.97, 0.25, 0.4))
+
+#: When the crystal throbs, in seconds from the start.
+CRYSTAL_THROBS = (0.15, 1.0, 1.85)
+
+#: How far the hum sags at the top of a throb, as a fraction of its pitch (about half a semitone).
+CRYSTAL_SAG = 0.03
+
+
+def howl(contour, rng):
+    """One wolf's howl: a voice sliding through the contour's (seconds, Hz) points with a slow
+    waver that grows as it's held, mostly its own pitch with a little of the two above, breath under
+    it, swelling in and dying away at the end."""
+    dur = contour[-1][0]
+    n = sec(dur)
+    f = lines(contour, n, R)
+    wob = sine(rng.uniform(4.5, 6.0), n, R)
+    depth = lines(((0.0, 0.0), (0.5, 0.0), (1.0, 0.012), (dur, 0.02)), n, R)
+    w = TAU / R
+    phase = list(accumulate(w * fi * (1.0 + d * v) for fi, d, v in zip(f, depth, wob)))
+    s = math.sin
+    tone = [s(p) + 0.3 * s(2.0 * p) + 0.1 * s(3.0 * p) for p in phase]
+    mix(tone, norm(biquad(noise(n, rng), "bp", 1200.0, 0.8, R)), 0, 0.08)
+    env = lines(((0.0, 0.0), (0.25, 1.0), (0.7 * dur, 0.85), (dur, 0.0)), n, R)
+    return shaped(lowpass(tone, 3000.0, R), env)
+
+
+def sfx_wolf_howl(rng):
+    """A gloomfang howling in the trees: a long voice lifting, holding and falling away, and a
+    second wolf answering higher before the first has finished."""
+    x = silence(sec(4.2))
+    place(x, howl(((0.0, 360.0), (0.4, 600.0), (1.7, 640.0), (2.4, 470.0), (2.7, 380.0)), rng), 0.0, 1.0)
+    place(x, howl(((0.0, 420.0), (0.35, 720.0), (1.4, 760.0), (1.9, 600.0), (2.2, 500.0)), rng), 1.1, 0.6)
+    return room(x, 2.4, 2200.0, 0.45, size=1.2)
+
+
+def sfx_crystal_pulse(rng):
+    """The black crystal: a deep hum that's wrong, its notes rubbing against each other, throbbing
+    three times like something with a pulse and sagging flat at every throb, a thump under each
+    one, and cold glassy partials ringing out of tune over the top."""
+    n = sec(3.0)
+    throbs = silence(n)
+    for t in CRYSTAL_THROBS:
+        place(throbs, envelope(sec(1.2), R, attack=0.06, tau=0.3), t)
+    # Warped time again: it runs slow while a throb is up, so the whole hum sags flat with it.
+    clock = list(accumulate(1.0 - CRYSTAL_SAG * p for p in throbs))
+    s = math.sin
+    hum = silence(n)
+    for f, g in CRYSTAL_HUM:
+        w = TAU * f / R
+        mix(hum, [s(w * t) for t in clock], 0, g)
+    hum = norm(hum)
+    hum = [math.tanh(1.8 * v) for v in hum]                  # driven a little, for the grit
+    swell = lines(((0.0, 0.0), (0.3, 0.4), (2.3, 0.4), (3.0, 0.0)), n, R)
+    x = shaped(lowpass(hum, 900.0, R), list(map(add, swell, scale(throbs, 0.6))))
+    for t in CRYSTAL_THROBS:
+        place(x, thump(70.0, 38.0, 0.6, 0.15), t, 0.5)
+    glass = norm(modes(CRYSTAL_GLASS, n, R, 1244.5))
+    mix(glass, sine(1251.0, n, R, 0.5, 1.0))
+    place(x, shaped(glass, list(map(add, repeat(0.3), throbs))), 0.0, 0.08)
+    return room(x, 1.6, 1800.0, 0.3)
+
+
+def horn_blast(freq, dur, rng, fall_cents=0.0):
+    """One blast on a war horn: blown hard and rough, the roughness a slow flutter in the lips."""
+    x = brass([freq], dur, R, rng, vel=1.0, attack=0.08, release=0.25, vib_cents=0.0, fall_cents=fall_cents)
+    flutter = norm(lowpass(lowpass(noise(len(x), rng), 30.0, R), 30.0, R))
+    return shaped(x, [1.0 + 0.25 * v for v in flutter])
+
+
+def sfx_war_horn(rng):
+    """War horns a long way off: a short blast, then a long one with a second horn coming in a
+    semitone above it, so they grind, both sagging as the breath runs out. Muffled by the distance
+    and spread out by the hills."""
+    x = silence(sec(3.5))
+    place(x, horn_blast(110.0, 0.55, rng), 0.0, 0.8)
+    place(x, horn_blast(110.0, 2.0, rng, 70.0), 0.8, 1.0)
+    place(x, horn_blast(116.54, 1.6, rng, 90.0), 1.15, 0.7)
+    x = lowpass(lowpass(x, 1400.0, R), 1400.0, R)
+    return room(x, 2.8, 1600.0, 0.55, size=1.4)
+
+
+def sfx_bowshot(rng):
+    """A bow loosed: the string snapping forward and thrumming, the limbs knocking, the string
+    slapping the bracer, and the arrow hissing away from you with its fletching fluttering."""
+    x = silence(sec(0.9))
+    n = sec(0.35)
+    twang = shaped(glide(190.0, 150.0, 0.03, n, R), envelope(n, R, attack=0.0005, tau=0.07))
+    mix(twang, shaped(glide(380.0, 300.0, 0.03, n, R), envelope(n, R, attack=0.0005, tau=0.04)), 0, 0.4)
+    place(x, twang, 0.0, 0.8)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.08), R, 520.0)), 0.0, 0.5)
+    place(x, burst(0.01, 0.002, rng, "hp", 2500.0), 0.0, 0.5)
+    n = sec(0.6)
+    going = lines(((0.0, 5000.0), (0.6, 1200.0)), n, R)
+    air = swept_lowpass(swept_lowpass(highpass(noise(n, rng), 600.0, R), going, R), going, R)
+    flutter = [1.0 + 0.35 * v for v in sine(rng.uniform(55.0, 70.0), n, R)]
+    place(x, shaped(shaped(norm(air), envelope(n, R, attack=0.02, tau=0.18)), flutter), 0.01, 0.45)
+    place(x, shaped(sweep(2200.0, 1500.0, n, R), envelope(n, R, attack=0.03, tau=0.12)), 0.01, 0.06)
+    return room(x, 0.7, 3500.0, 0.15)
+
+
+def sfx_coin(rng):
+    """A coin flipped: the flick of a thumb, the coin ringing and wobbling as it spins, a soft slap
+    as a palm catches it, then it set down on another coin. Pay counted into a hand sounds the same."""
+    x = silence(sec(1.0))
+    catch = 0.42
+    place(x, burst(0.004, 0.0008, rng, "hp", 3000.0), 0.0, 0.5)
+    ring = strike(COIN, 3100.0, catch + 0.03, rng, decay_scale=3.0, click=0.4, click_hp=4000.0)
+    n = len(ring)
+    spin = [0.6 + 0.4 * v for v in sweep(22.0, 14.0, n, R)]
+    held = lines(((0.0, 1.0), (catch, 1.0), (catch + 0.02, 0.0)), n, R)
+    place(x, shaped(shaped(ring, spin), held), 0.0, 0.6)
+    place(x, thump(160.0, 110.0, 0.12, 0.025), catch, 0.5)
+    place(x, norm(lowpass(burst(0.05, 0.012, rng), 1500.0, R)), catch, 0.35)
+    place(x, strike(COIN, 3600.0, 0.3, rng, decay_scale=0.7, click=0.3, click_hp=4000.0), catch + 0.2, 0.5)
+    place(x, strike(COIN, 2900.0, 0.3, rng, decay_scale=0.6, click=0.3, click_hp=4000.0), catch + 0.245, 0.3)
+    return x
+
+
 
 # --------------------------------------------------------------------------- #
 # Build
@@ -1440,6 +2128,8 @@ SONGS = {
     "hearthsmoke": build_hearthsmoke,
     "cold-stone": build_cold_stone,
     "salt-and-lanterns": build_salt_and_lanterns,
+    "meadowlark": build_meadowlark,
+    "sunspire": build_sunspire,
 }
 
 SFX = {   # name: (folder, peak dBFS, builder)
@@ -1463,6 +2153,11 @@ SFX = {   # name: (folder, peak dBFS, builder)
     "disapprove": ("Content/Sfx", PEAK_CLICK, sfx_disapprove),
     "heartbeat": ("Content/Sfx", PEAK_MENU, sfx_heartbeat),
     "ship-bell": ("Content/Sfx", PEAK_MENU, sfx_ship_bell),
+    "wolf-howl": ("Content/Sfx", PEAK_MENU, sfx_wolf_howl),
+    "crystal-pulse": ("Content/Sfx", PEAK_MENU, sfx_crystal_pulse),
+    "war-horn": ("Content/Sfx", PEAK_MENU, sfx_war_horn),
+    "bowshot": ("Content/Sfx", PEAK_MENU, sfx_bowshot),
+    "coin": ("Content/Sfx", PEAK_CLICK, sfx_coin),
 }
 
 

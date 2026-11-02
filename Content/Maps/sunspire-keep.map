@@ -1,0 +1,173 @@
+; Sunspire Keep, the palace on the terrace from the inside. The throne room at the north: the King's
+; throne on its dais under the sun, tall windows down the back wall pouring light across the marble,
+; Aurelian banners between them, the royal carpet from the steps down between the pillars and the
+; guards, and the court along the sides. Through the arch, the great hall on the way out: the war
+; table at its west end, a desk and a little wine table at its east end, and the door back out onto
+; the terrace. Lit, and no fog: it's the palace.
+
+[map]
+id = sunspire-keep
+name = Sunspire Keep
+tileset = keep
+size = 44 34
+dark = no
+fog = no
+music = Court
+
+[legend]
+, = marble
+* = marble-gold
+c = carpet
+d = dais
+^ = steps
+# = wall-top
+- = wall-high
+| = wall-face
+_ = wall-base
+n = window-high
+w = window
+
+[ground]
+############################################
+#--nn---nn---nn--------------nn---nn---nn--#
+#||ww|||ww|||ww||||||||||||||ww|||ww|||ww||#
+#__________________________________________#
+#,,,,,,,,,,,,,dddddddddddddddd,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,dddddddddddddddd,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,dddddddddddddddd,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,dddddddddddddddd,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,****^^^^^^^^****,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+####################cccc####################
+#-------------------cccc-------------------#
+#|||||||||||||||||||cccc|||||||||||||||||||#
+#___________________cccc___________________#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,ccccccccc,,,,,,,,*cccc*,,,,,,,,ccccccccc,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+#,,,,,,,,,,,,,,,,,,*cccc*,,,,,,,,,,,,,,,,,,#
+####################cccc####################
+
+[objects]
+spawn start 21.5 10.5 facing=up
+spawn door 21.5 31.5 facing=up
+exit door 20 33 w=4 to=back
+
+; The audience. It plays as soon as you're shown in with the Sunheart, which is why you arrive
+; before the dais and not at the door.
+scene a1-c4-03 21.5 10.5 talk=a1-c4-03 when=a1-c4-02 unless=a1-c4-03
+
+; The dais: the throne under its sun with the King before it, the Princess at his right hand and the
+; Lord Chancellor at his left, guards at its corners, braziers either side of the steps, and the two
+; great banners behind it. Once court's over the Chancellor's off down to the great hall to wait for
+; the Soul-Bound, and he's back at the King's left after.
+prop sun-throne 21.5 6.6
+prop sun-banner 17 3.5
+prop sun-banner 26 3.5
+prop brazier 16.5 8.2
+prop brazier 26.5 8.2
+prop sun-inlay 21.5 13.1
+npc leon 21.5 6.75 cast=leon facing=down
+npc elara 19 7 cast=elara facing=down
+npc crane 24 7 cast=crane facing=down unless=a1-c4-03
+npc crane-court 24 7 cast=crane facing=down when=a1-c4-04
+npc guard-1 14.8 6.5 cast=royal-guard facing=down
+npc guard-2 28.2 6.5 cast=royal-guard facing=down
+
+; The windows down the back wall, the sun lying across the floor from each, and the banners between.
+prop light-shaft 4.0625 7.625
+prop light-shaft 9.0625 7.625
+prop light-shaft 14.0625 7.625
+prop light-shaft 30.0625 7.625
+prop light-shaft 35.0625 7.625
+prop light-shaft 40.0625 7.625
+prop sun-banner 6 3.5
+prop sun-banner 11 3.5
+prop sun-banner 32 3.5
+prop sun-banner 37 3.5
+
+; The nave and its aisles: a colonnade down either side, guards by the arch, a statue of the old
+; war in each corner by the windows, flowers under the banners, and the court standing about the
+; aisles, watching.
+prop pillar-marble 9.5 9.6
+prop pillar-marble 9.5 15.6
+prop pillar-marble 33.5 9.6
+prop pillar-marble 33.5 15.6
+prop guard-statue 1.5 5.6
+prop guard-statue 41.5 5.6
+prop planter-pink 6 4.4
+prop planter-pink 11 4.4
+prop planter-pink 32 4.4
+prop planter-pink 37 4.4
+prop cypress-pot 1.5 16.2
+prop cypress-pot 41.5 16.2
+npc guard-3 18.4 15.8 cast=royal-guard facing=right
+npc guard-4 24.6 15.8 cast=royal-guard facing=left
+npc courtier-1 5 9.5 look=707 name="A Courtier" facing=right say="The King's in a good mood. Don't spoil it.|Velvet in this heat. I ask you.|The Chancellor's watching. He's always watching."
+npc courtier-2 6.4 11 look=733 name="A Lady of the Court" facing=right say="Heroes, apparently. They look tired.|Is that blood on your boot? How thrilling.|The Princess rode in at dawn again. Unchaperoned."
+npc courtier-3 37.6 9.8 look=751 name="A Courtier" facing=left say="Forty years of peace, and they want a war.|The Chancellor says it's nothing. The Chancellor's usually right.|Mind the carpet. It's older than your grandmother."
+npc courtier-4 36.5 12.5 look=768 name="A Scribe of the Court" facing=left say="I write down what the King says. All of it.|Today's been a lot of writing.|Doomward, Greywatch, Hollowed. My quill's never been so busy."
+npc courtier-5 13.5 12 look=786 name="A Courtier" facing=right say="Bow lower. No, lower. Oh, never mind.|I came for the gossip. There's so much of it today."
+
+; The arch through to the great hall, and a statue either side of it on the hall side.
+prop keep-arch 21.5 20.5
+prop guard-statue 17 21.4
+prop guard-statue 26 21.4
+
+; The great hall, on the way out: banners of the sun and the Princess's tapestries along its back
+; wall, pillars, flowers, and the guards on the door.
+prop sun-banner 4 20.5
+prop tapestry 8 20.5
+prop sun-banner 12 20.5
+prop sun-banner 31 20.5
+prop tapestry 35 20.5
+prop sun-banner 39 20.5
+prop pillar-marble 13.5 24.5
+prop pillar-marble 29.5 24.5
+prop pillar-marble 13.5 30.5
+prop pillar-marble 29.5 30.5
+prop cypress-pot 1.5 21.6
+prop cypress-pot 41.5 21.6
+prop cypress-pot 1.5 31.6
+prop cypress-pot 41.5 31.6
+prop planter-pink 17 31.4
+prop planter-pink 26 31.4
+npc guard-5 18.6 32 cast=royal-guard facing=up
+npc guard-6 24.4 32 cast=royal-guard facing=up
+
+; The war room end: the war table on its carpet with Fable on it, braziers either side, and a
+; captain over it.
+prop war-table 6 26.4
+prop brazier 2.5 23.6
+prop brazier 9.5 23.6
+npc captain 6 25 look=789 name="A Captain of the Guard" facing=down say="Greywatch holds. Greywatch always holds.|Forty men a company, and half the companies on paper.|Don't touch the markers. Took me all morning."
+npc officer 9.6 27.6 look=812 name="A Lieutenant" facing=left say="The Captain's been at that table since dawn.|Red markers are them. Blue are us. There are more red ones every week."
+
+; The chancellor's end: a desk on its carpet, a chair behind it, the wine, and Crane waiting there
+; for the Soul-Bound after court.
+prop armchair 37 22.5
+prop royal-desk 37 23.8
+prop wine-table 34.5 27.4
+prop potted-plant 41 26
+prop book-crate 40.2 23.2
+npc crane-hall 32.6 27.8 cast=crane facing=left when=a1-c4-03 unless=a1-c4-04
+trigger hall-crane 1 28 w=42 h=2 talk=a1-c4-04 when=a1-c4-03 unless=a1-c4-04
+
+; What the two of you say: the windows as you go down the aisle, and the hall past the arch.
+trigger bark-keep-windows 17 11 w=10 h=3 bark=keep-windows
+trigger bark-keep-hall 14 22 w=16 h=2 bark=keep-hall

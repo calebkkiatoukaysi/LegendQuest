@@ -71,6 +71,9 @@ public partial class ExploreScreen
     /// <summary>Each party member's figure, in party order.</summary>
     private readonly List<WalkerSprite> _walkers = new();
 
+    /// <summary>Whose each figure is, in the same order: the party as it was when the figures were last caught up with it, so after someone joins or swaps places each figure can still be matched to its owner.</summary>
+    private readonly List<PartyMember> _members = new();
+
     /// <summary>Where your feet have been, oldest first.</summary>
     private readonly List<Vector2> _trail = new();
 
@@ -307,7 +310,7 @@ public partial class ExploreScreen
         return true;
     }
 
-    /// <summary>Changes who you're controlling. The camera eases over to them, and the old one falls in behind.</summary>
+    /// <summary>Changes who you're controlling. The camera eases over to them, the old one falls in behind, and the markers are worked out again, since nobody's marked over your own head.</summary>
     /// <param name="index">Their place in the party.</param>
     private void SelectLeader(int index)
     {
@@ -316,7 +319,57 @@ public partial class ExploreScreen
         Halt();
         _game.Leader = index;
         SeedTrail();
+        RefreshMarkers();
         _audio.Play(Sfx.MenuMove);
+    }
+
+    /// <summary>Catches the party's figures up with the save after someone's joined, gone to wait at camp, or swapped places with someone waiting, then sits whoever's waiting here back down.</summary>
+    /// <remarks>
+    /// Everyone still in the party keeps their figure, where it's standing. Someone who's taken
+    /// another's place in the party stands where they stood, so a swap is just the two of them
+    /// changing places, and anyone else new comes in round you. You keep control of whoever has your
+    /// place in the party.
+    /// </remarks>
+    private void CatchUpParty()
+    {
+        var figures = new Dictionary<PartyMember, WalkerSprite>();
+        for (int i = 0; i < _walkers.Count; i++) figures[_members[i]] = _walkers[i];
+
+        var before = new List<WalkerSprite>(_walkers);
+        var beforeMembers = new List<PartyMember>(_members);
+        var arrivals = new List<WalkerSprite>();
+        _walkers.Clear();
+        _members.Clear();
+
+        for (int i = 0; i < _game.Party.Count; i++)
+        {
+            PartyMember member = _game.Party[i];
+            if (!figures.TryGetValue(member, out WalkerSprite walker))
+            {
+                walker = new WalkerSprite();
+                DressWalker(walker, member);
+
+                // Whoever had this place before has gone to wait, so they've swapped.
+                if (i < beforeMembers.Count && !_game.Party.Contains(beforeMembers[i]))
+                {
+                    walker.Position = before[i].Position;
+                    walker.Facing = before[i].Facing;
+                }
+                else
+                {
+                    arrivals.Add(walker);
+                }
+            }
+
+            _walkers.Add(walker);
+            _members.Add(member);
+        }
+
+        foreach (WalkerSprite arrival in arrivals) arrival.Facing = Leader.Facing;
+        GatherBehind(arrivals);
+        SeedTrail();
+        SeatCampers();
+        RefreshPresence();
     }
 
     /// <summary>Tab (or the right shoulder) for the next in line, F1 to F4 for one in particular.</summary>

@@ -38,10 +38,13 @@ public static class MapLoader
 
     private static readonly string[] Sections = { "map", "legend", "ground", "detail", "overhead", "objects" };
     private static readonly string[] RequiredSettings = { "id", "name", "tileset", "size", "dark", "music" };
-    private static readonly string[] OptionalSettings = { "world", "ambient", "fog" };
+    private static readonly string[] OptionalSettings = { "world", "ambient", "fog", "tint" };
 
     /// <summary>Every kind of object, for the error message when a line names one that isn't.</summary>
-    private static readonly string[] Kinds = { "spawn", "prop", "npc", "light", "exit", "entrance", "trigger", "scene", "chest", "door", "lever", "sign", "waypoint" };
+    private static readonly string[] Kinds = { "spawn", "prop", "npc", "light", "exit", "entrance", "trigger", "scene", "chest", "door", "lever", "sign", "waypoint", "camp" };
+
+    /// <summary>How many numbers a tint is: red, green and blue.</summary>
+    private const int TintChannels = 3;
 
     /// <summary>The doorway an entrance makes, in art pixels: wide enough to walk into, and so shallow you have to be walking into the door to go through.</summary>
     private const float DoorwayWidth = 18f;
@@ -92,6 +95,7 @@ public static class MapLoader
         bool dark = ReadYesNo(id, settings["dark"]);
         float ambient = ReadAmbient(id, settings, dark);
         bool fog = !settings.TryGetValue("fog", out (int Line, string Value) fogSetting) || ReadYesNo(id, fogSetting);
+        Color tint = settings.TryGetValue("tint", out (int Line, string Value) tintSetting) ? ReadTint(id, tintSetting) : Color.White;
 
         if (!Enum.TryParse(settings["music"].Value, out Track music) || !Enum.IsDefined(music))
             throw Fail(id, settings["music"].Line, $"there's no song called {settings["music"].Value} (the Track names are {string.Join(", ", Enum.GetNames<Track>())})");
@@ -140,6 +144,7 @@ public static class MapLoader
             Tileset = tileset,
             Dark = dark,
             Ambient = ambient,
+            Tint = tint,
             Fog = fog,
             Music = music,
             Width = width,
@@ -154,6 +159,7 @@ public static class MapLoader
             Triggers = triggers,
             Interactables = interactables,
             Npcs = ReadNpcs(objects, Solid),
+            Camp = ReadCamp(objects, Solid),
             Scenes = ReadScenes(objects),
         };
     }
@@ -283,6 +289,24 @@ public static class MapLoader
         return level;
     }
 
+    /// <summary>Reads tint, the colour the world on the map is multiplied by: red, green and blue, each a whole number from 0 to 255, like 196 188 226.</summary>
+    /// <remarks>It goes on a dark map as well as a lit one. The tint's the colour of the light, and the dark is how much of it there is.</remarks>
+    private static Color ReadTint(string id, (int Line, string Value) setting)
+    {
+        string[] parts = setting.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length != TintChannels)
+            throw Fail(id, setting.Line, $"tint has to be three numbers from 0 to {byte.MaxValue}, red, green and blue, like 196 188 226, not {setting.Value}");
+
+        var channels = new int[TintChannels];
+        for (int i = 0; i < TintChannels; i++)
+        {
+            if (!int.TryParse(parts[i], NumberStyles.None, CultureInfo.InvariantCulture, out channels[i]) || channels[i] > byte.MaxValue)
+                throw Fail(id, setting.Line, $"each of tint's numbers has to be a whole number from 0 to {byte.MaxValue}, and {parts[i]} isn't");
+        }
+
+        return new Color(channels[0], channels[1], channels[2]);
+    }
+
     /// <summary>Reads the [legend]: one character per tile, by the tile's name in the tileset.</summary>
     private static Dictionary<char, int> ReadLegend(string id, List<(int Line, string Text)> lines, TilesetDefinition tileset)
     {
@@ -405,7 +429,7 @@ public static class MapLoader
         return props;
     }
 
-    /// <summary>The people: npc id x y, then sheet= and name= for townsfolk, look= and name= for a crowd, or cast= for the story's people, and facing=, say=, wander=, when= and unless=.</summary>
+    /// <summary>The people and the creatures: npc id x y, then sheet= and name= for townsfolk, look= and name= for a crowd, cast= for the story's people, or creature= for a beast (name= if it isn't to be called what it is); and facing=, say=, talk=, wander=, when= and unless=.</summary>
     /// <param name="objects">Every object on the map.</param>
     /// <param name="solid">Whether a tile is solid, for checking they're standing somewhere they could.</param>
     private static List<MapNpc> ReadNpcs(List<MapObjectLine> objects, Func<int, int, bool> solid)
@@ -417,9 +441,10 @@ public static class MapLoader
             string castId = o.Text("cast");
             string sheet = o.Text("sheet");
             string seed = o.Text("look");
+            string creatureId = o.Text("creature");
             string name = o.Text("name");
-            if ((castId is null ? 0 : 1) + (sheet is null ? 0 : 1) + (seed is null ? 0 : 1) > 1)
-                throw o.Fail("someone's drawn from one of cast=, sheet= or look=, not two of them");
+            if ((castId is null ? 0 : 1) + (sheet is null ? 0 : 1) + (seed is null ? 0 : 1) + (creatureId is null ? 0 : 1) > 1)
+                throw o.Fail("someone's drawn from one of cast=, sheet=, look= or creature=, not two of them");
 
             CharacterLook look = null;
             if (castId is not null)
@@ -427,6 +452,12 @@ public static class MapLoader
                 CastMember cast = Cast.Get(castId) ?? throw o.Fail($"there's nobody in the cast called {castId}");
                 if (cast.Look is null && cast.Sheet is null) throw o.Fail($"{castId} is only ever a voice, and can't stand on a map");
                 name ??= cast.Name;
+            }
+            else if (creatureId is not null)
+            {
+                Creature creature = Creatures.Get(creatureId)
+                    ?? throw o.Fail($"there's no creature called {creatureId} (the creatures are {string.Join(", ", Creatures.Ids)})");
+                name ??= creature.Name;
             }
             else if (seed is not null)
             {
@@ -437,17 +468,20 @@ public static class MapLoader
             }
             else
             {
-                if (sheet is null || name is null) throw o.Fail("someone who isn't in the cast needs name=, and sheet= or look= for how they look");
+                if (sheet is null || name is null) throw o.Fail("someone who isn't in the cast or a creature needs name=, and sheet= or look= for how they look");
                 if (!Townsfolk.Contains(sheet))
                     throw o.Fail($"there's no sheet called {sheet} (the townsfolk are {string.Join(", ", Townsfolk.All)})");
             }
 
+            string talk = o.Text("talk");
+            if (talk is not null && DialogueCatalog.Get(talk) is null) throw o.Fail($"there's no conversation called {talk}");
+
             float wander = o.Number("wander", 0f);
             if (wander < 0f) throw o.Fail("wander can't be less than nothing");
 
-            var npc = new MapNpc(o.Id, name, FeetOn(o), o.Facing("facing", Direction.Down), sheet, castId, look,
-                ReadLines(o, "say"), wander * Tilemap.TileSize, o.Presence());
-            o.Done("name, sheet, look, cast, facing, say, wander, when, unless");
+            var npc = new MapNpc(o.Id, name, FeetOn(o), o.Facing("facing", Direction.Down), sheet, castId, look, creatureId,
+                ReadLines(o, "say"), talk, wander * Tilemap.TileSize, o.Presence());
+            o.Done("name, sheet, look, cast, creature, facing, say, talk, wander, when, unless");
 
             Point cell = Tilemap.CellOf(npc.Feet);
             if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
@@ -492,6 +526,26 @@ public static class MapLoader
         }
 
         return lights;
+    }
+
+    /// <summary>The places at the camp: camp id x y, and facing= (down if it isn't set). Whoever's first to be waiting stands at the first, and so on.</summary>
+    /// <param name="objects">Every object on the map.</param>
+    /// <param name="solid">Whether a tile is solid, for checking whoever's waiting there could stand there.</param>
+    private static List<MapCamp> ReadCamp(List<MapObjectLine> objects, Func<int, int, bool> solid)
+    {
+        var camp = new List<MapCamp>();
+
+        foreach (MapObjectLine o in Of(objects, "camp"))
+        {
+            var place = new MapCamp(o.Id, FeetOn(o), o.Facing("facing", Direction.Down));
+            o.Done("facing");
+
+            Point cell = Tilemap.CellOf(place.Feet);
+            if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is on a solid tile, and whoever's waiting there would be standing in it");
+            camp.Add(place);
+        }
+
+        return camp;
     }
 
     /// <summary>Reads every object of a kind that's a rectangle: x y is its top left tile, and w= and h= are its size in tiles (1 if they aren't set).</summary>

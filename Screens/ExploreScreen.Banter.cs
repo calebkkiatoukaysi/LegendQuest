@@ -21,7 +21,9 @@ namespace LegendQuest.Screens;
 /// A conversation or a menu over the map holds the line that's up, and it starts again after, so
 /// nothing gets said while you couldn't read it. If the conversation changed the flags so the banter
 /// can't play any more (the Red Gulls beaten while the two of you were still talking about them),
-/// the rest of it would be wrong, so it stops there.
+/// the rest of it would be wrong, so it stops there. The party's roaming banters need no trigger:
+/// once you've been walking a while with nothing said, the first one whose flags are right and whose
+/// speakers are all in the party plays, once a game.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -34,6 +36,15 @@ public partial class ExploreScreen
 
     /// <summary>How long before a trigger that goes off more than once can start its banter again, in seconds of play.</summary>
     private const float BarkCooldownSeconds = 45f;
+
+    /// <summary>How long you have to walk with nothing said before the party strikes up a banter of its own, in seconds.</summary>
+    private const float RoamQuietSeconds = 35f;
+
+    /// <summary>What goes in front of a roaming banter's id in the save's list of things that have happened, so it plays once a game.</summary>
+    private const string RoamedPrefix = "party/";
+
+    /// <summary>How long you've been walking with nothing said, in seconds.</summary>
+    private float _roamQuiet;
 
     /// <summary>How near you someone has to be to say something by themselves, in art pixels, and how many can be at it at once.</summary>
     private const float ChatterReach = 5f * Tilemap.TileSize;
@@ -87,6 +98,41 @@ public partial class ExploreScreen
         _banter = banter;
         _banterLine = -1;
         NextBanterLine();
+    }
+
+    /// <summary>Counts the quiet while you walk, and once it's been long enough, starts the first of the party's roaming banters that can play, hasn't, and has everyone it needs.</summary>
+    /// <param name="gameTime">The frame's timing.</param>
+    private void Roam(GameTime gameTime)
+    {
+        if (_banter is not null || _talking)
+        {
+            _roamQuiet = 0f;
+            return;
+        }
+
+        if (!Leader.IsWalking) return;
+        _roamQuiet += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (_roamQuiet < RoamQuietSeconds) return;
+
+        _roamQuiet = 0f;
+        foreach (Banter banter in Banters.Roaming)
+        {
+            if (_game.Triggered.Contains(RoamedPrefix + banter.Id) || !banter.CanPlay(_game.Flags) || !AllInParty(banter)) continue;
+
+            _game.Triggered.Add(RoamedPrefix + banter.Id);
+            _banter = banter;
+            _banterLine = -1;
+            NextBanterLine();
+            return;
+        }
+    }
+
+    /// <summary>Whether everyone with a line in a banter is in the party, so none of it gets skipped.</summary>
+    private bool AllInParty(Banter banter)
+    {
+        foreach (BanterLine line in banter.Lines)
+            if (!_game.InParty(line.Speaker)) return false;
+        return true;
     }
 
     /// <summary>Runs the banter's clock, and moves it on to its next line once the one that's up has had its time and the pause after it.</summary>
@@ -215,7 +261,7 @@ public partial class ExploreScreen
         {
             if (!OnScreen(head)) continue;
 
-            List<string> rows = Wrap(text, BubbleWidth);
+            List<string> rows = Text.Wrap(text, _detailFont, BubbleWidth);
             float width = 0f;
             foreach (string row in rows) width = MathF.Max(width, _detailFont.MeasureString(row).X);
             float height = rows.Count * _detailFont.LineSpacing;
@@ -272,33 +318,9 @@ public partial class ExploreScreen
     }
 
     /// <summary>Where the top of someone's head is on screen.</summary>
-    private Vector2 HeadOnScreen(WalkerSprite walker) => _camera.ToScreen(walker.Position - new Vector2(0f, HeadHeight));
+    private Vector2 HeadOnScreen(WalkerSprite walker) => _camera.ToScreen(HeadOf(walker));
 
     /// <summary>Whether a point is on the screen.</summary>
     private static bool OnScreen(Vector2 point) =>
         point.X >= 0f && point.Y >= 0f && point.X < LegendQuestGame.ScreenWidth && point.Y < LegendQuestGame.ScreenHeight;
-
-    /// <summary>Breaks a line into rows that fit a width, at the spaces.</summary>
-    /// <param name="text">The line.</param>
-    /// <param name="width">The widest a row can be, in screen pixels.</param>
-    private List<string> Wrap(string text, float width)
-    {
-        var rows = new List<string>();
-        string row = string.Empty;
-        foreach (string word in text.Split(' '))
-        {
-            string tried = row.Length == 0 ? word : row + " " + word;
-            if (row.Length > 0 && _detailFont.MeasureString(tried).X > width)
-            {
-                rows.Add(row);
-                row = word;
-            }
-            else
-            {
-                row = tried;
-            }
-        }
-        if (row.Length > 0) rows.Add(row);
-        return rows;
-    }
 }

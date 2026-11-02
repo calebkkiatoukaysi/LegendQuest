@@ -27,7 +27,8 @@ public class Paperdoll
     /// face, and the front half is the drape over the shoulders from the front and all of it from
     /// behind. With that split, one order works for every direction. The hair's after the cape so
     /// long hair falls over it, the hat after the hair, and ears and horns after the hat so they
-    /// stick out of it.
+    /// stick out of it. A hood's the one hat that's the whole head, so under one the hair and ears
+    /// aren't drawn at all; horns still come out through it.
     /// </remarks>
     private static readonly Slot[] PaperdollOrder =
     {
@@ -118,12 +119,15 @@ public class Paperdoll
         Slot.Face => Pick(LookOptions.Faces, look.Face),
         Slot.Beard => Pick(LookOptions.Beards, look.Beard),
         Slot.Hat => Pick(LookOptions.Hats, look.Hat),
-        Slot.Ears => Ears(look),
+        Slot.Ears => HidesHair(look) ? null : Ears(look),
         Slot.Horns => look.Ancestry == Ancestry.Emberkin ? Line(look) == 0 ? "horns-curl" : "horns-swept" : null,
         Slot.TailBack => Tail(look) is string tail ? tail + "-back" : null,
         Slot.TailFront => Tail(look) is string tail ? tail + "-front" : null,
-        _ => Pick(LookOptions.Hair, look.Hair),
+        _ => HidesHair(look) ? null : Pick(LookOptions.Hair, look.Hair),
     };
+
+    /// <summary>Whether their hat covers their whole head, hair, ears and all: a hood.</summary>
+    private static bool HidesHair(CharacterLook look) => LookOptions.Hats[LookOptions.Wrap(look.Hat, LookOptions.Hats.Count)].HidesHair;
 
     /// <summary>A people's ears, if theirs aren't hidden under their hair: the Sylvan's points and the Wildkin's beast's.</summary>
     private static string Ears(CharacterLook look) => look.Ancestry switch

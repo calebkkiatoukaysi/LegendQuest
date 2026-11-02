@@ -4,7 +4,9 @@
 ; stalls, and the bakery and the forge at its far end, with gardens and two houses past them. Then
 ; the canal, with a footbridge over to the washing yard, the avenue south to the city gate and the
 ; old road, and houses all along the south side. The Watch has a post by the gate and another where
-; the harbour road comes in off the west side. Lit, and no fog: everyone knows the capital.
+; the harbour road comes in off the west side. The market street runs on out of the east side, the
+; road to Thornbridge. The palace is the Sunspire Keep, and the stair down to the Old Crown Vault is
+; in the terrace beside it. Lit, and no fog: everyone knows the capital.
 
 [map]
 id = questeria
@@ -88,8 +90,10 @@ music = Exploring
 spawn start 42 34 facing=up
 spawn gate 42 55 facing=up
 spawn docks 2 26 facing=right
+spawn east-gate 105.5 33.5 facing=left
 exit road 40 57 w=5 to=road at=start
 exit docks 0 23 h=6 to=docks at=city
+exit thornbridge 107 31 h=6 to=thornbridge at=gate
 
 ; The Soul-Bound, as you come up from the harbour. It's the first thing that happens in the city, so it
 ; gets the red mark.
@@ -105,6 +109,17 @@ prop cypress 27 16
 prop cypress 57 16
 prop topiary 12 17
 prop topiary 74 17
+
+; The palace is the Sunspire Keep. Its door, 9 left of its foot at the top of its steps, only lets you
+; in once you've the Sunheart to bring the King; till then the guard on it sends you off. East of it,
+; the stair down to the Old Crown Vault in the terrace, its gate locked till the Princess gives you the
+; way in.
+entrance keep 41.9 17.5 to=sunspire-keep name="Sunspire Keep" when=a1-c4-02
+trigger keep-shut 41 17 w=2 say="Guardsman Oswin steps in front of the door. Nobody sees the King without a summons. Move along, kindly." once=no unless=a1-c4-02
+prop vault-stair-shut 56 12 unless=a1-c4-01
+prop vault-stair 56 12 when=a1-c4-01
+entrance vault 56.5 12.5 to=old-crown-vault name="The Old Crown Vault" when=a1-c4-01
+trigger vault-shut 55 12 w=3 say="Steps go down under the terrace to an old iron gate. It's locked, and somebody's oiled the lock lately." once=no unless=a1-c4-01
 
 ; The chapel in its garden west of the temple, and the Watch's post where the harbour road comes in.
 prop chapel-pink 5 11
@@ -152,8 +167,9 @@ prop sewer-grate 26.5 24
 ; The Lantern Market: the quest board with Fennick by it, the Gilded Flagon with a table out front, its
 ; sign by the door and the flower cart down by the water, and past it the square, two rows of stalls
 ; with their keepers out in front of them. The Flagon stands so its door, 45 art pixels right of its
-; foot, is where the old inn's was.
+; foot, is where the old inn's was. Once Thornbridge is seen to, a royal messenger waits outside it.
 npc fennick 56.5 34 cast=fennick facing=right
+npc messenger 71.5 31.6 cast=royal-messenger facing=down when=a1-c3 unless=a1-c4-01
 
 prop gilded-flagon 66.69 30
 prop gilded-flagon-sign 72 30.6
@@ -184,6 +200,11 @@ prop lamp-double 99.5 32
 prop barrel-flowers 106 30
 prop lamp-arm 106 35
 prop sewer-grate 98 34
+
+; Where the market street runs on out of the city, east to Thornbridge: the fingerpost for it, and a
+; watchman to wave you through.
+prop signpost-arrows 104.5 36.6
+npc east-watch 105 32.2 cast=watch facing=left say="East road's open. Thornbridge is a morning's walk.|Farmers in, carts out, all day long.|If you see smoke over the fields, come back and tell us."
 
 ; The gardens north of the market, with two houses in them.
 prop oak 79 9
@@ -294,6 +315,8 @@ trigger bark-city-kids 15 42 w=8 h=5 bark=city-kids once=no
 trigger bark-city-old-couple 44 34 w=5 h=3 bark=city-old-couple once=no
 trigger bark-city-busker 35 21 w=4 h=4 bark=city-busker once=no
 trigger bark-city-acolytes 11 18 w=6 h=3 bark=city-acolytes once=no
+trigger bark-city-keep-door 39 18 w=6 h=2 bark=city-keep-door
+trigger bark-city-east-gate 101 31 w=3 h=6 bark=city-east-gate
 
 ; The people. The ones with wander= walk about that many tiles round where they're put. The ones with
 ; a cast= have conversations, and a yellow mark when one's a job.

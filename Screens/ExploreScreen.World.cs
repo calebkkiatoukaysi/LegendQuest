@@ -26,10 +26,10 @@ public partial class ExploreScreen
     /// <summary>How far above something's picture its name and prompt go, in screen pixels.</summary>
     private const float PromptGap = 6f;
 
-    /// <summary>How close you have to be to talk to someone, in art pixels, feet to feet.</summary>
+    /// <summary>How close you have to be to talk to someone, in art pixels, feet to feet. Someone broader than a person can be talked to from further off (see ReachOf).</summary>
     private const float TalkReach = 28f;
 
-    /// <summary>How far above someone's feet the top of their head is, in art pixels, for writing over it.</summary>
+    /// <summary>How far above a person's feet the top of their head is, in art pixels, for writing over it. A creature's is as much higher as its frame stands taller (see HeadOf).</summary>
     private const float HeadHeight = 44f;
 
     /// <summary>What comes up on the next map if the autosave on the way there couldn't be written.</summary>
@@ -52,9 +52,10 @@ public partial class ExploreScreen
     /// <summary>The exits and triggers your feet are in, by id, so each one only goes off as you walk into it.</summary>
     private readonly HashSet<string> _inside = new();
 
-    /// <summary>The nearest thing you're close enough to use, or the nearest person you're close enough to talk to. At most one of them is set.</summary>
+    /// <summary>The nearest thing you're close enough to use, the nearest person you're close enough to talk to, or the place in the party of the nearest of them with something to say to you. At most one of them is set.</summary>
     private MapInteractable _near;
     private Npc _nearNpc;
+    private int? _nearMember;
 
     /// <summary>Whether feet there would be standing in something solid.</summary>
     private bool Blocked(BoundingRectangle feet)
@@ -136,12 +137,17 @@ public partial class ExploreScreen
     /// <summary>Whether a trigger that only goes off once already has. The save keeps it as map/id, the same as WorldState does.</summary>
     private bool Used(MapTrigger trigger) => trigger.Once && _game.Triggered.Contains(_map.Id + "/" + trigger.Id);
 
-    /// <summary>Finds the nearest thing you're close enough to use that there's still something to do with, or the nearest person you're close enough to talk to, whichever's nearer.</summary>
-    /// <remarks>Measured from your feet to its foot, so it doesn't matter how tall it is.</remarks>
+    /// <summary>Finds the nearest thing you're close enough to use that there's still something to do with, or the nearest person you're close enough to talk to, whichever's nearer; or if there's neither, the nearest of the party with something to say to you.</summary>
+    /// <remarks>
+    /// Measured from your feet to its foot, so it doesn't matter how tall it is. The party's always at
+    /// your elbow, so they only get E when there's nothing else to use it on, or they'd keep taking it
+    /// off the chest you're standing at.
+    /// </remarks>
     private void FindNearest()
     {
         _near = null;
         _nearNpc = null;
+        _nearMember = null;
         float best = float.MaxValue;
 
         foreach ((MapInteractable thing, _) in _things)
@@ -156,10 +162,21 @@ public partial class ExploreScreen
         foreach (Npc npc in _npcs)
         {
             float distance = Vector2.Distance(Leader.Position, npc.Walker.Position);
-            if (distance > TalkReach || distance >= best) continue;
+            if (distance > ReachOf(npc) || distance >= best) continue;
 
             _near = null;
             _nearNpc = npc;
+            best = distance;
+        }
+
+        if (_near is not null || _nearNpc is not null) return;
+
+        for (int i = 0; i < _walkers.Count; i++)
+        {
+            float distance = Vector2.Distance(Leader.Position, _walkers[i].Position);
+            if (i == _game.Leader || distance > TalkReach || distance >= best || ScriptFor(_game.Party[i]) is null) continue;
+
+            _nearMember = i;
             best = distance;
         }
     }
@@ -175,6 +192,13 @@ public partial class ExploreScreen
             return true;
         }
 
+        if (_nearMember is int member)
+        {
+            Halt();
+            TalkToMember(member);
+            return true;
+        }
+
         if (_near is null) return false;
 
         Halt();
@@ -182,16 +206,49 @@ public partial class ExploreScreen
         return true;
     }
 
-    /// <summary>Talks to someone: you both turn to face each other, and it's a conversation if they've one for now, or their line if not.</summary>
+    /// <summary>Talks to someone: you both turn to face each other, and it's a conversation if they've one for now, or their line if not. Someone waiting at camp with no conversation of their own offers to take a place in the party.</summary>
     /// <param name="npc">Who.</param>
     private void Talk(Npc npc)
     {
         Leader.Face(npc.Walker.Position);
 
-        DialogueScript script = DialogueCatalog.For(npc.Definition.Id, _game.Flags);
+        DialogueScript script = ScriptFor(npc) ?? (_campers.Contains(npc) ? CampOffer(npc.Definition.Id) : null);
         npc.TalkTo(Leader.Position, script is null);
         if (script is not null) Converse(script, null);
     }
+
+    /// <summary>Talks to one of the party you're not controlling, if they've something to say: you turn to each other, they stop where they are, and their conversation starts.</summary>
+    /// <param name="index">Their place in the party.</param>
+    private void TalkToMember(int index)
+    {
+        if (ScriptFor(_game.Party[index]) is not DialogueScript script) return;
+
+        WalkerSprite walker = _walkers[index];
+        Leader.Face(walker.Position);
+        walker.Face(Leader.Position);
+        walker.IsWalking = false;
+        Converse(script, null);
+    }
+
+    /// <summary>The conversation talking to someone on the map starts now: the one the map gives them with talk=, if it can start, or else their first in DialogueCatalog that can. Null if there's neither.</summary>
+    /// <param name="npc">Who.</param>
+    private DialogueScript ScriptFor(Npc npc)
+    {
+        if (DialogueCatalog.Get(npc.Definition.Talk) is DialogueScript talk && talk.CanStart(_game.Flags)) return talk;
+        return DialogueCatalog.For(npc.Definition.Id, _game.Flags);
+    }
+
+    /// <summary>The conversation talking to one of the party starts now: their first in DialogueCatalog that's with them (by their origin id) and can start, or null if they've nothing to say.</summary>
+    /// <param name="member">Who.</param>
+    private DialogueScript ScriptFor(PartyMember member) => DialogueCatalog.For(member.Id, _game.Flags);
+
+    /// <summary>How close you have to be to talk to someone: TalkReach for a person, and as much further as they're broader than one each side, so a beast the size of a cart can be talked to from beside it.</summary>
+    private static float ReachOf(Npc npc) =>
+        TalkReach + (npc.Walker.Shape.Footprint.X - WalkerShape.Person.Footprint.X) / 2f;
+
+    /// <summary>Where the top of someone's head is, in world pixels: HeadHeight up from a person's feet, and as much higher again as a creature's frame stands taller than a person's.</summary>
+    private static Vector2 HeadOf(WalkerSprite walker) =>
+        walker.Position - new Vector2(0f, HeadHeight + walker.Shape.Feet.Y - WalkerShape.Person.Feet.Y);
 
     /// <summary>Uses something: turns you to it, cues what happened, and opens the map to travel if it was a waypoint.</summary>
     /// <param name="thing">What to use.</param>
@@ -327,7 +384,14 @@ public partial class ExploreScreen
         if (_nearNpc is Npc npc)
         {
             if (npc.Line is not null || SayingBanter(npc.Walker)) return null;
-            return (npc.Definition.Name.ToUpperInvariant(), "E  ·  TALK", _camera.ToScreen(npc.Walker.Position - new Vector2(0f, HeadHeight)));
+            return (npc.Definition.Name.ToUpperInvariant(), "E  ·  TALK", _camera.ToScreen(HeadOf(npc.Walker)));
+        }
+
+        if (_nearMember is int member)
+        {
+            WalkerSprite walker = _walkers[member];
+            if (SayingBanter(walker)) return null;
+            return (_game.Party[member].Name.ToUpperInvariant(), "E  ·  TALK", _camera.ToScreen(HeadOf(walker)));
         }
 
         if (_near is not MapInteractable thing) return null;

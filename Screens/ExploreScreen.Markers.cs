@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendQuest.Characters;
-using LegendQuest.Dialogue;
 using LegendQuest.World;
 
 namespace LegendQuest.Screens;
@@ -13,10 +12,11 @@ namespace LegendQuest.Screens;
 /// an event, and an arrow at the edge of the screen for any that are off it.
 /// </summary>
 /// <remarks>
-/// Who's marked only changes when the flags do, so it's worked out then (after a conversation, a
-/// trigger, or using something), not every frame. They're drawn after the dark and the roofs, at the
-/// map's zoom so they're the size of everything else on it, and they bob a little so the eye goes
-/// to them. The map screen shows them too.
+/// Who's marked only changes when the flags or the party do, so it's worked out then (after a
+/// conversation, a trigger, using something, or changing who you control), not every frame. One of
+/// the party with something new to say to you is marked like anyone else, but never whoever you're
+/// controlling. They're drawn after the dark and the roofs, at the map's zoom so they're the size of
+/// everything else on it, and they bob a little so the eye goes to them. The map screen shows them too.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -50,19 +50,27 @@ public partial class ExploreScreen
 
     private Texture2D _markers;
 
-    /// <summary>Everyone and everywhere marked: the person (null for a trigger), where they were stood or the middle of the trigger, and which marker.</summary>
-    /// <remarks>The marker follows anyone who wanders. Where they were stood only sets its bob, so the bob doesn't speed up and slow down as they walk.</remarks>
-    private readonly List<(Npc Npc, Vector2 Spot, MarkerKind Kind)> _marked = new();
+    /// <summary>Everyone and everywhere marked: the figure it floats over (null for a trigger), where they were stood or the middle of the trigger, and which marker.</summary>
+    /// <remarks>The marker follows anyone who wanders, and the party as they walk. Where they were stood only sets its bob, so the bob doesn't speed up and slow down as they go.</remarks>
+    private readonly List<(WalkerSprite Walker, Vector2 Spot, MarkerKind Kind)> _marked = new();
 
-    /// <summary>Works out who and what's marked with the flags as they are: anyone whose conversation now has a marker, and every trigger the map marks that's there and hasn't gone off.</summary>
+    /// <summary>Works out who and what's marked with the flags as they are: anyone on the map whose conversation now has a marker, the same for the party but you, and every trigger the map marks that's there and hasn't gone off.</summary>
     private void RefreshMarkers()
     {
         _marked.Clear();
 
         foreach (Npc npc in _npcs)
         {
-            MarkerKind kind = DialogueCatalog.For(npc.Definition.Id, _game.Flags)?.Marker ?? MarkerKind.None;
-            if (kind != MarkerKind.None) _marked.Add((npc, npc.Walker.Position, kind));
+            MarkerKind kind = ScriptFor(npc)?.Marker ?? MarkerKind.None;
+            if (kind != MarkerKind.None) _marked.Add((npc.Walker, npc.Walker.Position, kind));
+        }
+
+        for (int i = 0; i < _walkers.Count; i++)
+        {
+            if (i == _game.Leader) continue;
+
+            MarkerKind kind = ScriptFor(_game.Party[i])?.Marker ?? MarkerKind.None;
+            if (kind != MarkerKind.None) _marked.Add((_walkers[i], _walkers[i].Position, kind));
         }
 
         foreach (MapTrigger trigger in _map.Triggers)
@@ -78,14 +86,14 @@ public partial class ExploreScreen
     private List<(Vector2 At, MarkerKind Kind)> MapMarkers()
     {
         var markers = new List<(Vector2 At, MarkerKind Kind)>();
-        foreach ((Npc npc, Vector2 spot, MarkerKind kind) in _marked)
-            markers.Add((npc?.Walker.Position ?? spot, kind));
+        foreach ((WalkerSprite walker, Vector2 spot, MarkerKind kind) in _marked)
+            markers.Add((walker?.Position ?? spot, kind));
         return markers;
     }
 
     /// <summary>The point a marker floats over, in world pixels: the top of someone's head, wherever they've walked to, or a little over the middle of a trigger.</summary>
-    private static Vector2 MarkedAt(Npc npc, Vector2 spot) =>
-        npc is not null ? npc.Walker.Position - new Vector2(0f, HeadHeight) : spot - new Vector2(0f, MarkerOverArea);
+    private static Vector2 MarkedAt(WalkerSprite walker, Vector2 spot) =>
+        walker is not null ? HeadOf(walker) : spot - new Vector2(0f, MarkerOverArea);
 
     /// <summary>Works out where each marker on the screen goes, over its head or its trigger, moved up out of the way of the prompt and the lines over people's heads.</summary>
     /// <param name="taken">What's already over people's heads, on screen. Each marker's room is added to it.</param>
@@ -93,9 +101,9 @@ public partial class ExploreScreen
     private void PlaceMarkers(List<Rectangle> taken, List<(Rectangle Box, MarkerKind Kind, float Phase)> marks)
     {
         int zoom = _camera.Zoom;
-        foreach ((Npc npc, Vector2 spot, MarkerKind kind) in _marked)
+        foreach ((WalkerSprite walker, Vector2 spot, MarkerKind kind) in _marked)
         {
-            Vector2 over = MarkedAt(npc, spot);
+            Vector2 over = MarkedAt(walker, spot);
             Vector2 screen = _camera.ToScreen(over);
             if (!OnScreen(screen)) continue;
 
@@ -133,9 +141,9 @@ public partial class ExploreScreen
         Vector2 middle = edge.Center.ToVector2();
         float nudge = (0.5f - 0.5f * MathF.Cos((float)gameTime.TotalGameTime.TotalSeconds * MarkerBobRate)) * ArrowNudge;
 
-        foreach ((Npc npc, Vector2 spot, MarkerKind kind) in _marked)
+        foreach ((WalkerSprite walker, Vector2 spot, MarkerKind kind) in _marked)
         {
-            Vector2 screen = _camera.ToScreen(MarkedAt(npc, spot));
+            Vector2 screen = _camera.ToScreen(MarkedAt(walker, spot));
             if (OnScreen(screen)) continue;
 
             // Out from the middle toward it, as far as the edge. A way straight across divides by

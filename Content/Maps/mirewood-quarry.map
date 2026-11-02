@@ -1,0 +1,188 @@
+; The Old Quarry, under the Mirewood. In up the ramp from the mouth at the bottom into the upper
+; cut, the quarrymen's store off it to the west and the tar coming up in the bay to the east. The
+; first roots are across the way north out of the cut, at its west end, and Sera parts them; past
+; them the roots have broken the floor of the second cut up, and the second roots are across the
+; way north out of that. Then the passage along the top, where the black's come up through the
+; floor, and down it to where the courier lies, and the Thornmother's den, with the black crystal
+; spike against its back wall. Lit by the daylight down the ramp, the fungus that glows, the
+; crystal coming through the walls, and the spike itself.
+
+[map]
+id = mirewood-quarry
+name = The Old Quarry
+tileset = quarry
+size = 36 32
+dark = yes
+ambient = 0.1
+music = Underground
+
+[legend]
+, = floor
+s = floor-shadow
+v = black-vein-floor
+r = root-floor
+~ = tar-seep
+= = ramp
+# = wall-top
+F = wall-face
+R = wall-roots
+C = wall-crystal
+B = wall-base
+x = rubble
+g = gravel
+o = roots
+* = shards
+f = fungus
+t = tools
+
+[ground]
+####################################
+###FFFFFRFFFFRFFFFFRFFFCFFFFFCFRFF##
+###BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB##
+###ssssssssssssss#rrvsvvvvvvvvvsrr##
+###,,,,,,,,,,,,,,#rr,vvvvvvvvvv,rr##
+###,,,,,,,,,,,,,,#r,vvvvvvvvvvvv,r##
+####,,########vv,#,vvvvvvvvvvvvvrr##
+##FR,,FFFCFFF#,v,#rvvvvvvvvvvvv,,r##
+##BB,,BBBBBBB#,v,#rr,vvvvvvvvvvvrr##
+##rrssssssrrs#,,vvrrvvvvvvvvvvv,,r##
+##,r,r,r,,,,r#,,vvrr,,vvvvvvvv,,rr##
+##,,rr,rrrr,r#,v,,rr,,v,v,v,v,,,rr##
+##rrr,,rr,,r,#,,,#rr,,,,,,,,,,,,rr##
+##rrr,rrrrr,,#####rr,,,,,,,,,,,,rr##
+##rrr,,,,,,,,#####r,rrrrrrrrrr,r,r##
+##rrrr,rrrrrr#####rrrrr,rrrr,r,,rr##
+##~~r,,rrrrrr#######################
+##~~rr,rrrrrr#######################
+##########,,########################
+########FF,,FFRFFFFFCFFFRFFF########
+##FFFFF#BB,,BBBBBBBBBBBBBBBB###R####
+##BBBBB#srrrrsssssssssssssss#FFFFF##
+##sssss#,rrrr,,,,,,,,,,,,,,,#BBBBB##
+##,,,,,,,,,r,,,,,,,,,,,,,,,,#sssss##
+##,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,##
+##,,,,,,,,,,,,,,,,,,,,,,,,,,,,,~~,##
+##,,,,,#,,,,,,,,,,,,,,,,,,,,,,~~~~##
+########,,,,,,,,,,,,,,,,,,,,#,,,,,##
+################====################
+################====################
+################====################
+################====################
+
+[detail]
+....................................
+....................................
+....................................
+....................................
+...o..fg...g....x.....*.......*..x..
+......................o.............
+....................*...............
+..............*.....................
+....................................
+...............g........*...........
+.....o......x...............*..o....
+................*...................
+...........f.........*..............
+...f....o...........o...............
+...................f.g..............
+..............................x..f..
+..........o.........................
+....................................
+....................................
+....................................
+....................................
+.........o..o.......................
+......x..f................x.........
+...f..........g.........g.......f...
+....g....x.........g..........g.....
+.....t.........t.........f..........
+...x......g.......g........x........
+.............x........x.............
+....................................
+....................................
+....................................
+....................................
+
+; kind id x y, in tiles, then any settings. Exits and triggers are rectangles from their top left
+; tile. A root wall stands in the way through a wall's face like the barrow's doors, its foot on
+; the line where the face meets the floor.
+[objects]
+spawn start 17.5 29 facing=up
+spawn mouth 17.5 29 facing=up
+exit mirewood 16 31 w=4 to=mirewood at=quarry
+
+; The light: the daylight down the ramp, the fungus, the crystal where it's come through the walls,
+; and the spike, whose glow is painted round it and whose light is this one.
+light daylight 17.5 30.5 reach=4 strength=0.7
+light daylight-in 17.5 27 reach=3 strength=0.35
+light fungus-cut-west 9 22 reach=3 strength=0.6
+light fungus-cut-east 25 25 reach=3 strength=0.55
+light crystal-cut 20 21 reach=3 strength=0.5
+light fungus-store 3 23 reach=3 strength=0.5
+light fungus-seep 32 23.5 reach=3 strength=0.5
+light fungus-roots-east 11 12 reach=3 strength=0.55
+light fungus-roots-west 3 13 reach=3 strength=0.5
+light crystal-roots 9 9.5 reach=2.5 strength=0.45
+light fungus-passage 6 4 reach=3 strength=0.5
+light shards-passage 15 9 reach=3 strength=0.45
+light spike 26 7.5 reach=7 strength=0.9
+light crystal-den-west 23 3.5 reach=2.5 strength=0.5
+light crystal-den-east 29 3.5 reach=2.5 strength=0.5
+light fungus-den-west 19.5 14 reach=3 strength=0.4
+light fungus-den-east 32.5 14.5 reach=3 strength=0.4
+
+; The upper cut, where you come in, with what the quarrymen left: a crate and a barrel, a timber
+; down, their tools. Then their store off to the west with a chest in it, and the bay to the east
+; where the tar comes up, with another.
+trigger bark-quarry-down 16 26 w=4 h=2 bark=quarry-down
+prop crate 13 26.4
+prop barrel 14.3 26.6
+prop log 23.5 22.4
+prop bones 21 24.6
+prop rocks 26.2 26.4
+prop gloom-mushroom-small 26.6 22.4
+prop crate-stack 3.6 22.6
+prop barrel 5.6 22.8
+prop sack-pile 3 25.8
+chest store 5.2 25.2 gold=25
+prop gloom-mushroom 29.6 24
+chest seep 32.5 23.6 gold=35
+
+; The first roots, across the way north out of the cut at its west end. Walk up to them and Sera
+; parts them.
+door roots-1 10.5 20.5 look=root-wall flag=quarry-roots-1 name="Roots"
+trigger roots-1-sera 10 21 w=2 h=2 talk=a1-c2-02-roots-1 unless=quarry-roots-1
+
+; The second cut, the roots through its floor, the tar coming up in its corner, and the second
+; roots across the way north out of it.
+trigger bark-quarry-roots 8 14 w=5 h=2 bark=quarry-roots
+prop bones 6 12.6
+prop gloom-mushroom 11.6 16.2
+prop gloom-mushroom-small 4.6 14.6
+prop gloom-mushroom-small 8.4 10
+door roots-2 4.5 8.5 look=root-wall flag=quarry-roots-2 name="Roots"
+trigger roots-2-sera 4 9 w=2 h=2 talk=a1-c2-02-roots-2 unless=quarry-roots-2
+
+; The passage along the top, where the black's in the floor and you can hear the crystal, and
+; down it the courier, lying where he fell with his satchel by him. His letter's read as you come
+; on him, and you can't get past him into the den without it.
+trigger bark-quarry-crystal-hum 8 3 h=3 bark=quarry-crystal-hum
+prop bones 11.4 4.6
+prop courier-body 15 7.6
+prop satchel 15.6 9.2
+trigger courier 14 6 w=3 h=2 talk=a1-c2-02-letter unless=courier-letter-read
+
+; The Thornmother's den: the spike against the back wall, whole until it's dealt with, then smashed
+; or made clean; her in front of it; the bones of what she's dragged in; and a chest in the far
+; corner. A1-C2-02 starts as you come in, once the letter's read.
+trigger den 17 9 h=3 talk=a1-c2-02 when=courier-letter-read unless=thornmother-beaten
+prop black-crystal 26 6.6 unless=crystal-dealt-with
+prop black-crystal-shattered 26 6.6 when=crystal-shattered
+prop black-crystal-purified 26 6.6 when=crystal-purified
+npc thornmother 25 11.5 creature=thornmother facing=left unless=thornmother-beaten
+prop bones 21 12.6
+prop bones 30.4 9.8
+prop bones 28.6 13.6
+prop gloom-mushroom 19.2 4.6
+prop gloom-mushroom 32.6 5.2
+chest den-chest 32 13 gold=60

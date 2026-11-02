@@ -1,7 +1,10 @@
 """
 The paperdoll: the youth off my townsperson sheet, taken apart so anyone can be made out of him.
 
-    python tools/generate_paperdoll.py
+    python tools/generate_paperdoll.py [sheet ...]
+
+With sheet names (hat-crown, say), only those are written, for every body, and everything else on
+disk is left as it is.
 
 He's the best-drawn walker I have (the biggest on his sheet, so the cleanest when he's sampled
 down), so he's the body everyone in the party is made from. Every pixel of him gets sorted into what
@@ -768,6 +771,12 @@ STEEL = ((56, 60, 78), (98, 106, 128), (150, 160, 180), (206, 214, 226))
 TRICORN = ((24, 20, 30), (44, 36, 46), (70, 58, 66))
 TRIM = ((176, 128, 50), (236, 196, 104))
 
+#: Royal gold for a crown and a circlet, dark to light, and the stones set in them: the king's ruby
+#: and the princess's sapphire. None of them changes colour.
+REGALIA = ((116, 66, 30), (184, 124, 44), (236, 186, 78), (255, 236, 156))
+RUBY = ((108, 20, 48), (192, 36, 66), (252, 128, 146))
+SAPPHIRE = ((26, 48, 116), (56, 110, 206), (164, 210, 255))
+
 
 def head_box(f, hair, r, c):
     """His head in a frame: the top, the eye row, the head's middle across, and how wide it is at
@@ -1042,6 +1051,202 @@ def hats(frames, hair, keys):
                     if r == DOWN:
                         layer.put(r, c, round(cx), top - CROWN_RISE + 1, STEEL[3])
         keep("hat-" + kind, layer)
+    royal_crown(frames, hair)
+    hood(frames, hair, keys)
+    circlet(frames, hair)
+
+
+#: The king's crown, as rows of text from its points down to the bottom of its band: G is gold
+#: and J is where the jewel goes facing you. Three points, the middle one tallest.
+CROWN_SHAPE = (
+    "G...G...G",
+    "G..GGG..G",
+    "GGGGGGGGG",
+    "GGGGJGGGG",
+    "GGGGGGGGG",
+)
+
+#: How many rows over the hat's brim the crown's band stands, so it sits up on top of his head
+#: with its points over his hair, the way a small crown does.
+CROWN_ABOVE_BRIM = 3
+
+
+def royal_crown(frames, hair):
+    """King Leon's small gold crown with a ruby in front, sat on top of the head over the hair.
+    Its points catch the light on their left edges, the band's top edge is the brightest row, and
+    from the side the ruby's at the front edge; from behind there isn't one."""
+    layer = Layer()
+    width = len(CROWN_SHAPE[0])
+    for r in range(4):
+        for c in range(PEOPLE_COLUMNS):
+            f = frames[r][c]
+            top, brim, cx, span = hat_anchor(f, hair, r, c)
+            x0 = round(cx - width / 2)
+            y0 = brim - CROWN_ABOVE_BRIM - len(CROWN_SHAPE) + 1
+            jewel = {DOWN: width // 2, LEFT: 1, RIGHT: width - 2}.get(r)
+            cells = set()
+            for row, text in enumerate(CROWN_SHAPE):
+                for col, ch in enumerate(text):
+                    if ch == ".":
+                        continue
+                    x, y = x0 + col, y0 + row
+                    cells.add((x, y))
+                    band = row - 2
+                    if band < 0:
+                        # The points: light on the side the light comes from.
+                        lit = (x - 1, y) not in cells and CROWN_SHAPE[row][col - 1:col] != "G"
+                        colour = REGALIA[3] if row == 0 or lit else REGALIA[2]
+                    elif band == 0:
+                        colour = REGALIA[3] if col < width - 2 else REGALIA[2]
+                    elif band == 1:
+                        colour = REGALIA[2] if col < width // 2 else REGALIA[1]
+                    else:
+                        colour = REGALIA[1] if col < width - 2 else REGALIA[0]
+                    layer.put(r, c, x, y, colour)
+            if jewel is not None:
+                x, y = x0 + jewel, y0 + 3
+                layer.put(r, c, x, y, RUBY[1])
+                layer.put(r, c, x, y - 1, RUBY[2])
+                layer.put(r, c, x + 1 if r != RIGHT else x - 1, y, RUBY[0])
+            for x, y in cells:
+                for n in ((x - 1, y), (x + 1, y), (x, y + 1), (x, y - 1)):
+                    if n not in cells and layer.get(r, c, *n) is None:
+                        layer.put(r, c, n[0], n[1], OUTLINE)
+    keep("hat-crown", layer)
+
+
+#: How far a hood stands out from the head each side, in pixels. Over the top it comes up to
+#: where the tips of the hair were, which is a pixel or two over the skull.
+HOOD_LOFT = 1
+
+#: How many rows of forehead show under a hood's edge, over the top of the eyes. One of them is in
+#: its shadow.
+HOOD_BROW = 2
+
+
+def hood(frames, hair, keys):
+    """A deep travelling hood in the cloak's keys, so it's the same dye as their cloak (woad
+    without one). It hides the hair and ears, which Paperdoll knows, so it's the whole head: a
+    rounded cowl a pixel bigger than the head with a little peak, open on the face from
+    just over the eyes down to the chin, lined dark round the opening, and falling onto the
+    shoulders. From the side the opening's the face's front, from behind there isn't one and a seam
+    runs down the middle."""
+    ramp = CLOAK_KEYS
+    layer = Layer()
+    for r in range(4):
+        for c in range(PEOPLE_COLUMNS):
+            f = frames[r][c]
+            top, eyes, cx, span = head_box(f, hair, r, c)
+            if r == UP:
+                eyes = f.neck - 3
+            shoulders = f.row_span(f.neck + 1, ("top", "shirt", "outline", "skin"))
+            face = {}
+            for x, y in f.face + [p for e in f.eyes for p in e]:
+                face.setdefault(y, []).append(x)
+            # The hood's outline: the head's width and a pixel each side, rounded over the top,
+            # and wide enough everywhere to cover the face round the opening.
+            cy = eyes - 3
+            rx = (span[1] - span[0]) / 2.0 + HOOD_LOFT + 0.5
+            ry = cy - top + 0.5
+            outside = set()
+            for y in range(top, f.neck):
+                if y < cy:
+                    half = rx * max(0.0, 1 - ((y - cy) / ry) ** 2) ** 0.5
+                else:
+                    half = rx
+                if half < 1:
+                    continue
+                x0, x1 = round(cx - half), round(cx + half) - 1
+                if y in face:
+                    x0, x1 = min(x0, min(face[y]) - 1), max(x1, max(face[y]) + 1)
+                outside.update((x, y) for x in range(x0, x1 + 1))
+            # The peak: a pixel up at the top, off to the back from the side.
+            peak = {LEFT: round(cx) + 2, RIGHT: round(cx) - 3}.get(r, round(cx) - 1)
+            outside.update(((peak, top - 1), (peak + 1, top - 1)))
+            # The cowl on the shoulders: a row as wide as them, under the chin.
+            for y in (f.neck, f.neck + 1):
+                inset = 1 if y == f.neck else 0
+                outside.update((x, y) for x in range(shoulders[0] + inset, shoulders[1] - inset + 1))
+
+            # The opening: the face from a little over the eyes to the chin, less its back edge
+            # from the side and a pixel at each cheek from the front.
+            top_eye = min((y for e in f.eyes for _, y in e), default=eyes - 1)
+            opening = set()
+            if r != UP:
+                for y in range(top_eye - HOOD_BROW, f.chin + 1):
+                    xs = face.get(y)
+                    if not xs:
+                        continue
+                    lo, hi = min(xs), max(xs)
+                    if r == DOWN:
+                        brow = 2 if y == top_eye - HOOD_BROW else 1 if y > f.chin - 2 else 0
+                        lo, hi = lo + brow, hi - brow
+                    elif r == LEFT:
+                        hi -= 2
+                    else:
+                        lo += 2
+                    opening.update((x, y) for x in range(lo, hi + 1) if (x, y) in f.part)
+            cloth = outside - opening
+
+            # Shaded like a ball lit from the top left, the lining dark round the opening, and the
+            # folds where it gathers under the chin and down the back.
+            for x, y in cloth:
+                u = (x + 0.5 - cx) / max(1.0, rx)
+                v = (y + 0.5 - cy) / max(1.0, ry if y < cy else f.neck - cy)
+                light = -0.55 * u - 0.65 * v + 0.35
+                level = 3 if light > 0.45 else 2 if light > -0.1 else 1
+                if any(n in opening for n in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1))):
+                    level = 0
+                elif r == UP and abs(x + 0.5 - cx) < 1 and top < y < f.neck - 1:
+                    level = max(1, level - 1)
+                layer.put(r, c, x, y, ramp[level])
+            if r == DOWN:
+                # The shadow the hood's edge throws on the forehead.
+                for x, y in opening:
+                    if (x, y - 1) not in opening and f.part.get((x, y)) == "skin":
+                        layer.put(r, c, x, y, keys["skin"][1])
+                mid = round(cx) - 1
+                layer.put(r, c, mid, f.neck, GOLD[1])
+                layer.put(r, c, mid + 1, f.neck, GOLD[0])
+            elif r in (LEFT, RIGHT):
+                for x, y in opening:
+                    if (x, y - 1) not in opening and f.part.get((x, y)) == "skin":
+                        layer.put(r, c, x, y, keys["skin"][1])
+            for x, y in cloth:
+                for n in ((x - 1, y), (x + 1, y), (x, y + 1), (x, y - 1)):
+                    if n not in outside and layer.get(r, c, *n) is None:
+                        layer.put(r, c, n[0], n[1], OUTLINE)
+    keep("hat-hood", layer)
+
+
+def circlet(frames, hair):
+    """A slim gold circlet over the hair at the hairline, with a sapphire on the brow. Round the
+    head, so its middle sits a row lower than its ends from every side; the stone's at the front
+    of it facing you or side on, and from behind it's plain gold."""
+    layer = Layer()
+    for r in range(4):
+        for c in range(PEOPLE_COLUMNS):
+            f = frames[r][c]
+            top, brim, cx, span = hat_anchor(f, hair, r, c)
+            x0, x1 = span[0], span[1]
+            for x in range(x0, x1 + 1):
+                end = min(x - x0, x1 - x)
+                y = brim - (1 if end < 2 else 0)
+                layer.put(r, c, x, y, REGALIA[3] if (x + y) % 3 == 0 else REGALIA[2] if x < cx else REGALIA[1])
+                layer.put(r, c, x, y + 1, OUTLINE)
+                if end == 0:
+                    layer.put(r, c, x, y - 1, OUTLINE)
+            stone = {DOWN: round(cx) - 1, LEFT: x0 + 1, RIGHT: x1 - 2}.get(r)
+            if stone is not None:
+                layer.put(r, c, stone, brim - 1, SAPPHIRE[2])
+                layer.put(r, c, stone + 1, brim - 1, SAPPHIRE[1])
+                layer.put(r, c, stone, brim, SAPPHIRE[1])
+                layer.put(r, c, stone + 1, brim, SAPPHIRE[0])
+                layer.put(r, c, stone - 1, brim - 1, REGALIA[3])
+                layer.put(r, c, stone + 2, brim - 1, REGALIA[1])
+                for x in range(stone - 1, stone + 3):
+                    layer.put(r, c, x, brim - 2, OUTLINE)
+    keep("hat-circlet", layer)
 
 
 # --------------------------------------------------------------------------- #
@@ -1097,10 +1302,12 @@ def built(frame_pixels, f, torso, legs, wider):
     return out
 
 
-def save_builds(frames):
-    """Every sheet, for every body."""
+def save_builds(frames, wanted=()):
+    """Every sheet, for every body, or only the ones named."""
     for folder, torso, legs, wider in BUILDS:
         for name, layer in SHEETS.items():
+            if wanted and name not in wanted:
+                continue
             sheet = new_image(FRAME_W * PEOPLE_COLUMNS, FRAME_H * 4)
             for r in range(4):
                 for c in range(PEOPLE_COLUMNS):
@@ -1133,6 +1340,7 @@ def palettes(keys):
 
 
 if __name__ == "__main__":
+    wanted = sys.argv[1:]
     print("Generating the paperdoll for Legend Quest...")
     frames = youth()
     keys, shade_of = make_keys(frames)
@@ -1148,6 +1356,10 @@ if __name__ == "__main__":
     horns(frames, hair)
     tails(frames, keys)
     hats(frames, hair, keys)
-    save_builds(frames)
-    palettes(keys)
+    for name in wanted:
+        if name not in SHEETS:
+            sys.exit("No sheet called '%s'." % name)
+    save_builds(frames, wanted)
+    if not wanted:
+        palettes(keys)
     print("Done.")

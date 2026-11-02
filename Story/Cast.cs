@@ -57,6 +57,52 @@ public static class Cast
             new CharacterLook { Skin = 0, Face = 0, Eyes = 0, Hair = 1, HairColour = 2, Hat = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 5 }),
         new("hesper", "Sister Hesper", null,
             new CharacterLook { Skin = 5, Face = 1, Eyes = 1, Hair = 2, HairColour = 4, Shirt = 1, Vest = 5, Legs = 1, LegsColour = 4, Cloak = 5 }),
+
+        // The companions before they join, standing on a map or speaking from camp: the same looks
+        // as their Origins, so nobody changes clothes when they're recruited.
+        new("sera", "Sera", null,
+            new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Shirt = 4, Vest = 2, LegsColour = 3, Cloak = 5 }),
+        new("mira", "Mira", null,
+            new CharacterLook { Skin = 0, Face = 1, Eyes = 1, Hair = 3, HairColour = 3, Shirt = 0, Vest = 4, Legs = 1, LegsColour = 4 }),
+        new("kael", "Kael", null,
+            new CharacterLook { Ancestry = Ancestry.Emberkin, Lineage = 1, Skin = 3, Face = 0, Eyes = 3, Hair = 1, HairColour = 1, Shirt = 4, Vest = 3, LegsColour = 1, Cloak = 4 }),
+        new("brannock", "Brannock", null,
+            new CharacterLook { Ancestry = Ancestry.Stoneborn, Skin = 2, Face = 3, Eyes = 1, Hair = 1, HairColour = 3, Beard = 4, Shirt = 4, Vest = 6, LegsColour = 1 }),
+
+        // Thornbridge (Act1Chapter3): Hedda and her daughter Lise, and the three sick Mira's remedies
+        // go to: an old orchard farmer, a boy with a fever, and a glassblower with burned hands. Mine,
+        // written round STORY.md's refugee mother. Sacking, charcoal and oat: everything they own has
+        // walked three weeks.
+        new("refugee-mother", "Hedda", null,
+            new CharacterLook { Skin = 3, Face = 1, Eyes = 1, Hair = 3, HairColour = 0, Shirt = 4, Vest = 6, Legs = 1, LegsColour = 0, Cloak = 4 }),
+        new("refugee-child", "Lise", "child", null),
+        new("refugee-1", "Old Aurek", null,
+            new CharacterLook { Skin = 3, Face = 3, Eyes = 4, Hair = 5, HairColour = 4, Beard = 3, Shirt = 4, Vest = 6, LegsColour = 0, Cloak = 4 }),
+        new("refugee-2", "Teodor", null,
+            new CharacterLook { Skin = 4, Face = 0, Eyes = 1, Hair = 0, HairColour = 1, Beard = 1, Shirt = 0, Vest = 5, LegsColour = 1 }),
+        new("refugee-3", "Yselle the Glassblower", null,
+            new CharacterLook { Ancestry = Ancestry.Stoneborn, Skin = 2, Face = 4, Eyes = 3, Hair = 4, HairColour = 3, Shirt = 3, Vest = 1, Legs = 1, LegsColour = 4 }),
+
+        // The crown (Act1Chapter4): the Princess hooded in the Flagon and in royal blue at court, the
+        // King in navy and gold with the small crown, the Chancellor in plum silk, and the palace's
+        // messenger and guards in the same navy and gold. The hood, crown and circlet are hats 5, 4
+        // and 6.
+        new("elara-hooded", "Princess Elara", null,
+            new CharacterLook { Skin = 0, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Hat = 5, Shirt = 4, Vest = 6, LegsColour = 0, Cloak = 4 }),
+        new("elara", "Princess Elara", null,
+            new CharacterLook { Skin = 0, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Hat = 6, Shirt = 1, Vest = 0, Legs = 1, LegsColour = 2, Cloak = 1 }),
+        new("leon", "King Leon", null,
+            new CharacterLook { Skin = 0, Face = 1, Eyes = 4, Hair = 2, HairColour = 4, Beard = 4, Hat = 4, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 5 }),
+        new("crane", "Lord Chancellor Crane", null,
+            new CharacterLook { Skin = 1, Face = 2, Eyes = 4, Hair = 2, HairColour = 1, Beard = 2, Shirt = 1, Vest = 4, LegsColour = 1, Cloak = 6 }),
+        new("royal-messenger", "Royal Messenger", null,
+            new CharacterLook { Skin = 1, Face = 4, Eyes = 1, Hair = 0, HairColour = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 5 }),
+        new("royal-guard", "Royal Guard", null,
+            new CharacterLook { Skin = 2, Face = 3, Eyes = 1, Hair = 1, HairColour = 0, Beard = 1, Hat = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 5 }),
+
+        // The Rusty Anvil's barkeep: a Wildkin of the bear line, who's seen every fight on the docks.
+        new("anvil-barkeep", "Hessa the Barkeep", null,
+            new CharacterLook { Ancestry = Ancestry.Wildkin, Lineage = 2, Skin = 2, Face = 5, Eyes = 1, Hair = 3, HairColour = 1, Shirt = 4, Vest = 6, LegsColour = 1 }),
     };
 
     private static readonly Dictionary<string, CastMember> ById = new();

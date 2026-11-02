@@ -11,7 +11,8 @@ namespace LegendQuest.Story;
 /// A map's trigger names one with bark=, and walking into it plays the lines one after another
 /// without stopping you. Nothing in it changes the game; the flags only say whether it's the
 /// right time for it, so the same spot can have one thing said before the Red Gulls and another
-/// after.
+/// after. A roaming banter isn't on any trigger: it's the party talking among themselves, and it
+/// plays by itself once you've walked a while in quiet and everyone with a line in it is with you.
 /// </remarks>
 public sealed class Banter
 {
@@ -26,6 +27,9 @@ public sealed class Banter
 
     /// <summary>Flags that stop it playing if any of them are set.</summary>
     public IReadOnlyList<string> Unless { get; init; } = Array.Empty<string>();
+
+    /// <summary>Whether it's the party's own, played by itself while you walk rather than by a trigger, once, and only with everyone who has a line in it in the party.</summary>
+    public bool Roaming { get; init; }
 
     /// <summary>Whether it can play with these flags set: every one of Needs, and none of Unless.</summary>
     /// <param name="flags">The game's flags.</param>

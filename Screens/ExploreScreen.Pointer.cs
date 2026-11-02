@@ -20,6 +20,8 @@ namespace LegendQuest.Screens;
 /// Clicking the ground walks there by A*. Clicking someone or something out of reach walks you
 /// into reach first, then talks to them or uses it, the same as E would. The keys always take over
 /// from a path. Hovering a party card, a person, a thing or the ground each give their own cursor.
+/// Clicking one of the party takes control of them, unless they've something to say to you, when
+/// it talks to them instead and the cursor and the tooltip say so.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -41,6 +43,9 @@ public partial class ExploreScreen
     /// <summary>The soft pool of light under whatever the mouse is on: its size in art pixels, and its colour.</summary>
     private static readonly Vector2 HighlightSize = new(28f, 10f);
     private static readonly Color HighlightColor = new Color(255, 226, 170) * 0.35f;
+
+    /// <summary>What goes on the end of the tooltip for one of the party who's something to say to you.</summary>
+    private const string TalkTip = "  ·  Talk";
 
     private readonly Tooltip _tooltip = new();
     private readonly PartyStrip _strip = new();
@@ -99,7 +104,7 @@ public partial class ExploreScreen
             _tipName = npc.Definition.Name;
             _highlight = npc.Walker.Position;
             _cursor.Shape = CursorShape.Talk;
-            if (click) Approach(npc.Walker.Position, TalkReach, () => Talk(npc));
+            if (click) Approach(npc.Walker.Position, ReachOf(npc), () => Talk(npc));
             return;
         }
 
@@ -108,6 +113,15 @@ public partial class ExploreScreen
             _preview = null;
             DescribeMember(member);
             _highlight = _walkers[member].Position;
+
+            if (member != _game.Leader && ScriptFor(_game.Party[member]) is not null)
+            {
+                _tipDetail += TalkTip;
+                _cursor.Shape = CursorShape.Talk;
+                if (click) Approach(_walkers[member].Position, TalkReach, () => TalkToMember(member));
+                return;
+            }
+
             if (click) SelectLeader(member);
             return;
         }

@@ -26,8 +26,9 @@ namespace LegendQuest.Screens;
 /// everyone on the floor is sorted by how far down the map their feet are. It's in partials: this
 /// one walks and draws, ExploreScreen.Party has the party and the followers, ExploreScreen.Pointer
 /// has the mouse, ExploreScreen.World has using things, talking, triggers and the ways off the map,
-/// ExploreScreen.Banter has the banter and the lines over people's heads, and ExploreScreen.Markers
-/// has the "!"s. The fighting gets a partial of its own later.
+/// ExploreScreen.Banter has the banter and the lines over people's heads, ExploreScreen.Markers
+/// has the "!"s, and ExploreScreen.Camp has whoever's waiting at camp. The fighting gets a partial
+/// of its own later.
 /// </remarks>
 public partial class ExploreScreen : GameScreen
 {
@@ -132,7 +133,12 @@ public partial class ExploreScreen : GameScreen
         foreach (MapInteractable thing in _map.Interactables)
             _everyThing.Add((thing, new PropSprite(new MapProp(thing.Look, thing.Foot, thing.Presence))));
         foreach (MapNpc npc in _map.Npcs) _everyNpc.Add(new Npc(npc));
-        foreach (PartyMember _ in game.Party) _walkers.Add(new WalkerSprite());
+        foreach (PartyMember member in game.Party)
+        {
+            _walkers.Add(new WalkerSprite());
+            _members.Add(member);
+        }
+        SeatCampers();
         RefreshPresence();
 
         if (_map.Dark) _lightMap = new LightMap(_tilemap, _map.Ambient, lights);
@@ -158,8 +164,9 @@ public partial class ExploreScreen : GameScreen
         _tooltip.LoadContent(_content);
         _strip.LoadContent(_content, ScreenManager.GraphicsDevice);
 
-        // The townsfolk come dressed. The party and the story's cast are baked off the paperdoll, each
-        // to how they look, unless one of the cast is drawn from a townsfolk sheet.
+        // The townsfolk and the creatures come dressed. The party, whoever's waiting at camp and the
+        // story's cast are baked off the paperdoll, each to how they look, unless one of the cast is
+        // drawn from a townsfolk sheet.
         _paperdoll.LoadContent(_content);
         foreach (Npc npc in _everyNpc)
         {
@@ -179,7 +186,7 @@ public partial class ExploreScreen : GameScreen
         Arrive();
         _camera.Bounds = _tilemap.Bounds;
         _camera.SnapTo(Leader.Position);
-        _cardFont = _content.Load<SpriteFont>("spectral-ui");
+        _chapterCard.LoadContent(_content);
         BeginArrival();
 
         _audio.PlaySong(_map.Music);
@@ -269,24 +276,27 @@ public partial class ExploreScreen : GameScreen
         FindNearest();
         CheckAreas();
         UpdateBanter(gameTime);
+        Roam(gameTime);
         Chatter();
     }
 
-    /// <summary>Draws the map and everyone on it, the dark over them, the light over that, the markers over everything, then what's on the screen itself.</summary>
+    /// <summary>Draws the map and everyone on it in the map's tint, the dark over them, the light over that, the markers over everything, then what's on the screen itself.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
         Matrix world = _camera.Transform;
         float pixel = _camera.Pixel;
+        Color tint = _map.Tint;
 
-        // 1. The map: the three layers of tiles, and everything on the floor sorted by how far down the map it is.
+        // 1. The map: the three layers of tiles, and everything on the floor sorted by how far down the
+        //    map it is, all in the map's tint. Not the flames, which are the light, not what it falls on.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
-        _tilemap.Draw(gameTime, spriteBatch, _camera.View, Color.White);
-        foreach (PropSprite prop in AllProps()) prop.Draw(spriteBatch, prop.Layer(_tilemap.Bounds.Height), Color.White);
+        _tilemap.Draw(gameTime, spriteBatch, _camera.View, tint);
+        foreach (PropSprite prop in AllProps()) prop.Draw(spriteBatch, prop.Layer(_tilemap.Bounds.Height), tint);
         foreach (TorchSprite torch in _torches) torch.Draw(spriteBatch, Layers.WallFlame);
-        foreach (Npc npc in _npcs) npc.Walker.Draw(spriteBatch, OnFloor(npc.Walker.Position), pixel);
-        foreach (WalkerSprite walker in _walkers) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel);
+        foreach (Npc npc in _npcs) npc.Walker.Draw(spriteBatch, OnFloor(npc.Walker.Position), pixel, tint);
+        foreach (WalkerSprite walker in _walkers) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel, tint);
         spriteBatch.End();
 
         // 2. On a dark map, the dark with the light cut out of it (linear, so the edges are soft).
@@ -401,14 +411,25 @@ public partial class ExploreScreen : GameScreen
         walker.Stepped += () => Footstep(walker);
     }
 
-    /// <summary>Someone on the map's sheet: the one baked for their look if they're one of a crowd, their townsfolk sheet, or their cast member's, baked if they're a look.</summary>
+    /// <summary>Someone on the map's sheet: a creature's own, the one baked for their look if they're one of a crowd (or waiting at camp), their townsfolk sheet, or their cast member's, baked if they're a look.</summary>
     private Texture2D NpcSheet(MapNpc npc)
     {
+        if (npc.Creature is not null) return CreatureSheet(Creatures.Get(npc.Creature));
         if (npc.Look is not null) return SheetFor(npc.Look);
         if (npc.Cast is null) return _content.Load<Texture2D>(Townsfolk.Texture(npc.Sheet));
 
         CastMember cast = Cast.Get(npc.Cast);
         return cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : SheetFor(cast.Look);
+    }
+
+    /// <summary>A creature's sheet, checked for room for every frame its walker cuts from it.</summary>
+    /// <remarks>Throws if there isn't, which means tools/generate_creatures.py and Creatures don't agree on how big its frames are.</remarks>
+    private Texture2D CreatureSheet(Creature creature)
+    {
+        var sheet = _content.Load<Texture2D>(creature.Texture);
+        if (!WalkerSprite.Fits(sheet, creature.Shape))
+            throw new InvalidOperationException($"{creature.Texture}.png is {sheet.Width} by {sheet.Height}, which hasn't room for a {creature.Id}'s {creature.Shape.Frame.X} by {creature.Shape.Frame.Y} frames. Run tools/generate_creatures.py.");
+        return sheet;
     }
 
     /// <summary>Works out who and what's on the map with the flags as they are now, and who's marked. Builds the paths again if anything came or went.</summary>

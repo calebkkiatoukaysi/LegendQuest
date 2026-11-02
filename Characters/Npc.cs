@@ -16,6 +16,7 @@ namespace LegendQuest.Characters;
 /// bump into the same things you do. What they say goes up over their head for a few seconds, unless
 /// they've a conversation for you instead. Someone with more than one line says them in turn, and
 /// every so often they're ready to say one by themselves; the screen decides whether they get to.
+/// A creature is one of these too, in its own shape: a wolf looks round and faces you the same way.
 /// </remarks>
 public class Npc
 {
@@ -43,9 +44,6 @@ public class Npc
     /// <summary>How long they keep on towards somewhere before giving up on it. Something's usually in the way.</summary>
     private const float GiveUpSeconds = 5f;
 
-    /// <summary>The size of their feet box, in world pixels. The same as yours, so nobody walks through them.</summary>
-    private static readonly Vector2 FeetSize = new(10f, 4f);
-
     /// <summary>Which ways they look. Never up, since someone facing the wall looks like a bug.</summary>
     private static readonly Direction[] Glances = { Direction.Down, Direction.Left, Direction.Down, Direction.Right };
 
@@ -68,12 +66,11 @@ public class Npc
     /// <summary>Who they are, from the map.</summary>
     public MapNpc Definition { get; }
 
-    /// <summary>Their figure.</summary>
-    public WalkerSprite Walker { get; } = new();
+    /// <summary>Their figure, in a person's shape or their creature's.</summary>
+    public WalkerSprite Walker { get; }
 
     /// <summary>Their feet box. Nobody can walk through it.</summary>
-    public BoundingRectangle Footprint => new(
-        Walker.Position.X - FeetSize.X / 2f, Walker.Position.Y - FeetSize.Y, FeetSize.X, FeetSize.Y);
+    public BoundingRectangle Footprint => FootprintAt(Walker.Position);
 
     /// <summary>The line over their head, or null if they aren't saying anything.</summary>
     public string Line => _lineClock > 0f ? _line : null;
@@ -92,8 +89,12 @@ public class Npc
     public Npc(MapNpc definition)
     {
         Definition = definition;
-        Walker.Position = definition.Feet;
-        Walker.Facing = definition.Facing;
+        Walker = new WalkerSprite
+        {
+            Shape = definition.Creature is null ? WalkerShape.Person : Creatures.Get(definition.Creature).Shape,
+            Position = definition.Feet,
+            Facing = definition.Facing,
+        };
 
         // Seeded from the id so they act the same every time. Can't use string.GetHashCode, since
         // .NET changes it every run.
@@ -141,6 +142,14 @@ public class Npc
         }
 
         Walker.Update(gameTime);
+    }
+
+    /// <summary>Where their feet box would be with their feet at a point: a person's is the same size as yours, so nobody walks through them, and a creature's is as broad as it stands.</summary>
+    /// <param name="feet">The point, in world pixels.</param>
+    public BoundingRectangle FootprintAt(Vector2 feet)
+    {
+        Vector2 size = Walker.Shape.Footprint;
+        return new BoundingRectangle(feet.X - size.X / 2f, feet.Y - size.Y, size.X, size.Y);
     }
 
     /// <summary>Stops strolling and stands about for a while: they got where they were going, or gave up on it.</summary>

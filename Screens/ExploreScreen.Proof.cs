@@ -31,7 +31,6 @@ public partial class ExploreScreen
     internal const int QuesteriaOutProofEnd = Settled + 300;
     internal const int RoadProofEnd = Settled + 267;
     internal const int QuesteriaAgainProofEnd = Settled + 26;
-    internal const int RoadAgainProofEnd = Settled + 316;
     internal const int BarrowProofEnd = Settled + 593;
 
     /// <summary>How often a conversation gets a press while the proof run's reading it, how long a window of reading lasts, and how long a line's held for its shot.</summary>
@@ -83,8 +82,8 @@ public partial class ExploreScreen
             ProofStage.QuesteriaOut => QuesteriaOutStep(frame),
             ProofStage.Road => RoadStep(frame),
             ProofStage.QuesteriaAgain => QuesteriaAgainStep(frame),
-            ProofStage.RoadAgain => RoadAgainStep(frame),
-            _ => BarrowStep(frame),
+            ProofStage.Barrow => BarrowStep(frame),
+            _ => ChapterStep(frame, stage),
         };
     }
 
@@ -607,45 +606,6 @@ public partial class ExploreScreen
             case Settled + 26:
                 ProofMap().ProofTravel("road");
                 return null;
-
-            default:
-                return null;
-        }
-    }
-
-    /// <summary>On the road at its stone, into the trigger at the blocked end twice (it goes off every time), then up the path north into the exit to the barrow.</summary>
-    private string RoadAgainStep(int frame)
-    {
-        switch (frame)
-        {
-            case Settled:
-                return "road-arrived.png";
-
-            // Into the trigger, back out, and in again once its line has gone, so the shot shows it going off a second time.
-            case Settled + 1:
-                ProofPlace(51.5f, 16.5f, Direction.Right);
-                _proofMove = new Vector2(1f, 0f);
-                return null;
-
-            case Settled + 30:
-                _proofMove = null;
-                ProofPlace(51.5f, 16.5f, Direction.Right);
-                return null;
-
-            case Settled + 250:
-                _proofMove = new Vector2(1f, 0f);
-                return null;
-
-            case Settled + 295:
-                return "road-blocked.png";
-
-            case Settled + 296:
-                ProofPlace(40.5f, 5f, Direction.Up);
-                _proofMove = new Vector2(0f, -1f);
-                return null;
-
-            case Settled + 316:
-                return "road-path.png";
 
             default:
                 return null;

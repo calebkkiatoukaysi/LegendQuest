@@ -47,10 +47,15 @@ public static class LookOptions
     /// <summary>Nothing to pick.</summary>
     private static readonly string[] NoLines = { "NONE" };
 
+    /// <summary>How many of the hats, from the first, anyone in a crowd might be wearing: none, the bandana, the tricorn and the helm. The crown, the hood and the circlet are for the story's people. It also keeps every look a seed was already giving the same as it was before they were added.</summary>
+    private const int CrowdHats = 4;
+
     /// <summary>The hats. The first is none.</summary>
+    /// <remarks>A save keeps the number, so a new hat only ever goes on the end. The crown is King Leon's, the hood and the circlet Princess Elara's.</remarks>
     public static IReadOnlyList<Option> Hats { get; } = new Option[]
     {
         new("NONE", null), new("BANDANA", "hat-bandana"), new("TRICORN", "hat-tricorn"), new("HELM", "hat-helm"),
+        new("CROWN", "hat-crown"), new("HOOD", "hat-hood", HidesHair: true), new("CIRCLET", "hat-circlet"),
     };
 
     /// <summary>The faces. The first is the body sheet's own; each after it is a sheet of its own, face-(name).</summary>
@@ -125,7 +130,7 @@ public static class LookOptions
             HairColour = random.Next(HairColours.Count),
             // Most people don't have a beard, or a hat.
             Beard = random.Next(3) == 0 ? random.Next(1, Beards.Count) : 0,
-            Hat = random.Next(4) == 0 ? random.Next(1, Hats.Count) : 0,
+            Hat = random.Next(4) == 0 ? random.Next(1, CrowdHats) : 0,
             Shirt = random.Next(Shirts.Count),
             Vest = random.Next(Vests.Count),
             Legs = random.Next(Legs.Count),
@@ -137,5 +142,6 @@ public static class LookOptions
     /// <summary>One choice that comes with a sheet of its own (or doesn't, for the first of some): what the screen calls it and what the sheet's called in Content/Paperdoll.</summary>
     /// <param name="Name">What the screen calls it.</param>
     /// <param name="Sheet">Its sheet, or null for none.</param>
-    public sealed record Option(string Name, string Sheet);
+    /// <param name="HidesHair">Whether it covers the whole head, so the hair and ears under it aren't drawn. Only a hood does.</param>
+    public sealed record Option(string Name, string Sheet, bool HidesHair = false);
 }

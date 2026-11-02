@@ -1,261 +1,341 @@
-; The old road. In from Questeria on the west, east through the forest at dusk. A camp off the
-; road to the south with its fire still going, a path north to the barrow where the road forks,
-; and a tree down across the road further east. The wood is props standing in the undergrowth, so
-; their crowns overlap and overhang the verges; the ground is grass, fallen leaves at the edge of
-; the trees, and the road with its ruts.
+; The old road, out of Questeria's south gate and east to the Mirewood, through the meadows round
+; the city at noon. The farm's on the west: the farmhouse, the windmill, hay in the yard, a plot by
+; the house and the wheat field over the road, and a track from the yard over the ford. The stream
+; comes down through the middle, under the stone bridge that takes the road over it, and into a
+; pond with lilies on it. The camp's off the road to the south in a stand of oaks, its fire still
+; going. At the fork a path goes north to the barrow, the waypoint stone's by the road, and the
+; great oak stands over the meadow. Past that the trees close in, and where they're thickest, toward
+; the Mirewood, a tree's down across the road, until the woodcutters saw it through.
 
 [map]
 id = road
 name = The Old Road
 world = 600 290
-tileset = forest
-size = 60 34
-dark = yes
-ambient = 0.55          ; dusk, not night: the dark is only to make the fire count
-music = Exploring
+tileset = meadow
+size = 64 36
+dark = no
+music = Meadow
 
 [legend]
 , = grass
-l = leaves
+" = long-grass
+- = path
 : = road
-U = undergrowth
-m = moss
-v = tuft
-f = fern
+s = soil
+~ = stream
+f = ford
+H = hedge
 * = flowers
+c = clover
+v = tuft
 o = pebbles
-r = roots
 = = ruts
-% = litter
+r = reeds
+l = lilies
+w = crops
+t = stepping
+p = petals
 
 [ground]
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU::UUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::lUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::lUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::lUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::UUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::UUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUl::UUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU::UUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUllllUUUUUUUUUUUUUUUUllll::lUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUllUlllllUUUUUUUUUUUUlllll,,,::llllllUUUUUUUUUUUU
-UUUUUUUUUUUlllll,,,lllllUUUUlllllll,,,,,::,,,lllllllUUUUUUUU
-UUUUUUUlllllll,,,,,,,,,lllUUl,,,,,,,,,,,::,,,,,,,,,lUUUUUUUU
-UUUlllUl,,,,,,,,,,,,,,,,,llll,,,,,,,,,,,::,,,,,,,,,lllUUUUUU
-llll,lll,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,lUUUUUU
-l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,::,,,,,,,,,,,lUUUUUU
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-l,,,,l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,lUUUUUU
-llllllllll,,,llll,,,,,,,,,,,,,,,,,ll,,,,,,,,,,,ll,,,llUUUUUU
-UUUUUUUUUlllllUUllll,,,,,,,,,,,,lllllllllllllllllllllUUUUUUU
-UUUUUUUUUUllUUUUUUUl,,,,:::::,,,lUUUlUUUUUUlUUllUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUll,,:::::::,,lUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUll,,:::::::,,lUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUl,,,:::::::,llUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUlll,,,::::,,,lUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUl,,,,,,,,lllUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUllllllllllUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+,,,,,,,,,,,,,,,,,,,~~~,,,,,,,,,,,,,,,,,"--",,,,,,,,,,,"""""""",,
+,,,,,,,,,,,,,,,,,,,~~~,,,,,,,,,,,,,,,,""--""",,,""""""""""""""",
+,,,,,,,,,,,,,,,,,,,~~~,,,,,,,,,,,,,,,,""--"""","""""""""""""""""
+,,,,,,,,,,,,,,,,,,,~~~,,,,,,,,,,,,,,,,""--"""",,""""""""""""""""
+,,,,,,,,,,,,,,,,,,,~~~,,,,,,,,,,,,,,,,""--,,,,,,,"""""""""""""""
+,,,,,,,,,,,,,,,,,,,,~~~,,,,,,,,,,,,,,,,,--,,,,,,,"""""""""""""""
+,,,,,,,,,,,,,,,,,---fff--------,,,,,,,,,--,,,,,,,,,,,,""""""""""
+,,,,,,,,,,,,,,,,,---fff---------,,,,,,,,--,,,,,,,,,,,"""""""""""
+,,,,,,,,,,,,,,,,,--,~~~,,,,,,,--,,,,,,,,--,,,,,,,,,,,"""""""""""
+,,,,,,,,,,,,,,,,,--,,,~~~,,,,,------------,,,,,,,,,,,"""""""""""
+,,,,,,,,,,,,,,,,,--,,,~~~,,,,,,-----------,,,,,,,,,,,"""""""""""
+,,,,,,--------,,,--,,,~~~,,,,,,,,,,,,,,,--,,,,,,,,,,,"""""""""""
+,,,,,,--,ssss,,,,--,,,~~~,,,,,,,,,,,,,,,--,,,,,,,,,,,""""""""",,
+,,,,,,--,ssss,,,,--,,,~~~,,,,,,,,,,,,,,,--,,,,,,,,,,,,"""""",,,,
+,,,,,,--,,,,,,,,,--,,,~~~,,,,,,,,,,,,,,,--,,,,,,,,,,,,,,"",,,,,,
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+,,,,,,,,,,,,,,,,,,,,,,~~~,,,,,"""",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,~~~,,,""""""",,,,,,,,,,,,,,,,,,,,""",,,,,,
+,,,ssssssssssss,,,,,,,~~~,,,"""""""",,,,,,,,,,,,,,,,,""""""",,,,
+,,,ssssssssssss,,,,,,,~~~,,"-------",,,,,,,,,,,,,,,,,""""""""",,
+,,,ssssssssssss,,,,,,~~~,""--------"",,,,,,,,,,,,,,,""""""""""""
+,,,ssssssssssss,,,,,,~~~"""---------"",,,,,,,,,,,,,,""""""""""""
+,,,ssssssssssss,,,,~~~~~~~"---------""",,,,,,,,,,,,,""""""""""""
+,,,ssssssssssss,,,~~~~~~~~~""-----""""",,,,,,,,,,,,,""""""""""""
+,,,ssssssssssss,,~~~~~~~~~~~"""""""""",,,,,,,,,,,,,,""""""""""""
+,,,ssssssssssss,,~~~~~~~~~~~,,,,,""",,,,,,,,,,,,,,,,,"""""""""""
+,,,,,,,,,,,,,,,,,~~~~~~~~~~~,,,,,,,,,,,,,,,,,,,,,,,,,"""""""""""
+,HHHHHHHHHHHHHHHH,~~~~~~~~~,,,,,,,,,,,,,,,,,,,,,,,,,,"""""""""""
+,HHHHHHHHHHHHHHHH,,~~~~~~~,,,,,,,,,,,,,,,,,,,,,,,"""""""""""""""
+""",,,,,,,,,,,,,,,,,,~~~,,,,,""""""",,,,,,,,,,,,""""""""""""""""
+""""""",,,,,,,,,,,,,,~~~,,"""""""""",,,,,,,,,,,,""""""""""""""""
+""""""",,,,,,,,,,,,,,~~~"""""""""""",,,,,,,,,,,,,"""""""""""""""
+""""",,,,,,,,,,,,,,,,~~~,"""""""""""",,,,,,,,,,,,,,"""""""""""",
+"""",,,,,,,,,,,,,,,,,~~~,,,,,,""""""",,,,,,,,,,,,,,,"""""""""",,
 
 [detail]
-............................................................
-..........................................v.................
-..........................................%.................
-............................................................
-............................................................
-.......................................%....................
-............................................................
-............................................................
-.................%..........................................
-............r..%..........................%...%.............
-...........%fr......r%.%....m..............fv.r....m........
-.............%..fv.............%..................o.........
-.......r.*......%...m........f.....v..........v.%....v......
-..v..r...f...om.v..v....%.f......%.v........................
-..v.........mv........*.*%.fv...f.f.........................
-=========================...===========.....=============...
-.......o...........o.............o.............o....o.......
-=========================...===========.....=============...
-f........*...........v.v*..o.........%........%.....o.......
-.fr..f%.....................................................
-.........f.......%..f.................%..%....r.%...........
-..........%.........v..v.....v.*...............m............
-............................................................
-......................v.........%...........................
-...................m............%...........................
-....................f.......................................
-.....................m.ov..v..%.............................
-.....................r.r..r..fr.............................
-............................................................
-............................................................
-............................................................
-............................................................
-............................................................
-............................................................
+..................r.......................................v.....
+..................................*....v.............v..........
+......*..*..*.........r....*....c...............................
+..................r..........*.....*.*..........................
+...**....*............r..v.......*.*............................
+.......................r....c*.c....*......o....................
+.........v..........ttt........ccv..........o.*..*.............v
+................................................................
+.......................r........................................
+................................................................
+.........................r......................................
+.....................r.....*....p..*.......*....................
+.........wwww............r.................*.....*..............
+..p......wwwwv.......r........................*.................
+.p..............................................................
+................................................................
+.==..===..===..===..=.....==..===..===..===..===..===..===..===.
+................................................................
+.....................r......................................oo..
+.....................o...............................o..........
+.........................r......................................
+.....................r..............*..*....c...................
+....................r............................c..............
+.................c*..........................c*................v
+...............*.........................*........*.......v.....
+................*................................c..............
+...................l.....l.......v..............................
+................................................................
+........................l.........................v.............
+.....................l..........................................
+..........................................................v.....
+................c.......r.......................................
+...............v....r.................v.....*................v..
+.....v.........v............................v...................
+........................r....v........................v.........
+....................r...........................................
 
 ; kind id x y, in tiles, then any settings. Exits and triggers are rectangles from their top left tile.
 [objects]
 spawn start 2 16 facing=right
 spawn barrow 40.5 2
+spawn mirewood 61 16 facing=left
 exit questeria 0 15 h=3 to=questeria at=gate
 exit barrow 40 0 w=2 to=barrow
+exit mirewood 63 15 h=3 to=mirewood at=road when=a1-c1-02
 
-; The wood north of the road: the trees along its edge stand with their trunks at the verge and
-; their crowns over the undergrowth, and the ones behind them are deeper and bluer.
-prop oak-light 7 0.8
-prop oak-deep 12 1
-prop oak 24 1.5
-prop oak-light 52 1
-prop fir 37.5 1.5
-prop fir 58.5 2
-prop fir-deep 20.5 3
-prop oak 15 3.5
-prop oak-deep 34.5 3.5
-prop oak-deep 46.5 3.5
-prop fir-deep 6.5 4
-prop fir-deep 30.5 4
-prop oak-deep 10.5 5
-prop oak-deep 54 5
-prop oak-deep 26 5.5
-prop fir-deep 49.5 6
-prop oak-deep 3 6.5
-prop fir-deep 15.5 7.4
-prop oak-pale 19 7.4
-prop fir-deep 36.5 7.4
-prop oak-deep 23 8.3
-prop oak-amber 33.5 8.3
-prop fir 43.5 8.3
-prop oak-light 12.5 8.4
-prop oak-light 47 8.4
-prop oak-deep 58 9
-prop oak 8 9.3
-prop oak 29.5 9.3
-prop oak-deep 51 9.4
-prop fir 26 10.3
-prop fir 53.5 11.3
-prop fir 4.5 11.4
-prop oak-deep 1 12.3
-prop oak 56.5 14.3
+; The farm. The farmhouse with a barrel by its door, hay bales and the washing out beside it, the
+; haystack in the yard, and the windmill at the end of the track, with the miller's cart. A fence
+; along the road with a gap where the path comes down from the door. The plot by the house is
+; detail on the soil.
+prop farmhouse 6 10
+entrance farmhouse 6.13 10.5 to=cottage-a name="The Farmhouse"
+prop barrel 9.4 10.8
+prop flower-box 3.2 10.9
+prop washing-line 1.8 8.6
+prop hay-bale 1.6 12.2
+prop hay-bale 3.3 12.9
+prop haystack 10.8 8
+prop hay-bale 14.2 12.6
+prop windmill 14 10.7
+prop handcart 15.6 13.2
+prop crate 19.8 10.6
+prop fence-wood 0.5 13.8
+prop fence-wood 2.5 13.8
+prop fence-wood-post 3.5 13.8
+prop fence-wood 8.5 13.8
+prop fence-wood 10.5 13.8
+prop fence-wood 12.5 13.8
+prop fence-wood 14.5 13.8
+prop fence-wood-post 15.5 13.8
+prop cherry-tree-small 1 4.5
 
-; Two standing out in the verge, so the road goes under their crowns.
-prop oak-pale 14.8 12.4
-prop fir 31.2 12.6
+; The wheat field over the road: fenced along the road and down both sides, the hedge along its
+; foot, the wheat standing in rows, and the scarecrow in the middle with a crow on his arm.
+prop fence-wood 2.5 18.8
+prop fence-wood 4.5 18.8
+prop fence-wood 6.5 18.8
+prop fence-wood-post 7.5 18.8
+prop fence-wood 10.5 18.8
+prop fence-wood 12.5 18.8
+prop fence-wood-post 13.5 18.8
+prop fence-wood-side 1.5 19.8
+prop fence-wood-side 1.5 20.8
+prop fence-wood-side 1.5 21.8
+prop fence-wood-side 1.5 22.8
+prop fence-wood-side 1.5 23.8
+prop fence-wood-side 1.5 24.8
+prop fence-wood-side 1.5 25.8
+prop fence-wood-side 1.5 26.8
+prop fence-wood-side 1.5 27.8
+prop fence-wood-side 15.5 19.8
+prop fence-wood-side 15.5 20.8
+prop fence-wood-side 15.5 21.8
+prop fence-wood-side 15.5 22.8
+prop fence-wood-side 15.5 23.8
+prop fence-wood-side 15.5 24.8
+prop fence-wood-side 15.5 25.8
+prop fence-wood-side 15.5 26.8
+prop fence-wood-side 15.5 27.8
+prop wheat 3.5 21
+prop wheat 5.5 21
+prop wheat 7.5 21
+prop wheat 9.5 21
+prop wheat 11.5 21
+prop wheat 13.5 21
+prop wheat 3.5 22.4
+prop wheat 5.5 22.4
+prop wheat 11.5 22.4
+prop wheat 13.5 22.4
+prop wheat 3.5 23.8
+prop wheat 5.5 23.8
+prop wheat 11.5 23.8
+prop wheat 13.5 23.8
+prop wheat 3.5 25.2
+prop wheat 5.5 25.2
+prop wheat 7.5 25.2
+prop wheat 9.5 25.2
+prop wheat 11.5 25.2
+prop wheat 13.5 25.2
+prop wheat 3.5 26.6
+prop wheat 5.5 26.6
+prop wheat 7.5 26.6
+prop wheat 9.5 26.6
+prop wheat 11.5 26.6
+prop wheat 13.5 26.6
+prop scarecrow 8.5 23
+prop hay-bale 9 22.2
 
-; Along the north verge.
-prop mushrooms-pale 42.2 2.3
-prop mushrooms-pale 39.3 4.6
-prop grass-tall 37.2 8.3
-prop mushrooms 17.3 8.4
-prop fern 35 9.1
-prop bush-small 14 9.2
-prop fern 21.5 9.2
-prop bush 45.3 9.3
-prop bush-deep 31.4 10.2
-prop grass-tall 9.7 10.3
-prop fern 49.5 10.3
-prop stump 27.6 10.5
-prop rocks-mossy 24.6 11.2
-prop fern 6.2 12.2
-prop bush-small 52.4 12.2
-prop bush 2.5 12.6
+; By the gate: wild flowers along the verges, and a blossom tree each side.
+prop blossom-tree 0.8 32.5
+prop wildflowers 5 14.4
+prop wildflowers-yellow 0.6 14.3
+prop wildflowers-blue 17.2 19.2
+prop wildflowers 19.4 14.2
 
-; In the corners where the edge of the wood steps.
-prop grass-tall 9 20.7
-prop fern 11 9.4
-prop bush-small 20 9.4
-prop mushrooms 44 20.7
+; The stream: the stone bridge the road takes over it, with a bush at each end of its far side, and
+; reeds and flowers along its banks. The pond it runs into below, and the angler on its bank.
+prop stone-bridge 23 19.375
+prop bush-small 21 14.2
+prop bush-small 25 14.2
+prop wildflowers-blue 17.6 4.2
+prop wildflowers 25.6 9.4
+prop wildflowers-yellow 18.6 25.4
+prop wildflowers 27.6 30.4
+prop cherry-tree-small 18 21.3
+prop bush-flowers 16.5 31.6
+prop bush-pink 28.8 25.6
+prop rocks 26.6 32.4
 
-; Where the path goes up to the barrow: a dead tree, a snag and stones either side of its mouth.
-prop rocks-mossy 38 0.6
-prop rocks-mossy 43.5 0.6
-prop snag 42.8 3
-prop dead-tree 38.3 6.5
+; The meadow north of the road, over the ford: blossom and an oak, bushes and flowers.
+prop blossom-tree 28.2 4.6
+prop cherry-tree 36.2 4
+prop oak-light 26.4 13.4
+prop bush-flowers 31.8 13.2
+prop bush 35.6 13.4
+prop wildflowers-yellow 30 4.6
+prop wildflowers-blue 33.4 8.2
+prop flowers-mixed 24.8 3.4
+prop flowers-pink 38 7.2
 
-; The wood south of the road, far enough back that its crowns only overhang the verge.
-prop fir-deep 57.5 21.5
-prop fir 1.5 22.5
-prop fir 5 23.4
-prop fir 50.5 23.5
-prop fir 38.5 23.6
-prop fir-deep 12 24.5
-prop fir-deep 44.5 24.5
-prop oak-deep 54 25
-prop oak 1 25.5
-prop oak-deep 8.5 25.5
-prop oak-light 15.5 26
-prop oak-deep 35 26
-prop oak-light 41.5 26
-prop oak 47.5 26.5
-prop oak-deep 59 27.5
-prop oak 16.5 28.5
-prop fir-deep 53 28.5
-prop fir-deep 7 29.5
-prop fir 19.5 29.5
-prop fir-deep 40 29.5
-prop fir 47.5 29.5
-prop fir-deep 27.5 30
-prop oak-deep 2 31
-prop oak-deep 56.5 31
-prop oak 10.5 31.5
-prop oak 50 31.5
-prop oak-light 37 32
-prop oak-deep 23.5 32.5
-prop oak-pale 32.5 32.5
-prop oak-deep 44 32.5
-prop oak-deep 13.5 33.4
+; The camp, off the road to the south among the oaks, its fire still going: a log to sit on by it,
+; two bedrolls, the crate and the barrel they brought, a stump at the back, and the chest.
+prop campfire 31 23
+prop log 31.5 21
+prop bedroll 27.6 22.6
+prop bedroll 33.4 25.2
+prop crate 26.9 21.5
+prop barrel 27.1 22.9
+prop stump 36.4 24.4
+prop mushrooms 35 26.2
+chest camp 35.2 22 gold=14
+prop oak 28 19.8
+prop oak-light 36.8 20.6
+prop oak 24.6 33
+prop oak-light 34.4 30
+prop blossom-tree 39.4 27.4
+prop bush 29.4 27.2
+prop bush-small 38.6 23.8
 
-; Along the south verge.
-prop fern 53.2 19.3
-prop bush-small 52.5 20.2
-prop fern 7.3 20.3
-prop fern 38.5 20.3
-prop grass-tall 15 20.4
-prop bush-small 4 20.6
-prop bush 17.8 21.2
-prop bush-deep 42.5 21.2
-prop stump 49.2 21.3
-prop mushrooms 13.2 21.4
-prop mushrooms 45.5 21.5
-prop log 11 21.6
-prop rocks-mossy 36 21.6
+; The fork: the sign, the waypoint stone under the great oak, and the path up to the barrow
+; between rocks, with a fir and a pale old oak by its mouth.
+sign fork 38 13 text="West, Questeria. North, the barrow. East, the Mirewood."
+waypoint stone 44 12
+prop great-oak 48.5 11.5
+prop rocks-mossy 38.2 0.8
+prop rocks 43.2 1
+prop fir 37.6 3.6
+prop bush-small 43 7.6
+prop wildflowers 39 11
+prop flowers-white 45.4 13.6
 
-; The camp, off the road to the south, with its fire still going: a log to sit on by it, two
-; bedrolls, the crate and the barrel they brought, and a stump at the back.
-prop campfire 26 23
-prop log 26.5 20.6
-prop bedroll 22.5 21.5
-prop bedroll 29 25
-prop crate 20.3 21.6
-prop barrel 20.6 22.9
-prop stump 31.5 24.2
-prop bush 33.5 22.6
-prop mushrooms 19.3 24.5
-prop bush-small 19.2 25.4
-chest camp 30 22 gold=14
+; The meadow south of the road past the camp.
+prop oak 46.5 23
+prop blossom-tree 42.6 32.4
+prop bush-flowers 44.2 20.6
+prop wildflowers-yellow 41 20.4
+prop wildflowers-blue 48.8 27.4
+prop flowers-pink 40.4 30.4
+prop rocks 49.4 33.2
+
+; The wood thickening toward the Mirewood: the oaks first, then deeper and bluer ones and firs,
+; long grass and bushes under them, the crowns along the road hanging over its verges.
+prop oak 56.4 3.4
+prop oak-light 58 1.4
+prop fir 61.5 3.5
+prop oak-deep 55.6 8.4
+prop fir-deep 60.4 8.6
+prop oak-deep 62.6 11.6
+prop fir 56.5 12.4
+prop bush-deep 54.6 12.6
+prop fern 60 13.8
+prop mushrooms 58.6 6.8
+prop oak-light 52.2 21.6
+prop fir 55.6 20.8
+prop oak-deep 60.6 21.4
+prop oak 50.6 27.6
+prop fir-deep 56.4 25.8
+prop oak-deep 61.4 27
+prop fir 53.6 31.4
+prop oak-deep 58.6 32.6
+prop oak-deep 63 34.6
+prop bush-deep 54.4 22.4
+prop fern 51.4 23.6
+prop mushrooms-pale 57.6 23.4
+prop grass-tall 49.6 19.6
+prop fern 62.4 19.4
+
+; The far end, where a tree's come down across the road, until the woodcutters saw it through:
+; then its trunk's in lengths along the verges and its stump's left by the road.
+prop fallen-tree 57 18.5 unless=a1-c1-02
+prop dead-tree 58.5 13.6
+prop bush-deep 59.4 19.4
+prop log 56.6 13.9 when=a1-c1-02
+prop log 57.6 19.6 when=a1-c1-02
+prop stump 54.6 19.8 when=a1-c1-02
+trigger blocked 53 14 h=5 once=no say="No way through to the east." unless=a1-c1-02
+npc woodcutter 59.5 14.4 look=341 name="A Woodcutter" facing=left when=a1-c1-02 say="Sawed it through at first light. Took four of us.|Two of the lads went on into the Mirewood for oak. Not back yet.|Past here the trees have gone wrong. You'll see."
+
+; The people out on a fine day: the farmer's wife in her yard, the miller by his mill, the farmer
+; in his wheat, a girl picking flowers by the pond, the angler, two out walking in the meadow, and
+; a traveller on the road.
+npc farmwife 4.6 12.4 look=322 name="The Farmer's Wife" facing=down say="Eggs, milk or advice? The advice is free.|The windmill's been turning since my gran's day.|Wipe your boots if you're coming in."
+npc miller 16 11.8 look=278 name="The Miller" facing=left say="Flour for the Rising Loaf, every morning.|Good wind today. The sails haven't stopped.|Don't stand under the sails. They don't stop for anyone."
+npc farmer 10 23.6 look=311 name="The Farmer" facing=down wander=2 say="Wheat's in early. The sun's been kind.|The scarecrow does nothing. The crow likes him.|Walk round the field, not through it."
+npc girl 19.4 22.6 look=188 name="A Girl" wander=3 say="I'm picking flowers for my mum.|There's a frog in the pond. He's called Sir Ribbit.|Are you going to the Mirewood? Mum says not to."
+npc angler 27.6 27.6 look=257 name="An Angler" facing=left say="Shh. They're biting.|Caught a pike here once. This big. Bigger.|The stream comes down from the hills. Clean as anything."
+npc walker-a 32.4 4.4 look=207 name="A Young Man" facing=right say="Lovely day for it.|We walk out to the oak every rest day.|She says the oak's older than the city. I believe her."
+npc walker-b 34 4.6 look=228 name="A Young Woman" facing=left say="Don't mind him. He's in love with the oak.|Bring a picnic next time. Everyone does.|Watch the road past the fork. Bandits, they say."
+npc traveller 44 16.4 name="A Traveller" sheet=traveller wander=4 say="Long road from the coast.|The bridge back there's older than the city, they say.|Is it far to the gate? My feet say yes."
+
 trigger watched 17 7 h=18 say="Someone has been watching the road." set=road-ambush
 
-; The fork.
-sign fork 38 13 text="West, Questeria. North, the barrow."
-waypoint stone 44 11
-
-; The far end, where a tree's come down across the road.
-prop fallen-tree 55 18.5
-prop dead-tree 58.5 13.6
-prop bush-deep 58.4 18.6
-trigger blocked 53 14 h=5 once=no say="No way through to the east."
-
-; What the two of you say on the way: setting out, at the camp (once Brisk has said there are
-; highwaymen, it's their camp), at the fork, and on the path up to the barrow, far enough short of it
-; to get a word in.
+; What the two of you say on the way: setting out, out in the meadow, at the farm, by the stream,
+; at the camp (once Brisk has said there are highwaymen, it's their camp), at the fork, on the path
+; up to the barrow, far enough short of it to get a word in, and where the wood starts closing in.
 trigger bark-road-out 4 15 w=2 h=3 bark=road-out
-trigger bark-road-camp 21 20 w=10 h=6 bark=road-camp
-trigger bark-road-camp-bandits 21 20 w=10 h=6 bark=road-camp-bandits
+trigger bark-meadow-out 9 15 w=2 h=3 bark=meadow-out
+trigger bark-meadow-farm 5 11 w=4 h=3 bark=meadow-farm
+trigger bark-meadow-stream 19 15 w=2 h=3 bark=meadow-stream
+trigger bark-road-camp 27 20 w=10 h=6 bark=road-camp
+trigger bark-road-camp-bandits 27 20 w=10 h=6 bark=road-camp-bandits
 trigger bark-road-fork 37 15 w=5 h=3 bark=road-fork
 trigger bark-barrow-mouth 40 7 w=2 h=2 bark=barrow-mouth
+trigger bark-meadow-mirewood-edge 50 15 w=2 h=3 bark=meadow-mirewood-edge

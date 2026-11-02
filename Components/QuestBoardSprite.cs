@@ -79,7 +79,7 @@ public class QuestBoardSprite
         foreach (Posting posting in Postings.All)
         {
             int c = (int)posting.Column;
-            List<string> rows = Wrap(posting.Text, NoteWidth - NoteInset * 2);
+            List<string> rows = Text.Wrap(posting.Text, _detailFont, NoteWidth - NoteInset * 2);
             int height = NoteInset + 6 + _detailFont.LineSpacing + 2 + _detailFont.LineSpacing + 4 + rows.Count * _detailFont.LineSpacing + NoteInset;
             var note = new Rectangle(cork.X + column * c + (column - NoteWidth) / 2, cork.Y + NotesTop + down[c], NoteWidth, height);
             down[c] += height + NoteGap;
@@ -107,26 +107,4 @@ public class QuestBoardSprite
 
     /// <summary>A rectangle grown by some pixels all round.</summary>
     private static Rectangle Grow(Rectangle area, int by) => new(area.X - by, area.Y - by, area.Width + by * 2, area.Height + by * 2);
-
-    /// <summary>Breaks a line into rows that fit a width, at the spaces.</summary>
-    private List<string> Wrap(string text, float width)
-    {
-        var rows = new List<string>();
-        string row = string.Empty;
-        foreach (string word in text.Split(' '))
-        {
-            string tried = row.Length == 0 ? word : row + " " + word;
-            if (row.Length > 0 && _detailFont.MeasureString(tried).X > width)
-            {
-                rows.Add(row);
-                row = word;
-            }
-            else
-            {
-                row = tried;
-            }
-        }
-        if (row.Length > 0) rows.Add(row);
-        return rows;
-    }
 }

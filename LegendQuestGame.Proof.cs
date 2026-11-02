@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using LegendQuest.Characters;
@@ -72,6 +73,12 @@ public partial class LegendQuestGame
     private ProofStage _proofStage = ProofStage.Menus;
     private GameScreen _proofSubject;
     private int _proofSubjectStart;
+
+    /// <summary>The frame the run started waiting for the current part's screen to open.</summary>
+    private int _proofWaitStart;
+
+    /// <summary>The longest the run waits for a part's screen to open, in drawn frames: half a minute, far past any loading screen.</summary>
+    private const int ProofLostFrames = 1800;
 
     /// <summary>Every sound the run played, by frame. Gets written out at the end.</summary>
     private readonly StringBuilder _proofAudio = new();
@@ -152,7 +159,71 @@ public partial class LegendQuestGame
                 break;
 
             case ProofStage.RoadAgain:
-                _proofPending = RunMap("road", ExploreScreen.RoadAgainProofEnd, ProofStage.Barrow);
+                _proofPending = RunMap("road", ExploreScreen.ChapterProofEnd, ProofStage.Mirewood);
+                break;
+
+            case ProofStage.Mirewood:
+                _proofPending = RunMap("mirewood", ExploreScreen.ChapterProofEnd, ProofStage.Quarry);
+                break;
+
+            case ProofStage.Quarry:
+                _proofPending = RunMap("mirewood-quarry", ExploreScreen.ChapterProofEnd, ProofStage.MirewoodCamp);
+                break;
+
+            case ProofStage.MirewoodCamp:
+                _proofPending = RunMap("mirewood", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaPaid);
+                break;
+
+            case ProofStage.QuesteriaPaid:
+                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.Thornbridge);
+                break;
+
+            case ProofStage.Thornbridge:
+                _proofPending = RunMap("thornbridge", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaMessenger);
+                break;
+
+            case ProofStage.QuesteriaMessenger:
+                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.FlagonElara);
+                break;
+
+            case ProofStage.FlagonElara:
+                _proofPending = RunMap("gilded-flagon", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaVault);
+                break;
+
+            case ProofStage.QuesteriaVault:
+                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.Vault);
+                break;
+
+            case ProofStage.Vault:
+                _proofPending = RunMap("old-crown-vault", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaKeep);
+                break;
+
+            case ProofStage.QuesteriaKeep:
+                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.Keep);
+                break;
+
+            case ProofStage.Keep:
+                _proofPending = RunMap("sunspire-keep", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaDocks);
+                break;
+
+            case ProofStage.QuesteriaDocks:
+                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.DocksAnvil);
+                break;
+
+            case ProofStage.DocksAnvil:
+                _proofPending = RunMap("docks", ExploreScreen.ChapterProofEnd, ProofStage.Anvil);
+                break;
+
+            case ProofStage.Anvil:
+                _proofPending = RunMap("rusty-anvil", ExploreScreen.ChapterProofEnd, ProofStage.FlagonCamp);
+                break;
+
+            case ProofStage.FlagonCamp:
+                _proofPending = RunMap("gilded-flagon", ExploreScreen.ChapterProofEnd, ProofStage.RoadToBarrow);
+                break;
+
+            case ProofStage.RoadToBarrow:
+                _proofPending = RunMap("road", ExploreScreen.ChapterProofEnd, ProofStage.Barrow);
                 break;
 
             case ProofStage.Barrow:
@@ -400,6 +471,12 @@ public partial class LegendQuestGame
                 _proofSubject = found;
                 _proofSubjectStart = _proofFrame;
             }
+            else if (_proofFrame - _proofWaitStart > ProofLostFrames)
+            {
+                // Throws on purpose: a part whose screen never opens means the part before it didn't
+                // end where it should, and waiting on would only hang the run with nothing said.
+                throw new InvalidOperationException($"The proof run waited {ProofLostFrames} frames for {_proofStage}'s screen, and it never opened.");
+            }
             return null;
         }
 
@@ -407,6 +484,7 @@ public partial class LegendQuestGame
         {
             _proofStage = next;
             _proofSubject = null;
+            _proofWaitStart = _proofFrame;
             return null;
         }
 

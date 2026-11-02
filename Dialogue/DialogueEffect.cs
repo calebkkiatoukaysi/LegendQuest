@@ -25,6 +25,15 @@ public readonly record struct DialogueEffect(EffectKind Kind, string Id, int Amo
     /// <summary>Hands over a key item.</summary>
     public static DialogueEffect Give(string item) => new(EffectKind.GiveItem, item);
 
+    /// <summary>Takes a key item back, for one that changes hands.</summary>
+    public static DialogueEffect Take(string item) => new(EffectKind.TakeItem, item);
+
+    /// <summary>Sets a meter outright, rather than adding to it.</summary>
+    public static DialogueEffect SetMeter(string meter, int value) => new(EffectKind.SetMeter, meter, value);
+
+    /// <summary>Someone joins: into the party if there's room, to wait at camp if not.</summary>
+    public static DialogueEffect Recruit(string origin) => new(EffectKind.Recruit, origin);
+
     /// <summary>What you're to do next.</summary>
     public static DialogueEffect Objective(string text) => new(EffectKind.Objective, text);
 

@@ -1,0 +1,225 @@
+; The Old Crown Vault, under the Sunspire. Down the stair from the palace terrace into the
+; antechamber, where two constructs stand asleep either side of the vault doors. Through them, the
+; long hall: plates in the floor either side of a runner of gold, darts in the wall above them, a
+; pit at the west end with a ledge along the wall, and past it the end of the hall fallen in, where
+; the Hollowed have dug up from underneath. Their tunnel runs down to the warden's room, and the
+; lever there works the Crown Door in the middle of the hall's north wall. East, the treasury.
+; North, through the Crown Door, the relic gallery: shelves and cases of the old kings' things, the
+; empty pedestal where the Sunheart sat, and Kael halfway up a shelf at the east end, where the
+; sappers come up through the floor once he's called a truce. Lit by gilded lamps and braziers, and
+; a little daylight down the stair.
+
+[map]
+id = old-crown-vault
+name = The Old Crown Vault
+tileset = vault
+size = 38 36
+dark = yes
+ambient = 0.12
+music = Underground
+
+[legend]
+, = floor
+s = floor-shadow
+x = floor-cracked
+= = inlay
+O = sun-crest
+p = pressure-plate
+_ = pit
+e = earth
+t = tunnel
+~ = steps
+# = wall-top
+F = wall-face
+C = wall-crest
+N = wall-niche
+B = wall-base
+% = earth-top
+E = earth-face
+$ = coins
+r = rubble
+d = debris
+a = darts
+b = bones
+c = cobweb
+k = cobweb-ne
+
+[ground]
+######################################
+###FFFFFFFFFFFFFCFFFFCFFFFFFFFFFFFF###
+###BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB###
+###ssssssssssssssssssssssssssssssss###
+###,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,###
+###,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,xx###
+###,,,,,,,,,,,,,,====,,,,,,,,,,xxxx###
+###,,,,,,,,,,,,,,====,,,,,,,,,,xxxx###
+###,,============================,x###
+###,,============================,,###
+##################,,##################
+#EEFNFFFFFFCFFFFFF,,FFFFFFCFFFFFFFNFF#
+#EEBBBBBBBBBBBBBBB,,BBBBBBBBBBBBBBBBB#
+#xxxxssssssssssss====ssssssssssssssss#
+#xxxx____,p,p,p,,=OO=,p,p,p,p,,,,,,,,#
+#eex,____p,p,p,p,=OO=,,p,p,p,,,,,,,x,#
+#eexx____,p,p,p,,====,p,p,p,p,,,,,,,x#
+#xxx,____p,p,p,p,====,,p,p,p,,,x,,,,,#
+#xx,x____,p,p,p,,====,p,p,p,p,,,,,,,,#
+%tt%%#############,,############,,####
+%tt%%#############,,############,,####
+%tt%%FFNFFFF#CFFFF,,FFFFC#FFFNFF,,FF##
+%tt%%BBBBBBB#BBBBB,,BBBBB#BBBBBB,,BB##
+%ttEEsssssss#ssss====ssss#ssssssssss##
+%ttttx,,,,,,#,,,,=OO=,,,,#,,,,,,,,,,##
+%ttttxx,,,,,#,,,,=OO=,,,,#,,,,,,,,,,##
+%ttttxxx,,,,#,,,,====,,,,#,,,,,,,,,,##
+%ttttxx,x,,,#,,,,====,,,,#,,,,,,,,,,##
+%ttttx,x,x,,#,,,,====,,,,#,,,,,,,,,,##
+%%%%%,x,x,,,#####,,,,#####,,,,,,,,,,##
+#%%%%,,,,,,,#####,,,,#####,,,,,,,,,,##
+#####,,,,,,,#####,,,,#####,,,,,,,,,,##
+#################~~~~#################
+#################~~~~#################
+#################~~~~#################
+#################~~~~#################
+
+[detail]
+......................................
+......................................
+......................................
+...c..............................k...
+......$....................$..........
+...........$.................$.d......
+......................................
+......................................
+................................d.....
+..................................d...
+......................................
+......................................
+......................................
+.......a............................k.
+...d.........a...................d....
+.d..d......................a..........
+....r.....a...................b.......
+..d........b.............a.........$..
+....r.................................
+......................................
+..d...................................
+......................................
+.r....................................
+.....c.....k.c..........k.c........k..
+...............................$......
+..d....d.....................$...$....
+...........................$..........
+.d..r.........................$....$..
+...d..d...............................
+.....r......................$..$......
+..........d.......................$...
+...........................$.....$....
+......................................
+......................................
+......................................
+......................................
+
+; kind id x y, in tiles, then any settings. A lamp, a dart trap or a lever goes on the lower row of
+; a wall's face, and a door's foot is on the line where the face meets the floor. The great doors
+; are four tiles wide with the way through the middle two, so they stand on a half.
+[objects]
+spawn start 18.5 30.5 facing=up
+spawn stair 18.5 30.5 facing=up
+exit stair-up 17 35 w=4 to=back
+light daylight 18.5 33.5 reach=3 strength=0.5
+
+; The antechamber: the vault doors, a construct asleep either side of them, braziers by the gold
+; and the crown's banners.
+door outer 18.5 22.5 look=vault-door name="The Vault Doors"
+npc construct-1 15 23 creature=vault-construct name="A Vault Construct"
+npc construct-2 22 23 creature=vault-construct name="A Vault Construct"
+prop vault-brazier 16 26.5
+prop vault-brazier 21 26.5
+prop banner-blue 14 28
+prop banner-blue 23 28
+trigger bark-vault-down 17 27 w=4 h=2 bark=vault-down
+trigger bark-vault-constructs 14 24 w=10 h=1 bark=vault-constructs
+
+; The long hall. The Crown Door, with two more constructs either side of it, won't open by hand: the
+; lever in the warden's room works it. The plates are either side of the gold, and the darts come
+; out of the suns in the wall over them. The ledge along the wall past the pit is the way west.
+door crown 18.5 12.5 look=vault-door flag=crown-door name="The Crown Door"
+npc construct-3 15 13 creature=vault-construct name="A Vault Construct"
+npc construct-4 22 13 creature=vault-construct name="A Vault Construct"
+trigger crown-shut 17 13 w=4 h=1 unless=crown-door say="The Crown Door won't move, and there's no keyhole in it. Something somewhere else works it."
+trigger bark-vault-traps 17 17 w=4 h=2 bark=vault-traps
+trigger plates 17 16 w=4 h=1 say="Plates set in the floor either side of the gold, each with a little sun on it, and suns in the wall above them with holes for mouths. Keep to the gold."
+trigger plate-west 10 16 say="Click. The plate sinks under your boot, a sun in the wall coughs, and a dart cracks off the flagstone behind you."
+trigger plate-middle 13 15 say="Click. Nothing. Then three darts at once, all of them into the floor where you were a moment ago."
+trigger plate-east 26 16 say="The plate gives with a click and a dart spits out of the wall. It takes your sleeve, not your arm."
+trigger ledge 5 13 w=4 h=1 say="A ledge along the wall, a foot wide, with the pit beside it. A long way down, iron spikes, and somebody who didn't make it."
+prop vault-sconce 10 12
+prop vault-sconce 27 12
+prop dart-trap 6 12
+prop dart-trap 8 12
+prop dart-trap 13 12
+prop dart-trap 24 12
+prop dart-trap 29 12
+prop dart-trap 31 12
+prop urn-blue 35.5 14
+
+; The west end of the hall, fallen in, and the sappers' tunnel down to the warden's room.
+prop rubble-heap 2 13.5
+trigger collapse 1 14 w=4 h=1 say="The end of the hall has come down. Under the rubble the floor's been broken up from below, and a tunnel goes down into the dark."
+trigger tunnel 1 21 w=2 h=1 say="Pick marks in the earth, and fresh. Somebody dug this from underneath, and not long ago."
+
+; The warden's room, where the tunnel broke in: the lever for the Crown Door, a strongbox, and the
+; hole the Hollowed came up through first.
+prop vault-sconce 6 22
+lever crown-lever 9 22 look=vault-lever flag=crown-door name="A Gilded Lever"
+chest warden-chest 10.5 24.5 look=vault-chest gold=60 name="A Royal Strongbox"
+prop rubble-heap 6.5 24.5
+prop sapper-hole 8 29
+
+; The treasury, behind its own doors off the east end of the hall.
+door treasury 32.5 22.5 look=vault-door name="The Treasury Doors"
+prop relic-shelf 27 23.5
+prop vault-sconce 35 22
+prop vault-brazier 30.5 24
+prop vault-brazier 31.5 29.5
+prop gold-pile 28.5 27
+prop gold-pile 33.5 28
+prop gold-pile 29 30.5
+prop gold-pile-small 31 25
+prop gold-pile-small 34.5 31
+prop urn 26.5 31
+prop urn-blue 35.5 26
+chest treasury-chest-1 26.5 25.5 look=vault-chest gold=80 name="A Royal Strongbox"
+chest treasury-chest-2 35 24.5 look=vault-chest gold=120 name="A Royal Strongbox"
+trigger bark-vault-gold 31 23 w=4 h=2 bark=vault-gold
+
+; The relic gallery: the shelves along the north wall, the cases in front of them, and the empty
+; pedestal on the sun in the middle with a brazier either side.
+prop relic-shelf 5 3.5
+prop relic-shelf 9 3.5
+prop relic-shelf 28 3.5
+prop relic-shelf 32 3.5
+prop vault-sconce 7 2
+prop vault-sconce 30 2
+prop relic-case 7 6
+prop relic-case-orb 11 6
+prop relic-case-orb 26 6
+prop relic-case 30 6
+prop urn-blue 13.5 4
+prop urn 23.5 4
+prop sun-mosaic 18.5 7
+prop sunheart-pedestal 18.5 5.5
+prop vault-brazier 15.5 6
+prop vault-brazier 21.5 6
+trigger pedestal 17 7 w=4 h=1 say="The pedestal's gold cradle is empty, its prongs closed round nothing. This is where the Sunheart sat."
+
+; Kael, up on the lowest shelf of the east one with his back to you. A1-C4-02 starts when you come
+; along the gallery to him. Once he's called a truce the sappers come up through the cracked floor
+; beside him, and the hole they made stays.
+npc kael 32 2.75 cast=kael facing=up unless=kael-recruited
+trigger kael-shelf 27 4 w=8 h=5 talk=a1-c4-02 unless=a1-c4-02 mark=yes
+prop sapper-hole 32.5 8 when=kael-truce
+npc sapper-1 30.5 6.5 creature=hollowed-sapper name="A Hollowed Sapper" facing=left when=kael-truce unless=sappers-beaten
+npc sapper-2 32.5 7.25 creature=hollowed-sapper name="A Hollowed Sapper" when=kael-truce unless=sappers-beaten
+npc sapper-3 34.25 5.25 creature=hollowed-sapper name="A Hollowed Sapper" facing=left when=kael-truce unless=sappers-beaten

@@ -37,7 +37,7 @@ public class CharacterLook
     /// <summary>Which beard, the first being none.</summary>
     public int Beard { get; set; }
 
-    /// <summary>Which hat, the first being none.</summary>
+    /// <summary>Which hat, the first being none. A hood hides the hair and ears under it.</summary>
     public int Hat { get; set; }
 
     /// <summary>Which shirt dye.</summary>

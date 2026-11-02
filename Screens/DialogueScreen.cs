@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +11,7 @@ using LegendQuest.Dialogue;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
 using LegendQuest.Story;
+using LegendQuest.World;
 
 namespace LegendQuest.Screens;
 
@@ -22,9 +22,10 @@ namespace LegendQuest.Screens;
 /// <remarks>
 /// It only shows what DialogueRunner says; the runner has the rules. A check opens the dice over it
 /// and the next line waits till they're put away. A painting can sit behind a line, with the panel
-/// kept as small as the words let it so the painting shows, and a card line is big in the middle of
-/// the screen. If a painting has the two of you in it, you and the Soul-Bound are baked when it
-/// opens and handed to the painting. Approval, gold, items and whoever joins come up as
+/// kept as small as the words let it so the painting shows, a card line is big in the middle of
+/// the screen, and a chapter's line is its card, the same one the ship coming in ends on. If a
+/// painting has the two of you in it, you and the Soul-Bound are baked when it opens and handed to
+/// the painting. Approval, gold, items, whoever joins and whoever goes to wait at camp come up as
 /// toasts, and everything the runner did goes out through Happened as it happens, so the map under
 /// it can catch up (someone leaving, someone joining). Nothing under it moves while it's up.
 /// </remarks>
@@ -68,6 +69,9 @@ public class DialogueScreen : GameScreen
     private const int ShortCard = 26;
     private const int CardWidth = 1100;
 
+    /// <summary>How far up from the bottom of the screen the hint under a card goes.</summary>
+    private const float CardHintRise = 60f;
+
     /// <summary>The bar a question on a clock drains, and its colour.</summary>
     private const int ClockHeight = 6;
     private static readonly Color ClockColor = new(222, 182, 98);
@@ -98,6 +102,7 @@ public class DialogueScreen : GameScreen
     private readonly PaintingSprite _paintings = new();
     private readonly Paperdoll _paperdoll = new();
     private readonly QuestBoardSprite _board = new();
+    private readonly ChapterCard _chapterCard = new();
     private readonly Toast _toast = new();
 
     private ContentManager _content;
@@ -140,7 +145,7 @@ public class DialogueScreen : GameScreen
         TransitionOffTime = FadeTime;
     }
 
-    /// <summary>Loads the panel, the fonts, the icons and the paintings (with the two of you, if you're in one), and starts the first line.</summary>
+    /// <summary>Loads the panel, the fonts, the icons, the chapter's card and the paintings (with the two of you, if you're in one), and starts the first line.</summary>
     public override void Activate()
     {
         _content ??= new ContentManager(ScreenManager.Game.Services, "Content");
@@ -149,6 +154,7 @@ public class DialogueScreen : GameScreen
         _paintings.LoadContent(_content);
         if (ShowsFigures()) BakeFigures();
         _board.LoadContent(_content, ScreenManager.GraphicsDevice);
+        _chapterCard.LoadContent(_content);
         _toast.LoadContent(_content);
         _font = _content.Load<SpriteFont>("spectral-ui");
         _detailFont = _content.Load<SpriteFont>("spectral-detail");
@@ -239,7 +245,7 @@ public class DialogueScreen : GameScreen
         Settle();
     }
 
-    /// <summary>Draws the painting or the veil, then the card or the panel with the face, the name, the line and the options, then the toasts.</summary>
+    /// <summary>Draws the painting or the veil, then the card (or the chapter's card) or the panel with the face, the name, the line and the options, then the toasts.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
@@ -247,7 +253,7 @@ public class DialogueScreen : GameScreen
         float alpha = TransitionAlpha;
         DialogueNode node = _shownNode;
         if (node is null) return;
-        bool card = node.Speaker == Speakers.Card;
+        bool card = IsCard(node);
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         var screen = new Rectangle(0, 0, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight);
@@ -280,7 +286,8 @@ public class DialogueScreen : GameScreen
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        if (card) DrawCard(spriteBatch, alpha);
+        if (node.Speaker == Speakers.Chapter) DrawChapter(spriteBatch, alpha);
+        else if (card) DrawCard(spriteBatch, alpha);
         else if (!_waiting) DrawWords(spriteBatch, node, panel, alpha);
         _toast.Draw(spriteBatch, alpha);
         spriteBatch.End();
@@ -363,8 +370,8 @@ public class DialogueScreen : GameScreen
         _clock = 0f;
         _painting = node.Painting;
         if (node.Sound is Sfx sound) _audio.Play(sound);
-        _wrapped = Wrap(TextTokens.Fill(node.Line, _game), _font, node.Speaker == Speakers.Card ? CardWidth : TextWidth);
-        if (node.Speaker == Speakers.Card) _shown = Length();
+        _wrapped = Text.Wrap(TextTokens.Fill(node.Line, _game), _font, IsCard(node) ? CardWidth : TextWidth);
+        if (IsCard(node)) _shown = Length();
     }
 
     /// <summary>Turns one thing the runner did into a toast, a sound, or the dice, and passes it on.</summary>
@@ -404,8 +411,8 @@ public class DialogueScreen : GameScreen
                 break;
 
             case DialogueEventKind.Recruited:
-                string name = happened.Amount == 1 ? _game.Member(happened.Id).Name : Origins.NameOf(happened.Id);
-                _toast.Show(name + (happened.Amount == 1 ? " joins the party" : " waits at camp"));
+                bool joins = happened.Amount == 1;
+                _toast.Show(NameOf(happened.Id) + (joins ? " joins the party" : " will wait at " + MapCatalog.Get(MapCatalog.Camp).Name));
                 _audio.Play(Sfx.Waypoint);
                 break;
 
@@ -415,6 +422,10 @@ public class DialogueScreen : GameScreen
         }
         Happened?.Invoke(happened);
     }
+
+    /// <summary>What someone who's just joined or gone to wait is called: their own name if they're in the party or the camp, or their origin's if they're somehow in neither.</summary>
+    private string NameOf(string id) =>
+        (_game.Member(id) ?? _game.Camp.Find(waiting => waiting.Id == id))?.Name ?? Origins.NameOf(id);
 
     /// <summary>Closes the screen and says where the party's to go.</summary>
     private void Close()
@@ -511,7 +522,7 @@ public class DialogueScreen : GameScreen
             if (node.Direction is not null)
             {
                 float after = left + _detailFont.MeasureString(name).X + 18f;
-                Text.Draw(spriteBatch, _detailFont, node.Direction, after, top, Palette.Note * alpha, Palette.FormShadow * alpha);
+                Text.Draw(spriteBatch, _detailFont, TextTokens.Fill(node.Direction, _game), after, top, Palette.Note * alpha, Palette.FormShadow * alpha);
             }
         }
 
@@ -566,9 +577,23 @@ public class DialogueScreen : GameScreen
                 y += _font.LineSpacing;
             }
         }
-        Text.DrawCentered(spriteBatch, _detailFont, NextIsLast() ? LastHint : NextHint, LegendQuestGame.ScreenHeight - 60f,
-            Palette.Note * alpha, Palette.Shadow * alpha);
+        DrawCardHint(spriteBatch, alpha);
     }
+
+    /// <summary>A chapter's card: the act over the chapter's name, on its smudge in the middle of the screen.</summary>
+    private void DrawChapter(SpriteBatch spriteBatch, float alpha)
+    {
+        _chapterCard.Draw(spriteBatch, TextTokens.Fill(_shownNode.Line, _game), alpha);
+        DrawCardHint(spriteBatch, alpha);
+    }
+
+    /// <summary>The hint under a card, across the bottom of the screen: the key to go on, or that it's the end.</summary>
+    private void DrawCardHint(SpriteBatch spriteBatch, float alpha) =>
+        Text.DrawCentered(spriteBatch, _detailFont, NextIsLast() ? LastHint : NextHint, LegendQuestGame.ScreenHeight - CardHintRise,
+            Palette.Note * alpha, Palette.Shadow * alpha);
+
+    /// <summary>Whether a line is shown as a card, big in the middle of the screen with no panel: a card, or a chapter's card.</summary>
+    private static bool IsCard(DialogueNode node) => node.Speaker is Speakers.Card or Speakers.Chapter;
 
     /// <summary>How far down the panel the line starts: under the speaker's name, or right at the top for the narrator over a painting, who has no name to make room for.</summary>
     private int LineTop(DialogueNode node)
@@ -626,27 +651,5 @@ public class DialogueScreen : GameScreen
         int length = -1;
         foreach (string row in _wrapped) length += row.Length + 1;
         return Math.Max(0, length);
-    }
-
-    /// <summary>Breaks a line into rows that fit a width, at the spaces.</summary>
-    private static List<string> Wrap(string text, SpriteFont font, float width)
-    {
-        var rows = new List<string>();
-        var row = new StringBuilder();
-        foreach (string word in text.Split(' '))
-        {
-            string tried = row.Length == 0 ? word : row + " " + word;
-            if (row.Length > 0 && font.MeasureString(tried).X > width)
-            {
-                rows.Add(row.ToString());
-                row.Clear().Append(word);
-            }
-            else
-            {
-                row.Clear().Append(tried);
-            }
-        }
-        if (row.Length > 0) rows.Add(row.ToString());
-        return rows;
     }
 }

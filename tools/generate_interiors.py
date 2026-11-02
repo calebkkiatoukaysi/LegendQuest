@@ -1,5 +1,6 @@
 """
-Inside Questeria's buildings: the interior tileset, and the bed for the cottages.
+Inside Questeria's buildings: the interior tileset, the bed for the cottages, and the tavern
+furniture my props sheet hasn't got (a table with the tankards on it, and a high-backed booth).
 
     python tools/generate_interiors.py
 
@@ -12,7 +13,8 @@ meets the floor, like the lawns outside.
 The rest of the furniture (the bar, the tables, the hearth and the shelves) used to be drawn here
 too, but my props sheet has better of all of it, so tools/cut_supplied.py cuts it from there now
 under the same names. There's no bed on the sheet, so the bed's still drawn here, standing on its
-foot like every other prop.
+foot like every other prop, and so are the taverns' tankard table and booth, in the colours of the
+cut furniture beside them.
 
 Only needs CPython. Every bit of noise is hash01 on where it is, so a rerun writes the same bytes.
 """
@@ -33,6 +35,11 @@ GOLD = ((150, 104, 40), (214, 166, 74), (246, 214, 130))
 GLASS = ((84, 130, 176), (140, 188, 226), (210, 236, 250))
 CLOTH = ((60, 70, 120), (86, 104, 160), (140, 156, 206), (200, 210, 236))
 PAGE = ((150, 120, 90), (206, 180, 140))
+OAK = ((70, 40, 34), (104, 64, 46), (140, 90, 58), (178, 120, 74), (212, 156, 100), (236, 192, 134))
+PEWTER = ((70, 72, 90), (116, 120, 140), (168, 172, 190), (222, 226, 236))
+ALE = ((150, 90, 30), (214, 150, 52), (250, 244, 226))
+CUSHION = ((70, 22, 40), (110, 34, 56), (150, 54, 70), (186, 86, 92))
+CANDLE = ((214, 200, 170), (246, 238, 214), (255, 214, 120), (255, 248, 214))
 
 
 # --------------------------------------------------------------------------- #
@@ -231,9 +238,128 @@ def bed():
     return c.img
 
 
+TANKARD_W, TANKARD_H = 32, 28
+
+
+def tankard(c, x, y, tipped=False):
+    """A pewter tankard with its head of foam, standing with its base at x, y, the handle on its
+    right. A tipped one lies on its side with the ale run out of it."""
+    if tipped:
+        c.box(x - 3, y - 3, x + 2, y - 1, PEWTER[2])
+        c.box(x - 3, y - 1, x + 2, y - 1, PEWTER[1])
+        c.put(x - 3, y - 3, PEWTER[3])
+        c.box(x + 3, y - 3, x + 3, y - 1, ALE[2])
+        for dx in range(4, 9):
+            c.put(x + dx, y - 1, ALE[1] if dx < 7 else ALE[0])
+        return
+    c.box(x - 2, y - 6, x + 1, y, PEWTER[2])
+    c.box(x - 2, y - 6, x - 2, y, PEWTER[3])
+    c.box(x + 1, y - 5, x + 1, y, PEWTER[1])
+    c.box(x - 2, y, x + 1, y, PEWTER[0])
+    c.box(x - 2, y - 8, x + 1, y - 7, ALE[2])
+    c.put(x - 1, y - 9, ALE[2])
+    c.put(x + 2, y - 5, PEWTER[1])
+    c.put(x + 3, y - 4, PEWTER[1])
+    c.put(x + 3, y - 3, PEWTER[1])
+    c.put(x + 2, y - 2, PEWTER[1])
+
+
+def tankard_table():
+    """A heavy oak tavern table seen from above and in front: its top of three boards, scarred and
+    ringed where the tankards stand, a thick front edge, and square legs. On it, two tankards with
+    their heads on, one knocked over with the ale running out, and a stub of candle in a dish."""
+    c = Canvas(TANKARD_W, TANKARD_H)
+    top, front, foot = 9, 18, TANKARD_H - 1
+    for y in range(top, front):
+        board = (y - top) // 3
+        for x in range(1, TANKARD_W - 1):
+            k = 4 if y == top else 3 if (y - top) % 3 else 2
+            if hash01(x // 3 + board * 5, y, 621) < 0.15:
+                k -= 1
+            c.put(x, y, OAK[k])
+    for x, y in ((6, 12), (7, 13), (8, 12), (22, 15), (23, 14)):
+        c.put(x, y, OAK[1])
+    for y in range(front, front + 3):
+        for x in range(1, TANKARD_W - 1):
+            c.put(x, y, OAK[3] if y == front else OAK[1] if x > TANKARD_W // 2 else OAK[2])
+    for lx in (2, TANKARD_W - 5):
+        c.box(lx, front + 3, lx + 2, foot, OAK[1])
+        c.box(lx, front + 3, lx, foot, OAK[2])
+    c.box(TANKARD_W // 2 - 1, front + 3, TANKARD_W // 2, foot - 2, OAK[0])
+    tankard(c, 7, front - 3)
+    tankard(c, 14, front - 1)
+    tankard(c, 22, front - 4, tipped=True)
+    # The candle in its dish at the back corner, unlit: the room's dark enough to have its own light.
+    c.box(24, top - 1, 28, top, PEWTER[1])
+    c.box(25, top - 6, 26, top - 2, CANDLE[1])
+    c.put(25, top - 6, CANDLE[0])
+    c.put(26, top - 7, CANDLE[2])
+    c.put(26, top - 8, CANDLE[3])
+    c.outline()
+    c.glow(26, top - 8, 5, CANDLE[2], 100)
+    return c.img
+
+
+BOOTH_W, BOOTH_H = 56, 46
+
+
+def booth():
+    """A high-backed booth for a quiet word: an oak settle against nothing at all, its back panelled
+    and crested, a crimson cushion along its seat, and a tall end either side coming forward to the
+    floor, so whoever sits in it is half hidden from the room. A brass lamp hook on its crest."""
+    c = Canvas(BOOTH_W, BOOTH_H)
+    left, right = 6, BOOTH_W - 7
+    seat = 30
+    # The back: panels between rails, an arched crest over the top.
+    for y in range(4, seat):
+        for x in range(left, right + 1):
+            crest = y >= 8 or abs(x + 0.5 - BOOTH_W / 2.0) < 10 + (y - 4) * 2.5
+            if not crest:
+                continue
+            rail = y in (8, seat - 1) or (x - left) % 11 in (0, 1)
+            if rail:
+                k = 4 if y == 8 or (x - left) % 11 == 0 else 3
+            else:
+                k = 2 if y < 14 else 1
+                if (x - left) % 11 == 2 or y == 9:
+                    k = 0
+                elif hash01(x, y // 3, 631) < 0.2:
+                    k += 1
+            if y < 8:
+                k = 5 if y == 4 or abs(x + 0.5 - BOOTH_W / 2.0) > 10 + (y - 5) * 2.5 else 4
+            c.put(x, y, OAK[k])
+    # The cushion, and the seat's front.
+    for y in range(seat, seat + 5):
+        for x in range(left, right + 1):
+            k = 3 if y == seat else 2 if y < seat + 3 else 1
+            if y == seat + 1 and (x - left) % 7 == 3:
+                k = 0
+            c.put(x, y, CUSHION[k])
+    for y in range(seat + 5, BOOTH_H - 1):
+        for x in range(left, right + 1):
+            c.put(x, y, OAK[2] if y == seat + 5 else OAK[1] if (x - left) % 8 else OAK[0])
+    # The two tall ends, their front edges toward the room.
+    for x0 in (0, right + 1):
+        for y in range(2, BOOTH_H - 1):
+            for x in range(x0, x0 + 6):
+                k = 4 if x == x0 or y == 2 else 3 if x < x0 + 3 else 2
+                if y > BOOTH_H - 4:
+                    k = 1
+                c.put(x, y, OAK[k])
+        c.put(x0 + 2, 1, OAK[4])
+        c.put(x0 + 3, 1, OAK[3])
+    # The lamp hook.
+    c.box(BOOTH_W // 2 - 1, 0, BOOTH_W // 2, 2, GOLD[1])
+    c.put(BOOTH_W // 2 - 1, 0, GOLD[2])
+    c.outline()
+    return c.img
+
+
 #: The furniture drawn here: just what my props sheet hasn't got.
 FURNITURE = {
     "bed": bed,
+    "tankard-table": tankard_table,
+    "booth": booth,
 }
 
 
