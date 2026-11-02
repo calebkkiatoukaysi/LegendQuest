@@ -22,6 +22,24 @@ the companions who join in them, and buildings you can go into. Outside the wall
 bright, green farmland now, the way a capital's fields should look at noon. [The story](#the-story)
 says what's in, and [COMPANIONS.md](COMPANIONS.md) is the companions' bible.
 
+## For the assignment
+
+The project's requirements, and where each one is met:
+
+- **A tilemap rendered for some elements of the game.** Every map is a tilemap: a text file in
+  `Content/Maps/` laying out its ground, detail and overhead layers as characters, each one a tile in
+  its tileset (`World/TilesetCatalog.cs`, one sheet of 16x16 tiles a set in `Content/Tiles/`).
+  `World/MapLoader.cs` reads it, and `World/Tilemap.cs` draws it, a layer at a time, with the edges
+  where one kind of ground meets another, animated water, and walls built from the solid tiles for
+  collision and sight. Nineteen of them are in the game; [Maps](#maps) has the file format.
+- **Serialization of game state to create and load a save file.** `Save/SaveSystem.cs` writes the
+  whole game, `Save/SaveData.cs`, to a JSON file with `System.Text.Json`, and reads it back: the map
+  and where everyone's standing, the party and what they're wearing, the bag, gold, the story's flags
+  and meters, the chests opened and the maps seen. There are three slots, a quicksave and an
+  autosave, written safely (a temporary file, then swapped in, the old one kept as a backup) and
+  upgraded from older versions; a broken file shows as UNREADABLE rather than crashing. NEW GAME
+  writes one, and LOAD and CONTINUE read one. [Saving](#saving) has the details.
+
 ## Running it
 
 Everything is drawn on a 1600x900 canvas (`ScreenCanvas`), and the canvas is blown up to fill the
