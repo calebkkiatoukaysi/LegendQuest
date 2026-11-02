@@ -123,4 +123,4 @@ prop urn-blue 25.5 15
 door tomb 19.5 13.5 locked=yes name="Tomb door"
 door side 4.5 13.5 look=gate flag=side-gate name="Stone door"
 lever side-lever 30 13 flag=side-gate
-chest side-chest 4.5 8 gold=40
+chest side-chest 4.5 8 gold=40 items=iron-helm,healing-potion

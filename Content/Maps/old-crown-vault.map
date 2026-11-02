@@ -173,7 +173,7 @@ trigger tunnel 1 21 w=2 h=1 say="Pick marks in the earth, and fresh. Somebody du
 ; hole the Hollowed came up through first.
 prop vault-sconce 6 22
 lever crown-lever 9 22 look=vault-lever flag=crown-door name="A Gilded Lever"
-chest warden-chest 10.5 24.5 look=vault-chest gold=60 name="A Royal Strongbox"
+chest warden-chest 10.5 24.5 look=vault-chest gold=60 items=steel-shield name="A Royal Strongbox"
 prop rubble-heap 6.5 24.5
 prop sapper-hole 8 29
 
@@ -190,8 +190,8 @@ prop gold-pile-small 31 25
 prop gold-pile-small 34.5 31
 prop urn 26.5 31
 prop urn-blue 35.5 26
-chest treasury-chest-1 26.5 25.5 look=vault-chest gold=80 name="A Royal Strongbox"
-chest treasury-chest-2 35 24.5 look=vault-chest gold=120 name="A Royal Strongbox"
+chest treasury-chest-1 26.5 25.5 look=vault-chest gold=80 items=greater-healing-potion,elixir-of-focus name="A Royal Strongbox"
+chest treasury-chest-2 35 24.5 look=vault-chest gold=120 items=ring-of-protection name="A Royal Strongbox"
 trigger bark-vault-gold 31 23 w=4 h=2 bark=vault-gold
 
 ; The relic gallery: the shelves along the north wall, the cases in front of them, and the empty
@@ -221,5 +221,5 @@ npc kael 32 2.75 cast=kael facing=up unless=kael-recruited
 trigger kael-shelf 27 4 w=8 h=5 talk=a1-c4-02 unless=a1-c4-02 mark=yes
 prop sapper-hole 32.5 8 when=kael-truce
 npc sapper-1 30.5 6.5 creature=hollowed-sapper name="A Hollowed Sapper" facing=left when=kael-truce unless=sappers-beaten
-npc sapper-2 32.5 7.25 creature=hollowed-sapper name="A Hollowed Sapper" when=kael-truce unless=sappers-beaten
+npc sapper-2 33.75 7.6 creature=hollowed-sapper name="A Hollowed Sapper" facing=left when=kael-truce unless=sappers-beaten
 npc sapper-3 34.25 5.25 creature=hollowed-sapper name="A Hollowed Sapper" facing=left when=kael-truce unless=sappers-beaten

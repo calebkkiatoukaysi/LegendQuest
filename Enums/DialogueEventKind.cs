@@ -28,4 +28,10 @@ public enum DialogueEventKind
 
     /// <summary>The party's to go to another map once the conversation's over.</summary>
     Travel,
+
+    /// <summary>A shop's to open once the conversation's over. The id is the shop's.</summary>
+    Shop,
+
+    /// <summary>A fight's to start once the conversation's over. The id is the encounter's.</summary>
+    Fight,
 }

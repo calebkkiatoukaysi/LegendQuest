@@ -12,6 +12,9 @@ public enum WorldEventKind
     /// <summary>Gold out of a chest. The line says how much.</summary>
     GoldTaken,
 
+    /// <summary>Items out of a chest, into the party's bag. The line names them.</summary>
+    ItemsTaken,
+
     /// <summary>A door swung open.</summary>
     DoorOpened,
 

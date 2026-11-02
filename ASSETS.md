@@ -18,7 +18,7 @@ Content/mote.png - created by Caleb Kiatoukaysi for Legend Quest, the small soft
 
 ## Characters and armour
 
-Content/Paperdoll/body.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the youth with his hair taken off, every part of him (skin, eyes, shirt, vest, breeches) cut down to a few key shades for the palette swap; standing and four steps each way, 32x48 frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+Content/Paperdoll/body.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the youth with his hair taken off, every part of him (skin, eyes, shirt, vest, breeches) cut down to a few key shades for the palette swap; standing, four steps and the five fighting frames each way (posed from his standing frame), 32x48 frames; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Paperdoll/hair-tousled.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: his own hair, on a layer of its own, in the hair's key shades; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
@@ -229,6 +229,196 @@ Content/Paperdoll/Small/hat-crown.png - built by tools/generate_paperdoll.py fro
 Content/Paperdoll/Small/hat-hood.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-hood.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 Content/Paperdoll/Small/hat-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/hat-circlet.png redrawn for the Hearthling's small body, rows taken out of the torso and legs by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-padded.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a quilted padded jacket over the body and sleeves in the vest's key shades, a stitched line every third row and a high collar; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-leather.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a leather jerkin in leather's key shades, laced up the front, with shoulder caps and a belt with a brass buckle; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-studded.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: the leather jerkin with steel rivets in a diamond pattern; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-hide.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a hide jerkin in leather's key shades with fur round the collar and a ragged fur hem; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-chain-shirt.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a mail shirt in metal's key shades, to the elbows and just past the hips; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-scale.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: scale armour in metal's key shades, rows of scales each set over by one; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-chain.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a belted mail hauberk in metal's key shades, to the wrists and the knees; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-plate.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: plate in metal's key shades: a ridged breastplate with a glint, pauldrons, mail at the upper arm, vambraces, tassets over the hips, brass at the neck and wrists; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/armour-robe.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a robe to the ankles in the vest's key shades, gold at the hem, the cuffs and down the front, and a sash; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/helm-cap.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a leather skullcap with a darker band, a seam and a button; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/helm-full.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a great helm in metal's key shades that covers the whole head, a visor slot across the eyes and down the middle, and a brass rim; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/helm-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a slim silver circlet in metal's key shades with a violet stone on the brow; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/gloves.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: leather gloves with a cuff over the wrist; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/gauntlets.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: steel gauntlets over the hands and wrists, a glint on the knuckles; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/boots-leather.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: tall leather boots to the middle of the calf with a turned-down cuff; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/boots-iron.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: iron greaves from the knee, a strap at the ankle and plated feet; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py onto the youth's frames and posed for the fights like the rest; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/shield-round.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a round shield of wooden planks with a steel rim and boss on the arm without the weapon: its face from the front, its back and strap from behind, its edge out in front from the side; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/shield-heater.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a heater shield, its face in the vest's key shades with a steel rim and a brass stud, on the arm without the weapon; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-dagger.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a dagger in the weapon hand, lifted back over the shoulder winding up and driven straight in; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-shortsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a shortsword in the weapon hand, lifted over the shoulder winding up and brought down through striking; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-longsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a longsword with a brass guard in the weapon hand, lifted and brought down; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-rapier.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a rapier, long and thin with a brass guard, lifted back and driven straight in; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-scimitar.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a scimitar curving back near the tip, lifted and brought down; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-axe.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: an axe on a wooden haft, its broad head out in front with a bright edge; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-greatsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a greatsword three pixels broad, with a long grip and a wide guard; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-hammer.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a warhammer, a steel block on a wooden haft; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-mace.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a mace, a flanged steel ball on an iron haft; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-staff.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a staff with a violet crystal at its top: held upright, swung from its foot, and held up high to cast; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-spear.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a spear: upright, levelled behind the head winding up, and thrust out at its full reach; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-bow.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a bow, carried in the other hand; winding up an arrow's taken from the quiver, and striking it's drawn to the full with the arrow on the string; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/weapon-crossbow.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: a light crossbow, carried in the other hand; winding up a bolt's taken from the quiver, and striking it's levelled and loosed; standing, four steps and the five fighting frames each way, 32x48 frames, drawn procedurally by tools/generate_paperdoll.py on each frame where the hand holding it is; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/gear-palettes.png - created by Caleb Kiatoukaysi for Legend Quest, the gear's tints, one ramp a row: metal's keys and then iron, blackened steel, bronze and gold, and leather's keys and then dark, black, tan and red leather, written by tools/generate_paperdoll.py, released under public domain
+
+Content/Paperdoll/Stout/armour-padded.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-padded.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-leather.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-leather.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-studded.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-studded.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-hide.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-hide.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-chain-shirt.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-chain-shirt.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-scale.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-scale.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-chain.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-chain.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-plate.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-plate.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/armour-robe.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-robe.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/helm-cap.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/helm-cap.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/helm-full.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/helm-full.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/helm-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/helm-circlet.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/gloves.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/gloves.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/gauntlets.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/gauntlets.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/boots-leather.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/boots-leather.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/boots-iron.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/boots-iron.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/shield-round.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/shield-round.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/shield-heater.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/shield-heater.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-dagger.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-dagger.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-shortsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-shortsword.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-longsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-longsword.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-rapier.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-rapier.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-scimitar.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-scimitar.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-axe.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-axe.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-greatsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-greatsword.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-hammer.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-hammer.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-mace.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-mace.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-staff.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-staff.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-spear.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-spear.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-bow.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-bow.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Stout/weapon-crossbow.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-crossbow.png drawn again for the Stoneborn's stout body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-padded.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-padded.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-leather.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-leather.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-studded.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-studded.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-hide.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-hide.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-chain-shirt.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-chain-shirt.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-scale.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-scale.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-chain.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-chain.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-plate.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-plate.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/armour-robe.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/armour-robe.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/helm-cap.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/helm-cap.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/helm-full.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/helm-full.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/helm-circlet.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/helm-circlet.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/gloves.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/gloves.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/gauntlets.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/gauntlets.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/boots-leather.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/boots-leather.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/boots-iron.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/boots-iron.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/shield-round.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/shield-round.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/shield-heater.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/shield-heater.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-dagger.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-dagger.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-shortsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-shortsword.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-longsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-longsword.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-rapier.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-rapier.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-scimitar.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-scimitar.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-axe.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-axe.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-greatsword.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-greatsword.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-hammer.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-hammer.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-mace.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-mace.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-staff.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-staff.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-spear.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-spear.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-bow.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-bow.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Paperdoll/Small/weapon-crossbow.png - built by tools/generate_paperdoll.py from tools/source/npc-townsperson.png: Content/Paperdoll/weapon-crossbow.png drawn again for the Hearthling's small body by tools/generate_paperdoll.py; the picture was supplied by Caleb Kiatoukaysi for Legend Quest
+
+Content/Creatures/sea-wraith.png - created by Caleb Kiatoukaysi for Legend Quest, a sea-wraith, a drowned thing gone sea-green and half see-through, kelp for hair, empty sockets with a cold light in them and rags trailing off where its legs were; it drifts rather than walks, lunges claws first, flickers when it's hurt and comes apart into a puddle when it's down; 32x48 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
 
 Content/Creatures/gloomfang.png - created by Caleb Kiatoukaysi for Legend Quest, the gloomfang, a lean near-black wolf of the Mirewood, violet eyes with black smoke leaking up off them; standing, four steps, wind-up, strike, howl, hurt and downed each way, 48x32 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
 
@@ -492,6 +682,18 @@ Content/dialogue-icons.png - created by Caleb Kiatoukaysi for Legend Quest, the 
 
 Content/cursors.png - created by Caleb Kiatoukaysi for Legend Quest, the mouse cursors: an arrow, a ring to walk, a hand to use, a speech bubble to talk, and a crossed circle, drawn procedurally by tools/generate_ui.py, released under public domain
 
+Content/Items/icons.png - created by Caleb Kiatoukaysi for Legend Quest, an icon for every item, 24x24, in ItemCatalog's order (the weapons, the armour by what it's made of, the shields, helms, gloves, boots and cloaks, the amulet and the ring, the potions and the rest), with a glint on the magic ones, drawn procedurally by tools/generate_items.py, released under public domain
+
+Content/Items/slots.png - created by Caleb Kiatoukaysi for Legend Quest, the inventory's slots (empty, under the mouse and picked), the faint outline of what goes in each equipment slot, and the rims of an uncommon and a rare thing's slot, drawn procedurally by tools/generate_items.py, released under public domain
+
+Content/Combat/abilities.png - created by Caleb Kiatoukaysi for Legend Quest, an icon for every ability in a fight, in AbilityId's order, each on a tile the colour of its kind, and the End Turn and bow attack icons, drawn procedurally by tools/generate_combat_art.py, released under public domain
+
+Content/Combat/conditions.png - created by Caleb Kiatoukaysi for Legend Quest, an icon for every condition, in ConditionId's order, drawn procedurally by tools/generate_combat_art.py, released under public domain
+
+Content/Combat/hud.png - created by Caleb Kiatoukaysi for Legend Quest, the pieces of the fight's screen: the hotbar's slots, the initiative portraits, the action, bonus action and reaction pips, the movement bar, death saves, the Soul-Link sigil in its five states, the target rings, the path's dots and ends, and the arrow, fire bolt, frost ray, radiant mote, eldritch blast, magic missile and flask in flight, drawn procedurally by tools/generate_combat_art.py, released under public domain
+
+Content/keycaps.png - created by Caleb Kiatoukaysi for Legend Quest, the key cap the tutorial tips and HOW TO PLAY write keys on, and the mouse with its left button, right button and wheel lit, drawn procedurally by tools/generate_ui.py, released under public domain
+
 ## Maps
 
 Content/Maps/questeria.map - written by Caleb Kiatoukaysi for Legend Quest, Questeria, the capital and the hub map, released under public domain
@@ -546,6 +748,10 @@ Content/Music/meadowlark.wav - created by Caleb Kiatoukaysi for Legend Quest, "M
 
 Content/Music/sunspire.wav - created by Caleb Kiatoukaysi for Legend Quest, "Sunspire", for the royal keep, composed and synthesised by tools/generate_audio.py, released under public domain
 
+Content/Music/steel.wav - created by Caleb Kiatoukaysi for Legend Quest, "Steel", for fights, composed and synthesised by tools/generate_audio.py, released under public domain
+
+Content/Music/the-hunger.wav - created by Caleb Kiatoukaysi for Legend Quest, "The Hunger", for boss fights, composed and synthesised by tools/generate_audio.py, released under public domain
+
 ## Sound effects
 
 Content/Sfx/menu-move.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
@@ -598,6 +804,44 @@ Content/Sfx/bowshot.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound
 
 Content/Sfx/coin.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
 
+Content/Sfx/sword-hit.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/miss.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/crit.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/thud.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/shield.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/bow.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/cast.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/fire.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/frost.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/heal.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/potion.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/soul-link.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/turn-start.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/downed.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/death.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/victory.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/game-over.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/equip.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/buy.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
 ## Text
 
 Content/Spectral/Spectral-Light.ttf - Spectral font created by Production Type, released on Google Fonts (https://fonts.google.com/specimen/Spectral) under the SIL Open Font License
@@ -611,6 +855,8 @@ Content/spectral-title.spritefont - written by Caleb Kiatoukaysi for Legend Ques
 Content/spectral-ui.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Medium at 26pt, letterspaced
 
 Content/spectral-detail.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Light at 17pt, letterspaced
+
+Content/spectral-number.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Medium at 40pt, only the digits and the plus and minus signs, for the numbers that pop up over someone hit or healed
 
 ## The scripts
 
@@ -628,9 +874,13 @@ tools/generate_vault.py - written by Caleb Kiatoukaysi for Legend Quest, draws t
 
 tools/generate_mirewood.py - written by Caleb Kiatoukaysi for Legend Quest, draws the Mirewood's and the Old Quarry's tilesets and props, and cuts the black-veined trees off tools/source/questeria-trees.png (through cut_supplied.py) and turns them. It needs nothing but CPython, and it's seeded, so a rerun gives the same files
 
-tools/generate_creatures.py - written by Caleb Kiatoukaysi for Legend Quest, draws the creatures' sheets (the gloomfang, the Thornmother, the three Hollowed and the vault construct) out of shaded round parts posed frame by frame. It needs nothing but CPython, and every bit of noise in it is seeded on where it is, so a rerun gives the same files
+tools/generate_creatures.py - written by Caleb Kiatoukaysi for Legend Quest, draws the creatures' sheets (the sea-wraith, the gloomfang, the Thornmother, the three Hollowed and the vault construct) out of shaded round parts posed frame by frame. It needs nothing but CPython, and every bit of noise in it is seeded on where it is, so a rerun gives the same files
 
 tools/generate_meadow.py - written by Caleb Kiatoukaysi for Legend Quest, draws the meadows' tileset and the farm's, the bridge's and the refugees' camp's props, and cuts the great oak, the wild flowers, the farmhouse, the east gate and the city wall off tools/source/ (through cut_supplied.py). It needs nothing but CPython, and every bit of noise in it is seeded, so a rerun gives the same files
+
+tools/generate_items.py - written by Caleb Kiatoukaysi for Legend Quest, draws the item icons and the inventory's slots: every pixel is given a material and shaded from the top left at the end, with a dark outline round the lot, and it checks Items/ItemCatalog.cs's icons and rarities against its own list before it writes anything. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
+
+tools/generate_combat_art.py - written by Caleb Kiatoukaysi for Legend Quest, draws the ability and condition icons and the pieces of the fight's screen with generate_items.py's kit, and checks Combat/CombatIcons.cs and the AbilityId and ConditionId enums against its own tables before it writes anything. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 
 ## The pictures the generators read
 

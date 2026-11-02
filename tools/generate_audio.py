@@ -11,7 +11,8 @@ script. Run it from the repo root:
 Only needs CPython (3.12 or newer, for math.sumprod). No samples are used: everything is built from
 sines, wavetables, noise and a few filters, and every random number is seeded, so a rerun writes
 the exact same files. The oscillators, filters, reverb and song mixer are The Black Box's, copied
-over. The lute, the frame drum, the brass, the timpani, the chimes and the birds are new.
+over. The lute, the frame drum, the brass, the timpani, the chimes, the birds, the war drum, the
+cymbals and the great bell are new.
 
 Music is 16-bit stereo at 32 kHz and loops cleanly with MediaPlayer.IsRepeating. Sound effects are
 16-bit mono at 44.1 kHz and already balanced against each other, so the game can play them all at
@@ -41,8 +42,10 @@ MUSIC_PEAK_DB = -1.0
 TITLE_RMS_DB = -21.0
 EXPLORE_RMS_DB = -22.0  # under everything else that's going on, since it plays the longest
 DARK_RMS_DB = -24.0     # quieter again, so the drips and the footsteps carry
+BATTLE_RMS_DB = -21.0   # as loud as the title: a fight should lift, but the blows have to cut through it
 LIMIT_KNEE = 0.5        # the limiter only touches samples above this (linear)
 
+PEAK_HIT = -5.0         # the blows in a fight, a touch over the menus so they land over the battle music
 PEAK_MENU = -6.0        # confirm and back
 PEAK_CLICK = -8.0       # UI clicks
 PEAK_REPEAT = -10.0     # footsteps, which fire constantly
@@ -861,6 +864,73 @@ def birdsong(length, rate, rng, songs):
     return x
 
 
+#: A great bell, cast with a minor third in it like the ship's bell but bigger and heavier, so it
+#: rings on a long time and sits in a minor key. (ratio, gain, tau)
+GREAT_BELL = ((0.5, 0.6, 4.0), (1.0, 1.0, 3.2), (1.19, 0.55, 2.4), (1.5, 0.4, 1.8), (2.0, 0.35, 1.4),
+              (2.66, 0.2, 0.9), (3.0, 0.15, 0.6))
+
+#: How many partials a cymbal's shimmer is made of, and the band they're scattered over, in Hz.
+CYMBAL_PARTIALS = 48
+CYMBAL_LOW_HZ, CYMBAL_HIGH_HZ = 2200.0, 9000.0
+
+#: Tremolo strings play in sixteenths: four strokes of the bow to a beat.
+TREMOLO_PER_BEAT = 4
+
+#: A sixteenth note, in beats. The drums roll in them.
+SIXTEENTH = 0.25
+
+
+def war_drum(rate, rng):
+    """A big war drum struck with a padded beater: a deep boom dropping in pitch, the shell
+    answering it higher for a moment, and the slap of the skin. Bigger and lower than the frame drum."""
+    n = int(1.6 * rate)
+    x = shaped(glide(95.0, 46.0, 0.05, n, rate), envelope(n, rate, attack=0.0015, tau=0.32))
+    mix(x, shaped(glide(160.0, 125.0, 0.03, n, rate), envelope(n, rate, attack=0.001, tau=0.06)), 0, 0.35)
+    m = int(0.04 * rate)
+    slap = shaped(norm(lowpass(highpass(noise(m, rng), 600.0, rate), 3000.0, rate)), envelope(m, rate, 0.0005, 0.008))
+    mix(x, slap, 0, 0.3)
+    return fade(lowpass(x, 3000.0, rate), rate, 0.0005, 0.2)
+
+
+def cymbal(rate, rng, length=3.0):
+    """A pair of cymbals clashed: a crash of bright noise, and dozens of partials that belong to no
+    note ringing on and shimmering away, the higher ones dying first."""
+    n = int(length * rate)
+    x = silence(n)
+    for _ in range(CYMBAL_PARTIALS):
+        f = rng.uniform(CYMBAL_LOW_HZ, CYMBAL_HIGH_HZ)
+        tau = rng.uniform(0.5, 1.1) * CYMBAL_LOW_HZ / f
+        mix(x, sine(f, min(n, int(8 * tau * rate) + 1), rate, rng.uniform(0.3, 1.0), tau))
+    x = norm(x)
+    mix(x, shaped(norm(highpass(noise(n, rng), 3000.0, rate)), envelope(n, rate, attack=0.001, tau=0.3)), 0, 0.7)
+    return fade(x, rate, 0.0005, 0.3)
+
+
+def knell(freq, rate, rng):
+    """A great bell tolled close by: struck hard with an iron clapper and ringing a long time, the
+    top of it dark."""
+    n = int(6.0 * rate)
+    x = norm(modes(GREAT_BELL, n, rate, freq))
+    m = int(0.008 * rate)
+    mix(x, norm(shaped(lowpass(noise(m, rng), 2500.0, rate), envelope(m, rate, 0.0003, 0.002))), 0, 0.3)
+    return fade(lowpass(lowpass(x, 1800.0, rate), 1800.0, rate), rate, 0.0005, 0.8)
+
+
+def tremolo(x, rate, hz, depth):
+    """Strings played tremolo, the bow going back and forth as fast as it can so the note pulses:
+    the level dips `depth` of the way down `hz` times a second."""
+    w = TAU * hz / rate
+    c = math.cos
+    return [v * (1.0 - depth * (0.5 - 0.5 * c(w * i))) for i, v in enumerate(x)]
+
+
+def loop_tone(freq, length, rate, amp=1.0):
+    """A steady sine the whole loop long that runs round without a seam. Its pitch is nudged (by a
+    hundredth of a hertz or so) so a whole number of cycles fits the loop exactly."""
+    cycles = max(1, round(freq * length / rate))
+    return sine(cycles * rate / length, length, rate, amp)
+
+
 # --------------------------------------------------------------------------- #
 # embers.wav: title theme
 # --------------------------------------------------------------------------- #
@@ -1677,6 +1747,543 @@ def build_sunspire():
 
 
 # --------------------------------------------------------------------------- #
+# steel.wav: a fight
+# --------------------------------------------------------------------------- #
+# D minor, 136 BPM, 32 bars (about 56 s). The low strings drive eighths on the bass in octaves the
+# whole way through, leaning on a 3+3+2, and the timpani hit the same three. The horns call low and
+# swell through B flat and A, then play the theme in octaves: Steel's call (D, the A a fifth up and
+# the D an octave up) and a tune that climbs back to it. The trumpet takes it an octave higher with
+# a choir and a field drum, up to the high D. The middle turns to E flat against the D and back, the
+# violins climbing over stabbing horns and the lute picking sixteenths in threes, up to an A major
+# that hangs. Then the trumpet and the horns throw the call out one last time and the field drum
+# rolls it round to the start. A cymbal crashes in every section.
+
+STEEL_BPM, STEEL_BARS = 136, 32
+
+STEEL_VOICINGS = {         # chord: (bass MIDI, horns low to high, strings low to high)
+    "Dm": (38, (57, 62, 65), (62, 65, 69, 74)),
+    "Bb": (34, (58, 62, 65), (62, 65, 70, 74)),
+    "C": (36, (55, 60, 64), (64, 67, 72, 76)),
+    "Gm": (31, (55, 58, 62), (62, 67, 70, 74)),
+    "A": (33, (57, 61, 64), (61, 64, 69, 73)),
+    "F": (29, (57, 60, 65), (65, 69, 72, 77)),
+    "Eb": (39, (58, 63, 67), (63, 67, 70, 75)),
+}
+
+STEEL_BARS_CHORDS = (      # one chord a bar
+    "Dm", "Dm", "Bb", "A",                          # 1-4: the strings and the drums, and the horns calling low
+    "Dm", "Bb", "C", "A", "Dm", "Bb", "Gm", "A",    # 5-12: the horns' theme
+    "Dm", "Bb", "C", "F", "Bb", "C", "A", "Dm",     # 13-20: the trumpet takes it up to the high D
+    "Dm", "Eb", "Dm", "Eb", "Bb", "C", "A", "A",    # 21-28: the middle, the violins climbing
+    "Dm", "Bb", "C", "A",                           # 29-32: the call thrown out, and the roll round
+)
+
+STEEL_THEME = range(5, 13)     # the horns have the tune, and the strings go tremolo under it
+STEEL_HIGH = range(13, 21)     # the trumpet has it over held horns, and the choir and the field drum come in
+STEEL_MIDDLE = range(21, 29)   # the violins, the horns stabbing, the lute in sixteenths, the war drum harder
+STEEL_LAST = range(29, 33)     # the call on the trumpet and the horns together
+
+#: The low strings' eighths, every bar, leaning on a 3+3+2. (beat, semitones over the bass, velocity)
+STEEL_OSTINATO = ((0.0, 0, 1.0), (0.5, 0, 0.5), (1.0, 12, 0.6), (1.5, 0, 0.9), (2.0, 0, 0.5), (2.5, 12, 0.6),
+                  (3.0, 0, 0.9), (3.5, 7, 0.6))
+
+#: How long the bow stays on the string for each of the ostinato's eighths, in seconds.
+STEEL_STROKE_S = 0.16
+
+#: How many takes of each ostinato note there are to pick from, so it isn't a machine bowing them.
+STEEL_TAKES = 3
+
+#: The horns calling low in bar 2, in octaves: (bar, beat, MIDI of the top one, beats held).
+STEEL_LOW_CALL = ((2, 0.0, 50, 1.5), (2, 1.5, 57, 0.5), (2, 2.0, 62, 2.0))
+
+#: The bars where the horns hold the chord and swell up into the theme.
+STEEL_SWELL = (3, 4)
+
+STEEL_HORN_THEME = (       # the horns in octaves: (bar, beat, MIDI of the top one, beats held)
+    (5, 0.0, 62, 1.5), (5, 1.5, 69, 0.5), (5, 2.0, 74, 1.5), (5, 3.5, 72, 0.5),     # the call: D, A, D
+    (6, 0.0, 70, 1.0), (6, 1.0, 69, 1.0), (6, 2.0, 65, 2.0),
+    (7, 0.0, 67, 1.5), (7, 1.5, 69, 0.5), (7, 2.0, 70, 1.0), (7, 3.0, 72, 1.0),
+    (8, 0.0, 73, 2.0), (8, 2.0, 69, 1.0), (8, 3.0, 64, 1.0),
+    (9, 0.0, 62, 1.5), (9, 1.5, 69, 0.5), (9, 2.0, 74, 1.5), (9, 3.5, 76, 0.5),
+    (10, 0.0, 77, 1.0), (10, 1.0, 74, 1.0), (10, 2.0, 70, 2.0),
+    (11, 0.0, 74, 1.5), (11, 1.5, 72, 0.5), (11, 2.0, 70, 1.0), (11, 3.0, 67, 1.0),
+    (12, 0.0, 69, 2.0), (12, 2.0, 73, 1.0), (12, 3.0, 76, 1.0),
+)
+
+STEEL_TRUMPET = (          # the trumpet: (bar, beat, MIDI, beats held)
+    (13, 0.0, 74, 1.5), (13, 1.5, 81, 0.5), (13, 2.0, 86, 1.5), (13, 3.5, 84, 0.5),   # the call an octave up
+    (14, 0.0, 82, 1.0), (14, 1.0, 81, 1.0), (14, 2.0, 77, 2.0),
+    (15, 0.0, 79, 1.5), (15, 1.5, 81, 0.5), (15, 2.0, 82, 1.0), (15, 3.0, 84, 1.0),
+    (16, 0.0, 81, 2.0), (16, 2.0, 84, 2.0),
+    (17, 0.0, 86, 1.5), (17, 1.5, 84, 0.5), (17, 2.0, 82, 1.0), (17, 3.0, 81, 1.0),
+    (18, 0.0, 79, 1.5), (18, 1.5, 81, 0.5), (18, 2.0, 82, 1.0), (18, 3.0, 84, 1.0),
+    (19, 0.0, 85, 3.0), (19, 3.0, 81, 1.0),
+    (20, 0.0, 86, 4.0),                                                                # the high D
+)
+
+STEEL_VIOLINS = (          # the violins over the middle, in octaves: (bar, beat, MIDI of the top one, beats held)
+    (21, 0.0, 81, 4.0),
+    (22, 0.0, 82, 4.0),
+    (23, 0.0, 81, 2.0), (23, 2.0, 77, 2.0),
+    (24, 0.0, 79, 2.0), (24, 2.0, 82, 2.0),
+    (25, 0.0, 86, 3.0), (25, 3.0, 84, 1.0),
+    (26, 0.0, 88, 2.0), (26, 2.0, 84, 2.0),          # the high E, the top of the song
+    (27, 0.0, 85, 4.0),
+    (28, 0.0, 88, 2.0), (28, 2.0, 85, 1.0), (28, 3.0, 81, 1.0),
+)
+
+STEEL_CALL_AGAIN = (       # the trumpet, with the horns an octave under it: (bar, beat, MIDI, beats held)
+    (29, 0.0, 74, 1.5), (29, 1.5, 81, 0.5), (29, 2.0, 86, 2.0),
+    (30, 0.0, 86, 1.5), (30, 1.5, 84, 0.5), (30, 2.0, 82, 2.0),
+    (31, 0.0, 79, 1.5), (31, 1.5, 81, 0.5), (31, 2.0, 84, 2.0),
+    (32, 0.0, 85, 1.5), (32, 1.5, 81, 0.5),
+)
+
+#: The horns in the middle: the chord stabbed on the 3+3+2. (beat, velocity)
+STEEL_STABS = ((0.0, 0.9), (1.5, 0.7), (3.0, 0.8))
+
+#: How long each stab is blown, in beats.
+STEEL_STAB_BEATS = 0.6
+
+#: The lute's sixteenths in the middle, in threes against the ostinato's eighths. (beat, which note, velocity)
+STEEL_PICKING = (
+    (0.0, 0, 0.6), (0.25, 2, 0.4), (0.5, 3, 0.4), (0.75, 0, 0.55), (1.0, 2, 0.4), (1.25, 3, 0.4),
+    (1.5, 0, 0.55), (1.75, 3, 0.4),
+    (2.0, 0, 0.6), (2.25, 2, 0.4), (2.5, 3, 0.4), (2.75, 0, 0.55), (3.0, 2, 0.4), (3.25, 3, 0.4),
+    (3.5, 0, 0.55), (3.75, 3, 0.4),
+)
+
+STEEL_TIMPANI = ((0.0, 0.9), (1.5, 0.55), (3.0, 0.7))                    # (beat, velocity), every bar
+STEEL_WAR_DRUM = ((0.0, 0.9), (2.0, 0.5))                                # from the theme on
+STEEL_WAR_DRUM_HARD = ((0.0, 1.0), (1.5, 0.7), (2.0, 0.5), (3.0, 0.8))   # from the middle on
+STEEL_SIDE_DRUM = ((0.0, 0.25), (0.5, 0.18), (1.0, 0.7), (1.5, 0.22), (2.0, 0.25), (2.5, 0.18), (3.0, 0.7),
+                   (3.5, 0.25), (3.75, 0.3))                             # from the trumpet on
+
+#: The bars that end in a roll on the field drum, leading into the next section: from which beat,
+#: how many sixteenths, and how loud the first and the last are.
+STEEL_FILLS = (20, 28, 32)
+STEEL_FILL_BEAT = 2.0
+STEEL_FILL_STROKES = 8
+STEEL_FILL_FROM, STEEL_FILL_TO = 0.3, 0.9
+
+#: The bars a cymbal crashes in on.
+STEEL_CRASHES = (1, 5, 13, 21, 29)
+
+#: The timpani play the bass this far up (an octave), where the kettles ring.
+STEEL_TIMPANI_UP = 12
+
+#: How deep the tremolo goes, how loud the held horns are against the theme, and the war drum and
+#: the field drum against the timpani.
+STEEL_TREMOLO_DEPTH = 0.6
+STEEL_HELD_HORNS = 0.5
+STEEL_WAR_DRUM_LEVEL = 0.8
+STEEL_SIDE_DRUM_LEVEL = 0.4
+
+
+def build_steel():
+    rng = random.Random(13602)
+    s = Song(STEEL_BPM, STEEL_BARS)
+    R, H = s.rate, s.rate // 2
+    chords = [STEEL_VOICINGS[name] for name in STEEL_BARS_CHORDS]
+
+    # The ostinato: the low strings in octaves on the bass, short and hard, the whole way through.
+    # Each note is one of a few takes bowed separately (the take only tells them apart in the
+    # cache), picked at random.
+    stroke = note_cache(lambda m, take: bowed([midi_hz(m), midi_hz(m + 12)], STEEL_STROKE_S, H, rng, attack=0.006,
+                                              release=0.05, vib_cents=0.0, bow=0.16, bright=2.0))
+    low = s.half_track()
+    for bar, (bass, _, _) in enumerate(chords, start=1):
+        for beat, step, vel in STEEL_OSTINATO:
+            jitter = int(rng.gauss(0.0, 0.003) * H)
+            mix_loop(low, stroke(bass + step, rng.randrange(STEEL_TAKES)), s.half_at(bar, beat) + jitter,
+                     vel * rng.uniform(0.9, 1.0))
+    s.add_half(low, -10.0, send=0.2, label="ostinato")
+    # Every finished layer is dropped as soon as it's added, here and below. The song keeps its own
+    # copy, and holding on to them all doubles what the run needs.
+    del low, stroke
+
+    # The rest of the strings, tremolo on the chord from the theme on, a bow a bar.
+    shiver = TREMOLO_PER_BEAT * R / s.beat
+    strings = s.half_track()
+    for bar in range(STEEL_THEME.start, STEEL_BARS + 1):
+        _, _, upper = chords[bar - 1]
+        note = bowed([midi_hz(m) for m in upper], s.secs(s.beats) + 0.1, H, rng, attack=0.12, release=0.25,
+                     vib_cents=6.0, bow=0.1, bright=1.2)
+        mix_loop(strings, tremolo(note, H, shiver, STEEL_TREMOLO_DEPTH), s.half_at(bar) - int(0.05 * H))
+    s.add_half(strings, -19.0, pan=0.25, send=0.4, label="tremolo")
+    del strings, note
+
+    # The horns: the low call and the swell, the theme in octaves, soft held chords under the
+    # trumpet, stabs in the middle, and the call again an octave under the trumpet at the end.
+    blow = note_cache(lambda m, held, vel: brass([midi_hz(m - 12), midi_hz(m)], held, H, rng, vel, attack=0.04,
+                                                 release=0.2))
+    stab = note_cache(lambda name, vel: brass([midi_hz(m) for m in STEEL_VOICINGS[name][1]],
+                                              s.secs(STEEL_STAB_BEATS), H, rng, vel, attack=0.015, release=0.1))
+    horns = s.half_track()
+    for bar, beat, m, held in STEEL_LOW_CALL:
+        mix_loop(horns, blow(m, s.secs(held) * 0.9, 0.75), s.half_at(bar, beat))
+    for bar in STEEL_SWELL:
+        _, chord, _ = chords[bar - 1]
+        note = brass([midi_hz(m) for m in chord], s.secs(s.beats), H, rng, 0.6, attack=0.8 * s.secs(s.beats),
+                     release=0.2)
+        mix_loop(horns, note, s.half_at(bar))
+    for bar, beat, m, held in STEEL_HORN_THEME:
+        jitter = int(rng.gauss(0.0, 0.005) * H)
+        mix_loop(horns, blow(m, s.secs(held) * 0.9, 0.9 if beat == 0.0 else 0.8), s.half_at(bar, beat) + jitter)
+    for bar in STEEL_HIGH:
+        _, chord, _ = chords[bar - 1]
+        note = brass([midi_hz(m) for m in chord], s.secs(s.beats) * 0.95, H, rng, 0.45, attack=0.25, release=0.4)
+        mix_loop(horns, note, s.half_at(bar), STEEL_HELD_HORNS)
+    for bar in STEEL_MIDDLE:
+        for beat, vel in STEEL_STABS:
+            mix_loop(horns, stab(STEEL_BARS_CHORDS[bar - 1], vel), s.half_at(bar, beat))
+    for bar, beat, m, held in STEEL_CALL_AGAIN:
+        mix_loop(horns, blow(m - 12, s.secs(held) * 0.9, 0.9), s.half_at(bar, beat))
+    s.add_half(horns, -12.0, pan=-0.2, send=0.4, label="horns")
+    del horns, note, blow, stab
+
+    # The trumpet: the theme an octave up, then the call at the end.
+    toot = note_cache(lambda m, held, vel: brass([midi_hz(m)], held, H, rng, vel, attack=0.03, release=0.2,
+                                                 vib_cents=6.0))
+    trumpet = s.half_track()
+    for bar, beat, m, held in STEEL_TRUMPET + STEEL_CALL_AGAIN:
+        jitter = int(rng.gauss(0.0, 0.004) * H)
+        mix_loop(trumpet, toot(m, s.secs(held) * 0.88, 0.95 if beat == 0.0 else 0.85), s.half_at(bar, beat) + jitter)
+    s.add_half(trumpet, -8.5, pan=0.1, send=0.4, label="trumpet")
+    del trumpet, toot
+
+    # The violins over the middle, with the violas an octave under them.
+    violins = s.half_track()
+    for bar, beat, m, held in STEEL_VIOLINS:
+        note = bowed([midi_hz(m - 12), midi_hz(m)], s.secs(held) * 0.97, H, rng, attack=0.1, release=0.4,
+                     vib_cents=14.0, bow=0.1, bright=0.9)
+        mix_loop(violins, note, s.half_at(bar, beat) - int(0.03 * H))
+    s.add_half(violins, -10.5, pan=0.2, send=0.5, label="violins")
+    del violins, note
+
+    # The choir, from the trumpet on.
+    ch = s.half_track()
+    for bar in range(STEEL_HIGH.start, STEEL_BARS + 1):
+        _, chord, _ = chords[bar - 1]
+        c = choir([midi_hz(m) for m in chord], s.secs(s.beats), H, rng, "oh", attack=0.5, release=0.6)
+        mix_loop(ch, c, s.half_at(bar) - int(0.2 * H))
+    s.add_half(ch, -6.0, pan=-0.1, send=0.6, label="choir")
+    del ch, c
+
+    # The lute picking sixteenths through the strings' chord in the middle.
+    pluck = note_cache(lambda m, vel: lute(midi_hz(m), R, rng, vel, 1.2))
+    picking = s.track()
+    for bar in STEEL_MIDDLE:
+        _, _, upper = chords[bar - 1]
+        for beat, which, vel in STEEL_PICKING:
+            jitter = int(rng.gauss(0.0, 0.004) * R)
+            mix_loop(picking, pluck(upper[which], vel), s.at(bar, beat) + jitter, rng.uniform(0.9, 1.0))
+    s.add(picking, -24.0, pan=-0.3, send=0.3, label="lute")
+    del picking, pluck
+
+    # The drums: the timpani on the 3+3+2 tuned to the bass, the war drum from the theme on, and the
+    # field drum from the trumpet on, rolling into the middle, the call and back round to the start.
+    kettle = note_cache(lambda m: timpani(midi_hz(m), R, rng))
+    boom = war_drum(R, rng)
+    snare = side_drum(R, rng)
+    drums = s.track()
+    for bar, (bass, _, _) in enumerate(chords, start=1):
+        for beat, vel in STEEL_TIMPANI:
+            mix_loop(drums, kettle(bass + STEEL_TIMPANI_UP), s.at(bar, beat), vel)
+        if bar >= STEEL_THEME.start:
+            for beat, vel in STEEL_WAR_DRUM_HARD if bar >= STEEL_MIDDLE.start else STEEL_WAR_DRUM:
+                mix_loop(drums, boom, s.at(bar, beat), vel * STEEL_WAR_DRUM_LEVEL)
+        if bar >= STEEL_HIGH.start:
+            fill = bar in STEEL_FILLS
+            for beat, vel in STEEL_SIDE_DRUM:
+                if not (fill and beat >= STEEL_FILL_BEAT):
+                    jitter = int(rng.gauss(0.0, 0.003) * R)
+                    mix_loop(drums, snare, s.at(bar, beat) + jitter, vel * STEEL_SIDE_DRUM_LEVEL)
+            if fill:
+                for i in range(STEEL_FILL_STROKES):
+                    vel = STEEL_FILL_FROM + (STEEL_FILL_TO - STEEL_FILL_FROM) * i / (STEEL_FILL_STROKES - 1)
+                    jitter = int(rng.gauss(0.0, 0.003) * R)
+                    mix_loop(drums, snare, s.at(bar, STEEL_FILL_BEAT + i * SIXTEENTH) + jitter,
+                             vel * STEEL_SIDE_DRUM_LEVEL)
+    s.add(drums, -11.0, send=0.25, label="drums")
+    del drums, kettle, boom, snare
+
+    crash = cymbal(R, rng)
+    cymbals = s.track()
+    for bar in STEEL_CRASHES:
+        mix_loop(cymbals, crash, s.at(bar))
+    s.add(cymbals, -12.0, pan=0.3, send=0.4, label="cymbals")
+    del cymbals, crash
+
+    s.add_reverb(rt60=2.4, damp_hz=3000.0, size=1.1, gain_db=-11.0)
+    s.finish("Content/Music/steel.wav", BATTLE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
+# the-hunger.wav: a boss
+# --------------------------------------------------------------------------- #
+# A Phrygian, 96 BPM, 24 bars (60 s). Steel turned inside out. Under everything the black crystal's
+# hum, its notes rubbing a semitone apart and throbbing on one and three like a slow heart, and the
+# low strings grinding sixteenths on the bass in Steel's 3+3+2 at twice the speed, catching on the
+# semitone above. A great bell tolls and the war drum pounds. The low brass play Steel's call bent
+# out of shape (the fifth a tritone, the seventh a semitone past the octave, and it falls onto the
+# semitone above home instead of home), on A, B flat, F and E. Then the trumpet tries Steel's theme
+# as it was, in A minor, and the brass drag it under: its last A sags flat while they answer with the
+# call bent. Last, everything at once: the choir, the violins shrieking a semitone apart, the trumpet
+# playing the call bent as well, and the crystal's glass ringing it high.
+
+HUNGER_BPM, HUNGER_BARS = 96, 24
+
+HUNGER_VOICINGS = {        # chord: (bass MIDI, choir low to high)
+    "Am": (45, (57, 60, 64)),
+    "Bb": (46, (58, 62, 65)),
+    "F": (41, (57, 60, 65)),
+    "G": (43, (55, 59, 62)),
+    "E": (40, (56, 59, 65)),    # G sharp, B and F: an E with a flat ninth and no root, pulling hard to the A
+}
+
+HUNGER_BARS_CHORDS = (     # one chord a bar
+    "Am", "Am", "Bb", "Am",                          # 1-4: the hum, the strings grinding, the drum
+    "Am", "Am", "Bb", "Bb", "F", "F", "E", "E",      # 5-12: the call, bent, on A, B flat, F and E
+    "Am", "F", "G", "E", "Am", "Bb", "Am", "E",      # 13-20: the trumpet tries Steel's theme, and is dragged under
+    "Am", "Bb", "Am", "E",                           # 21-24: everything at once
+)
+
+HUNGER_CALL_FROM = 5             # the bent call comes in, and the choir and the timpani with it
+HUNGER_TRY_FROM = 13             # the trumpet tries Steel's theme, the field drum comes in, the choir opens up
+HUNGER_SHRIEK = range(17, 25)    # the violins creep in a semitone apart
+HUNGER_ALL_IN = range(21, 25)    # the trumpet plays the bent call too, and the glass rings it
+
+#: The low strings' sixteenths, every bar: Steel's 3+3+2 twice as fast, catching on the semitone
+#: (and once the minor third) above the bass. (beat, semitones over the bass, velocity)
+HUNGER_OSTINATO = (
+    (0.0, 0, 1.0), (0.25, 0, 0.45), (0.5, 0, 0.5), (0.75, 0, 0.85), (1.0, 0, 0.45), (1.25, 0, 0.5),
+    (1.5, 1, 0.85), (1.75, 0, 0.5),
+    (2.0, 0, 0.95), (2.25, 0, 0.45), (2.5, 0, 0.5), (2.75, 0, 0.85), (3.0, 0, 0.45), (3.25, 0, 0.5),
+    (3.5, 3, 0.85), (3.75, 1, 0.6),
+)
+
+#: How long the bow stays on the string for each of the ostinato's sixteenths, in seconds.
+HUNGER_STROKE_S = 0.12
+
+#: How many takes of each ostinato note there are to pick from.
+HUNGER_TAKES = 3
+
+#: Steel's call bent: (bar from its start, beat, semitones over its root, beats held). Steel's goes
+#: up a fifth, an octave and back to the seventh, then falls home. This goes up a tritone, an octave
+#: and a semitone past it, then falls onto the semitone above home and stays there.
+HUNGER_CALL = ((0, 0.0, 0, 1.5), (0, 1.5, 6, 0.5), (0, 2.0, 12, 1.5), (0, 3.5, 13, 0.5),
+               (1, 0.0, 8, 1.0), (1, 1.0, 6, 1.0), (1, 2.0, 1, 2.0))
+
+#: Where the low brass play the bent call: (first bar, root MIDI).
+HUNGER_CALL_AT = ((5, 45), (7, 46), (9, 41), (11, 40), (17, 45), (19, 40), (21, 45), (23, 40))
+
+#: How far each bent call's last note sags as it dies, in cents.
+HUNGER_CALL_SAG = 80.0
+
+#: The trumpet tries the first four bars of Steel's theme, moved up a fifth from D to A.
+HUNGER_STEEL_BARS = 4
+HUNGER_STEEL_UP = 7
+
+#: Then it holds the A where the theme should come home, and it sags this far (cents) as it dies,
+#: over this long (s), while the brass answer it with the call bent: (bar, beat, MIDI, beats held).
+HUNGER_DRAGGED = (17, 0.0, 69, 3.0)
+HUNGER_DRAG_CENTS = 150.0
+HUNGER_DRAG_RELEASE_S = 0.9
+
+#: At the end the trumpet doubles the bent call two octaves up and the glass rings it three.
+HUNGER_TRUMPET_UP = 24
+HUNGER_GLASS_UP = 36
+
+#: How long a note of the crystal's glass rings, in seconds.
+HUNGER_GLASS_S = 2.5
+
+#: The violins: the A and the B flat above it, together.
+HUNGER_CLUSTER = (81, 82)
+
+#: The crystal's hum: the beats in a bar it throbs on, how long a throb takes to die away (s), how
+#: loud it is between throbs, and how hard it's driven, for the grit.
+HUNGER_THROBS = (0.0, 2.0)
+HUNGER_THROB_S = 1.2
+HUNGER_HUM_FLOOR = 0.5
+HUNGER_HUM_DRIVE = 1.8
+
+HUNGER_WAR_DRUM_INTRO = ((0.0, 1.0), (2.0, 0.6))                                        # (beat, velocity)
+HUNGER_WAR_DRUM = ((0.0, 1.0), (0.75, 0.5), (1.5, 0.7), (2.0, 0.85), (2.75, 0.5), (3.5, 0.7))   # from the call on
+HUNGER_TIMPANI = ((0.0, 0.9), (2.0, 0.6))                                               # from the call on
+HUNGER_TIMPANI_LATE = ((3.5, 0.45), (3.75, 0.55))                                       # and these from the trumpet on
+HUNGER_SIDE_DRUM = ((1.0, 0.6), (3.0, 0.6), (3.25, 0.2), (3.5, 0.25))                   # from the trumpet on
+
+#: The bars that end in a roll on the field drum: from which beat, how many sixteenths, and how
+#: loud the first and the last are.
+HUNGER_ROLLS = (12, 20, 24)
+HUNGER_ROLL_BEAT = 2.0
+HUNGER_ROLL_STROKES = 8
+HUNGER_ROLL_FROM, HUNGER_ROLL_TO = 0.25, 0.85
+
+#: The bars the great bell tolls on, and its note; the bars a cymbal crashes in on.
+HUNGER_BELLS = (1, 13, 21)
+HUNGER_BELL_NOTE = 45
+HUNGER_CRASHES = (13, 21)
+
+#: How loud the timpani and the field drum are against the war drum, the choir before the trumpet
+#: comes in, and the cymbal against the bell.
+HUNGER_TIMPANI_LEVEL = 0.7
+HUNGER_SIDE_DRUM_LEVEL = 0.4
+HUNGER_CHOIR_SOFT = 0.5
+HUNGER_CRASH_LEVEL = 0.4
+
+
+def bent_calls(transpose=0, bars=None):
+    """Every note of the bent call where it comes, as (bar, beat, MIDI, beats held, last), moved up
+    `transpose` semitones and only the calls starting in `bars` if it's given. `last` marks each
+    call's last note, the one that sags."""
+    notes = []
+    for first, root in HUNGER_CALL_AT:
+        if bars is None or first in bars:
+            notes += [(first + bar, beat, root + transpose + step, held, k == len(HUNGER_CALL) - 1)
+                      for k, (bar, beat, step, held) in enumerate(HUNGER_CALL)]
+    return notes
+
+
+def steel_in_a():
+    """Steel's theme as it was, its first bars moved up a fifth into A minor and along to where the
+    trumpet tries it: (bar, beat, MIDI, beats held)."""
+    shift = HUNGER_TRY_FROM - STEEL_THEME.start
+    return [(bar + shift, beat, m + HUNGER_STEEL_UP, held) for bar, beat, m, held in STEEL_HORN_THEME
+            if bar < STEEL_THEME.start + HUNGER_STEEL_BARS]
+
+
+def build_the_hunger():
+    rng = random.Random(9601)
+    s = Song(HUNGER_BPM, HUNGER_BARS)
+    R, L, H = s.rate, s.length, s.rate // 2
+    chords = [HUNGER_VOICINGS[name] for name in HUNGER_BARS_CHORDS]
+
+    # The crystal's hum the whole loop long, driven for the grit and throbbing like a slow heart. Its
+    # notes are tuned to whole cycles of the loop, so it runs round without a seam.
+    hum = s.half_track()
+    for f, g in CRYSTAL_HUM:
+        mix(hum, loop_tone(f, L // 2, H), 0, g)
+    hum = looped(lambda x: lowpass(x, 900.0, H), [math.tanh(HUNGER_HUM_DRIVE * v) for v in norm(hum)], H)
+    pulse = envelope(int(HUNGER_THROB_S * H), H, attack=0.05, tau=0.3)
+    throbs = s.half_track()
+    for bar in range(1, HUNGER_BARS + 1):
+        for beat in HUNGER_THROBS:
+            mix_loop(throbs, pulse, s.half_at(bar, beat))
+    swell = [HUNGER_HUM_FLOOR + (1.0 - HUNGER_HUM_FLOOR) * p for p in throbs]
+    s.add_half(shaped(hum, swell), -14.0, send=0.25, label="hum")
+    # Every finished layer is dropped as soon as it's added, here and below, as in Steel.
+    del hum, throbs, swell
+
+    # The ostinato: the low strings in octaves, grinding.
+    stroke = note_cache(lambda m, take: bowed([midi_hz(m - 12), midi_hz(m)], HUNGER_STROKE_S, H, rng, attack=0.005,
+                                              release=0.06, vib_cents=0.0, bow=0.18, bright=2.5))
+    low = s.half_track()
+    for bar, (bass, _) in enumerate(chords, start=1):
+        for beat, step, vel in HUNGER_OSTINATO:
+            jitter = int(rng.gauss(0.0, 0.003) * H)
+            mix_loop(low, stroke(bass + step, rng.randrange(HUNGER_TAKES)), s.half_at(bar, beat) + jitter,
+                     vel * rng.uniform(0.9, 1.0))
+    s.add_half(low, -10.0, send=0.15, label="ostinato")
+    del low, stroke
+
+    # The low brass in octaves, blown hard and flat out: the bent call.
+    groan = note_cache(lambda m, held, sag: brass([midi_hz(m - 12), midi_hz(m)], held, H, rng, 0.95, attack=0.05,
+                                                  release=0.3, vib_cents=0.0, fall_cents=sag))
+    low_brass = s.half_track()
+    for bar, beat, m, held, last in bent_calls():
+        mix_loop(low_brass, groan(m, s.secs(held) * 0.92, HUNGER_CALL_SAG if last else 0.0), s.half_at(bar, beat))
+    s.add_half(low_brass, -11.0, pan=-0.15, send=0.35, label="low brass")
+    del low_brass, groan
+
+    # The trumpet: Steel's theme as it was, the A dragged down under the brass, and at the end the
+    # call bent like theirs.
+    toot = note_cache(lambda m, held, vel, sag, release: brass([midi_hz(m)], held, H, rng, vel, attack=0.03,
+                                                               release=release, vib_cents=6.0, fall_cents=sag))
+    trumpet = s.half_track()
+    for bar, beat, m, held in steel_in_a():
+        jitter = int(rng.gauss(0.0, 0.004) * H)
+        mix_loop(trumpet, toot(m, s.secs(held) * 0.88, 0.9 if beat == 0.0 else 0.8, 0.0, 0.2),
+                 s.half_at(bar, beat) + jitter)
+    bar, beat, m, held = HUNGER_DRAGGED
+    mix_loop(trumpet, toot(m, s.secs(held), 0.9, HUNGER_DRAG_CENTS, HUNGER_DRAG_RELEASE_S), s.half_at(bar, beat))
+    for bar, beat, m, held, last in bent_calls(HUNGER_TRUMPET_UP, HUNGER_ALL_IN):
+        mix_loop(trumpet, toot(m, s.secs(held) * 0.9, 0.9, HUNGER_CALL_SAG if last else 0.0, 0.3),
+                 s.half_at(bar, beat))
+    s.add_half(trumpet, -9.0, pan=0.12, send=0.45, label="trumpet")
+    del trumpet, toot
+
+    # The violins: one long bow on the semitone, creeping in over two bars, tremolo.
+    violins = s.half_track()
+    bars = len(HUNGER_SHRIEK)
+    note = bowed([midi_hz(m) for m in HUNGER_CLUSTER], s.secs(s.beats * bars), H, rng, attack=s.secs(2 * s.beats),
+                 release=0.6, vib_cents=10.0, bow=0.12, bright=1.0)
+    mix_loop(violins, tremolo(note, H, TREMOLO_PER_BEAT * R / s.beat, 0.6), s.half_at(HUNGER_SHRIEK.start))
+    s.add_half(violins, -18.0, pan=0.3, send=0.6, label="violins")
+    del violins, note
+
+    # The choir, soft on "oo" under the call, opening to "oh" once the trumpet comes in.
+    ch = s.half_track()
+    for bar in range(HUNGER_CALL_FROM, HUNGER_BARS + 1):
+        _, chord = chords[bar - 1]
+        vowel, level = ("oh", 1.0) if bar >= HUNGER_TRY_FROM else ("oo", HUNGER_CHOIR_SOFT)
+        c = choir([midi_hz(m) for m in chord], s.secs(s.beats), H, rng, vowel, attack=0.6, release=0.8)
+        mix_loop(ch, c, s.half_at(bar) - int(0.25 * H), level)
+    s.add_half(ch, -5.0, send=0.6, label="choir")
+    del ch, c
+
+    # The crystal's glass ringing the bent call high at the end, out of tune with itself.
+    ring = note_cache(lambda m: fade(modes(CRYSTAL_GLASS, int(HUNGER_GLASS_S * R), R, midi_hz(m)), R, 0.0005, 0.4))
+    glass = s.track()
+    for bar, beat, m, _, _ in bent_calls(HUNGER_GLASS_UP, HUNGER_ALL_IN):
+        mix_loop(glass, ring(m), s.at(bar, beat))
+    s.add(glass, -25.0, pan=-0.3, send=0.7, label="glass")
+    del glass, ring
+
+    # The drums: the war drum pounding the 3+3+2 from the call on, the timpani on the bass, and the
+    # field drum from the trumpet on, rolling into each section and round to the start.
+    kettle = note_cache(lambda m: timpani(midi_hz(m), R, rng))
+    boom = war_drum(R, rng)
+    snare = side_drum(R, rng)
+    drums = s.track()
+    for bar, (bass, _) in enumerate(chords, start=1):
+        for beat, vel in HUNGER_WAR_DRUM if bar >= HUNGER_CALL_FROM else HUNGER_WAR_DRUM_INTRO:
+            mix_loop(drums, boom, s.at(bar, beat), vel)
+        if bar >= HUNGER_CALL_FROM:
+            for beat, vel in HUNGER_TIMPANI + (HUNGER_TIMPANI_LATE if bar >= HUNGER_TRY_FROM else ()):
+                mix_loop(drums, kettle(bass), s.at(bar, beat), vel * HUNGER_TIMPANI_LEVEL)
+        roll = bar in HUNGER_ROLLS
+        if bar >= HUNGER_TRY_FROM:
+            for beat, vel in HUNGER_SIDE_DRUM:
+                if not (roll and beat >= HUNGER_ROLL_BEAT):
+                    jitter = int(rng.gauss(0.0, 0.003) * R)
+                    mix_loop(drums, snare, s.at(bar, beat) + jitter, vel * HUNGER_SIDE_DRUM_LEVEL)
+        if roll:
+            for i in range(HUNGER_ROLL_STROKES):
+                vel = HUNGER_ROLL_FROM + (HUNGER_ROLL_TO - HUNGER_ROLL_FROM) * i / (HUNGER_ROLL_STROKES - 1)
+                jitter = int(rng.gauss(0.0, 0.003) * R)
+                mix_loop(drums, snare, s.at(bar, HUNGER_ROLL_BEAT + i * SIXTEENTH) + jitter,
+                         vel * HUNGER_SIDE_DRUM_LEVEL)
+    s.add(drums, -9.0, send=0.25, label="drums")
+    del drums, kettle, boom, snare
+
+    # The great bell at the top of each part, with a cymbal over it once the trumpet's in.
+    toll = s.track()
+    bell = knell(midi_hz(HUNGER_BELL_NOTE), R, rng)
+    for bar in HUNGER_BELLS:
+        mix_loop(toll, bell, s.at(bar))
+    crash = cymbal(R, rng)
+    for bar in HUNGER_CRASHES:
+        mix_loop(toll, crash, s.at(bar), HUNGER_CRASH_LEVEL)
+    s.add(toll, -10.0, pan=-0.2, send=0.6, label="bell")
+    del toll, bell, crash
+
+    s.add_reverb(rt60=3.2, damp_hz=2000.0, size=1.4, gain_db=-9.0)
+    s.finish("Content/Music/the-hunger.wav", BATTLE_RMS_DB)
+
+
+# --------------------------------------------------------------------------- #
 # Sound-effect helpers
 # --------------------------------------------------------------------------- #
 
@@ -1964,21 +2571,23 @@ def sfx_disapprove(rng):
 # The story
 # --------------------------------------------------------------------------- #
 
+def heartbeat():
+    """One heartbeat: two low thumps close together, the second softer."""
+    b = silence(sec(0.5))
+    place(b, thump(70.0, 45.0, 0.3, 0.07), 0.0, 1.0)
+    place(b, thump(62.0, 40.0, 0.3, 0.06), 0.16, 0.7)
+    return lowpass(b, 400.0, R)
+
+
 def sfx_heartbeat(rng):
     """The Prologue's card: one heartbeat on its own, then two together, in step."""
     x = silence(sec(3.2))
-
-    def beat():
-        b = silence(sec(0.5))
-        place(b, thump(70.0, 45.0, 0.3, 0.07), 0.0, 1.0)
-        place(b, thump(62.0, 40.0, 0.3, 0.06), 0.16, 0.7)
-        return lowpass(b, 400.0, R)
-
-    place(x, beat(), 0.0, 0.9)
-    place(x, beat(), 1.3, 0.9)
-    place(x, beat(), 1.36, 0.75)
-    place(x, beat(), 2.2, 0.9)
-    place(x, beat(), 2.26, 0.75)
+    beat = heartbeat()
+    place(x, beat, 0.0, 0.9)
+    place(x, beat, 1.3, 0.9)
+    place(x, beat, 1.36, 0.75)
+    place(x, beat, 2.2, 0.9)
+    place(x, beat, 2.26, 0.75)
     return room(x, 1.2, 1500.0, 0.25)
 
 
@@ -2118,6 +2727,382 @@ def sfx_coin(rng):
     return x
 
 
+# --------------------------------------------------------------------------- #
+# Fighting
+# --------------------------------------------------------------------------- #
+
+#: A sword's blade ringing after a blow: a long thin bar of steel, its modes well out of tune with
+#: each other. (ratio, gain, tau)
+BLADE = ((1.0, 1.0, 0.18), (2.62, 0.55, 0.12), (5.13, 0.35, 0.07), (8.45, 0.2, 0.04), (12.6, 0.1, 0.02))
+
+#: A shield's boards: thick planks held in an iron rim, so they boom more than they knock. (ratio, gain, tau)
+SHIELD_BOARDS = ((1.0, 1.0, 0.07), (1.58, 0.6, 0.045), (2.31, 0.4, 0.03), (3.12, 0.2, 0.015))
+
+#: A sliver of ice: a glassy little bar, out of tune with itself. (ratio, gain, tau)
+ICE = ((1.0, 1.0, 0.5), (1.62, 0.6, 0.35), (2.47, 0.4, 0.22), (3.53, 0.25, 0.12))
+
+#: A link of mail: tiny, bright and gone almost at once. (ratio, gain, tau)
+MAIL_LINK = ((1.0, 1.0, 0.035), (2.9, 0.5, 0.02), (5.3, 0.3, 0.01))
+
+#: Steel's call, the battle theme's first three notes (D, the A a fifth up and the D an octave up).
+#: The turn, the critical hit, the Soul-Link, the victory and the defeat all borrow it, so a fight
+#: sounds like one piece.
+CALL_NOTES = (74, 81, 86)
+
+#: How far through a swish it's loudest and brightest, as a fraction of its length.
+SWISH_PEAK = 0.45
+
+#: How many pops there are in the crackle as fire burns down.
+FIRE_POPS = 22
+
+#: How many cracks run through the ice as frost spreads.
+FROST_CRACKS = 16
+
+#: How many strokes the timpani roll up into the victory with.
+VICTORY_ROLL_STROKES = 10
+
+#: How hard the blows are driven into a soft clip (see punch), and a critical hit harder still.
+HIT_DRIVE = 1.6
+CRIT_DRIVE = 2.2
+
+
+def punch(x, drive):
+    """Drives a blow into a soft clip, so the crack at the front sits nearly as loud as its peak and
+    it lands harder over the music."""
+    top = math.tanh(drive)
+    th = math.tanh
+    return [th(drive * v) / top for v in norm(x)]
+
+
+def swish(dur, top_hz, rng, low_hz=500.0):
+    """Something swung hard through the air: noise that gets brighter and louder as it comes past,
+    then falls away."""
+    n = sec(dur)
+    top_at = SWISH_PEAK * dur
+    cut = lines(((0.0, low_hz), (top_at, top_hz), (dur, low_hz)), n, R)
+    air = swept_lowpass(swept_lowpass(highpass(noise(n, rng), low_hz, R), cut, R), cut, R)
+    swell = lines(((0.0, 0.0), (top_at, 1.0), (dur, 0.0)), n, R)
+    return shaped(norm(air), shaped(swell, swell))
+
+
+def voice(contour):
+    """A voice humming through a contour of (seconds, Hz) points: mostly its own pitch with a little
+    of the two above, swelling in and fading out."""
+    dur = contour[-1][0]
+    n = sec(dur)
+    w = TAU / R
+    phase = list(accumulate(w * f for f in lines(contour, n, R)))
+    s = math.sin
+    tone = [s(p) + 0.25 * s(2.0 * p) + 0.08 * s(3.0 * p) for p in phase]
+    return shaped(lowpass(tone, 2500.0, R), lines(((0.0, 0.0), (0.2, 1.0), (0.75 * dur, 0.8), (dur, 0.0)), n, R))
+
+
+def sfx_sword_hit(rng):
+    """A sword landing: a short swish as it comes in, the edge biting (a hard crack of noise), the
+    weight of the blow behind it, and the blade ringing for a moment after."""
+    x = silence(sec(0.7))
+    land = 0.07
+    place(x, swish(0.09, 3500.0, rng), 0.0, 0.35)
+    place(x, burst(0.04, 0.007, rng, "bp", 2800.0, 0.8), land, 0.9)
+    place(x, thump(180.0, 75.0, 0.25, 0.05), land, 1.0)
+    place(x, norm(lowpass(burst(0.08, 0.02, rng), 1200.0, R)), land, 0.5)
+    place(x, strike(BLADE, 1450.0, 0.5, rng, click=0.0), land, 0.2)
+    return room(punch(x, HIT_DRIVE), 0.4, 3500.0, 0.12)
+
+
+def sfx_miss(rng):
+    """A blow that misses: the weapon whooshing past with its edge whistling, and nothing to stop it."""
+    x = silence(sec(0.45))
+    place(x, swish(0.26, 4500.0, rng, 400.0), 0.0, 1.0)
+    n = sec(0.22)
+    whistle = shaped(sweep(1300.0, 800.0, n, R), lines(((0.0, 0.0), (0.12, 1.0), (0.22, 0.0)), n, R))
+    place(x, whistle, 0.02, 0.06)
+    return room(x, 0.3, 4000.0, 0.08)
+
+
+def sfx_crit(rng):
+    """A critical hit: the sword hit, harder, with a deep boom under it and the blade ringing out
+    longer, and Steel's call flaring high over the top on chimes, so you know it was something."""
+    x = silence(sec(1.5))
+    land = 0.06
+    place(x, swish(0.08, 5000.0, rng), 0.0, 0.4)
+    place(x, burst(0.05, 0.01, rng, "bp", 2400.0, 0.7), land, 1.0)
+    place(x, thump(200.0, 60.0, 0.3, 0.06), land, 1.0)
+    place(x, thump(90.0, 34.0, 0.9, 0.25, sweep_tau=0.06), land, 0.9)
+    place(x, strike(BLADE, 1250.0, 1.0, rng, decay_scale=2.0, click=0.0), land, 0.3)
+    x = punch(x, CRIT_DRIVE)
+    for i, m in enumerate(CALL_NOTES):
+        place(x, chime(midi_hz(m + 12), R, rng, 0.8, 1.2), land + 0.03 * i, 0.2)
+    return room(x, 1.0, 4000.0, 0.25)
+
+
+def sfx_thud(rng):
+    """A blunt blow, a mace or a hammer coming down: a deep, dull thump with no ring to it, the
+    crunch of what it lands on, and a knock from the wooden haft."""
+    x = silence(sec(0.6))
+    land = 0.08
+    place(x, swish(0.1, 1800.0, rng, 300.0), 0.0, 0.3)
+    place(x, thump(140.0, 48.0, 0.45, 0.09, sweep_tau=0.025), land, 1.0)
+    place(x, norm(lowpass(lowpass(burst(0.1, 0.025, rng), 900.0, R), 900.0, R)), land, 0.6)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.1), R, 310.0)), land, 0.35)
+    place(x, burst(0.03, 0.006, rng, "bp", 1600.0, 1.0), land + 0.004, 0.25)
+    return room(punch(x, HIT_DRIVE), 0.35, 2000.0, 0.1)
+
+
+def sfx_shield(rng):
+    """A blow taken on a shield: a deep boom from the boards, the iron rim ringing, and the scrape of
+    the weapon glancing off."""
+    x = silence(sec(0.8))
+    place(x, thump(130.0, 70.0, 0.4, 0.07), 0.0, 1.0)
+    place(x, norm(modes(SHIELD_BOARDS, sec(0.3), R, 190.0)), 0.0, 0.8)
+    place(x, strike(IRON_LATCH, 520.0, 0.6, rng, decay_scale=3.0, click=0.5), 0.0, 0.3)
+    n = sec(0.12)
+    scrape = shaped(norm(biquad(noise(n, rng), "bp", 2600.0, 1.5, R)), envelope(n, R, attack=0.01, tau=0.04))
+    place(x, scrape, 0.02, 0.3)
+    return room(punch(x, HIT_DRIVE), 0.5, 3000.0, 0.15)
+
+
+def sfx_bow(rng):
+    """A bow loosed in a fight, quicker and tighter than Bowshot: the string's snap and a short
+    bright twang, and the arrow whipping across, its whistle dropping as it passes."""
+    x = silence(sec(0.5))
+    n = sec(0.2)
+    place(x, shaped(glide(330.0, 260.0, 0.02, n, R), envelope(n, R, attack=0.0004, tau=0.045)), 0.0, 0.7)
+    place(x, burst(0.008, 0.0015, rng, "hp", 3000.0), 0.0, 0.7)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.06), R, 700.0)), 0.0, 0.35)
+    n = sec(0.3)
+    whip = shaped(sweep(3200.0, 1700.0, n, R), lines(((0.0, 0.0), (0.12, 1.0), (0.3, 0.0)), n, R))
+    place(x, whip, 0.03, 0.12)
+    place(x, swish(0.3, 6000.0, rng, 1000.0), 0.03, 0.5)
+    return room(x, 0.4, 4000.0, 0.1)
+
+
+def sfx_cast(rng):
+    """A spell let go: a breath of air rushing up as the power gathers, small bells running up a
+    chord over it, and a soft bloom as it leaves your hands."""
+    x = silence(sec(1.3))
+    gather = 0.5
+    n = sec(gather)
+    rise = lines(((0.0, 0.0), (0.85 * gather, 1.0), (gather, 0.0)), n, R)
+    air = swept_lowpass(highpass(noise(n, rng), 800.0, R), lines(((0.0, 900.0), (gather, 7000.0)), n, R), R)
+    place(x, shaped(norm(air), rise), 0.0, 0.45)
+    for f, g in ((330.0, 0.1), (495.0, 0.05)):
+        place(x, shaped(sweep(f, 2.0 * f, n, R), rise), 0.0, g)
+    for i, m in enumerate((81, 86, 88, 93, 98)):
+        place(x, chime(midi_hz(m), R, rng, 0.6, 1.0), 0.05 + 0.08 * i, 0.16)
+    place(x, thump(240.0, 120.0, 0.35, 0.1), gather, 0.35)
+    place(x, norm(lowpass(burst(0.35, 0.09, rng), 2500.0, R)), gather, 0.3)
+    return room(x, 1.2, 4500.0, 0.3)
+
+
+def sfx_fire(rng):
+    """Fire let loose: the whump of it catching, a roar of flame rushing out and dying back with a
+    hiss, and the crackle of it burning down."""
+    x = silence(sec(1.4))
+    burn = 1.0
+    n = sec(burn)
+    place(x, thump(150.0, 50.0, 0.4, 0.08), 0.0, 0.6)
+    roar = norm(lowpass(lowpass(noise(n, rng), 1300.0, R), 1300.0, R))
+    flicker = [1.0 + 0.35 * v for v in norm(lowpass(lowpass(noise(n, rng), 30.0, R), 30.0, R))]
+    place(x, shaped(shaped(roar, envelope(n, R, attack=0.06, tau=0.4)), flicker), 0.0, 0.8)
+    place(x, swish(0.4, 3000.0, rng, 300.0), 0.0, 0.5)
+    place(x, burst(0.6, 0.15, rng, "bp", 3500.0, 0.6, attack=0.02), 0.0, 0.25)
+    for _ in range(FIRE_POPS):
+        t = 0.05 + burn * rng.random() ** 1.6        # bunched up at the start, thinning out
+        m = int(rng.uniform(0.001, 0.004) * R)
+        pop = shaped(norm(biquad(noise(m, rng), "bp", rng.uniform(1500.0, 5000.0), 1.2, R)),
+                     envelope(m, R, 0.0002, m / R * 0.3))
+        place(x, pop, t, rng.uniform(0.1, 0.3) * (1.0 - 0.6 * t / (burn + 0.05)))
+    return room(x, 0.8, 3000.0, 0.2)
+
+
+def sfx_frost(rng):
+    """Frost: a cold rush of air, ice cracking as it spreads in a run of tiny sharp ticks that slow
+    down, a crunch as it sets, and glassy notes ringing high and out of tune with each other."""
+    x = silence(sec(1.5))
+    place(x, burst(0.7, 0.2, rng, "hp", 4500.0, 0.7, attack=0.03), 0.0, 0.5)
+    t, gap = 0.02, 0.012
+    for _ in range(FROST_CRACKS):
+        place(x, burst(0.004, 0.0008, rng, "hp", 3500.0), t, rng.uniform(0.15, 0.35))
+        place(x, strike(ICE, rng.uniform(3200.0, 5200.0), 0.08, rng, decay_scale=0.15, click=0.0), t, 0.15)
+        t += gap * rng.uniform(0.7, 1.3)
+        gap *= 1.12
+    place(x, burst(0.06, 0.015, rng, "bp", 1800.0, 0.9), t, 0.3)
+    place(x, thump(260.0, 140.0, 0.12, 0.03), t, 0.2)
+    for i in range(4):
+        ring = strike(ICE, rng.uniform(2400.0, 4200.0), 1.0, rng, click=0.0)
+        place(x, ring, 0.05 + 0.1 * i + rng.uniform(0.0, 0.04), 0.3)
+    return room(x, 1.1, 5000.0, 0.3)
+
+
+def sfx_heal(rng):
+    """Healing: a warm swell like a held breath let out, four soft bells going up a major chord and
+    ringing on together at the top, and a sparkle over them."""
+    x = silence(sec(2.0))
+    hum = choir([midi_hz(m) for m in (62, 66, 69)], 0.5, R, rng, "oo", attack=0.2, release=0.5)
+    place(x, norm(hum), 0.0, 0.4)
+    for i, m in enumerate((74, 78, 81, 86)):
+        place(x, chime(midi_hz(m), R, rng, 0.7, 1.6), 0.05 + 0.09 * i, 0.3)
+    for i, m in enumerate((93, 98)):
+        place(x, chime(midi_hz(m), R, rng, 0.5, 0.8), 0.45 + 0.07 * i, 0.08)
+    return room(x, 1.4, 5000.0, 0.35)
+
+
+def sfx_potion(rng):
+    """A potion drunk: the cork twisted with a squeak and pulled with a pop, three gulps going down,
+    and a soft shimmer as it takes hold."""
+    x = silence(sec(1.4))
+    n = sec(0.06)
+    place(x, shaped(sweep(900.0, 1400.0, n, R), envelope(n, R, attack=0.01, tau=0.02)), 0.0, 0.15)
+    n = sec(0.05)
+    place(x, shaped(sweep(1100.0, 380.0, n, R), envelope(n, R, attack=0.0005, tau=0.012)), 0.06, 0.8)
+    place(x, burst(0.006, 0.0012, rng, "bp", 2500.0, 0.8), 0.06, 0.5)
+    n, m = sec(0.12), sec(0.025)
+    for i in range(3):
+        t = 0.3 + 0.2 * i
+        place(x, shaped(glide(170.0, 290.0, 0.04, n, R), envelope(n, R, attack=0.008, tau=0.035)), t, 0.7)
+        for _ in range(2):
+            f = rng.uniform(500.0, 900.0)
+            bubble = shaped(sweep(f, 1.8 * f, m, R), envelope(m, R, attack=0.001, tau=0.006))
+            place(x, bubble, t + rng.uniform(0.02, 0.08), 0.15)
+    for i, note in enumerate((88, 93)):
+        place(x, chime(midi_hz(note), R, rng, 0.5, 1.0), 0.95 + 0.06 * i, 0.12)
+    return room(x, 0.6, 4000.0, 0.15)
+
+
+def sfx_soul_link(rng):
+    """The Soul-Link: two heartbeats falling into step, two voices a semitone either side of the
+    same note sliding together onto it and opening out into a fifth, and Steel's call ringing high
+    as you strike together."""
+    x = silence(sec(2.4))
+    beat = heartbeat()
+    place(x, beat, 0.0, 0.55)
+    place(x, beat, 0.09, 0.45)
+    place(x, beat, 0.6, 1.0)
+    home, fifth = midi_hz(62), midi_hz(69)
+    for start in (midi_hz(61), midi_hz(63)):
+        place(x, voice(((0.0, start), (0.45, home), (1.4, home))), 0.1, 0.3)
+    place(x, voice(((0.0, fifth), (0.9, fifth))), 0.6, 0.25)
+    strike_at = 0.6
+    place(x, thump(110.0, 55.0, 0.5, 0.12), strike_at, 0.6)
+    place(x, burst(1.0, 0.3, rng, "hp", 5000.0, attack=0.01), strike_at, 0.15)
+    for i, m in enumerate(CALL_NOTES):
+        place(x, chime(midi_hz(m + 12), R, rng, 0.7, 1.4), strike_at + 0.04 * i, 0.15)
+    return room(x, 1.6, 4500.0, 0.35)
+
+
+def sfx_turn_start(rng):
+    """Your turn: Steel's call run up quickly on plucked strings over a soft tap on the drum, with
+    a chime on the top note."""
+    x = silence(sec(0.9))
+    place(x, thump(150.0, 90.0, 0.2, 0.04), 0.0, 0.35)
+    for i, m in enumerate(CALL_NOTES):
+        place(x, norm(lute(midi_hz(m), R, rng, 0.75, 0.8)), 0.05 * i, 0.4 + 0.1 * i)
+    place(x, chime(midi_hz(CALL_NOTES[-1] + 12), R, rng, 0.5, 0.8), 0.1, 0.1)
+    return room(x, 0.6, 4500.0, 0.15)
+
+
+def sfx_downed(rng):
+    """Someone in the party going down: their knees hitting the ground, then the rest of them with
+    their gear clattering, and after a moment one slow heartbeat. Down, not dead."""
+    x = silence(sec(1.8))
+    fall = 0.16
+    place(x, thump(120.0, 50.0, 0.35, 0.07), 0.0, 0.6)
+    place(x, thump(95.0, 38.0, 0.6, 0.14), fall, 1.0)
+    place(x, norm(lowpass(burst(0.15, 0.04, rng), 800.0, R)), fall, 0.5)
+    for i in range(5):
+        place(x, strike(IRON_LATCH, rng.uniform(900.0, 1500.0), 0.12, rng, decay_scale=0.4, click=0.4),
+              fall + 0.01 + 0.03 * i + rng.uniform(0.0, 0.015), 0.18 * (1.0 - 0.15 * i))
+    place(x, heartbeat(), 0.95, 0.8)
+    return room(x, 1.2, 2000.0, 0.3)
+
+
+def sfx_death(rng):
+    """Something dying: the last breath going out of it, the body dropping, and a dark low note
+    sinking away under it."""
+    x = silence(sec(1.8))
+    n = sec(0.7)
+    breath = noise(n, rng)
+    sigh = silence(n)
+    for fc, g in VOWELS["oh"]:
+        mix(sigh, biquad(breath, "bp", fc, 4.0, R), 0, g)
+    place(x, shaped(norm(sigh), envelope(n, R, attack=0.04, tau=0.22)), 0.0, 0.4)
+    drop = 0.28
+    place(x, thump(100.0, 36.0, 0.6, 0.15), drop, 1.0)
+    place(x, norm(lowpass(burst(0.2, 0.05, rng), 600.0, R)), drop, 0.4)
+    n = sec(1.2)
+    high, low = midi_hz(50), midi_hz(38)
+    sink = glide(high, low, 0.35, n, R)
+    mix(sink, glide(2.0 * high, 2.0 * low, 0.35, n, R), 0, 0.3)
+    place(x, shaped(sink, envelope(n, R, attack=0.05, tau=0.4)), 0.1, 0.35)
+    return room(x, 1.4, 2000.0, 0.35)
+
+
+def sfx_victory(rng):
+    """The fight won: the timpani rolling up into Steel's call played out on the trumpet over the
+    horns' D major chord, a cymbal and the timpani on the last note, and chimes ringing up the chord."""
+    x = silence(sec(3.8))
+    kettle = timpani(midi_hz(38), R, rng)
+    for i in range(VICTORY_ROLL_STROKES):
+        place(x, kettle, 0.045 * i, 0.15 + 0.05 * i)
+    land = 0.85
+    for (t, held), m in zip(((0.45, 0.25), (0.72, 0.1), (land, 1.6)), CALL_NOTES):
+        place(x, brass([midi_hz(m)], held, R, rng, 0.95, attack=0.02, release=0.3, vib_cents=6.0), t, 0.5)
+    place(x, brass([midi_hz(m) for m in (62, 66, 69)], 1.5, R, rng, 0.7, attack=0.05, release=0.5), land, 0.4)
+    place(x, kettle, land, 1.0)
+    place(x, cymbal(R, rng, 2.5), land, 0.25)
+    for i, m in enumerate((86, 90, 93, 98)):
+        place(x, chime(midi_hz(m), R, rng, 0.7, 2.0), land + 0.05 * i, 0.15)
+    return room(x, 1.8, 4000.0, 0.3)
+
+
+def sfx_game_over(rng):
+    """The party fallen: Steel's call turned upside down, falling slow and low on a horn over a dark
+    chord on the choir, and a great bell tolling once under it all."""
+    x = silence(sec(5.0))
+    place(x, knell(midi_hz(50), R, rng), 0.0, 0.6)
+    hum = choir([midi_hz(m) for m in (50, 53, 57)], 2.6, R, rng, "oh", attack=0.8, release=1.2)
+    place(x, norm(hum), 0.0, 0.5)
+    falling = [m - 12 for m in reversed(CALL_NOTES)]
+    for (t, held, sag), m in zip(((0.3, 0.7, 0.0), (1.05, 0.7, 0.0), (1.8, 1.8, 40.0)), falling):
+        horn = brass([midi_hz(m)], held, R, rng, 0.55, attack=0.08, release=0.5, vib_cents=4.0, fall_cents=sag)
+        place(x, horn, t, 0.45)
+    return room(x, 3.0, 2200.0, 0.4, size=1.2)
+
+
+# --------------------------------------------------------------------------- #
+# Gear and shops
+# --------------------------------------------------------------------------- #
+
+def sfx_equip(rng):
+    """Putting gear on: leather creaking as a strap is pulled tight, a buckle snapping shut, and a
+    little mail settling."""
+    x = silence(sec(0.6))
+    place(x, creak(0.14, 160.0, 240.0, rng, 1100.0), 0.0, 0.5)
+    for t in (0.0, 0.05, 0.11):
+        place(x, burst(0.05, 0.015, rng, "bp", rng.uniform(1800.0, 3200.0), 0.9, attack=0.005), t, 0.3)
+    place(x, strike(IRON_LATCH, 1800.0, 0.15, rng, decay_scale=0.4, click=0.7), 0.17, 0.7)
+    for i in range(6):
+        place(x, strike(MAIL_LINK, rng.uniform(3500.0, 5500.0), 0.06, rng, click=0.3, click_hp=5000.0),
+              0.2 + 0.025 * i + rng.uniform(0.0, 0.01), 0.15)
+    return room(x, 0.3, 4000.0, 0.1)
+
+
+def sfx_buy(rng):
+    """Buying something: a purse set down on the counter with the coins in it settling, and one coin
+    rung down on the wood to seal it."""
+    x = silence(sec(1.0))
+    place(x, thump(150.0, 90.0, 0.2, 0.04), 0.0, 0.7)
+    place(x, norm(lowpass(burst(0.08, 0.02, rng), 1200.0, R)), 0.0, 0.4)
+    for _ in range(6):
+        # The coins inside, muffled by the leather.
+        clink = strike(COIN, rng.uniform(2400.0, 3400.0), 0.15, rng, decay_scale=0.5, click=0.2, click_hp=4000.0)
+        place(x, lowpass(clink, 2000.0, R), rng.uniform(0.005, 0.1), 0.15)
+    seal = 0.32
+    place(x, norm(modes(WOOD_KNOCK, sec(0.12), R, 300.0)), seal, 0.4)
+    place(x, strike(COIN, 3300.0, 0.6, rng, decay_scale=1.5, click=0.4, click_hp=4000.0), seal, 0.55)
+    return room(x, 0.4, 3500.0, 0.12)
+
 
 # --------------------------------------------------------------------------- #
 # Build
@@ -2130,6 +3115,8 @@ SONGS = {
     "salt-and-lanterns": build_salt_and_lanterns,
     "meadowlark": build_meadowlark,
     "sunspire": build_sunspire,
+    "steel": build_steel,
+    "the-hunger": build_the_hunger,
 }
 
 SFX = {   # name: (folder, peak dBFS, builder)
@@ -2158,6 +3145,25 @@ SFX = {   # name: (folder, peak dBFS, builder)
     "war-horn": ("Content/Sfx", PEAK_MENU, sfx_war_horn),
     "bowshot": ("Content/Sfx", PEAK_MENU, sfx_bowshot),
     "coin": ("Content/Sfx", PEAK_CLICK, sfx_coin),
+    "sword-hit": ("Content/Sfx", PEAK_HIT, sfx_sword_hit),
+    "miss": ("Content/Sfx", PEAK_MENU, sfx_miss),
+    "crit": ("Content/Sfx", PEAK_HIT, sfx_crit),
+    "thud": ("Content/Sfx", PEAK_HIT, sfx_thud),
+    "shield": ("Content/Sfx", PEAK_HIT, sfx_shield),
+    "bow": ("Content/Sfx", PEAK_MENU, sfx_bow),
+    "cast": ("Content/Sfx", PEAK_MENU, sfx_cast),
+    "fire": ("Content/Sfx", PEAK_MENU, sfx_fire),
+    "frost": ("Content/Sfx", PEAK_MENU, sfx_frost),
+    "heal": ("Content/Sfx", PEAK_MENU, sfx_heal),
+    "potion": ("Content/Sfx", PEAK_MENU, sfx_potion),
+    "soul-link": ("Content/Sfx", PEAK_MENU, sfx_soul_link),
+    "turn-start": ("Content/Sfx", PEAK_CLICK, sfx_turn_start),
+    "downed": ("Content/Sfx", PEAK_MENU, sfx_downed),
+    "death": ("Content/Sfx", PEAK_MENU, sfx_death),
+    "victory": ("Content/Sfx", PEAK_MENU, sfx_victory),
+    "game-over": ("Content/Sfx", PEAK_MENU, sfx_game_over),
+    "equip": ("Content/Sfx", PEAK_CLICK, sfx_equip),
+    "buy": ("Content/Sfx", PEAK_CLICK, sfx_buy),
 }
 
 

@@ -78,7 +78,16 @@ Old Crown Vault's traps and Kael, the audience with the King and Crane in the gr
 the Rusty Anvil, and Kael and Brannock waiting at the Flagon, with Kael swapped in for Sera. Those
 visits are queues of beats (walk into this, talk to them, read it through) rather than frames,
 since a conversation's length depends on its answers (`ExploreScreen.ProofBeats.cs` and
-`ExploreScreen.ProofChapters.cs`). Then back to the road and up the path into the barrow. In the
+`ExploreScreen.ProofChapters.cs`). Every fight on the way is fought, from the sea-wraiths to the
+sappers: whenever one's on, it has the run to itself (`ExploreScreen.ProofFights.cs`), EnemyMind
+plays the party's turns as well as the foes' at three times the speed, and there's a shot of each
+fight's opening and its end. The tutorial's first turn is played by hand, for the movement preview
+past the budget, the target's tooltip, the attack and the log. The map's dice are seeded under the
+run, so it fights the same way each time, and a part's clock stops while a fight's on. A fight the
+party loses goes to game over like anyone's, and the run loads the save from just before it and
+fights it again on the next seed, five times at most before it says one's too hard. In the Flagon it
+opens the bag, the character sheet, the forge's shop, the help's first page and its page on fights,
+and a tip. Then back to the road and up the path into the barrow. In the
 barrow it tries the locked door and the stone door, pulls the lever that opens the stone door, goes
 through it to the chest, opens the map, stands under a torch, pauses, and goes out through QUIT TO
 TITLE, where the slots show the autosave it made on the way. Moving and using things go in through
@@ -88,7 +97,7 @@ inside `shots/` that it fills with one of every kind of slot, so it never touche
 it ignores the real mouse and keyboard so nothing I do while it runs changes the pictures. It's
 silent: every sound it would have played goes in `shots/audio.log` with the frame it was asked for
 on, which is how I check the footsteps change from grass to stone and the door grinds when the
-lever's pulled. A second switch, `--simulate`, comes with combat.
+lever's pulled. A second switch, `--simulate`, fights an encounter headless (see [Combat](#combat)).
 
 ### Controls
 
@@ -107,10 +116,17 @@ lever's pulled. A second switch, `--simulate`, comes with combat.
 | The ship coming in | **Esc** skips it |
 | Anywhere | **F11** switches full screen on and off |
 | The map | **Tab** switches between the map you're on and the world. Opened from a waypoint, the **arrows** (or the mouse) pick where to go and **Enter** (or a click) goes. **M** or **Esc** closes it |
+| A tip | **Enter** or a **click** on its card puts it away. It never stops you walking, and goes by itself once there's been time to read it twice |
+| How to play | **Esc**, then HOW TO PLAY. **Left** and **right** (or **Q** and **E**) turn the page, a **click** on a tab jumps to it, and **Esc** goes back |
+| In a fight | **Click** a tile to walk there, a foe to attack it (walking into reach first if it's in range of a walk), or a friend who's down to help them up. **1** to **0**, then **-** and **=**, or a **click** picks a hotbar slot: one used on yourself happens at once, anything else waits for a target. **Tab** goes through the targets and **Enter** uses it on the one picked out. **Right click** or **Esc** puts it back. **WASD** or the **arrows** step a tile, **Space**, **End** or END TURN ends the turn, **L** shows and hides the log (the **wheel** scrolls it with the mouse on it, and zooms otherwise), and **Esc** with nothing picked pauses. Pointing at anything says what it is and what a click would do |
+| The end of a fight | **Enter**, **Space** or a **click** on the panel goes on to what happens next |
+| The inventory | **I** for the bag, **C** for the character sheet, or **Esc** and then INVENTORY. **Q** and **E** (or **F1** to **F4**, or a **click** on a face) pick who you're looking at, **Tab** turns between the bag and the sheet, and **I**, **C** or **Esc** closes it. On a pad, the shoulders pick who, Y turns the page, A uses and B closes |
+| In the inventory | The **arrows** move round the slots, the bag and the key items. **Enter** or a **click** puts on what's in the bag (whatever was there goes back in it), drinks a potion, or takes off what's in a slot; on an empty slot it finds something in the bag for it. The **mouse wheel** scrolls the bag. On the sheet, **up** and **down** pick an ability to read |
+| A shop | Talk to the keeper. **Enter** or a **click** buys one or sells one, and with **Shift** held it sells the whole stack. **Tab** crosses the counter, **Q** and **E** pick who the cards measure against, **Esc** leaves |
 
 A gamepad works anywhere the keyboard does: the d-pad or left stick, A to use, B to back out, Y for
 the map, the right shoulder for the next in the party (and both shoulders to switch the map's sides),
-and Start.
+X to put a tip away, and Start.
 
 ## Screens
 
@@ -122,14 +138,18 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 | --- | --- |
 | `TitleBackgroundScreen` | Questeria at twilight behind the title and every form on it, moving. It doesn't transition off when something covers it, so it stays up behind all of them |
 | `TitleScreen` | The title, with NEW GAME, CONTINUE, LOAD, OPTIONS and EXIT |
-| `OptionsScreen` | Master, music and sound volume, and how fast text types out. Saved to `settings.json` |
+| `OptionsScreen` | Master, music and sound volume, how fast text types out, and whether the tutorial's tips come up. Saved to `settings.json` |
 | `SaveSlotScreen` | The save slots, for a new game or for loading one, with ERASE beside each slot that has something in it |
 | `CharacterCreationScreen` | Making you, then the Soul-Bound: rows for a name, a people, a class and every part of a look, on three tabs, with them walking on the spot and turning round beside the rows, and their face blown up over that. RANDOM, BEGIN and BACK. The Prologue's first lines play between the two |
 | `DialogueScreen` | Popup. A conversation a line at a time, over the dimmed map or a painting: the speaker's face and name, the line typing out at the text speed, and a question's options numbered under it, with an icon for a check, a flirt or a locked one. Approval, gold and items come up as toasts |
 | `DiceRollOverlay` | Popup, over a conversation. A check: the d20 with the DC and every modifier, a press to roll, the tumble, then the total and SUCCESS or FAILURE |
 | `ExploreScreen` | A map being walked round: the tiles, the props, the things you can use, the people, the party, and the dark if it's a dark map. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
 | `MapScreen` | Popup. The map you're on, as much as you've seen of it, and the world: every place you've been and the roads between them. Opened from a waypoint, it's where you pick somewhere to travel to |
-| `PauseMenuScreen` | RESUME, OPTIONS or QUIT TO TITLE. Nothing under it moves while it's up. SAVE and LOAD go on it once there's a game to save |
+| `InventoryScreen` | Popup, from **I**, **C** or the pause menu. The party's faces down the left, whoever's picked turning on the spot in what they're wearing with their nine slots round them, and the bag, the gold and the key items or their character sheet on the right (see [Items and inventory](#items-and-inventory)) |
+| `ShopScreen` | Popup, from a shopkeeper's conversation. Their shelf at their prices on the left and the bag at half on the right; a click buys or sells |
+| `PauseMenuScreen` | RESUME, INVENTORY, OPTIONS, HOW TO PLAY or QUIT TO TITLE. Nothing under it moves while it's up. SAVE and LOAD go on it once there's a game to save. In a fight there's no INVENTORY, and its line says there's no saving mid-fight |
+| `GameOverScreen` | Popup, over the fight that was lost. LOAD LAST SAVE (the autosave from just before the fight, unless you've saved since) or QUIT TO TITLE |
+| `HelpScreen` | Popup, from HOW TO PLAY. Every control on the keyboard, the mouse and a pad, then every tutorial tip under its topic, with the keys as key caps (see [The tutorial](#the-tutorial)) |
 | `LoadingScreen` | From the tutorial. Waits for everything to fade out, then adds the next screens. Going onto a map puts its name on the black in between |
 
 ## The title
@@ -162,13 +182,15 @@ as the proof shots. What's in so far:
   remembers that day and the oath, each over a painting, and the game is written to its slot. P-04
   and P-05 are the voyage: the deck of the Gull's Wager at night, two days out, where you can walk
   about and hear the crew before you go to the rail at the bow (the red "!"), then the Soul-Bound
-  talking about the new king, the bell from the crow's nest, the sea-wraiths (a card until there's
-  combat), and Questeria at dawn.
+  talking about the new king, the bell from the crow's nest, and the sea-wraiths up over the port
+  rail: the first fight, and a guided one, where a wraith at a time teaches you to move, attack, use
+  an ability, fill and spend the Soul-Link, and end your turn. Then Questeria at dawn.
 - **Act 1, Chapter 1: Saltwind Welcome.** The ship comes into Saltwind Docks and Act 1's card comes
   up. Across the boardwalk, under a red "!", the Red Gulls are shaking old Tomas down for a dock tax
   that doesn't exist, and it starts when you walk up to them. You can wade in,
   try talking first (a Persuade check, with advantage for a Skald or an Honorable voice), or say it's
-  not your business, in which case the Soul-Bound goes in anyway. Then their boss, Grell, is on his
+  not your business, in which case the Soul-Bound goes in anyway. Every way in ends in a brawl with
+  the three of them and their bosun, Grell: cudgels and fists, and nobody dies. Then Grell is on his
   knees with the Soul-Bound's blade at his throat a beat too long, and what happens to him is up to
   you. Captain Hale's Watch arrives, and Tomas gives you his lucky hook. Up in the city the
   Soul-Bound points the way, Fennick talks you through the quest board in the Lantern Market (the
@@ -219,9 +241,15 @@ their ambition, each companion's approval, fame, and how far the eclipse has gon
 it starts and its range), the key items, the paintings and the quest board's postings. Every table
 there throws at startup if a row's wrong.
 
-The fights in the story are cards until combat exists ("The Red Gulls are beaten."), with the
-conversation round them, and each keeps its encounter's id so the fight can go in where the card
-is. The barks in them (the Soul-Bound's one-liners mid-fight) are lines for now too.
+Every fight in the story is fought where it happens, on that map. The conversation before it ends
+by starting it (`DialogueEffect.Fight`, with the encounter's id), the foes are the people already
+standing there or the ones who come over a rail, down a passage or up out of a hole, and winning it
+sets the flag the scene always set, so the map changes, and plays the conversation after it (the
+encounter's `Then`, called `<encounter>-after`), so the scene carries on where it left off. The
+Soul-Bound's barks are the fight's own: the Soul-Link's two lines from P-05, and "Where's the
+Watch?! Where's the king's army?!" when Thornbridge's second wave comes out of the trees. Kael's duel
+ends when he gives up, the sappers break in, and the truce goes straight into the fight with them;
+holding the quarry while Sera purifies the crystal is a fight of its own, and she sits it out.
 
 ## Maps
 
@@ -284,7 +312,7 @@ the Red Gulls stand on the docks until they're beaten, and the Watch only turns 
 | `entrance` | A building's door: walk into it and you go in. x, y is the middle of the bottom of the door | `to`, `at`, and `name`, what the door says on the map screen |
 | `trigger` | Walk into it and it says something, sets a flag, starts a conversation or plays a banter | `say`, `set`, `talk`, `bark` (a banter from `Banters`, said in bubbles while you walk), `mark` (a red "!" over it while it's waiting), `once` (yes if it isn't set), `w`, `h` |
 | `scene` | A conversation that plays by itself as soon as the map's up and it's there (it needs a `when`, or it'd play on every visit until it's done) | `talk` |
-| `chest` | Opens once, and gives up what's in it | `gold`, and `look` and `name` like all of these |
+| `chest` | Opens once, and gives up what's in it: the gold to the party, the items to the bag, and a toast for each | `gold`, `items` (item ids from `ItemCatalog` between commas, like `items=healing-potion,leather-cap`; the same one twice is two of it), and `look` and `name` like all of these |
 | `door` | Opens and stays open, unless it's locked or a flag works it | `locked`, or `flag` (it's open while the flag is set, and won't move by hand) |
 | `lever` | Sets its flag, or clears it if it's set | `flag` |
 | `sign` | Has something written on it | `text` |
@@ -298,7 +326,7 @@ tile that isn't in the legend, a legend tile that isn't in the tileset, a prop t
 catalogue, an object off the edge of the map, `ambient` on a map that isn't dark, a `tint` that isn't
 three whole numbers from 0 to 255, a setting a kind doesn't have (so `glod=12` is caught, and so is
 `gold=12` on a door), two objects with the same id, a trigger that does nothing, a conversation that
-doesn't exist, someone off a sheet that doesn't exist or drawn from two things at once, a creature
+doesn't exist, a chest item that doesn't exist, someone off a sheet that doesn't exist or drawn from two things at once, a creature
 that doesn't exist, someone or a camp place standing on a solid tile, a spawn inside an exit, a
 waypoint with no room beside it or on a map that isn't on the world map, and a quote that's never
 closed. Once every map is read, `MapCatalog` checks every exit goes to a map that exists and a spawn
@@ -413,11 +441,14 @@ already, anyone else who joins waits at camp, which is the Gilded Flagon.
 
 | File | What it is |
 | --- | --- |
-| `PartyMember` | Someone in the party, as the save keeps them: name, pronouns, class, level, ability scores, hit points, look, and where they're standing |
-| `Origins` | Everyone who can be in the party and how they start: class, scores (5e's standard array, 15 14 13 12 10 8, where their class recommends) and look. You and the Soul-Bound start from theirs and the creation screen does the rest |
-| `ClassCatalog` | The eight classes: the SRD's names in the code and the story's on screen (a Fighter is a Blademaster, a Rogue a Shadowstep, a Cleric a Lightbearer, a Wizard an Arcanist, a Paladin a Warden, a Druid a Wildcaller, a Warlock a Hexblade and a Bard a Skald), each with its role, its hit die and where its scores go |
+| `PartyMember` | Someone in the party, as the save keeps them: name, pronouns, class, level, experience, ability scores, hit points, what they're wearing (item ids by slot, changed with `Equip`, `Unequip` and `PutOn`), what they've spent since they last rested, look, and where they're standing. The most hit points they can have includes anything worn that adds to it |
+| `Origins` | Everyone who can be in the party and how they start: class, scores (5e's standard array, 15 14 13 12 10 8, where their class recommends), look and kit. A companion the story arms sets out in their own (Sera's shortbow, Kael's twin daggers, Brannock's round shield); everyone else in their class's. You and the Soul-Bound start from theirs and the creation screen does the rest |
+| `ClassCatalog` | The eight classes: the SRD's names in the code and the story's on screen (a Fighter is a Blademaster, a Rogue a Shadowstep, a Cleric a Lightbearer, a Wizard an Arcanist, a Paladin a Warden, a Druid a Wildcaller, a Warlock a Hexblade and a Bard a Skald), each with its role, its hit die, where its scores go, the armour, shields and weapons it's trained with (every class has the simple weapons), the ability it casts with, its speed, and its starting kit: its weapon, shield and armour, and a travelling cloak and boots. A kit it couldn't wear stops the game at startup |
 | `AbilityCheck` | A check: a d20 plus a modifier against a DC, with or without advantage, and a natural 20 or 1 deciding it whatever the total |
 | `AbilityScores` | The six scores, and 5e's modifier: half of (score minus 10), rounded down |
+| `DiceExpression` | Dice written 5e's way (`2d6+3`, `1d8`, `3`), parsed once and rolled into a `RollResult` with every die and every modifier by where it came from; a critical rolls the dice twice and the bonus once. `Dice` rolls one die |
+| `AttackMath` | The d20 with advantage or disadvantage, whether a roll hits (a natural 20 always, a natural 1 never), the exact chance it will for the tooltip, and how several advantages and disadvantages cancel |
+| `ArmourClass` | AC from what's worn: the armour's base, Dexterity up to its cap (all for light, +2 for medium, none for heavy), and every worn bonus, a shield's +2 among them. 10 plus Dexterity in nothing |
 
 Hit points at level 1 are 5e's: the whole hit die plus the Constitution modifier. Everyone stays
 level 1 in the skeleton.
@@ -491,6 +522,263 @@ level 1 in the skeleton.
   that's off the screen gets an arrow at its edge pointing the way. Who's marked is only worked out
   again when a flag changes, the party does, or you take control of someone else.
 
+## Items
+
+Forty-nine items in `ItemCatalog`, in the order their icons are drawn: the SRD's weapons and armour
+with its damage, ranges, properties, AC, Dexterity caps, Strength and prices, shields, helms,
+gloves, boots, cloaks, an amulet and a ring, potions, alchemist's fire, an elixir that gives back a
+spell slot, and the pelts and black crystal shards foes drop for selling. The few magic ones are the
+team's: the ember dagger, the thornwood bow, the sunsteel blade, the Warden's shield, and the circlet,
+gauntlets, boots, cloak, amulet and ring that each add one thing. Every row is checked against its
+kind when the game starts, so a sword with no damage or a potion with a paperdoll layer stops it there.
+
+| File | What it is |
+| --- | --- |
+| `ItemDefinition` | One item: name, kind, description, value, rarity, icon, the paperdoll layer it draws, and whichever of the weapon, armour, worn and consumable settings its kind uses. `Slot`, `Fits` and `SlotOn` say where it goes |
+| `ItemCatalog` | Every item, by id |
+| `Inventory` | The party's bag, over the save's list of `ItemStack`s: potions and materials stack, anything worn has a place each |
+| `ShopCatalog` | The shops: the Trader's stall in the Lantern Market, Halden's Forge, the apothecary and the Chandler's, each with its stock and markup. Selling gets half an item's value anywhere |
+| `LootTableCatalog` | What each foe drops: some gold, anything it always has, and weighted draws. Wolves leave pelts, the Hollowed a few coins and the odd shard, the Thornmother the thornwood bow, the Old Crown Vault's fight its gold and the sunsteel blade |
+
+Chests hold items too (`items=` in the map files), which go in the bag with a toast naming them.
+
+## Items and inventory
+
+**I** opens the inventory over the map, **C** opens it on the character sheet, and so does
+INVENTORY on the pause menu. Down the left are the party's faces, then whoever's waiting at camp
+under AT CAMP. Whoever's picked stands big in the middle, turning on the spot in exactly what
+they're wearing (baked off the paperdoll with their gear), with their nine slots round them: head,
+cloak, body and main hand down the left, the side their sword hand's on when they face you; amulet,
+ring, hands and off hand down the right; and feet under them. An empty slot shows a faint outline
+of what goes in it. Their HP, AC and speed are on the tiles under them.
+
+On the right is the party's shared bag, shown in the catalogue's order (weapons, then armour and
+what's worn with it, then potions, then what's for selling) whatever order it was filled in, with
+how many of anything that stacks in the corner, then the party's gold and the key items the story's
+handed over. A click on something in the bag (or Enter) puts it on whoever's picked, in the slot it
+goes in, and whatever was there goes back in the bag: a shield takes a two-handed weapon off with
+it, and a second light weapon goes in the off hand. The slot it'll go in lights up gold while it's
+pointed at. They swing a new weapon once and a glow goes up behind them, so you see the change, and
+the party on the map behind the veil is already wearing it. A click on a slot takes off what's in
+it, and on an empty one finds something in the bag for it. A healing potion is drunk the same way,
+by whoever's picked, and an elixir of focus gives back a spent spell slot. Anything that can't be
+used says why along the bottom of the screen: a pelt's for selling, alchemist's fire is for a fight,
+and nobody drinks a potion they don't need. Whoever's at camp can be looked at but not changed;
+their kit's at the Flagon with them.
+
+Pointing at anything, or the keys landing on it, brings up its card: its name in its rarity's
+colour (white, green for uncommon, blue for rare, like the rim round its slot), what it is and
+where it's worn, its numbers the way the SRD writes them, what it says about itself, what putting
+it on would change against what's worn there now (AC +1 in green, average damage -1.5 in red), a
+warning if they aren't trained with it or strong enough for it, and what it's worth. The
+comparison is worked out by dressing a copy of them in it and asking `CombatStats`, so a shield
+that costs a longsword its two-handed die says so, and the card can't disagree with a fight.
+
+The character sheet (**Tab**, or **C**) has their level, class and experience, their people and
+what their class is for, the six scores with their modifiers and the save under each (gold for
+their class's own), their proficiency bonus, how they attack with each hand and with spells, and
+their class's abilities out of `AbilityCatalog`, each with what it costs and what's left of
+anything it spends. Picking one reads out what it does under the list.
+
+Shops open from their keepers' conversations, once the talking's done (`DialogueEffect.Shop`): the
+Trader at the blue stall in the Lantern Market, the smith at Halden's Forge (inside, or by its
+door), the Chandler down by the south canal, and the spice seller at the teal stall, who keeps her
+sister's apothecary shelf. Each has something to say the first time and something short after.
+The shelf is on the left at the shop's prices and the bag on the right at half what things are
+worth. A click buys or sells one, and Shift sells the whole stack. Whatever's sold stays on the end
+of the shelf at what it fetched until you leave, so a slip of the finger can be bought back, and
+what the party can't afford is greyed with its price in red. Only the bag can be sold from: what
+someone's wearing comes off in the inventory first.
+
+| File | What it is |
+| --- | --- |
+| `Items/Wardrobe` | Putting things on out of the bag, taking them off into it, and drinking from it, and why something can't be used |
+| `Items/Trade` | Buying and selling across a counter, and why a deal can't be done |
+| `Items/GearComparison` | What putting something on would change (each a `GearChange`), and what's worth knowing first |
+| `Items/ItemReadout` | An item in words: its kind and slot, and its numbers a line each |
+| `Items/BagOrder` | The order the bag's shown in |
+| `Components/ItemIcons`, `ItemGrid`, `ItemTooltip` | The icons and the slots they sit in, a scrolling grid of them, and the card |
+| `Components/PortraitRail`, `StatTiles`, `CharacterSheet` | The faces down the left, the tiles with a number on, and the sheet |
+| `Dialogue/Scripts/Shops` | The four shopkeepers' conversations |
+
+Anything out of a chest goes in the bag with a toast that says so, and the first time anything
+does, a tip says where it's gone; the next time, if the bag hasn't been opened by then, another
+says I and C.
+
+## Combat
+
+Fights are turn-based 5e from the SRD 5.1, on the map you're on, a tile at a time (a tile is 1.5 m,
+and a diagonal step costs the same as a straight one). `Combat/` is the rules and draws nothing:
+`CombatEngine` takes the encounter, who's in it and where, the ground (`ICombatGrid`) and a
+`Random`, and every command (`Begin`, `Move`, `Use`, `EndTurn`, `RunAiTurn`) hands back the
+`CombatEvent`s it caused, in order, each with its whole log line ("SERA attacks GLOOMFANG: 14 + 5 =
+19 vs AC 13 - HIT. 1d8+3 = 9 piercing."), for the screen to play out at its own pace, the way The
+Black Box's table did. Nothing in it waits on time.
+
+- **Turns.** Initiative is d20 + Dexterity (ties to the higher Dexterity, then the party). A turn
+  has 9 m of movement (less in heavy armour you aren't strong enough for, 3 m less when Slowed, none
+  when Restrained), an action, a bonus action and a reaction.
+- **Moving.** Foes block you, allies you can walk through but not stop on. Leaving a foe's reach
+  without Disengaging gives it an opportunity attack, which spends its reaction.
+- **Attacks.** Advantage from Help, a restrained or prone target, a Downed one in reach, and Pack
+  Tactics; disadvantage from Dodge, being restrained, prone or mocked, armour you aren't trained
+  for, a ranged attack with a foe beside you, and a Warden's raised shield. A natural 20 doubles the
+  dice, and so does a hit on someone Downed from beside them.
+- **Kits.** Every class's level-1 kit is in `AbilityCatalog`, with the actions everyone has (Attack,
+  Off-hand, Dash, Disengage, Dodge, Help, Drink Potion, Drink Elixir, Alchemist's Fire). What's spent
+  goes in `PartyMember.Spent` by `ResourceCatalog`'s ids (`spell-slot-1`, `pact-slot`,
+  `second-wind`, `lay-on-hands`, `bardic-inspiration`), and `ResourceCatalog.Recharge` gives it back
+  on a short or long rest. Hex and Entangle need concentration, which damage can break.
+- **Going down.** A party member at 0 is Downed and rolls death saves on their turn; a hit on them is
+  a failure (two for a critical), a 20 gets them up on 1 HP, and healing or Help gets them up any time.
+  Foes at 0 die. A fight to yield (Kael's duel) or a brawl (the Red Gulls) knocks people out
+  instead; the duel ends when Kael gives up.
+- **The Soul-Link.** When you and the Soul-Bound both hit the same foe between your turns it
+  charges; at two charges either of you can spend it on the Soul-Link Strike, both weapons and 1d8
+  radiant on a sure hit, and the Soul-Bound says their P-05 lines as bark events.
+- **Waves.** An encounter can bring more foes on a later round, sooner if everyone before them is
+  beaten, and guests who fight on your side (Mira at Thornbridge, Kael against the sappers). It can
+  also sit party members out (`SitsOut`: Sera, while she draws the rot out of the crystal).
+- **The AI.** `EnemyMind` floods out everywhere the one whose turn it is could walk, scores every
+  ability on everyone from there (hit chance times damage, the chance of dropping them, how hurt and
+  how dangerous they are, what the walk risks in opportunity attacks, staying out of reach for
+  anyone who fights from range), does the best thing, and goes again. Getting someone up is worth
+  less each time they've already gone down that fight, so nobody spends every turn hauling up a
+  friend who's knocked straight back down. Every weight is a named constant. It has no randomness
+  of its own, so a seed replays a fight exactly.
+
+| File | What it is |
+| --- | --- |
+| `CombatEngine` | The rules, in partials: turns and waves, movement, abilities, attacks, health, and the odds for the tooltip |
+| `Combatant`, `TurnBudget`, `ActiveCondition` | Someone in a fight, what's left of their turn, and what's on them |
+| `AbilityCatalog`, `ResourceCatalog`, `CombatStats` | What everyone can do, what it spends, and a party member's numbers from their kit |
+| `EnemyCatalog`, `EncounterCatalog` | The foes' stat blocks, and every fight by the story's id |
+| `EnemyMind`, `CombatSimulator` | The AI, and `--simulate` |
+| `ShownFight`, `TurnPlan` | The fight as far as the screen's shown it, and what a click on your turn would do |
+| `World/MapCombatGrid` | The map a fight's on, as the engine sees it |
+| `Screens/ExploreScreen.Combat*` | The fight on the map: starting and ending it, playing it out, its cues, your turn, the cards, drawing it, its tips, and the proof run's hooks |
+| `Components/CombatHotbar`, `BudgetBar`, `InitiativeBar`, `UnitFrame`, `SoulLinkSigil` | The hotbar and END TURN, what's left of the turn, the turn order, the frame of whoever's turn it is, and the Soul-Link's meter |
+| `Components/CombatLog`, `CombatCard`, `TurnBanner`, `DamagePopups`, `CombatResult` | The log, the card by whatever's pointed at, the banner when a turn starts, the numbers that pop, and the panel at the end |
+| `Components/CombatEffects`, `ScreenShake`, `CombatStyle`, `CombatArt` | What's thrown about (sparks, motes, what flies), the shake, the colours and sounds of each kind of damage, and the fight's sheets |
+
+```
+dotnet run -- --simulate a1-c1-01-gulls 2000   # fight it 2000 times headless, AI on both sides
+dotnet run -- --simulate all                   # every encounter, 1000 times each
+```
+
+`--simulate` opens no window. The party is the default level-1 one (you as a Blademaster, the
+Soul-Bound as a Shadowstep, and the companions who'd be there, with the two potions you start with)
+on open ground a move away from the foes, and it prints the win rate, the rounds, and each member's
+hit points left and how often they went down. A fight that runs into the 30-round cap is counted
+as unfinished, and `StallWatch` says why from its last five rounds: a revive treadmill, a
+stand-off, one side unable to hurt the other, or just a slow fight. The targets are constants in `CombatSimulator`: the
+tutorial 98% or more, story fights 80 to 92%, bosses 65 to 80%. These are the simulator's own
+numbers, `--simulate all 1000` with its seed, after tuning; nothing ran into the round cap.
+
+| Encounter | Target | Won | Rounds | Who goes down most |
+| --- | --- | --- | --- | --- |
+| `p-05-wraiths` | 98%+ | 100% | 4.0 | nobody |
+| `a1-c1-01-gulls` | 80-92% | 88.3% | 6.1 | the Soul-Bound, 71% |
+| `a1-c2-01-gloomfangs` | 80-92% | 89.6% | 4.8 | the Soul-Bound, 49% |
+| `a1-c2-02-thornmother` | 65-80% | 78.4% | 8.8 | the Soul-Bound, 98% |
+| `a1-c2-02-guard-wave` | 80-92% | 83.9% | 6.0 | the Soul-Bound, 61% |
+| `a1-c3-02-raid` | 80-92% | 81.4% | 8.3 | the Soul-Bound, 78% |
+| `a1-c4-02-kael` | 80-92% | 88.3% | 6.2 | the Soul-Bound, 91% |
+| `a1-c4-02-sappers` | 80-92% | 81.3% | 5.1 | the Soul-Bound, 81% |
+
+Getting there took two things the first runs showed up. A fighter in heavy armour kept picking the
+same Downed friend up every turn and never hit back, so a handful of fights never ended; picking
+someone up is now worth less each time they've gone down in the fight. And the Soul-Bound, a
+Shadowstep in leather, died in nearly a quarter of the Red Gulls fights, which the story can't
+have, so that fight is a brawl with cudgels now: nobody dies in it, and Grell is alive to beg after.
+In the game nobody in the party dies for good in any fight: whoever's fallen gets up on 1 HP once
+it's won.
+
+How I'd tune one that's off: hit points first, since they change how long a fight lasts without
+changing what each turn feels like; then the to-hit, which changes how often anyone goes down; damage
+last, because a level-1 party has so few hit points that one more point a hit is a lot. A boss gets
+its AC and hit points moved, not its attacks, since they're what makes it frightening. Waves are the
+last thing to move, since they change the shape of the fight. `EnemyMind`'s weights are how foes
+behave, not how hard they are, so they stay put unless a foe's doing something silly. The leather
+Shadowstep and Wildcaller are the party's soft spots, so most fights are tuned round how quickly
+they go down.
+
+What the story asks of a fight comes before any of that. The wraiths at sea take two hits each and
+only chill you, so the Soul-Link fills against them and nobody goes down while they learn. The Red
+Gulls are a brawl, so nobody dies on the docks and Grell's alive to beg. The Thornmother frightens
+by lasting (her hit points and a thorn-hard hide) and by knocking you flat (Trip), not by hitting
+harder. The guard wave comes in three, the pack, the courier's dead escort, then a straggler, while
+Sera sits it out at the crystal. The sappers are diggers, a point worse with a pick than a soldier
+would be.
+
+### On screen
+
+A fight happens on the map you're on. A conversation that ends with `DialogueEffect.Fight` starts
+it when it's over, the way a shop or a journey waits for the talking to end, and the game's
+autosaved first, so a lost fight can be fought again. Everyone steps onto the middle of their tile
+(the nearest free one, if theirs is taken or under a shelf), foes who were standing about turn,
+foes who turn up fade in where they arrive, guests join you at your side, and anyone the encounter
+`SitsOut` stays where they are. The battle's song comes in, the fight's name goes across the
+screen, and the initiative dice fill the turn order in along the top a portrait at a time.
+
+The engine works each command out whole, and `ExploreScreen.CombatPlayback` shows what it caused a
+beat at a time, the way The Black Box's table read its round a line at a time. `ShownFight` keeps
+up with what's been shown, so the bars, the turn order and the death saves never get ahead of the
+picture. `ExploreScreen.CombatCues` is what each beat looks and sounds like:
+
+- **A step** is a slide from tile to tile, walking.
+- **An attack** winds up, then lunges, or lets fly (an arrow, a fire bolt, a frost ray, an eldritch
+  blast, a flask lobbed in an arc, each turned to where it's going and trailing its colour). Its
+  log line goes in as it lands, with the sparks in the damage's colour, the damage's sound, the
+  target flashing red, recoiling and hurt, and a small shake (a bigger one, gold sparks and
+  CRITICAL! for a critical). Then the number pops in the big Spectral digits as the bar drains. A
+  miss is a sidestep and MISS.
+- **A spell** lifts the caster's hands in a cloud of its colour; a save shows radiant light falling,
+  a burst, or the vines, and SAVED or FAILED over whoever made it. Healing rises in warm motes with
+  its number.
+- **Going down** is the downed pose and DOWN!, then the death saves over them and on their portrait:
+  three sockets for successes, three for failures. Help or healing gets them up. A foe who dies fades
+  off the map in grey motes; one of yours who runs out of death saves has fallen, faint on the
+  ground, for the rest of the fight.
+- **The Soul-Link** flickers violet as it charges, gold motes rise off the two of you, and full it
+  glows and says READY; the strike is the two of you winding up and lunging together in a fall of
+  gold. The Soul-Bound's lines come up over their head the way banter does.
+- **A turn** starts with its banner (YOUR TURN, or whose it is) and the camera going to them. A
+  foe's turn waits a moment so its banner can be read, then EnemyMind plays it, at the same pace.
+
+On your turn the hotbar along the bottom is whoever's turn it is: the fighting slots (the weapon
+and the class's own), the Soul-Link Strike, moving about, and the bag, each with its key, what's
+left of what it spends, and END TURN after them. Over it are the action's circle, the bonus
+action's triangle, the reaction and the movement bar, each pale for what the thing you're pointing
+at would spend. Pointing at the ground shows the tiles you can reach, the path there and what it
+costs, the part past your movement in the other colour, and an ember ring under every foe it'd let
+swing at you. Pointing at someone shows the card: their health and armour, what's on them, and what
+a click would do, with the engine's own odds ("72% TO HIT", "4 TO 11 SLASHING", "DC 13 DEX SAVE  ·
+58% THEY FAIL"), the range, and the walk into reach if there is one. Anything that can't be done
+says why, in the engine's words. Everything on the screen has a card: a slot (what it costs, how
+far it reaches, its dice and its DC, what's left of it until which rest), the budget's parts, the
+sigil, a condition, an always-on ability. The frame in the bottom left is whoever's turn it is,
+the log is up the left side over it, and the tips come up on the right.
+
+When the last foe's beaten the panel comes up with the experience, the gold and what the fallen
+carried (each foe's `LootTable` and the encounter's, rolled into the gold and the bag), the
+encounter's `Victory` flag is set, everyone who's down or fallen gets up on 1 HP, and its `Then`
+conversation plays. Nobody in the party dies for good. Lose a fight with a `Lost` conversation and
+that plays instead, everyone back on 1 HP; lose any other and it's `GameOverScreen`. A foe who died
+stays off the map for the rest of the visit, and its presence flag keeps it off after that. There's
+no saving mid-fight, and no inventory: what's worn can't change in the middle of one.
+
+The first fight, the wraiths at sea, is marked `Tutorial`: the combat tips come a lesson at a time
+on your turns (moving, attacking, the bonus action once the action's spent, ending the turn,
+abilities from your second turn, the Soul-Link the first time it charges), and with tips on,
+whatever each is about pulses gold until you've done it: the ground you can reach, the foes, the
+slot, END TURN. In any other fight the same tips come once, the first time their moment does.
+
+The proof run has `ProofAutoplay(on, speed)` to have EnemyMind play the party too (the panel at the
+end goes by itself), `ProofAimAtFighter(id)` and `ProofAimAtCell(cell)` to point,
+`ProofPressAbility(id)` to pick a slot, `ProofClick()` to click, `ProofShowLog(shown)` and
+`ProofContinue()`, and `ProofInFight`, `ProofYourTurn` and `ProofFightOver` to wait on.
+
 ## Conversations
 
 A conversation is a `DialogueScript`, written in C# in `Dialogue/Scripts/`, a file per chapter. It
@@ -546,6 +834,51 @@ that can play again (`once=no`) waits a while first. `Dialogue/Scripts/Townspeop
 people you can stop and talk to round the city, each with a few choices, a check or two, and
 something different to say the second time, and the side-quest hooks the board's postings hint at.
 
+## The tutorial
+
+Nobody reads a page of controls before they've walked anywhere, so the game teaches itself as you
+play: a tip comes up the first time you need it, says one thing in a sentence or two with its keys
+drawn as key caps, and never comes up again in that game. It doesn't stop anything. You can walk
+while a tip's up, and it goes by itself once there's been time to read it twice, or straight away
+with **Enter** (X on a pad) or a click on it. Tips that come at the same moment wait their turn, so
+they come one at a time with a breath between, and while a conversation or a menu's over the map
+the card fades out and its clock stops, so it's all there to read after. If you do the thing before
+its tip has come up (you talk to someone before the tip about talking), it never comes, and if it's
+up when you do it, it goes, since it's done its job. **TUTORIAL TIPS** on the options switches them
+off and on, and with them off the controls go up as one toast when the ship comes in, the way
+they did before there were tips.
+
+| File | What it is |
+| --- | --- |
+| `TutorialTip` | One tip: its id, its title, its words, the keys it teaches, where its card goes (`TipAnchor`), what it's about (`TipTopic`), and whether it holds everything until it's read (only the first fight's does) |
+| `TutorialCatalog` | Every tip, checked when the game starts like the other tables: no two with one id, a title that fits on its card, no more than 120 letters of words and six keys, and every id the game calls by name in the table. A wall of text stops the game before it can turn up mid-play |
+| `Tutorials` | The tips for one game: which have been seen (kept in the save, in `SaveData.Tips`, so it's once a game and a new game on another slot teaches it all again), the one that's up and the ones waiting. A tip counts as seen the moment it comes up, so quitting with one on screen doesn't bring it back. It draws nothing; `Show` puts one in line, `Complete` says you've done what it teaches |
+| `TutorialPanel` | The card: cut from the forms' panel at the party cards' size, the title in gold, the words in bone, the keys on ivory caps (`KeyCaps`), and ENTER · GOT IT in the corner. A gold edge flares as it comes in and settles, so the eye goes to it once. It rises into place, or drops for the ones along the top |
+| `HelpScreen` | HOW TO PLAY, from the pause menu. A page of every control on the keyboard, the mouse and a pad, then every tip under its topic, laid out down two columns and onto another page if they need one. The tips are the manual, so one put away too fast can always be found again, and the two can't say different things |
+
+| Tip | When it comes |
+| --- | --- |
+| Finding your feet | The first moment you can walk: on the Gull's Wager's deck in a new game. It goes once you've walked a few seconds |
+| A red mark, A gold mark | The first time there's a red "!", and the first gold one over someone outside the party |
+| Someone to talk to | The first time someone's close enough to talk to |
+| Chests, doors and levers, Waypoint stones, The quest board | The first time one's in reach |
+| Going inside | The first time you're by the door into a building |
+| What's next | The first time the line under the map's name changes, pointing at it from under it |
+| The map | The first time you're somewhere that's on the world map, under the M on the top right |
+| Your party | Once there are two of you and you've walked twenty seconds on one map, over the party's cards. It goes the first time you change who you're controlling |
+| Something to say | The first time one of the party has a gold "!" over them, or something to say with you beside them |
+| Waiting at the Flagon | The first time anyone's waiting at camp |
+| Every control | Once you've had five tips: Esc, then HOW TO PLAY |
+| The fight's and the bag's | Written, and waiting for the screens they're about: `combat-start` to `combat-victory`, `inventory-open`, `inventory-equip`, `inventory-potion` and `loot` |
+
+The conversation's tips (going on, answering, the dice) and the wheel are only in HOW TO PLAY: a
+conversation has the whole screen, and there's no single moment to say the wheel zooms. The map
+screen notices the moments in `ExploreScreen.Tutorial.cs`, since nearly all of them are things it
+already knows every frame (who's nearest, who's marked, what you're to do next), and the few that
+are something you do (talking, using something, opening the map) tell it from where they happen.
+The proof run keeps the tips quiet (`Tutorials.Quiet`), so its shots are the same as they were and
+nothing waits on a press it can't make; `ProofTip` puts one up for a shot of its card.
+
 ## The walker
 
 Every character sheet is one layout, so the paperdoll's layers can stack: 32x48 frames (the same
@@ -570,10 +903,9 @@ that go with them; everyone who's a person has the one shape, and `Creatures` ha
 
 `WalkerSprite` is The Black Box's on the new layout: it cuts frames from a sheet, walks through
 columns 1 to 4, and fires `Stepped` on 1 and 3, when a foot lands, so the footsteps match the feet.
-The footstep is grass or stone depending on the ground tile under you. For now the party is just
-the body, in smallclothes; the paperdoll puts hair, a face and clothes on it later. The townsfolk
-have sheets of their own, cut from my pictures already dressed, and since they only stand and
-walk, theirs stop after the first five columns.
+The footstep is grass or stone depending on the ground tile under you. The party's sheets are
+baked by the paperdoll, below. The townsfolk have sheets of their own, cut from my pictures already
+dressed, and since they only stand and walk, theirs stop after the first five columns.
 
 The party is all one body: the youth off my townsperson sheet, the best drawn walker I have, so
 everyone looks like they belong with the townsfolk. `tools/generate_paperdoll.py` takes him apart:
@@ -586,13 +918,46 @@ a Sylvan's pointed ears, a Wildkin's wolf, hawk or bear ears and a wolf's tail, 
 horns (curled or swept) and burning tail, and the hats (a bandana, a tricorn, the Watch's helm). A
 tail comes in two halves, like the cape, since it's behind you facing down and in front of you
 facing up. The Stoneborn and the Hearthling are shorter, so every layer is drawn again for each
-build, with rows taken out of the torso and legs: `Paperdoll/Stout/` and `Paperdoll/Small/`. `Paperdoll.Compose` lays the sheets someone's look calls
-for over each other in `PaperdollOrder`, and `CharacterPalettes` swaps each key shade for the same
-shade of the preset their look picks, out of `character-palettes.png`: six skins, eight hair
+build, with rows taken out of the torso and legs: `Paperdoll/Stout/` and `Paperdoll/Small/`.
+`Paperdoll.Compose` lays the sheets someone's look and gear call for over each other, in the order
+`PaperdollOrder` gives for each way they face, and `CharacterPalettes` swaps each key shade for the
+same shade of the preset their look picks, out of `character-palettes.png`: six skins, eight hair
 colours, six eye colours, five shirts, eight vests, six for the legs and six cloaks. That's The Black
-Box's palette swap, done once per look with `GetData` and `SetData`, not every frame, and two
-people who look alike share one sheet. For now his sheets only go as far as the fifth column; the
-fighting columns come with combat.
+Box's palette swap, done once per change with `GetData` and `SetData`, not every frame, and two
+people who look alike and are dressed alike share one sheet (`Paperdoll.Key`).
+
+He was only ever drawn standing and walking, so the five fighting columns are his standing frame
+posed like a paper puppet. Each frame has one map of where every pixel in it comes from, and every
+layer goes through the same map, so a hat stays on his head and a sleeve on his arm and the layers
+still stack. His arms come off at the shoulder and go where the frame wants them, he leans from his
+feet, sinks or comes up at the knee, and his feet go apart. Winding up, the weapon arm goes up over
+his head; striking, it comes across in front of him from the front, straight out from the side, and
+stays up for a blow over the head from behind; casting, both arms go up from the front, and from
+the side he pushes the spell out with both hands; hurt, he's knocked back and his knees go; downed,
+the whole of him is turned onto his back across the frame, with rows out of his legs and body if
+he's too long to fit. From the side his near arm is the back of him, so when it moves the gap is
+filled from his body in front of it. A cape's back half and a tail's hang behind him and don't go
+with his arms.
+
+Gear is more layers, named the way the items name them: nine body armours (padded, leather,
+studded, hide, a chain shirt, scale, a mail hauberk, plate and a robe), three helms (a leather cap,
+a great helm that hides the hair, and a circlet), gloves and gauntlets, leather boots and iron ones,
+the cloak (which is the cape), two shields and thirteen weapons. What's worn is drawn onto his frames
+from the same measurements as the hats, so it's made into the other builds and posed like the rest.
+Cloth gear is in his vest's keys, so a robe comes out whatever his vest is dyed; metal and leather
+have keys of their own, and `gear-palettes.png` has those and a few tints (iron, blackened steel,
+bronze and gold; dark, black, tan and red leather), so `weapon-longsword:gold` is the same sheet in
+gold. What's held has to swing, so it isn't posed: each weapon and shield is drawn on every build's
+own frames from wherever the hand holding it has got to. The weapon is in his right hand from the
+front and from behind and the hand nearer you from the side (the two side rows are each other in a
+mirror), lifted over the shoulder to wind up and brought down or driven in to strike. A bow or a
+crossbow is carried in the other hand; winding up he takes an arrow from the quiver on his back,
+and striking it's in his bow hand at full draw. A staff is held up high to cast. The shield is on
+the other arm, over him facing you and behind him every other way, with its rim showing past him.
+Anything long enough to go off the edge of a frame is cut short, as if it's pointing a little
+towards you or away. `ExploreScreen` dresses each party member in what their `Equipment` holds
+(`Paperdoll.GearOf` reads each item's `Layer`), and `Paperdoll` checks every layer is there for
+every build when it loads, and that every item's `Layer` is one it has.
 
 ## Saving
 
@@ -602,7 +967,7 @@ because `bin/` gets deleted by every clean build.
 
 | File | What it is |
 | --- | --- |
-| `SaveData` | The whole save: the map (and where you came in, while you're inside a building), the party (each with where they're standing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
+| `SaveData` | The whole save: the map (and where you came in, while you're inside a building), the party (each with where they're standing and what they're wearing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, the party's bag, the tutorial tips already shown, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
 | `SaveSlot` | One slot as the form sees it: empty, occupied or unreadable, plus the line printed on it |
 | `SaveSystem` | Reads, writes and erases slots. The only thing in the project that touches a save file |
 
@@ -618,16 +983,18 @@ The same three decisions as The Black Box:
   forward when a field changes, one version at a time. Version 2 is the party: version 1 had one X,
   Y and Facing for you, and upgrading gives it the starting party with you standing there. Version
   3 is the Soul-Bound: Valen becomes them, keeping his name and look, the placeholders go, and the
-  Prologue counts as done, since those games started on the harbour. Those old fields only make it
-  as far as `Upgrade` because `SaveData.Extra` keeps whatever this build doesn't have a property
-  for.
+  Prologue counts as done, since those games started on the harbour. Version 4 is items: everyone in
+  the party and at camp gets dressed in their kit, and the bag gets the two healing potions a new
+  game starts with. Those old fields only make it as far as `Upgrade` because `SaveData.Extra` keeps
+  whatever this build doesn't have a property for.
 
 Enums go in by name (`"Facing": "Up"`), so reordering one is safe and renaming one breaks saves; a
 number where a name should be makes the slot unreadable. Things on a map are kept as `map/id`, like
 `road/camp` for the chest at the camp, so two maps can each have a chest called chest. What's been
 seen of a map is its bits packed eight to a byte, which JSON writes as base64. A list I've nulled by
 hand comes back empty instead of crashing, a save with nobody in the party gets the starting party,
-hit points get pulled back between 0 and the most someone can have, and a position off the map or
+anything in the bag or worn that this build hasn't got is dropped (something worn where it doesn't
+go goes back in the bag), hit points get pulled back between 0 and the most someone can have, and a position off the map or
 inside a wall puts you on the map's start. A class the game doesn't have makes the slot unreadable.
 
 A new game only goes in a numbered slot, and it's written as soon as you pick one, so if the slot
@@ -661,6 +1028,8 @@ python tools/generate_audio.py embers pause    # just these
 | *Meadowlark* | The Old Road and the fields round Questeria | 136 BPM in G major, in three, 48 bars. The only waltz: the lute goes low-strum-strum under a flute tune that leaps up a sixth and skips back down like a lark going up, the middle climbs to the high E over held strings, and the last time round chimes ring an octave over the tune with a tambourine. A frame drum on the downbeats, small birds either side and a breeze |
 | *Sunspire* | Sunspire Keep | 72 BPM in D major leaning Mixolydian, 18 bars. Far-off bells and two horns calling while the timpani roll in, then a trumpet plays a stately tune in dotted steps over held horn chords with a harp running up every chord; the second time the violins take it to the high D over a choir, chimes and a field drum walking it like a procession. Ends C to A, back round to D |
 | *Salt and Lanterns* | The Gull's Wager | 60 BPM in E minor with every beat in three, so it rocks like a hull, 16 bars. The lute picks low, high, middle in each beat, a flute tune that keeps lifting to the G comes in at bar 5, a frame drum knocks like the hull on a swell, and the sea rolls in and out under it all, four long waves to a loop |
+| *Steel* | Fights | 136 BPM in D minor, 32 bars. The low strings drive eighths on the bass in octaves the whole way, leaning on a 3+3+2 with the timpani, and the horns play Steel's call in octaves: D, the A a fifth up, the D an octave up. The trumpet takes it an octave higher with a choir and a field drum, the middle turns to E flat against the D with the violins climbing over stabbing horns and the lute picking sixteenths, and the trumpet and the horns throw the call out once more before the field drum rolls it round. A cymbal crashes in every section |
+| *The Hunger* | Boss fights | 96 BPM in A Phrygian, 24 bars. Steel turned inside out: the black crystal's hum throbbing under it all, the strings grinding sixteenths that catch on the semitone above, a great bell and the war drum pounding. The low brass play Steel's call bent (the fifth a tritone, and it falls onto the semitone above home instead of home), the trumpet tries Steel's theme as it was and its last note is dragged flat under them, then the choir, the violins shrieking a semitone apart, the trumpet bending the call too and the crystal's glass ringing it high |
 
 Each song is an exact number of bars long and wraps its own echoes round to the start, so it loops
 under `MediaPlayer.IsRepeating` without a seam. A map's file says which song plays on it. The sound
@@ -678,7 +1047,16 @@ and then two in step, and a ship's bell rung three times for all hands. The road
 a gloomfang howling and another answering, the black crystal's hum (two notes rubbing a semitone
 apart, throbbing three times and sagging flat at each throb), war horns a long way off grinding a
 semitone apart, a bow loosed and the arrow hissing away, and a coin flipped, caught and set down
-on another.
+on another. The fights brought nineteen more, and five of them borrow Steel's call so a fight
+sounds like one piece: a blade landing (a swish in, the edge biting, the blade ringing), a miss
+whooshing past, a critical hit with a boom under it and the call flaring on chimes, a blunt thud, a
+blow taken on a shield, a bow loosed quicker and tighter than the story's, a spell let go, fire
+catching and roaring, frost cracking as it spreads, a heal going up a major chord on soft bells, a
+potion uncorked and gulped, the Soul-Link (two heartbeats falling into step and two voices sliding
+onto one note), your turn (the call run up on plucked strings), someone going down with one
+heartbeat after, something dying, the victory (the call on the trumpet over the horns), the defeat
+(the call upside down over a choir and a great bell), gear buckled on, and a purse set down on a
+shop counter.
 
 `Audio/AudioManager` is where all of it lives: the same `Content.Load<Song>`, `MediaPlayer` and
 `SoundEffect.Play` calls as the audio tutorial, in one game service any screen can reach, with a
@@ -705,9 +1083,11 @@ fades the old one out and the new one in.
 | Questeria's `Props/*.png` | `PropSprite` | The same, cut from my pictures: the palace, the temple, the guildhall, the city gate, the fountain, statues, lamps, banners, benches, market stalls, trees, bushes and flowers, the quest board, and the waypoint crystal, dim then lit. The houses: the four I painted whole, and townhouses, cottages, turret houses, a bakery, a chapel, a forge, a Watch post, warehouses, the Gilded Flagon with its sign, the Rusty Anvil and a fishmonger's, put together by `cut_supplied.py` from the walls, roofs, doors and shop fronts on my sheets, each in blue, pink, teal and plum roofs. The docks' fish stalls, net racks and harbour bell, crates, sacks and barrels, wells, pumps, washing lines, carts and planters |
 | `People/*.png` | `WalkerSprite` | Seventeen townsfolk, cut from my pictures, in the first five columns of the 10x4 layout: standing, and walking |
 | `map-marks.png` | `MapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
-| `Paperdoll/*.png` | `Paperdoll` | The body, six hair styles (one of them bald), five faces, four beards, the skirt, the cape and the two tails in halves, four kinds of ears, two of horns, and three hats, all in the youth's 5x4 layout and his key shades, so they stack and recolour. `Stout/` and `Small/` are every one of them again for the shorter builds. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
+| `Paperdoll/*.png` | `Paperdoll` | The body, six hair styles (one of them bald), five faces, four beards, the skirt, the cape and the two tails in halves, four kinds of ears, two of horns, and the hats; and the gear: nine body armours, three helms, gloves, gauntlets, two kinds of boots, two shields and thirteen weapons. All in the youth's 10x4 layout and his key shades (metal and leather in keys of their own), so they stack and recolour. `Stout/` and `Small/` are every one of them again for the shorter builds. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
 | `character-palettes.png` | `CharacterPalettes` | Five pixels by forty-five: one ramp per row, dark to light. Skins, hair, eyes, shirts, vests, legs and cloaks, each block with its key first |
+| `gear-palettes.png` | `Paperdoll` | Five pixels by ten: metal's keys and its four tints, then leather's keys and its four, one ramp a row, dark to light |
 | `cursors.png` | `CursorSprite` | 5 cursors, 16x16, at 2x: an arrow, a ring to walk, a hand to use something, a speech bubble to talk, a crossed circle for no way |
+| `keycaps.png` | `KeyCaps` | 4 frames, 14x14, at 3x: an ivory key cap with a deeper lip along its bottom, nine-sliced so it's as wide as what's written on it, then the mouse with its left button, its right button and its wheel lit in torchlight |
 | `dice.png` | `DiceRollOverlay` | The d20, 9 frames of 40x40 at 4x: eight tumbling, then the face it lands on with the number drawn over it |
 | `dialogue-icons.png` | `DialogueScreen` | 6 icons, 12x12, at 2x, beside an option: a die for a check, a heart for a flirt, a lock, and the three voices |
 | `markers.png` | `ExploreScreen`, `MapScreen` | Two rows of 14x14 cells at 3x, gold then red: the "!" that bobs over someone with work for you (gold) or an event (red), and the arrows at the edge of the screen pointing to one that's off it, which the game turns a quarter at a time for every direction |
@@ -726,7 +1106,7 @@ and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as Th
 Every PNG in `Content/` is made by a script:
 
 ```
-python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png, dialogue-icons.png and markers.png
+python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png, dialogue-icons.png, markers.png and keycaps.png
 python tools/generate_world.py        # the crypt and forest tilesets, their props (cut or drawn), the torch flame, glow.png and mote.png
 python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship and its deck, its gangplank, mast, lanterns, wheel and rope, and the rowing boat
 python tools/generate_interiors.py    # the inside of the buildings: the interior tileset, the bed, and the taverns' tables and booth
@@ -738,7 +1118,7 @@ python tools/generate_creatures.py    # the creatures' sheets: gloomfangs, the T
 python tools/generate_paintings.py    # the story's paintings and what moves over them, out of the title's pictures
 python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, the houses, the furniture and the townsfolk, out of tools/source/
 python tools/cut_supplied.py buildings  # just the houses (or name props to cut just those)
-python tools/generate_paperdoll.py    # the paperdoll sheets for all three builds and character-palettes.png, off the youth (after cut_supplied.py's people)
+python tools/generate_paperdoll.py    # the paperdoll sheets and the gear for all three builds, character-palettes.png and gear-palettes.png, off the youth (after cut_supplied.py's people)
 ```
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's
@@ -793,12 +1173,14 @@ In the order they're being built:
 2. ~~One map and one walker: the map file format, collision, the camera, walking, the dark with lights in it.~~
 3. ~~The three maps joined up: exits, triggers, chests, doors, levers, the map screen and fast travel.~~
 4. ~~The party: four members, switching between them, followers, click-to-move with A*.~~
-5. The paperdoll and gear: armour you can see, the inventory and the character sheet.
+5. ~~The paperdoll and gear: armour you can see, the inventory and the character sheet.~~
 6. Character creation. ~~Your name, people, class and look, and the Soul-Bound's~~; point buy is still to come.
 7. Dialogue with dice rolls, approval, the quest and the journal. ~~Conversations, choices, checks
    on the dice, clocks, approval~~; the journal is still to come.
-8. Combat, and `--simulate`.
-9. Resting, full saving, and the polish.
+8. ~~Combat, and `--simulate`.~~
+9. Resting, full saving, and the polish. ~~A long rest~~ (the night at sea, the camp in the
+   Mirewood, and a room at the Gilded Flagon, all back to full); short rests and the camp screen
+   are still to come.
 
 The story goes in alongside them, in its own order:
 
@@ -812,9 +1194,8 @@ The story goes in alongside them, in its own order:
    party and the caravan for Greywatch leaving from the east gate at dawn.
 5. Act 2, with the eclipse.
 6. Act 3.
-7. Every fight card swapped for its fight, as combat comes in.
+7. ~~Every fight card swapped for its fight, as combat comes in.~~
 
-The Soul-Link (the two of you fighting as one) comes with combat, and so do the barks in fights.
 The Soul-Bound's remarks turning colder as their ambition grows come with Act 2. The side quests'
 hooks are in, and the quests behind them come with the chapters they belong to.
 The companions' personal quests have their hooks set in this stretch (see COMPANIONS.md), and
@@ -827,13 +1208,16 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
-- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
+- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, `ExploreScreen.Tutorial.cs` for the tutorial's tips, `ExploreScreen.Items.cs` for I and C, the shops and what goes in the bag, and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
 - `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
 - `Characters/` is the walking sprite and the shape of its frames (`WalkerSprite` and `WalkerShape`), the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), the beasts (`Creature` and `Creatures`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
 - `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, and the scripts themselves in `Dialogue/Scripts/`, a file per chapter.
 - `Story/` is the story's tables: `Meters`, `KeyItems`, `Paintings`, `Cast`, the quest board's `Postings`, and `Banters`.
-- `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, and the classes in `ClassCatalog`.
-- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board and the chapters' card, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
+- `Tutorial/` is the tutorial's tips, which draw nothing: `TutorialTip`, every one of them in `TutorialCatalog`, and `Tutorials` for which a game has seen and which are waiting. `TutorialPanel` and `KeyCaps` in `Components/` show them.
+- `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
+- `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the catalogs (`AbilityCatalog`, `ResourceCatalog`, `EnemyCatalog`, `EncounterCatalog`), `EnemyMind` for the AI, `CombatSimulator` for `--simulate`, and the grid it all happens on (`ICombatGrid`, `OpenGround`, `Measure`).
+- `Items/` is everything that can be carried, worn or sold: `ItemDefinition` and `ItemCatalog`, the bag (`Inventory` over the save's `ItemStack`s), the shops (`ShopDefinition`, `ShopCatalog`) and what foes drop (`LootTable`, `LootResult`, `LootTableCatalog`). The inventory's and the shops' rules are here too, drawing nothing: `Wardrobe`, `Trade`, `GearComparison`, `ItemReadout` and `BagOrder`.
+- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.
 - `Particles/` is the particle engine, and the title's petals and motes built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.

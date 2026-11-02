@@ -144,9 +144,9 @@ prop gloom-mushroom-small 26.6 22.4
 prop crate-stack 3.6 22.6
 prop barrel 5.6 22.8
 prop sack-pile 3 25.8
-chest store 5.2 25.2 gold=25
+chest store 5.2 25.2 gold=25 items=alchemists-fire,healing-potion
 prop gloom-mushroom 29.6 24
-chest seep 32.5 23.6 gold=35
+chest seep 32.5 23.6 gold=35 items=black-crystal-shard
 
 ; The first roots, across the way north out of the cut at its west end. Walk up to them and Sera
 ; parts them.
@@ -185,4 +185,4 @@ prop bones 30.4 9.8
 prop bones 28.6 13.6
 prop gloom-mushroom 19.2 4.6
 prop gloom-mushroom 32.6 5.2
-chest den-chest 32 13 gold=60
+chest den-chest 32 13 gold=60 items=greater-healing-potion,black-crystal-shard

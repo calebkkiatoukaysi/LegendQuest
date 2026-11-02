@@ -9,8 +9,10 @@ namespace LegendQuest.Dialogue.Scripts;
 /// </summary>
 /// <remarks>
 /// Every line is STORY.md's, scenes P-01 to P-05; the ids are the scene ids lowercased. The
-/// sea-wraith fight is a card until combat exists, with the Soul-Bound's barks round it, and the
-/// Soul-Link it teaches comes with combat too.
+/// voyage ends on the bell and the wraiths coming over the rail, and the fight they start is the
+/// guided one (EncounterCatalog's p-05-wraiths): it teaches moving, attacking, an ability, the
+/// Soul-Link and ending a turn, and the Soul-Bound's two P-05 lines are its barks. Winning it plays
+/// the dawn.
 /// </remarks>
 public static class Prologue
 {
@@ -22,6 +24,12 @@ public static class Prologue
 
     /// <summary>The flag the end of the Prologue sets: you're coming into Questeria's harbour.</summary>
     public const string Done = "prologue-done";
+
+    /// <summary>The flag the lookout's bell sets: the sea-wraiths are over the Gull's Wager's rail.</summary>
+    public const string WraithsSighted = "wraiths-sighted";
+
+    /// <summary>The sea-wraiths are beaten: they're gone from the deck.</summary>
+    public const string WraithsBeaten = "wraiths-beaten";
 
     /// <summary>P-01: the card before anything.</summary>
     public static readonly DialogueScript TitleCard = new()
@@ -84,7 +92,7 @@ public static class Prologue
         },
     };
 
-    /// <summary>P-04 and P-05: on the deck at night, two days out, then the sea-wraiths, and Questeria rising out of the sea at dawn.</summary>
+    /// <summary>P-04 and the start of P-05: on the deck at night, two days out, then the bell, and the sea-wraiths over the rail.</summary>
     public static readonly DialogueScript Voyage = new()
     {
         Id = "p-04",
@@ -131,13 +139,35 @@ public static class Prologue
             new() { Id = "rent", Speaker = SoulBound, Line = "Small steps. Big dreams.", Next = "bell" },
             new() { Id = "crowns", Speaker = SoulBound, Direction = "a pause, then a smile", Line = "Then I'll just have to want it more than they did." },
 
-            // P-05: the bell, the wraiths, and the fight as a card until combat exists.
-            new() { Id = "bell", Speaker = "lookout", Direction = "from the crow's nest, over the bell", Line = "Sea-wraiths off the port bow!", Sound = Sfx.ShipBell },
-            new() { Speaker = SoulBound, Direction = "drawing", Line = "Together! Just like the old days!" },
-            new() { Speaker = Speakers.Card, Line = "The sea-wraiths come over the rail, and go back into the sea in pieces." },
-            new() { Speaker = SoulBound, Direction = "breathing hard", Line = "I've got you. I've always got you." },
+            // P-05: the bell, and the wraiths over the port rail; the fight is the tutorial, and the
+            // Soul-Bound's line before it is the Soul-Link it teaches, said the way they'd say it.
+            new()
+            {
+                Id = "bell", Speaker = "lookout", Direction = "from the crow's nest, over the bell", Line = "Sea-wraiths off the port bow!", Sound = Sfx.ShipBell,
+                Effects = new[] { DialogueEffect.Set(WraithsSighted) },
+            },
+            new() { Speaker = Speakers.Narrator, Line = "Pale shapes haul themselves up over the port rail, the sea running out of them, and come along the deck." },
+            new()
+            {
+                Speaker = SoulBound, Direction = "drawing", Line = "Same as the old days. Pick one, and we hit it together.",
+                Effects = new[] { DialogueEffect.Fight("p-05-wraiths") },
+            },
+        },
+    };
 
-            new() { Speaker = Speakers.Narrator, Painting = "questeria-dawn", Line = "Dawn breaks. Questeria rises on its hill: white walls, and a golden spire." },
+    /// <summary>The rest of P-05, once the wraiths are beaten: the Soul-Bound's hand on your shoulder, and Questeria rising out of the sea at dawn.</summary>
+    /// <remarks>EncounterCatalog's p-05-wraiths plays it when the fight's won.</remarks>
+    public static readonly DialogueScript Dawn = new()
+    {
+        Id = "p-05-wraiths-after",
+        Nodes = new DialogueNode[]
+        {
+            new() { Speaker = SoulBound, Direction = "breathing hard, a hand on your shoulder", Line = "I've got you. I've always got you." },
+            new()
+            {
+                Speaker = Speakers.Narrator, Painting = "questeria-dawn", Line = "Dawn breaks. Questeria rises on its hill: white walls, and a golden spire.",
+                Effects = new[] { DialogueEffect.Rest() },
+            },
             new() { Speaker = "odelle", Painting = "questeria-dawn", Line = "There she is. Questeria, Capital of Fable. Don't let the shine fool you, it's got teeth like any city." },
             new() { Speaker = SoulBound, Painting = "questeria-dawn", Direction = "awed", Line = "Look at that. That's what a kingdom looks like." },
             new()

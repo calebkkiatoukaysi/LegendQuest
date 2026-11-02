@@ -412,6 +412,7 @@ public class CharacterCreationScreen : MenuScreen
     {
         _member.Class = id;
         _member.Scores = ClassCatalog.Get(id).Recommended;
+        _member.PutOn(Origins.KitFor(_member.Id, id));
         _member.Hp = _member.MaxHp;
         Refresh();
     }
@@ -518,7 +519,7 @@ public class CharacterCreationScreen : MenuScreen
 
         if (ScreenManager is null || _font is null) return;
         _sheet?.Dispose();
-        _sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, _member.Look);
+        _sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, _member.Look, Paperdoll.GearOf(_member));
     }
 
     /// <summary>The tabs under the heading, each tab's rows down the panel, and the buttons along the bottom.</summary>

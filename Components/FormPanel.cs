@@ -22,6 +22,9 @@ public class FormPanel
     /// <summary>How dark the veil is. Dark enough to read the panel, but you can still see the torches.</summary>
     private const float VeilOpacity = 0.62f;
 
+    /// <summary>How dark the veil is behind a screen that fills most of the canvas, the inventory or a shop, so nothing of the map's own words shows round its edges.</summary>
+    public const float FullVeil = 0.92f;
+
     /// <summary>Padding inside the panel. The forms lay things out from this.</summary>
     public const int Padding = 40;
 
@@ -42,10 +45,11 @@ public class FormPanel
     /// <summary>Dims the whole screen behind the form.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with.</param>
     /// <param name="opacity">How far the form has faded in, 0 to 1.</param>
-    public void DrawVeil(SpriteBatch spriteBatch, float opacity)
+    /// <param name="strength">How dark it is at its darkest: the usual veil, or FullVeil.</param>
+    public void DrawVeil(SpriteBatch spriteBatch, float opacity, float strength = VeilOpacity)
     {
         spriteBatch.Draw(_pixel, new Rectangle(0, 0, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight), null,
-            Palette.Veil * (VeilOpacity * opacity), 0f, Vector2.Zero, SpriteEffects.None, Layers.Veil);
+            Palette.Veil * (strength * opacity), 0f, Vector2.Zero, SpriteEffects.None, Layers.Veil);
     }
 
     /// <summary>Draws the panel, nine-sliced so it can be any size.</summary>

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace LegendQuest.World;
@@ -43,8 +45,10 @@ public sealed class MapInteractable
     public required string Name { get; init; }
 
     /// <summary>A chest: how much gold is in it.</summary>
-    /// <remarks>Gold only until there are items. Then a chest gets a list of them too.</remarks>
     public int Gold { get; init; }
+
+    /// <summary>A chest: the items in it, by id in ItemCatalog, one entry for each, so the same one twice is two of it. Empty for anything else.</summary>
+    public IReadOnlyList<string> Items { get; init; } = Array.Empty<string>();
 
     /// <summary>A door: whether it's locked. It stays that way until there are keys and checks to open it with.</summary>
     public bool Locked { get; init; }

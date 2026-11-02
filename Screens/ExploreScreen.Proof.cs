@@ -73,6 +73,9 @@ public partial class ExploreScreen
         }
         _proofPress = false;
 
+        // A fight has the run to itself while it's on, whatever part of the run it is.
+        if (ProofInFight) return FightStep();
+
         return stage switch
         {
             ProofStage.Voyage => VoyageStep(frame),
@@ -160,12 +163,12 @@ public partial class ExploreScreen
             return null;
         }
 
-        // Before the Red Gulls: stand off to the west of them, the red "!" over Tomas, then walk east into them.
+        // Before the Red Gulls: stand off to the west of them, short of the trigger, the red "!" over Tomas, then walk east into them.
         if (!_game.Flags.Contains(Act1Chapter1.DocksDone))
         {
             if (ProofOnce("docks-approach"))
             {
-                ProofPlace(24.5f, 15.5f, Direction.Right);
+                ProofPlace(22.5f, 15.5f, Direction.Right);
                 _proofMark = frame;
             }
             else if (frame == _proofMark + 30)

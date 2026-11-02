@@ -9,6 +9,7 @@ using LegendQuest.Components;
 using LegendQuest.Dialogue;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
+using LegendQuest.Tutorial;
 using LegendQuest.World;
 
 namespace LegendQuest.Screens;
@@ -210,6 +211,7 @@ public partial class ExploreScreen
     /// <param name="npc">Who.</param>
     private void Talk(Npc npc)
     {
+        TutorialDone(TutorialCatalog.Talk);
         Leader.Face(npc.Walker.Position);
 
         DialogueScript script = ScriptFor(npc) ?? (_campers.Contains(npc) ? CampOffer(npc.Definition.Id) : null);
@@ -223,6 +225,7 @@ public partial class ExploreScreen
     {
         if (ScriptFor(_game.Party[index]) is not DialogueScript script) return;
 
+        TutorialDone(TutorialCatalog.Companion);
         WalkerSprite walker = _walkers[index];
         Leader.Face(walker.Position);
         walker.Face(Leader.Position);
@@ -254,6 +257,7 @@ public partial class ExploreScreen
     /// <param name="thing">What to use.</param>
     private void Use(MapInteractable thing)
     {
+        TutorialUsed(thing);
         Leader.IsWalking = false;
         Leader.Face(thing.Foot);
 
@@ -280,6 +284,7 @@ public partial class ExploreScreen
             WorldEventKind.DoorLocked or WorldEventKind.DoorStuck => Sfx.DoorLocked,
             WorldEventKind.LeverPulled => Sfx.Lever,
             WorldEventKind.WaypointFound => Sfx.Waypoint,
+            WorldEventKind.ItemsTaken => Sfx.Pickup,
             _ => null,
         };
 
@@ -290,7 +295,7 @@ public partial class ExploreScreen
         }
 
         if (sound is Sfx play) _audio.Play(play);
-        if (happened.Text is not null) _toast.Show(happened.Text);
+        Announce(happened);
     }
 
     /// <summary>Catches the pictures and the markers up with the save after something's been used or walked into, and if a door moved, plays it and lets the light, the sight and the paths through again.</summary>
@@ -344,6 +349,7 @@ public partial class ExploreScreen
     private void OpenMap(MapInteractable waypoint)
     {
         Halt();
+        TutorialDone(TutorialCatalog.Map);
 
         var map = new MapScreen(_map, _tilemap, AllProps(), _seen, _world, Leader.Position, MapMarkers(), travelling: waypoint is not null);
         map.Travel += to => Leave(to, _world.FoundWaypoint(to).Beside, Direction.Down);

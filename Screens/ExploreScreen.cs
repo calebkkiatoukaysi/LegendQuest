@@ -27,8 +27,9 @@ namespace LegendQuest.Screens;
 /// one walks and draws, ExploreScreen.Party has the party and the followers, ExploreScreen.Pointer
 /// has the mouse, ExploreScreen.World has using things, talking, triggers and the ways off the map,
 /// ExploreScreen.Banter has the banter and the lines over people's heads, ExploreScreen.Markers
-/// has the "!"s, and ExploreScreen.Camp has whoever's waiting at camp. The fighting gets a partial
-/// of its own later.
+/// has the "!"s, ExploreScreen.Camp has whoever's waiting at camp, and ExploreScreen.Tutorial has
+/// the tutorial's tips. A fight on the map is ExploreScreen.Combat and the partials named after it,
+/// which take over the input, the running and the drawing while it's on.
 /// </remarks>
 public partial class ExploreScreen : GameScreen
 {
@@ -93,7 +94,10 @@ public partial class ExploreScreen : GameScreen
     private readonly List<Npc> _everyNpc = new();
     private readonly Camera2D _camera = new(new Point(LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight));
     private readonly Paperdoll _paperdoll = new();
-    private readonly Random _random = new();
+    private readonly Random _random = ProofSeed is int seed ? new Random(seed) : new Random();
+
+    /// <summary>The seed every map's dice start from under the proof run, so its fights go the same way every time, or null to roll freely.</summary>
+    internal static int? ProofSeed { get; set; }
 
     /// <summary>The party's baked sheets, one per look, so two who look alike share one.</summary>
     private readonly Dictionary<string, Texture2D> _sheets = new();
@@ -163,6 +167,7 @@ public partial class ExploreScreen : GameScreen
         _toast.LoadContent(_content);
         _tooltip.LoadContent(_content);
         _strip.LoadContent(_content, ScreenManager.GraphicsDevice);
+        LoadTutorial();
 
         // The townsfolk and the creatures come dressed. The party, whoever's waiting at camp and the
         // story's cast are baked off the paperdoll, each to how they look, unless one of the cast is
@@ -202,19 +207,23 @@ public partial class ExploreScreen : GameScreen
         _content?.Unload();
     }
 
-    /// <summary>The pause menu, the map, switching who you control, using things, zooming, the mouse, and walking.</summary>
+    /// <summary>The pause menu, a tip's card, the map, switching who you control, using things, zooming, the mouse, and walking.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="input">The input this frame.</param>
     public override void HandleInput(GameTime gameTime, InputState input)
     {
         if (HandleArrivalInput(input)) return;
+        if (HandleCombatInput(gameTime, input)) return;
 
         if (_pause.Occurred(input))
         {
             Halt();
-            ScreenManager.AddScreen(new PauseMenuScreen());
+            ScreenManager.AddScreen(new PauseMenuScreen(() => OpenInventory(InventoryPage.Bag)));
             return;
         }
+
+        if (HandleTutorialInput(input)) return;
+        if (HandleInventoryInput(input)) return;
 
         if (_openMap.Occurred(input))
         {
@@ -250,6 +259,7 @@ public partial class ExploreScreen : GameScreen
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
     {
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+        UpdateTutorial(gameTime);
 
         // Paused, so nothing moves, not even the clock, and the banter's line waits to be read.
         if (!IsActive)
@@ -260,12 +270,14 @@ public partial class ExploreScreen : GameScreen
         }
 
         _game.PlaytimeSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+        if (UpdateCombat(gameTime)) return;
 
         MoveTownsfolk(gameTime);
         foreach (Npc npc in _npcs) npc.Update(gameTime);
         foreach (TorchSprite torch in _torches) torch.Update(gameTime);
         _toast.Update(gameTime);
         if (UpdateArrival(gameTime)) return;
+        if (ResumeSavedFight()) return;
         if (PlayScenes()) return;
 
         MoveFollowers(gameTime);
@@ -284,6 +296,12 @@ public partial class ExploreScreen : GameScreen
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
+        if (InCombat)
+        {
+            DrawCombat(gameTime);
+            return;
+        }
+
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
         Matrix world = _camera.Transform;
         float pixel = _camera.Pixel;
@@ -370,6 +388,9 @@ public partial class ExploreScreen : GameScreen
         _toast.Draw(spriteBatch, alpha);
         spriteBatch.End();
 
+        // 9. A tutorial tip's card, over everything on the map and under any conversation over it.
+        DrawTutorial(spriteBatch, alpha);
+
         ScreenManager.FadeBackBufferToBlack(TransitionPosition);
     }
 
@@ -403,11 +424,11 @@ public partial class ExploreScreen : GameScreen
         return band;
     }
 
-    /// <summary>Gets a party member's walker ready to walk: its shadow, their baked sheet, and their footsteps.</summary>
+    /// <summary>Gets a party member's walker ready to walk: its shadow, their sheet baked with what they're wearing, and their footsteps.</summary>
     private void DressWalker(WalkerSprite walker, PartyMember member)
     {
         walker.LoadContent(_content);
-        walker.Sheet = SheetFor(member.Look);
+        walker.Sheet = SheetFor(member.Look, Paperdoll.GearOf(member));
         walker.Stepped += () => Footstep(walker);
     }
 
@@ -437,7 +458,7 @@ public partial class ExploreScreen : GameScreen
     private bool RefreshPresence()
     {
         List<PropSprite> props = _everyProp.FindAll(prop => prop.Presence.Holds(_game.Flags));
-        List<Npc> npcs = _everyNpc.FindAll(npc => npc.Definition.Presence.Holds(_game.Flags));
+        List<Npc> npcs = _everyNpc.FindAll(npc => npc.Definition.Presence.Holds(_game.Flags) && !_fallen.Contains(npc));
         var things = _everyThing.FindAll(each => each.Thing.Presence.Holds(_game.Flags));
         bool changed = !props.SequenceEqual(_props) || !npcs.SequenceEqual(_npcs) || !things.SequenceEqual(_things);
 
@@ -453,13 +474,14 @@ public partial class ExploreScreen : GameScreen
         return changed;
     }
 
-    /// <summary>The sheet for a look, baked the first time it's asked for and kept after that.</summary>
-    private Texture2D SheetFor(CharacterLook look)
+    /// <summary>The sheet for a look and the gear they're wearing (none for the townsfolk and the cast), baked the first time it's asked for and kept after that.</summary>
+    private Texture2D SheetFor(CharacterLook look, IReadOnlyList<string> gear = null)
     {
-        if (!_sheets.TryGetValue(look.Key, out Texture2D sheet))
+        string key = Paperdoll.Key(look, gear);
+        if (!_sheets.TryGetValue(key, out Texture2D sheet))
         {
-            sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, look);
-            _sheets[look.Key] = sheet;
+            sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, look, gear);
+            _sheets[key] = sheet;
         }
         return sheet;
     }

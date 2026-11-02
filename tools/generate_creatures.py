@@ -1,6 +1,7 @@
 """
-The creatures: the gloomfangs and the Thornmother out of the Mirewood, the Hollowed that come out
-of Doomward (footmen, hexers and sappers), and the constructs that guard the Old Crown Vault.
+The creatures: the sea-wraiths that come over the Gull's Wager's rail, the gloomfangs and the
+Thornmother out of the Mirewood, the Hollowed that come out of Doomward (footmen, hexers and
+sappers), and the constructs that guard the Old Crown Vault.
 
     python tools/generate_creatures.py [creature ...]
 
@@ -39,6 +40,9 @@ STAND, WIND_UP, STRIKE, CAST, HURT, DOWNED = 0, 5, 6, 7, 8, 9
 #: the point the game draws a walker from is the row under the soles, as it is for the people.
 UNDER_FEET = 2
 
+#: How opaque the parts of a see-through creature that aren't see-through are.
+SOLID_ALPHA = 240
+
 #: Where the light comes from: up and to the left, and a good way towards you (made a unit long).
 LIGHT = tuple(v / math.sqrt(0.45 ** 2 + 0.6 ** 2 + 0.66 ** 2) for v in (-0.45, -0.6, 0.66))
 
@@ -67,6 +71,10 @@ class Figure:
         self.owner = {}
         self.parts = 0
         self.over = []
+        # How see-through it is: none of it, unless a creature says how opaque each row is. The
+        # solid pixels (a wraith's kelp, its eyes) stay nearly opaque whatever.
+        self.opacity = None
+        self.solid = set()
 
     @property
     def ground(self):
@@ -205,16 +213,22 @@ class Figure:
         ys = [y for (px, y) in self.colour if px == self.at(x, 0)[0]]
         return min(ys) if ys else None
 
+    def alpha(self, p):
+        """How opaque a pixel of the frame comes out."""
+        if self.opacity is None:
+            return 255
+        return SOLID_ALPHA if p in self.solid else self.opacity(p[1])
+
     def render(self, outline):
         """The finished frame: every part, an outline round the lot, then the glows over it."""
         img = new_image(self.w, self.h)
         for (x, y), rgb in self.colour.items():
             if 0 <= x < self.w and 0 <= y < self.h:
-                img[y][x] = [rgb[0], rgb[1], rgb[2], 255]
+                img[y][x] = [rgb[0], rgb[1], rgb[2], self.alpha((x, y))]
         for (x, y) in list(self.colour):
             for n in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
                 if n not in self.colour and 0 <= n[0] < self.w and 0 <= n[1] < self.h:
-                    img[n[1]][n[0]] = [outline[0], outline[1], outline[2], 255]
+                    img[n[1]][n[0]] = [outline[0], outline[1], outline[2], self.alpha((x, y))]
         for (x, y), rgba in self.over:
             put(img, x, y, rgba)
         return img
@@ -1993,12 +2007,336 @@ def vault_construct(fig, facing, column):
 
 
 # --------------------------------------------------------------------------- #
+# The sea-wraith
+# --------------------------------------------------------------------------- #
+
+#: A drowned thing gone sea-green and half see-through, pale and cold in its light; the kelp it's
+#: got for hair; its eyes and the cold glow off it; the dark of its mouth and eye sockets; the
+#: water it comes apart into; and its outline.
+WRAITH = ((22, 74, 84), (40, 116, 118), (68, 160, 152), (118, 206, 190), (190, 244, 228))
+KELP = ((20, 42, 34), (34, 70, 46), (56, 104, 58), (92, 140, 72))
+WRAITH_EYE = ((170, 255, 240), (250, 255, 255))
+WRAITH_GLOW = (150, 255, 230)
+DROWNED = (8, 30, 40)
+SEAWATER = ((18, 70, 96), (34, 112, 138), (80, 170, 186), (196, 244, 240))
+WRAITH_OUTLINE = (6, 30, 40)
+
+#: How opaque the wraith is down its length: its head and shoulders most, thinning through its
+#: middle to the rags it trails off into, which you can nearly see through.
+WRAITH_TOP_ALPHA = 215
+WRAITH_TAIL_ALPHA = 95
+WRAITH_FADE_FROM, WRAITH_FADE_TO = 28, 44
+
+#: How much more see-through it goes for the flicker when it's hurt.
+WRAITH_FLICKER = 0.5
+
+
+def wraith_pose(column):
+    """How a sea-wraith hangs in a frame. It doesn't walk, it drifts, so its "steps" are its rags
+    and hair streaming and its arms trailing, with the body held at the same height; it rears and
+    spreads its claws to wind up, lunges claws first to strike, throws its head back and wails to
+    cast, flickers half away when it's hurt, and comes apart into water when it's down."""
+    pose = {"lean": 0, "rise": 0, "sway": 0.0, "hands": [(0, 0), (0, 0)], "jaw": 0, "eyes": True,
+            "wail": 0.0, "flicker": False, "claws": False, "phase": 0.0}
+    if 1 <= column <= 4:
+        i = column - 1
+        pose.update(lean=1, sway=(1.0, 0.0, -1.0, 0.0)[i], phase=i / 4.0, hands=[(-1, 1), (-1, 1)])
+    elif column == WIND_UP:
+        pose.update(lean=-2, rise=-2, hands=[(-1, 9), (-1, 9)], jaw=1, claws=True, phase=0.6)
+    elif column == STRIKE:
+        pose.update(lean=3, rise=1, hands=[(5, 4), (4, 3)], jaw=2, claws=True, phase=0.2, sway=-1.0)
+    elif column == CAST:
+        pose.update(rise=-1, hands=[(1, 7), (1, 7)], jaw=2, wail=1.0, phase=0.4)
+    elif column == HURT:
+        pose.update(lean=-2, hands=[(-3, 4), (-3, 5)], jaw=1, eyes=False, flicker=True, phase=0.8)
+    return pose
+
+
+def kelp(fig, points, width, phase, seed):
+    """A strand of kelp hanging off the wraith along a line of points, waving, with a frond
+    widening here and there down it. It's solid, not see-through."""
+    wavy = []
+    for i, (x, y) in enumerate(points):
+        wavy.append((x + math.sin(i * 1.3 + phase * math.tau + seed) * 0.7 * (i > 0), y))
+    radii = [width * (1.0 - 0.35 * i / max(1, len(points) - 1)) for i in range(len(points))]
+    for i in range(1, len(radii) - 1):
+        if hash01(i, seed, 51) < 0.45:
+            radii[i] *= 1.35
+    fig.solid.update(fig.limb(wavy, radii, KELP, seam=False))
+
+
+def claws(fig, x, y, toward, spread):
+    """Three long pale claws off a hand at (x, y), reaching `toward` (a step across and down)."""
+    dx, dy = toward
+    for k in (-1, 0, 1):
+        sx, sy = -dy * k * spread, dx * k * spread
+        for i in range(1, 4):
+            fig.dot(int(math.floor(x + sx * (0.5 + i * 0.3) + dx * i)), int(math.floor(y + sy * (0.5 + i * 0.3) + dy * i)),
+                    WRAITH[4] if i < 3 else WRAITH[3])
+
+
+def drips(fig, x0, x1, y, phase):
+    """Water running off it: a few drops falling from its rags, and the odd one already on the way
+    down."""
+    for i in range(4):
+        x = int(x0 + (x1 - x0) * hash01(i, 0, 81))
+        fall = (phase * 6 + i * 1.7) % 5
+        if y + fall < fig.ground + 2:
+            fig.glow(x, int(y + fall), SEAWATER[3] + (150 - int(fall * 22),))
+
+
+def wraith_glow(fig, x, y, strength):
+    """The cold pale light it gives off, round a point, out past its outline."""
+    reach = 3 + strength * 3
+    for oy in range(-int(reach) - 1, int(reach) + 2):
+        for ox in range(-int(reach) - 1, int(reach) + 2):
+            d = math.hypot(ox, oy * 1.1)
+            if d <= reach and not fig.has(x + ox, y + oy):
+                fig.glow(x + ox, y + oy, WRAITH_GLOW + (int(105 * (1 - d / (reach + 0.5))),))
+
+
+def wraith_face(fig, cx, cy, facing, pose):
+    """Its drowned face: sunken dark sockets with a cold light for eyes, and a mouth hanging open."""
+    open_ = pose["eyes"]
+    if facing == LEFT:
+        sockets = ((int(cx) - 4, int(cy)),)
+        mouth = (int(cx) - 5, int(cy) + 4)
+    else:
+        sockets = ((int(cx) - 4, int(cy)), (int(cx) + 2, int(cy)))
+        mouth = (int(cx) - 1, int(cy) + 4)
+    for x, y in sockets:
+        for ox in (-1, 0, 1, 2):
+            for oy in (0, 1):
+                if (ox in (-1, 2)) and oy == 1:
+                    continue
+                fig.dot(x + ox, y + oy, DROWNED)
+        if open_:
+            fig.dot(x, y, WRAITH_EYE[1])
+            fig.dot(x + 1, y, WRAITH_EYE[0])
+            fig.dot(x, y + 1, WRAITH_EYE[0])
+            fig.solid.update({fig.at(x, y), fig.at(x + 1, y), fig.at(x, y + 1)})
+            fig.glow(x - 2, y, WRAITH_EYE[0] + (110,))
+            fig.glow(x + 3, y, WRAITH_EYE[0] + (90,))
+            fig.glow(x, y - 1, WRAITH_EYE[0] + (90,))
+            fig.glow(x + 1, y - 1, WRAITH_EYE[0] + (60,))
+    gape = 1 + pose["jaw"]
+    for oy in range(gape):
+        for ox in range(2 if facing != LEFT else 1):
+            fig.dot(mouth[0] + ox, mouth[1] + oy, DROWNED)
+    fig.dot(mouth[0] + (2 if facing != LEFT else 1), mouth[1], WRAITH[1])
+
+
+def wraith_front(fig, column, pose, facing):
+    """A sea-wraith facing you (or, with `facing` UP, going away): kelp hanging round its head and
+    down past its shoulders, a thin drowned body, long arms ending in claws, and rags trailing off
+    under it where its legs should be."""
+    cx = 16.0
+    away = facing == UP
+    lean = pose["lean"] * (0.5 if not away else -0.3)
+    rise = pose["rise"]
+    hy = 14 + rise + max(0, lean)
+    phase = pose["phase"]
+    sway = pose["sway"]
+    body, far = WRAITH, shifted(WRAITH, 1)
+
+    # The rags it trails off into, swaying, longest in the middle.
+    for k, (ox, length) in enumerate(((-3.6, 9), (-1.2, 12), (1.2, 11), (3.6, 8))):
+        top = (cx + ox * 0.8, 29 + rise)
+        bend = math.sin(phase * math.tau + k * 1.4) * 1.3 + sway * (0.6 + k * 0.1)
+        fig.limb([top, (cx + ox + bend * 0.5, top[1] + length * 0.5), (cx + ox * 1.2 + bend, top[1] + length)],
+                 [2.2, 1.5, 0.6], far if k % 2 else body)
+    fig.plate([(cx - 5.5, 26 + rise), (cx + 5.5, 26 + rise), (cx + 5.0, 33 + rise), (cx + 2.5, 31 + rise),
+               (cx, 35 + rise), (cx - 2.5, 31.5 + rise), (cx - 5.0, 34 + rise)], body, facing=(-0.2, 0.1, 0.95))
+
+    # The kelp hanging down its back and over its shoulders, behind its arms.
+    for side in (-1, 1):
+        for k, ox in enumerate((6.4, 4.6)):
+            top = (cx + side * ox * 0.8, hy - 4)
+            end_y = hy + 15 + k * 3 - (2 if away else 0)
+            kelp(fig, [top, (cx + side * (ox + 0.6), hy + 2), (cx + side * (ox + 0.4), hy + 8), (cx + side * (ox - 0.2), end_y)],
+                 1.3, phase, k + (3 if side > 0 else 0))
+    fig.limb([(cx, 22 + rise + lean), (cx, 28 + rise)], [4.4, 3.2], body)
+
+    # Arms: long and thin, hanging or reaching, claws at the ends.
+    hands = []
+    for i, (fwd, up) in enumerate(pose["hands"]):
+        side = -1 if i == 0 else 1
+        sx, sy = cx + side * 5.0, 22.5 + rise + lean
+        hx = cx + side * (7.0 + max(0, up) * 0.35) - side * max(0, fwd) * 0.5
+        hyy = 31 + rise - up * 1.3 + max(0, fwd) * 0.4
+        fig.limb([(sx, sy), ((sx + hx) / 2 + side * 1.2, (sy + hyy) / 2), (hx, hyy)], [1.6, 1.3, 1.1], far)
+        fig.ball(hx, hyy + 0.5, 1.4, 1.3, body)
+        hands.append((side, hx, hyy))
+
+    if not away:
+        # Ribs showing through.
+        for y in (24, 26):
+            for x in range(int(cx) - 2, int(cx) + 2):
+                if x != int(cx) - 1 or y != 24:
+                    fig.dot(x, int(y + rise + lean), WRAITH[1])
+
+    # The head, a shade darker so its eyes burn out of it, then the kelp over it.
+    fig.ball(cx, hy, 6.8, 6.4, body, bias=-0.2)
+    fig.ball(cx, hy + 3.6, 4.6, 3.2, body, bias=-0.2, seam=False)
+    if not away:
+        wraith_face(fig, cx, hy + 0.5, DOWN, pose)
+    shaped = {}
+    cap_bottom = hy - 3 if not away else hy + 5
+    for y in range(int(hy - 8), int(cap_bottom) + 1):
+        for x in range(int(cx - 8), int(cx + 8)):
+            nx, ny = (x + 0.5 - cx) / 7.3, (y + 0.5 - (hy - 0.5)) / 7.0
+            if nx * nx + ny * ny <= 1.0:
+                # A ragged fringe: some strands come down further than others.
+                if y > hy - 5 and not away and hash01(x, 0, 91) < 0.5 and abs(x + 0.5 - cx) < 4:
+                    continue
+                shaped[(x, y)] = (nx, ny, math.sqrt(max(0.0, 1 - nx * nx - ny * ny)))
+    fig.solid.update(fig.lay(shaped, KELP))
+    for side in (-1, 1):
+        kelp(fig, [(cx + side * 3.0, hy - 3), (cx + side * 4.2, hy + 1), (cx + side * 4.6, hy + 5)], 0.9, phase, 7 + side)
+    if away:
+        for k in range(-2, 3):
+            kelp(fig, [(cx + k * 2.2, hy + 2), (cx + k * 2.4, hy + 9), (cx + k * 2.2, hy + 14 + abs(k))], 1.2, phase, 11 + k)
+
+    for side, hx, hyy in hands:
+        up = hyy < 26
+        claws(fig, hx, hyy + 1.0, (side * 0.3, -1.0) if up else (side * 0.2, 1.0), 0.9)
+    wraith_glow(fig, int(cx), int(hy), 0.6 + pose["wail"])
+    wraith_glow(fig, int(cx), int(hy) + 12, 0.3)
+    if pose["wail"]:
+        wail(fig, cx, hy + 6)
+    drips(fig, cx - 4, cx + 4, 41 + rise, phase)
+
+
+def wail(fig, x, y):
+    """Its wail: rings of cold light spreading out off its open mouth, and spray thrown up."""
+    for r in (5, 8, 11):
+        for i in range(16):
+            a = i * math.tau / 16
+            if hash01(i, r, 3) < 0.7:
+                fig.glow(int(x + math.cos(a) * r), int(y + math.sin(a) * r * 0.7), WRAITH_GLOW + (int(150 - r * 9),))
+
+
+def wraith_side(fig, column, pose):
+    """A sea-wraith side on, drifting left: leaning into it, the kelp streaming back off its head,
+    its rags trailing out behind and below, its near arm reaching ahead with the claws out."""
+    cx = 16.0
+    lean = pose["lean"]
+    rise = pose["rise"]
+    phase = pose["phase"]
+    sway = pose["sway"]
+    body, far = WRAITH, shifted(WRAITH, 1)
+    top = cx - lean * 0.7
+    hy = 14 + rise
+
+    (w_fwd, w_up), (o_fwd, o_up) = pose["hands"]
+
+    def arm(fwd, up, ramp):
+        sx, sy = top + 0.5, 22.5 + rise
+        hx = sx - 2 - fwd * 1.1 - max(0, up) * 0.2
+        hyy = 30.5 + rise - up * 1.3
+        fig.limb([(sx, sy), ((sx + hx) / 2 + 1.0, (sy + hyy) / 2 + 0.5), (hx, hyy)], [1.5, 1.3, 1.1], ramp)
+        fig.ball(hx, hyy + 0.4, 1.4, 1.3, ramp)
+        return hx, hyy
+
+    arm(o_fwd, o_up, far)
+    for k, (oy, length) in enumerate(((0, 11), (1.5, 13), (3, 10))):
+        start = (cx + 1 + k * 0.8, 28 + rise + oy * 0.3)
+        bend = math.sin(phase * math.tau + k * 1.5) * 1.2 + sway * 0.5
+        fig.limb([start, (start[0] + 2.5 + k, start[1] + length * 0.5 + bend * 0.4),
+                  (start[0] + 4.5 + k * 1.5 + bend, start[1] + length)], [2.2, 1.4, 0.6], far if k == 1 else body)
+    fig.plate([(top - 3.5, 26 + rise), (top + 4.0, 26 + rise), (cx + 6.5, 33 + rise), (cx + 3.5, 31.5 + rise),
+               (cx + 1.0, 35 + rise), (cx - 2.5, 31 + rise)], body, facing=(-0.3, 0.1, 0.95))
+    fig.limb([(top, 22 + rise), (cx + 0.5, 28 + rise)], [3.4, 2.6], body)
+    for k, (ox, length) in enumerate(((3.5, 16), (5.5, 13), (1.8, 18))):
+        start = (top + ox * 0.6, hy - 5)
+        trail = 2.5 + lean * 0.6
+        kelp(fig, [start, (top + ox + trail * 0.5, hy + 1), (top + ox + trail, hy + 7), (top + ox + trail * 1.4, hy - 4 + length)],
+             1.3, phase, 21 + k)
+    fig.ball(top - 0.5, hy, 6.4, 6.4, body, bias=-0.2)
+    fig.ball(top - 2.0, hy + 3.4, 4.2, 3.2, body, bias=-0.2, seam=False)
+    wraith_face(fig, top - 0.5, hy + 0.5, LEFT, pose)
+    shaped = {}
+    for y in range(int(hy - 8), int(hy + 5)):
+        for x in range(int(top - 8), int(top + 8)):
+            nx, ny = (x + 0.5 - (top + 0.8)) / 6.9, (y + 0.5 - (hy - 0.5)) / 7.0
+            if nx * nx + ny * ny > 1.0:
+                continue
+            # The kelp covers the back of the head down to the jaw, and only the crown in front.
+            if x + 0.5 < top - 5.0 + max(0, y - (hy - 5)) * 2.2:
+                continue
+            shaped[(x, y)] = (nx, ny, math.sqrt(max(0.0, 1 - nx * nx - ny * ny)))
+    fig.solid.update(fig.lay(shaped, KELP))
+    kelp(fig, [(top - 4.5, hy - 4), (top - 5.8, hy), (top - 5.6, hy + 4)], 0.9, phase, 29)
+    hx, hyy = arm(w_fwd, w_up, body)
+    up = w_up > 5
+    claws(fig, hx, hyy + 0.8, (-0.8, -0.6) if up else (-0.7, 0.7) if w_fwd > 2 else (-0.2, 1.0), 0.9)
+    wraith_glow(fig, int(top - 1), int(hy), 0.6 + pose["wail"])
+    wraith_glow(fig, int(cx), int(hy) + 12, 0.3)
+    if pose["wail"]:
+        wail(fig, top - 4, hy + 5)
+    drips(fig, cx, cx + 8, 40 + rise, phase)
+
+
+def wraith_downed(fig, column):
+    """A sea-wraith gone: a spreading puddle of seawater on the deck with its kelp lying in it, the
+    last of it rising off the water as a wisp of cold light, and a splash still coming down."""
+    g = fig.ground + 0.5
+    cx = 16.0
+    shaped = {}
+    for y in range(int(g - 4), int(g) + 1):
+        for x in range(1, 31):
+            nx, ny = (x + 0.5 - cx) / 12.5, (y + 0.5 - (g - 1.6)) / 2.6
+            ripple = 0.12 * math.sin(x * 0.9)
+            if nx * nx + ny * ny <= 1.0 + ripple:
+                shaped[(x, y)] = (nx * 0.3, -0.5 + ny * 0.3, 0.8)
+    fig.lay(shaped, SEAWATER[:3], seam=False)
+    for x in range(int(cx) - 8, int(cx) + 7, 3):
+        if fig.has(x, int(g - 3)):
+            fig.dot(x, int(g - 3), SEAWATER[3])
+            fig.dot(x + 1, int(g - 3), SEAWATER[2])
+    kelp(fig, [(cx - 9, g - 1.5), (cx - 4, g - 2.5), (cx + 1, g - 1.6)], 1.0, 0.1, 41)
+    kelp(fig, [(cx + 2, g - 2.8), (cx + 6, g - 1.6), (cx + 10, g - 2.2)], 0.9, 0.3, 43)
+    fig.opacity = lambda y: 170
+    for i in range(14):
+        t = i / 13
+        x = cx + math.sin(t * 5.5) * 2.2 * (1 - t)
+        y = g - 5 - t * 22
+        fig.glow(int(x), int(y), WRAITH_GLOW + (int(170 * (1 - t)),))
+        if t < 0.6:
+            fig.glow(int(x) + 1, int(y), WRAITH_GLOW + (int(90 * (1 - t)),))
+    for x, y in ((cx - 7, g - 7), (cx + 6, g - 9), (cx - 3, g - 11), (cx + 9, g - 5)):
+        fig.glow(int(x), int(y), SEAWATER[3] + (190,))
+
+
+def sea_wraith(fig, facing, column):
+    """One frame of a sea-wraith: see-through, thinning to nearly nothing down its rags."""
+    if column == DOWNED:
+        wraith_downed(fig, column)
+        return
+    pose = wraith_pose(column)
+    flicker = WRAITH_FLICKER if pose["flicker"] else 1.0
+
+    def opacity(y):
+        t = max(0.0, min(1.0, (y - WRAITH_FADE_FROM) / (WRAITH_FADE_TO - WRAITH_FADE_FROM)))
+        return int((WRAITH_TOP_ALPHA + (WRAITH_TAIL_ALPHA - WRAITH_TOP_ALPHA) * t) * flicker)
+    fig.opacity = opacity
+    if facing == LEFT:
+        wraith_side(fig, column, pose)
+    else:
+        wraith_front(fig, column, pose, facing)
+    if pose["flicker"]:
+        # Hurt, it flickers: the solid parts go see-through too.
+        fig.solid = set()
+
+
+# --------------------------------------------------------------------------- #
 # Saving
 # --------------------------------------------------------------------------- #
 
 #: Every creature: its id (and sheet name), its frame's width and height, how to draw a frame of
 #: it, and the colour of its outline.
 CREATURES = (
+    ("sea-wraith", 32, 48, sea_wraith, WRAITH_OUTLINE),
     ("gloomfang", 48, 32, gloomfang, GLOOM_OUTLINE),
     ("thornmother", 96, 80, thornmother, BEAR_OUTLINE),
     ("hollowed-footman", 32, 48, hollowed(FOOTMAN), HOLLOW_OUTLINE),

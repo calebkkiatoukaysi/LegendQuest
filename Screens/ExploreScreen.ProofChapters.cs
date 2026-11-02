@@ -193,7 +193,7 @@ public partial class ExploreScreen
         yield return Teleport("gilded-flagon", "start");
     }
 
-    /// <summary>The Flagon with Kael and Brannock waiting at its tables: Kael's two conversations, since he joined too late in the chapter to have had either, then Kael taking Sera's place, and off to the road.</summary>
+    /// <summary>The Flagon with Kael and Brannock waiting at its tables: Kael's two conversations, since he joined too late in the chapter to have had either, then Kael taking Sera's place, a look in on the screens over the map, and off to the road.</summary>
     private IEnumerable<ProofBeat> FlagonCampBeats()
     {
         yield return Shot("flagon-waiting.png");
@@ -206,6 +206,7 @@ public partial class ExploreScreen
         yield return Read((Asked, "flagon-swap.png"));
         yield return Stop();
         yield return Shot("flagon-swapped.png");
+        foreach (ProofBeat beat in LookIns()) yield return beat;
         yield return Teleport("road", "start");
     }
 

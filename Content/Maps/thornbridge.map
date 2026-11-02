@@ -194,7 +194,8 @@ prop cherry-tree 31.8 29
 prop rocks 29.4 1.6
 
 ; The trees on the far side, where the road goes in, and the Hollowed coming out of them once
-; Mira's done with the supplies. Walk up to them and the raid starts.
+; Mira's done with the supplies. Come off the bridge towards them and the raid starts, with the
+; whole bank between you and them to fight on.
 prop oak 35.6 3.4
 prop oak-light 38.8 7.2
 prop oak-deep 35.4 10.6
@@ -213,7 +214,7 @@ npc hollowed-1 34.4 11.6 creature=hollowed-footman facing=left when=mira-supplie
 npc hollowed-2 35.2 13.6 creature=hollowed-footman facing=left when=mira-supplies-done unless=hollowed-raid-beaten
 npc hollowed-3 34.2 16.4 creature=hollowed-footman facing=left when=mira-supplies-done unless=hollowed-raid-beaten
 npc hollowed-4 36.8 14.8 creature=hollowed-hexer facing=left when=mira-supplies-done unless=hollowed-raid-beaten
-trigger raid 31 9 w=2 h=10 talk=a1-c3-02-raid when=mira-supplies-done unless=hollowed-raid-beaten mark=yes
+trigger raid 29 0 w=2 h=30 talk=a1-c3-02-raid when=mira-supplies-done unless=hollowed-raid-beaten mark=yes
 
 ; What the party says: walking into the camp, at the bridge, and in the camp after the raid.
 trigger bark-thornbridge-camp 13 12 w=2 h=3 bark=thornbridge-camp

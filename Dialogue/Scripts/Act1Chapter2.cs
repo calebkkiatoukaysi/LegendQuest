@@ -11,10 +11,13 @@ namespace LegendQuest.Dialogue.Scripts;
 /// <remarks>
 /// STORY.md's A1-C2-01 to A1-C2-03, and what it leaves for the game to fill: Sera talking the
 /// quarry's root walls open, the courier's letter as a scene of its own, Fennick's pay with the hook
-/// to the east gate (A1-C2-04), and the Lodge's ranger and the busker once you're back. The fights
-/// are cards until combat exists. The flags change the maps as they go: the wolves leave the clearing
-/// once they're beaten, the roots stand open once Sera's parted them, the Thornmother's gone once
-/// she's down, and the crystal ends shattered or shining white.
+/// to the east gate (A1-C2-04), and the Lodge's ranger and the busker once you're back. Each fight
+/// splits its scene in two: the conversation before it ends by starting it, and winning it plays the
+/// rest (EncounterCatalog's Then). The gloomfangs, then Sera; the Thornmother, then the crystal; and
+/// if you hold the den while Sera purifies it, the guard wave, then camp. The flags change the maps
+/// as they go: the wolves leave the clearing once they're beaten, the roots stand open once Sera's
+/// parted them, the Thornmother's gone once she's down, and the crystal ends shattered or shining
+/// white.
 /// </remarks>
 public static class Act1Chapter2
 {
@@ -87,7 +90,7 @@ public static class Act1Chapter2
     /// <summary>Fennick's paid for the Mirewood and pointed you at the east gate.</summary>
     public const string Paid = "a1-c2-04";
 
-    /// <summary>A1-C2-01: into the Mirewood, the gloomfangs, Sera's arrow, and Sera joining.</summary>
+    /// <summary>A1-C2-01 up to the fight: into the Mirewood, and the gloomfangs in the clearing.</summary>
     public static readonly DialogueScript Edge = new()
     {
         Id = "a1-c2-01",
@@ -107,15 +110,29 @@ public static class Act1Chapter2
             new() { Speaker = SoulBound, Direction = "the grin going", Line = "Yeah. It does.", Conditions = new[] { DialogueCondition.Speaks(Voice.Honorable) } },
             new() { Speaker = SoulBound, Line = "Rude. Accurate, but rude.", Conditions = new[] { DialogueCondition.Speaks(Voice.Witty) } },
 
-            // The gloomfangs, as a card until combat exists, and Sera's arrow for the last of them.
             new() { Speaker = Speakers.Narrator, Sound = Sfx.WolfHowl, Line = "A howl, close. Four wolves come out of the trees with their heads low, and black smoke leaks from their eyes like tears." },
-            new() { Speaker = SoulBound, Direction = "drawing", Line = "Nice doggies. Nice, horrible doggies." },
-            new() { Speaker = Speakers.Card, Line = "Three gloomfangs lie still in the bracken, the smoke thinning out of their eyes. The fourth is already in the air, jaws wide, going for {sb}'s throat." },
             new()
             {
-                Speaker = Speakers.Narrator, Sound = Sfx.Bowshot, Line = "An arrow out of the dark takes it in mid-leap. It's dead before it lands at {sb}'s feet.",
-                Effects = new[] { DialogueEffect.Set(GloomfangsBeaten) },
+                Speaker = SoulBound, Direction = "drawing", Line = "Nice doggies. Nice, horrible doggies.",
+                Effects = new[] { DialogueEffect.Fight("a1-c2-01-gloomfangs") },
             },
+        },
+    };
+
+    /// <summary>The rest of A1-C2-01, once the gloomfangs are beaten: the one that gets up again, Sera's arrow, and Sera joining.</summary>
+    /// <remarks>EncounterCatalog's a1-c2-01-gloomfangs plays it when the fight's won, which has set GloomfangsBeaten.</remarks>
+    public static readonly DialogueScript SeraJoins = new()
+    {
+        Id = "a1-c2-01-gloomfangs-after",
+        Nodes = new DialogueNode[]
+        {
+            // The rot won't let the last of them lie, which is how Sera gets the last word.
+            new()
+            {
+                Speaker = Speakers.Narrator,
+                Line = "The last gloomfang won't stay down. It drags itself up out of the bracken with the smoke pouring from its eyes, and goes for {sb}'s throat.",
+            },
+            new() { Speaker = Speakers.Narrator, Sound = Sfx.Bowshot, Line = "An arrow out of the dark takes it in mid-leap. It's dead before it lands at {sb}'s feet." },
             new() { Speaker = Speakers.Narrator, Line = "A woman steps out of the trees with her bow still drawn: a Sylvan in green and brown leathers, a braid over one shoulder." },
             new() { Speaker = "sera", Line = "You're loud. Both of you. The whole forest heard you coming." },
             new() { Speaker = SoulBound, Direction = "grinning", Line = "And yet you waited until we'd done the hard part." },
@@ -251,7 +268,7 @@ public static class Act1Chapter2
         },
     };
 
-    /// <summary>A1-C2-02: the Thornmother, the crystal, and the party's first argument, then out to camp.</summary>
+    /// <summary>A1-C2-02 up to the fight: the den, the crystal, and what's become of the bear that guards it.</summary>
     public static readonly DialogueScript Thornmother = new()
     {
         Id = "a1-c2-02",
@@ -266,14 +283,22 @@ public static class Act1Chapter2
             new() { Speaker = "sera", Direction = "very quietly", Line = "...Oh, no. Not you." },
             new() { Speaker = "sera", Line = "She's denned in this quarry ten springs running. I've watched her raise every cub." },
             new() { Speaker = SoulBound, Direction = "gently", Line = "Sera..." },
-            new() { Speaker = "sera", Direction = "drawing", Line = "I know. Make it quick. She'd want it quick." },
-
-            // The boss, as a card until combat exists.
             new()
             {
-                Speaker = Speakers.Card, Line = "The Thornmother is beaten. She goes down across the crystal's roots like a falling tree, and the thorns in her hide crumble to black dust.",
-                Effects = new[] { DialogueEffect.Set(ThornmotherBeaten) },
+                Speaker = "sera", Direction = "drawing", Line = "I know. Make it quick. She'd want it quick.",
+                Effects = new[] { DialogueEffect.Fight("a1-c2-02-thornmother") },
             },
+        },
+    };
+
+    /// <summary>The rest of A1-C2-02, once the Thornmother's beaten: the woodcutters, the party's first argument, and out to camp, or the den to hold while Sera purifies the crystal.</summary>
+    /// <remarks>EncounterCatalog's a1-c2-02-thornmother plays it when the fight's won, which has set ThornmotherBeaten. Holding the den is a fight of its own, and Guarded is the rest of that way.</remarks>
+    public static readonly DialogueScript Crystal = new()
+    {
+        Id = "a1-c2-02-thornmother-after",
+        Nodes = new DialogueNode[]
+        {
+            new() { Speaker = Speakers.Narrator, Line = "The Thornmother goes down like a falling tree, and the thorns in her hide crumble to black dust." },
             new() { Speaker = Speakers.Narrator, Line = "Sera kneels and rests a hand on the bear's muzzle until the crystal light in its eyes goes out." },
             new()
             {
@@ -306,11 +331,7 @@ public static class Act1Chapter2
                     new()
                     {
                         Text = "Sera purifies it. {sb} and I hold the quarry.", Next = "guard",
-                        Effects = new[]
-                        {
-                            DialogueEffect.Add(SeraAffinity, 5), DialogueEffect.Add(Meters.Bond, 2),
-                            DialogueEffect.Set(CrystalPurified), DialogueEffect.Set(CrystalGuarded),
-                        },
+                        Effects = new[] { DialogueEffect.Add(SeraAffinity, 5), DialogueEffect.Add(Meters.Bond, 2) },
                     },
                 },
             },
@@ -330,20 +351,32 @@ public static class Act1Chapter2
             new() { Speaker = "sera", Direction = "watching it go", Line = "...That's in the water now. All the way to the river farms." },
             new() { Speaker = SoulBound, Line = "Then we'll clean the stream as well. One thing at a time.", Next = "camp" },
 
-            // The compromise: a guard wave, as a card until combat exists.
+            // The compromise: the guard wave. Sera starts, and the quarry answers.
             new() { Id = "guard", Speaker = "sera", Line = "Then hold it. Everything left in this wood will come for the light the moment I start." },
             new()
             {
-                Speaker = Speakers.Card,
-                Line = "The Mirewood throws everything it has left at the quarry: wolves, crows, a stag with black antlers. You and {sb} hold the den's mouth back to back, and behind you the crystal stops screaming and starts to shine.",
+                Speaker = Speakers.Narrator, Sound = Sfx.WolfHowl, Line = "She lays both hands on the crystal's roots. Out in the passage, something howls, and something else answers it.",
+                Effects = new[] { DialogueEffect.Fight("a1-c2-02-guard-wave") }, Next = DialogueScript.End,
             },
-            new() { Speaker = SoulBound, Direction = "breathing hard, grinning", Line = "Back to back. Just like home." },
 
+            NightFalls("camp"),
+        },
+    };
+
+    /// <summary>The compromise's end, once the den's held: the crystal shining, the two of you back to back, and out to camp.</summary>
+    /// <remarks>EncounterCatalog's a1-c2-02-guard-wave plays it when the fight's won, which has set CrystalGuarded. The crystal only turns white once the den's been held.</remarks>
+    public static readonly DialogueScript Guarded = new()
+    {
+        Id = "a1-c2-02-guard-wave-after",
+        Nodes = new DialogueNode[]
+        {
             new()
             {
-                Id = "camp", Speaker = Speakers.Narrator, Line = "Night's coming on by the time you climb out of the quarry. You make camp where the trees are still green.",
-                Effects = new[] { DialogueEffect.Set(CrystalDealtWith), DialogueEffect.Set(QuarryDone), DialogueEffect.Objective("Rest at the camp in the Mirewood"), DialogueEffect.Travel("mirewood", "camp") },
+                Speaker = Speakers.Narrator, Line = "The last of them goes down at the den's mouth. Behind you, the crystal has stopped screaming, and started to shine.",
+                Effects = new[] { DialogueEffect.Set(CrystalPurified) },
             },
+            new() { Speaker = SoulBound, Direction = "breathing hard, grinning", Line = "Back to back. Just like home." },
+            NightFalls(null),
         },
     };
 
@@ -353,7 +386,11 @@ public static class Act1Chapter2
         Id = "a1-c2-03",
         Nodes = new DialogueNode[]
         {
-            new() { Speaker = Speakers.Narrator, Line = "Night. A small fire in a ring of stones. Sera has taken the first watch up on the rocks, out of the light." },
+            new()
+            {
+                Speaker = Speakers.Narrator, Line = "Night. A small fire in a ring of stones. Sera has taken the first watch up on the rocks, out of the light.",
+                Effects = new[] { DialogueEffect.Rest() },
+            },
             new()
             {
                 Speaker = Speakers.Narrator, Line = "{sb} came back to the fire an hour after dark, said nothing about the quarry, and handed you half an apple.",
@@ -569,5 +606,13 @@ public static class Act1Chapter2
         With = "lark",
         Needs = new[] { LarkSecondVerse },
         Nodes = new DialogueNode[] { new() { Speaker = "lark", Line = "The Mirewood verse is my best seller. Go and do something else dangerous. I need a chorus." } },
+    };
+
+    /// <summary>The line every way through the quarry ends on: the crystal's dealt with, and out to camp in the Mirewood.</summary>
+    /// <param name="id">What the line's called, for the ways that go to it, or null if nothing does.</param>
+    private static DialogueNode NightFalls(string id) => new()
+    {
+        Id = id, Speaker = Speakers.Narrator, Line = "Night's coming on by the time you climb out of the quarry. You make camp where the trees are still green.",
+        Effects = new[] { DialogueEffect.Set(CrystalDealtWith), DialogueEffect.Set(QuarryDone), DialogueEffect.Objective("Rest at the camp in the Mirewood"), DialogueEffect.Travel("mirewood", "camp") },
     };
 }

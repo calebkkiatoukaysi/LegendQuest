@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using LegendQuest.Items;
 using LegendQuest.Save;
 
 namespace LegendQuest.World;
@@ -26,6 +28,12 @@ public class WorldState
 
     /// <summary>What a chest with gold in it says.</summary>
     private const string GoldLine = "{0} GOLD";
+
+    /// <summary>How a chest's items line names something there's more than one of: the name, then how many.</summary>
+    private const string CountedLine = "{0} x{1}";
+
+    /// <summary>What goes between the things a chest's items line names.</summary>
+    private const string ItemSeparator = ", ";
 
     /// <summary>What a waypoint says the first time it's used.</summary>
     private const string FoundLine = "WAYPOINT FOUND";
@@ -60,7 +68,7 @@ public class WorldState
 
     /// <summary>Uses something: opens it, pulls it, reads it or wakes it.</summary>
     /// <param name="thing">The thing. Check CanUse first.</param>
-    /// <returns>What happened, in order. Usually one thing; a chest with gold in it is two.</returns>
+    /// <returns>What happened, in order. Usually one thing; a chest is the lid, then the gold, then the items, for whichever it has.</returns>
     public List<WorldEvent> Use(MapInteractable thing)
     {
         var happened = new List<WorldEvent>();
@@ -69,11 +77,17 @@ public class WorldState
         {
             case InteractableKind.Chest:
                 _game.Opened.Add(Key(_map, thing));
-                happened.Add(new WorldEvent(WorldEventKind.ChestOpened, thing.Gold > 0 ? null : EmptyLine));
+                happened.Add(new WorldEvent(WorldEventKind.ChestOpened, thing.Gold > 0 || thing.Items.Count > 0 ? null : EmptyLine));
                 if (thing.Gold > 0)
                 {
                     _game.Gold += thing.Gold;
                     happened.Add(new WorldEvent(WorldEventKind.GoldTaken, string.Format(CultureInfo.InvariantCulture, GoldLine, thing.Gold)));
+                }
+                if (thing.Items.Count > 0)
+                {
+                    Inventory bag = _game.Bag;
+                    foreach (string item in thing.Items) bag.Add(item);
+                    happened.Add(new WorldEvent(WorldEventKind.ItemsTaken, ItemsLine(thing.Items)));
                 }
                 break;
 
@@ -144,6 +158,13 @@ public class WorldState
             if (map.Id != _map.Id && FoundWaypoint(map) is not null) destinations.Add(map);
         return destinations;
     }
+
+    /// <summary>What a chest with items in it says: each one's name, in the order they're listed, with how many there are when it's more than one.</summary>
+    /// <param name="items">The items, one entry for each.</param>
+    private static string ItemsLine(IReadOnlyList<string> items) =>
+        string.Join(ItemSeparator, items.GroupBy(id => id).Select(same => same.Count() == 1
+            ? ItemCatalog.Get(same.Key).Name
+            : string.Format(CultureInfo.InvariantCulture, CountedLine, ItemCatalog.Get(same.Key).Name, same.Count())));
 
     /// <summary>How the save keeps track of something on a map: map/id.</summary>
     private static string Key(MapDefinition map, MapInteractable thing) => map.Id + "/" + thing.Id;

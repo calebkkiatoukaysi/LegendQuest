@@ -40,4 +40,13 @@ public enum EffectKind
 
     /// <summary>Takes the party to another map once the conversation's over: the id is "map spawn".</summary>
     Travel,
+
+    /// <summary>Opens a shop once the conversation's over: the id is the shop's, in ShopCatalog.</summary>
+    Shop,
+
+    /// <summary>Starts a fight once the conversation's over, on the map it's on: the id is the encounter's, in EncounterCatalog.</summary>
+    Fight,
+
+    /// <summary>A long rest for everyone, in the party and waiting at camp: hit points full, spell slots and every use back. The id is the kind of rest.</summary>
+    Rest,
 }

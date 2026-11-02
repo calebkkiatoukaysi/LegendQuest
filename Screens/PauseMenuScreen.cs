@@ -7,8 +7,8 @@ using LegendQuest.StateManagement;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// Escape while playing: RESUME, OPTIONS, or QUIT TO TITLE. It's a popup so the paused screen stays
-/// drawn underneath.
+/// Escape while playing: RESUME, INVENTORY, OPTIONS, HOW TO PLAY, or QUIT TO TITLE. It's a popup so
+/// the paused screen stays drawn underneath.
 /// </summary>
 /// <remarks>
 /// The screen underneath stops itself while this has focus (the IsActive check in its Update),
@@ -19,7 +19,9 @@ public class PauseMenuScreen : MenuScreen
     private const string Heading = "PAUSED";
     private const string Note = "THE ROAD WILL WAIT.";
     private const string ResumeLabel = "RESUME";
+    private const string InventoryLabel = "INVENTORY";
     private const string OptionsLabel = "OPTIONS";
+    private const string HelpLabel = "HOW TO PLAY";
     private const string TitleLabel = "QUIT TO TITLE";
 
     private const int PanelWidth = 700;
@@ -30,14 +32,20 @@ public class PauseMenuScreen : MenuScreen
 
     private readonly FormPanel _panel = new();
 
+    /// <summary>The line under the heading: the usual one, or why something's missing (no saving mid-fight).</summary>
+    private readonly string _note;
+
     private SpriteFont _font;
     private SpriteFont _detailFont;
     private Rectangle _panelBounds;
     private float _noteY;
 
     /// <summary>Builds the menu.</summary>
-    public PauseMenuScreen()
+    /// <param name="inventory">What INVENTORY does once the menu's closed, or null for a menu without it.</param>
+    /// <param name="note">The line under the heading, or null for the usual one. A fight uses it to say why there's no saving.</param>
+    public PauseMenuScreen(Action inventory = null, string note = null)
     {
+        _note = note ?? Note;
         IsPopup = true;
         TransitionOnTime = FadeTime;
         TransitionOffTime = FadeTime;
@@ -45,14 +53,27 @@ public class PauseMenuScreen : MenuScreen
         // Torchlight keeps playing, ember is the way out.
         var resume = new MenuEntry(ResumeLabel, Palette.Torch);
         var options = new MenuEntry(OptionsLabel, Palette.Bone);
+        var help = new MenuEntry(HelpLabel, Palette.Bone);
         var title = new MenuEntry(TitleLabel, Palette.Ember);
 
         resume.Selected += ExitScreen;
         options.Selected += () => ScreenManager.AddScreen(new OptionsScreen());
+        help.Selected += () => ScreenManager.AddScreen(new HelpScreen());
         title.Selected += QuitToTitle;
 
         MenuEntries.Add(resume);
+        if (inventory is not null)
+        {
+            var bag = new MenuEntry(InventoryLabel, Palette.Bone);
+            bag.Selected += () =>
+            {
+                ExitScreen();
+                inventory();
+            };
+            MenuEntries.Add(bag);
+        }
         MenuEntries.Add(options);
+        MenuEntries.Add(help);
         MenuEntries.Add(title);
     }
 
@@ -91,7 +112,7 @@ public class PauseMenuScreen : MenuScreen
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
         Text.Draw(spriteBatch, _font, Heading, _panelBounds.Center.X, _panelBounds.Top + FormPanel.Padding,
             Palette.Heading * alpha, Palette.FormShadow * alpha, centred: true);
-        Text.Draw(spriteBatch, _detailFont, Note, _panelBounds.Center.X, _noteY,
+        Text.Draw(spriteBatch, _detailFont, _note, _panelBounds.Center.X, _noteY,
             Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
         spriteBatch.End();
 

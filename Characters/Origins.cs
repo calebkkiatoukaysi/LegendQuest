@@ -12,7 +12,9 @@ namespace LegendQuest.Characters;
 /// You and the Soul-Bound are made on the creation screen, so theirs are only where it starts:
 /// the Soul-Bound has no name until you give them one. The companions are the story's: their
 /// peoples, classes and looks come from STORY.md, and every score spread is 5e's standard array
-/// put where their class wants it (ClassCatalog's recommended one).
+/// put where their class wants it (ClassCatalog's recommended one). Their kits are the story's
+/// too, where it gives them weapons of their own: Sera's bow, Kael's twin daggers, Brannock's
+/// battered round shield. Mira sets out in her class's.
 /// </remarks>
 public static class Origins
 {
@@ -36,12 +38,14 @@ public static class Origins
         {
             Id = "sera", Name = "Sera", Class = ClassId.Druid,
             Look = new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Shirt = 4, Vest = 2, LegsColour = 3, Cloak = 5 },
+            Kit = ClassCatalog.Kit("shortbow", "leather-armour"),
         },
         // An Emberkin Shadowstep from the Low Ring: swept horns, an ember tail, a red sash, a dark cloak.
         new()
         {
             Id = "kael", Name = "Kael", Class = ClassId.Rogue,
             Look = new CharacterLook { Ancestry = Ancestry.Emberkin, Lineage = 1, Skin = 3, Face = 0, Eyes = 3, Hair = 1, HairColour = 1, Shirt = 4, Vest = 3, LegsColour = 1, Cloak = 4 },
+            Kit = ClassCatalog.Kit("dagger", "dagger", "leather-armour"),
         },
         // A Human Lightbearer from Doomward: faded scholar's robes, her hair tied back.
         new()
@@ -54,17 +58,22 @@ public static class Origins
         {
             Id = "brannock", Name = "Brannock", Class = ClassId.Paladin,
             Look = new CharacterLook { Ancestry = Ancestry.Stoneborn, Skin = 2, Face = 3, Eyes = 1, Hair = 1, HairColour = 3, Beard = 4, Shirt = 4, Vest = 6, LegsColour = 1 },
+            Kit = ClassCatalog.Kit("longsword", "wooden-shield", "chain-mail"),
         },
     };
 
     private static readonly Dictionary<string, Origin> ById = new();
 
-    /// <summary>Indexes the table.</summary>
+    /// <summary>Indexes the table, and checks every companion's own kit is one their class can set out in.</summary>
     /// <remarks>Throws on purpose, so a typo shows up when the game starts.</remarks>
     static Origins()
     {
         foreach (Origin origin in Table)
+        {
+            if (origin.Kit is not null && ClassCatalog.Get(origin.Class).KitProblem(origin.Kit) is string problem)
+                throw new InvalidOperationException($"Origin {origin.Id}'s kit {problem}.");
             if (!ById.TryAdd(origin.Id, origin)) throw new InvalidOperationException($"Two origins are called {origin.Id}.");
+        }
     }
 
     /// <summary>Whether there's an origin with this id.</summary>
@@ -74,6 +83,13 @@ public static class Origins
     /// <summary>Someone fresh from their origin, the way they'd join, with their class's recommended scores.</summary>
     /// <param name="id">Who. They have to exist.</param>
     public static PartyMember Create(string id) => ById[id].Create();
+
+    /// <summary>What someone sets out in as a given class: a companion's own kit, or the class's starting kit.</summary>
+    /// <remarks>For dressing someone who's already been made: an old save's party, or you when the creation screen changes your class.</remarks>
+    /// <param name="id">Who, by origin id. Anyone without an origin gets the class's kit.</param>
+    /// <param name="classId">Their class.</param>
+    public static IReadOnlyList<string> KitFor(string id, ClassId classId) =>
+        ById.TryGetValue(id ?? string.Empty, out Origin origin) ? origin.KitFor(classId) : ClassCatalog.Get(classId).StartingKit;
 
     /// <summary>What someone's called before they've joined, for the lines that mention them.</summary>
     /// <param name="id">Who.</param>

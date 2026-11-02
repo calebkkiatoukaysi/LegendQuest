@@ -120,6 +120,15 @@ npc odelle 31 12.6 cast=odelle facing=left say="Two days to Questeria, if the se
 npc sailor-a 24 9.9 look=146 name="A Deckhand" facing=right say="Two days to port. Two days of beans.|Mind the hatch, it bites ankles.|Captain's in a mood. Captain's always in a mood.|Hear that? No, me neither. That's what worries me."
 npc sailor-b 25.5 10.2 look=122 name="A Deckhand" facing=left say="Coil the rope clockwise or the sea gets ideas.|Questeria by Thursday, if the wind likes us.|I've seen wraiths once. Once was plenty."
 
+; P-05's sea-wraiths, up over the port rail when the lookout rings the bell, and gone once they're
+; beaten: the tutorial fight. One squeezes in between the barrel and the sacks at the bow, four
+; tiles from the two of you, to walk up to and hit first; the other two come over amidships and
+; aft, and take a turn or two to get there, so there's one at a time to learn on. The open deck
+; between the bow and the hatch is where it's fought.
+npc wraith-1 16 14 creature=sea-wraith name="A Sea-wraith" facing=up when=wraiths-sighted unless=wraiths-beaten
+npc wraith-2 22 15 creature=sea-wraith name="A Sea-wraith" facing=up when=wraiths-sighted unless=wraiths-beaten
+npc wraith-3 25 15 creature=sea-wraith name="A Sea-wraith" facing=left when=wraiths-sighted unless=wraiths-beaten
+
 ; What the two of you say on deck before the voyage starts, and the watch talking it over.
 trigger bark-deck-night 16 10 w=2 h=5 bark=deck-night
 trigger bark-deck-sailors 21 9 w=7 h=3 bark=deck-sailors once=no

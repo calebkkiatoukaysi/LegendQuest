@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LegendQuest.Characters;
+using LegendQuest.Items;
 using LegendQuest.Story;
 using LegendQuest.World;
 
@@ -13,13 +14,16 @@ namespace LegendQuest.Save;
 /// </summary>
 /// <remarks>
 /// Plain data only, no sprites or textures, so it serialises and I can hand-edit a save while
-/// testing. It grows with the game: the party, the inventory and the quests each get their field
-/// when the system that owns them exists. A new field with a default doesn't need a version bump.
+/// testing. It grows with the game: the party, the bag and the quests each get their field when
+/// the system that owns them exists. A new field with a default doesn't need a version bump.
 /// Things on a map (a chest, a trigger, a waypoint) are kept as "map/id", so two maps can each have
 /// a chest called chest.
 /// </remarks>
 public class SaveData
 {
+    /// <summary>How many healing potions a party starts with in its bag.</summary>
+    public const int StartingPotions = 2;
+
     /// <summary>Which shape of save file this is. See SaveSystem.CurrentVersion.</summary>
     public int Version { get; set; } = SaveSystem.CurrentVersion;
 
@@ -60,6 +64,18 @@ public class SaveData
     /// <summary>The key items the story's handed over, by id in KeyItems.</summary>
     public List<string> Items { get; set; } = new();
 
+    /// <summary>The party's shared bag: everything that isn't a key item and isn't being worn. Bag wraps it.</summary>
+    public List<ItemStack> Inventory { get; set; } = new();
+
+    /// <summary>The fight that was starting when this was saved, by its encounter id, or null if there wasn't one.</summary>
+    /// <remarks>
+    /// Every story fight autosaves as it starts, after whatever started it (a trigger, a conversation)
+    /// has been used up, so loading that save couldn't start the fight again on its own. This says
+    /// which fight it was, and loading the save starts it again: LOAD LAST SAVE after a loss is the
+    /// fight again, not the map with the fight gone.
+    /// </remarks>
+    public string Fight { get; set; }
+
     /// <summary>What you're to do next, as the corner of the screen says it, or null for nothing.</summary>
     /// <remarks>A line for now. The journal and its quests take over from this when they exist.</remarks>
     public string Objective { get; set; }
@@ -75,6 +91,9 @@ public class SaveData
 
     /// <summary>Every flag that's set. Levers, triggers and (later) conversations and quests set them, and doors read them.</summary>
     public HashSet<string> Flags { get; set; } = new();
+
+    /// <summary>The tutorial tips that have been shown, by id, so each is only shown once.</summary>
+    public HashSet<string> Tips { get; set; } = new();
 
     /// <summary>The chests and doors that have been opened, as map/id.</summary>
     public HashSet<string> Opened { get; set; } = new();
@@ -104,6 +123,10 @@ public class SaveData
     /// <summary>Whoever you're controlling.</summary>
     [JsonIgnore]
     public PartyMember LeaderMember => Party[Leader];
+
+    /// <summary>The party's bag, for adding to it, taking from it and counting what's in it. It works on Inventory itself.</summary>
+    [JsonIgnore]
+    public Inventory Bag => new(Inventory);
 
     /// <summary>You, whoever's being controlled. Always in the party, and first in a new game.</summary>
     [JsonIgnore]
@@ -136,7 +159,7 @@ public class SaveData
         Meters[id] = Math.Clamp(value, meter.Min, meter.Max);
     }
 
-    /// <summary>The save a new game starts from: you and the Soul-Bound at the start of the opening map, with no time played.</summary>
+    /// <summary>The save a new game starts from: you and the Soul-Bound at the start of the opening map, with no time played and StartingPotions in the bag.</summary>
     /// <remarks>Only the leader gets put on the start. The map puts the rest round them when it loads.</remarks>
     /// <param name="you">You, as the creation screen made you.</param>
     /// <param name="soulBound">The Soul-Bound, as the second pass of it made them.</param>
@@ -146,6 +169,7 @@ public class SaveData
         var game = new SaveData { MapId = MapCatalog.Opening, Party = new List<PartyMember> { you, soulBound } };
         game.LeaderMember.Feet = start.Feet;
         game.LeaderMember.Facing = start.Facing;
+        game.Bag.Add(ItemCatalog.HealingPotion, StartingPotions);
         return game;
     }
 }

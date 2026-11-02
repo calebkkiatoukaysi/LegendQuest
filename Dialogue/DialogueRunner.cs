@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LegendQuest.Characters;
+using LegendQuest.Combat;
 using LegendQuest.Rules;
 using LegendQuest.Save;
 
@@ -193,6 +195,10 @@ public sealed class DialogueRunner
                     Recruit(effect.Id);
                     break;
 
+                case EffectKind.Rest:
+                    Rest();
+                    break;
+
                 case EffectKind.Swap:
                     if (effect.Id.Split(' ') is [string waiting, string member]) Swap(waiting, member);
                     break;
@@ -204,7 +210,25 @@ public sealed class DialogueRunner
                 case EffectKind.Travel:
                     _events.Add(new DialogueEvent(DialogueEventKind.Travel, effect.Id));
                     break;
+
+                case EffectKind.Shop:
+                    _events.Add(new DialogueEvent(DialogueEventKind.Shop, effect.Id));
+                    break;
+
+                case EffectKind.Fight:
+                    _events.Add(new DialogueEvent(DialogueEventKind.Fight, effect.Id));
+                    break;
             }
+        }
+    }
+
+    /// <summary>A long rest: everyone, in the party and at camp, back to full hit points with their spell slots and uses back.</summary>
+    private void Rest()
+    {
+        foreach (PartyMember member in _game.Party.Concat(_game.Camp))
+        {
+            member.Hp = member.MaxHp;
+            ResourceCatalog.Recharge(member, RestKind.Long);
         }
     }
 

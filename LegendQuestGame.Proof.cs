@@ -6,6 +6,7 @@ using LegendQuest.Rules;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
+using LegendQuest.Tutorial;
 using LegendQuest.World;
 
 namespace LegendQuest;
@@ -26,6 +27,15 @@ public partial class LegendQuestGame
 
     /// <summary>The part of the run to stop after, so I can look at one part without sitting through the rest. Done runs all of it.</summary>
     public ProofStage ProofLast { get; init; } = ProofStage.Done;
+
+    /// <summary>The seed the maps' dice start from under the proof run, so a run goes the same way as the last.</summary>
+    private const int ProofCombatSeed = 1;
+
+    /// <summary>The most fights the run will lose and fight again before it decides one's too hard. The story's fights are tuned for 80 to 92 wins in a hundred, the boss's for 65 to 80, so a few losses in a run are the dice.</summary>
+    private const int ProofMostLosses = 5;
+
+    /// <summary>How many fights the run has lost so far.</summary>
+    private int _proofLosses;
 
     // The menus by frame. Each one gets time to fade in before its shot.
     private const int ProofTitleShot = 60;
@@ -92,6 +102,14 @@ public partial class LegendQuestGame
         SettingsStore.ReadOnly = true;
         _screenManager.IgnoreWindowFocus = true;
         _screenManager.Input.IgnoreDevices = true;
+
+        // The tips are a player's, not the run's: the shots are of the game as it plays once you've
+        // seen them, and a card up would catch the run's presses. A proof step can still put one up.
+        Tutorials.Quiet = true;
+
+        // The fights are rolled like any other, so a run could lose one now and then. A fixed seed
+        // makes every run fight them the same way, and the same shots come out each time.
+        ExploreScreen.ProofSeed = ProofCombatSeed;
 
         string saves = Path.Combine(ProofDirectory, "saves");
         if (Directory.Exists(saves)) Directory.Delete(saves, recursive: true);
@@ -443,8 +461,39 @@ public partial class LegendQuestGame
     /// <param name="next">Which part comes next.</param>
     private string RunMap(string mapId, int end, ProofStage next)
     {
+        if (Find<GameOverScreen>() is GameOverScreen over)
+        {
+            FightAgain(over);
+            return null;
+        }
+
         ProofStage stage = _proofStage;
-        return RunSubject<ExploreScreen>(s => s.ProofStep(Frame(), stage), end, next, s => s.MapId == mapId);
+        return RunSubject<ExploreScreen>(ExploreStep, end, next, s => s.MapId == mapId);
+
+        // The part's clock stops while a fight's on: a fight takes as long as its dice say, and
+        // nothing in a schedule is waiting on it, so it picks up after where it left off.
+        string ExploreStep(ExploreScreen screen)
+        {
+            if (screen.ProofInFight) _proofSubjectStart++;
+            return screen.ProofStep(Frame(), stage);
+        }
+    }
+
+    /// <summary>
+    /// A fight the party lost, fought again the way a player would: LOAD LAST SAVE, which is the
+    /// autosave from just before it, on dice seeded one further along so it doesn't go the same way.
+    /// The part of the run starts over on the map that's loaded, and plays back up to the fight.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">If the run's lost more fights than it's allowed, which means a fight's too hard, not unlucky.</exception>
+    private void FightAgain(GameOverScreen over)
+    {
+        if (++_proofLosses > ProofMostLosses)
+            throw new InvalidOperationException($"The proof run has lost {_proofLosses} fights; one of them is too hard for the party, not just unlucky.");
+
+        ExploreScreen.ProofSeed++;
+        over.ProofLoadLastSave();
+        _proofSubject = null;
+        _proofWaitStart = _proofFrame;
     }
 
     /// <summary>The first screen of type T on the stack that isn't on its way out (and passes the test, if there is one), or null.</summary>

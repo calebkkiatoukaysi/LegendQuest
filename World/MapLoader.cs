@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
 using LegendQuest.Dialogue;
+using LegendQuest.Items;
 using LegendQuest.Story;
 
 namespace LegendQuest.World;
@@ -626,7 +627,8 @@ public static class MapLoader
     /// <summary>The chests, doors, levers, signs and waypoints.</summary>
     /// <remarks>
     /// Each kind looks like the prop with its name (a chest looks like the chest prop) unless look=
-    /// says otherwise, and is called by its kind on screen unless name= says otherwise.
+    /// says otherwise, and is called by its kind on screen unless name= says otherwise. A chest's
+    /// items= is item ids between commas, like items=healing-potion,leather-cap.
     /// </remarks>
     /// <param name="objects">Every object on the map.</param>
     /// <param name="solid">Whether a tile is solid, for checking there's room beside a waypoint.</param>
@@ -655,6 +657,7 @@ public static class MapLoader
                 Presence = o.Presence(),
                 Name = o.Text("name") ?? kind.ToString(),
                 Gold = kind == InteractableKind.Chest ? o.Count("gold", 0) : 0,
+                Items = kind == InteractableKind.Chest ? ReadItems(o) : Array.Empty<string>(),
                 Locked = kind == InteractableKind.Door && o.YesNo("locked", false),
                 Flag = kind is InteractableKind.Door or InteractableKind.Lever ? o.Text("flag") : null,
                 Text = kind == InteractableKind.Sign ? o.Required("text") : null,
@@ -662,7 +665,7 @@ public static class MapLoader
 
             o.Done(kind switch
             {
-                InteractableKind.Chest => "look, name, gold, when, unless",
+                InteractableKind.Chest => "look, name, gold, items, when, unless",
                 InteractableKind.Door => "look, name, locked, flag, when, unless",
                 InteractableKind.Lever => "look, name, flag, when, unless",
                 InteractableKind.Sign => "look, name, text, when, unless",
@@ -687,6 +690,24 @@ public static class MapLoader
         }
 
         return interactables;
+    }
+
+    /// <summary>A chest's items=: item ids between commas, each one in ItemCatalog, or none if it isn't set. The same one twice is two of it.</summary>
+    private static IReadOnlyList<string> ReadItems(MapObjectLine o)
+    {
+        string text = o.Text("items");
+        if (text is null) return Array.Empty<string>();
+
+        var items = new List<string>();
+        foreach (string part in text.Split(','))
+        {
+            string id = part.Trim();
+            if (id.Length == 0) throw o.Fail("items has nothing between two of its commas");
+            if (!ItemCatalog.Exists(id)) throw o.Fail($"there's no item called {id}");
+            items.Add(id);
+        }
+
+        return items;
     }
 
     /// <summary>Every object of one kind.</summary>

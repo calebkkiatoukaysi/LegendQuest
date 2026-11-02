@@ -63,6 +63,13 @@ public class Toast
         if (_line is not null) _clock = MathF.Max(_clock, Length(_line) - FadeOutSeconds);
     }
 
+    /// <summary>Puts away the line that's up and any waiting, at once: a fight starting has its own words to show, and what was said before it isn't about it.</summary>
+    public void Clear()
+    {
+        _waiting.Clear();
+        _line = null;
+    }
+
     /// <summary>Runs the clock on the line that's up, and brings up the next when it's done.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public void Update(GameTime gameTime)

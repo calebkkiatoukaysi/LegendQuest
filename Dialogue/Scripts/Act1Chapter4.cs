@@ -11,10 +11,13 @@ namespace LegendQuest.Dialogue.Scripts;
 /// <remarks>
 /// STORY.md's A1-C4-01 to A1-C4-05, and what it leaves to fill: the messenger who finds you after
 /// Thornbridge (A1-C4-00), and what the King, the Princess, the Chancellor, the royal guards and the
-/// Anvil's barkeep say when you talk to them again. The fights are cards until combat exists. The
-/// party's full by now, so Kael and Brannock go to wait at the Gilded Flagon when they join. Mira is
-/// always in the party in the booth and the vault (nobody's waiting yet to swap with her); at court
-/// she may be waiting at the Flagon, and she comes up to speak anyway.
+/// Anvil's barkeep say when you talk to them again. The vault is three conversations round two
+/// fights: Kael, then his duel (EncounterCatalog's a1-c4-02-kael, which he gives up at 30%); the
+/// sappers breaking in and the truce, then the sappers with Kael beside you; and the Sunheart handed
+/// over, the coin, and Kael joining. The party's full by now, so Kael and Brannock go to wait at the
+/// Gilded Flagon when they join. Mira is always in the party in the booth and the vault (nobody's
+/// waiting yet to swap with her); at court she may be waiting at the Flagon, and she comes up to
+/// speak anyway.
 /// </remarks>
 public static class Act1Chapter4
 {
@@ -187,13 +190,13 @@ public static class Act1Chapter4
         },
     };
 
-    /// <summary>A1-C4-02: Kael on the relic shelf, the duel, the sappers, the truce, the black-iron coin, and Kael joining.</summary>
-    /// <remarks>It's with Kael as well as on the trigger before him, so walking up and talking to him starts it too.</remarks>
+    /// <summary>A1-C4-02 up to the duel: Kael on the relic shelf, and the Sunheart he won't hand over.</summary>
+    /// <remarks>It's with Kael as well as on the trigger before him, so walking up and talking to him starts it too, until he's called the truce.</remarks>
     public static readonly DialogueScript Vault = new()
     {
         Id = "a1-c4-02",
         With = "kael",
-        Unless = new[] { VaultDone },
+        Unless = new[] { KaelTruce, VaultDone },
         Marker = MarkerKind.Event,
         Nodes = new DialogueNode[]
         {
@@ -205,19 +208,30 @@ public static class Act1Chapter4
             new() { Speaker = "kael", Line = "Ah. Company. I'd say make yourselves at home, but it's technically the king's home, and I'm technically robbing it." },
             new() { Speaker = SoulBound, Line = "Hand it over." },
             new() { Speaker = "kael", Line = "Love to. Can't. Someone's paying me very well to keep it. And I'm very fond of being paid." },
-            new() { Speaker = Speakers.Narrator, Line = "He drops off the shelf and lands like a cat, with a knife in each hand." },
-
-            // The duel, as a card until combat exists, broken off by the sappers.
             new()
             {
-                Speaker = Speakers.Card,
-                Line = "Kael fights like a rumour: smoke, a cloak with nobody in it, a knife that's never where it was. You've almost got him pinned against the shelves when the wall behind him cracks.",
+                Speaker = Speakers.Narrator, Line = "He drops off the shelf and lands like a cat, with a knife in each hand.",
+                Effects = new[] { DialogueEffect.Fight("a1-c4-02-kael") },
             },
-            new() { Speaker = Speakers.Narrator, Line = "Stone bursts inward. Grey shapes climb out of a fresh tunnel with picks and hooded lamps, and there are more behind them." },
+        },
+    };
+
+    /// <summary>A1-C4-02 once Kael's had enough of the duel: the sappers breaking in, and the truce.</summary>
+    /// <remarks>EncounterCatalog's a1-c4-02-kael plays it when Kael gives up, which has set KaelTruce and brought the sappers up through the floor. It ends on the fight with them.</remarks>
+    public static readonly DialogueScript Truce = new()
+    {
+        Id = "a1-c4-02-kael-after",
+        Nodes = new DialogueNode[]
+        {
+            new()
+            {
+                Speaker = Speakers.Narrator,
+                Line = "Kael's out of smoke and out of room, his back to the shelves, a knife still up. Then the floor behind him cracks.",
+            },
+            new() { Speaker = Speakers.Narrator, Line = "Stone bursts upward. Grey shapes climb out of a fresh tunnel with picks and hooded lamps, and there are more behind them." },
             new()
             {
                 Speaker = "kael", Direction = "staring", Line = "...Those are not my employers. Truce?",
-                Effects = new[] { DialogueEffect.Set(KaelTruce) },
                 Options = new DialogueOption[]
                 {
                     new() { Text = "Truce. Fight now, argue later.", Effects = new[] { DialogueEffect.Add(KaelAffinity, 5) } },
@@ -234,14 +248,24 @@ public static class Act1Chapter4
             new() { Id = "sb", Speaker = SoulBound, Line = "Fine. But I'm watching you, thief." },
             new() { Speaker = "kael", Direction = "admiring", Line = "Please do. I've only got good sides." },
 
-            // The sappers and their chief, as a card until combat exists.
+            // Their chief, up last out of the hole.
             new()
             {
-                Id = "sappers", Speaker = Speakers.Card,
-                Line = "The sappers are beaten, and their chief with them. Kael fights at your shoulder like he's always been there, and the last sapper goes back down his own tunnel headfirst.",
-                Effects = new[] { DialogueEffect.Set(SappersBeaten) },
+                Id = "sappers", Speaker = Speakers.Narrator,
+                Line = "Something bigger hauls itself up out of the hole behind them, a lantern in one fist and a pick in the other.",
+                Effects = new[] { DialogueEffect.Fight("a1-c4-02-sappers") },
             },
-            new() { Speaker = Speakers.Narrator, Line = "In the quiet after, Kael looks at the hole in the wall for a long moment. Then he unhooks the pouch from his belt." },
+        },
+    };
+
+    /// <summary>The rest of A1-C4-02, once the sappers are beaten: the Sunheart handed over, the black-iron coin, and Kael joining.</summary>
+    /// <remarks>EncounterCatalog's a1-c4-02-sappers plays it when the fight's won, which has set SappersBeaten.</remarks>
+    public static readonly DialogueScript KaelJoins = new()
+    {
+        Id = "a1-c4-02-sappers-after",
+        Nodes = new DialogueNode[]
+        {
+            new() { Speaker = Speakers.Narrator, Line = "In the quiet after, Kael looks at the hole in the floor for a long moment. Then he unhooks the pouch from his belt." },
             new()
             {
                 Speaker = "kael", Line = "Here. Before I change my mind. It's been warm against my hip for three days. I'll miss it.",

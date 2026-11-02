@@ -9,7 +9,7 @@ using LegendQuest.StateManagement;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The three volumes, the text speed and full screen, on a form over whatever opened it. Left and right change one.
+/// The three volumes, the text speed, the tutorial's tips and full screen, on a form over whatever opened it. Left and right change one.
 /// </summary>
 /// <remarks>
 /// You hear a volume change right away since AudioManager reads the settings every frame. The file
@@ -24,6 +24,7 @@ public class OptionsScreen : MenuScreen
     private const string MusicLabel = "MUSIC";
     private const string SoundLabel = "SOUND";
     private const string TextSpeedLabel = "TEXT SPEED";
+    private const string TipsLabel = "TUTORIAL TIPS";
     private const string DisplayLabel = "DISPLAY";
     private const string BackLabel = "BACK";
 
@@ -42,6 +43,7 @@ public class OptionsScreen : MenuScreen
     private readonly MenuEntry _music;
     private readonly MenuEntry _sound;
     private readonly MenuEntry _textSpeed;
+    private readonly MenuEntry _tips;
     private readonly MenuEntry _display;
 
     private SpriteFont _font;
@@ -49,7 +51,7 @@ public class OptionsScreen : MenuScreen
     private Rectangle _panelBounds;
     private float _noteY;
 
-    /// <summary>Builds the five adjustable entries and BACK.</summary>
+    /// <summary>Builds the six adjustable entries and BACK.</summary>
     public OptionsScreen()
     {
         IsPopup = true;
@@ -60,6 +62,7 @@ public class OptionsScreen : MenuScreen
         _music = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _sound = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _textSpeed = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _tips = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _display = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         var back = new MenuEntry(BackLabel, Palette.Bone);
 
@@ -67,6 +70,7 @@ public class OptionsScreen : MenuScreen
         _music.Adjusted += step => ChangeVolume(v => Audio.Settings.MusicVolume = v, Audio.Settings.MusicVolume, step);
         _sound.Adjusted += step => ChangeVolume(v => Audio.Settings.SfxVolume = v, Audio.Settings.SfxVolume, step);
         _textSpeed.Adjusted += ChangeTextSpeed;
+        _tips.Adjusted += _ => ToggleTips();
         _display.Adjusted += _ => ToggleFullScreen();
         back.Selected += Close;
 
@@ -74,6 +78,7 @@ public class OptionsScreen : MenuScreen
         MenuEntries.Add(_music);
         MenuEntries.Add(_sound);
         MenuEntries.Add(_textSpeed);
+        MenuEntries.Add(_tips);
         MenuEntries.Add(_display);
         MenuEntries.Add(back);
     }
@@ -142,6 +147,13 @@ public class OptionsScreen : MenuScreen
         Relabel();
     }
 
+    /// <summary>Switches the tutorial's tips on or off. A tip that's up goes as soon as you're back on the map.</summary>
+    private void ToggleTips()
+    {
+        Audio.Settings.TutorialTips = !Audio.Settings.TutorialTips;
+        Relabel();
+    }
+
     /// <summary>Switches between full screen and a window, straight away.</summary>
     private void ToggleFullScreen()
     {
@@ -159,6 +171,7 @@ public class OptionsScreen : MenuScreen
         _music.Text = Row(MusicLabel, Percent(settings.MusicVolume));
         _sound.Text = Row(SoundLabel, Percent(settings.SfxVolume));
         _textSpeed.Text = Row(TextSpeedLabel, settings.Typing.ToString().ToUpperInvariant());
+        _tips.Text = Row(TipsLabel, settings.TutorialTips ? "ON" : "OFF");
         _display.Text = Row(DisplayLabel, settings.FullScreen ? "FULL SCREEN" : "WINDOW");
     }
 

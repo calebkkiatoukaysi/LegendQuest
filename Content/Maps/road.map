@@ -245,7 +245,7 @@ prop crate 26.9 21.5
 prop barrel 27.1 22.9
 prop stump 36.4 24.4
 prop mushrooms 35 26.2
-chest camp 35.2 22 gold=14
+chest camp 35.2 22 gold=14 items=healing-potion
 prop oak 28 19.8
 prop oak-light 36.8 20.6
 prop oak 24.6 33

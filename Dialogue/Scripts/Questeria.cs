@@ -99,12 +99,28 @@ public static class Questeria
         },
     };
 
-    /// <summary>The keeper once you've been paid.</summary>
+    /// <summary>The keeper once you've been paid: a room upstairs for nothing whenever you want one, which is a long rest.</summary>
     public static readonly DialogueScript InnkeeperAfter = new()
     {
         Id = "innkeeper-after",
         With = "innkeeper",
         Needs = new[] { WorkDone },
-        Nodes = new DialogueNode[] { new() { Speaker = "innkeeper", Line = "Rooms upstairs when you're tired. Stew's on the fire." } },
+        Nodes = new DialogueNode[]
+        {
+            new()
+            {
+                Speaker = "innkeeper", Line = "Rooms upstairs when you're tired, and yours cost nothing after the rosewater. Stew's on the fire.",
+                Options = new DialogueOption[]
+                {
+                    new() { Text = "We'll take a room for the night.", Next = "rest" },
+                    new() { Text = "Not yet.", Next = DialogueScript.End },
+                },
+            },
+            new()
+            {
+                Id = "rest", Speaker = Speakers.Narrator, Line = "A real bed, a long night, and stew in the morning. You all wake mended.",
+                Effects = new[] { DialogueEffect.Rest() },
+            },
+        },
     };
 }

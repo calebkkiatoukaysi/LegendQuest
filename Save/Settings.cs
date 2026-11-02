@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace LegendQuest.Save;
 
 /// <summary>
-/// The settings that aren't part of a game: the three volumes, full screen or not, and how fast text types out.
+/// The settings that aren't part of a game: the three volumes, full screen or not, how fast text types out, and whether the tutorial's tips come up.
 /// </summary>
 /// <remarks>Not in the save slots on purpose. Turning the music down shouldn't depend on which game you loaded.</remarks>
 public class Settings
@@ -23,6 +23,9 @@ public class Settings
 
     /// <summary>How fast dialogue types out, by name.</summary>
     public string TextSpeed { get; set; } = nameof(LegendQuest.TextSpeed.Normal);
+
+    /// <summary>Whether the tutorial's tips come up as you play. On to start with; a file from before there were tips doesn't have it, and gets it on.</summary>
+    public bool TutorialTips { get; set; } = true;
 
     /// <summary>TextSpeed as the enum, or Normal if the file has something it doesn't recognise.</summary>
     [JsonIgnore]

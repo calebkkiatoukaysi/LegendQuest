@@ -1,6 +1,6 @@
 """
 UI art for Legend Quest: the button plates, the panel the forms sit on, the marks on the map, the
-"!" markers over people, and the mouse cursors.
+"!" markers over people, the mouse cursors, and the key caps the tutorial tips show.
 Run it from the repo root:
 
     python tools/generate_ui.py
@@ -721,6 +721,109 @@ def build_dialogue_icons():
     write_png(os.path.join(OUT, "dialogue-icons.png"), img)
 
 
+# --------------------------------------------------------------------------- #
+# keycaps.png -- the keys and the mouse the tutorial tips and HOW TO PLAY show
+# --------------------------------------------------------------------------- #
+# One row of 14x14 frames, drawn at 3x: a key cap, nine-sliced in the game so it's as wide as its
+# label (E, TAB, SPACE), then the mouse three ways: its left button lit for a click, its right
+# button lit, and its wheel lit. Ivory like the d20, so the dark letters KeyCaps writes on it read,
+# lit from the top left like everything else, with a deeper lip along the bottom so it looks like a
+# key you could press. The cap keeps to the nine-slice rule: every row of its top and bottom bands
+# is one colour across the middle, every column of its side bands one colour down it, and the
+# middle is flat.
+
+KEYCAP = 14
+
+#: Fixed corner of the cap's nine-slice. Has to match CornerSize in Components/KeyCaps.cs, and
+#: stay deeper than the lip so the lip is all in the bottom band.
+KEYCAP_CORNER = 5
+
+#: The rows of the lip along the bottom, deepest last: lit, then shadow, then deep shadow.
+KEYCAP_LIP = (10, 11, 12)
+
+#: The lit button and wheel are the cursor's torchlight.
+KEY_LIT = ((150, 82, 30), (232, 150, 58), (250, 196, 120))
+
+
+def _keycap(img):
+    """The cap: a dark rounded edge, the top face with a highlight along its top, a lit left side,
+    a shadowed right side, and the lip."""
+    S = KEYCAP
+    rounded = ((0, 0), (S - 1, 0), (0, S - 1), (S - 1, S - 1))
+    for y in range(S):
+        for x in range(S):
+            if (x, y) in rounded:
+                continue
+            edge = x in (0, S - 1) or y in (0, S - 1) or (x in (1, S - 2) and y in (1, S - 2))
+            if edge:
+                img[y][x] = list(DIE_EDGE) + [255]
+            elif y in KEYCAP_LIP:
+                img[y][x] = list(DIE_IVORY[2 - KEYCAP_LIP.index(y)]) + [255]
+            elif x == 1:
+                img[y][x] = list(DIE_IVORY[2]) + [255]
+            elif x == S - 2:
+                img[y][x] = list(DIE_IVORY[1]) + [255]
+            elif y == 1:
+                img[y][x] = list(DIE_IVORY[4]) + [255]
+            else:
+                img[y][x] = list(DIE_IVORY[3]) + [255]
+
+
+def _mouse(img, ox, lit):
+    """The mouse, its cable at the top: a rounded ivory body, the two buttons split by a groove
+    with the wheel in it, and whichever of 'left', 'right' or 'wheel' is `lit` in torchlight."""
+    S = KEYCAP
+    left, right, top, bottom, split = 3, 11, 2, 12, 6
+
+    def inside(x, y):
+        if not (left <= x <= right and top <= y <= bottom):
+            return False
+        # Round the four corners off by two pixels.
+        dx = min(x - left, right - x)
+        dy = min(y - top, bottom - y)
+        return dx + dy >= 2
+
+    mask = [[inside(x, y) for x in range(S)] for y in range(S)]
+    middle = (left + right) // 2
+    for y in range(S):
+        for x in range(S):
+            if not mask[y][x]:
+                continue
+            on_button = y < split and x != middle
+            button = "left" if x < middle else "right"
+            if on_button and lit == button:
+                shade = KEY_LIT[2] if x == left + 1 or y == top else KEY_LIT[1]
+            elif x == middle and y < split or y == split:
+                shade = DIE_IVORY[1]
+            elif x == right or y == bottom:
+                shade = DIE_IVORY[2]
+            else:
+                shade = DIE_IVORY[4] if (x <= left + 1 or y <= top + 1) and x + y < middle + top + 2 else DIE_IVORY[3]
+            img[y][ox + x] = list(shade) + [255]
+
+    # The wheel, in the groove between the buttons.
+    for y in range(top + 1, split - 1):
+        img[y][ox + middle] = list(KEY_LIT[1] if lit == "wheel" else DIE_IVORY[0]) + [255]
+
+    # The dark edge round the body, then the cable up out of the top of it.
+    for y in range(S):
+        for x in range(S):
+            if mask[y][x]:
+                continue
+            if any(0 <= x + dx < S and 0 <= y + dy < S and mask[y + dy][x + dx]
+                   for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                img[y][ox + x] = list(DIE_EDGE) + [255]
+    img[0][ox + middle] = list(DIE_EDGE) + [255]
+
+
+def build_keycaps():
+    img = new_image(KEYCAP * 4, KEYCAP)
+    _keycap(img)
+    _mouse(img, KEYCAP, "left")
+    _mouse(img, KEYCAP * 2, "right")
+    _mouse(img, KEYCAP * 3, "wheel")
+    write_png(os.path.join(OUT, "keycaps.png"), img)
+
 
 if __name__ == "__main__":
     print("Generating UI for Legend Quest...")
@@ -731,4 +834,5 @@ if __name__ == "__main__":
     build_cursors()
     build_dice()
     build_dialogue_icons()
+    build_keycaps()
     print("Done.")

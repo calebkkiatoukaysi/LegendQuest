@@ -316,6 +316,7 @@ public partial class ExploreScreen
     }
 
     /// <summary>Ends the ship coming in, whether it played out or got skipped: tied up with her plank down, you both on the boardwalk looking along it at the trouble, and the harbour's scene next.</summary>
+    /// <remarks>The controls go up as a toast only with the tutorial's tips off. With them on, the tips teach the same things one at a time.</remarks>
     private void EndArrival()
     {
         MoveShip(Vector2.Zero);
@@ -332,7 +333,7 @@ public partial class ExploreScreen
         SelectLeader(0);
         SeedTrail();
         RefreshPresence();
-        _toast.Show(ControlsLine);
+        if (!TutorialsOn) _toast.Show(ControlsLine);
         if (!Autosave()) _toast.Show(AutosaveFailedLine);
     }
 
@@ -381,6 +382,8 @@ public partial class ExploreScreen
         {
             _talking = false;
             then?.Invoke();
+            OpenAwaitedShop();
+            StartAwaitedFight();
             if (travel is null) return;
 
             string[] where = travel.Split(' ');
@@ -402,6 +405,14 @@ public partial class ExploreScreen
 
             case DialogueEventKind.Recruited:
                 CatchUpParty();
+                break;
+
+            case DialogueEventKind.Shop:
+                _shopAfterTalk = happened.Id;
+                break;
+
+            case DialogueEventKind.Fight:
+                _fightAfterTalk = happened.Id;
                 break;
         }
     }

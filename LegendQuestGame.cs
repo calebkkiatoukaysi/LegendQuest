@@ -1,8 +1,10 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendQuest.Audio;
 using LegendQuest.Components;
 using LegendQuest.Dialogue;
+using LegendQuest.Items;
 using LegendQuest.Save;
 using LegendQuest.Screens;
 using LegendQuest.StateManagement;
@@ -84,6 +86,10 @@ public partial class LegendQuestGame : Game
     {
         MapCatalog.LoadAll();
         DialogueCatalog.ValidateAll();
+
+        // Nothing else reads the shops or the loot tables until a shop opens or a fight's won, so
+        // a bad row in one would otherwise only show up then. Reading them checks them now.
+        _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
 
         if (ProofDirectory is not null) BeginProof();
 

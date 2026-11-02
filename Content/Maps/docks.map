@@ -143,7 +143,7 @@ prop cherry-tree 27.5 3
 prop fishmonger-pink 27.5 12
 prop crate-open 26.2 12.9
 prop crate-open 29.6 12.9
-trigger red-gulls 26 9 w=6 h=9 talk=a1-c1-01 mark=yes when=arrived unless=red-gulls-beaten
+trigger red-gulls 24 9 w=8 h=9 talk=a1-c1-01 mark=yes when=arrived unless=red-gulls-beaten
 trigger red-gulls-behind 27 0 w=2 h=9 talk=a1-c1-01 when=arrived unless=red-gulls-beaten
 npc tomas 28.5 15.5 cast=tomas facing=left say="Forty years on this harbour. Never paid a dock tax yet."
 npc gull-1 27 15.8 cast=red-gull facing=right unless=red-gulls-beaten

@@ -10,11 +10,12 @@ namespace LegendQuest.Dialogue.Scripts;
 /// </summary>
 /// <remarks>
 /// STORY.md's A1-C3-01 and A1-C3-02, and what it leaves to fill: the three sick refugees Mira's
-/// remedies go to, and what Brisk, Hedda and her daughter say when you talk to them again. The raid
-/// is a card until combat exists. Mira tells her story about Maleficio either straight away or once
-/// the remedies are handed out, so both of her scripts end on the same lines (Maleficio); the last of
-/// them sounds the horns and sets mira-supplies-done, which brings the Hollowed out of the treeline,
-/// and walking up to them starts the raid.
+/// remedies go to, and what Brisk, Hedda and her daughter say when you talk to them again. Mira
+/// tells her story about Maleficio either straight away or once the remedies are handed out, so both
+/// of her scripts end on the same lines (Maleficio); the last of them sounds the horns and sets
+/// mira-supplies-done, which brings the Hollowed out of the treeline, and walking up to them starts
+/// the raid: a few lines, then the fight (EncounterCatalog's a1-c3-02-raid, with Mira beside you and
+/// the Soul-Bound's bark when the second wave comes), and winning it plays the rest.
 /// </remarks>
 public static class Act1Chapter3
 {
@@ -469,7 +470,7 @@ public static class Act1Chapter3
         },
     };
 
-    /// <summary>A1-C3-02's raid: the Hollowed at the treeline, the Watch too late, the Soul-Bound and Brisk, and Mira joining.</summary>
+    /// <summary>A1-C3-02's raid up to the fight: the Hollowed at the treeline, and Mira coming up beside you.</summary>
     public static readonly DialogueScript Raid = new()
     {
         Id = "a1-c3-02-raid",
@@ -478,18 +479,24 @@ public static class Act1Chapter3
             new()
             {
                 Speaker = Speakers.Narrator, Sound = Sfx.WarHorn,
-                Line = "The horns again, close now. Footmen come across the ford with axes, and behind them a Hexer in rags, chanting, black light gathering in her hands.",
+                Line = "The horns again, close now. Footmen come out of the treeline with rusted swords, and behind them a Hexer in rags, chanting, black light gathering in her hands.",
             },
-            new() { Speaker = "mira", Direction = "stepping up beside you", Line = "I'm not hiding behind the carts. Not again." },
-
-            // The defence of Thornbridge, as a card until combat exists, with the Soul-Bound's bark in the thick of it.
-            new() { Speaker = SoulBound, Direction = "mid-fight", Line = "Where's the Watch?! Where's the king's army?!" },
             new()
             {
-                Speaker = Speakers.Card,
-                Line = "The Hollowed are beaten. The last footman goes down in the shallows with Mira's gold light still burning on his chest, and the river runs grey with ash for a long way downstream.",
-                Effects = new[] { DialogueEffect.Set(RaidBeaten) },
+                Speaker = "mira", Direction = "stepping up beside you", Line = "I'm not hiding behind the carts. Not again.",
+                Effects = new[] { DialogueEffect.Fight("a1-c3-02-raid") },
             },
+        },
+    };
+
+    /// <summary>The rest of A1-C3-02's raid, once the Hollowed are beaten: the Watch too late, the Soul-Bound and Brisk, and Mira joining.</summary>
+    /// <remarks>EncounterCatalog's a1-c3-02-raid plays it when the fight's won, which has set RaidBeaten.</remarks>
+    public static readonly DialogueScript Aftermath = new()
+    {
+        Id = "a1-c3-02-raid-after",
+        Nodes = new DialogueNode[]
+        {
+            new() { Speaker = Speakers.Narrator, Line = "Then it's quiet. What's left of the Hollowed is ash, and the river carries it away grey for a long way downstream." },
             new() { Speaker = Speakers.Narrator, Line = "Only then does the gate open. Sergeant Brisk and his Watch come out at a jog with their spears up, to a camp that doesn't need them any more." },
             new() { Speaker = SoulBound, Direction = "to Brisk, shaking with rage", Line = "You stood behind your wall and watched." },
             new()

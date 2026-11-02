@@ -8,9 +8,10 @@ namespace LegendQuest.Dialogue.Scripts;
 /// board in the Lantern Market.
 /// </summary>
 /// <remarks>
-/// STORY.md's A1-C1-01 and A1-C1-02. The fight with the Red Gulls is a card until combat exists.
-/// The flags it sets change the docks as it goes: the thugs are gone once they're beaten, Grell
-/// once he's dealt with, and the Watch turns up.
+/// STORY.md's A1-C1-01 and A1-C1-02. A1-C1-01 is two conversations either side of the fight with
+/// the Red Gulls (EncounterCatalog's a1-c1-01-gulls): every way into it ends with Grell sending the
+/// thugs at you, and winning it plays the rest. The flags change the docks as it goes: the thugs are
+/// gone once they're beaten, Grell once he's dealt with, and the Watch turns up.
 /// </remarks>
 public static class Act1Chapter1
 {
@@ -32,7 +33,7 @@ public static class Act1Chapter1
     /// <summary>The quest board's been read and the Mirewood contract taken.</summary>
     public const string BoardRead = "a1-c1-02";
 
-    /// <summary>A1-C1-01: the Red Gulls shaking down Old Tomas, the fight, Grell, Captain Hale, and the hook.</summary>
+    /// <summary>A1-C1-01 up to the fight: the Red Gulls shaking down Old Tomas, and what you do about it.</summary>
     public static readonly DialogueScript Docks = new()
     {
         Id = "a1-c1-01",
@@ -69,11 +70,23 @@ public static class Act1Chapter1
             new() { Id = "charges", Speaker = SoulBound, Line = "It's exactly our business. That's Lord Harrow's men with different hats." },
             new() { Speaker = Speakers.Narrator, Line = "{sb} charges in. There's no stopping it now." },
 
+            // However it started, the bosun's the one who finishes it.
+            new() { Id = "fight", Speaker = Speakers.Narrator, Line = "Cudgels come out, and a big man with a hook for a hand shoulders his way to the front of them." },
             new()
             {
-                Id = "fight", Speaker = Speakers.Card, Line = "The Red Gulls are beaten. Bosun Grell goes down last.",
-                Effects = new[] { DialogueEffect.Set(GullsBeaten) },
+                Speaker = "grell", Line = "Fresh off the boat, and already in my harbour's business. Gulls! Collect.",
+                Effects = new[] { DialogueEffect.Fight("a1-c1-01-gulls") },
             },
+        },
+    };
+
+    /// <summary>The rest of A1-C1-01, once the Red Gulls are beaten: Grell on his knees, Captain Hale, and the hook.</summary>
+    /// <remarks>EncounterCatalog's a1-c1-01-gulls plays it when the fight's won, which has set GullsBeaten.</remarks>
+    public static readonly DialogueScript Grell = new()
+    {
+        Id = "a1-c1-01-gulls-after",
+        Nodes = new DialogueNode[]
+        {
             new() { Speaker = Speakers.Narrator, Line = "Grell's on his knees. {sb} keeps a blade at his throat a beat too long." },
             new() { Speaker = "grell", Line = "Mercy! It was just coin!" },
             new()

@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LegendQuest.Characters;
+using LegendQuest.Combat;
 using LegendQuest.Dialogue.Scripts;
+using LegendQuest.Items;
 using LegendQuest.Story;
 using LegendQuest.World;
 
@@ -36,7 +38,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 3;
+    public const int CurrentVersion = 4;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -195,8 +197,10 @@ public static class SaveSystem
     /// gives you the starting party and puts its leader there. Version 2's party was you, Valen and
     /// the four placeholders; version 3 has the Soul-Bound where Valen was, keeping his name and
     /// he and him, and the placeholders gone, since the story recruits the companions. A version 2 game started on the
-    /// harbour, so the Prologue's behind it: without that flag the ship would never come in. The old
-    /// fields only survive the read because of SaveData.Extra.
+    /// harbour, so the Prologue's behind it: without that flag the ship would never come in. Version 4
+    /// is when there were items: everyone in the party and at camp gets dressed in their kit (a
+    /// companion's own, or their class's), and the bag gets the healing potions a new game starts
+    /// with. The old fields only survive the read because of SaveData.Extra.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <returns>The same game, in the shape this build expects.</returns>
@@ -256,6 +260,22 @@ public static class SaveSystem
             data.Flags.Add(Prologue.Done);
         }
 
+        if (data.Version < 4)
+        {
+            // Mend hasn't been at these either, so a list nulled by hand, or someone in it, can still be null.
+            data.Party ??= new List<PartyMember>();
+            data.Camp ??= new List<PartyMember>();
+            data.Inventory ??= new List<ItemStack>();
+            foreach (PartyMember member in data.Party.Concat(data.Camp))
+            {
+                if (member is null) continue;
+                member.Scores ??= new();
+                member.Equipment ??= new Dictionary<EquipmentSlot, string>();
+                member.PutOn(Origins.KitFor(member.Id, member.Class));
+            }
+            data.Bag.Add(ItemCatalog.HealingPotion, SaveData.StartingPotions);
+        }
+
         data.Version = CurrentVersion;
         return data;
     }
@@ -269,18 +289,23 @@ public static class SaveSystem
     /// <summary>Puts back anything a hand-edited file left out or set to null, so nothing that reads the save has to check.</summary>
     /// <remarks>
     /// A save with nobody in the party gets the starting party, standing nowhere, which puts them on
-    /// the map's start. Hit points out of range get pulled back in.
+    /// the map's start. Anything in the bag or worn that this build hasn't got is dropped, the bag is
+    /// put back into stacks the way Inventory keeps it, and something worn in a slot it doesn't go in
+    /// goes back in the bag. Hit points out of range get pulled back in, after the equipment, since
+    /// what's worn can add to the most there can be.
     /// </remarks>
     /// <param name="data">The save, upgraded.</param>
     private static void Mend(SaveData data)
     {
         data.Flags ??= new();
+        data.Tips ??= new();
         data.Opened ??= new();
         data.Triggered ??= new();
         data.Waypoints ??= new();
         data.Seen ??= new();
 
         data.Camp ??= new();
+        if (data.Fight is not null && !EncounterCatalog.Exists(data.Fight)) data.Fight = null;
         data.Items ??= new();
         data.Meters ??= new();
         data.Camp.RemoveAll(member => member is null);
@@ -290,6 +315,7 @@ public static class SaveSystem
             if (Meters.Exists(meter)) data.SetMeter(meter, data.Meters[meter]);
             else data.Meters.Remove(meter);
         }
+        MendBag(data);
 
         data.Party ??= new();
         data.Party.RemoveAll(member => member is null);
@@ -302,7 +328,39 @@ public static class SaveSystem
             member.Name ??= string.Empty;
             member.Scores ??= new();
             member.Look ??= new();
+            member.Xp = Math.Max(0, member.Xp);
+            MendEquipment(member, data.Bag);
+            member.Spent ??= new();
+            foreach (string resource in new List<string>(member.Spent.Keys))
+                if (member.Spent[resource] <= 0) member.Spent.Remove(resource);
             member.Hp = Math.Clamp(member.Hp, 0, member.MaxHp);
+        }
+    }
+
+    /// <summary>Drops anything in the bag that isn't an item or isn't there at all, and puts the rest back into stacks the way Inventory keeps them.</summary>
+    /// <param name="data">The save.</param>
+    private static void MendBag(SaveData data)
+    {
+        List<ItemStack> read = data.Inventory ?? new List<ItemStack>();
+        data.Inventory = new List<ItemStack>();
+
+        Inventory bag = data.Bag;
+        foreach (ItemStack stack in read)
+            if (stack is not null && ItemCatalog.Exists(stack.Id) && stack.Count > 0) bag.Add(stack.Id, stack.Count);
+    }
+
+    /// <summary>Drops anything worn that isn't an item, and moves anything worn where it doesn't go into the bag.</summary>
+    /// <param name="member">Who.</param>
+    /// <param name="bag">The party's bag.</param>
+    private static void MendEquipment(PartyMember member, Inventory bag)
+    {
+        member.Equipment ??= new();
+        foreach ((EquipmentSlot slot, string id) in new List<KeyValuePair<EquipmentSlot, string>>(member.Equipment))
+        {
+            if (ItemCatalog.Exists(id) && ItemCatalog.Get(id).Fits(slot)) continue;
+
+            member.Equipment.Remove(slot);
+            if (ItemCatalog.Exists(id)) bag.Add(id);
         }
     }
 

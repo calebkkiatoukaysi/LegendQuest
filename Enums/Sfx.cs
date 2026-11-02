@@ -91,4 +91,65 @@ public enum Sfx
 
     /// <summary>A coin flipped and caught, or pay counted into a hand.</summary>
     Coin,
+
+    // Fighting.
+
+    /// <summary>A blade landing.</summary>
+    SwordHit,
+
+    /// <summary>A blow that misses: a whoosh past and nothing else.</summary>
+    Miss,
+
+    /// <summary>A critical hit: the blow harder, a boom under it and Steel's call flaring on chimes.</summary>
+    Crit,
+
+    /// <summary>A blunt blow landing: a mace, a hammer, a fist.</summary>
+    Thud,
+
+    /// <summary>A blow taken on a shield.</summary>
+    Shield,
+
+    /// <summary>A bow loosed in a fight. Shorter and tighter than Bowshot, which is for the story.</summary>
+    Bow,
+
+    /// <summary>A spell let go.</summary>
+    Cast,
+
+    /// <summary>Fire catching and roaring: a fire bolt landing, or alchemist's fire.</summary>
+    Fire,
+
+    /// <summary>Frost spreading and setting: a ray of frost landing.</summary>
+    Frost,
+
+    /// <summary>Someone healed.</summary>
+    Heal,
+
+    /// <summary>A potion drunk.</summary>
+    Potion,
+
+    /// <summary>The Soul-Link: two heartbeats falling into step and two voices meeting, as the duo strike together.</summary>
+    SoulLink,
+
+    /// <summary>Your turn starting: Steel's call run up quickly on plucked strings.</summary>
+    TurnStart,
+
+    /// <summary>Someone in the party going down, and one heartbeat after: down, not dead.</summary>
+    Downed,
+
+    /// <summary>Something dying.</summary>
+    Death,
+
+    /// <summary>The fight won: Steel's call on the trumpet over the horns.</summary>
+    Victory,
+
+    /// <summary>The party fallen: the call turned upside down, a choir and a great bell.</summary>
+    GameOver,
+
+    // Gear and shops.
+
+    /// <summary>Putting gear on: leather, a buckle, a little mail.</summary>
+    Equip,
+
+    /// <summary>Buying something: a purse set down and a coin rung on the counter.</summary>
+    Buy,
 }

@@ -87,6 +87,14 @@ public partial class ExploreScreen
             return;
         }
 
+        // A tip's card is in front of everything, and a click on it puts it away (HandleTutorialInput).
+        if (PointingAtTutorial())
+        {
+            _preview = null;
+            _cursor.Shape = CursorShape.Use;
+            return;
+        }
+
         // The party's cards are in front of the map, so they come first.
         if (_strip.CardAt(_mouse, _walkers.Count, _game.Leader) is int card)
         {

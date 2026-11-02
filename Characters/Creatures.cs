@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework;
 namespace LegendQuest.Characters;
 
 /// <summary>
-/// The creatures a map can put down with npc ... creature=(id): the beasts, the Hollowed and the
-/// things that guard the vault, each with its name and the shape of its frames.
+/// The creatures a map can put down with npc ... creature=(id): the sea-wraiths, the beasts, the
+/// Hollowed and the things that guard the vault, each with its name and the shape of its frames.
 /// </summary>
 /// <remarks>
 /// Each one's sheet is Content/Creatures/(id).png, drawn by tools/generate_creatures.py and laid out
@@ -22,6 +22,11 @@ public static class Creatures
 
     private static readonly Creature[] Table =
     {
+        // The Prologue's drowned things, up over the Gull's Wager's rail: a person's frame, but it
+        // floats, so the shadow under it is a small one, a hand's breadth below its rags.
+        new("sea-wraith", "Sea-wraith",
+            Standing(32, 48, figure: new(16f, 40f), shadow: new(12f, 4f), footprint: new(10f, 4f))),
+
         // A Mirewood wolf with black smoke leaking from its eyes: long and low, side on.
         new("gloomfang", "Gloomfang Wolf",
             Standing(48, 32, figure: new(34f, 26f), shadow: new(30f, 6f), footprint: new(18f, 5f))),

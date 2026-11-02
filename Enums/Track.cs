@@ -23,4 +23,10 @@ public enum Track
 
     /// <summary>"Sunspire": the royal keep, all gold light and old ceremony.</summary>
     Court,
+
+    /// <summary>"Steel": a fight. Strings and drums driving under the horns' call.</summary>
+    Battle,
+
+    /// <summary>"The Hunger": a boss fight. Steel's call bent out of shape over the black crystal's hum.</summary>
+    Boss,
 }

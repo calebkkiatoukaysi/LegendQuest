@@ -152,7 +152,7 @@ prop flowers-pink 2.6 21.4
 prop bush-flowers 7.8 21.5
 prop flowers-mixed 4.2 11.8
 prop fern 2.8 9.6
-chest glade 5 9.4 gold=15
+chest glade 5 9.4 gold=15 items=healing-potion
 
 ; The clearing where the Gloomfangs are, a few tiles in. A1-C2-01 starts as you walk in, from the
 ; trail or the grass either side of it. Sera's at the tree line on its north side, in the shadow
@@ -163,7 +163,7 @@ npc wolf-1 13 16.4 creature=gloomfang facing=left unless=gloomfangs-beaten
 npc wolf-2 15.6 18.2 creature=gloomfang facing=left unless=gloomfangs-beaten
 npc wolf-3 13.4 20.6 creature=gloomfang facing=left unless=gloomfangs-beaten
 npc wolf-4 16.8 21.2 creature=gloomfang facing=left unless=gloomfangs-beaten
-npc sera 14.5 13.8 cast=sera facing=down unless=sera-recruited
+npc sera 14.5 12.6 cast=sera facing=down unless=sera-recruited
 prop bones 18.2 21.6
 prop log 18.6 15.2
 prop rocks-mossy 10.6 15.2
@@ -194,7 +194,7 @@ prop woodcutter-stump 43.4 12.4
 prop log 45.6 14.8
 prop log 42.2 15.6
 prop crate 40.4 11.2
-chest woodcutters 46.2 12 gold=30
+chest woodcutters 46.2 12 gold=30 items=handaxe,leather-gloves
 
 ; The tar glade, south off the yard: tar welling up in pools, the gloom mushrooms that grow round
 ; them, the bones of a deer that drank there, and a chest past the pools.
@@ -206,7 +206,7 @@ prop gloom-mushroom-small 44.8 26.2
 prop gloom-mushroom-small 40.8 23.6
 prop bones 42.4 25
 light glow-glade 44.5 22.5 reach=3 strength=0.3
-chest tar-glade 47.2 22.6 gold=45
+chest tar-glade 47.2 22.6 gold=45 items=alchemists-fire,wolf-pelt
 
 ; The quarry's mouth, cut into the rock to the north-east, the trail running up into it. The stream
 ; comes out of the foot of the rock beside it, black where it starts. The rangers have a sign up
