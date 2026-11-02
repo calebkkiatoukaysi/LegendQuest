@@ -20,5 +20,6 @@ namespace LegendQuest.World;
 /// <param name="Talk">The conversation talking to them starts, by its id in DialogueCatalog, while it can start, or null to look theirs up by their id.</param>
 /// <param name="Wander">How far they walk about from where they're put, in world pixels. Zero to stand still.</param>
 /// <param name="Presence">When they're there.</param>
+/// <param name="Aboard">The prop they're standing on, by its id, if they ride on one that moves (the crew on the ship coming into the harbour), or null if they're on the ground.</param>
 public sealed record MapNpc(string Id, string Name, Vector2 Feet, Direction Facing, string Sheet, string Cast, CharacterLook Look,
-    string Creature, IReadOnlyList<string> Say, string Talk, float Wander, MapPresence Presence);
+    string Creature, IReadOnlyList<string> Say, string Talk, float Wander, MapPresence Presence, string Aboard = null);

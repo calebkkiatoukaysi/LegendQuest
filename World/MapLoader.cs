@@ -479,12 +479,19 @@ public static class MapLoader
             float wander = o.Number("wander", 0f);
             if (wander < 0f) throw o.Fail("wander can't be less than nothing");
 
+            // Someone aboard a prop stands on its deck, not the tiles under it (the ship's crew are
+            // over the water), and goes where it goes, so they can't wander off it.
+            string aboard = o.Text("aboard");
+            if (aboard is not null && !objects.Exists(other => other.Kind == "prop" && other.Id == aboard))
+                throw o.Fail($"{o.Id} is aboard {aboard}, but there's no {aboard} on this map");
+            if (aboard is not null && wander > 0f) throw o.Fail($"{o.Id} is aboard {aboard}, so they can't wander as well");
+
             var npc = new MapNpc(o.Id, name, FeetOn(o), o.Facing("facing", Direction.Down), sheet, castId, look, creatureId,
-                ReadLines(o, "say"), talk, wander * Tilemap.TileSize, o.Presence());
-            o.Done("name, sheet, look, cast, creature, facing, say, talk, wander, when, unless");
+                ReadLines(o, "say"), talk, wander * Tilemap.TileSize, o.Presence(), aboard);
+            o.Done("name, sheet, look, cast, creature, facing, say, talk, wander, aboard, when, unless");
 
             Point cell = Tilemap.CellOf(npc.Feet);
-            if (solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
+            if (aboard is null && solid(cell.X, cell.Y)) throw o.Fail($"{o.Id} is standing on a solid tile");
             npcs.Add(npc);
         }
 

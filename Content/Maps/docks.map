@@ -70,6 +70,13 @@ exit city 75 3 h=8 to=questeria at=docks
 ; one above the other, since the arrival walks you off by where they are.
 prop ship 27.5 26.5
 prop gangplank 27.5 27.5
+
+; Her crew, the same three as on her deck at sea, still aboard when she comes in: the captain
+; aft of the mast and the two deckhands amidships, clear of the gangway. aboard=ship keeps them on
+; her deck as she sails in, and leaves them there once she's tied up.
+npc odelle 29.75 23.375 cast=odelle facing=left aboard=ship say="Questeria. Told you she'd hold.|Mind the plank. It's seen more ale than I have.|Go on, then. Make a name. Send me a song about it."
+npc sailor-a 28.625 24 look=146 name="A Deckhand" facing=left aboard=ship say="Solid ground. My legs won't believe it till Thursday.|Shore leave! Somebody tell my stomach.|Two days of beans, and now the smell of fish pie. Cruel."
+npc sailor-b 25.875 23.5 look=122 name="A Deckhand" facing=down aboard=ship say="Lines fast, wraiths behind us. Good morning.|Coiled clockwise. Told you it'd hold.|First round's on whoever saw the wraiths and didn't scream."
 prop bollard 21.5 27
 prop bollard 34 27
 prop rowboat 10 20

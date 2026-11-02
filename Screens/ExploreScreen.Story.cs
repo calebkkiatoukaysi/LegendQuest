@@ -243,11 +243,13 @@ public partial class ExploreScreen
         if (frame == PlankDown) _audio.Play(Sfx.Door);
     }
 
-    /// <summary>Moves the ship off where she ties up, and her near rail with her.</summary>
+    /// <summary>Moves the ship off where she ties up, her near rail with her, and her crew on her deck.</summary>
     private void MoveShip(Vector2 offset)
     {
         _ship.Offset = offset;
         _gangplank.Offset = offset;
+        foreach (Npc npc in _everyNpc)
+            if (npc.Definition.Aboard == _ship.Definition.Id) npc.Walker.Position = npc.Definition.Feet + offset;
     }
 
     /// <summary>The middle of the ship's deck, which the camera keeps on while she sails in.</summary>
