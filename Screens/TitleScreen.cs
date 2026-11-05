@@ -156,7 +156,7 @@ public class TitleScreen : MenuScreen
     /// <summary>Goes to the map the game is on, with its name on the black in between.</summary>
     /// <param name="game">The game, new or loaded.</param>
     private void Begin(SaveData game) =>
-        LoadingScreen.Load(ScreenManager, MapCatalog.Get(game.MapId).Name.ToUpperInvariant(), new ExploreScreen(game));
+        LoadingScreen.Load(ScreenManager, ZoneCatalog.Get(game.ZoneId).Name.ToUpperInvariant(), new ExploreScreen(game));
 
     /// <summary>Lights CONTINUE if any slot has a game in it, and kills it if none do.</summary>
     private void RefreshContinue() => _continue.Plate.Enabled = SaveSystem.Latest() is not null;

@@ -95,7 +95,7 @@ public partial class ExploreScreen
     /// <summary>How far up their figure from their feet someone's chest is, as a share of how tall they stand: where blows land and motes rise from.</summary>
     private const float ChestShare = 0.55f;
 
-    /// <summary>How long a fallen foe takes to fade off the map, and how faint one of the party who's fallen is drawn.</summary>
+    /// <summary>How long a fallen foe takes to fade out of the room, and how faint one of the party who's fallen is drawn.</summary>
     private const float FadeOutSeconds = 0.8f;
     private const float FallenOpacity = 0.6f;
 

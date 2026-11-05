@@ -1489,7 +1489,7 @@ def ship_end_ground(bow):
     """What the ground under the bow or the stern has to be, a row of map characters per row of
     the block: deck (-) where every pixel of a cell is deck you could stand on, rail (#) where the
     picture covers it all, and sea (~) where any of the sea shows. The script prints them with
-    --ship-ends, for copying into gulls-wager.map when the bow or the stern changes shape."""
+    --ship-ends, for copying into tools/rooms/legacy/gulls-wager.map when the bow or the stern changes shape."""
     img = ship_end(bow)
     rows = []
     for cy in range(SHIP_BLOCK):

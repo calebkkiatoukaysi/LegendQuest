@@ -41,7 +41,7 @@ public sealed class DialogueScript
     /// <summary>The marker over whoever it's with, while talking to them would start it: a gold "!" for work or a quest, a red one for an event, or none.</summary>
     public MarkerKind Marker { get; init; }
 
-    /// <summary>The map it happens on, by its id in MapCatalog, or null for one that isn't on a map (the creation screen's).</summary>
+    /// <summary>The zone it happens in, by its id in ZoneCatalog, or null for one that isn't in a zone (the creation screen's).</summary>
     /// <remarks>Only for the start-up check, which looks for the spawns and the people its cues name on it. Whatever map it's played over is the one its cues play on.</remarks>
     public string Map { get; init; }
 

@@ -76,17 +76,20 @@ public partial class LegendQuestGame : Game
         base.Initialize();
     }
 
-    /// <summary>Reads every map and checks every table that's read from them: the conversations, the shops and the loot.</summary>
+    /// <summary>Reads every map and every zone, and checks every table that's read from them: the conversations, the shops and the loot.</summary>
     /// <remarks>
     /// Throws on the first fault, with what and where. The game does it as it starts, and --validate
     /// does it alone, with no window, so the data can be checked in a second instead of a proof run.
     /// Nothing else reads the shops or the loot tables until a shop opens or a fight's won, so a bad
-    /// row in one would otherwise only show up then; reading them checks them now.
+    /// row in one would otherwise only show up then; reading them checks them now. The zones are read
+    /// before the conversations, which check their travels against them, and the rest of the zones'
+    /// checks (talks, barks, every fight's foes together) wait for the conversations.
     /// </remarks>
     public static void LoadAndCheckData()
     {
-        MapCatalog.LoadAll();
+        ZoneCatalog.LoadAll();
         DialogueCatalog.ValidateAll();
+        ZoneCatalog.ValidateAfterDialogue();
         _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
     }
 

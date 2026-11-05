@@ -12,7 +12,8 @@ namespace LegendQuest.World;
 /// the player. The difference is that the world is in art pixels now and the camera does the scaling,
 /// so zoom is just the scale: 2x, 3x or 4x, never anything in between, so every art pixel stays a
 /// square of whole screen pixels. The offset is still rounded to whole screen pixels, because the
-/// tiles shimmer otherwise.
+/// tiles shimmer otherwise. In a room it's locked (LockTo): one zoom, the room's own, and the view
+/// only ever slides along the room, since a room is exactly as tall as the screen.
 /// </remarks>
 public class Camera2D
 {
@@ -28,6 +29,9 @@ public class Camera2D
     /// <summary>Where the zoom starts. 3x is the size all the art is drawn for.</summary>
     private const int DefaultZoom = 3;
 
+    /// <summary>Whether it's locked to a room, so the wheel doesn't zoom it.</summary>
+    private bool _locked;
+
     /// <summary>How big the view is, in screen pixels.</summary>
     public Point ViewSize { get; }
 
@@ -39,6 +43,9 @@ public class Camera2D
 
     /// <summary>How many screen pixels one art pixel covers.</summary>
     public int Zoom { get; private set; } = DefaultZoom;
+
+    /// <summary>The left edge of the view in world pixels, exactly where it's drawn from: what a room's layers slide against.</summary>
+    public float Left => Offset.X / (float)Zoom;
 
     /// <summary>How big one screen pixel is in world pixels. Things snap to this so they move a screen pixel at a time.</summary>
     public float Pixel => 1f / Zoom;
@@ -83,6 +90,17 @@ public class Camera2D
     /// <param name="world">The point, in world pixels.</param>
     public Vector2 ToScreen(Vector2 world) => Vector2.Transform(world, Transform);
 
+    /// <summary>Locks the camera to a room: its bounds, and the one zoom a room is drawn at, which the wheel can't change.</summary>
+    /// <param name="bounds">The room, in world pixels.</param>
+    /// <param name="zoom">Screen pixels to a world pixel: ZoneCatalog.RoomScale.</param>
+    public void LockTo(Rectangle bounds, int zoom)
+    {
+        Bounds = bounds;
+        Zoom = zoom;
+        _locked = true;
+        Centre = Clamp(Centre);
+    }
+
     /// <summary>Jumps the camera straight to a point with no easing. Used on the first frame.</summary>
     /// <param name="target">The world point to look at.</param>
     public void SnapTo(Vector2 target) => Centre = Clamp(target);
@@ -102,11 +120,13 @@ public class Camera2D
     /// <param name="within">How near counts, in world pixels.</param>
     public bool IsNear(Vector2 target, float within) => Vector2.Distance(Centre, Clamp(target)) <= within;
 
-    /// <summary>Zooms in or out by whole steps, staying between MinZoom and MaxZoom.</summary>
+    /// <summary>Zooms in or out by whole steps, staying between MinZoom and MaxZoom. Not while it's locked to a room.</summary>
     /// <param name="steps">How many steps in (positive) or out (negative).</param>
     /// <returns>True if the zoom changed.</returns>
     public bool ZoomBy(int steps)
     {
+        if (_locked) return false;
+
         int zoom = Math.Clamp(Zoom + steps, MinZoom, MaxZoom);
         if (zoom == Zoom) return false;
 

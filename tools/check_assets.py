@@ -5,10 +5,13 @@ before every commit:
     python tools/check_assets.py
 
 It fails with a list of problems if:
-  - a file under Content/ or tools/source/, or a script in tools/, isn't named in ASSETS.md
+  - a file under Content/ or tools/source/, or a script in tools/ or tools/rooms/, isn't named in ASSETS.md
   - ASSETS.md names a file that doesn't exist
   - a /build: or /copy: line in Content.mgcb points at a file that doesn't exist
   - a file under Content/ isn't in Content.mgcb
+  - a room in Content/Zones/ is missing a painted layer in Content/Rooms/ (its mid layer, foreground,
+    thumbnail and doors.txt, and outdoors its sky and far layer), or a folder in Content/Rooms/ is
+    for no room at all
 
 One exception to the last one: a font file counts as in Content.mgcb when a .spritefont that is in
 it names the font. The pipeline reads the TTF through the .spritefont and bakes the letters out of
@@ -36,6 +39,13 @@ TEMPLATE_FILES = ("Icon.ico", "Icon.bmp", "app.manifest")
 PATH_PATTERN = re.compile(r"(?:Content|tools)/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
 
 FONT_PATTERN = re.compile(r"<FontName>\s*([^<]+?)\s*</FontName>")
+
+#: The folders of scripts ASSETS.md has to name every one of.
+SCRIPT_FOLDERS = ("tools", os.path.join("tools", "rooms"))
+
+#: What every room's folder in Content/Rooms/ has, and what only a street's (outdoors) has too.
+ROOM_FILES = ("mid.png", "fore.png", "thumb.png", "doors.txt")
+STREET_FILES = ("sky.png", "far.png")
 
 
 def rel(path):
@@ -80,6 +90,51 @@ def fonts_named_by(spritefonts):
     return fonts
 
 
+def rooms():
+    """Every room in Content/Zones/, as (its paint folder, whether it's a street), read straight off
+    the zone files: its [room] line, and its kind and paint settings if it has them."""
+    found = []
+    folder = os.path.join(CONTENT, "Zones")
+    if not os.path.isdir(folder):
+        return found
+    for name in sorted(os.listdir(folder)):
+        if not name.endswith(".txt"):
+            continue
+        zone = name[:-4]
+        room = None
+        with open(os.path.join(folder, name), encoding="utf-8") as f:
+            for line in f:
+                line = line.split(";")[0].strip()
+                head = re.match(r"\[room\s+([\w-]+)\]$", line)
+                if head or line.startswith("["):
+                    if room:
+                        found.append(room)
+                    room = [zone + "/" + head.group(1), True] if head else None
+                elif room and re.match(r"kind\s*=\s*interior$", line):
+                    room[1] = False
+                elif room and line.startswith("paint"):
+                    room[0] = line.split("=", 1)[1].strip()
+        if room:
+            found.append(room)
+    return [tuple(r) for r in found]
+
+
+def room_problems(content_files):
+    """Rooms missing a painted file, and folders in Content/Rooms/ that are for no room."""
+    problems = []
+    painted = set()
+    for paint, street in rooms():
+        painted.add(paint)
+        for name in ROOM_FILES + (STREET_FILES if street else ()):
+            path = "Content/Rooms/" + paint + "/" + name
+            if not os.path.isfile(os.path.join(ROOT, path)):
+                problems.append("room " + paint + " has no " + path + " (run tools/rooms/generate_room_placeholders.py)")
+    for path in content_files:
+        if path.startswith("Content/Rooms/") and path.rsplit("/", 1)[0][len("Content/Rooms/"):] not in painted:
+            problems.append(path + " is for a room that isn't in Content/Zones")
+    return problems
+
+
 def main():
     problems = []
 
@@ -90,7 +145,8 @@ def main():
 
     content_files = files_under(CONTENT, BUILD_FOLDERS)
     source_files = files_under(os.path.join(ROOT, "tools", "source"))
-    scripts = sorted(rel(os.path.join(ROOT, "tools", n)) for n in os.listdir(os.path.join(ROOT, "tools")) if n.endswith(".py"))
+    scripts = sorted(rel(os.path.join(ROOT, folder, n)) for folder in SCRIPT_FOLDERS if os.path.isdir(os.path.join(ROOT, folder))
+                     for n in os.listdir(os.path.join(ROOT, folder)) if n.endswith(".py"))
 
     for path in content_files + source_files + scripts:
         if path not in named:
@@ -111,6 +167,8 @@ def main():
             continue
         if path not in covered:
             problems.append(path + " isn't in Content.mgcb")
+
+    problems += room_problems(content_files)
 
     if problems:
         print("check_assets: %d problem%s" % (len(problems), "" if len(problems) == 1 else "s"))

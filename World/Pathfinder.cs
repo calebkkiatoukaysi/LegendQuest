@@ -9,18 +9,19 @@ namespace LegendQuest.World;
 /// </summary>
 /// <remarks>
 /// Not from a tutorial; it's the usual A*. Eight directions, but never diagonally past the corner
-/// of a blocked tile, since the feet would catch on it. A straight step costs 1 and a diagonal √2,
+/// of a blocked cell, since the feet would catch on it. A straight step costs 1 and a diagonal √2,
 /// so paths come out the way someone would walk them, and the guess at the rest of the way is the
 /// same measure with nothing in the way (octile distance), which never guesses too much, so the
-/// path is the shortest. The open list is a BinaryHeap. The tile path then gets pulled straight
-/// wherever the feet could walk a straight line, so you don't zigzag across an open square.
+/// path is the shortest. The open list is a BinaryHeap. The cell path then gets pulled straight
+/// wherever the feet could walk a straight line, so you don't zigzag across an open square. The
+/// grid is a room's floor in fine cells; everything here is in its own cells.
 /// </remarks>
 public static class Pathfinder
 {
     /// <summary>The cost of a diagonal step.</summary>
     private static readonly float Diagonal = MathF.Sqrt(2f);
 
-    /// <summary>The eight steps from a tile: the four straight ones first, then the diagonals.</summary>
+    /// <summary>The eight steps from a cell: the four straight ones first, then the diagonals.</summary>
     private static readonly Point[] Steps =
     {
         new(1, 0), new(-1, 0), new(0, 1), new(0, -1),
@@ -31,19 +32,20 @@ public static class Pathfinder
     /// <param name="grid">Where can be walked.</param>
     /// <param name="from">Where the feet are now, in world pixels.</param>
     /// <param name="to">Where to go, in world pixels.</param>
-    /// <param name="reach">How close is close enough, in world pixels. 0 means the tile it's in, which has to be walkable.</param>
-    /// <returns>The points to walk through, in order, not counting where you are; or null if there's no way there.</returns>
+    /// <param name="reach">How close is close enough, in world pixels. 0 means the cell it's in, which has to be walkable.</param>
+    /// <returns>The points to walk through, in order, not counting where you are; or null if there's no way there, or you're off the grid.</returns>
     public static List<Vector2> Find(NavGrid grid, Vector2 from, Vector2 to, float reach)
     {
-        Point start = Tilemap.CellOf(from), target = Tilemap.CellOf(to);
+        Point start = grid.CellOf(from), target = grid.CellOf(to);
+        if (start.X < 0 || start.Y < 0 || start.X >= grid.Width || start.Y >= grid.Height) return null;
         if (reach <= 0f && !grid.IsWalkable(target)) return null;
 
-        bool Arrived(Point cell) => reach <= 0f ? cell == target : Vector2.Distance(NavGrid.Middle(cell), to) <= reach;
+        bool Arrived(Point cell) => reach <= 0f ? cell == target : Vector2.Distance(grid.MiddleOf(cell), to) <= reach;
         float Guess(Point cell)
         {
             int dx = Math.Abs(cell.X - target.X), dy = Math.Abs(cell.Y - target.Y);
             float octile = Math.Max(dx, dy) + (Diagonal - 1f) * Math.Min(dx, dy);
-            return MathF.Max(0f, octile - reach / Tilemap.TileSize);
+            return MathF.Max(0f, octile - reach / grid.CellSize);
         }
 
         int width = grid.Width, height = grid.Height;
@@ -72,7 +74,7 @@ public static class Pathfinder
                 var next = new Point(cell.X + step.X, cell.Y + step.Y);
                 if (!grid.IsWalkable(next)) continue;
 
-                // No cutting a corner: a diagonal needs both of the straight tiles beside it clear.
+                // No cutting a corner: a diagonal needs both of the straight cells beside it clear.
                 bool diagonal = step.X != 0 && step.Y != 0;
                 if (diagonal && (!grid.IsWalkable(new Point(cell.X + step.X, cell.Y)) || !grid.IsWalkable(new Point(cell.X, cell.Y + step.Y))))
                     continue;
@@ -90,7 +92,7 @@ public static class Pathfinder
         return null;
     }
 
-    /// <summary>Walks back from the end along where each tile was reached from, and turns it round.</summary>
+    /// <summary>Walks back from the end along where each cell was reached from, and turns it round.</summary>
     private static List<Point> Walk(int[] came, int end, int width)
     {
         var cells = new List<Point>();
@@ -99,7 +101,7 @@ public static class Pathfinder
         return cells;
     }
 
-    /// <summary>Pulls a tile path straight: from each point, on to the furthest one ahead that the feet could walk straight to.</summary>
+    /// <summary>Pulls a cell path straight: from each point, on to the furthest one ahead that the feet could walk straight to.</summary>
     private static List<Vector2> Smooth(NavGrid grid, Vector2 from, List<Point> cells)
     {
         var points = new List<Vector2>();
@@ -111,20 +113,20 @@ public static class Pathfinder
             int furthest = i + 1;
             for (int j = cells.Count - 1; j > i + 1; j--)
             {
-                if (grid.LineClear(at, NavGrid.Middle(cells[j])))
+                if (grid.LineClear(at, grid.MiddleOf(cells[j])))
                 {
                     furthest = j;
                     break;
                 }
             }
 
-            at = NavGrid.Middle(cells[furthest]);
+            at = grid.MiddleOf(cells[furthest]);
             points.Add(at);
             i = furthest;
         }
 
-        // Already standing in the end tile, so just go to the middle of it.
-        if (points.Count == 0) points.Add(NavGrid.Middle(cells[^1]));
+        // Already standing in the end cell, so just go to the middle of it.
+        if (points.Count == 0) points.Add(grid.MiddleOf(cells[^1]));
         return points;
     }
 }

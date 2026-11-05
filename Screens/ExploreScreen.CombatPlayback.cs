@@ -119,9 +119,9 @@ public partial class ExploreScreen
     private void FadeTo(WalkerSprite walker, float opacity, float seconds) => _fades[walker] = (opacity, 1f / MathF.Max(seconds, float.Epsilon));
 
     /// <summary>Runs the fight a frame on, if there is one: everyone's figures, what's thrown about, the screen's pieces, the camera, and then whatever's next.</summary>
-    /// <remarks>Replaces the map's own running while a fight's on, so nobody strolls off, no trigger goes off and no scene plays mid-fight. The torches and the toasts still run.</remarks>
+    /// <remarks>Replaces the room's own running while a fight's on, so nobody strolls off, no trigger goes off and no scene plays mid-fight. The torches, the toasts and the room's life still run.</remarks>
     /// <param name="gameTime">The frame's timing.</param>
-    /// <returns>True if a fight's on, so the map's own running should stop here.</returns>
+    /// <returns>True if a fight's on, so the room's own running should stop here.</returns>
     private bool UpdateCombat(GameTime gameTime)
     {
         if (!InCombat) return false;
@@ -232,6 +232,8 @@ public partial class ExploreScreen
         // next step's slide starts this same frame, before the walk cycle's looked at again.
         foreach (WalkerSprite walker in _fighters.Values)
             if (!_glides.ContainsKey(walker)) walker.IsWalking = false;
+        foreach (Npc npc in _standingBack.Keys)
+            if (!_glides.ContainsKey(npc.Walker)) npc.Walker.IsWalking = false;
 
         foreach (WalkerSprite walker in new List<WalkerSprite>(_fades.Keys))
         {

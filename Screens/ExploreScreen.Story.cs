@@ -16,27 +16,34 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The story on a map: conversations, the scenes that play by themselves, what you're to do next in
+/// The story in a room: conversations, the scenes that play by themselves, what you're to do next in
 /// the corner of the screen, the townsfolk strolling about, and the ship coming in.
 /// </summary>
 /// <remarks>
-/// The ship comes into the harbour once the Prologue's over: she sails in along the pier with you and
-/// the Soul-Bound on her foredeck, her sail coming in as she slows, ties up clear of the boardwalk,
-/// the gangplank slides out of her rail and down onto the pier, you both walk off along the pier and
-/// up the jetty to the boardwalk, and Act 1's card comes up. Then the harbour's own scene takes over
-/// (the Red Gulls). It's steps on a clock, not a general cutscene system; the scenes are data, in the
-/// map files. Nothing you press moves you while the ship's coming in, but Escape skips it.
+/// The ship comes into the harbourside once the Prologue's over, side on at the back of the floor:
+/// she sails in from the east with you and the Soul-Bound on her deck behind her near rail, her sail
+/// coming in as she slows, ties up, the gangplank slides out of her rail and down onto the quay, you
+/// both walk along the deck, down the plank and along the quay to the harbourside's start, and Act 1's
+/// card comes up. Then the harbour's own scene takes over (the Red Gulls). Her crew stand on her deck
+/// the whole time, wherever she is. It's steps on a clock, not a general cutscene system; the scenes
+/// are data, in the zone files. Nothing you press moves you while the ship's coming in, but Escape
+/// skips it.
 /// </remarks>
 public partial class ExploreScreen
 {
     private const string SkipHint = "ESC  ·  SKIP";
     private const string FirstChapter = "Chapter 1  ·  Saltwind Welcome";
-    private const string ControlsLine = "WASD or click to walk  ·  E to talk  ·  M for the map";
+    private const string ControlsLine = "WASD or click to walk  ·  E to talk  ·  ALT to show all  ·  M for the zone map";
 
     /// <summary>The flag the ship coming in sets once you're off it.</summary>
     public const string Arrived = "arrived";
 
-    /// <summary>Where what you're to do next goes, under the map's name.</summary>
+    /// <summary>The zone she comes in to, and the props that are her and her near rail there.</summary>
+    private const string HarbourZone = "docks";
+    private const string ShipProp = "ship";
+    private const string RailProp = "gangplank";
+
+    /// <summary>Where what you're to do next goes, under the zone's name.</summary>
     private const float ObjectiveY = 50f;
 
     /// <summary>How far east of where she ties up the ship starts, and how long she takes to sail in.</summary>
@@ -90,15 +97,18 @@ public partial class ExploreScreen
     private static readonly Vector2 ShipViewOffset = new(-40f, -50f);
 
     /// <summary>
-    /// Where you and the Soul-Bound stand on her foredeck, from the ship's foot, close enough to her
-    /// near rail that it hides your feet; and the way off: along the deck to the gangway, down the plank
-    /// onto the pier, along the pier to the jetty, up the jetty to the boardwalk, and a step along it.
-    /// Nobody goes behind her mast, her sail or her rigging, which are all north of the deck.
+    /// Where you and the Soul-Bound stand on her deck, from the ship's foot, behind her near rail so it
+    /// hides your feet, and where her crew stand on it; and the way off: along the deck to the gangway
+    /// and down the plank onto the quay, from the ship's foot, before the walk along the quay to the
+    /// harbourside's start. Everyone on her deck sorts between her and her rail, by their feet.
     /// </summary>
     private static readonly Vector2 YouOnDeck = new(-80f, -46f);
     private static readonly Vector2 SoulBoundOnDeck = new(-56f, -37f);
-    private static readonly Vector2[] SoulBoundOff = { new(-44f, -34f), new(-44f, 20f), new(-152f, 20f), new(-152f, -154f), new(-120f, -168f) };
-    private static readonly Vector2[] YouOff = { new(-44f, -34f), new(-44f, 20f), new(-164f, 20f), new(-164f, -146f), new(-140f, -156f) };
+    private const float CrewOnDeck = -44f;
+    private static readonly Vector2[] OffTheShip = { new(-44f, -34f), new(-44f, 22f) };
+
+    /// <summary>Where the Soul-Bound ends up from you on the quay: a little ahead and a little deeper, so you're both looking along it at the trouble.</summary>
+    private static readonly Vector2 SoulBoundAshore = new(20f, -12f);
 
     private readonly InputAction _skip = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
 
@@ -118,17 +128,25 @@ public partial class ExploreScreen
     /// <summary>Who's walking off the ship and the way they're going, a point at a time.</summary>
     private readonly List<(WalkerSprite Walker, Queue<Vector2> Way, float Wait)> _disembarking = new();
 
-    /// <summary>Starts the ship coming in if this is the harbour, the Prologue's over, and you've not landed yet.</summary>
-    /// <remarks>Otherwise she's left as the map has her: tied up, with her plank down on the pier.</remarks>
-    private void BeginArrival()
+    /// <summary>Stands everyone aboard a prop on its deck, wherever it's got to: in this room, that's the ship's crew. Called whenever the room's put together.</summary>
+    /// <remarks>The zone file stands them at the back of the floor in front of her; the deck is CrewOnDeck up her side from her foot.</remarks>
+    private void Board()
     {
-        if (_map.Id != "docks" || !_game.Flags.Contains(Prologue.Done) || _game.Flags.Contains(Arrived)) return;
-
+        _ship = null;
+        _gangplank = null;
         foreach (PropSprite prop in _everyProp)
         {
-            if (prop.Definition.Id == "ship") _ship = prop;
-            if (prop.Definition.Id == "gangplank") _gangplank = prop;
+            if (prop.Definition.Id == ShipProp) _ship = prop;
+            if (prop.Definition.Id == RailProp) _gangplank = prop;
         }
+        if (_ship is not null) MoveShip(_ship.Offset);
+    }
+
+    /// <summary>Starts the ship coming in if she's in this room of the harbour, the Prologue's over, and you've not landed yet.</summary>
+    /// <remarks>Otherwise she's left as the zone has her: tied up, with her plank down on the quay.</remarks>
+    private void BeginArrival()
+    {
+        if (_zone.Id != HarbourZone || !_game.Flags.Contains(Prologue.Done) || _game.Flags.Contains(Arrived)) return;
         if (_ship is null || _gangplank is null || _walkers.Count < 2) return;
 
         _arriving = Arriving.Sailing;
@@ -247,21 +265,24 @@ public partial class ExploreScreen
     private void MoveShip(Vector2 offset)
     {
         _ship.Offset = offset;
-        _gangplank.Offset = offset;
+        if (_gangplank is not null) _gangplank.Offset = offset;
         foreach (Npc npc in _everyNpc)
-            if (npc.Definition.Aboard == _ship.Definition.Id) npc.Walker.Position = npc.Definition.Feet + offset;
+        {
+            if (npc.Definition.Aboard != _ship.Definition.Id) continue;
+            npc.Walker.Position = new Vector2(npc.Definition.Feet.X, _ship.Foot.Y + CrewOnDeck) + offset;
+        }
     }
 
     /// <summary>The middle of the ship's deck, which the camera keeps on while she sails in.</summary>
     private Vector2 ShipView() => _ship.Foot + _ship.Offset + ShipViewOffset;
 
-    /// <summary>Stands you and the Soul-Bound on her foredeck, wherever she's got to: you looking up at the city, the Soul-Bound out ahead.</summary>
+    /// <summary>Stands you and the Soul-Bound on her deck, wherever she's got to, both looking ahead to the city over her bow.</summary>
     private void PlaceOnDeck()
     {
         Vector2 deck = _ship.Foot + _ship.Offset;
         _walkers[0].Position = deck + YouOnDeck;
         _walkers[1].Position = deck + SoulBoundOnDeck;
-        _walkers[0].Facing = Direction.Up;
+        _walkers[0].Facing = Direction.Left;
         _walkers[1].Facing = Direction.Left;
     }
 
@@ -271,17 +292,22 @@ public partial class ExploreScreen
         Next(Arriving.Disembarking);
         MoveShip(Vector2.Zero);
         _disembarking.Clear();
-        _disembarking.Add((_walkers[1], Way(SoulBoundOff), 0f));
-        _disembarking.Add((_walkers[0], Way(YouOff), FollowGap));
+        _disembarking.Add((_walkers[1], Way(YouAshore() + SoulBoundAshore), 0f));
+        _disembarking.Add((_walkers[0], Way(YouAshore()), FollowGap));
     }
 
-    /// <summary>A way off the ship, from the ship's foot.</summary>
-    private Queue<Vector2> Way(Vector2[] points)
+    /// <summary>A way off the ship: along the deck to the gangway, down the plank, and along the quay to where they end up.</summary>
+    private Queue<Vector2> Way(Vector2 ashore)
     {
         var way = new Queue<Vector2>();
-        foreach (Vector2 point in points) way.Enqueue(_ship.Foot + point);
+        foreach (Vector2 point in OffTheShip) way.Enqueue(_ship.Foot + point);
+        way.Enqueue(ashore);
         return way;
     }
+
+    /// <summary>Where you end up on the quay: the room's start, or the foot of the plank if it hasn't one.</summary>
+    private Vector2 YouAshore() =>
+        _room.Spawns.TryGetValue(ZoneLoader.StartSpawn, out MapSpawn start) ? start.Feet : _ship.Foot + OffTheShip[^1];
 
     /// <summary>Walks each of you a step along your way off, straight there, the gangplank and all.</summary>
     /// <returns>True once you're both on the boardwalk.</returns>
@@ -315,15 +341,15 @@ public partial class ExploreScreen
         return done;
     }
 
-    /// <summary>Ends the ship coming in, whether it played out or got skipped: tied up with her plank down, you both on the boardwalk looking along it at the trouble, and the harbour's scene next.</summary>
+    /// <summary>Ends the ship coming in, whether it played out or got skipped: tied up with her plank down, you both on the quay looking along it at the trouble, and the harbour's scene next.</summary>
     /// <remarks>The controls go up as a toast only with the tutorial's tips off. With them on, the tips teach the same things one at a time.</remarks>
     private void EndArrival()
     {
         MoveShip(Vector2.Zero);
         _ship.Frame = ShipMoored;
         _gangplank.Frame = PlankDown;
-        _walkers[1].Position = _ship.Foot + SoulBoundOff[^1];
-        _walkers[0].Position = _ship.Foot + YouOff[^1];
+        _walkers[1].Position = YouAshore() + SoulBoundAshore;
+        _walkers[0].Position = YouAshore();
         foreach (WalkerSprite walker in _walkers) walker.IsWalking = false;
         _walkers[0].Facing = Direction.Right;
         _walkers[1].Facing = Direction.Right;
@@ -337,10 +363,11 @@ public partial class ExploreScreen
         if (!Autosave()) _toast.Show(AutosaveFailedLine);
     }
 
-    /// <summary>Writes the autosave with everyone where they're stood.</summary>
+    /// <summary>Writes the autosave with everyone where they're stood, in the room they're in.</summary>
     private bool Autosave()
     {
         Leader.IsWalking = false;
+        _game.RoomId = _room.Id;
         for (int i = 0; i < _walkers.Count; i++)
         {
             _game.Party[i].Feet = _walkers[i].Position;
@@ -349,15 +376,15 @@ public partial class ExploreScreen
         return SaveSystem.Write(SaveSystem.AutoSlot, _game);
     }
 
-    /// <summary>Plays the first of the map's scenes that can play and hasn't, if nothing else is going on.</summary>
+    /// <summary>Plays the first of the room's scenes that can play and hasn't, if nothing else is going on.</summary>
     /// <returns>True if one started.</returns>
     private bool PlayScenes()
     {
         if (_talking) return false;
 
-        foreach (MapScene scene in _map.Scenes)
+        foreach (MapScene scene in _room.Scenes)
         {
-            string key = _map.Id + "/" + scene.Id;
+            string key = _zone.Id + "/" + scene.Id;
             if (_game.Triggered.Contains(key) || !scene.Presence.Holds(_game.Flags)) continue;
 
             _game.Triggered.Add(key);
@@ -367,7 +394,7 @@ public partial class ExploreScreen
         return false;
     }
 
-    /// <summary>Starts a conversation over the map, with the map as the stage its cues play on. When it's over, whatever's to happen next does, and if it (or a travel-actor cue) sends the party somewhere, it goes.</summary>
+    /// <summary>Starts a conversation over the room, with the room as the stage its cues play on. When it's over, whatever's to happen next does, and if it (or a travel-actor cue) sends the party somewhere, it goes.</summary>
     /// <param name="script">What gets said.</param>
     /// <param name="then">What happens after, or null.</param>
     private void Converse(DialogueScript script, Action then)
@@ -389,14 +416,12 @@ public partial class ExploreScreen
             if (travel is null) return;
 
             string[] where = travel.Split(' ');
-            MapDefinition to = MapCatalog.Get(where[0]);
-            MapSpawn spawn = to.Spawns[where[1]];
-            Leave(to, spawn.Feet, spawn.Facing);
+            GoTo(where[0], where[1]);
         };
         ScreenManager.AddScreen(talk);
     }
 
-    /// <summary>Catches the map up with something a conversation did: people coming and going with the flags, and someone joining the party, going to wait at camp, or swapping places with someone waiting.</summary>
+    /// <summary>Catches the room up with something a conversation did: people coming and going with the flags, and someone joining the party, going to wait at camp, or swapping places with someone waiting.</summary>
     private void OnDialogue(DialogueEvent happened)
     {
         switch (happened.Kind)
@@ -421,7 +446,7 @@ public partial class ExploreScreen
 
     /// <summary>Who a speaker id in a conversation is: their name and the sheet their face comes off.</summary>
     /// <remarks>
-    /// The party first, then whoever's on the map (whoever's waiting at camp too), then the story's
+    /// The party first, then whoever's in the room (whoever's waiting at camp too), then the story's
     /// cast wherever they are. A creature has no face to give: its sheet isn't a person's, so the
     /// portrait's crop would come off the wrong part of it, and its frame is left empty. A voice is
     /// whoever it's the voice of, found the same way, with no name: it's heard, not said by anyone
@@ -475,14 +500,12 @@ public partial class ExploreScreen
         }
     }
 
-    /// <summary>Whether a townsperson's feet (or a creature's) would bump into anything at a point: a wall, a prop, someone else, or the party.</summary>
+    /// <summary>Whether a townsperson's feet (or a creature's) would leave the floor or bump into anything at a point: a prop, someone else, or the party.</summary>
     private bool Crowded(Npc mover, Vector2 at)
     {
-        if (!_tilemap.Bounds.Contains(at)) return true;
+        if (!_room.OnFloor(at)) return true;
 
         BoundingRectangle feet = mover.FootprintAt(at);
-        foreach (BoundingRectangle solid in _tilemap.Walls)
-            if (feet.CollidesWith(solid)) return true;
         foreach (PropSprite prop in AllProps())
             foreach (BoundingRectangle footprint in prop.Footprints)
                 if (feet.CollidesWith(footprint)) return true;
@@ -515,7 +538,7 @@ public partial class ExploreScreen
         _chapterCard.Draw(spriteBatch, FirstChapter, _game.Meter(Meters.Act), shown);
     }
 
-    /// <summary>What you're to do next, under the map's name, on its smudge.</summary>
+    /// <summary>What you're to do next, under the zone's name, on its smudge.</summary>
     private void DrawObjective(SpriteBatch spriteBatch, float alpha)
     {
         if (string.IsNullOrEmpty(_game.Objective) || _arriving != Arriving.None) return;

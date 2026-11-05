@@ -9,12 +9,12 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's part of the party's things: I and C for the inventory and the character sheet,
+/// The zone screen's part of the party's things: I and C for the inventory and the character sheet,
 /// a shopkeeper's shop once the talking's done, the line that says what's gone in the bag, and
 /// dressing the party again when what they're wearing changes.
 /// </summary>
 /// <remarks>
-/// The inventory and the shop are popups over the map, like the map screen, so the map stays drawn
+/// The inventory and the shop are popups over the room, like the zone map, so the room stays drawn
 /// and paused under them. The inventory says whenever anyone's gear changes, and the figures are
 /// baked again then and there, so the party behind the veil is already wearing it when it closes.
 /// A conversation that opens a shop only says which; the shop opens when the conversation's over,
@@ -42,7 +42,7 @@ public partial class ExploreScreen
         return true;
     }
 
-    /// <summary>Opens the inventory over the map, which is the tip about opening it done.</summary>
+    /// <summary>Opens the inventory over the room, which is the tip about opening it done.</summary>
     /// <param name="page">The page to open on.</param>
     private void OpenInventory(InventoryPage page)
     {
@@ -76,7 +76,7 @@ public partial class ExploreScreen
         ScreenManager.AddScreen(shop);
     }
 
-    /// <summary>Puts up the line for something that happened on the map. Things out of a chest say they've gone in the bag, and the first time it happens the tip about loot comes (or, after that, the one about opening the bag, if it's still to come).</summary>
+    /// <summary>Puts up the line for something that happened in the room. Things out of a chest say they've gone in the bag, and the first time it happens the tip about loot comes (or, after that, the one about opening the bag, if it's still to come).</summary>
     /// <param name="happened">What happened.</param>
     private void Announce(WorldEvent happened)
     {

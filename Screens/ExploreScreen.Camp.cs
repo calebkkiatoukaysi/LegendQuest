@@ -8,16 +8,16 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's camp: whoever's waiting for a place in the party, standing at the map's camp
-/// places, and taking the place of someone in the party when you ask them to.
+/// The zone screen's camp: whoever's waiting for a place in the party, standing at the room's camp
+/// seats, and taking the place of someone in the party when you ask them to.
 /// </summary>
 /// <remarks>
-/// They're people on the map like anyone else (an Npc each, dressed off their own look), so they
-/// stand, look round, face you, and get a marker the same way. Talking to one plays their own
+/// They're people in the room like anyone else (an Npc each, dressed off their own look), so they
+/// stand, glance round, face you, and get a marker the same way. Talking to one plays their own
 /// conversation if they've one that can start; if not, they offer to take the place of one of the
 /// companions with you, or to come along if there's room. You and the Soul-Bound are never offered:
 /// the story's about the two of you. The offer is a conversation built there and then, so the swap
-/// goes through DialogueRunner like anything else a conversation does, and the map catches up when
+/// goes through DialogueRunner like anything else a conversation does, and the room catches up when
 /// it hears.
 /// </remarks>
 public partial class ExploreScreen
@@ -38,29 +38,22 @@ public partial class ExploreScreen
     /// <summary>What an offer's called: this, then who's making it. It's never in DialogueCatalog, so it can't clash with anything there.</summary>
     private const string OfferId = "camp-";
 
-    /// <summary>Whoever's waiting at camp who has a place to stand on this map, in the camp's order.</summary>
+    /// <summary>Whoever's waiting at camp who has a place to stand in this room, in the camp's order.</summary>
     private readonly List<Npc> _campers = new();
 
-    /// <summary>Stands whoever's waiting at camp at this map's camp places, the first of them at the first, as many as there are places for. Anyone already standing there is put away first.</summary>
-    /// <remarks>Before the map's loaded they're dressed with everyone else in Activate; after, they're dressed here.</remarks>
+    /// <summary>Stands whoever's waiting at camp at this room's camp seats, the first of them at the first, as many as there are seats for, dressed. Anyone already standing there is put away first.</summary>
     private void SeatCampers()
     {
         foreach (Npc camper in _campers) _everyNpc.Remove(camper);
         _campers.Clear();
 
-        int seated = Math.Min(_game.Camp.Count, _map.Camp.Count);
+        int seated = Math.Min(_game.Camp.Count, _room.Camp.Count);
         for (int i = 0; i < seated; i++)
         {
             PartyMember waiting = _game.Camp[i];
-            MapCamp place = _map.Camp[i];
-            var camper = new Npc(new MapNpc(waiting.Id, waiting.Name, place.Feet, place.Facing, Sheet: null, Cast: null,
-                Look: waiting.Look, Creature: null, Say: Array.Empty<string>(), Talk: null, Wander: 0f, Presence: MapPresence.Always));
-
-            if (_content is not null)
-            {
-                camper.Walker.LoadContent(_content);
-                camper.Walker.Sheet = NpcSheet(camper.Definition);
-            }
+            MapCamp place = _room.Camp[i];
+            var camper = Dressed(new Npc(new MapNpc(waiting.Id, waiting.Name, place.Feet, place.Facing, Sheet: null, Cast: null,
+                Look: waiting.Look, Creature: null, Say: Array.Empty<string>(), Talk: null, Wander: 0f, Presence: MapPresence.Always), _walk));
 
             _campers.Add(camper);
             _everyNpc.Add(camper);

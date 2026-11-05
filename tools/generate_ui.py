@@ -1,6 +1,7 @@
 """
 UI art for Legend Quest: the button plates, the panel the forms sit on, the marks on the map, the
-"!" markers over people, the mouse cursors, and the key caps the tutorial tips show.
+"!" markers over people, the mouse cursors, the badges, chevrons and glints that mark a room's ways
+out and the things in it, and the key caps the tutorial tips show.
 Run it from the repo root:
 
     python tools/generate_ui.py
@@ -514,9 +515,9 @@ def build_markers():
 # --------------------------------------------------------------------------- #
 #
 # One row of 16x16 frames, blown up 2x in the game, in CursorShape order: an arrow, a ring for
-# walking, a hand for using something, a speech bubble for talking, and a crossed circle where
-# there's no way. Each is filled, lit on its upper left, and has a dark line all the way round so
-# it shows on grass, stone and the dark alike.
+# walking, a hand for using something, a speech bubble for talking, a crossed circle where there's
+# no way, and an arched door with its knob for a door in a room. Each is filled, lit on its upper
+# left, and has a dark line all the way round so it shows on grass, stone and the dark alike.
 
 CURSOR = 16
 CURSOR_BONE = (226, 216, 200)
@@ -552,7 +553,7 @@ def _cursor_frame(img, ox, filled, colour):
 
 
 def build_cursors():
-    img = new_image(CURSOR * 5, CURSOR)
+    img = new_image(CURSOR * 6, CURSOR)
 
     # The arrow, its tip at (1, 1).
     arrow = [(1.0, 1.0), (1.0, 13.0), (4.2, 10.2), (6.8, 15.0), (9.0, 14.0), (6.6, 9.4), (10.6, 9.4)]
@@ -588,7 +589,493 @@ def build_cursors():
         return 4.8 < d < 6.8 or slash
     _cursor_frame(img, CURSOR * 4, no_way, CURSOR_EMBER)
 
+    # An arched door, the knob a hole the dark line goes round: go in.
+    def door(x, y):
+        leaf = 3.6 < x < 12.4 and 6.0 < y < 15.0
+        arch = math.hypot(x - 8.0, y - 6.0) < 4.4 and y <= 6.0
+        knob = math.hypot(x - 10.4, y - 10.6) < 0.9
+        return (leaf or arch) and not knob
+    _cursor_frame(img, CURSOR * 5, door, CURSOR_TORCH)
+
     write_png(os.path.join(OUT, "cursors.png"), img)
+
+
+# --------------------------------------------------------------------------- #
+# indicators.png -- what makes a room readable: badges, chevrons, glints, plaques
+# --------------------------------------------------------------------------- #
+#
+# Four rows of 18x18 cells. Row 0 is the badges in BadgeKind order, each a round twilight-navy
+# medallion with a rim and an emblem in its colour (gold for trade and the palace, amber for an inn,
+# blue for the trainers, the Guild and the Watch, white for temples, homes, gates and stairs), then
+# the padlock that's laid over a locked badge's lower right, and the compass that goes beside a way
+# out to somewhere else on the world map. Row 1 is the same badges greyed, for a locked door. Row 2
+# is the chevrons: east and west for the ends of a room, up and down for a stair; then four frames of
+# a glint twinkling over something you can use; then the plaque a badge's name sits on and the soft
+# outline round a doorway under the mouse, both nine-sliced, the outline white so the game tints it.
+# Row 3 is the chevrons greyed and the plaque greyed, for a way that's locked. The game draws it all
+# at 3x like the rest of the UI, and a badge beside a name, or the compass beside a label, at 2x.
+# The emblems are lit from the top left like everything else and drop a shadow onto the enamel; the
+# chevrons light whichever arm faces the top left, so the west one is lit the same way as the east.
+
+INDICATOR = 18
+
+#: The medallion's rings, by distance from the cell's middle: the dark edge, the rim, the enamel.
+BADGE_OUTER = 9.0
+BADGE_RIM = 8.0
+BADGE_ENAMEL = 6.6
+
+#: The columns of row 0 after the badges, and of row 2: the chevrons, the glint's frames, the plaque, the outline.
+PADLOCK_COLUMN = 13
+COMPASS_COLUMN = 14
+CHEVRON_COLUMNS = ("east", "west", "up", "down")
+GLINT_COLUMN = 4
+PLAQUE_COLUMN = 8
+DOOR_OUTLINE_COLUMN = 9
+
+#: The plaque's and the outline's nine-slices: each is a PLAQUE-square frame in the top left of its cell.
+#: Have to match PlaqueFrame and PlaqueCorner in World/Rooms/IndicatorLayer.cs.
+PLAQUE = 12
+PLAQUE_CORNER = 4
+
+#: Deep shadow, shadow, base, light, highlight. The gold is the markers' gold, the amber the cursor's
+#: torchlight, the blue the title's banners lit, the white an ivory with a little lilac in its shadow.
+BADGE_GOLD = MARKER_GOLD[:5]
+BADGE_AMBER = ((150, 70, 34), (198, 102, 42), (232, 150, 58), (248, 192, 112), (254, 230, 184))
+BADGE_BLUE = ((44, 74, 150), (66, 110, 196), (104, 156, 230), (156, 198, 248), (220, 236, 255))
+BADGE_WHITE = ((132, 128, 146), (178, 174, 188), (218, 214, 224), (242, 240, 246), (255, 255, 255))
+BADGE_GREY = ((70, 70, 78), (96, 96, 104), (126, 126, 134), (152, 152, 158), (178, 178, 184))
+BADGE_STEEL = ((54, 58, 78), (92, 98, 124), (140, 148, 172), (190, 196, 214), (228, 232, 242))
+BADGE_RED = MARKER_RED[:5]
+
+#: The enamel inside the rim, lit, base and in shadow: the buttons' navy, and a slate for a locked one.
+ENAMEL = (IRON_LT, IRON, IRON_DK)
+ENAMEL_GREY = ((84, 86, 96), (52, 54, 62), (28, 29, 36))
+
+#: The dark edge round a medallion, a chevron and the padlock.
+BADGE_INK = (12, 14, 30)
+CHEVRON_EDGE = MARKER_GOLD_EDGE
+CHEVRON_EDGE_GREY = (30, 30, 36)
+
+#: The glint's white middle and its gold-white arms.
+GLINT_CORE = (255, 252, 240)
+GLINT_ARM = (253, 240, 204)
+
+
+def _cell_mask(inside):
+    """Which pixels of a cell a shape fills, testing each pixel's middle."""
+    return [[inside(x + 0.5, y + 0.5) for x in range(INDICATOR)] for y in range(INDICATOR)]
+
+
+def _filled(mask, x, y):
+    return 0 <= x < INDICATOR and 0 <= y < INDICATOR and mask[y][x]
+
+
+def _shade_mask(img, ox, oy, mask, ramp, marks=None):
+    """Fills a mask from a ramp, lit from the top left: a pixel with nothing over it or left of it
+    catches the light, one with nothing under it or right of it is in shadow, and both at once is
+    the highlight. marks(x, y) can name a tone of its own for a pixel (a band, a seam, a knob)."""
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            if not mask[y][x]:
+                continue
+            lit = not _filled(mask, x, y - 1) or not _filled(mask, x - 1, y)
+            dim = not _filled(mask, x, y + 1) or not _filled(mask, x + 1, y)
+            shade = 4 if lit and not _filled(mask, x, y - 1) and not _filled(mask, x - 1, y) else 3 if lit else 1 if dim else 2
+            if marks is not None:
+                own = marks(x + 0.5, y + 0.5)
+                if own is not None:
+                    shade = own
+            put(img, ox + x, oy + y, tone(ramp[shade], 1.0))
+
+
+def _outline_mask(img, ox, oy, mask, edge):
+    """The dark edge on every empty pixel beside (not across a corner from) a filled one."""
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            if not mask[y][x] and any(_filled(mask, x + dx, y + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                put(img, ox + x, oy + y, edge + (255,))
+
+
+def _medallion(img, ox, oy, ramp, enamel):
+    """The round badge behind an emblem: the dark edge, the rim lit round its top left, and the
+    enamel, recessed, so its top-left lip is in the rim's shadow and its bottom-right lip catches light."""
+    c = INDICATOR / 2.0
+    lit_e, base_e, dark_e = enamel
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            dx, dy = x + 0.5 - c, y + 0.5 - c
+            d = math.hypot(dx, dy)
+            facing = dx + dy
+            if d > BADGE_OUTER:
+                continue
+            if d > BADGE_RIM:
+                put(img, ox + x, oy + y, BADGE_INK + (255,))
+            elif d > BADGE_ENAMEL:
+                shade = 4 if facing < -7.0 else 3 if facing < -2.0 else 2 if facing < 4.0 else 1
+                put(img, ox + x, oy + y, tone(ramp[shade], 1.0))
+            elif d > BADGE_ENAMEL - 1.0 and facing < -1.5:
+                put(img, ox + x, oy + y, tone(dark_e, 1.0))
+            elif d > BADGE_ENAMEL - 1.0 and facing > 3.0:
+                put(img, ox + x, oy + y, tone(lit_e, 0.85))
+            else:
+                put(img, ox + x, oy + y, tone(base_e, 1.06 if facing < -3.0 else 1.0))
+
+
+def _emblem(img, ox, oy, inside, ramp, enamel, marks=None):
+    """An emblem on the enamel: its shadow dropped a pixel down and right, then the emblem shaded over it."""
+    mask = _cell_mask(inside)
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            if mask[y][x] and not _filled(mask, x + 1, y + 1):
+                put(img, ox + x + 1, oy + y + 1, tone(enamel[2], 1.0))
+    _shade_mask(img, ox, oy, mask, ramp, marks)
+
+
+def _purse(x, y):
+    body = ((x - 9.0) / 4.6) ** 2 + ((y - 11.2) / 3.6) ** 2 < 1.0
+    neck = 7.4 < x < 10.6 and 6.6 < y < 8.6
+    frill = _inside_poly(x, y, [(5.0, 3.4), (7.0, 4.6), (9.0, 3.4), (11.0, 4.6), (13.0, 3.4), (10.8, 6.8), (7.2, 6.8)])
+    return body or neck or frill
+
+
+def _purse_marks(x, y):
+    """The cord round its neck, and a coin's glint on its belly."""
+    if 7.4 < x < 10.6 and 7.0 < y < 8.0:
+        return 0
+    if math.hypot(x - 9.0, y - 11.5) < 1.2:
+        return 4
+    return None
+
+
+def _anvil(x, y):
+    face = 4.6 < x < 14.0 and 5.6 < y < 8.2
+    horn = _inside_poly(x, y, [(3.4, 5.8), (4.8, 5.6), (4.8, 8.2)])
+    waist = 7.4 < x < 11.2 and 8.0 < y < 11.2
+    foot = 5.4 < x < 13.2 and 11.0 < y < 13.6
+    return face or horn or waist or foot
+
+
+def _bottle(x, y):
+    cork = 7.6 < x < 10.4 and 3.2 < y < 5.0
+    neck = 8.0 < x < 10.0 and 4.8 < y < 7.6
+    body = math.hypot(x - 9.0, y - 10.9) < 3.9
+    return cork or neck or body
+
+
+def _bottle_marks(x, y):
+    """The cork darker than the glass, and a streak of light down the glass."""
+    if y < 5.0:
+        return 1
+    if 6.0 < x < 7.0 and 9.0 < y < 12.0:
+        return 4
+    return None
+
+
+def _tankard(x, y):
+    body = 4.8 < x < 11.4 and 5.8 < y < 14.0
+    handle = 1.0 < math.hypot(x - 11.6, y - 9.6) < 2.6 and x > 11.0
+    foam = (4.6 < x < 11.6 and 5.2 < y < 6.6) or any(math.hypot(x - cx, y - cy) < 1.4 for cx, cy in ((6.0, 5.2), (8.2, 4.8), (10.4, 5.2)))
+    return body or handle or foam
+
+
+def _tankard_marks(x, y):
+    """The foam, pale, and the two hoops round the body."""
+    if y < 6.6 and x < 11.6:
+        return 4
+    if 4.8 < x < 11.4 and (7.8 < y < 8.6 or 12.0 < y < 12.8):
+        return 1
+    return None
+
+
+def _swords(x, y):
+    for tx, ty, px, py in ((4.8, 4.8, 12.8, 12.8), (13.2, 4.8, 5.2, 12.8)):
+        length = math.hypot(px - tx, py - ty)
+        ux, uy = (px - tx) / length, (py - ty) / length
+        t = (x - tx) * ux + (y - ty) * uy
+        v = abs(-(x - tx) * uy + (y - ty) * ux)
+        guard = length * 0.62
+        if 0.0 <= t <= guard and v < 0.95 * min(1.0, (t + 0.3) / 1.6):
+            return True
+        if guard <= t <= guard + 1.1 and v < 2.6:
+            return True
+        if guard + 1.1 <= t <= length - 0.6 and v < 0.7:
+            return True
+        if math.hypot(x - px, y - py) < 1.15:
+            return True
+    return False
+
+
+def _scroll(x, y):
+    sheet = 5.6 < x < 12.4 and 5.0 < y < 13.0
+    rolls = 4.6 < x < 13.4 and (4.0 < y < 5.8 or 12.2 < y < 13.8)
+    return sheet or rolls
+
+
+def _scroll_marks(x, y):
+    """Two lines of writing, and the rolls' ends in shadow."""
+    if 7.0 < x < 11.0 and (8.0 < y < 9.0 or 10.0 < y < 11.0):
+        return 1
+    if (4.0 < y < 5.8 or 12.2 < y < 13.8) and (x < 6.0 or x > 12.0):
+        return 1
+    return None
+
+
+def _shield(x, y):
+    return _inside_poly(x, y, [(4.6, 4.4), (13.4, 4.4), (13.4, 9.0), (9.0, 14.2), (4.6, 9.0)])
+
+
+def _shield_marks(x, y):
+    """A pale cross on its face."""
+    if 8.0 < x < 10.0 and 5.4 < y < 12.6 or 5.6 < x < 12.4 and 7.0 < y < 9.0:
+        return 3
+    return None
+
+
+def _sun(x, y):
+    """A round sun with a gap round it, and eight rays tapering out from that: the four straight ones long, the diagonals short."""
+    dx, dy = x - 9.0, y - 9.0
+    d = math.hypot(dx, dy)
+    if d < 3.0:
+        return True
+    k = round(math.atan2(dy, dx) / (math.pi / 4))
+    off = abs(math.atan2(dy, dx) - k * math.pi / 4) * d
+    if k % 2 == 0:
+        return 3.8 < d < 6.4 and off < 1.3 * (6.4 - d) / 2.6 + 0.2
+    return 3.8 < d < 5.6 and off < 0.9 * (5.6 - d) / 1.8 + 0.3
+
+
+def _sun_marks(x, y):
+    """A bright middle."""
+    return 4 if math.hypot(x - 8.5, y - 8.5) < 1.2 else None
+
+
+def _crown(x, y):
+    band = 4.6 < x < 13.4 and 10.6 < y < 13.2
+    points = _inside_poly(x, y, [(4.6, 10.8), (4.6, 5.8), (6.9, 8.4), (9.0, 4.4), (11.1, 8.4), (13.4, 5.8), (13.4, 10.8)])
+    return band or points
+
+
+def _crown_marks(x, y):
+    """Three stones set in the band."""
+    if 11.0 < y < 12.0 and any(abs(x - cx) < 0.6 for cx in (6.5, 9.0, 11.5)):
+        return 0
+    return None
+
+
+def _door(x, y):
+    leaf = 5.8 < x < 12.2 and 7.4 < y < 14.0
+    arch = math.hypot(x - 9.0, y - 7.4) < 3.2 and y <= 7.4
+    return leaf or arch
+
+
+def _door_marks(x, y):
+    """The seam between its planks, and its knob."""
+    if 8.0 < x < 9.0 and y > 5.0:
+        return 1
+    if 10.0 < x < 11.0 and 10.0 < y < 11.0:
+        return 0
+    return None
+
+
+def _gate(x, y):
+    outer = (4.2 < x < 13.8 and 8.6 < y < 13.8) or (math.hypot(x - 9.0, y - 8.6) < 4.8 and y <= 8.6)
+    opening = (6.2 < x < 11.8 and 9.4 < y < 13.8) or (math.hypot(x - 9.0, y - 9.4) < 2.8 and y <= 9.4)
+    bars = abs(x - 7.5) < 0.5 or abs(x - 10.5) < 0.5 or abs(y - 11.5) < 0.5
+    return outer and (not opening or bars)
+
+
+def _stairs_up(x, y):
+    """Three steps climbing to the right, and an arrow pointing up clear of them on the left."""
+    steps = (7.0 < x < 9.4 and 11.2 < y < 13.8) or (9.4 < x < 11.8 and 8.6 < y < 13.8) or (11.8 < x < 14.0 and 6.0 < y < 13.8)
+    arrow = _inside_poly(x, y, [(3.4, 8.0), (5.5, 4.6), (7.6, 8.0)]) or (4.8 < x < 6.2 and 7.8 < y < 10.6)
+    return steps or arrow
+
+
+def _stairs_down(x, y):
+    """Three steps going down to the right, and an arrow pointing down clear of them on the right."""
+    steps = (4.0 < x < 6.2 and 6.0 < y < 13.8) or (6.2 < x < 8.6 and 8.6 < y < 13.8) or (8.6 < x < 11.0 and 11.2 < y < 13.8)
+    arrow = _inside_poly(x, y, [(10.4, 7.6), (14.6, 7.6), (12.5, 11.0)]) or (11.8 < x < 13.2 and 4.4 < y < 7.8)
+    return steps or arrow
+
+
+def _compass(x, y):
+    """A four-pointed star, its points out to the rim and its waist wide enough to read as a star and not a cross."""
+    dx, dy = abs(x - 9.0), abs(y - 9.0)
+    return dx < 2.3 * (1.0 - dy / 6.2) or dy < 2.3 * (1.0 - dx / 6.2)
+
+
+def _compass_north(x, y):
+    """Whether a pixel of the star is its north point, which is red, the way every compass has it."""
+    return y < 8.0 and abs(x - 9.0) < 1.5
+
+
+def _padlock(x, y):
+    shackle = 1.5 < math.hypot(x - 13.0, y - 10.6) < 2.7 and y < 10.8
+    body = 9.8 < x < 16.2 and 10.6 < y < 16.2
+    return shackle or body
+
+
+def _padlock_marks(x, y):
+    """The keyhole."""
+    return 0 if 12.0 < x < 14.0 and 12.0 < y < 14.0 else None
+
+
+#: The badges, in BadgeKind order: the emblem, its marks, and its colour.
+BADGES = (
+    (_purse, _purse_marks, BADGE_GOLD),          # Shop
+    (_anvil, None, BADGE_GOLD),                  # Anvil
+    (_bottle, _bottle_marks, BADGE_GOLD),        # Bottle
+    (_tankard, _tankard_marks, BADGE_AMBER),     # Inn
+    (_swords, None, BADGE_BLUE),                 # Trainer
+    (_scroll, _scroll_marks, BADGE_BLUE),        # Scroll
+    (_shield, _shield_marks, BADGE_BLUE),        # Shield
+    (_sun, _sun_marks, BADGE_WHITE),             # Sun
+    (_crown, _crown_marks, BADGE_GOLD),          # Crown
+    (_door, _door_marks, BADGE_WHITE),           # Door
+    (_gate, None, BADGE_WHITE),                  # Gate
+    (_stairs_up, None, BADGE_WHITE),             # StairUp
+    (_stairs_down, None, BADGE_WHITE),           # StairDown
+)
+
+#: Each chevron: its outline, and which of its arms faces the top left and catches the light.
+CHEVRONS = {
+    "east": ([(4.0, 2.0), (9.0, 2.0), (15.0, 9.0), (9.0, 16.0), (4.0, 16.0), (10.0, 9.0)], lambda x, y: y < 9.0),
+    "west": ([(14.0, 2.0), (9.0, 2.0), (3.0, 9.0), (9.0, 16.0), (14.0, 16.0), (8.0, 9.0)], lambda x, y: y < 9.0),
+    "up": ([(2.0, 15.0), (2.0, 10.0), (9.0, 3.0), (16.0, 10.0), (16.0, 15.0), (9.0, 8.0)], lambda x, y: x < 9.0),
+    "down": ([(2.0, 3.0), (9.0, 10.0), (16.0, 3.0), (16.0, 8.0), (9.0, 15.0), (2.0, 8.0)], lambda x, y: x < 9.0),
+}
+
+#: The glint's frames, from a speck to the full star and back down: how far each arm reaches, and
+#: how strong each pixel out along it is.
+GLINT = (
+    (1, (110,)),
+    (2, (230, 120)),
+    (4, (250, 220, 150, 70)),
+    (2, (150, 60)),
+)
+
+
+def _badge(img, ox, oy, emblem, marks, ramp, enamel):
+    _medallion(img, ox, oy, ramp, enamel)
+    _emblem(img, ox, oy, emblem, ramp, enamel, marks)
+
+
+def _compass_badge(img, ox, oy):
+    """The compass: a gold medallion with a four-pointed star, north in red."""
+    _medallion(img, ox, oy, BADGE_GOLD, ENAMEL)
+    mask = _cell_mask(_compass)
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            if mask[y][x] and not _filled(mask, x + 1, y + 1):
+                put(img, ox + x + 1, oy + y + 1, tone(IRON_DK, 1.0))
+    _shade_mask(img, ox, oy, mask, BADGE_GOLD)
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            if mask[y][x] and _compass_north(x + 0.5, y + 0.5):
+                put(img, ox + x, oy + y, tone(BADGE_RED[3 if x < 9 else 2], 1.0))
+
+
+def _padlock_cell(img, ox, oy):
+    """The padlock, in the bottom right of its cell so it sits on a badge's rim, steel with a dark edge."""
+    mask = _cell_mask(_padlock)
+    _shade_mask(img, ox, oy, mask, BADGE_STEEL, _padlock_marks)
+    _outline_mask(img, ox, oy, mask, BADGE_INK)
+
+
+def _chevron(img, ox, oy, points, lit_arm, ramp, edge):
+    """One chevron, its arm toward the top left lit and the other a shade down, light along its top
+    edges and shadow along its bottom ones, and the dark edge round it."""
+    mask = _cell_mask(lambda x, y: _inside_poly(x, y, points))
+    for y in range(INDICATOR):
+        for x in range(INDICATOR):
+            if not mask[y][x]:
+                continue
+            shade = 3 if lit_arm(x + 0.5, y + 0.5) else 2
+            if not _filled(mask, x, y - 1):
+                shade = min(shade + 1, 4)
+            elif not _filled(mask, x, y + 1):
+                shade = max(shade - 1, 1)
+            put(img, ox + x, oy + y, tone(ramp[shade], 1.0))
+    _outline_mask(img, ox, oy, mask, edge)
+
+
+def _glint(img, ox, oy, reach, strengths):
+    """One frame of the glint: a white middle and four arms fading out from it, and at its fullest
+    a softer pixel on each diagonal."""
+    c = INDICATOR // 2 - 1
+    put(img, ox + c, oy + c, GLINT_CORE + (255,))
+    for i in range(1, reach + 1):
+        a = strengths[i - 1]
+        for dx, dy in ((i, 0), (-i, 0), (0, i), (0, -i)):
+            put(img, ox + c + dx, oy + c + dy, (GLINT_ARM if i > 1 else GLINT_CORE) + (a,))
+    if reach >= 4:
+        for dx, dy in ((1, 1), (-1, 1), (1, -1), (-1, -1)):
+            put(img, ox + c + dx, oy + c + dy, GLINT_ARM + (120,))
+
+
+def _plaque(img, ox, oy, trim, enamel):
+    """The plaque a name sits on: a dark edge with its corners cut round, a line of trim lit along
+    its top and left, a bevel inside that, and flat enamel in the middle. Every row of its top and
+    bottom bands is one colour across the middle, and every column of its sides one colour down it,
+    so it nine-slices."""
+    S = PLAQUE
+    lit_e, base_e, dark_e = enamel
+    for y in range(S):
+        for x in range(S):
+            inset = min(x, y, S - 1 - x, S - 1 - y)
+            corner = (x in (0, S - 1)) and (y in (0, S - 1))
+            if corner:
+                continue
+            if inset == 0:
+                colour = tone(BADGE_INK, 1.0)
+            elif inset == 1:
+                lit = y == 1 or x == 1 and y < S - 2
+                colour = tone(trim, 1.15 if y == 1 else 1.0 if lit else 0.72)
+            elif inset == 2:
+                colour = tone(lit_e, 0.9) if y == 2 or x == 2 and y < S - 3 else tone(dark_e, 1.0)
+            else:
+                colour = tone(base_e, 1.0)
+            put(img, ox + x, oy + y, colour)
+
+
+def _door_outline(img, ox, oy):
+    """The soft line round a doorway under the mouse: white, strongest a pixel in from the edge and
+    fading either side of that, round at the corners, and clear in the middle."""
+    S = PLAQUE
+    radius = 3.5
+    for y in range(S):
+        for x in range(S):
+            px, py = x + 0.5, y + 0.5
+            dx = max(0.0, abs(px - S / 2.0) - (S / 2.0 - radius))
+            dy = max(0.0, abs(py - S / 2.0) - (S / 2.0 - radius))
+            inset = radius - math.hypot(dx, dy)
+            if inset < 0.0:
+                continue
+            a = 70 if inset < 1.0 else 210 if inset < 2.0 else 90 if inset < 3.0 else 25 if inset < 4.0 else 0
+            put(img, ox + x, oy + y, (255, 255, 255, a))
+
+
+def build_indicators():
+    img = new_image(INDICATOR * 15, INDICATOR * 4)
+    for column, (emblem, marks, ramp) in enumerate(BADGES):
+        _badge(img, column * INDICATOR, 0, emblem, marks, ramp, ENAMEL)
+        _badge(img, column * INDICATOR, INDICATOR, emblem, marks, BADGE_GREY, ENAMEL_GREY)
+    _padlock_cell(img, PADLOCK_COLUMN * INDICATOR, 0)
+    _compass_badge(img, COMPASS_COLUMN * INDICATOR, 0)
+
+    for column, name in enumerate(CHEVRON_COLUMNS):
+        points, lit_arm = CHEVRONS[name]
+        _chevron(img, column * INDICATOR, INDICATOR * 2, points, lit_arm, BADGE_GOLD, CHEVRON_EDGE)
+        _chevron(img, column * INDICATOR, INDICATOR * 3, points, lit_arm, BADGE_GREY, CHEVRON_EDGE_GREY)
+
+    for frame, (reach, strengths) in enumerate(GLINT):
+        _glint(img, (GLINT_COLUMN + frame) * INDICATOR, INDICATOR * 2, reach, strengths)
+
+    _plaque(img, PLAQUE_COLUMN * INDICATOR, INDICATOR * 2, RIVET, ENAMEL)
+    _plaque(img, PLAQUE_COLUMN * INDICATOR, INDICATOR * 3, BADGE_GREY[3], ENAMEL_GREY)
+    _door_outline(img, DOOR_OUTLINE_COLUMN * INDICATOR, INDICATOR * 2)
+
+    write_png(os.path.join(OUT, "indicators.png"), img)
 
 # --------------------------------------------------------------------------- #
 # The d20, for checks on screen
@@ -832,6 +1319,7 @@ if __name__ == "__main__":
     build_map_marks()
     build_markers()
     build_cursors()
+    build_indicators()
     build_dice()
     build_dialogue_icons()
     build_keycaps()

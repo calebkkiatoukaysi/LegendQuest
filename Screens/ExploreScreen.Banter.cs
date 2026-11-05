@@ -10,7 +10,7 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's talk that isn't a conversation: the banter a trigger starts, said a line at a
+/// The zone screen's talk that isn't a conversation: the banter a trigger starts, said a line at a
 /// time over people's heads while you keep walking, the townsfolk saying things by themselves, and
 /// laying out every line over anyone's head so none of them sits on another.
 /// </summary>
@@ -18,7 +18,7 @@ namespace LegendQuest.Screens;
 /// One banter plays at a time. Another that starts while it's going waits for it, and if one's
 /// already waiting, the new one's dropped; three at once was too much to read anyway. A line whose
 /// speaker isn't here (a companion who isn't in the party, someone who's gone home) is skipped.
-/// A conversation or a menu over the map holds the line that's up, and it starts again after, so
+/// A conversation or a menu over the room holds the line that's up, and it starts again after, so
 /// nothing gets said while you couldn't read it. If the conversation changed the flags so the banter
 /// can't play any more (the Red Gulls beaten while the two of you were still talking about them),
 /// the rest of it would be wrong, so it stops there. The party's roaming banters need no trigger:
@@ -46,8 +46,8 @@ public partial class ExploreScreen
     /// <summary>How long you've been walking with nothing said, in seconds.</summary>
     private float _roamQuiet;
 
-    /// <summary>How near you someone has to be to say something by themselves, in art pixels, and how many can be at it at once.</summary>
-    private const float ChatterReach = 5f * Tilemap.TileSize;
+    /// <summary>How near you someone has to be to say something by themselves, in art pixels (five old tiles), and how many can be at it at once.</summary>
+    private const float ChatterReach = 80f;
     private const int MostChattering = 2;
 
     /// <summary>The widest a line over someone's head gets before it wraps, in screen pixels.</summary>
@@ -152,7 +152,7 @@ public partial class ExploreScreen
         if (_banterClock >= _banterLength + BanterGapSeconds) NextBanterLine();
     }
 
-    /// <summary>Puts the banter line that's up back to its start, while a conversation or a menu is over the map, so it's all there to read after.</summary>
+    /// <summary>Puts the banter line that's up back to its start, while a conversation or a menu is over the room, so it's all there to read after.</summary>
     private void HoldBanter()
     {
         if (_banterClock < _banterLength) _banterClock = 0f;
@@ -188,7 +188,7 @@ public partial class ExploreScreen
         return FindSpeaker(_banter.Lines[_banterLine].Speaker);
     }
 
-    /// <summary>Someone a banter line can come from: one of the party by their id (you, the Soul-Bound, a companion), or someone on the map by theirs.</summary>
+    /// <summary>Someone a banter line can come from: one of the party by their id (you, the Soul-Bound, a companion), or someone in the room by theirs.</summary>
     /// <param name="id">The line's speaker.</param>
     /// <returns>Their figure and whether they're in the party, or null if they aren't here.</returns>
     private (WalkerSprite Walker, bool Party)? FindSpeaker(string id)
@@ -316,9 +316,6 @@ public partial class ExploreScreen
                     colour * fade, Palette.Shadow * fade, centred: true);
         }
     }
-
-    /// <summary>Where the top of someone's head is on screen.</summary>
-    private Vector2 HeadOnScreen(WalkerSprite walker) => _camera.ToScreen(HeadOf(walker));
 
     /// <summary>Whether a point is on the screen.</summary>
     private static bool OnScreen(Vector2 point) =>

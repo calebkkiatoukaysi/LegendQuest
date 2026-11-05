@@ -21,8 +21,8 @@ public static class TutorialCatalog
     /// <summary>Walking, by the keys or the mouse. The first moment you have control.</summary>
     public const string Move = "explore-move";
 
-    /// <summary>The mouse wheel. Only in HOW TO PLAY.</summary>
-    public const string Zoom = "explore-zoom";
+    /// <summary>Alt, for every badge, name and way out at once. Only in HOW TO PLAY.</summary>
+    public const string ShowAll = "explore-alt";
 
     /// <summary>Chests, doors, levers and signs. The first time one's in reach.</summary>
     public const string Use = "explore-use";
@@ -124,7 +124,7 @@ public static class TutorialCatalog
     /// <summary>Every id the game calls by name. Each one has to have a row, so a tip renamed in the table and not here shows up when the game starts.</summary>
     private static readonly string[] Called =
     {
-        Move, Zoom, Use, Enter, Map, Waypoint, Help, Talk, Choices, Checks, Event, Work, Objective, Board,
+        Move, ShowAll, Use, Enter, Map, Waypoint, Help, Talk, Choices, Checks, Event, Work, Objective, Board,
         Party, Companion, Approval, Camp, CombatStart, CombatMove, CombatAttack, CombatAbility, CombatBonus,
         CombatEndTurn, CombatSoulLink, CombatDowned, CombatVictory, InventoryOpen, InventoryEquip, InventoryPotion, Loot,
     };
@@ -140,9 +140,9 @@ public static class TutorialCatalog
         },
         new()
         {
-            Id = Zoom, Topic = TipTopic.Exploring, Title = "A closer look",
-            Body = "The mouse wheel zooms the world in and out, a whole step at a time.",
-            Keys = new[] { KeyCaps.Wheel },
+            Id = ShowAll, Topic = TipTopic.Exploring, Title = "Everything at once",
+            Body = "Hold Alt to see every door's badge, every name and every way out of the room.",
+            Keys = new[] { "ALT" },
         },
         new()
         {

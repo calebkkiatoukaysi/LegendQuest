@@ -218,16 +218,15 @@ public sealed partial class CombatEngine
         Strike(attacker, attacker.Melee, mover, AbilityCatalog.Get(AbilityId.Attack), false);
     }
 
-    /// <summary>Which way someone faces looking from one tile to another: sideways when it's at least as far across as up or down.</summary>
+    /// <summary>Which way someone faces looking from one tile to another: left or right, by which side of them it's on, since nobody in a fight faces any other way.</summary>
     /// <param name="from">Where they are.</param>
     /// <param name="to">What they're looking at.</param>
-    /// <param name="otherwise">Which way they face if it's the same tile.</param>
+    /// <param name="otherwise">Which way they face already (left or right: see Combatant.Facing), kept if it's the same tile or straight up or down the floor from them.</param>
     internal static Direction FacingOf(Point from, Point to, Direction otherwise)
     {
-        int dx = to.X - from.X, dy = to.Y - from.Y;
-        if (dx == 0 && dy == 0) return otherwise;
-        if (Math.Abs(dx) >= Math.Abs(dy)) return dx > 0 ? Direction.Right : Direction.Left;
-        return dy > 0 ? Direction.Down : Direction.Up;
+        int dx = to.X - from.X;
+        if (dx == 0) return otherwise;
+        return dx > 0 ? Direction.Right : Direction.Left;
     }
 
     /// <summary>Walks a path back from its end, and turns it round, leaving off the start.</summary>

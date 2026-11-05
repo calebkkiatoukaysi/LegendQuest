@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using LegendQuest.Items;
 using LegendQuest.StateManagement;
-using LegendQuest.World;
 
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The proof run's fights, and the screens over the map it looks in on: whenever a fight's on,
+/// The proof run's fights, and the screens over the room it looks in on: whenever a fight's on,
 /// whatever part of the run it is, this plays it; and a visit can open the inventory, a shop, the
 /// help or a tip for a shot.
 /// </summary>
@@ -18,7 +17,7 @@ namespace LegendQuest.Screens;
 /// the foes', faster than real time, and the run takes a shot of the opening (the turn banner and
 /// the initiative bar) and of the end. The tutorial at sea is the exception: its first turn is
 /// played by hand, the movement preview past the budget, the target's tooltip and the attack, the
-/// way a player would meet them. The map's dice are seeded under the proof run, so every run
+/// way a player would meet them. The zone's dice are seeded under the proof run, so every run
 /// fights the same fights; one that's lost goes to the game-over screen like any other, and the
 /// run (LegendQuestGame.Proof.cs) loads the save from before it and fights it again.
 /// </remarks>
@@ -33,7 +32,7 @@ public partial class ExploreScreen
     /// <summary>How long the panel at the end is up before its shot, so it's faded in.</summary>
     private const int ProofFightEnding = 30;
 
-    /// <summary>How far ahead of you the tutorial's movement preview reaches, in tiles: well past a turn's walk, so the part beyond it shows.</summary>
+    /// <summary>How far ahead of you (towards the foes, on the right) the tutorial's movement preview reaches, in tiles: well past a turn's walk, so the part beyond it shows. It stops at the right end of the fight's ground.</summary>
     private const int ProofPreviewReach = 9;
 
     /// <summary>How long each of the tutorial's hand-played moments is held before its shot.</summary>
@@ -42,7 +41,7 @@ public partial class ExploreScreen
     /// <summary>The sea-wraith the tutorial's first attack goes for: the one that comes up over the rail nearest the bow.</summary>
     private const string ProofTutorialTarget = "wraith-1";
 
-    /// <summary>How long a screen opened over the map for a shot gets to come in.</summary>
+    /// <summary>How long a screen opened over the room for a shot gets to come in.</summary>
     private const int ProofScreenSettles = 30;
 
     /// <summary>The fight the run's in, by encounter id; how long it's been on; how long its end panel has been up; and how far the tutorial's hand-played turn has got.</summary>
@@ -89,8 +88,8 @@ public partial class ExploreScreen
         switch (_proofTutorialStep)
         {
             case 0 when ProofYourTurn:
-                Point here = Tilemap.CellOf(Leader.Position);
-                ProofAimAtCell(new Point(here.X + ProofPreviewReach, here.Y));
+                Point here = _ground.CellOf(Leader.Position);
+                ProofAimAtCell(new Point(Math.Min(here.X + ProofPreviewReach, _ground.Width - 1), here.Y));
                 return Moment();
 
             case 1 when since == ProofMomentFrames:
@@ -139,7 +138,7 @@ public partial class ExploreScreen
         return null;
     }
 
-    /// <summary>Opens a screen over the map for a while, takes its shot, and puts it away.</summary>
+    /// <summary>Opens a screen over the room for a while, takes its shot, and puts it away.</summary>
     /// <param name="open">Makes the screen.</param>
     /// <param name="shot">The shot.</param>
     /// <param name="also">Anything to do to it before the shot, or null.</param>
@@ -162,7 +161,7 @@ public partial class ExploreScreen
         yield return Wait(ProofScreenSettles);
     }
 
-    /// <summary>The screens a player opens over the map, each looked in on once in the Flagon: the bag, the character sheet, the forge's shop, the help's first two pages, and a tip.</summary>
+    /// <summary>The screens a player opens over the room, each looked in on once in the Flagon: the bag, the character sheet, the forge's shop, the help's first two pages, and a tip.</summary>
     private IEnumerable<ProofBeat> LookIns()
     {
         foreach (ProofBeat beat in Over(() => new InventoryScreen(_game, InventoryPage.Bag), "inventory.png")) yield return beat;

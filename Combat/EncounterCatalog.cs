@@ -12,15 +12,17 @@ namespace LegendQuest.Combat;
 /// Every fight in the story so far, by the story's encounter id (Story/09-registry.md lists them all).
 /// </summary>
 /// <remarks>
-/// The foes on a map already are its npcs (Content/Maps): the wraiths over the Gull's Wager's rail
-/// once the bell's rung, the Red Gulls on the docks, the wolves at the Mirewood's edge, the
-/// Thornmother in her den, the Hollowed at Thornbridge's treeline, Kael on his shelf and the sappers
-/// beside him. Everyone else turns up on a tile picked off the map: the guard wave down the quarry's
-/// passage, the second raid out of Thornbridge's trees, and the sapper chief up out of the hole.
-/// Each fight is started by the conversation before it (DialogueEffect.Fight), and winning it sets
-/// its flag, the one the story already reads, so the map changes, and then plays the conversation
-/// after it (Then), which is the rest of the scene. None of them can be lost and carried on from: a
-/// loss is the game over screen.
+/// The foes in a room already are its npcs (Content/Zones), and they fight from where the room has
+/// them standing: the wraiths over the Gull's Wager's rail once the bell's rung, the Red Gulls on
+/// the harbourside, the wolves at the Mirewood's edge, the Thornmother in her den, the Hollowed at
+/// Thornbridge's treeline, Kael on his shelf and the sappers beside him. Everyone else turns up on a
+/// cell of the fight's ground, on its right third, the foes' side: the guard wave down the quarry's
+/// passage, the second raid out of Thornbridge's trees, and the sapper chief up out of the hole. That
+/// ground is M3's RoomCombatGrid, columns across the room's fight range and four rows down its
+/// floor band, until M4 gives every foe a slot instead. Each fight is started by the conversation
+/// before it (DialogueEffect.Fight), and winning it sets its flag, the one the story already reads,
+/// so the room changes, and then plays the conversation after it (Then), which is the rest of the
+/// scene. None of them can be lost and carried on from: a loss is the game over screen.
 /// </remarks>
 public static class EncounterCatalog
 {
@@ -72,11 +74,11 @@ public static class EncounterCatalog
         {
             Id = "a1-c2-02-guard-wave", Name = "Guarding the Crystal", Victory = Act1Chapter2.CrystalGuarded, Then = "a1-c2-02-guard-wave-after",
             SitsOut = new[] { "sera" },
-            Foes = new[] { Spawn("gloomfang", 15, 9), Spawn("gloomfang", 15, 11), Spawn("gloomfang", 16, 12) },
+            Foes = new[] { Spawn("gloomfang", 15, 1), Spawn("gloomfang", 15, 3), Spawn("gloomfang", 16, 2) },
             Waves = new[]
             {
-                new EncounterWave(2, new[] { Spawn("hollowed-footman", 15, 4) }, null),
-                new EncounterWave(3, new[] { Spawn("gloomfang", 12, 4) }, null),
+                new EncounterWave(2, new[] { Spawn("hollowed-footman", 15, 0) }, null),
+                new EncounterWave(3, new[] { Spawn("gloomfang", 14, 0) }, null),
             },
         },
 
@@ -92,7 +94,7 @@ public static class EncounterCatalog
             },
             Waves = new[]
             {
-                new EncounterWave(3, new[] { Spawn("hollowed-footman", 38, 12), Spawn("hollowed-hexer", 39, 13), Spawn("hollowed-footman", 38, 14) },
+                new EncounterWave(3, new[] { Spawn("hollowed-footman", 13, 1), Spawn("hollowed-hexer", 13, 2), Spawn("hollowed-footman", 13, 3) },
                     "Where's the Watch?! Where's the king's army?!"),
             },
             Guests = new[] { "mira" },
@@ -114,7 +116,7 @@ public static class EncounterCatalog
             Foes = new[]
             {
                 Npc("hollowed-sapper", "sapper-1"), Npc("hollowed-sapper", "sapper-2"), Npc("hollowed-sapper", "sapper-3"),
-                Spawn("sapper-chief", 33, 9),
+                Spawn("sapper-chief", 13, 3),
             },
             Guests = new[] { "kael" },
         },
@@ -144,10 +146,10 @@ public static class EncounterCatalog
     /// <param name="id">Which. It has to exist.</param>
     public static EncounterDefinition Get(string id) => ById[id];
 
-    /// <summary>A foe who's an npc on the map already.</summary>
+    /// <summary>A foe who's an npc in the room already.</summary>
     private static EncounterFoe Npc(string enemy, string npc) => new(enemy, npc, null);
 
-    /// <summary>A foe who turns up on a tile.</summary>
+    /// <summary>A foe who turns up on a cell of the fight's ground: x columns from the left of the grid laid over the room's fight range, y rows out from the back of its floor band (0 to 3).</summary>
     private static EncounterFoe Spawn(string enemy, int x, int y) => new(enemy, null, new Point(x, y));
 
     /// <summary>Checks one encounter, and throws with what's wrong if it can't be fought.</summary>

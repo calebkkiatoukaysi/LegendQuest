@@ -19,6 +19,8 @@ This file is the spec for characters, items, faces and backdrops. The world itse
 | Variety | One body, palette swaps | One base body in four builds, part kits per character, and four tiers of distinctness (§7) |
 | Detail | Pixel shading, one tone of shadow | Painted parts with two shadow tones, a highlight and a rim light, and costume detail (trims, buckles, stitching, wear) to sit against detailed painted rooms |
 
+**The author's direction (2026-11-04).** The artwork stays the game's current artwork, drawn in more detail, not a new style: the rig's parts are drawn from today's characters' designs, palettes and proportions, with this file's detail rules raised on top. Characters and enemies face only right or left; there's no front or back view to draw. NPCs keep walking. Where this file's style rules disagree with that, the direction wins.
+
 Everything sits behind a switch, `ArtSettings.Characters = Legacy | Rig` and `ArtSettings.World = Legacy | Rooms`, read at start-up from `settings.json` and toggled in the options screen's debug page. Until M14 is done, both paths work, and the proof run (`--proof`) runs once in each.
 
 ## 2. Style

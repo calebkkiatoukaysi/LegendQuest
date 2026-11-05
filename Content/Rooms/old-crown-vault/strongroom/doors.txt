@@ -1,0 +1,4 @@
+; The painted doorway of each door in old-crown-vault/strongroom: id, then x y width height in canvas pixels
+; (the game divides by RoomScale). Written by tools/rooms/generate_room_placeholders.py; a door
+; that isn't here has nothing painted for it, and the game uses its box.
+strongroom-out 474 342 252 258

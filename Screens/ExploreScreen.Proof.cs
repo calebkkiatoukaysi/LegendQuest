@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using LegendQuest.Characters;
 using LegendQuest.Dialogue;
 using LegendQuest.Dialogue.Scripts;
 using LegendQuest.StateManagement;
@@ -8,59 +10,46 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's part of the proof run: the arrival at the harbour, Questeria and the
-/// innkeeper's work, the road, fast travel both ways, the barrow, then out through the pause menu.
+/// The zone screen's part of the proof run: the voyage, the arrival at the harbour and the Red Gulls,
+/// Questeria and the innkeeper's work, the road, fast travel both ways, the barrow, then out through
+/// the pause menu. Act 1's later chapters are ExploreScreen.ProofChapters, and the beats and their
+/// helpers ExploreScreen.ProofBeats.
 /// </summary>
 /// <remarks>
-/// Movement goes in through the same code the keyboard uses (ReadMovement), using things goes
-/// through the same code the E key does, and the mouse is a pretend one in InputState that the
-/// screen reads like the real one, so the shots actually test the collision, the paths, the
-/// triggers, the exits and the rules. I only teleport between scenes to keep the run short, like the lobby's
-/// schedule in The Black Box. Each visit to a map is its own stage, so each gets its own schedule.
+/// Every visit to a zone is its own stage, and each is a queue of beats. Movement goes in through the
+/// same code the keyboard uses (ReadMovement), using things and talking through the same code the E
+/// key does, Alt through the same flag it sets, and the mouse is a pretend one in InputState that the
+/// screen reads like the real one, so the shots actually test the floor, the paths, the triggers, the
+/// doors, the ways out, the room changes and the rules. I only teleport between scenes to keep the run
+/// short, like the lobby's schedule in The Black Box. The ship coming in keeps its timed shots, on
+/// the arrival's own clock.
 /// </remarks>
 public partial class ExploreScreen
 {
-    /// <summary>How many frames a map gets to fade in before the first shot.</summary>
+    /// <summary>How many frames a zone gets to fade in before the first beat.</summary>
     private const int Settled = 50;
-
-    /// <summary>The last frame of each visit's schedule. Most of them end walking into an exit or travelling, and the next stage picks up on the next map.</summary>
-    internal const int VoyageProofEnd = Settled + 4000;
-    internal const int DocksProofEnd = Settled + 4000;
-    internal const int QuesteriaProofEnd = Settled + 1600;
-    internal const int FlagonProofEnd = Settled + 400;
-    internal const int QuesteriaOutProofEnd = Settled + 300;
-    internal const int RoadProofEnd = Settled + 267;
-    internal const int QuesteriaAgainProofEnd = Settled + 26;
-    internal const int BarrowProofEnd = Settled + 593;
 
     /// <summary>How often a conversation gets a press while the proof run's reading it, and how long a line's held for its shot.</summary>
     private const int ProofReadEvery = 6;
     private const int ProofHoldFrames = 20;
 
-    /// <summary>The choices still to make at this visit's questions, the clock the presses go by, the shots taken, the shot a line's being held for, and a frame to count on from.</summary>
+    /// <summary>The choices still to make at this visit's questions, the clock the presses go by, the shots taken, the shot a line's being held for, and how long it's been held.</summary>
     private readonly Queue<int> _proofChoices = new();
     private readonly HashSet<string> _proofShots = new();
     private int _proofTalkClock;
     private string _proofHolding;
     private int _proofHoldClock;
-    private int _proofMark;
-
-    /// <summary>When each of Questeria's conversations gets read, after Settled, and for how many frames: the Soul-Bound's as you come in, and Fennick's, whose six lines take two presses each.</summary>
-    private static readonly (int At, int Frames)[] ProofReads = { (72, 80), (880, 92) };
 
     /// <summary>A direction to walk in instead of reading the keyboard, while the proof run is driving.</summary>
     private Vector2? _proofMove;
 
-    /// <summary>A point on the map the pretend mouse stays over, whatever the camera does, and whether its button is down this frame.</summary>
+    /// <summary>A point in the room the pretend mouse stays over, whatever the camera does, and whether its button is down this frame.</summary>
     private Vector2? _proofAim;
     private bool _proofPress;
 
-    /// <summary>Which map this is, so the proof run can tell one map's screen from the last one's.</summary>
-    internal string MapId => _map.Id;
-
     /// <summary>Sets up whatever this frame needs, and returns a file name if this frame should be saved.</summary>
-    /// <param name="frame">Which drawn frame this is, counted from the map's first.</param>
-    /// <param name="stage">Which part of the run it is, which says which visit to this map it is.</param>
+    /// <param name="frame">Which drawn frame this is, counted from the zone's first.</param>
+    /// <param name="stage">Which part of the run it is, which says which visit to this zone it is.</param>
     /// <returns>The file the frame should be written to, or null.</returns>
     internal string ProofStep(int frame, ProofStage stage)
     {
@@ -77,175 +66,347 @@ public partial class ExploreScreen
 
         return stage switch
         {
-            ProofStage.Voyage => VoyageStep(frame),
-            ProofStage.Docks => DocksStep(frame),
-            ProofStage.Questeria => QuesteriaStep(frame),
-            ProofStage.Flagon => FlagonStep(frame),
-            ProofStage.QuesteriaOut => QuesteriaOutStep(frame),
-            ProofStage.Road => RoadStep(frame),
-            ProofStage.QuesteriaAgain => QuesteriaAgainStep(frame),
-            ProofStage.Barrow => BarrowStep(frame),
+            ProofStage.Voyage => Beats(frame, VoyageBeats),
+            ProofStage.Docks => Beats(frame, DocksBeats),
+            ProofStage.Questeria => Beats(frame, QuesteriaBeats),
+            ProofStage.Flagon => Beats(frame, FlagonBeats),
+            ProofStage.QuesteriaOut => Beats(frame, () => Seq(Shot("questeria-outside.png"), Out("road"))),
+            ProofStage.Road => Beats(frame, RoadBeats),
+            ProofStage.QuesteriaAgain => Beats(frame, () => Seq(Shot("questeria-arrived.png"), TravelFrom("crystal", "road"))),
+            ProofStage.Barrow => Beats(frame, BarrowBeats),
             _ => ChapterStep(frame, stage),
         };
     }
 
-    /// <summary>The deck at night, with the red "!" at the bow: a walk up to it, then the Prologue's voyage read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE), the sea-wraiths and Questeria at dawn, and off to the harbour.</summary>
-    private string VoyageStep(int frame)
+    /// <summary>The deck at night, with the red "!" at the bow: a walk up to it along the deck, then the Prologue's voyage read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE), the sea-wraiths, the fight, and Questeria at dawn, until the voyage ends at the harbour.</summary>
+    private IEnumerable<ProofBeat> VoyageBeats() => Seq(
+        Shot("voyage.png"),
+        Answer(1, 0),
+        Walk(-ProofToTheBow),
+        ReadUntil(() => false, (Asked, "voyage-choice.png"), ("lookout", "voyage-wraiths.png"), ("odelle", "voyage-dawn.png")));
+
+    /// <summary>How far along the deck from the start the bow's "!" is, at most, in art pixels: the walk stops when the voyage starts.</summary>
+    private const float ProofToTheBow = 160f;
+
+    /// <summary>
+    /// The harbour: the ship sailing in with the two of you on deck, the sail coming in, tied up, the
+    /// plank going out, the walk ashore and Act 1's card, each on the arrival's own clock; then the red
+    /// "!" over the Red Gulls and a walk east into them (talked down, with the dice, and Grell let
+    /// off), the fight, Captain Hale, and on through the fish market and up into the city.
+    /// </summary>
+    private IEnumerable<ProofBeat> DocksBeats()
     {
-        if (frame == Settled) return "voyage.png";
-        if (frame < Settled) return null;
-        if (frame == Settled + 1)
+        var beats = new List<object>();
+        if (_arriving != Arriving.None)
         {
-            ProofChoices(1, 0);
-            ProofPlace(15f, 13f, Direction.Left);
-            _proofMove = new Vector2(-1f, 0f);
+            beats.Add(ArrivalShot(Arriving.Sailing, 3.3f, "arrival-sailing.png"));
+            beats.Add(ArrivalShot(Arriving.Sailing, 5f, "arrival-furling.png"));
+            beats.Add(ArrivalShot(Arriving.Docked, 0.67f, "arrival-docked.png"));
+            beats.Add(ArrivalShot(Arriving.Docked, 1.33f, "arrival-plank.png"));
+            beats.Add(ArrivalShot(Arriving.Disembarking, 0.77f, "arrival-gangplank.png"));
+            beats.Add(ArrivalShot(Arriving.Disembarking, 3f, "arrival-ashore.png"));
+            beats.Add(ArrivalShot(Arriving.Card, 1.7f, "arrival-card.png"));
         }
 
-        DialogueScreen talk = ProofDialogue();
-        if (talk is not null) _proofMove = Vector2.Zero;
-        if (talk is not null && talk.ProofAsking && ProofOnce("voyage-choice.png")) return "voyage-choice.png";
-        if (talk?.ProofLine is DialogueNode line)
-        {
-            if (line.Speaker == Speakers.Card && line.Line.StartsWith("The sea-wraiths") && ProofOnce("voyage-wraiths.png")) return "voyage-wraiths.png";
-            if (line.Painting == "questeria-dawn" && line.Speaker == "odelle" && ProofHold(talk, "voyage-dawn.png")) return "voyage-dawn.png";
-        }
-
-        ProofTalk();
-        return null;
+        return Seq(
+            Seq(beats.ToArray()),
+            WaitFor(() => _arriving == Arriving.None),
+            Answer(1, 0),
+            Wait(30),
+            Shot("docks-event.png"),
+            Walk(ProofIntoTheGulls),
+            ReadUntil(() => _game.Flags.Contains(Act1Chapter1.DocksDone), (Rolled, "docks-check.png"), ("red-gull", "docks-gulls.png"), ("hale", "docks-hale.png")),
+            Wait(40),
+            Shot("docks.png"),
+            Out("city"));
     }
 
-    /// <summary>The harbour: the ship sailing in with the two of you on deck, the sail coming in, tied up, the plank going out, the walk ashore, Act 1's card, then the red "!" over the Red Gulls and a walk up to them (talked down, with the dice, and Grell let off), Captain Hale, and up the street into the city.</summary>
-    private string DocksStep(int frame)
+    /// <summary>How far east the walk into the Red Gulls goes at most, in art pixels: the conversation stops it once it's in their trigger.</summary>
+    private const float ProofIntoTheGulls = 120f;
+
+    /// <summary>A shot of the ship coming in, once the arrival's part has run so long, or as soon as it's past that part.</summary>
+    /// <param name="part">The part of the arrival.</param>
+    /// <param name="seconds">How far into it, on its own clock.</param>
+    /// <param name="shot">The shot.</param>
+    private ProofBeat ArrivalShot(Arriving part, float seconds, string shot)
     {
-        switch (frame)
-        {
-            case 200:
-                return "arrival-sailing.png";
-
-            case 300:
-                return "arrival-furling.png";
-
-            case 520:
-                return "arrival-docked.png";
-
-            case 560:
-                return "arrival-plank.png";
-
-            case 640:
-                return "arrival-gangplank.png";
-
-            case 900:
-                return "arrival-ashore.png";
-
-            case 1200:
-                return "arrival-card.png";
-
-            case 1201:
-                ProofChoices(1, 0);
-                return null;
-        }
-        if (frame < 1201 || _arriving != Arriving.None) return null;
-
-        DialogueScreen talk = ProofDialogue();
-        DiceRollOverlay dice = ProofDice();
-        if (talk is not null) _proofMove = Vector2.Zero;
-        if (dice is not null && dice.ProofLanded && ProofOnce("docks-check.png")) return "docks-check.png";
-        if (talk?.ProofLine is DialogueNode line)
-        {
-            if (line.Speaker == "red-gull" && ProofHold(talk, "docks-gulls.png")) return "docks-gulls.png";
-            if (line.Speaker == "hale" && ProofHold(talk, "docks-hale.png")) return "docks-hale.png";
-        }
-
-        if (talk is not null || dice is not null)
-        {
-            ProofTalk();
-            return null;
-        }
-
-        // Before the Red Gulls: stand off to the west of them, short of the trigger, the red "!" over Tomas, then walk east into them.
-        if (!_game.Flags.Contains(Act1Chapter1.DocksDone))
-        {
-            if (ProofOnce("docks-approach"))
-            {
-                ProofPlace(22.5f, 15.5f, Direction.Right);
-                _proofMark = frame;
-            }
-            else if (frame == _proofMark + 30)
-            {
-                return "docks-event.png";
-            }
-            else if (frame == _proofMark + 31)
-            {
-                _proofMove = new Vector2(1f, 0f);
-            }
-            return null;
-        }
-
-        if (ProofOnce("docks-after"))
-        {
-            _proofMark = frame;
-            return null;
-        }
-        if (frame == _proofMark + 40) return "docks.png";
-        if (frame == _proofMark + 42)
-        {
-            ProofPlace(72f, 7f, Direction.Right);
-            _proofMove = new Vector2(1f, 0f);
-        }
-        return null;
+        bool past() => _arriving == Arriving.None || _arriving > part || _arriving == part && _arrivalClock >= seconds;
+        return () => past() ? new ProofTick(true, shot) : new ProofTick(false);
     }
+
+    /// <summary>
+    /// Questeria, in off the harbour, room by room. The gate plaza: the Soul-Bound in the street, and
+    /// the label at its east end. The festival square: the townsfolk about it a few seconds apart, the
+    /// path round the fountain and a click to walk it, the elder, a point above the floor with no way
+    /// there, Tab and a card, the mouse on the city gate, Alt held, the stair up to the Sunspire Steps
+    /// and back down, and the waypoint crystal. The Lantern Market: the camera along it, Fennick and
+    /// the quest board, you off on your own, the Flagon's badge with its "!", the zone map and a jump
+    /// back to the square from it, then in through the Gilded Flagon's door.
+    /// </summary>
+    private IEnumerable<ProofBeat> QuesteriaBeats() => Seq(
+        Shot("questeria.png"),
+        Walk(ProofIntoTheSoulBound),
+        Read(("soulbound", "questeria-soulbound.png")),
+        GoToSpawn("gate-plaza-east"),
+        Wait(20),
+        Shot("questeria-edge-label.png"),
+        Out("gate-plaza-east"),
+
+        // The square, then the same view a few seconds later: the ones who wander have moved.
+        GoToSpawn("start"),
+        Wait(30),
+        Shot("questeria-plaza.png"),
+        Wait(210),
+        Shot("questeria-plaza-later.png"),
+
+        // West of the fountain, the mouse on the far side of it: the path goes round. Click, and walk it.
+        Do(() => ProofPlace(Fountain() - new Vector2(FountainRadii().X + ProofRoundTheFountain, 0f), Direction.Right)),
+        Do(() => ProofAimAt(Fountain() + new Vector2(FountainRadii().X + ProofRoundTheFountain, 0f))),
+        Wait(25),
+        Shot("questeria-path.png"),
+        Do(ProofClick),
+        Wait(44),
+        Shot("questeria-click-walk.png"),
+        Wait(95),
+        Shot("questeria-path-end.png"),
+
+        // A few steps from the elder, the mouse on them, then a click: you walk up and they speak.
+        Do(ProofLetGo),
+        Do(() => ProofPlace(ProofNpc("elder").Walker.Position + ProofOffTheElder, Direction.Right)),
+        Hover("elder"),
+        Wait(24),
+        Shot("questeria-hover-npc.png"),
+        Do(ProofClick),
+        Wait(74),
+        Shot("questeria-talk.png"),
+
+        // The mouse up over the painting, where there's no door: there's no way there.
+        Do(() => ProofAimAt(NoWayFrom(Leader.Position))),
+        Wait(15),
+        Shot("questeria-no-way.png"),
+
+        // Tab to the Soul-Bound; the camera eases over. Then a click on your card takes you back.
+        Do(ProofLetGo),
+        Do(() => SelectLeader((_game.Leader + 1) % _walkers.Count)),
+        Wait(24),
+        Shot("questeria-switch.png"),
+        ClickCard(0),
+        Wait(22),
+        Shot("questeria-card.png"),
+
+        // Near the city gate, the mouse on it: its outline, its plaque and the door cursor. Then Alt.
+        Do(() => ProofPlace(FindDoor("road").Foot + ProofOffTheGate, Direction.Right)),
+        Hover("road"),
+        Wait(20),
+        Shot("questeria-door-hover.png"),
+        Do(ProofLetGo),
+        ShowAll(true),
+        Wait(20),
+        Shot("questeria-alt.png"),
+        ShowAll(false),
+
+        // The stair up: its chevrons and label under the mouse, then a click walks up it, and back down.
+        Do(() => ProofPlace(new Vector2(FindExit("festival-square-up").X + ProofOffTheStair, Leader.Position.Y), Direction.Left)),
+        Hover("festival-square-up"),
+        Wait(20),
+        Shot("questeria-stairs.png"),
+        Do(ProofClick),
+        WaitRoom("sunspire-steps"),
+        Do(ProofLetGo),
+        Wait(20),
+        Out("sunspire-steps-down"),
+        WaitRoom("festival-square"),
+
+        // Beside the waypoint crystal, close enough that its name and E come up over it. Using it
+        // finds it, and opens the zone map's world to travel; closed again.
+        NextTo("crystal"),
+        Wait(23),
+        Shot("questeria-waypoint.png"),
+        UseThing("crystal"),
+        WaitFor(() => ProofMap() is not null),
+        Wait(ProofScreenComesIn),
+        Shot("map-world-first.png"),
+        CloseMap(),
+        Wait(12),
+        Out("festival-square-east"),
+
+        // Along the market, the camera after you; Fennick at the board, his lines, the Mirewood's contract.
+        Do(() => ProofPlace(ProofMarketFrom, Direction.Right)),
+        Walk(ProofMarketWalk),
+        Shot("questeria-market-scroll.png"),
+        TalkTo("fennick"),
+        Read(("fennick", "questeria-board.png")),
+        Shot("questeria-task.png"),
+
+        // Off on your own along the market: the Soul-Bound finds their way after you.
+        Do(() => ProofPlaceAlone(Leader.Position + ProofAlone, Direction.Right)),
+        Wait(98),
+        Shot("questeria-catch-up.png"),
+        Wait(100),
+        Shot("questeria-caught-up.png"),
+
+        // The Flagon's tankard, with the innkeeper's "!" over it; the zone map, and a jump to the square.
+        Do(() => ProofPlace(FindDoor("flagon").Foot + ProofOffTheFlagon, Direction.Left)),
+        Wait(20),
+        Shot("questeria-badges.png"),
+        ZoneMap(),
+        Shot("zone-map-questeria.png"),
+        Jump("festival-square"),
+        Wait(20),
+        Shot("zone-map-jump.png"),
+
+        // Then back to the market, and in through the Gilded Flagon's door.
+        Out("flagon"));
+
+    /// <summary>The Questeria visit's distances, in art pixels: how far east the walk into the Soul-Bound's trigger goes at most, how far past the fountain's ends the path round it starts and ends, where the walk along the market starts and how far it goes, and how far you go off on your own.</summary>
+    private const float ProofIntoTheSoulBound = 80f;
+    private const float ProofRoundTheFountain = 16f;
+    private const float ProofOffTheStair = 50f;
+    private const float ProofMarketWalk = 150f;
+    private static readonly Vector2 ProofMarketFrom = new(300f, 192f);
+    private static readonly Vector2 ProofAlone = new(220f, 0f);
+
+    /// <summary>Where you stand for the mouse on the elder, the city gate and the Flagon's badge, from the elder's feet and the doors' feet, in art pixels.</summary>
+    private static readonly Vector2 ProofOffTheElder = new(-40f, 6f);
+    private static readonly Vector2 ProofOffTheGate = new(-60f, 40f);
+    private static readonly Vector2 ProofOffTheFlagon = new(60f, 42f);
+
+    /// <summary>Where the pretend mouse goes for there being no way: up over the painting, well to one side of you, where there's no door, way out, person or thing.</summary>
+    private Vector2 NoWayFrom(Vector2 you)
+    {
+        float x = MathF.Max(ProofNoWayIn, you.X - ProofNoWayAside);
+        return new Vector2(x, _room.BackEdgeAt(x) - ProofNoWayUp);
+    }
+
+    /// <summary>How far in from the end, to one side of you and up over the floor's back edge the no-way point is, in art pixels.</summary>
+    private const float ProofNoWayIn = 60f;
+    private const float ProofNoWayAside = 140f;
+    private const float ProofNoWayUp = 60f;
+
+    /// <summary>The middle of the festival square's fountain, and how far it reaches across and in depth: the room's one ellipse.</summary>
+    private Vector2 Fountain() => _room.Blocks[0].Centre;
+    private Vector2 FountainRadii() => _room.Blocks[0].Radii;
 
     /// <summary>Inside the Gilded Flagon: the tavern, the keeper's errand taken, and back out through the door.</summary>
-    private string FlagonStep(int frame)
+    private IEnumerable<ProofBeat> FlagonBeats() => Seq(
+        Shot("flagon.png"),
+        TalkTo("innkeeper"),
+        Read(("innkeeper", "flagon-innkeeper.png")),
+        Out("door"));
+
+    /// <summary>The old road: a walk in, the trigger in the farmland, then at the fork the chest, the sign, the zone map, the waypoint and the world, and fast travel back to Questeria.</summary>
+    private IEnumerable<ProofBeat> RoadBeats() => Seq(
+        Shot("road.png"),
+        Walk(ProofRoadWalk),
+        Shot("road-walk.png"),
+        Into("watched"),
+        Wait(49),
+        Shot("road-trigger.png"),
+        NextTo("camp"),
+        Wait(24),
+        Shot("road-camp.png"),
+        UseThing("camp"),
+        Wait(19),
+        Shot("road-chest.png"),
+        UseThing("fork"),
+        Wait(40),
+        Shot("road-sign.png"),
+        ZoneMap(),
+        Shot("map-road.png"),
+        CloseMap(),
+        Wait(12),
+        UseThing("stone"),
+        WaitFor(() => ProofMap() is not null),
+        Wait(ProofScreenComesIn),
+        Shot("map-world-travel.png"),
+        Do(() => ProofMap().ProofTravel("questeria")));
+
+    /// <summary>How far the walk in along the road goes, in art pixels: a little under a second of it.</summary>
+    private const float ProofRoadWalk = 37f;
+
+    /// <summary>The barrow: the steps in from the daylight, the dark further in, the cold, the hall, the locked tomb door, the stone door that won't move, the lever and the door it works, the side room's chest, the zone map, a torch, and paused, then out to the title.</summary>
+    private IEnumerable<ProofBeat> BarrowBeats() => Seq(
+        Shot("barrow.png"),
+        Walk(ProofIntoTheDark),
+        Shot("barrow-dark.png"),
+        Into("cold"),
+        Wait(30),
+        Out("steps-east"),
+        Wait(30),
+        Shot("barrow-hall.png"),
+        AtDoor("tomb"),
+        Wait(18),
+        Shot("barrow-door.png"),
+        Out("tomb"),
+        Wait(19),
+        Shot("barrow-locked.png"),
+        Out("side-shut"),
+        Wait(18),
+        Shot("barrow-gate-shut.png"),
+        UseThing("side-lever"),
+        Wait(20),
+        Shot("barrow-lever.png"),
+
+        // Back at the stone door, open now, once the line from trying it has gone. Then through it to the chest.
+        AtDoor("side"),
+        Wait(40),
+        Shot("barrow-gate-open.png"),
+        Out("side"),
+        Wait(20),
+        UseThing("side-chest"),
+        Wait(20),
+        Shot("barrow-chest.png"),
+        ZoneMap(),
+        Shot("map-barrow.png"),
+        CloseMap(),
+        Wait(12),
+
+        // Right under a torch, then paused, and QUIT TO TITLE.
+        Do(UnderATorch),
+        Wait(22),
+        Shot("barrow-torch.png"),
+        Do(() => ScreenManager.AddScreen(new PauseMenuScreen())),
+        Wait(20),
+        Shot("explore-paused.png"),
+        Do(() =>
+        {
+            foreach (GameScreen screen in ScreenManager.GetScreens())
+                if (screen is PauseMenuScreen pause) pause.ProofQuitToTitle();
+        }));
+
+    /// <summary>How far along the barrow's steps the walk into the dark goes, in art pixels.</summary>
+    private const float ProofIntoTheDark = 110f;
+
+    /// <summary>Stands you on the floor right under the first torch in the room.</summary>
+    private void UnderATorch()
     {
-        if (frame is >= Settled + 32 and < Settled + 120)
+        PropSprite torch = _props.Find(prop => prop.Definition.Light is not null);
+        ProofPlace(_walk.NearestOnFloor(new Vector2(torch.Foot.X, _room.BackEdgeAt(torch.Foot.X) + ProofUnderTheTorch)), Direction.Right);
+    }
+
+    /// <summary>How far onto the floor from its back edge you stand under a torch, in art pixels.</summary>
+    private const float ProofUnderTheTorch = 10f;
+
+    /// <summary>A visit's beats in order, from single beats and runs of them.</summary>
+    /// <param name="parts">Each a ProofBeat, or a run of them.</param>
+    private static IEnumerable<ProofBeat> Seq(params object[] parts)
+    {
+        foreach (object part in parts)
         {
-            ProofTalk();
-            return null;
-        }
-
-        switch (frame)
-        {
-            case Settled:
-                return "flagon.png";
-
-            case Settled + 2:
-                ProofPlace(9.5f, 8f, Direction.Up);
-                return null;
-
-            case Settled + 4:
-                ProofUse();
-                return null;
-
-            case Settled + 30:
-                return "flagon-innkeeper.png";
-
-            case Settled + 130:
-                ProofPlace(10.5f, 13f, Direction.Down);
-                _proofMove = new Vector2(0f, 1f);
-                return null;
-
-            default:
-                return null;
+            if (part is ProofBeat beat) yield return beat;
+            else foreach (ProofBeat each in (IEnumerable<ProofBeat>)part) yield return each;
         }
     }
 
-    /// <summary>Back out of the Flagon, outside its door, then south through the city gate to the old road.</summary>
-    private string QuesteriaOutStep(int frame)
+    /// <summary>Waits till a room of the zone's in and faded in, without asking for it: for a way out you've set walking into.</summary>
+    private ProofBeat WaitRoom(string room) => WaitFor(() => _room.Id == room && _roomChange is null && _roomFade <= 0f);
+
+    /// <summary>Clicks one of the party's cards with the pretend mouse: on it, down, and up.</summary>
+    private IEnumerable<ProofBeat> ClickCard(int index)
     {
-        switch (frame)
-        {
-            case Settled:
-                return "questeria-outside.png";
-
-            case Settled + 2:
-                ProofPlace(42f, 55.5f, Direction.Down);
-                _proofMove = new Vector2(0f, 1f);
-                return null;
-
-            default:
-                return null;
-        }
+        yield return Do(() => ScreenManager.Input.ProofMouse(ProofCard(index), false));
+        yield return Do(() => ScreenManager.Input.ProofMouse(ProofCard(index), true));
+        yield return Do(() => ScreenManager.Input.ProofMouse(ProofCard(index), false));
     }
 
     /// <summary>The choices to make, in order, at the next questions in this visit's conversations.</summary>
@@ -307,441 +468,13 @@ public partial class ExploreScreen
         return null;
     }
 
-    /// <summary>Questeria, in off the harbour: the Soul-Bound in the street, the townsfolk about the plaza, behind a roof, both zooms, the path round a statue and a click to walk it, the elder, the canal, Tab and a card, Fennick and the quest board, you off on your own, the waypoint, the map, then in through the Gilded Flagon's door.</summary>
-    private string QuesteriaStep(int frame)
-    {
-        foreach ((int at, int frames) in ProofReads)
-        {
-            if (frame < Settled + at || frame >= Settled + at + frames) continue;
-            ProofTalk();
-            return null;
-        }
-
-        switch (frame)
-        {
-            case Settled:
-                return "questeria.png";
-
-            // East up the street into the Soul-Bound's trigger: they talk.
-            case Settled + 1:
-                _proofMove = new Vector2(1f, 0f);
-                return null;
-
-            case Settled + 45:
-                _proofMove = null;
-                return null;
-
-            case Settled + 70:
-                return "questeria-soulbound.png";
-
-            // The plaza, then the same view a few seconds later: the ones who wander have moved.
-            case Settled + 160:
-                ProofPlace(42f, 33f, Direction.Up);
-                return null;
-
-            case Settled + 190:
-                return "questeria-plaza.png";
-
-            case Settled + 400:
-                return "questeria-plaza-later.png";
-
-            // Along behind the ivy house. Its roof should hide you.
-            case Settled + 402:
-                ProofPlace(2.5f, 24.5f, Direction.Right);
-                _proofMove = new Vector2(1f, 0f);
-                return null;
-
-            case Settled + 455:
-                return "questeria-behind-roof.png";
-
-            // In front of the fountain, zoomed all the way out, then all the way in.
-            case Settled + 457:
-                _proofMove = null;
-                ProofPlace(42f, 32.5f, Direction.Down);
-                _camera.ZoomBy(-1);
-                return null;
-
-            case Settled + 480:
-                return "questeria-zoom-2.png";
-
-            case Settled + 482:
-                _camera.ZoomBy(2);
-                return null;
-
-            case Settled + 505:
-                return "questeria-zoom-4.png";
-
-            // South of the west statue, the mouse over the far side of it: the path goes round it.
-            case Settled + 507:
-                _camera.ZoomBy(-1);
-                ProofPlace(32f, 25f, Direction.Up);
-                return null;
-
-            case Settled + 515:
-                ProofAimAt(new Vector2(32f, 20.5f) * Tilemap.TileSize);
-                return null;
-
-            case Settled + 540:
-                return "questeria-path.png";
-
-            // Click, and walk it. The Soul-Bound follows.
-            case Settled + 541:
-                ProofClick();
-                return null;
-
-            case Settled + 585:
-                return "questeria-click-walk.png";
-
-            case Settled + 680:
-                return "questeria-path-end.png";
-
-            // A few steps from the elder, the mouse on them, then a click: you walk up and they speak.
-            case Settled + 681:
-                ProofLetGo();
-                ProofPlace(36f, 33.5f, Direction.Up);
-                ProofAimAt(ProofNpc("elder") - new Vector2(0f, HeadHeight / 2f));
-                return null;
-
-            case Settled + 705:
-                return "questeria-hover-npc.png";
-
-            case Settled + 706:
-                ProofClick();
-                return null;
-
-            case Settled + 780:
-                return "questeria-talk.png";
-
-            // The mouse on the canal: there's no way there.
-            case Settled + 781:
-                ProofAimAt(new Vector2(20f, 39f) * Tilemap.TileSize);
-                return null;
-
-            case Settled + 795:
-                return "questeria-invalid.png";
-
-            // Tab to the Soul-Bound; the camera eases over. Then a click on your card takes you back.
-            case Settled + 796:
-                ProofLetGo();
-                SelectLeader((_game.Leader + 1) % _walkers.Count);
-                return null;
-
-            case Settled + 820:
-                return "questeria-switch.png";
-
-            case Settled + 821:
-                ScreenManager.Input.ProofMouse(ProofCard(0), false);
-                return null;
-
-            case Settled + 822:
-                ScreenManager.Input.ProofMouse(ProofCard(0), true);
-                return null;
-
-            case Settled + 823:
-                ScreenManager.Input.ProofMouse(ProofCard(0), false);
-                return null;
-
-            case Settled + 845:
-                return "questeria-card.png";
-
-            // Fennick at the quest board: the board, his lines, and the Mirewood's contract taken.
-            case Settled + 846:
-                ProofLetGo();
-                ProofPlace(56.5f, 35.5f, Direction.Up);
-                return null;
-
-            case Settled + 848:
-                ProofUse();
-                return null;
-
-            case Settled + 875:
-                return "questeria-board.png";
-
-            case Settled + 975:
-                return "questeria-task.png";
-
-            // Off on your own across the plaza: the Soul-Bound finds their way after you.
-            case Settled + 1182:
-                ProofPlaceAlone(50f, 24.5f, Direction.Down);
-                return null;
-
-            case Settled + 1280:
-                return "questeria-catch-up.png";
-
-            case Settled + 1380:
-                return "questeria-caught-up.png";
-
-            // Beside the waypoint crystal, close enough that its name and E come up over it.
-            case Settled + 1382:
-                ProofPlace(35.4f, 26.3f, Direction.Left);
-                return null;
-
-            case Settled + 1405:
-                return "questeria-waypoint.png";
-
-            // Using it finds it, and opens the world to travel.
-            case Settled + 1406:
-                ProofUse();
-                return null;
-
-            case Settled + 1430:
-                return "map-world-first.png";
-
-            // Closed, then M for the map of Questeria, all of it, since the capital has no fog.
-            case Settled + 1431:
-                ProofMap().ExitScreen();
-                return null;
-
-            case Settled + 1440:
-                OpenMap(null);
-                return null;
-
-            case Settled + 1460:
-                return "map-questeria.png";
-
-            // Then into the Gilded Flagon, through its door.
-            case Settled + 1461:
-                ProofMap().ExitScreen();
-                return null;
-
-            case Settled + 1466:
-                ProofPlace(70f, 31.4f, Direction.Up);
-                _proofMove = new Vector2(0f, -1f);
-                return null;
-
-            default:
-                return null;
-        }
-    }
-
-    /// <summary>The old road: a walk in, the trigger before the camp, the chest, the sign, the waypoint, both sides of the map, and fast travel back to Questeria.</summary>
-    private string RoadStep(int frame)
-    {
-        switch (frame)
-        {
-            case Settled:
-                return "road.png";
-
-            case Settled + 1:
-                _proofMove = new Vector2(1f, 0f);
-                return null;
-
-            case Settled + 40:
-                return "road-walk.png";
-
-            // On along the road into the trigger before the camp.
-            case Settled + 41:
-                ProofPlace(15f, 16.5f, Direction.Right);
-                return null;
-
-            case Settled + 90:
-                return "road-trigger.png";
-
-            // The chest in the camp, by the fire.
-            case Settled + 91:
-                _proofMove = null;
-                ProofPlace(29.125f, 22.625f, Direction.Right);
-                return null;
-
-            case Settled + 115:
-                return "road-camp.png";
-
-            case Settled + 116:
-                ProofUse();
-                return null;
-
-            case Settled + 135:
-                return "road-chest.png";
-
-            // The sign at the fork.
-            case Settled + 137:
-                ProofPlace(37f, 13.75f, Direction.Right);
-                return null;
-
-            case Settled + 160:
-                ProofUse();
-                return null;
-
-            case Settled + 200:
-                return "road-sign.png";
-
-            // The waypoint: found, so now there are two, and Questeria is somewhere to go.
-            case Settled + 202:
-                ProofPlace(45.75f, 11.75f, Direction.Left);
-                return null;
-
-            case Settled + 215:
-                ProofUse();
-                return null;
-
-            case Settled + 240:
-                return "map-world-travel.png";
-
-            case Settled + 241:
-                ProofMap().ProofShow(MapView.Here);
-                return null;
-
-            case Settled + 265:
-                return "map-road.png";
-
-            case Settled + 267:
-                ProofMap().ProofTravel("questeria");
-                return null;
-
-            default:
-                return null;
-        }
-    }
-
-    /// <summary>Back in Questeria, standing at the crystal. Straight back to the road by it.</summary>
-    private string QuesteriaAgainStep(int frame)
-    {
-        switch (frame)
-        {
-            case Settled:
-                return "questeria-arrived.png";
-
-            case Settled + 2:
-                ProofUse();
-                return null;
-
-            case Settled + 26:
-                ProofMap().ProofTravel("road");
-                return null;
-
-            default:
-                return null;
-        }
-    }
-
-    /// <summary>The barrow: the way in, the dark passage, the hall, the locked door, the lever and the door it works, the chest, the map, a torch, and paused.</summary>
-    private string BarrowStep(int frame)
-    {
-        switch (frame)
-        {
-            case Settled:
-                return "barrow.png";
-
-            // Up out of the entrance into the passage, which has no torch, and on into the hall's trigger.
-            case Settled + 1:
-                _proofMove = new Vector2(0f, -1f);
-                return null;
-
-            case Settled + 75:
-                return "barrow-dark.png";
-
-            case Settled + 150:
-                return "barrow-hall.png";
-
-            // The tomb door: locked.
-            case Settled + 151:
-                _proofMove = null;
-                ProofPlace(21.2f, 14.7f, Direction.Left);
-                return null;
-
-            case Settled + 170:
-                return "barrow-door.png";
-
-            case Settled + 171:
-                ProofUse();
-                return null;
-
-            case Settled + 190:
-                return "barrow-locked.png";
-
-            // The stone door at the west end: it won't open by hand.
-            case Settled + 192:
-                ProofPlace(6.2f, 14.7f, Direction.Left);
-                return null;
-
-            case Settled + 212:
-                ProofUse();
-                return null;
-
-            case Settled + 230:
-                return "barrow-gate-shut.png";
-
-            // The lever at the east end, which opens it.
-            case Settled + 232:
-                ProofPlace(29.5f, 14.4f, Direction.Right);
-                return null;
-
-            case Settled + 250:
-                ProofUse();
-                return null;
-
-            case Settled + 270:
-                return "barrow-lever.png";
-
-            // Back at the stone door, open now, with the side room's light coming through it, once the
-            // line from trying it has gone. Then through it to the chest.
-            case Settled + 272:
-                ProofPlace(5f, 15.2f, Direction.Up);
-                return null;
-
-            case Settled + 410:
-                return "barrow-gate-open.png";
-
-            case Settled + 412:
-                _proofMove = new Vector2(0f, -1f);
-                return null;
-
-            case Settled + 472:
-                _proofMove = null;
-                ProofPlace(6.25f, 8.75f, Direction.Left);
-                return null;
-
-            case Settled + 495:
-                ProofUse();
-                return null;
-
-            case Settled + 515:
-                return "barrow-chest.png";
-
-            // The map of the barrow, as much as that's seen.
-            case Settled + 517:
-                OpenMap(null);
-                return null;
-
-            case Settled + 545:
-                return "map-barrow.png";
-
-            case Settled + 546:
-                ProofMap().ExitScreen();
-                return null;
-
-            // Right under a torch.
-            case Settled + 548:
-                ProofPlace(8.5f, 15f, Direction.Up);
-                return null;
-
-            case Settled + 570:
-                return "barrow-torch.png";
-
-            case Settled + 572:
-                ScreenManager.AddScreen(new PauseMenuScreen());
-                return null;
-
-            case Settled + 592:
-                return "explore-paused.png";
-
-            case Settled + 593:
-                foreach (GameScreen screen in ScreenManager.GetScreens())
-                    if (screen is PauseMenuScreen pause) pause.ProofQuitToTitle();
-                return null;
-
-            default:
-                return null;
-        }
-    }
-
     /// <summary>Somewhere the pretend mouse can be that's off the window, so nothing's under it.</summary>
     private static readonly Point OffScreen = new(-1, -1);
 
     /// <summary>Uses whatever's in reach, the same as pressing E. Does nothing if nothing is, which the next shot shows.</summary>
     private void ProofUse() => UseNearest();
 
-    /// <summary>Keeps the pretend mouse over a point on the map from the next frame on.</summary>
+    /// <summary>Keeps the pretend mouse over a point in the room from the next frame on.</summary>
     /// <param name="world">The point, in world pixels.</param>
     private void ProofAimAt(Vector2 world) => _proofAim = world;
 
@@ -755,39 +488,38 @@ public partial class ExploreScreen
         ScreenManager.Input.ProofMouse(OffScreen, false);
     }
 
-    /// <summary>Where someone's feet are, by their id in the map file.</summary>
-    private Vector2 ProofNpc(string id) => _npcs.Find(npc => npc.Definition.Id == id).Walker.Position;
+    /// <summary>Someone in the room, by their id in the zone file (or their origin id, waiting at camp).</summary>
+    /// <exception cref="InvalidOperationException">If they aren't here, which means a beat names someone the room hasn't got, or who isn't there with the flags as they are.</exception>
+    private Npc ProofNpc(string id) => _npcs.Find(npc => npc.Definition.Id == id) ?? throw Missing("person", id);
 
     /// <summary>The middle of one of the party's cards, on screen.</summary>
     private Point ProofCard(int index) => _strip.ProofCard(index, _game.Leader);
 
-    /// <summary>The map screen that's up over this one.</summary>
-    private MapScreen ProofMap()
+    /// <summary>The zone map that's up over this one, or null.</summary>
+    private ZoneMapScreen ProofMap()
     {
         foreach (GameScreen screen in ScreenManager.GetScreens())
-            if (screen is MapScreen map && !map.IsExiting) return map;
+            if (screen is ZoneMapScreen map && !map.IsExiting) return map;
         return null;
     }
 
-    /// <summary>Puts you somewhere, facing a way, with the camera straight on you.</summary>
-    /// <param name="x">How far across, in tiles.</param>
-    /// <param name="y">How far down, in tiles.</param>
+    /// <summary>Puts you somewhere in the room, facing a way, with the camera straight on you and the others behind you.</summary>
+    /// <param name="feet">Where, in world pixels.</param>
     /// <param name="facing">Which way to face.</param>
-    private void ProofPlace(float x, float y, Direction facing)
+    private void ProofPlace(Vector2 feet, Direction facing)
     {
-        ProofPlaceAlone(x, y, facing);
+        ProofPlaceAlone(feet, facing);
         GatherBehind(Followers());
         SeedTrail();
     }
 
-    /// <summary>Puts just you somewhere, and leaves the others where they are to find their own way to you.</summary>
-    /// <param name="x">How far across, in tiles.</param>
-    /// <param name="y">How far down, in tiles.</param>
+    /// <summary>Puts just you somewhere in the room, and leaves the others where they are to find their own way to you.</summary>
+    /// <param name="feet">Where, in world pixels.</param>
     /// <param name="facing">Which way to face.</param>
-    private void ProofPlaceAlone(float x, float y, Direction facing)
+    private void ProofPlaceAlone(Vector2 feet, Direction facing)
     {
         Halt();
-        Leader.Position = new Vector2(x, y) * Tilemap.TileSize;
+        Leader.Position = feet;
         Leader.Facing = facing;
         _camera.SnapTo(Leader.Position);
     }

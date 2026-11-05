@@ -11,14 +11,14 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's tutorial: noticing the moments a tip's for, the card it comes up on, and
+/// The zone screen's tutorial: noticing the moments a tip's for, the card it comes up on, and
 /// putting it away.
 /// </summary>
 /// <remarks>
 /// Each tip comes at the moment it's needed, once a game: the first time you can walk, someone's in
 /// reach, a mark's up, what you're to do next changes, and so on. Most of those moments are things
 /// the screen already knows every frame (who's nearest, who's marked), so they're noticed here, and
-/// the few that are something you do (talking, using something, opening the map) tell it from where
+/// the few that are something you do (talking, using something, opening the zone map) tell it from where
 /// they happen with TutorialDone, which also puts away a tip that's taught what it set out to.
 /// Nothing's noticed while a conversation's up or the ship's coming in, and the card waits too. The
 /// fighting partial shows its tips through ShowTutorial the same way. The proof run keeps tips quiet
@@ -29,23 +29,23 @@ public partial class ExploreScreen
     /// <summary>How long you have to have walked before the tip about walking has done its job and goes, in seconds.</summary>
     private const float MoveTaughtSeconds = 4f;
 
-    /// <summary>How long you walk on a map, in seconds, before the tip about switching who you control comes, so it isn't one more thing the moment you land.</summary>
+    /// <summary>How long you walk in a zone, in seconds, before the tip about switching who you control comes, so it isn't one more thing the moment you land.</summary>
     private const float PartyTipSeconds = 20f;
 
-    /// <summary>How near a building's door you have to come for the tip about going in, in art pixels: two tiles.</summary>
-    private const float EntranceTipReach = 2f * Tilemap.TileSize;
+    /// <summary>How near a door you have to come along the floor for the tip about going in, in art pixels.</summary>
+    private const float DoorTipReach = 32f;
 
     /// <summary>How many tips you've seen before the one that says where they all are comes.</summary>
     private const int HelpAfterTips = 5;
 
-    /// <summary>What the quest board's drawn as, its look in the map file. It's the only notice board there is.</summary>
+    /// <summary>What the quest board's drawn as, its look in the zone file. It's the only notice board there is.</summary>
     private const string QuestBoardLook = "notice-board";
 
     private readonly TutorialPanel _tutorialPanel = new();
 
     private Tutorials _tutorials;
 
-    /// <summary>What you were to do next and who you were controlling when last looked, so a change is noticed, and how long you've walked on this map, in seconds.</summary>
+    /// <summary>What you were to do next and who you were controlling when last looked, so a change is noticed, and how long you've walked in this zone, in seconds.</summary>
     private string _tutorialObjective;
     private int _tutorialLeader;
     private float _tutorialWalked;
@@ -86,7 +86,7 @@ public partial class ExploreScreen
         return true;
     }
 
-    /// <summary>Whether the mouse is on the card, which is in front of everything, so the mouse there isn't pointing at the map.</summary>
+    /// <summary>Whether the mouse is on the card, which is in front of everything, so the mouse there isn't pointing at the room.</summary>
     private bool PointingAtTutorial() => _tutorialPanel.Contains(_mouse);
 
     /// <summary>Notices the moments while you're the one playing, then runs the card: in when there's a tip and room, out when it's done or something's over the screen.</summary>
@@ -100,7 +100,7 @@ public partial class ExploreScreen
         _tutorialPanel.Update(gameTime, _tutorials, playing);
     }
 
-    /// <summary>Draws the card over everything on the map: the card and its keys point sampled, then its words.</summary>
+    /// <summary>Draws the card over everything in the room: the card and its keys point sampled, then its words.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with.</param>
     /// <param name="alpha">How faded in the screen is.</param>
     private void DrawTutorial(SpriteBatch spriteBatch, float alpha)
@@ -136,11 +136,11 @@ public partial class ExploreScreen
             else ShowTutorial(TutorialCatalog.Work);
         }
 
-        // Whoever and whatever's in reach, and the doors into buildings.
+        // Whoever and whatever's in reach, and the doors.
         if (_nearNpc is not null) ShowTutorial(TutorialCatalog.Talk);
         if (_nearMember is not null) ShowTutorial(TutorialCatalog.Companion);
         if (_near is MapInteractable thing) ShowTutorial(TutorialFor(thing));
-        if (NearEntrance()) ShowTutorial(TutorialCatalog.Enter);
+        if (NearDoor()) ShowTutorial(TutorialCatalog.Enter);
 
         // What you're to do next, the first time it changes.
         if (_game.Objective != _tutorialObjective)
@@ -149,8 +149,8 @@ public partial class ExploreScreen
             if (!string.IsNullOrEmpty(_game.Objective)) ShowTutorial(TutorialCatalog.Objective);
         }
 
-        // The map, once you're somewhere that's on it.
-        if (_map.World is not null) ShowTutorial(TutorialCatalog.Map);
+        // The zone map, once you're somewhere that's on the world map.
+        if (_zone.World is not null) ShowTutorial(TutorialCatalog.Map);
 
         // Switching who you control: done the first time you do, and taught once you've walked a while with someone behind you.
         if (_game.Leader != _tutorialLeader)
@@ -171,19 +171,17 @@ public partial class ExploreScreen
         return thing.Look.Id == QuestBoardLook ? TutorialCatalog.Board : TutorialCatalog.Use;
     }
 
-    /// <summary>Whether your feet are near the door into a building that's there.</summary>
-    private bool NearEntrance()
+    /// <summary>Whether your feet are near a door that's there and opens: within DoorTipReach of its foot along the floor, and near the back of it where doors stand.</summary>
+    private bool NearDoor()
     {
         Vector2 feet = Leader.Position;
-        foreach (MapExit exit in _map.Exits)
+        foreach (RoomDoor door in Doors())
         {
-            if (exit.Name is null || !exit.Presence.Holds(_game.Flags)) continue;
+            if (door.LockedWhy is not null) continue;
 
-            // How far outside the doorway's strip the feet are, across and down; nothing if they're in it.
-            BoundingRectangle area = exit.Area;
-            float across = MathF.Max(MathF.Max(area.Left - feet.X, feet.X - area.Right), 0f);
-            float down = MathF.Max(MathF.Max(area.Top - feet.Y, feet.Y - area.Bottom), 0f);
-            if (across * across + down * down <= EntranceTipReach * EntranceTipReach) return true;
+            // How far outside the doorway the feet are across; nothing if they're under it.
+            float across = MathF.Max(MathF.Max(door.Area.Left - feet.X, feet.X - door.Area.Right), 0f);
+            if (across <= DoorTipReach && feet.Y - door.Foot.Y <= DoorTipReach) return true;
         }
         return false;
     }

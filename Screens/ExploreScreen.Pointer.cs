@@ -13,15 +13,17 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's mouse: what it's over, the tooltip and the cursor for that, the path you'd
+/// The zone screen's mouse: what it's over, the tooltip and the cursor for that, the path you'd
 /// take if you clicked, and walking it when you do.
 /// </summary>
 /// <remarks>
-/// Clicking the ground walks there by A*. Clicking someone or something out of reach walks you
-/// into reach first, then talks to them or uses it, the same as E would. The keys always take over
-/// from a path. Hovering a party card, a person, a thing or the ground each give their own cursor.
-/// Clicking one of the party takes control of them, unless they've something to say to you, when
-/// it talks to them instead and the cursor and the tooltip say so.
+/// Clicking the floor walks there by A*. Clicking someone, something or a door out of reach walks
+/// you into reach first, then talks to them, uses it or goes through, the same as E would; clicking
+/// a way out's chevrons walks you into it. Above the floor there's only the painting, so a click
+/// there that isn't on a door or a way out goes nowhere. The keys always take over from a path.
+/// Hovering a party card, a person, a thing, a door or the floor each give their own cursor (the
+/// indicators outline the doorway). Clicking one of the party takes control of them, unless they've
+/// something to say to you, when it talks to them instead and the cursor and the tooltip say so.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -33,6 +35,12 @@ public partial class ExploreScreen
 
     /// <summary>How much short of something's reach to aim for, so you end up inside it and not on the edge.</summary>
     private const float ReachMargin = 2f;
+
+    /// <summary>How close to the spot in front of a door you have to get to go through it, in art pixels.</summary>
+    private const float DoorReach = 6f;
+
+    /// <summary>How far out from the wall something hung on it is used from, in art pixels.</summary>
+    private const float WallStep = 8f;
 
     /// <summary>The dots of the path you'd walk, how far apart they are in art pixels.</summary>
     private const float PathDotSpacing = 6f;
@@ -61,14 +69,15 @@ public partial class ExploreScreen
     /// <summary>What to do when you get in reach of where you're walking to, if anything: where it is, how close is close enough, and the thing to do.</summary>
     private (Vector2 At, float Reach, Action Act)? _pending;
 
-    /// <summary>The path you'd walk if you clicked where the mouse is, and the tiles it was worked out for, so it only gets worked out again when one of them changes.</summary>
+    /// <summary>The path you'd walk if you clicked where the mouse is, and the path cells it was worked out for, so it only gets worked out again when one of them changes.</summary>
     private List<Vector2> _preview;
     private (Point From, Point To)? _previewFor;
 
-    /// <summary>What the tooltip says this frame (null for no tooltip), where the mouse is, and where the pool of light goes.</summary>
+    /// <summary>What the tooltip says this frame (null for no tooltip), where the mouse is on the screen and in the room, and where the pool of light goes.</summary>
     private string _tipName;
     private string _tipDetail;
     private Point _mouse;
+    private Vector2 _mouseWorld;
     private Vector2? _highlight;
 
     /// <summary>Works out what the mouse is over, sets the cursor and the tooltip for it, and does whatever a click on it does.</summary>
@@ -95,7 +104,7 @@ public partial class ExploreScreen
             return;
         }
 
-        // The party's cards are in front of the map, so they come first.
+        // The party's cards are in front of the room, so they come first.
         if (_strip.CardAt(_mouse, _walkers.Count, _game.Leader) is int card)
         {
             _preview = null;
@@ -105,6 +114,7 @@ public partial class ExploreScreen
         }
 
         Vector2 world = _camera.ToWorld(_mouse.ToVector2());
+        _mouseWorld = world;
 
         if (NpcAt(world) is Npc npc)
         {
@@ -112,7 +122,7 @@ public partial class ExploreScreen
             _tipName = npc.Definition.Name;
             _highlight = npc.Walker.Position;
             _cursor.Shape = CursorShape.Talk;
-            if (click) Approach(npc.Walker.Position, ReachOf(npc), () => Talk(npc));
+            if (click) Approach(TalkSpot(npc), ReachOf(npc), () => Talk(npc));
             return;
         }
 
@@ -145,17 +155,46 @@ public partial class ExploreScreen
             return;
         }
 
-        // The ground: the path there, worked out again only when you or the mouse move to another tile.
-        Point from = Tilemap.CellOf(Leader.Position), to = Tilemap.CellOf(world);
+        // A door's plaque names it and says why it's locked, so it has no tooltip.
+        if (_indicators.DoorAt(_room, _game.Flags, world) is RoomDoor door)
+        {
+            _preview = null;
+            _cursor.Shape = CursorShape.Door;
+            if (click) Approach(DoorSpot(door), DoorReach, () => UseDoor(door));
+            return;
+        }
+
+        if (_indicators.ChevronAt(_room, _game.Flags, world) is RoomExit exit)
+        {
+            _preview = null;
+            _cursor.Shape = CursorShape.Door;
+            if (click && _walk.FindPath(Leader.Position, ExitSpot(exit), 0f) is List<Vector2> way) StartPath(way, null);
+            return;
+        }
+
+        // Above the floor there's only the painting.
+        if (world.Y < _room.BackEdgeAt(world.X))
+        {
+            _preview = null;
+            _cursor.Shape = CursorShape.Invalid;
+            return;
+        }
+
+        // The floor: the path there, worked out again only when you or the mouse move to another cell.
+        Point from = PathCell(Leader.Position), to = PathCell(world);
         if (_previewFor != (from, to))
         {
             _previewFor = (from, to);
-            _preview = Pathfinder.Find(_nav, Leader.Position, NavGrid.Middle(to), 0f);
+            _preview = _walk.FindPath(Leader.Position, world, 0f);
         }
 
         _cursor.Shape = _preview is null ? CursorShape.Invalid : CursorShape.Move;
         if (click && _preview is not null) StartPath(_preview, null);
     }
+
+    /// <summary>Which of the room's path cells a point's in, to tell when the path preview needs working out again.</summary>
+    private static Point PathCell(Vector2 world) =>
+        new((int)MathF.Floor(world.X / RoomWalker.Cell), (int)MathF.Floor(world.Y / RoomWalker.Cell));
 
     /// <summary>The tooltip for someone in the party: their name, and their level, class and hit points.</summary>
     private void DescribeMember(int index)
@@ -179,7 +218,7 @@ public partial class ExploreScreen
             return;
         }
 
-        List<Vector2> path = Pathfinder.Find(_nav, Leader.Position, at, reach - ReachMargin);
+        List<Vector2> path = _walk.FindPath(Leader.Position, at, reach - ReachMargin);
         if (path is not null) StartPath(path, (at, reach, act));
     }
 
@@ -263,7 +302,7 @@ public partial class ExploreScreen
 
     /// <summary>Where you'd stand to use something: its foot, or for something on a wall, the floor below it.</summary>
     private static Vector2 UseSpot(MapInteractable thing) =>
-        thing.Look.Placement == PropPlacement.Wall ? thing.Foot + new Vector2(0f, Tilemap.TileSize / 2f) : thing.Foot;
+        thing.Look.Placement == PropPlacement.Wall ? thing.Foot + new Vector2(0f, WallStep) : thing.Foot;
 
     /// <summary>Whether a point is inside a rectangle.</summary>
     private static bool Contains(BoundingRectangle box, Vector2 point) =>

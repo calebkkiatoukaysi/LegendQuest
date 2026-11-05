@@ -680,7 +680,9 @@ Content/dice.png - created by Caleb Kiatoukaysi for Legend Quest, the d20 for ch
 
 Content/dialogue-icons.png - created by Caleb Kiatoukaysi for Legend Quest, the icons beside options in a conversation (a die, a heart, a lock, and the three voices), drawn procedurally by tools/generate_ui.py, released under public domain
 
-Content/cursors.png - created by Caleb Kiatoukaysi for Legend Quest, the mouse cursors: an arrow, a ring to walk, a hand to use, a speech bubble to talk, and a crossed circle, drawn procedurally by tools/generate_ui.py, released under public domain
+Content/cursors.png - created by Caleb Kiatoukaysi for Legend Quest, the mouse cursors: an arrow, a ring to walk, a hand to use, a speech bubble to talk, a crossed circle, and a door for a room's doors, drawn procedurally by tools/generate_ui.py, released under public domain
+
+Content/indicators.png - created by Caleb Kiatoukaysi for Legend Quest, what marks a room's ways out and the things in it: the badges over its doors (a coin purse, an anvil, a bottle, a tankard, crossed swords, a scroll, a shield, a sun, a crown, a door, a gate, and stairs up and down), each in colour and greyed for a locked one, the padlock and the compass, the chevrons at the ends of a room and on its stairs, a glint's four frames, the plaque a badge's name sits on, and the outline round a doorway under the mouse, drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/Items/icons.png - created by Caleb Kiatoukaysi for Legend Quest, an icon for every item, 24x24, in ItemCatalog's order (the weapons, the armour by what it's made of, the shields, helms, gloves, boots and cloaks, the amulet and the ring, the potions and the rest), with a glint on the magic ones, drawn procedurally by tools/generate_items.py, released under public domain
 
@@ -694,45 +696,172 @@ Content/Combat/hud.png - created by Caleb Kiatoukaysi for Legend Quest, the piec
 
 Content/keycaps.png - created by Caleb Kiatoukaysi for Legend Quest, the key cap the tutorial tips and HOW TO PLAY write keys on, and the mouse with its left button, right button and wheel lit, drawn procedurally by tools/generate_ui.py, released under public domain
 
-## Maps
+## Old maps
 
-Content/Maps/questeria.map - written by Caleb Kiatoukaysi for Legend Quest, Questeria, the capital and the hub map, released under public domain
+The top-down tile maps the zones were converted from. The game doesn't read them any more;
+they're tools/rooms/convert_maps.py's input, kept in tools/rooms/legacy/.
 
-Content/Maps/docks.map - written by Caleb Kiatoukaysi for Legend Quest, Questeria's harbour, where a new game opens with the ship coming in, released under public domain
+tools/rooms/legacy/questeria.map - written by Caleb Kiatoukaysi for Legend Quest, Questeria, the capital and the hub map, released under public domain
 
-Content/Maps/road.map - written by Caleb Kiatoukaysi for Legend Quest, the old road through the meadows at noon: the farm, the stream and its bridge, the camp, the fork to the barrow, and the wood thickening toward the Mirewood, released under public domain
+tools/rooms/legacy/docks.map - written by Caleb Kiatoukaysi for Legend Quest, Questeria's harbour, where a new game opens with the ship coming in, released under public domain
 
-Content/Maps/barrow.map - written by Caleb Kiatoukaysi for Legend Quest, the barrow, a dark map lit by torches, released under public domain
+tools/rooms/legacy/road.map - written by Caleb Kiatoukaysi for Legend Quest, the old road through the meadows at noon: the farm, the stream and its bridge, the camp, the fork to the barrow, and the wood thickening toward the Mirewood, released under public domain
 
-Content/Maps/gulls-wager.map - written by Caleb Kiatoukaysi for Legend Quest, the deck of the Gull's Wager at night, where the Prologue's voyage plays, released under public domain
+tools/rooms/legacy/barrow.map - written by Caleb Kiatoukaysi for Legend Quest, the barrow, a dark map lit by torches, released under public domain
 
-Content/Maps/gilded-flagon.map - written by Caleb Kiatoukaysi for Legend Quest, inside the Gilded Flagon, the Lantern Market's tavern, released under public domain
+tools/rooms/legacy/gulls-wager.map - written by Caleb Kiatoukaysi for Legend Quest, the deck of the Gull's Wager at night, where the Prologue's voyage plays, released under public domain
 
-Content/Maps/cottage-a.map - written by Caleb Kiatoukaysi for Legend Quest, inside a cottage: a bed, a wardrobe, a bookshelf and a table, released under public domain
+tools/rooms/legacy/gilded-flagon.map - written by Caleb Kiatoukaysi for Legend Quest, inside the Gilded Flagon, the Lantern Market's tavern, released under public domain
 
-Content/Maps/cottage-b.map - written by Caleb Kiatoukaysi for Legend Quest, inside another cottage, with a hearth, released under public domain
+tools/rooms/legacy/cottage-a.map - written by Caleb Kiatoukaysi for Legend Quest, inside a cottage: a bed, a wardrobe, a bookshelf and a table, released under public domain
 
-Content/Maps/shop.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chandler's shop, released under public domain
+tools/rooms/legacy/cottage-b.map - written by Caleb Kiatoukaysi for Legend Quest, inside another cottage, with a hearth, released under public domain
 
-Content/Maps/warehouse.map - written by Caleb Kiatoukaysi for Legend Quest, inside a warehouse on the docks, released under public domain
+tools/rooms/legacy/shop.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chandler's shop, released under public domain
 
-Content/Maps/bakery.map - written by Caleb Kiatoukaysi for Legend Quest, inside the bakery in the Lantern Market: its counters, the shelves of loaves, the sacks of flour and the oven, released under public domain
+tools/rooms/legacy/warehouse.map - written by Caleb Kiatoukaysi for Legend Quest, inside a warehouse on the docks, released under public domain
 
-Content/Maps/forge.map - written by Caleb Kiatoukaysi for Legend Quest, inside the forge in the Lantern Market: the anvil, the tool racks and the forge fire, released under public domain
+tools/rooms/legacy/bakery.map - written by Caleb Kiatoukaysi for Legend Quest, inside the bakery in the Lantern Market: its counters, the shelves of loaves, the sacks of flour and the oven, released under public domain
 
-Content/Maps/chapel.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chapel by the temple: benches for pews, candles and a tapestry, released under public domain
+tools/rooms/legacy/forge.map - written by Caleb Kiatoukaysi for Legend Quest, inside the forge in the Lantern Market: the anvil, the tool racks and the forge fire, released under public domain
 
-Content/Maps/sunspire-keep.map - written by Caleb Kiatoukaysi for Legend Quest, inside Sunspire Keep: the throne room and the great hall on the way out, released under public domain
+tools/rooms/legacy/chapel.map - written by Caleb Kiatoukaysi for Legend Quest, inside the chapel by the temple: benches for pews, candles and a tapestry, released under public domain
 
-Content/Maps/rusty-anvil.map - written by Caleb Kiatoukaysi for Legend Quest, inside the Rusty Anvil, Brannock's bar on the docks, released under public domain
+tools/rooms/legacy/sunspire-keep.map - written by Caleb Kiatoukaysi for Legend Quest, inside Sunspire Keep: the throne room and the great hall on the way out, released under public domain
 
-Content/Maps/old-crown-vault.map - written by Caleb Kiatoukaysi for Legend Quest, the Old Crown Vault under the Sunspire: the antechamber and its constructs, the trapped hall, the sappers' tunnel and the warden's room, the treasury, and the relic gallery where Kael is, a dark map lit by lamps and braziers, released under public domain
+tools/rooms/legacy/rusty-anvil.map - written by Caleb Kiatoukaysi for Legend Quest, inside the Rusty Anvil, Brannock's bar on the docks, released under public domain
 
-Content/Maps/mirewood.map - written by Caleb Kiatoukaysi for Legend Quest, the Mirewood, bright at its west edge and rotten toward the old quarry, at twilight, released under public domain
+tools/rooms/legacy/old-crown-vault.map - written by Caleb Kiatoukaysi for Legend Quest, the Old Crown Vault under the Sunspire: the antechamber and its constructs, the trapped hall, the sappers' tunnel and the warden's room, the treasury, and the relic gallery where Kael is, a dark map lit by lamps and braziers, released under public domain
 
-Content/Maps/mirewood-quarry.map - written by Caleb Kiatoukaysi for Legend Quest, the Old Quarry under the Mirewood, a dark map lit by fungus and the black crystal, down to the Thornmother's den, released under public domain
+tools/rooms/legacy/mirewood.map - written by Caleb Kiatoukaysi for Legend Quest, the Mirewood, bright at its west edge and rotten toward the old quarry, at twilight, released under public domain
 
-Content/Maps/thornbridge.map - written by Caleb Kiatoukaysi for Legend Quest, Thornbridge, the meadow outside Questeria's east gate, the old bridge over the river, and the refugees' camp, released under public domain
+tools/rooms/legacy/mirewood-quarry.map - written by Caleb Kiatoukaysi for Legend Quest, the Old Quarry under the Mirewood, a dark map lit by fungus and the black crystal, down to the Thornmother's den, released under public domain
+
+tools/rooms/legacy/thornbridge.map - written by Caleb Kiatoukaysi for Legend Quest, Thornbridge, the meadow outside Questeria's east gate, the old bridge over the river, and the refugees' camp, released under public domain
+
+## Zones
+
+The places, each a chain of side-on rooms (12-rooms), read by World/Zones/ZoneLoader.cs. Each was
+turned out of its old map by tools/rooms/convert_maps.py, with the hand work (where the rooms split,
+their doors and floors) in tools/rooms/plan.py.
+
+Content/Zones/bakery.txt - written by Caleb Kiatoukaysi for Legend Quest, The Bakery: The Bakery, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/barrow.txt - written by Caleb Kiatoukaysi for Legend Quest, The Barrow: The Barrow Steps, The Barrow Hall, The Side Room, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/chapel.txt - written by Caleb Kiatoukaysi for Legend Quest, The Chapel: The Chapel, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/cottage-a.txt - written by Caleb Kiatoukaysi for Legend Quest, A Cottage: A Cottage, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/cottage-b.txt - written by Caleb Kiatoukaysi for Legend Quest, A Cottage: A Cottage, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/docks.txt - written by Caleb Kiatoukaysi for Legend Quest, Saltwind Docks: The Pier, The Harbourside, The Fish Market, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/forge.txt - written by Caleb Kiatoukaysi for Legend Quest, The Smithy: The Smithy, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/gilded-flagon.txt - written by Caleb Kiatoukaysi for Legend Quest, The Gilded Flagon: The Taproom, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/gulls-wager.txt - written by Caleb Kiatoukaysi for Legend Quest, The Gull's Wager: The Main Deck, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/mirewood.txt - written by Caleb Kiatoukaysi for Legend Quest, The Mirewood: The Mirewood's Edge, The Deep Wood, The Rangers' Camp, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/mirewood-quarry.txt - written by Caleb Kiatoukaysi for Legend Quest, The Old Quarry: The Quarry's Lip, The Second Cut, The Quarry Floor, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/old-crown-vault.txt - written by Caleb Kiatoukaysi for Legend Quest, The Old Crown Vault: The Antechamber, The Long Hall, The Relic Gallery, The Treasury, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/questeria.txt - written by Caleb Kiatoukaysi for Legend Quest, Questeria: The Gate Plaza, The Festival Square, The Sunspire Steps, The Lantern Market, The Thornbridge Gate, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/road.txt - written by Caleb Kiatoukaysi for Legend Quest, The Old Road: The Farmland, The Fork, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/rusty-anvil.txt - written by Caleb Kiatoukaysi for Legend Quest, The Rusty Anvil: The Bar, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/shop.txt - written by Caleb Kiatoukaysi for Legend Quest, The Chandler's: The Chandler's, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/sunspire-keep.txt - written by Caleb Kiatoukaysi for Legend Quest, Sunspire Keep: The Great Hall, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/thornbridge.txt - written by Caleb Kiatoukaysi for Legend Quest, Thornbridge: The Camp Gate, The Tents, The River's Edge, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+Content/Zones/warehouse.txt - written by Caleb Kiatoukaysi for Legend Quest, A Warehouse: A Warehouse, converted from its map by tools/rooms/convert_maps.py, released under public domain
+
+## Rooms
+
+Every room's painted layers, at art resolution, and where its doorways are painted. Until the rooms
+are painted by hand, tools/rooms/generate_room_placeholders.py puts them together out of the props,
+tiles and title pictures above, stood up side on and given more detail.
+
+Content/Rooms/bakery/inside/mid.png, Content/Rooms/bakery/inside/fore.png, Content/Rooms/bakery/inside/thumb.png, Content/Rooms/bakery/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Bakery in The Bakery: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/barrow/steps/sky.png, Content/Rooms/barrow/steps/far.png, Content/Rooms/barrow/steps/mid.png, Content/Rooms/barrow/steps/fore.png, Content/Rooms/barrow/steps/thumb.png, Content/Rooms/barrow/steps/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Barrow Steps in The Barrow: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/barrow/hall/sky.png, Content/Rooms/barrow/hall/far.png, Content/Rooms/barrow/hall/mid.png, Content/Rooms/barrow/hall/fore.png, Content/Rooms/barrow/hall/thumb.png, Content/Rooms/barrow/hall/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Barrow Hall in The Barrow: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/barrow/side-room/sky.png, Content/Rooms/barrow/side-room/far.png, Content/Rooms/barrow/side-room/mid.png, Content/Rooms/barrow/side-room/fore.png, Content/Rooms/barrow/side-room/thumb.png, Content/Rooms/barrow/side-room/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Side Room in The Barrow: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/chapel/inside/mid.png, Content/Rooms/chapel/inside/fore.png, Content/Rooms/chapel/inside/thumb.png, Content/Rooms/chapel/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Chapel in The Chapel: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/cottage-a/inside/mid.png, Content/Rooms/cottage-a/inside/fore.png, Content/Rooms/cottage-a/inside/thumb.png, Content/Rooms/cottage-a/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, A Cottage in A Cottage: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/cottage-b/inside/mid.png, Content/Rooms/cottage-b/inside/fore.png, Content/Rooms/cottage-b/inside/thumb.png, Content/Rooms/cottage-b/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, A Cottage in A Cottage: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/docks/pier/sky.png, Content/Rooms/docks/pier/far.png, Content/Rooms/docks/pier/mid.png, Content/Rooms/docks/pier/fore.png, Content/Rooms/docks/pier/thumb.png, Content/Rooms/docks/pier/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Pier in Saltwind Docks: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/docks/harbourside/sky.png, Content/Rooms/docks/harbourside/far.png, Content/Rooms/docks/harbourside/mid.png, Content/Rooms/docks/harbourside/fore.png, Content/Rooms/docks/harbourside/thumb.png, Content/Rooms/docks/harbourside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Harbourside in Saltwind Docks: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/docks/fish-market/sky.png, Content/Rooms/docks/fish-market/far.png, Content/Rooms/docks/fish-market/mid.png, Content/Rooms/docks/fish-market/fore.png, Content/Rooms/docks/fish-market/thumb.png, Content/Rooms/docks/fish-market/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Fish Market in Saltwind Docks: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/forge/inside/mid.png, Content/Rooms/forge/inside/fore.png, Content/Rooms/forge/inside/thumb.png, Content/Rooms/forge/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Smithy in The Smithy: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/gilded-flagon/taproom/mid.png, Content/Rooms/gilded-flagon/taproom/fore.png, Content/Rooms/gilded-flagon/taproom/thumb.png, Content/Rooms/gilded-flagon/taproom/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Taproom in The Gilded Flagon: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/gulls-wager/deck/sky.png, Content/Rooms/gulls-wager/deck/far.png, Content/Rooms/gulls-wager/deck/mid.png, Content/Rooms/gulls-wager/deck/fore.png, Content/Rooms/gulls-wager/deck/thumb.png, Content/Rooms/gulls-wager/deck/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Main Deck in The Gull's Wager: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/mirewood-quarry/lip/sky.png, Content/Rooms/mirewood-quarry/lip/far.png, Content/Rooms/mirewood-quarry/lip/mid.png, Content/Rooms/mirewood-quarry/lip/fore.png, Content/Rooms/mirewood-quarry/lip/thumb.png, Content/Rooms/mirewood-quarry/lip/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Quarry's Lip in The Old Quarry: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/mirewood-quarry/cut/sky.png, Content/Rooms/mirewood-quarry/cut/far.png, Content/Rooms/mirewood-quarry/cut/mid.png, Content/Rooms/mirewood-quarry/cut/fore.png, Content/Rooms/mirewood-quarry/cut/thumb.png, Content/Rooms/mirewood-quarry/cut/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Second Cut in The Old Quarry: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/mirewood-quarry/floor/sky.png, Content/Rooms/mirewood-quarry/floor/far.png, Content/Rooms/mirewood-quarry/floor/mid.png, Content/Rooms/mirewood-quarry/floor/fore.png, Content/Rooms/mirewood-quarry/floor/thumb.png, Content/Rooms/mirewood-quarry/floor/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Quarry Floor in The Old Quarry: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/mirewood/edge/sky.png, Content/Rooms/mirewood/edge/far.png, Content/Rooms/mirewood/edge/mid.png, Content/Rooms/mirewood/edge/fore.png, Content/Rooms/mirewood/edge/thumb.png, Content/Rooms/mirewood/edge/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Mirewood's Edge in The Mirewood: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/mirewood/deep/sky.png, Content/Rooms/mirewood/deep/far.png, Content/Rooms/mirewood/deep/mid.png, Content/Rooms/mirewood/deep/fore.png, Content/Rooms/mirewood/deep/thumb.png, Content/Rooms/mirewood/deep/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Deep Wood in The Mirewood: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/mirewood/camp/sky.png, Content/Rooms/mirewood/camp/far.png, Content/Rooms/mirewood/camp/mid.png, Content/Rooms/mirewood/camp/fore.png, Content/Rooms/mirewood/camp/thumb.png, Content/Rooms/mirewood/camp/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Rangers' Camp in The Mirewood: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/old-crown-vault/entrance/sky.png, Content/Rooms/old-crown-vault/entrance/far.png, Content/Rooms/old-crown-vault/entrance/mid.png, Content/Rooms/old-crown-vault/entrance/fore.png, Content/Rooms/old-crown-vault/entrance/thumb.png, Content/Rooms/old-crown-vault/entrance/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Antechamber in The Old Crown Vault: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/old-crown-vault/halls/sky.png, Content/Rooms/old-crown-vault/halls/far.png, Content/Rooms/old-crown-vault/halls/mid.png, Content/Rooms/old-crown-vault/halls/fore.png, Content/Rooms/old-crown-vault/halls/thumb.png, Content/Rooms/old-crown-vault/halls/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Long Hall in The Old Crown Vault: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/old-crown-vault/strongroom/sky.png, Content/Rooms/old-crown-vault/strongroom/far.png, Content/Rooms/old-crown-vault/strongroom/mid.png, Content/Rooms/old-crown-vault/strongroom/fore.png, Content/Rooms/old-crown-vault/strongroom/thumb.png, Content/Rooms/old-crown-vault/strongroom/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Relic Gallery in The Old Crown Vault: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/old-crown-vault/treasury/sky.png, Content/Rooms/old-crown-vault/treasury/far.png, Content/Rooms/old-crown-vault/treasury/mid.png, Content/Rooms/old-crown-vault/treasury/fore.png, Content/Rooms/old-crown-vault/treasury/thumb.png, Content/Rooms/old-crown-vault/treasury/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Treasury in The Old Crown Vault: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/questeria/gate-plaza/sky.png, Content/Rooms/questeria/gate-plaza/far.png, Content/Rooms/questeria/gate-plaza/mid.png, Content/Rooms/questeria/gate-plaza/fore.png, Content/Rooms/questeria/gate-plaza/thumb.png, Content/Rooms/questeria/gate-plaza/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Gate Plaza in Questeria: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/questeria/festival-square/sky.png, Content/Rooms/questeria/festival-square/far.png, Content/Rooms/questeria/festival-square/mid.png, Content/Rooms/questeria/festival-square/fore.png, Content/Rooms/questeria/festival-square/thumb.png, Content/Rooms/questeria/festival-square/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Festival Square in Questeria: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/questeria/sunspire-steps/sky.png, Content/Rooms/questeria/sunspire-steps/far.png, Content/Rooms/questeria/sunspire-steps/mid.png, Content/Rooms/questeria/sunspire-steps/fore.png, Content/Rooms/questeria/sunspire-steps/thumb.png, Content/Rooms/questeria/sunspire-steps/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Sunspire Steps in Questeria: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/questeria/lantern-market/sky.png, Content/Rooms/questeria/lantern-market/far.png, Content/Rooms/questeria/lantern-market/mid.png, Content/Rooms/questeria/lantern-market/fore.png, Content/Rooms/questeria/lantern-market/thumb.png, Content/Rooms/questeria/lantern-market/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Lantern Market in Questeria: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/questeria/thornbridge-gate/sky.png, Content/Rooms/questeria/thornbridge-gate/far.png, Content/Rooms/questeria/thornbridge-gate/mid.png, Content/Rooms/questeria/thornbridge-gate/fore.png, Content/Rooms/questeria/thornbridge-gate/thumb.png, Content/Rooms/questeria/thornbridge-gate/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Thornbridge Gate in Questeria: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/road/farmland/sky.png, Content/Rooms/road/farmland/far.png, Content/Rooms/road/farmland/mid.png, Content/Rooms/road/farmland/fore.png, Content/Rooms/road/farmland/thumb.png, Content/Rooms/road/farmland/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Farmland in The Old Road: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/road/fork/sky.png, Content/Rooms/road/fork/far.png, Content/Rooms/road/fork/mid.png, Content/Rooms/road/fork/fore.png, Content/Rooms/road/fork/thumb.png, Content/Rooms/road/fork/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Fork in The Old Road: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/rusty-anvil/bar/mid.png, Content/Rooms/rusty-anvil/bar/fore.png, Content/Rooms/rusty-anvil/bar/thumb.png, Content/Rooms/rusty-anvil/bar/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Bar in The Rusty Anvil: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/shop/inside/mid.png, Content/Rooms/shop/inside/fore.png, Content/Rooms/shop/inside/thumb.png, Content/Rooms/shop/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Chandler's in The Chandler's: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/sunspire-keep/great-hall/mid.png, Content/Rooms/sunspire-keep/great-hall/fore.png, Content/Rooms/sunspire-keep/great-hall/thumb.png, Content/Rooms/sunspire-keep/great-hall/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Great Hall in Sunspire Keep: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/thornbridge/camp-gate/sky.png, Content/Rooms/thornbridge/camp-gate/far.png, Content/Rooms/thornbridge/camp-gate/mid.png, Content/Rooms/thornbridge/camp-gate/fore.png, Content/Rooms/thornbridge/camp-gate/thumb.png, Content/Rooms/thornbridge/camp-gate/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Camp Gate in Thornbridge: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/thornbridge/tents/sky.png, Content/Rooms/thornbridge/tents/far.png, Content/Rooms/thornbridge/tents/mid.png, Content/Rooms/thornbridge/tents/fore.png, Content/Rooms/thornbridge/tents/thumb.png, Content/Rooms/thornbridge/tents/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The Tents in Thornbridge: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/thornbridge/river-edge/sky.png, Content/Rooms/thornbridge/river-edge/far.png, Content/Rooms/thornbridge/river-edge/mid.png, Content/Rooms/thornbridge/river-edge/fore.png, Content/Rooms/thornbridge/river-edge/thumb.png, Content/Rooms/thornbridge/river-edge/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, The River's Edge in Thornbridge: its sky at 4x, its far layer at 2x (the skyline, cooled and hazed), its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
+
+Content/Rooms/warehouse/inside/mid.png, Content/Rooms/warehouse/inside/fore.png, Content/Rooms/warehouse/inside/thumb.png, Content/Rooms/warehouse/inside/doors.txt - created by Caleb Kiatoukaysi for Legend Quest, A Warehouse in A Warehouse: its mid layer at 3x (the buildings on their doors, or the wall, and the dressing), its foreground at 4x, its 200x113 thumbnail for the zone map, and doors.txt, where each door's doorway is painted, put together procedurally by tools/rooms/generate_room_placeholders.py from the game's own props, tiles and title pictures, released under public domain
 
 ## Music
 
@@ -881,6 +1010,10 @@ tools/generate_meadow.py - written by Caleb Kiatoukaysi for Legend Quest, draws 
 tools/generate_items.py - written by Caleb Kiatoukaysi for Legend Quest, draws the item icons and the inventory's slots: every pixel is given a material and shaded from the top left at the end, with a dark outline round the lot, and it checks Items/ItemCatalog.cs's icons and rarities against its own list before it writes anything. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 
 tools/generate_combat_art.py - written by Caleb Kiatoukaysi for Legend Quest, draws the ability and condition icons and the pieces of the fight's screen with generate_items.py's kit, and checks Combat/CombatIcons.cs and the AbilityId and ConditionId enums against its own tables before it writes anything. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
+
+tools/rooms/roomkit.py, tools/rooms/generate_room_placeholders.py, tools/rooms/make_room_template.py, tools/rooms/cut_room.py - written by Caleb Kiatoukaysi for Legend Quest, the room painting tools: generate_room_placeholders.py paints every room's layers, its thumbnail and its doors.txt into Content/Rooms out of the game's own props, tiles and title pictures, and writes previews of them; make_room_template.py writes the guide a room is painted over; cut_room.py cuts a painted room into its layers; roomkit.py is what they share. They need nothing but CPython, and every one is seeded, so a rerun gives the same files
+
+tools/rooms/zonefile.py, tools/rooms/convert_maps.py, tools/rooms/plan.py, tools/rooms/catalogs.py, tools/rooms/check_rooms.py, tools/check_spawns.py - written by Caleb Kiatoukaysi for Legend Quest, the zone tools: zonefile.py reads and writes the zone files, convert_maps.py turns the maps into zones with the hand work in plan.py, catalogs.py reads what the game's C# catalogs hold, check_rooms.py checks the zones against them, and check_spawns.py checks that every spawn the scripts name is in their zone. They need nothing but CPython
 
 ## The pictures the generators read
 

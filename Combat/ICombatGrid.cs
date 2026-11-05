@@ -7,8 +7,8 @@ namespace LegendQuest.Combat;
 /// through.
 /// </summary>
 /// <remarks>
-/// An interface so the engine never touches a map: the explore screen hands it one over the map's
-/// NavGrid and its opaque tiles, and the simulator one that's open ground. Who's standing where is
+/// An interface so the engine never touches a room: the explore screen hands it one laid over the
+/// room's floor (RoomCombatGrid), and the simulator one that's open ground. Who's standing where is
 /// the engine's business, not the grid's.
 /// </remarks>
 public interface ICombatGrid

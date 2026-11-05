@@ -37,19 +37,28 @@ public class SaveData
     /// <remarks>A number, not a TimeSpan, so the file stays easy to edit by hand. The game uses Playtime.</remarks>
     public double PlaytimeSeconds { get; set; }
 
-    /// <summary>The id of the map the party is on.</summary>
-    public string MapId { get; set; } = string.Empty;
+    /// <summary>The zone the party is in. A zone has its old map's id.</summary>
+    public string ZoneId { get; set; } = string.Empty;
 
-    /// <summary>Where the last way off a map was: the map, where you stood, and which way you faced. A building's way out goes back here.</summary>
-    public string BackMap { get; set; }
+    /// <summary>The room of ZoneId the party is in. The party's feet are where they stand in it.</summary>
+    public string RoomId { get; set; }
 
-    /// <summary>How far across BackMap you were, in world pixels.</summary>
+    /// <summary>Where the last way out of a zone was: a building's way out goes back here. Null if there's been none.</summary>
+    public string BackZone { get; set; }
+
+    /// <summary>The room of BackZone the way out was in.</summary>
+    public string BackRoom { get; set; }
+
+    /// <summary>Where in BackRoom to come back out, across, in world pixels: in front of the door, or in from the end.</summary>
     public float BackX { get; set; }
 
-    /// <summary>How far down BackMap you were, in world pixels.</summary>
+    /// <summary>Where in BackRoom to come back out, down, in world pixels.</summary>
     public float BackY { get; set; }
 
-    /// <summary>Everyone in the party, in order, each with where they're standing on the map.</summary>
+    /// <summary>Every room that's been walked into, as zone/room. The zone map lets you jump to any of them.</summary>
+    public HashSet<string> Visited { get; set; } = new();
+
+    /// <summary>Everyone in the party, in order, each with where they're standing in the room.</summary>
     public List<PartyMember> Party { get; set; } = new();
 
     /// <summary>Which of the party you're controlling, by their place in Party.</summary>
@@ -107,10 +116,6 @@ public class SaveData
 
     /// <summary>The waypoints that have been found, as map/id. Fast travel goes between these.</summary>
     public HashSet<string> Waypoints { get; set; } = new();
-
-    /// <summary>What's been seen of each map that's been visited: one bit per tile, row by row, by map id.</summary>
-    /// <remarks>Packed, so a map is a few hundred bytes. JSON writes a byte array as base64, which keeps the file short.</remarks>
-    public Dictionary<string, byte[]> Seen { get; set; } = new();
 
     /// <summary>What everyone's holding in their sockets, as scenes' hold and drop cues left it: by who (an origin id, or someone's id on a map), then by socket (hand_front, neck, belt_front), the item's id.</summary>
     /// <remarks>
@@ -171,16 +176,18 @@ public class SaveData
         Meters[id] = Math.Clamp(value, meter.Min, meter.Max);
     }
 
-    /// <summary>The save a new game starts from: you and the Soul-Bound at the start of the opening map, with no time played and StartingPotions in the bag.</summary>
-    /// <remarks>Only the leader gets put on the start. The map puts the rest round them when it loads.</remarks>
+    /// <summary>The save a new game starts from: you and the Soul-Bound at the start of the opening zone, with no time played and StartingPotions in the bag.</summary>
+    /// <remarks>Only the leader gets put on the start. The room puts the rest behind them when it loads.</remarks>
     /// <param name="you">You, as the creation screen made you.</param>
     /// <param name="soulBound">The Soul-Bound, as the second pass of it made them.</param>
     public static SaveData NewGame(PartyMember you, PartyMember soulBound)
     {
-        MapSpawn start = MapCatalog.Get(MapCatalog.Opening).Spawns[MapLoader.StartSpawn];
-        var game = new SaveData { MapId = MapCatalog.Opening, Party = new List<PartyMember> { you, soulBound } };
+        ZoneCatalog.TryResolve(ZoneCatalog.Opening, ZoneLoader.StartSpawn, out RoomDefinition room, out MapSpawn start);
+        var game = new SaveData { ZoneId = ZoneCatalog.Opening, RoomId = room.Id, Party = new List<PartyMember> { you, soulBound } };
         game.LeaderMember.Feet = start.Feet;
         game.LeaderMember.Facing = start.Facing;
+        game.Visited.Add(ZoneCatalog.Opening + "/" + room.Id);
+
         game.Bag.Add(ItemCatalog.HealingPotion, StartingPotions);
         return game;
     }

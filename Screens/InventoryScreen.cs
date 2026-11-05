@@ -648,7 +648,7 @@ public class InventoryScreen : GameScreen
     }
 
     /// <summary>What the bottom line says when someone at camp is asked to change.</summary>
-    private static string AtCampLine(PartyMember member) => $"{member.Name} is waiting at {MapCatalog.Get(MapCatalog.Camp).Name}, kit and all.";
+    private static string AtCampLine(PartyMember member) => $"{member.Name} is waiting at {ZoneCatalog.Get(ZoneCatalog.Camp).Name}, kit and all.";
 
     /// <summary>Catches everything up after something on someone changed: their sheet is baked again, the bag and the character sheet are filled again, they turn to face you, and the map's told.</summary>
     /// <param name="member">Who changed.</param>
@@ -886,7 +886,7 @@ public class InventoryScreen : GameScreen
 
         if (!AtCamp) return;
         y += _detailFont.LineSpacing;
-        Text.Draw(spriteBatch, _detailFont, "WAITING AT " + MapCatalog.Get(MapCatalog.Camp).Name.ToUpperInvariant(), MemberPanel.Center.X, y,
+        Text.Draw(spriteBatch, _detailFont, "WAITING AT " + ZoneCatalog.Get(ZoneCatalog.Camp).Name.ToUpperInvariant(), MemberPanel.Center.X, y,
             Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
     }
 

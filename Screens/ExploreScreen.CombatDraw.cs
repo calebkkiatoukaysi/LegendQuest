@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendQuest.Characters;
+using LegendQuest.Collisions;
 using LegendQuest.Combat;
 using LegendQuest.Components;
 using LegendQuest.World;
@@ -10,17 +11,18 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// Drawing a fight: the map and everyone on it with the marks on the ground (where you can reach,
+/// Drawing a fight: the room and everyone in it with the marks on the ground (where you can reach,
 /// the path, the rings under whoever's turn it is and whoever you're pointing at), the dark, what's
 /// flying and what's thrown about, then the screen: health over heads, the numbers and the lines
 /// said, the turn order, the frame, the sigil, the budget and the hotbar, the log, the banner, the
 /// card, and the panel at the end.
 /// </summary>
 /// <remarks>
-/// The map screen's own order of batches, with the fight's in among them, so it's drawn instead of
-/// the map's Draw while a fight's on. The marks on the ground go under everyone's feet; on a dark
-/// map they're drawn again in light over the dark, the way the pool under the mouse is, so they
-/// can always be seen. The whole map shakes with a hit; the screen's pieces don't.
+/// The room's own order of batches (RoomScene's back, the floor, its front, its dark), with the
+/// fight's in among them, so it's drawn instead of the room's Draw while a fight's on. The marks on
+/// the ground fill the fight's tiles under everyone's feet; in a dark room they're drawn again in
+/// light over the dark, the way the pool under the mouse is, so they can always be seen. The whole
+/// room shakes with a hit, and with a scene's shake still settling; the screen's pieces don't.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -29,7 +31,7 @@ public partial class ExploreScreen
     private const float GroundDot = 0.965f;
     private const float GroundRing = 0.964f;
 
-    /// <summary>How strong the marks are drawn again in light on a dark map.</summary>
+    /// <summary>How strong the marks are drawn again in light in a dark room.</summary>
     private const float MarksInTheDark = 0.6f;
 
     /// <summary>What the corner of the screen says in a fight.</summary>
@@ -66,35 +68,35 @@ public partial class ExploreScreen
     private readonly HashSet<Point> _reach = new();
     private object _reachFor;
 
-    /// <summary>Draws the fight, in place of the map's own Draw.</summary>
+    /// <summary>Draws the fight, in place of the room's own Draw.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     private void DrawCombat(GameTime gameTime)
     {
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-        Matrix world = _camera.Transform * _effects.Shake;
+        Matrix shake = _cueShake.Transform * _effects.Shake;
+        Matrix world = _camera.Transform * shake;
         float pixel = _camera.Pixel;
         float alpha = TransitionAlpha;
         float clock = (float)gameTime.TotalGameTime.TotalSeconds;
         Color tint = WorldTint;
 
-        // 1. The map, the marks on the ground, and everyone on it, sorted by how far down they stand.
+        // 1. The room behind everyone, then the marks on the ground and everything on the floor,
+        //    sorted by how far down the band it stands, then the room in front of everyone.
+        _scene.DrawBack(gameTime, spriteBatch, _camera, tint, shake);
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
-        _tilemap.Draw(gameTime, spriteBatch, _camera.View, tint);
-        foreach (PropSprite prop in AllProps()) prop.Draw(spriteBatch, prop.Layer(_tilemap.Bounds.Height), tint);
+        foreach (PropSprite prop in AllProps()) prop.Draw(spriteBatch, prop.Layer(ZoneCatalog.RoomHeight), tint);
         foreach (TorchSprite torch in _torches) torch.Draw(spriteBatch, Layers.WallFlame);
         DrawGroundMarks(spriteBatch, clock, 1f);
         foreach (Npc npc in _npcs) npc.Walker.Draw(spriteBatch, OnFloor(npc.Walker.Position), pixel, tint);
         foreach (WalkerSprite walker in _walkers) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel, tint);
         foreach (WalkerSprite walker in _spawned) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel, tint);
         spriteBatch.End();
+        _scene.DrawFront(spriteBatch, _camera, tint, shake);
 
-        // 2. The dark, on a dark map.
-        if (_lightMap is not null)
+        // 2. The dark, in a dark room, and the torches and the marks again in light over it.
+        _scene.DrawDark(spriteBatch, _camera, shake);
+        if (_room.Dark)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, transformMatrix: world);
-            _lightMap.Draw(spriteBatch);
-            spriteBatch.End();
-
             spriteBatch.Begin(SpriteSortMode.Deferred, Blends.PremultipliedAdditive, SamplerState.LinearClamp, transformMatrix: world);
             foreach (TorchSprite torch in _torches) torch.DrawGlow(spriteBatch, GlowRadius, GlowColor);
             spriteBatch.End();
@@ -219,7 +221,7 @@ public partial class ExploreScreen
     /// <summary>The marks on the ground: the tiles you can reach, an area's tiles, the path and where it ends, and the rings under whoever's turn it is, whoever you're pointing at, and anyone the path would let swing at you.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in world space, point-sampled.</param>
     /// <param name="clock">The game's clock, for the rings' frames and the pulses.</param>
-    /// <param name="strength">How strong they're drawn: 1 on the ground, less when they're drawn again as light on a dark map.</param>
+    /// <param name="strength">How strong they're drawn: 1 on the ground, less when they're drawn again as light in a dark room.</param>
     private void DrawGroundMarks(SpriteBatch spriteBatch, float clock, float strength)
     {
         float pulse = 0.5f + 0.5f * MathF.Sin(clock * PulseRate);
@@ -232,14 +234,13 @@ public partial class ExploreScreen
             if (_selected is null)
             {
                 Color reach = (GuidingMove ? Color.Lerp(ReachTint, ReachGuided, pulse) : ReachTint) * strength;
-                foreach (Point cell in Reach(me)) spriteBatch.Draw(pixel, TileArea(cell), null, reach, 0f, Vector2.Zero, SpriteEffects.None, GroundFill);
+                foreach (Point cell in Reach(me)) Fill(spriteBatch, pixel, cell, reach);
             }
 
             if (_plan is { Ability: { Target: TargetKind.Area or TargetKind.Point } area } && _plan.Problem is null)
             {
                 Color fill = CombatStyle.LightOf(area) * (AreaTint * strength);
-                foreach (Point cell in Around(_plan.Cell, area.Radius))
-                    spriteBatch.Draw(pixel, TileArea(cell), null, fill, 0f, Vector2.Zero, SpriteEffects.None, GroundFill);
+                foreach (Point cell in Around(_plan.Cell, area.Radius)) Fill(spriteBatch, pixel, cell, fill);
             }
 
             if (_plan is not null) DrawPath(spriteBatch, _plan, strength);
@@ -266,16 +267,16 @@ public partial class ExploreScreen
         {
             string piece = i < plan.Reachable ? "path-dot" : "path-dot-far";
             Rectangle dot = CombatIcons.Piece(piece);
-            spriteBatch.Draw(_combatArt.Hud, NavGrid.Middle(plan.Path[i]) - new Vector2(dot.Width / 2f, dot.Height / 2f), dot, colour, 0f, Vector2.Zero, 1f, SpriteEffects.None, GroundDot);
+            spriteBatch.Draw(_combatArt.Hud, FeetOn(plan.Path[i]) - new Vector2(dot.Width / 2f, dot.Height / 2f), dot, colour, 0f, Vector2.Zero, 1f, SpriteEffects.None, GroundDot);
         }
 
         bool cutShort = plan.Reachable < plan.Path.Count;
         Rectangle end = CombatIcons.Piece(cutShort ? "path-end-far" : "path-end");
-        spriteBatch.Draw(_combatArt.Hud, NavGrid.Middle(plan.Path[^1]) - new Vector2(end.Width / 2f, end.Height / 2f), end, colour, 0f, Vector2.Zero, 1f, SpriteEffects.None, GroundDot);
+        spriteBatch.Draw(_combatArt.Hud, FeetOn(plan.Path[^1]) - new Vector2(end.Width / 2f, end.Height / 2f), end, colour, 0f, Vector2.Zero, 1f, SpriteEffects.None, GroundDot);
         if (cutShort && plan.Reachable > 0)
         {
             Rectangle stop = CombatIcons.Piece("path-end");
-            spriteBatch.Draw(_combatArt.Hud, NavGrid.Middle(plan.Path[plan.Reachable - 1]) - new Vector2(stop.Width / 2f, stop.Height / 2f), stop, colour, 0f, Vector2.Zero, 1f, SpriteEffects.None, GroundDot);
+            spriteBatch.Draw(_combatArt.Hud, FeetOn(plan.Path[plan.Reachable - 1]) - new Vector2(stop.Width / 2f, stop.Height / 2f), stop, colour, 0f, Vector2.Zero, 1f, SpriteEffects.None, GroundDot);
         }
     }
 
@@ -314,17 +315,21 @@ public partial class ExploreScreen
         return _reach;
     }
 
-    /// <summary>Every tile within a distance of one, on the map.</summary>
+    /// <summary>Every tile within a distance of one, on the fight's ground.</summary>
     private IEnumerable<Point> Around(Point centre, float metres)
     {
         int tiles = Measure.Tiles(metres);
         for (int y = centre.Y - tiles; y <= centre.Y + tiles; y++)
             for (int x = centre.X - tiles; x <= centre.X + tiles; x++)
-                if (x >= 0 && y >= 0 && x < _nav.Width && y < _nav.Height) yield return new Point(x, y);
+                if (x >= 0 && y >= 0 && x < _ground.Width && y < _ground.Height) yield return new Point(x, y);
     }
 
-    /// <summary>A tile's square, in world pixels.</summary>
-    private static Rectangle TileArea(Point cell) => new(cell.X * Tilemap.TileSize, cell.Y * Tilemap.TileSize, Tilemap.TileSize, Tilemap.TileSize);
+    /// <summary>Fills the patch of floor a tile covers, under everyone's feet.</summary>
+    private void Fill(SpriteBatch spriteBatch, Texture2D pixel, Point cell, Color colour)
+    {
+        BoundingRectangle area = _ground.Area(cell);
+        spriteBatch.Draw(pixel, new Vector2(area.X, area.Y), null, colour, 0f, Vector2.Zero, new Vector2(area.Width, area.Height), SpriteEffects.None, GroundFill);
+    }
 
     /// <summary>The health bar over everyone's head who's up, and over anyone of yours who's Downed, their death saves.</summary>
     private void DrawOverheads(SpriteBatch spriteBatch, float alpha)

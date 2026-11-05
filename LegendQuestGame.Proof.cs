@@ -28,7 +28,7 @@ public partial class LegendQuestGame
     /// <summary>The part of the run to stop after, so I can look at one part without sitting through the rest. Done runs all of it.</summary>
     public ProofStage ProofLast { get; init; } = ProofStage.Done;
 
-    /// <summary>The seed the maps' dice start from under the proof run, so a run goes the same way as the last.</summary>
+    /// <summary>The seed the zones' dice start from under the proof run, so a run goes the same way as the last.</summary>
     private const int ProofCombatSeed = 1;
 
     /// <summary>The most fights the run will lose and fight again before it decides one's too hard. The story's fights are tuned for 80 to 92 wins in a hundred, the boss's for 65 to 80, so a few losses in a run are the dice.</summary>
@@ -115,8 +115,8 @@ public partial class LegendQuestGame
         if (Directory.Exists(saves)) Directory.Delete(saves, recursive: true);
         SaveSystem.Folder = saves;
 
-        SaveSystem.Write(0, new SaveData { MapId = "questeria", PlaytimeSeconds = 4320 });
-        SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { MapId = "barrow", PlaytimeSeconds = 2840 });
+        SaveSystem.Write(0, new SaveData { ZoneId = "questeria", PlaytimeSeconds = 4320 });
+        SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { ZoneId = "barrow", PlaytimeSeconds = 2840 });
         File.WriteAllText(SaveSystem.PathFor(ProofBrokenSlot), "{ this was never a save");
     }
 
@@ -149,103 +149,103 @@ public partial class LegendQuestGame
                 break;
 
             case ProofStage.Voyage:
-                _proofPending = RunMap("gulls-wager", ExploreScreen.VoyageProofEnd, ProofStage.Docks);
+                _proofPending = RunZone("gulls-wager", ProofStage.Docks);
                 break;
 
             case ProofStage.Docks:
-                _proofPending = RunMap("docks", ExploreScreen.DocksProofEnd, ProofStage.Questeria);
+                _proofPending = RunZone("docks", ProofStage.Questeria);
                 break;
 
             case ProofStage.Questeria:
-                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaProofEnd, ProofStage.Flagon);
+                _proofPending = RunZone("questeria", ProofStage.Flagon);
                 break;
 
             case ProofStage.Flagon:
-                _proofPending = RunMap("gilded-flagon", ExploreScreen.FlagonProofEnd, ProofStage.QuesteriaOut);
+                _proofPending = RunZone("gilded-flagon", ProofStage.QuesteriaOut);
                 break;
 
             case ProofStage.QuesteriaOut:
-                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaOutProofEnd, ProofStage.Road);
+                _proofPending = RunZone("questeria", ProofStage.Road);
                 break;
 
             case ProofStage.Road:
-                _proofPending = RunMap("road", ExploreScreen.RoadProofEnd, ProofStage.QuesteriaAgain);
+                _proofPending = RunZone("road", ProofStage.QuesteriaAgain);
                 break;
 
             case ProofStage.QuesteriaAgain:
-                _proofPending = RunMap("questeria", ExploreScreen.QuesteriaAgainProofEnd, ProofStage.RoadAgain);
+                _proofPending = RunZone("questeria", ProofStage.RoadAgain);
                 break;
 
             case ProofStage.RoadAgain:
-                _proofPending = RunMap("road", ExploreScreen.ChapterProofEnd, ProofStage.Mirewood);
+                _proofPending = RunZone("road", ProofStage.Mirewood);
                 break;
 
             case ProofStage.Mirewood:
-                _proofPending = RunMap("mirewood", ExploreScreen.ChapterProofEnd, ProofStage.Quarry);
+                _proofPending = RunZone("mirewood", ProofStage.Quarry);
                 break;
 
             case ProofStage.Quarry:
-                _proofPending = RunMap("mirewood-quarry", ExploreScreen.ChapterProofEnd, ProofStage.MirewoodCamp);
+                _proofPending = RunZone("mirewood-quarry", ProofStage.MirewoodCamp);
                 break;
 
             case ProofStage.MirewoodCamp:
-                _proofPending = RunMap("mirewood", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaPaid);
+                _proofPending = RunZone("mirewood", ProofStage.QuesteriaPaid);
                 break;
 
             case ProofStage.QuesteriaPaid:
-                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.Thornbridge);
+                _proofPending = RunZone("questeria", ProofStage.Thornbridge);
                 break;
 
             case ProofStage.Thornbridge:
-                _proofPending = RunMap("thornbridge", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaMessenger);
+                _proofPending = RunZone("thornbridge", ProofStage.QuesteriaMessenger);
                 break;
 
             case ProofStage.QuesteriaMessenger:
-                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.FlagonElara);
+                _proofPending = RunZone("questeria", ProofStage.FlagonElara);
                 break;
 
             case ProofStage.FlagonElara:
-                _proofPending = RunMap("gilded-flagon", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaVault);
+                _proofPending = RunZone("gilded-flagon", ProofStage.QuesteriaVault);
                 break;
 
             case ProofStage.QuesteriaVault:
-                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.Vault);
+                _proofPending = RunZone("questeria", ProofStage.Vault);
                 break;
 
             case ProofStage.Vault:
-                _proofPending = RunMap("old-crown-vault", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaKeep);
+                _proofPending = RunZone("old-crown-vault", ProofStage.QuesteriaKeep);
                 break;
 
             case ProofStage.QuesteriaKeep:
-                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.Keep);
+                _proofPending = RunZone("questeria", ProofStage.Keep);
                 break;
 
             case ProofStage.Keep:
-                _proofPending = RunMap("sunspire-keep", ExploreScreen.ChapterProofEnd, ProofStage.QuesteriaDocks);
+                _proofPending = RunZone("sunspire-keep", ProofStage.QuesteriaDocks);
                 break;
 
             case ProofStage.QuesteriaDocks:
-                _proofPending = RunMap("questeria", ExploreScreen.ChapterProofEnd, ProofStage.DocksAnvil);
+                _proofPending = RunZone("questeria", ProofStage.DocksAnvil);
                 break;
 
             case ProofStage.DocksAnvil:
-                _proofPending = RunMap("docks", ExploreScreen.ChapterProofEnd, ProofStage.Anvil);
+                _proofPending = RunZone("docks", ProofStage.Anvil);
                 break;
 
             case ProofStage.Anvil:
-                _proofPending = RunMap("rusty-anvil", ExploreScreen.ChapterProofEnd, ProofStage.FlagonCamp);
+                _proofPending = RunZone("rusty-anvil", ProofStage.FlagonCamp);
                 break;
 
             case ProofStage.FlagonCamp:
-                _proofPending = RunMap("gilded-flagon", ExploreScreen.ChapterProofEnd, ProofStage.RoadToBarrow);
+                _proofPending = RunZone("gilded-flagon", ProofStage.RoadToBarrow);
                 break;
 
             case ProofStage.RoadToBarrow:
-                _proofPending = RunMap("road", ExploreScreen.ChapterProofEnd, ProofStage.Barrow);
+                _proofPending = RunZone("road", ProofStage.Barrow);
                 break;
 
             case ProofStage.Barrow:
-                _proofPending = RunMap("barrow", ExploreScreen.BarrowProofEnd, ProofStage.TitleAgain);
+                _proofPending = RunZone("barrow", ProofStage.TitleAgain);
                 break;
 
             case ProofStage.TitleAgain:
@@ -470,11 +470,10 @@ public partial class LegendQuestGame
         }
     }
 
-    /// <summary>Runs one visit to a map: waits for that map's screen, then its schedule for this stage.</summary>
-    /// <param name="mapId">The map the visit is on.</param>
-    /// <param name="end">The last frame of the visit's schedule.</param>
+    /// <summary>Runs one visit to a zone: waits for that zone's screen, then its beats for this stage, until it leaves the zone or ExploreScreen.ProofVisitEnd.</summary>
+    /// <param name="zoneId">The zone the visit is in.</param>
     /// <param name="next">Which part comes next.</param>
-    private string RunMap(string mapId, int end, ProofStage next)
+    private string RunZone(string zoneId, ProofStage next)
     {
         if (Find<GameOverScreen>() is GameOverScreen over)
         {
@@ -483,7 +482,7 @@ public partial class LegendQuestGame
         }
 
         ProofStage stage = _proofStage;
-        return RunSubject<ExploreScreen>(ExploreStep, end, next, s => s.MapId == mapId);
+        return RunSubject<ExploreScreen>(ExploreStep, ExploreScreen.ProofVisitEnd, next, s => s.ZoneId == zoneId);
 
         // The part's clock stops while a fight's on: a fight takes as long as its dice say, and
         // nothing in a schedule is waiting on it, so it picks up after where it left off.
@@ -497,7 +496,7 @@ public partial class LegendQuestGame
     /// <summary>
     /// A fight the party lost, fought again the way a player would: LOAD LAST SAVE, which is the
     /// autosave from just before it, on dice seeded one further along so it doesn't go the same way.
-    /// The part of the run starts over on the map that's loaded, and plays back up to the fight.
+    /// The part of the run starts over in the zone that's loaded, and plays its beats back up to the fight.
     /// </summary>
     /// <exception cref="InvalidOperationException">If the run's lost more fights than it's allowed, which means a fight's too hard, not unlucky.</exception>
     private void FightAgain(GameOverScreen over)
@@ -524,7 +523,7 @@ public partial class LegendQuestGame
     /// <param name="step">One frame of its schedule. Returns the file name to save, or null.</param>
     /// <param name="end">The last frame of its schedule.</param>
     /// <param name="next">Which part comes next.</param>
-    /// <param name="test">Which screen of type T it has to be, or null for any. The maps use it, since the last map's screen is still fading out when the next one's stage starts.</param>
+    /// <param name="test">Which screen of type T it has to be, or null for any. The zones use it, since the last zone's screen is still fading out when the next one's stage starts.</param>
     private string RunSubject<T>(System.Func<T, string> step, int end, ProofStage next, System.Func<T, bool> test) where T : GameScreen
     {
         if (_proofSubject is not T subject)

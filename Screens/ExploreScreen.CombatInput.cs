@@ -29,9 +29,10 @@ namespace LegendQuest.Screens;
 /// </para>
 /// <para>
 /// The screen's pieces (the hotbar, the turn order, the budget, the sigil, the frame) are in front
-/// of the map, so the mouse finds them first. L shows and hides the log, the wheel scrolls it when
-/// the mouse is on it and zooms otherwise, and Escape with nothing picked is the pause menu. While
-/// it isn't your turn, pointing still works and says what everything is; only doing is held back.
+/// of the room, so the mouse finds them first. L shows and hides the log, the wheel scrolls it when
+/// the mouse is on it (a room's camera doesn't zoom), and Escape with nothing picked is the pause
+/// menu. While it isn't your turn, pointing still works and says what everything is; only doing is
+/// held back.
 /// </para>
 /// </remarks>
 public partial class ExploreScreen
@@ -66,7 +67,7 @@ public partial class ExploreScreen
     /// <summary>Whether the right button was down last frame, so a click is only the frame it goes down.</summary>
     private bool _rightWasDown;
 
-    /// <summary>What the mouse is over: a hotbar slot, END TURN, a portrait, a part of the budget, the sigil, an icon in the frame, someone on the map, or a tile.</summary>
+    /// <summary>What the mouse is over: a hotbar slot, END TURN, a portrait, a part of the budget, the sigil, an icon in the frame, someone in the room, or a tile.</summary>
     private int _hoverSlot = -1;
     private bool _hoverEndTurn;
     private int _hoverPortrait = -1;
@@ -118,11 +119,7 @@ public partial class ExploreScreen
             return true;
         }
 
-        if (input.WheelTurn != 0)
-        {
-            if (_log.Bounds.Contains(_mouse)) _log.Scroll(input.WheelTurn);
-            else _camera.ZoomBy(input.WheelTurn);
-        }
+        if (input.WheelTurn != 0 && _log.Bounds.Contains(_mouse)) _log.Scroll(input.WheelTurn);
         if (input.MouseMoved) _keyTarget = null;
 
         BuildHotbar();
@@ -219,7 +216,7 @@ public partial class ExploreScreen
         return count;
     }
 
-    /// <summary>Works out what the mouse is over, the screen's pieces before the map.</summary>
+    /// <summary>Works out what the mouse is over, the screen's pieces before the room.</summary>
     private void FindHover()
     {
         _hoverSlot = -1;
@@ -277,10 +274,10 @@ public partial class ExploreScreen
 
         Vector2 world = _camera.ToWorld(_mouse.ToVector2());
         _hoverFighter = FighterAt(world);
-        if (_hoverFighter is null) _hoverCell = Tilemap.CellOf(world);
+        if (_hoverFighter is null) _hoverCell = _ground.CellOf(world);
     }
 
-    /// <summary>Whoever in the fight the mouse is over on the map, the one in front if two overlap, or null. The dead foes have gone.</summary>
+    /// <summary>Whoever in the fight the mouse is over in the room, the one in front if two overlap, or null. The dead foes have gone.</summary>
     private Combatant FighterAt(Vector2 world)
     {
         Combatant found = null;
@@ -399,7 +396,7 @@ public partial class ExploreScreen
         _ => CursorShape.Move,
     };
 
-    /// <summary>A click: a hotbar slot, END TURN, or whatever's planned on the map.</summary>
+    /// <summary>A click: a hotbar slot, END TURN, or whatever's planned in the room.</summary>
     private void Click()
     {
         if (_hoverSlot >= 0) PressSlot(_hoverSlot);

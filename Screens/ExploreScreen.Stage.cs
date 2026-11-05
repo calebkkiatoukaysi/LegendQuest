@@ -12,33 +12,35 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen as a conversation's stage: the stage cues done to the tile map and everyone on it,
-/// as a CutsceneDirector asks.
+/// The zone screen as a conversation's stage: the stage cues done to the room and everyone in it, as
+/// a CutsceneDirector asks.
 /// </summary>
 /// <remarks>
 /// <para>
 /// Who an actor id names is ICutsceneStage's rule, looked for in that order: the party (party,
-/// both, you, soulbound, a companion by their origin id), then whoever's on the map by their id,
+/// both, you, soulbound, a companion by their origin id), then whoever's in the room by their id,
 /// then a group, which is everyone standing as that one of the cast and every copy numbered after
 /// it (guard-1, guard-2), and then the same for the id without an s on the end, so royal-guards is
 /// every royal guard. Someone a place or an echo names who isn't here, but is one of the cast or the
 /// creatures, is brought on, dressed off their Cast entry or their creature's sheet, and stays for as
-/// long as the map's up, like anyone else put down on it.
+/// long as the room's up, like anyone else put down in it.
 /// </para>
 /// <para>
-/// A spawn's spot is exactly where the map has it, turned the way it faces unless the cue says. The
-/// other spots look for somewhere the feet fit, nearest first: beside is a party's spacing to one
-/// side of whoever it is, before a tile in front of them (down the map), over a tile behind them,
-/// on right where they stand, and the crowd the nearest free spot to you. A group or copies are
-/// spread a spacing apart round the spot. Walking goes along the A* paths the mouse uses, straight
-/// through anyone in the way, at a walk; a spot no path reaches is jumped to. A clip strikes the
-/// Legacy pose LegacyClips gives it, held through its line; downed is held till a clip gets them
+/// A spawn is any of the zone's, found with ZoneCatalog.TryResolve, and it's a spot here if it's in
+/// this room: exactly where the zone has it, turned the way it faces unless the cue says. The other
+/// spots look for somewhere the feet fit on the floor, nearest first: beside is a party's spacing to
+/// one side of whoever it is, before a little nearer than them, over a little deeper, on right where
+/// they stand, and the crowd the nearest free spot to you. A group or copies are spread a spacing
+/// apart round the spot. Walking goes along the paths the mouse uses, straight through anyone in the
+/// way, at a walk; a spot no path reaches is jumped to. Everyone faces left or right. A clip strikes
+/// the Legacy pose LegacyClips gives it, held through its line; downed is held till a clip gets them
 /// up. A glow is the glow texture over them, light added; an echo is them at half strength; a tint
-/// fades the map's own tint to the cue's; a shake is ScreenShake over the world; the sigil goes up on
+/// fades the room's own tint to the cue's; a shake is ScreenShake over everyone; the sigil goes up on
 /// the corner of the party's cards. Show and hide go over what the flags say for as long as the
-/// map's up. A travel-actor to another map can't happen with the scene still on this one, so the
-/// party (you) leaves when the conversation's over, the way a Travel effect goes, and anyone else is
-/// gone from here for the rest of the scene.
+/// zone's up, for anyone and anything with an id: people, things, and the props the zone names. A
+/// travel-actor to another zone, or to a spawn in another room of this one, can't happen with the
+/// scene still in this room, so the party (you) goes when the conversation's over, the way a Travel
+/// effect goes, and anyone else is gone from here for the rest of the scene.
 /// </para>
 /// </remarks>
 public partial class ExploreScreen : ICutsceneStage
@@ -46,8 +48,11 @@ public partial class ExploreScreen : ICutsceneStage
     /// <summary>How near the camera has to be to where a camera cue sent it to be there, in world pixels.</summary>
     private const float CameraNear = 1f;
 
-    /// <summary>How many tiles round a spot to look for somewhere free to stand.</summary>
-    private const int SpotSearch = 120;
+    /// <summary>How much nearer than someone a before spot is, and deeper an over spot, in world pixels.</summary>
+    private const float SpotDepth = 12f;
+
+    /// <summary>How near a path a walk with no way to the spot itself will settle for, in world pixels.</summary>
+    private const float WalkNear = 16f;
 
     /// <summary>How strong an echo is drawn: build plan §5.3's 50%.</summary>
     private const float EchoOpacity = 0.5f;
@@ -74,7 +79,7 @@ public partial class ExploreScreen : ICutsceneStage
     private readonly List<Npc> _brought = new();
     private readonly List<Npc> _remembered = new();
 
-    /// <summary>What show and hide have put over the flags, by id on the map, and the party's figures hidden for the scene.</summary>
+    /// <summary>What show and hide have put over the flags, by id in the zone, and the party's figures hidden for the scene.</summary>
     private readonly HashSet<string> _cueShown = new();
     private readonly HashSet<string> _cueHidden = new();
     private readonly HashSet<WalkerSprite> _hiddenWalkers = new();
@@ -85,7 +90,7 @@ public partial class ExploreScreen : ICutsceneStage
     /// <summary>Where a camera cue's sent the camera, or null to follow you as usual.</summary>
     private Vector2? _cueCamera;
 
-    /// <summary>The tint the map's going from and to, how far it's got and how long it takes; and the glows' clock.</summary>
+    /// <summary>The tint the room's going from and to, how far it's got and how long it takes; and the glows' clock.</summary>
     private Color _tintFrom;
     private Color _tintTo;
     private float _tintClock;
@@ -98,10 +103,10 @@ public partial class ExploreScreen : ICutsceneStage
     /// <summary>Whether a cue's put any of the party somewhere, so the followers' trail starts again from where they are once it's over.</summary>
     private bool _partyStaged;
 
-    /// <summary>Where a travel-actor sent the party, as "map spawn", for when the conversation's over; or null.</summary>
+    /// <summary>Where a travel-actor sent the party, as "zone spawn", for when the conversation's over; or null.</summary>
     private string _cueTravel;
 
-    /// <summary>The colour of the light on the map now: its own tint, or a tint cue's, or on the way between them.</summary>
+    /// <summary>The colour of the light in the room now: its own tint, or a tint cue's, or on the way between them.</summary>
     private Color WorldTint => Color.Lerp(_tintFrom, _tintTo, _tintLength <= 0f ? 1f : MathHelper.Clamp(_tintClock / _tintLength, 0f, 1f));
 
     /// <inheritdoc/>
@@ -115,9 +120,9 @@ public partial class ExploreScreen : ICutsceneStage
     /// <inheritdoc/>
     public bool TryGetSpawn(string name, out Vector2 at)
     {
-        bool found = _map.Spawns.TryGetValue(name ?? string.Empty, out MapSpawn spawn);
-        at = found ? spawn.Feet : Vector2.Zero;
-        return found;
+        MapSpawn spawn = SpawnHere(name);
+        at = spawn?.Feet ?? Vector2.Zero;
+        return spawn is not null;
     }
 
     /// <inheritdoc/>
@@ -147,8 +152,8 @@ public partial class ExploreScreen : ICutsceneStage
 
             default:
                 if (!TryGetFoot(spot.Name, out Vector2 foot)) return false;
-                float ahead = spot.Kind switch { CueSpotKind.Before => Tilemap.TileSize, CueSpotKind.Over => -Tilemap.TileSize, _ => 0f };
-                at = ahead == 0f ? foot : FreeNear(foot + new Vector2(0f, ahead), new List<Vector2>());
+                float ahead = spot.Kind switch { CueSpotKind.Before => SpotDepth, CueSpotKind.Over => -SpotDepth, _ => 0f };
+                at = ahead == 0f ? foot : FreeNear(_walk.NearestOnFloor(foot + new Vector2(0f, ahead)), new List<Vector2>());
                 return true;
         }
     }
@@ -163,7 +168,7 @@ public partial class ExploreScreen : ICutsceneStage
         if (figures.Count == 0 || !TryGetSpot(spot, out Vector2 at)) return false;
 
         Direction? way = facing is CueFacing turned ? Turned(turned)
-            : spot.Kind == CueSpotKind.Spawn ? _map.Spawns[spot.Name].Facing
+            : spot.Kind == CueSpotKind.Spawn ? _room.Spawns[spot.Name].Facing
             : spot.Kind == CueSpotKind.Beside ? Figures(spot.Name)[0].Walker.Facing
             : null;
         List<Vector2> spots = Round(at, figures.Count);
@@ -180,9 +185,9 @@ public partial class ExploreScreen : ICutsceneStage
         for (int i = 0; i < figures.Count; i++)
         {
             WalkerSprite walker = figures[i].Walker;
-            List<Vector2> path = Pathfinder.Find(_nav, walker.Position, spots[i], 0f);
+            List<Vector2> path = _walk.FindPath(walker.Position, spots[i], 0f);
             if (path is not null && path[^1] != spots[i]) path.Add(spots[i]);
-            path ??= Pathfinder.Find(_nav, walker.Position, spots[i], Tilemap.TileSize);
+            path ??= _walk.FindPath(walker.Position, spots[i], WalkNear);
 
             if (path is null)
             {
@@ -323,7 +328,7 @@ public partial class ExploreScreen : ICutsceneStage
     public void Tint(Color? colour, float seconds)
     {
         _tintFrom = WorldTint;
-        _tintTo = colour ?? _map.Tint;
+        _tintTo = colour ?? _room.Tint;
         _tintClock = 0f;
         _tintLength = seconds;
     }
@@ -349,7 +354,7 @@ public partial class ExploreScreen : ICutsceneStage
     /// <inheritdoc/>
     public void TravelActor(string actor, string mapOrZone, string spawn)
     {
-        if (mapOrZone == _map.Id)
+        if (mapOrZone == _zone.Id && SpawnHere(spawn) is not null)
         {
             Place(actor, CueSpot.At(spawn), null, 0);
             return;
@@ -455,27 +460,27 @@ public partial class ExploreScreen : ICutsceneStage
         SeedTrail();
     }
 
-    /// <summary>Lets a shake or a tint a scene started settle on the map's own clock, once the scene that started it is over.</summary>
+    /// <summary>Lets a shake or a tint a scene started settle on the zone's own clock, once the scene that started it is over.</summary>
     private void SettleStage(GameTime gameTime)
     {
         _cueShake.Update(gameTime);
         _tintClock += (float)gameTime.ElapsedGameTime.TotalSeconds;
     }
 
-    /// <summary>Starts the map's light as its own tint. Called once, as the map's put together.</summary>
-    private void SetUpStage()
-    {
-        _tintFrom = _map.Tint;
-        _tintTo = _map.Tint;
-    }
+    /// <summary>A spawn of the zone's, if it's in this room: where a cue can put anyone.</summary>
+    /// <param name="name">The spawn's name.</param>
+    /// <returns>The spawn, or null if the zone hasn't one called that or it's in another room.</returns>
+    private MapSpawn SpawnHere(string name) =>
+        ZoneCatalog.TryResolve(_zone.Id, name, out RoomDefinition room, out MapSpawn spawn) && room == _room ? spawn : null;
 
-    /// <summary>Whether something's on the map by its id, there now or not: someone it puts down or a cue's brought on, or one of the things on it. What show and hide go over the flags for.</summary>
-    private bool OnMap(string id) => _everyNpc.Exists(npc => npc.Definition.Id == id) || _everyThing.Exists(each => each.Thing.Id == id);
+    /// <summary>Whether something's in the room by its id, there now or not: someone it puts down or a cue's brought on, one of the things in it, or a prop it names. What show and hide go over the flags for.</summary>
+    private bool OnMap(string id) =>
+        _everyNpc.Exists(npc => npc.Definition.Id == id) || _everyThing.Exists(each => each.Thing.Id == id) || _propIds.ContainsValue(id);
 
-    /// <summary>Whether something on the map's there now: what show and hide said, or else what the flags say.</summary>
+    /// <summary>Whether something in the room's there now: what show and hide said, or else what the flags say.</summary>
     private bool Present(string id, MapPresence presence) => !_cueHidden.Contains(id) && (_cueShown.Contains(id) || presence.Holds(_game.Flags));
 
-    /// <summary>Everyone an actor id names who's on the stage now, each with their key, their figure, and who they are if they're on the map rather than in the party.</summary>
+    /// <summary>Everyone an actor id names who's on the stage now, each with their key, their figure, and who they are if they're in the room rather than in the party.</summary>
     private List<(string Key, WalkerSprite Walker, Npc Npc)> Figures(string id)
     {
         var found = new List<(string Key, WalkerSprite Walker, Npc Npc)>();
@@ -506,7 +511,7 @@ public partial class ExploreScreen : ICutsceneStage
         return found;
     }
 
-    /// <summary>Adds everyone on the map who's in a group: standing as that one of the cast, or numbered after it.</summary>
+    /// <summary>Adds everyone in the room who's in a group: standing as that one of the cast, or numbered after it.</summary>
     private void AddGroup(string id, List<(string Key, WalkerSprite Walker, Npc Npc)> found)
     {
         foreach (Npc npc in _npcs)
@@ -524,7 +529,7 @@ public partial class ExploreScreen : ICutsceneStage
         if (!TryGetSpot(spot, out Vector2 at)) return false;
 
         List<Vector2> spots = Round(at, copies);
-        Direction? way = facing is CueFacing turned ? Turned(turned) : spot.Kind == CueSpotKind.Spawn ? _map.Spawns[spot.Name].Facing : null;
+        Direction? way = facing is CueFacing turned ? Turned(turned) : spot.Kind == CueSpotKind.Spawn ? _room.Spawns[spot.Name].Facing : null;
         for (int i = 0; i < copies; i++)
         {
             string id = actor + "-" + (i + 1);
@@ -546,11 +551,9 @@ public partial class ExploreScreen : ICutsceneStage
         Creature creature = cast is null ? Creatures.Get(who) : null;
         if (cast is null && creature is null) return null;
 
-        var definition = new MapNpc(id, cast?.Name ?? creature.Name, Leader.Position, Direction.Down, Sheet: null, Cast: cast?.Id, Look: null,
+        var definition = new MapNpc(id, cast?.Name ?? creature.Name, Leader.Position, Leader.Facing, Sheet: null, Cast: cast?.Id, Look: null,
             Creature: creature?.Id, Say: Array.Empty<string>(), Talk: null, Wander: 0f, Presence: MapPresence.Always);
-        var npc = new Npc(definition);
-        npc.Walker.LoadContent(_content);
-        npc.Walker.Sheet = NpcSheet(definition);
+        Npc npc = Dressed(new Npc(definition, _walk));
         _everyNpc.Add(npc);
         _brought.Add(npc);
         RefreshPresence();
@@ -567,7 +570,7 @@ public partial class ExploreScreen : ICutsceneStage
         if (_walkers.Contains(walker)) _partyStaged = true;
     }
 
-    /// <summary>Where a prop, a thing on the map or someone stands: someone first, then the thing by its id, then the nearest prop to you of that kind.</summary>
+    /// <summary>Where a prop, a thing in the room or someone stands: someone first, then the thing by its id, then the prop the zone calls that, then the nearest prop to you of that kind.</summary>
     private bool TryGetFoot(string id, out Vector2 foot)
     {
         foot = Vector2.Zero;
@@ -583,6 +586,13 @@ public partial class ExploreScreen : ICutsceneStage
             return true;
         }
 
+        foreach (PropSprite prop in _props)
+        {
+            if (!_propIds.TryGetValue(prop, out string named) || named != id) continue;
+            foot = prop.Foot;
+            return true;
+        }
+
         bool found = false;
         foreach (PropSprite prop in _props)
         {
@@ -593,60 +603,29 @@ public partial class ExploreScreen : ICutsceneStage
         return found;
     }
 
-    /// <summary>Spots for so many people round a point: the point itself for the first, then the nearest free spots a party's spacing apart.</summary>
+    /// <summary>Spots for so many people round a point: the point itself for the first, then the nearest free spots on the floor a party's spacing apart, along the room before deeper or nearer.</summary>
     private List<Vector2> Round(Vector2 at, int count)
     {
         var spots = new List<Vector2> { at };
-        while (spots.Count < count) spots.Add(FreeNear(at, spots));
+        if (count > 1) spots.AddRange(_walk.SpotsNear(at, Spacing, count - 1, Direction.Down));
         return spots;
     }
 
-    /// <summary>The nearest spot to a point where feet fit, a party's spacing from every spot that's taken, looking out a tile at a time and never through a wall; the point itself if there's nowhere.</summary>
+    /// <summary>The nearest spot to a point where feet fit, a party's spacing from every spot that's taken; the point itself if it's free, or if there's nowhere.</summary>
     /// <param name="near">The point, in world pixels.</param>
     /// <param name="taken">Spots that are spoken for.</param>
     private Vector2 FreeNear(Vector2 near, List<Vector2> taken)
     {
-        bool Free(Vector2 spot) => Standable(spot) && taken.TrueForAll(other => Vector2.Distance(other, spot) >= Spacing);
-        if (Free(near)) return near;
-
-        Point start = Tilemap.CellOf(near);
-        var seen = new HashSet<Point> { start };
-        var queue = new Queue<Point>();
-        queue.Enqueue(start);
-        for (int looked = 0; queue.Count > 0 && looked < SpotSearch; looked++)
-        {
-            Point cell = queue.Dequeue();
-            if (cell != start && Free(NavGrid.Middle(cell))) return NavGrid.Middle(cell);
-
-            for (int dy = -1; dy <= 1; dy++)
-            {
-                for (int dx = -1; dx <= 1; dx++)
-                {
-                    var next = new Point(cell.X + dx, cell.Y + dy);
-                    if (seen.Add(next) && _tilemap.Bounds.Contains(NavGrid.Middle(next)) && !_tilemap.IsSolid(next.X, next.Y)) queue.Enqueue(next);
-                }
-            }
-        }
-        return near;
+        if (Standable(near) && taken.TrueForAll(other => Vector2.Distance(other, near) >= Spacing)) return near;
+        return _walk.SpotsNear(near, Spacing, 1, Direction.Down, taken)[0];
     }
 
-    /// <summary>Whether someone's feet would fit at a point: on the map, clear of the walls, the props, the shut doors, everyone on the map and the party.</summary>
+    /// <summary>Whether someone's feet would fit at a point: on the floor, clear of everything standing, and clear of everyone in the room and the party.</summary>
     private bool Standable(Vector2 feet)
     {
-        if (!_tilemap.Bounds.Contains(feet)) return false;
+        if (!_walk.Fits(feet)) return false;
 
         BoundingRectangle box = FeetAt(feet);
-        foreach (BoundingRectangle wall in _tilemap.Walls)
-            if (box.CollidesWith(wall)) return false;
-        foreach (PropSprite prop in _props)
-            foreach (BoundingRectangle footprint in prop.Footprints)
-                if (box.CollidesWith(footprint)) return false;
-        foreach ((MapInteractable thing, PropSprite sprite) in _things)
-        {
-            if (thing.Kind == InteractableKind.Door && _world.IsOpen(thing)) continue;
-            foreach (BoundingRectangle footprint in sprite.Footprints)
-                if (box.CollidesWith(footprint)) return false;
-        }
         foreach (Npc npc in _npcs)
             if (box.CollidesWith(npc.Footprint)) return false;
         foreach (WalkerSprite walker in _walkers)

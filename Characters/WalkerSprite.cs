@@ -19,7 +19,9 @@ namespace LegendQuest.Characters;
 /// creature with a bigger frame of its own. A fight plays the poses (Play), nudges the figure out
 /// and back for a lunge or a recoil (Nudge), flashes it red when it's hit (Flash) and fades it in or
 /// out (Opacity). A townsfolk sheet is only the first five columns, so on one of those a pose
-/// stands instead, and the nudge and the flash carry the moment on their own.
+/// stands instead, and the nudge and the flash carry the moment on their own. In the side-on rooms
+/// everyone faces left or right only (SideOnly): the sheets keep their four rows, and the down and
+/// up ones just never get asked for.
 /// </remarks>
 public class WalkerSprite
 {
@@ -44,6 +46,7 @@ public class WalkerSprite
     private Texture2D _shadow;
     private float _clock;
     private int _frame;
+    private Direction _facing = SideOnly ? Direction.Right : Direction.Down;
 
     /// <summary>The pose struck, and how much longer it's held, in seconds; a held pose has no end.</summary>
     private WalkerPose _pose;
@@ -68,8 +71,20 @@ public class WalkerSprite
     /// <summary>Where the feet are, in world pixels.</summary>
     public Vector2 Position { get; set; }
 
-    /// <summary>Which way they're facing.</summary>
-    public Direction Facing { get; set; } = Direction.Down;
+    /// <summary>Whether everyone faces only left or right, as they do in the side-on rooms: setting Up or Down does nothing, and Face goes by how far across the point is alone.</summary>
+    /// <remarks>On for every walker, since there are only rooms to walk in. The sheets keep their up and down rows for whatever comes after.</remarks>
+    public static bool SideOnly { get; set; } = true;
+
+    /// <summary>Which way they're facing. With SideOnly on, Up and Down are ignored and they keep facing the way they were.</summary>
+    public Direction Facing
+    {
+        get => _facing;
+        set
+        {
+            if (SideOnly && value is Direction.Up or Direction.Down) return;
+            _facing = value;
+        }
+    }
 
     /// <summary>Whether they're walking. Standing still uses the first column.</summary>
     public bool IsWalking { get; set; }
@@ -158,11 +173,16 @@ public class WalkerSprite
         _frame = frame;
     }
 
-    /// <summary>Turns to face a point, whichever of the four ways is closest.</summary>
-    /// <param name="target">The point, in world pixels.</param>
+    /// <summary>Turns to face a point: whichever of the four ways is closest, or with SideOnly on, left or right by which side of them it's on.</summary>
+    /// <param name="target">The point, in world pixels. Straight above or below them, with SideOnly on, they don't turn.</param>
     public void Face(Vector2 target)
     {
         Vector2 to = target - Position;
+        if (SideOnly)
+        {
+            if (to.X != 0f) Facing = to.X < 0f ? Direction.Left : Direction.Right;
+            return;
+        }
         if (to == Vector2.Zero) return;
 
         Facing = MathF.Abs(to.X) > MathF.Abs(to.Y)

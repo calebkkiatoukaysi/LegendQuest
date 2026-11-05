@@ -522,7 +522,7 @@ public class DialogueScreen : GameScreen
                 _toast.Show(NameOf(happened.Id) + (happened.Amount switch
                 {
                     1 => " joins the party",
-                    0 => " will wait at " + MapCatalog.Get(MapCatalog.Camp).Name,
+                    0 => " will wait at " + ZoneCatalog.Get(ZoneCatalog.Camp).Name,
                     _ => " leaves the party",
                 }));
                 _audio.Play(Sfx.Waypoint);

@@ -196,7 +196,7 @@ public sealed class StageDirection
                 if (args.Count is < 2 or > 3) return "isn't travel-actor, who, a map, and a spawn there if not its start";
                 Actor = args[0];
                 Map = args[1];
-                Spawn = args.Count == 3 ? args[2] : MapLoader.StartSpawn;
+                Spawn = args.Count == 3 ? args[2] : ZoneLoader.StartSpawn;
                 return Ids(Actor, Map, Spawn);
 
             case "anim":

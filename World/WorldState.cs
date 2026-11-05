@@ -7,13 +7,14 @@ using LegendQuest.Save;
 namespace LegendQuest.World;
 
 /// <summary>
-/// The rules for the things on a map: opening chests and doors, pulling levers, reading signs,
+/// The rules for the things in a zone: opening chests and doors, pulling levers, reading signs,
 /// finding waypoints, and walking into triggers. It reads and changes the save, and draws nothing.
 /// </summary>
 /// <remarks>
 /// The same shape as The Black Box's RoundEngine: the screen asks it to do something and it hands
 /// back what happened, and the screen turns that into a sound and a line on screen. There are no
-/// dice yet, so it doesn't take a Random. It will when locked doors can be forced.
+/// dice yet, so it doesn't take a Random. It will when locked doors can be forced. The save keeps
+/// what's been used as zone/id, and a zone has its old map's id, so the keys are what they were.
 /// </remarks>
 public class WorldState
 {
@@ -39,15 +40,15 @@ public class WorldState
     private const string FoundLine = "WAYPOINT FOUND";
 
     private readonly SaveData _game;
-    private readonly MapDefinition _map;
+    private readonly string _zone;
 
-    /// <summary>Sets up the rules for one map of a game.</summary>
+    /// <summary>Sets up the rules for one zone of a game.</summary>
     /// <param name="game">The save, which is where everything that changes is kept.</param>
-    /// <param name="map">The map you're on.</param>
-    public WorldState(SaveData game, MapDefinition map)
+    /// <param name="zone">The zone you're in, by its id.</param>
+    public WorldState(SaveData game, string zone)
     {
         _game = game;
-        _map = map;
+        _zone = zone;
     }
 
     /// <summary>Whether a chest or door is open, a lever is pulled, or a waypoint has been found. A sign is never open.</summary>
@@ -57,8 +58,8 @@ public class WorldState
         InteractableKind.Sign => false,
         InteractableKind.Lever => _game.Flags.Contains(thing.Flag),
         InteractableKind.Door when thing.Flag is not null => _game.Flags.Contains(thing.Flag),
-        InteractableKind.Waypoint => _game.Waypoints.Contains(Key(_map, thing)),
-        _ => _game.Opened.Contains(Key(_map, thing)),
+        InteractableKind.Waypoint => _game.Waypoints.Contains(Key(thing)),
+        _ => _game.Opened.Contains(Key(thing)),
     };
 
     /// <summary>Whether there's anything left to do with it. An open chest or door has nothing; everything else can be used again.</summary>
@@ -76,7 +77,7 @@ public class WorldState
         switch (thing.Kind)
         {
             case InteractableKind.Chest:
-                _game.Opened.Add(Key(_map, thing));
+                _game.Opened.Add(Key(thing));
                 happened.Add(new WorldEvent(WorldEventKind.ChestOpened, thing.Gold > 0 || thing.Items.Count > 0 ? null : EmptyLine));
                 if (thing.Gold > 0)
                 {
@@ -100,7 +101,7 @@ public class WorldState
                 break;
 
             case InteractableKind.Door:
-                _game.Opened.Add(Key(_map, thing));
+                _game.Opened.Add(Key(thing));
                 happened.Add(new WorldEvent(WorldEventKind.DoorOpened, null));
                 break;
 
@@ -114,7 +115,7 @@ public class WorldState
                 break;
 
             default:
-                happened.Add(_game.Waypoints.Add(Key(_map, thing))
+                happened.Add(_game.Waypoints.Add(Key(thing))
                     ? new WorldEvent(WorldEventKind.WaypointFound, FoundLine)
                     : new WorldEvent(WorldEventKind.WaypointUsed, null));
                 break;
@@ -128,35 +129,11 @@ public class WorldState
     /// <returns>What it says, or null if it says nothing (or has already gone off).</returns>
     public WorldEvent Enter(MapTrigger trigger)
     {
-        if (trigger.Once && !_game.Triggered.Add(_map.Id + "/" + trigger.Id)) return null;
+        if (trigger.Once && !_game.Triggered.Add(_zone + "/" + trigger.Id)) return null;
         if (trigger.SetFlag is not null) _game.Flags.Add(trigger.SetFlag);
 
         if (trigger.Talk is not null) return new WorldEvent(WorldEventKind.TriggerTalked, trigger.Talk);
         return trigger.Say is null ? null : new WorldEvent(WorldEventKind.TriggerSaid, trigger.Say);
-    }
-
-    /// <summary>Whether any of a map has been seen, which is what puts it on the world map.</summary>
-    /// <param name="map">The map.</param>
-    public bool IsDiscovered(MapDefinition map) => _game.Seen.ContainsKey(map.Id);
-
-    /// <summary>A map's waypoint, if it's been found.</summary>
-    /// <param name="map">The map.</param>
-    /// <returns>The waypoint, or null if the map hasn't got one or it hasn't been found yet.</returns>
-    public MapInteractable FoundWaypoint(MapDefinition map)
-    {
-        foreach (MapInteractable thing in map.Interactables)
-            if (thing.Kind == InteractableKind.Waypoint && _game.Waypoints.Contains(Key(map, thing))) return thing;
-        return null;
-    }
-
-    /// <summary>Every map with a found waypoint, other than this one, in world map order. That's where fast travel can go.</summary>
-    /// <remarks>Fast travel only starts from a waypoint. Once there's fighting, it won't start during a fight either.</remarks>
-    public List<MapDefinition> Destinations()
-    {
-        var destinations = new List<MapDefinition>();
-        foreach (MapDefinition map in MapCatalog.All)
-            if (map.Id != _map.Id && FoundWaypoint(map) is not null) destinations.Add(map);
-        return destinations;
     }
 
     /// <summary>What a chest with items in it says: each one's name, in the order they're listed, with how many there are when it's more than one.</summary>
@@ -166,6 +143,6 @@ public class WorldState
             ? ItemCatalog.Get(same.Key).Name
             : string.Format(CultureInfo.InvariantCulture, CountedLine, ItemCatalog.Get(same.Key).Name, same.Count())));
 
-    /// <summary>How the save keeps track of something on a map: map/id.</summary>
-    private static string Key(MapDefinition map, MapInteractable thing) => map.Id + "/" + thing.Id;
+    /// <summary>How the save keeps track of something in this zone: zone/id.</summary>
+    private string Key(MapInteractable thing) => _zone + "/" + thing.Id;
 }

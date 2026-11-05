@@ -44,6 +44,8 @@ This file covers the format, the indicators you asked for (shops and places you 
 
 Followers trail you as now. Facing is left or right only (`03-art-overhaul.md` §1).
 
+**Built in M3, to the author's direction (2026-11-04).** Rooms are composed from the game's existing art (its tilesets, buildings, props and the title's paintings), side-on and more detailed, by `tools/rooms/generate_room_placeholders.py`; nobody, enemies included, faces up or down; townsfolk still stroll along the band and patrols walk end to end. The course requires a tilemap rendered for some elements of the game, so every room keeps a tile strip: the ground under the floor band, and an interior's back wall, drawn from the zone's 16x16 tileset by `World/Tilemap`. Characters are the current walker sheets at 4x until the rig (M11).
+
 ## 2. Ways out, and how they're marked
 
 You asked for shops and places to enter to have indicators. Every way out of a room, and everything you can use, is marked. Nothing that matters relies on the painting alone.
@@ -99,7 +101,7 @@ You asked for more detail, backgrounds included. These are the rules for every r
 | --- | --- | --- | --- |
 | Sky | 0.1 | Sky, clouds, sun or moon | Soft gradients; 2 to 3 cloud shapes; drifts |
 | Far | 0.3 | Skyline, mountains, distant towers, the sea | Low contrast, cooler, simplified shapes with a few lit windows |
-| Mid | 0.7 (1.0 in a one-screen room) | The buildings you can enter, walls, trees, shop fronts, stalls | Full detail: timber, stone courses, roof tiles, hanging signs, window boxes, washing lines, posters, cracks, moss |
+| Mid | 1.0 (built: 0.7 would slide doors off their click boxes) | The buildings you can enter, walls, trees, shop fronts, stalls | Full detail: timber, stone courses, roof tiles, hanging signs, window boxes, washing lines, posters, cracks, moss |
 | Floor | 1.0 | Cobbles, planks, grass, ash, with a calmer pattern in the band where people stand | Medium detail, lower contrast than the mid layer so characters read against it |
 | Foreground | 1.1 to 1.3 | Lamp posts, railings, crates, foliage along the bottom edge, drawn over everyone | Dark and crisp, never covering more than 12% of the floor band |
 
@@ -130,46 +132,59 @@ The same way as the characters (`03-art-overhaul.md` §12):
 
 ## 4. The room file
 
-Rooms replace `Content/Maps/*.txt` with `Content/Zones/*.txt`, read by `ZoneCatalog` at start-up, failing on the first bad line as `MapCatalog` does.
+Rooms replace the tile maps with `Content/Zones/<zone>.txt`, read by `ZoneCatalog` at start-up, failing on the first bad line with the file and the line, as the maps' loader did. `tools/rooms/convert_maps.py` writes them from the old maps and `tools/rooms/plan.py`; nobody edits one by hand. The old `.map` files now live in `tools/rooms/legacy/`, as the converter's input; the game doesn't read them. `tools/rooms/zonefile.py` is the parser every tool shares, and its docstring is the full reference.
+
+Everything is in canvas pixels (a room is 1600 to 4800 wide, a multiple of 64, and 900 tall), and the game divides by `ZoneCatalog.RoomScale` (4) once, on loading. A line is `head = body · field · field`, split at each middle dot; a field is a word (`mark`) or a key and a value (`gold 15`), and a value in double quotes has them taken off. `;` outside quotes starts a comment.
 
 ```text
-; Questeria
 [zone]
-id = questeria
-name = Questeria
-world = 640 410                 ; on the world map
-music = Questeria
-region = questeria              ; for random encounters; towns have danger 0
-danger = 0
+id = docks
+name = Saltwind Docks
+world = 80 190                       ; optional: on the world map
+music = Exploring
+region = saltwind                    ; optional, for random encounters
+danger = 0                           ; towns and insides are 0
 
-[room lantern-market]
-name = The Lantern Market
+[room harbourside]                   ; rooms run left to right; settings first, then objects
+name = The Harbourside
+kind = street                        ; or interior: no sky, far layer or parallax
 width = 3200
-paint = questeria/lantern-market          ; Content/Rooms/questeria/lantern-market/
-floor = 0 610, 3200 600, 3200 860, 0 860  ; a polygon, x y pairs
-block = 1500 700 90 40                    ; an ellipse feet can't enter: the fountain
-exit west = gate-plaza east               ; room and spawn it arrives at
-exit east = sunspire-steps west
-door 640 = chandlery entrance · shop · "The Chandlery"
-door 1180 = proving-hall entrance · trainer · "The Proving Hall"
-door 2210 = gilded-flagon entrance · inn · "The Gilded Flagon"
-door 2790 = apothecary entrance · bottle · "The Apothecary"
-spawn west = 90 740
-spawn east = 3110 740
-spawn fountain = 1500 760
-spawn stall-row = 900 650
-npc fennick = 2830 680 facing left
-npc netty = 420 760 facing right
-sign 300 640 = "Mind the gulls. They'll have your bread."
-trigger a1-c1-02 = 1200 600 1800 860      ; x0 y0 x1 y1
-fight = 600 2600                          ; where fights in this room may stand (default: the middle 1600)
-when crowd-protectorate = act3            ; a room state, as map objects' when= did
+dark = yes                           ; optional; a dark room has ambient = 0..1
+tint = 214 186 164                   ; optional
+floor = 0 600, 3200 600, 3200 860, 0 860   ; a simple polygon, closed implicitly
+block = 1500 700 90 40               ; an ellipse feet can't enter: centre, radii
+fight = 400 2200                     ; optional: where fights stand (default the middle 1600)
+legacy = 18 0 44 36                  ; the old map's tiles it came from, x0 y0 x1 y1 exclusive (saves migrate by these; they don't overlap)
+tiles = questeria                    ; the tile strip: its tileset,
+tiletop = 576                        ;   its top (an interior's is 0, with the back wall),
+legend = + planks                    ;   a character per tile name,
+row = ++++++++...                    ;   ceil((900 - tiletop) / 64) rows of width/64,
+detail = ....f....                   ;   and optional detail rows ('.' is empty)
+when protectorate = act3             ; a room state (reserved)
+scenery mid rusty-anvil-plum 300     ; far|mid|fore, a prop, x: the painter's input
+life gulls = 0 40 3200 260           ; gulls clouds smoke flag shimmer leaves motes ash candle
+exit west = pier pier-east · id harbourside-west
+exit east = locked · id blocked · why "No way through to the east." · unless a1-c1-02
+exit up 1000 = sunspire-steps sunspire-steps-down · id festival-square-up · label "The Sunspire Steps"
+door 441 = rusty-anvil start · inn · "The Rusty Anvil" · id anvil · when a1-c4-03
+door 441 = locked · inn · "The Rusty Anvil" · id anvil-shut · why "Barred from the inside." · unless a1-c4-03
+spawn start = 560 780 · facing right
+npc gull-1 = 1137 762 · cast red-gull · facing right · unless red-gulls-beaten
+npc dock-hand = 2864 706 · sheet farmhand · name "A Dock Hand" · wander 192 · say "a|b"
+npc trader = 1445 663 · sheet trader · name "The Trader" · badge shop     ; or look <seed>, creature, patrol l r, aboard <prop>, talk
+prop ship = 1246 600                 ; a prop on the floor (or hung on the back wall), with optional id, when, unless
+chest glade = 760 660 · gold 15 · items healing-potion                   ; sign (text), lever (flag), waypoint; look and name
+trigger red-gulls = 773 600 1718 860 · talk a1-c1-01 · mark · when arrived ; say, set, bark, once no
+scene a1-c4-03 = talk a1-c4-03 · when a1-c4-02 · unless a1-c4-03
+camp seat-1 = 870 750 · facing right
+light corner-candle = 1378 700 160 0.8   ; x y reach [strength]; the id is optional
 ```
 
-- Every `door` line is `door <x> = <room> <spawn> · <badge> · "<name>"`. Its y is the back of the floor band at that x; its size comes from the badge kind (a shop door is 120×200, a gate 300×300) unless `size` is given.
-- Spawn names are unique within a zone. Every `place x at <spawn>` in the scripts names one of them; `check_spawns.py` (build plan §8) checks it against the room the script plays in.
-- `trigger` boxes replace trigger tiles. `when` and `unless` work on every line, as they did on map objects.
-- Interiors are rooms with `kind = interior` (no sky, no parallax).
+- **Ways out.** An exit or a door goes to `<room> <spawn>` in the zone, `<zone> <spawn>` for another (a room's looked for first), `back`, or `locked` with a `why`. Locked twins replace the old `*-shut` triggers: the same exit or door twice, one `when` a flag and the other `unless` it. West and east exits go off in the 48 px at that end; up and down stand at an x; `label` changes what an exit's label says and `travel` makes it open the world map.
+- **Doors** stand on the floor's back edge at x. The badge is one of shop, anvil, bottle, inn, trainer, scroll, shield, sun, crown, door, gate, stair-up and stair-down, and sizes the box (120×200; gate and crown 300×300; stairs 160×120) unless `size w h` says.
+- **Ids.** Spawn names are unique in a zone, and so are the ids of everything else, which keep the old maps' ids, so saves' zone/id keys still mean what they did. Every room has a spawn and every zone has `start`. An exit's id defaults to `<room>-<side>` and a door's to where it goes, but the converter always writes them.
+- **People** are one of `cast`, `sheet` (with `name`), `look` (a seed, with `name`) or `creature`, facing left or right (toward the room's middle if it isn't set). Every `place x at <spawn>` in the scripts names a spawn; `tools/check_spawns.py` (build plan §8) checks it against the room the script plays in.
+- `tools/rooms/check_rooms.py` checks everything `ZoneCatalog` does, and walks every room to be sure each trigger, door, exit, person and thing in it can be reached.
 
 ## 5. Fights in rooms
 
@@ -271,4 +286,4 @@ Each map from `03b-world-art.md` §1 and §3b becomes a zone of these rooms, lef
 | `ZoneMapScreen` | The M map: room thumbnails, badges, jump to a visited room |
 | `ExploreScreen` | Keeps its partials (conversations, banter, markers, camp, items, proof), with the tile-specific parts swapped for `RoomScene` and `RoomWalker` |
 
-`MapCatalog`, the tile maps and the tilesets stay in the repo while zones are converted (the built ones in M3, the rest as their acts are built in M6 to M8), then go.
+The tile maps' code went at the end of M3. Their `.map` files stay in `tools/rooms/legacy/` as the converter's input, and the tilesets stay, since the rooms' tile strips are drawn from them. Zones the later acts add are written as zones from the start.

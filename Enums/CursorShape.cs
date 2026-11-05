@@ -20,4 +20,7 @@ public enum CursorShape
 
     /// <summary>A crossed-out circle: there's no way there.</summary>
     Invalid,
+
+    /// <summary>A door: go through it, or up or down the stair.</summary>
+    Door,
 }

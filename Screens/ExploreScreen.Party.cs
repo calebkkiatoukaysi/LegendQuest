@@ -11,15 +11,16 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The map screen's party: who you're controlling, everyone else following along behind, switching
-/// between them, and where they all stand when you arrive.
+/// The zone screen's party: who you're controlling, everyone else following along behind, switching
+/// between them, and where they all stand when you arrive in a room.
 /// </summary>
 /// <remarks>
 /// The followers walk your trail: wherever your feet have been, a point every few pixels, and each
-/// of them aims for the spot their own distance back along it. That keeps them in single file
-/// through doors and round corners without any of them having to think. If one falls too far behind
-/// or gets stuck on something, they find a path to their spot with the same A* the mouse uses, then
-/// go back to the trail. None of them ever stands in your feet. Not from a tutorial.
+/// of them aims for the spot their own distance back along it. That keeps them in single file along
+/// the floor and round anything in the way without any of them having to think. If one falls too far
+/// behind or gets stuck on something, they find a path to their spot with the same A* the mouse uses,
+/// then go back to the trail. None of them ever stands in your feet. When you go into another room of
+/// the zone they come with you, and fall in behind you there. Not from a tutorial.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -53,11 +54,8 @@ public partial class ExploreScreen
     /// <summary>How much room followers leave round your feet, in art pixels.</summary>
     private const float LeaderRoom = 3f;
 
-    /// <summary>How far from you a follower can be when a map loads and still keep where they were standing.</summary>
+    /// <summary>How far from you a follower can be when a zone loads and still keep where they were standing.</summary>
     private const float GatherDistance = 96f;
-
-    /// <summary>How many tiles round you to look for somewhere to put the followers when you arrive.</summary>
-    private const int GatherSearch = 40;
 
     private readonly InputAction _nextLeader = new(new[] { Buttons.RightShoulder }, new[] { Keys.Tab }, true);
     private readonly InputAction[] _pickLeader =
@@ -86,21 +84,18 @@ public partial class ExploreScreen
     /// <summary>Whoever you're controlling.</summary>
     private WalkerSprite Leader => _walkers[_game.Leader];
 
-    /// <summary>Puts you where the save says (or on the map's start, if that's no good), the rest of the party round you, and notes any exit or trigger you're already standing in.</summary>
+    /// <summary>Puts you where the save says (or as near it on the floor as there's room, or on the room's first spawn), the rest of the party behind you, and notes any way out or trigger you're already standing in.</summary>
     /// <remarks>
-    /// An old save, or one I've edited by hand, can say somewhere off the map or inside a wall. That
-    /// isn't worth an error, so you start on the start instead. A follower keeps their own spot if
-    /// it's free and near you, which is what loading a save wants; after an exit they're all on your
-    /// spot, so they get put round you. Arriving in a trigger doesn't set it off; you have to walk
-    /// out and back in.
+    /// A save edited by hand can say somewhere off the floor or inside a prop. That isn't worth an
+    /// error, so you start somewhere you fit instead. A follower keeps their own spot if it's free and
+    /// near you, which is what loading a save wants; after a way out they're all on your spot, so they
+    /// get put behind you. Arriving in a trigger doesn't set it off; you have to walk out and back in.
     /// </remarks>
     private void Arrive()
     {
         PartyMember you = _game.LeaderMember;
-        MapSpawn start = _map.Spawns[MapLoader.StartSpawn];
-        bool fits = Fits(you.Feet);
-        Leader.Position = fits ? you.Feet : start.Feet;
-        Leader.Facing = fits ? you.Facing : start.Facing;
+        Leader.Position = Landing(you.Feet);
+        Leader.Facing = you.Facing;
 
         var homeless = new List<WalkerSprite>();
         BoundingRectangle room = RoomAroundLeader();
@@ -119,72 +114,34 @@ public partial class ExploreScreen
         }
         GatherBehind(homeless);
         SeedTrail();
-
-        BoundingRectangle feet = FeetAt(Leader.Position);
-        foreach (MapExit exit in _map.Exits)
-            if (feet.CollidesWith(exit.Area)) _inside.Add(exit.Id);
-        foreach (MapTrigger trigger in _map.Triggers)
-            if (feet.CollidesWith(trigger.Area)) _inside.Add(trigger.Id);
+        NoteWhereYouStand();
     }
 
-    /// <summary>Whether feet could stand at a point: on the map and not inside anything solid.</summary>
-    private bool Fits(Vector2 feet) => _tilemap.Bounds.Contains(feet) && !Blocked(FeetAt(feet));
+    /// <summary>Where you land for feet a save asked for: there if you fit, else the nearest point of the floor if you fit there, else the room's first spawn.</summary>
+    private Vector2 Landing(Vector2 wanted)
+    {
+        if (Fits(wanted)) return wanted;
 
-    /// <summary>Puts followers on free tiles round you, behind you if there's room, so they don't arrive in front of you.</summary>
+        Vector2 onFloor = _walk.NearestOnFloor(wanted);
+        if (Fits(onFloor)) return onFloor;
+        foreach (MapSpawn spawn in _room.Spawns.Values) return spawn.Feet;
+        return onFloor;
+    }
+
+    /// <summary>Whether feet could stand at a point: on the floor and not inside anything standing.</summary>
+    private bool Fits(Vector2 feet) => _walk.Fits(feet);
+
+    /// <summary>Puts followers on free spots round you, a party's spacing apart, behind you if there's room, so they don't arrive in front of you.</summary>
     /// <param name="followers">Who needs putting somewhere.</param>
     private void GatherBehind(List<WalkerSprite> followers)
     {
         if (followers.Count == 0) return;
 
-        Point home = Tilemap.CellOf(Leader.Position);
-        Vector2 ahead = Ahead(Leader.Facing);
-
-        // The walkable tiles nearest you, out to GatherSearch of them, by how far they'd be to walk to.
-        var found = new List<Point>();
-        var seen = new HashSet<Point> { home };
-        var queue = new Queue<Point>();
-        queue.Enqueue(home);
-        while (queue.Count > 0 && found.Count < GatherSearch)
+        List<Vector2> spots = _walk.SpotsNear(Leader.Position, Spacing, followers.Count, Leader.Facing);
+        for (int i = 0; i < followers.Count; i++)
         {
-            Point cell = queue.Dequeue();
-            if (cell != home) found.Add(cell);
-
-            for (int dy = -1; dy <= 1; dy++)
-            {
-                for (int dx = -1; dx <= 1; dx++)
-                {
-                    var next = new Point(cell.X + dx, cell.Y + dy);
-                    if (seen.Add(next) && _nav.IsWalkable(next)) queue.Enqueue(next);
-                }
-            }
-        }
-
-        // Nearest first, and a tile in front of you counts as further than it is.
-        found.Sort((a, b) => Nearness(a).CompareTo(Nearness(b)));
-        float Nearness(Point cell)
-        {
-            Vector2 to = NavGrid.Middle(cell) - Leader.Position;
-            return to.Length() + (Vector2.Dot(to, ahead) > 0f ? Tilemap.TileSize : 0f);
-        }
-
-        // Then a party's spacing apart, from you and from each other, or they arrive in a heap.
-        var taken = new List<Vector2> { Leader.Position };
-        foreach (WalkerSprite follower in followers)
-        {
-            Vector2 spot = Leader.Position;
-            foreach (Point cell in found)
-            {
-                Vector2 middle = NavGrid.Middle(cell);
-                if (taken.TrueForAll(other => Vector2.Distance(other, middle) >= Spacing))
-                {
-                    spot = middle;
-                    break;
-                }
-            }
-
-            taken.Add(spot);
-            follower.Position = spot;
-            follower.IsWalking = false;
+            followers[i].Position = spots[i];
+            followers[i].IsWalking = false;
         }
     }
 
@@ -265,7 +222,7 @@ public partial class ExploreScreen
     private void CatchUp(WalkerSprite walker, Vector2 spot)
     {
         _stuck[walker] = 0f;
-        List<Vector2> path = Pathfinder.Find(_nav, walker.Position, spot, Spacing / 2f);
+        List<Vector2> path = _walk.FindPath(walker.Position, spot, Spacing / 2f);
         if (path is null) GatherBehind(new List<WalkerSprite> { walker });
         else _catchingUp[walker] = (path, 0);
     }
@@ -400,14 +357,8 @@ public partial class ExploreScreen
     private static BoundingRectangle Grown(BoundingRectangle box, float by) =>
         new(box.X - by, box.Y - by, box.Width + by * 2f, box.Height + by * 2f);
 
-    /// <summary>Which way is in front, for a facing.</summary>
-    private static Vector2 Ahead(Direction facing) => facing switch
-    {
-        Direction.Up => -Vector2.UnitY,
-        Direction.Left => -Vector2.UnitX,
-        Direction.Right => Vector2.UnitX,
-        _ => Vector2.UnitY,
-    };
+    /// <summary>Which way is in front, for a facing: along the room, since everyone faces left or right.</summary>
+    private static Vector2 Ahead(Direction facing) => facing == Direction.Left ? -Vector2.UnitX : Vector2.UnitX;
 
     /// <summary>Everyone's sheet, in party order, for the strip's faces.</summary>
     private List<Texture2D> PartySheets()

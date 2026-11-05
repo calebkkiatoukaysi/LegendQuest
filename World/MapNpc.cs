@@ -21,5 +21,8 @@ namespace LegendQuest.World;
 /// <param name="Wander">How far they walk about from where they're put, in world pixels. Zero to stand still.</param>
 /// <param name="Presence">When they're there.</param>
 /// <param name="Aboard">The prop they're standing on, by its id, if they ride on one that moves (the crew on the ship coming into the harbour), or null if they're on the ground.</param>
+/// <param name="Patrol">The stretch of a room's floor they walk from end to end and back, resting at each, in world pixels along it, or null if they don't. A zone's npcs only: a map's never patrol.</param>
+/// <param name="Badge">The badge beside their name (a shop's purse, the smith's anvil) for anyone you can buy from or train with, or null.</param>
 public sealed record MapNpc(string Id, string Name, Vector2 Feet, Direction Facing, string Sheet, string Cast, CharacterLook Look,
-    string Creature, IReadOnlyList<string> Say, string Talk, float Wander, MapPresence Presence, string Aboard = null);
+    string Creature, IReadOnlyList<string> Say, string Talk, float Wander, MapPresence Presence, string Aboard = null,
+    (float Left, float Right)? Patrol = null, BadgeKind? Badge = null);

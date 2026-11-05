@@ -40,7 +40,7 @@ public sealed class Combatant
         Enemy = setup.Enemy;
         Guest = setup.Guest;
         Cell = cell;
-        Facing = setup.Facing;
+        Facing = setup.Facing is Direction.Left or Direction.Right ? setup.Facing : Side == Side.Foes ? Direction.Left : Direction.Right;
         Joined = joined;
 
         if (Member is not null)
@@ -104,7 +104,7 @@ public sealed class Combatant
     /// <summary>The tile they're on.</summary>
     public Point Cell { get; set; }
 
-    /// <summary>Which way they're facing.</summary>
+    /// <summary>Which way they're facing: left or right, never up or down. Set up facing either of those, they start facing their side's way, the party right and the foes left.</summary>
     public Direction Facing { get; set; }
 
     /// <summary>The hit points they have now.</summary>

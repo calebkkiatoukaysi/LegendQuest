@@ -83,9 +83,9 @@ public static class TilesetCatalog
             new() { Name = "floor-wood", Variants = 3 },
             new() { Name = "floor-stone", Variants = 2 },
             new() { Name = "rug", Edged = true },
-            new() { Name = "wall-top", Solid = true, Opaque = true },
-            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
-            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
+            new() { Name = "wall-top", Solid = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true },
         },
     };
 
@@ -110,11 +110,11 @@ public static class TilesetCatalog
 
             // Walls: the top of one seen from above, then the two rows of its face. The niche and
             // the carving go in the upper row.
-            new() { Name = "wall-top", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
-            new() { Name = "wall-niche", Solid = true, Opaque = true },
-            new() { Name = "wall-carving", Solid = true, Opaque = true },
-            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
+            new() { Name = "wall-top", Variants = 2, Solid = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true },
+            new() { Name = "wall-niche", Solid = true },
+            new() { Name = "wall-carving", Solid = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true },
 
             // Detail, drawn over the floor. The cobwebs go in a room's top left and top right corners.
             new() { Name = "rubble", Solid = true },
@@ -182,7 +182,7 @@ public static class TilesetCatalog
             new() { Name = "stream", Variants = 3, Frames = 4, FrameSeconds = WaterFrameSeconds, Edged = true, Solid = true },
             new() { Name = "ford", Variants = 2, Frames = 4, FrameSeconds = WaterFrameSeconds, Edged = true, Surface = Surface.Grass },
             new() { Name = "hedge", Variants = 2, Edged = true, Solid = true },
-            new() { Name = "wall", Variants = 2, Edged = true, Solid = true, Opaque = true },
+            new() { Name = "wall", Variants = 2, Edged = true, Solid = true },
 
             // Detail, drawn over the ground. All of it stays off the edges of its tile, so a patch of
             // it has a ragged edge, apart from the ruts and the crops, which run on along the road and
@@ -233,9 +233,9 @@ public static class TilesetCatalog
             new() { Name = "undergrowth-rot", Variants = 2, Edged = true, Solid = true },
 
             // The rock: its top seen from above, then the two rows of its cut face.
-            new() { Name = "cliff-top", Variants = 2, Edged = true, Solid = true, Opaque = true },
-            new() { Name = "cliff-face", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "cliff-base", Variants = 2, Solid = true, Opaque = true },
+            new() { Name = "cliff-top", Variants = 2, Edged = true, Solid = true },
+            new() { Name = "cliff-face", Variants = 2, Solid = true },
+            new() { Name = "cliff-base", Variants = 2, Solid = true },
 
             // Detail, drawn over the ground and kept off the edges of its tile. The brambles go over
             // the undergrowth, and the tar lying thick on the stream moves with it.
@@ -278,11 +278,11 @@ public static class TilesetCatalog
             new() { Name = "ramp", Surface = Surface.Grass },
 
             // Walls: the top of one seen from above, then the two rows of its face.
-            new() { Name = "wall-top", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
-            new() { Name = "wall-roots", Solid = true, Opaque = true },
-            new() { Name = "wall-crystal", Solid = true, Opaque = true },
-            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
+            new() { Name = "wall-top", Variants = 2, Solid = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true },
+            new() { Name = "wall-roots", Solid = true },
+            new() { Name = "wall-crystal", Solid = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true },
 
             // Detail, drawn over the floor.
             new() { Name = "rubble", Solid = true },
@@ -317,12 +317,12 @@ public static class TilesetCatalog
             new() { Name = "steps" },
 
             // Walls: the top of one seen from above, then the three rows of its face, and the window.
-            new() { Name = "wall-top", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "wall-high", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
-            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "window-high", Solid = true, Opaque = true },
-            new() { Name = "window", Solid = true, Opaque = true },
+            new() { Name = "wall-top", Variants = 2, Solid = true },
+            new() { Name = "wall-high", Variants = 2, Solid = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true },
+            new() { Name = "window-high", Solid = true },
+            new() { Name = "window", Solid = true },
         },
     };
 
@@ -355,13 +355,13 @@ public static class TilesetCatalog
 
             // Walls: the top of one seen from above, then the two rows of its face, with the crest
             // and the niche in the upper row; and the banks of earth where a tunnel's come down.
-            new() { Name = "wall-top", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "wall-face", Variants = 3, Solid = true, Opaque = true },
-            new() { Name = "wall-crest", Solid = true, Opaque = true },
-            new() { Name = "wall-niche", Solid = true, Opaque = true },
-            new() { Name = "wall-base", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "earth-top", Variants = 2, Solid = true, Opaque = true },
-            new() { Name = "earth-face", Variants = 2, Solid = true, Opaque = true },
+            new() { Name = "wall-top", Variants = 2, Solid = true },
+            new() { Name = "wall-face", Variants = 3, Solid = true },
+            new() { Name = "wall-crest", Solid = true },
+            new() { Name = "wall-niche", Solid = true },
+            new() { Name = "wall-base", Variants = 2, Solid = true },
+            new() { Name = "earth-top", Variants = 2, Solid = true },
+            new() { Name = "earth-face", Variants = 2, Solid = true },
 
             // Detail, drawn over the floor. The cobwebs go in a room's top left and top right corners.
             new() { Name = "coins", Variants = 3 },

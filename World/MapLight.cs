@@ -9,4 +9,5 @@ namespace LegendQuest.World;
 /// <param name="Pool">The middle of the pool, in world pixels.</param>
 /// <param name="Reach">How far it gets before it's mostly gone, in world pixels.</param>
 /// <param name="Strength">How bright it is in the middle, 0 to 1.</param>
-public sealed record MapLight(Vector2 Pool, float Reach, float Strength);
+/// <param name="Id">What the zone file calls it, or null. A map's lights had ids only for its own checks.</param>
+public sealed record MapLight(Vector2 Pool, float Reach, float Strength, string Id = null);

@@ -26,12 +26,13 @@ says what's in, and [COMPANIONS.md](COMPANIONS.md) is the companions' bible.
 
 The project's requirements, and where each one is met:
 
-- **A tilemap rendered for some elements of the game.** Every map is a tilemap: a text file in
-  `Content/Maps/` laying out its ground, detail and overhead layers as characters, each one a tile in
-  its tileset (`World/TilesetCatalog.cs`, one sheet of 16x16 tiles a set in `Content/Tiles/`).
-  `World/MapLoader.cs` reads it, and `World/Tilemap.cs` draws it, a layer at a time, with the edges
-  where one kind of ground meets another, animated water, and walls built from the solid tiles for
-  collision and sight. Nineteen of them are in the game; [Maps](#maps) has the file format.
+- **A tilemap rendered for some elements of the game.** Every room's floor is a tilemap. The room
+  file in `Content/Zones/` lays out the rows of ground under the floor band (and an interior's back
+  wall) as characters, each a 16x16 tile in the zone's tileset (`World/TilesetCatalog.cs`, one sheet a
+  set in `Content/Tiles/`). `World/Zones/ZoneLoader.cs` reads them, and `World/Tilemap.cs` draws them
+  at 4x under everyone: a variant picked per cell, edges where one kind of ground meets another, and
+  animated water. The footsteps read the tile under your feet. All 19 zones, 37 rooms, have one;
+  [Rooms](#rooms) has the format and the layers.
 - **Serialization of game state to create and load a save file.** `Save/SaveSystem.cs` writes the
   whole game, `Save/SaveData.cs`, to a JSON file with `System.Text.Json`, and reads it back: the map
   and where everyone's standing, the party and what they're wearing, the bag, gold, the story's flags
@@ -47,9 +48,9 @@ window, keeping its shape. The window opens as big as fits on the screen it's on
 any size, and **F11** (or DISPLAY on the options) makes it full screen. A whole number of times
 bigger is point sampled; in between, it's blown up to the next whole number and shrunk the rest of
 the way smoothly, so the pixels stay even. On the canvas the art is drawn small and blown up by a
-whole number so the pixels stay square: 3x for the buttons, the panels and the world, 4x for the
-picture behind the title, which is 416x277 art pixels, a little bigger than the canvas so its
-layers can sway. The mouse wheel zooms the world between 2x, 3x and 4x, never anything in between.
+whole number so the pixels stay square: 3x for the buttons and the panels, 4x for the picture
+behind the title, which is 416x277 art pixels, a little bigger than the canvas so its layers can
+sway, and 4x for a room, which is exactly the canvas's height. The world doesn't zoom.
 
 ```
 dotnet run
@@ -59,9 +60,9 @@ dotnet run
 the Soul-Bound, your oldest friend, then you sail for Questeria (see [The story](#the-story)).
 **LOAD** opens them to carry a game on, **CONTINUE** carries on whichever slot was saved last (it's
 dead when there isn't one), **OPTIONS** has the volumes and the text speed, and **EXIT** and **Esc**
-close the game. On a map, clicking the ground walks you there, clicking someone or something walks you up to
-them, E uses whatever you're standing next to, Tab changes who you're controlling, M is the map, and
-Esc is the pause menu.
+close the game. In a room, clicking the floor walks you there, clicking someone, something or a door
+walks you up to it, E uses whatever you're standing next to (a door too), holding Alt shows everything
+at once, Tab changes who you're controlling, M is the zone map, and Esc is the pause menu.
 
 One switch exists for working on the game, and it isn't the game:
 
@@ -85,45 +86,55 @@ It's the same harness as The Black Box's. It goes through the title, the options
 for loading (and erases a broken slot the way a player would, ERASE then SURE?), the save slots for
 a new game, then the Prologue: its card, the creation screen (you as you start, then named, and
 each of its tabs), the question that picks your voice, the Soul-Bound as they start and then named,
-and the two paintings, the pier and the red moon. On the deck of the Gull's Wager it walks up to
-the red "!" at the bow, and the voyage gets read through, answering its questions, past the
-sea-wraiths' card to Questeria at dawn. On the harbour the arrival plays itself: the ship sailing in,
-the sail coming in, tied up, the plank sliding out, the walk ashore up the jetty, and Act 1's card.
-Then the red "!" over the Red Gulls, and a walk up to them: it tries talking first, the Persuade
-check comes up on the dice, it calls the Soul-Bound off Grell, and Captain Hale arrives. Then up the street into Questeria: the Soul-Bound talking as you come in,
-the plaza and the same view a few seconds on with the townsfolk moved, round behind a house, both
-zooms, the mouse over the far side of a statue (the path goes round it) and a click to walk it, the
-mouse on the elder and a click to walk up and talk to them, the mouse on the canal where there's no
-way, Tab, a click on a card, Fennick and the quest board, you sent off on your own while the
-Soul-Bound finds their way after you, the waypoint crystal, the map, and in through the Gilded
+and the two paintings, the pier and the red moon. On the deck of the Gull's Wager it walks along to
+the red "!" at the bow, and the voyage gets read through, answering its questions, past the lookout
+seeing the sea-wraiths and the fight to Questeria at dawn. On the harbourside the arrival plays
+itself, its shots on its own clock: the ship sailing in, the sail coming in, tied up, the plank
+sliding out, the walk down it and along the quay, and Act 1's card. Then the red "!" over the Red
+Gulls, and a walk east into them: it tries talking first, the Persuade check comes up on the dice,
+it calls the Soul-Bound off Grell, and Captain Hale arrives; then through the fish market and up
+into the city. Questeria goes room by room. In the gate plaza, the Soul-Bound talking as you come
+in, and the label at the plaza's east end. In the festival square, the square and the same view a
+few seconds on with the townsfolk moved, the mouse over the far side of the fountain (the path goes
+round its ellipse) and a click to walk it, the mouse on the elder and a click to walk up and talk to
+them, the mouse up over the painting where there's no way, Tab, a click on a card, the mouse on the
+city gate (its outline, its plaque and the door cursor), Alt held, the stair's chevrons under the
+mouse and a click that walks up them and back down, and the waypoint crystal and the zone map's
+world. In the Lantern Market, the camera along it, Fennick and the quest board, you sent off on your
+own while the Soul-Bound finds their way after you, the Gilded Flagon's tankard with the
+innkeeper's "!" over it, the zone map and a jump from it back to the square, and in through the
 Flagon's door. Inside it takes the innkeeper's work and goes back out the door, which leaves you on
-the street outside it, then out through the city gate. On the old road it walks into the trigger before the camp, opens the chest,
-reads the sign, finds the second waypoint and fast travels back to Questeria, then straight back to
-the road by it and east into the Mirewood. From there it plays Act 1's chapters 2 to 4 through: the
-gloomfangs and Sera, the quarry's roots, the courier's letter, the Thornmother and the crystal, the
-night camp and a word with Sera, Fennick paying out, Thornbridge's gate (talked open on the dice),
-Mira and her errands, the Hollowed raid, the royal messenger, the hooded woman in the Flagon, the
-Old Crown Vault's traps and Kael, the audience with the King and Crane in the great hall, Brannock in
-the Rusty Anvil, and Kael and Brannock waiting at the Flagon, with Kael swapped in for Sera. Those
-visits are queues of beats (walk into this, talk to them, read it through) rather than frames,
-since a conversation's length depends on its answers (`ExploreScreen.ProofBeats.cs` and
-`ExploreScreen.ProofChapters.cs`). Every fight on the way is fought, from the sea-wraiths to the
-sappers: whenever one's on, it has the run to itself (`ExploreScreen.ProofFights.cs`), EnemyMind
-plays the party's turns as well as the foes' at three times the speed, and there's a shot of each
-fight's opening and its end. The tutorial's first turn is played by hand, for the movement preview
-past the budget, the target's tooltip, the attack and the log. The map's dice are seeded under the
-run, so it fights the same way each time, and a part's clock stops while a fight's on. A fight the
-party loses goes to game over like anyone's, and the run loads the save from just before it and
-fights it again on the next seed, five times at most before it says one's too hard. In the Flagon it
-opens the bag, the character sheet, the forge's shop, the help's first page and its page on fights,
-and a tip. Then back to the road and up the path into the barrow. In the
-barrow it tries the locked door and the stone door, pulls the lever that opens the stone door, goes
-through it to the chest, opens the map, stands under a torch, pauses, and goes out through QUIT TO
-TITLE, where the slots show the autosave it made on the way. Moving and using things go in through
-the same code the keyboard does, and the mouse is a pretend one inside `InputState` that the screen
-reads the same as the real one; it only jumps about between scenes. It uses a scratch save folder
-inside `shots/` that it fills with one of every kind of slot, so it never touches a real one, and
-it ignores the real mouse and keyboard so nothing I do while it runs changes the pictures. It's
+the street outside it, then out through the city gate. On the old road it walks in, walks into the
+trigger in the farmland, then at the fork opens the chest, reads the sign, looks at the zone map,
+finds the second waypoint and fast travels back to Questeria, then straight back to the road by it
+and east into the Mirewood. From there it plays Act 1's chapters 2 to 4 through: the gloomfangs and
+Sera, the quarry's roots, the courier's letter, the Thornmother and the crystal, the night camp and
+a word with Sera, Fennick paying out, Thornbridge's gate (talked open on the dice), Mira and her
+errands, the Hollowed raid at the river, the royal messenger, the hooded woman in the Flagon, the
+Old Crown Vault's plates and Kael, the audience with the King and Crane in the great hall, Brannock
+in the Rusty Anvil, and Kael and Brannock waiting at the Flagon, with Kael swapped in for Sera. Every
+visit to a zone is a queue of beats (walk into this, talk to them, read it through, go out that way)
+rather than frames, since a conversation's length depends on its answers and a room change on its
+fade (`ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs`).
+The beats find people, triggers, doors, ways out, things and spawns by their ids in the zone file,
+and change room first, through the same fade a player gets, when one's in another room of the zone.
+Every fight on the way is fought, from the sea-wraiths to the sappers: whenever one's on, it has the
+run to itself (`ExploreScreen.ProofFights.cs`), EnemyMind plays the party's turns as well as the
+foes' at three times the speed, and there's a shot of each fight's opening and its end. The
+tutorial's first turn is played by hand, for the movement preview past the budget, the target's
+tooltip, the attack and the log. The zones' dice are seeded under the run, so it fights the same way
+each time, and a part's clock stops while a fight's on. A fight the party loses goes to game over
+like anyone's, and the run loads the save from just before it and fights it again on the next seed,
+five times at most before it says one's too hard. In the Flagon it opens the bag, the character
+sheet, the forge's shop, the help's first page and its page on fights, and a tip. Then back to the
+road and in at the barrow's gate. In the barrow it walks into the dark and the cold, tries the
+locked tomb door and the stone door, pulls the lever that opens the stone door, goes through it to
+the side room's chest, opens the zone map, stands under a torch, pauses, and goes out through QUIT
+TO TITLE, where the slots show the autosave it made on the way. Moving and using things go in
+through the same code the keyboard does, and the mouse is a pretend one inside `InputState` that the
+screen reads the same as the real one; it only jumps about between scenes. It uses a scratch save
+folder inside `shots/` that it fills with one of every kind of slot, so it never touches a real one,
+and it ignores the real mouse and keyboard so nothing I do while it runs changes the pictures. It's
 silent: every sound it would have played goes in `shots/audio.log` with the frame it was asked for
 on, which is how I check the footsteps change from grass to stone and the door grinds when the
 lever's pulled. A second switch, `--simulate`, fights an encounter headless (see [Combat](#combat)).
@@ -135,8 +146,8 @@ lever's pulled. A second switch, `--simulate`, fights an encounter headless (see
 | Menus and forms | **Arrows** or **WASD** to move, **Enter** or **Space** to pick, **Esc** to go back. The mouse works too |
 | Options | **Left** and **right** change the selected row |
 | Save slots | **Left** and **right** move between a slot and its ERASE |
-| On a map | **WASD** or the **arrows** to walk, **E**, **Space** or **Enter** to use or talk to what you're next to, **M** for the map, the **mouse wheel** to zoom, **Esc** to pause |
-| On a map, the mouse | **Left click** the ground to walk there (the path shows while you point), or someone or something to walk up to them and talk or use it. Pointing at anything says what it is |
+| Walking a room | **A** and **D** or **left** and **right** to walk along it, **W** and **S** or **up** and **down** to walk deeper or nearer on the floor, **E**, **Space** or **Enter** to use or talk to what you're next to or go through the door you're at, **M** for the zone map, **Esc** to pause. Walk off either end, or into a stair, to go on. Everyone faces left or right |
+| Walking a room, the mouse | **Left click** the floor to walk there (the path shows while you point), someone, something or a door to walk up to it and talk, use it or go through, or a way out's chevrons to walk into it. Above the floor there's only the painting. Pointing at anything says what it is |
 | The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
 | Talking to the party | **E** (with nobody and nothing else in reach) or a **click** on one of them talks to them, when they've something to say: the cursor's a speech bubble, the tooltip ends TALK, and a gold "!" floats over anyone with something new |
 | Making a character | **Up** and **down** pick a row, **left** and **right** change it, **Q** and **E** change the tab. On NAME, **Enter** and then type |
@@ -144,18 +155,19 @@ lever's pulled. A second switch, `--simulate`, fights an encounter headless (see
 | The dice | **Space**, **Enter** or a click rolls, and the same again goes on |
 | The ship coming in | **Esc** skips it |
 | Anywhere | **F11** switches full screen on and off |
-| The map | **Tab** switches between the map you're on and the world. Opened from a waypoint, the **arrows** (or the mouse) pick where to go and **Enter** (or a click) goes. **M** or **Esc** closes it |
+| In a room | Hold **Alt** to see everything at once: every door's badge (a plain door's only shows under the mouse otherwise), every name, every way out's label and every glint on something still to use. A way out's label also shows once you're near it |
+| The zone map | **M** in a room shows the zone's rooms laid out the way they join, with their badges and "!"s. The **arrows** or the mouse pick a room, and **Enter** or a click jumps to it if you've been there, but not in a fight or a scene. **Tab** switches to the world, which is where it opens from a waypoint, to pick somewhere to travel to. **M** or **Esc** closes it |
 | A tip | **Enter** or a **click** on its card puts it away. It never stops you walking, and goes by itself once there's been time to read it twice |
 | How to play | **Esc**, then HOW TO PLAY. **Left** and **right** (or **Q** and **E**) turn the page, a **click** on a tab jumps to it, and **Esc** goes back |
-| In a fight | **Click** a tile to walk there, a foe to attack it (walking into reach first if it's in range of a walk), or a friend who's down to help them up. **1** to **0**, then **-** and **=**, or a **click** picks a hotbar slot: one used on yourself happens at once, anything else waits for a target. **Tab** goes through the targets and **Enter** uses it on the one picked out. **Right click** or **Esc** puts it back. **WASD** or the **arrows** step a tile, **Space**, **End** or END TURN ends the turn, **L** shows and hides the log (the **wheel** scrolls it with the mouse on it, and zooms otherwise), and **Esc** with nothing picked pauses. Pointing at anything says what it is and what a click would do |
+| In a fight | **Click** a tile to walk there, a foe to attack it (walking into reach first if it's in range of a walk), or a friend who's down to help them up. **1** to **0**, then **-** and **=**, or a **click** picks a hotbar slot: one used on yourself happens at once, anything else waits for a target. **Tab** goes through the targets and **Enter** uses it on the one picked out. **Right click** or **Esc** puts it back. **WASD** or the **arrows** step a tile, **Space**, **End** or END TURN ends the turn, **L** shows and hides the log (the **wheel** scrolls it with the mouse on it), and **Esc** with nothing picked pauses. Pointing at anything says what it is and what a click would do |
 | The end of a fight | **Enter**, **Space** or a **click** on the panel goes on to what happens next |
 | The inventory | **I** for the bag, **C** for the character sheet, or **Esc** and then INVENTORY. **Q** and **E** (or **F1** to **F4**, or a **click** on a face) pick who you're looking at, **Tab** turns between the bag and the sheet, and **I**, **C** or **Esc** closes it. On a pad, the shoulders pick who, Y turns the page, A uses and B closes |
 | In the inventory | The **arrows** move round the slots, the bag and the key items. **Enter** or a **click** puts on what's in the bag (whatever was there goes back in it), drinks a potion, or takes off what's in a slot; on an empty slot it finds something in the bag for it. The **mouse wheel** scrolls the bag. On the sheet, **up** and **down** pick an ability to read |
 | A shop | Talk to the keeper. **Enter** or a **click** buys one or sells one, and with **Shift** held it sells the whole stack. **Tab** crosses the counter, **Q** and **E** pick who the cards measure against, **Esc** leaves |
 
 A gamepad works anywhere the keyboard does: the d-pad or left stick, A to use, B to back out, Y for
-the map, the right shoulder for the next in the party (and both shoulders to switch the map's sides),
-X to put a tip away, and Start.
+the zone map, the right shoulder for the next in the party, the left shoulder held for what Alt
+shows, X to put a tip away, and Start.
 
 ## Screens
 
@@ -172,8 +184,8 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 | `CharacterCreationScreen` | Making you, then the Soul-Bound: rows for a name, a people, a class and every part of a look, on three tabs, with them walking on the spot and turning round beside the rows, and their face blown up over that. RANDOM, BEGIN and BACK. The Prologue's first lines play between the two |
 | `DialogueScreen` | Popup. A conversation a line at a time, over the dimmed map or a painting: the speaker's face and name, the line typing out at the text speed, and a question's options numbered under it, with an icon for a check, a flirt or a locked one. Approval, gold and items come up as toasts |
 | `DiceRollOverlay` | Popup, over a conversation. A check: the d20 with the DC and every modifier, a press to roll, the tumble, then the total and SUCCESS or FAILURE |
-| `ExploreScreen` | A map being walked round: the tiles, the props, the things you can use, the people, the party, and the dark if it's a dark map. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
-| `MapScreen` | Popup. The map you're on, as much as you've seen of it, and the world: every place you've been and the roads between them. Opened from a waypoint, it's where you pick somewhere to travel to |
+| `ExploreScreen` | A zone's room being walked along: its painted layers and tile strip, the props, the things you can use, the people, the party, and the dark if it's a dark room. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
+| `ZoneMapScreen` | Popup, from **M** or a waypoint. The zone you're in as its rooms, laid out as they join, with their badges and markers, and the world: every place you've been and the roads between them. Any room you've walked into can be jumped to outside a fight or a scene; opened from a waypoint, it's where you pick somewhere to travel to |
 | `InventoryScreen` | Popup, from **I**, **C** or the pause menu. The party's faces down the left, whoever's picked turning on the spot in what they're wearing with their nine slots round them, and the bag, the gold and the key items or their character sheet on the right (see [Items and inventory](#items-and-inventory)) |
 | `ShopScreen` | Popup, from a shopkeeper's conversation. Their shelf at their prices on the left and the bag at half on the right; a click buys or sells |
 | `PauseMenuScreen` | RESUME, INVENTORY, OPTIONS, HOW TO PLAY or QUIT TO TITLE. Nothing under it moves while it's up. SAVE and LOAD go on it once there's a game to save. In a fight there's no INVENTORY, and its line says there's no saving mid-fight |
@@ -280,186 +292,144 @@ Watch?! Where's the king's army?!" when Thornbridge's second wave comes out of t
 ends when he gives up, the sappers break in, and the truce goes straight into the fight with them;
 holding the quarry while Sera purifies the crystal is a fight of its own, and she sits it out.
 
-## Maps
+## Walking a room
 
-A map is a text file in `Content/Maps`, copied next to the game by `Content.mgcb` and read with
-`TitleContainer.OpenStream`. It's my tilemap exercise grown up: that one read a tileset name, a
-tile size, a map size and a list of tile ids, and this reads the same things out of sections, with
-the tiles laid out as ASCII the way The Black Box's lobby was, so I can see the map while I edit
-it. `MapCatalog` reads every map when the game starts, so a mistake in one stops the game right
-there with the file and the line, instead of when somebody walks onto it.
+`ExploreScreen` is one visit to a zone: one of its rooms at a time ([Rooms](#rooms) has the zone file
+and the painting). Going into another room of the same zone fades it out over a quarter of a second,
+swaps the room in, fades back in over another, and writes the autosave; there's no loading screen.
+Going to another zone is a new screen through the loading screen, with the autosave written before
+anything fades, as an exit always did. The party comes with you either way.
 
-```
-; A comment. Blank lines don't matter, and every line is trimmed.
-[map]
-id = barrow              ; has to match the file name
-name = The Barrow        ; what the heading and the loading screen say
-world = 860 110          ; where it is on the world map; a map without it isn't on it
-tileset = crypt          ; from TilesetCatalog
-size = 40 30             ; width and height in tiles; every layer has to be exactly this
-dark = yes
-ambient = 0.07           ; how much light gets everywhere (dark maps only)
-tint = 196 188 226       ; optional: the colour of the light, red green blue from 0 to 255 (white if it isn't set)
-music = Underground      ; a Track name
-
-[legend]                 ; one character per tile, by the tile's name in the tileset
-, = floor
-# = wall-top
-
-[ground]                 ; every cell needs a tile
-[detail]                 ; things on the floor; . is an empty cell
-[overhead]               ; roofs and canopies, drawn over everyone; . is an empty cell
-
-[objects]                ; kind id x y, in tiles, then any settings as key=value
-spawn start 19.5 27 facing=up
-exit road 18 29 w=4 to=road at=barrow
-trigger cold 18 19 w=4 say="The air in here is colder."
-prop sconce 8 13
-door tomb 19.5 13.5 locked=yes name="Tomb door"
-door side 4.5 13.5 look=gate flag=side-gate name="Stone door"
-lever side-lever 30 13 flag=side-gate
-chest side-chest 4.5 8 gold=40
-```
-
-Something at x, y stands with its feet on the middle of that tile, and halves are fine. Exits and
-triggers are rectangles instead: x, y is their top left tile and `w` and `h` their size. A value
-with spaces in it goes in double quotes, and it can't have a `;` in it, since that's a comment.
-`fog = no` in `[map]` has the map screen show all of a map from the start, which Questeria does,
-since it's the capital and everyone knows their way round it. A map with no `world` isn't on the
-world map: the inside of a building is part of the place it's in, and the ship's deck is out at sea.
-Anything on a map can have `when=` a flag, to only be there once it's set, or `unless=` a flag, to
-go once it is (lights, spawns and camp places can't). That's how one map shows the story going on:
-the Red Gulls stand on the docks until they're beaten, and the Watch only turns up after.
-
-| Kind | What it is | Settings |
-| --- | --- | --- |
-| `spawn` | Somewhere you can arrive, or a mark a scene's stage cues put people at or walk them to (`bow`, `throne`). Every map needs one called `start` | `facing` (down if it isn't set) |
-| `prop` | Anything out of `PropCatalog`; the id is which one | none |
-| `npc` | Someone standing there (see People, under [The party](#the-party)), or a creature | `cast` (one of the story's people, from `Cast`), `name` with `sheet` (one of `Townsfolk`) or `look` (a number: someone the paperdoll dresses at random from it, for crowds), or `creature` (one of `Creatures`, called what it is unless `name` says otherwise), never two of them; `facing`, `say` (several lines go between `\|`, said in turn), `talk` (the conversation talking to them starts, while it can, instead of looking theirs up by their id), `wander` (how far they stroll, in tiles), and `aboard` (a prop on the map they stand on and move with, so the Gull's Wager's crew come into the harbour on her deck; they're on the prop, so the tiles under them can be water, and they can't wander) |
-| `light` | A pool of light with nothing drawn for it, like daylight down the barrow's steps | `reach` in tiles, `strength` 0 to 1 |
-| `exit` | Walk into it and you go to another map | `to` the map, `at` a spawn there (`start` if it isn't set), `w`, `h`. `to=back` goes back out to wherever you came in from, which is how every building's door works |
-| `entrance` | A building's door: walk into it and you go in. x, y is the middle of the bottom of the door | `to`, `at`, and `name`, what the door says on the map screen |
-| `trigger` | Walk into it and it says something, sets a flag, starts a conversation or plays a banter | `say`, `set`, `talk`, `bark` (a banter from `Banters`, said in bubbles while you walk), `mark` (a red "!" over it while it's waiting), `once` (yes if it isn't set), `w`, `h` |
-| `scene` | A conversation that plays by itself as soon as the map's up and it's there (it needs a `when`, or it'd play on every visit until it's done) | `talk` |
-| `chest` | Opens once, and gives up what's in it: the gold to the party, the items to the bag, and a toast for each | `gold`, `items` (item ids from `ItemCatalog` between commas, like `items=healing-potion,leather-cap`; the same one twice is two of it), and `look` and `name` like all of these |
-| `door` | Opens and stays open, unless it's locked or a flag works it | `locked`, or `flag` (it's open while the flag is set, and won't move by hand) |
-| `lever` | Sets its flag, or clears it if it's set | `flag` |
-| `sign` | Has something written on it | `text` |
-| `waypoint` | A stone you travel between. One a map at most | none |
-| `camp` | A place for someone waiting for a place in the party to stand: whoever's first waiting stands at the first, and so on. The camp's in the Gilded Flagon | `facing` |
-
-The loader keeps the two fixes from the exercise: it trims every line (the exercise left the `\r`
-from Windows line endings on each one), and it checks every row against the map's size (the
-exercise took the id list on trust, and a short one read straight past the end). It also refuses a
-tile that isn't in the legend, a legend tile that isn't in the tileset, a prop that isn't in the
-catalogue, an object off the edge of the map, `ambient` on a map that isn't dark, a `tint` that isn't
-three whole numbers from 0 to 255, a setting a kind doesn't have (so `glod=12` is caught, and so is
-`gold=12` on a door), two objects with the same id, a trigger that does nothing, a conversation that
-doesn't exist, a chest item that doesn't exist, someone off a sheet that doesn't exist or drawn from two things at once, a creature
-that doesn't exist, someone or a camp place standing on a solid tile, a spawn inside an exit, a
-waypoint with no room beside it or on a map that isn't on the world map, and a quote that's never
-closed. Once every map is read, `MapCatalog` checks every exit goes to a map that exists and a spawn
-on it that does too, and that the camp's map has somewhere for whoever's waiting to stand.
-
-- **Tiles.** Ids count from 1 and 0 is empty, the same as the exercise. A tileset lists its tiles
-  in order, and each one says how many variants it has, whether it's solid and whether it sounds
-  like grass or stone. The map picks a variant per cell from where the cell is, so a field of grass
-  doesn't repeat, and it's the same every time. A tile can be a block of several tiles each way,
-  where each cell shows its part of the block and the variant is picked per block. A tile can also
-  be *edged*: Questeria's lawns, water and boardwalk have four more frames for their north, east,
-  south and west sides, and the tilemap draws them wherever one meets ground of another kind, so a
-  lawn gets its kerb and the water its quay wall without a tile for every corner. And a tile can be
-  *animated*: the water and the sea have four frames each, which the tilemap steps through by the
-  clock, every cell starting on a frame of its own so the whole harbour doesn't ripple in step.
-- **Walls.** Collision comes from the tiles: a cell is solid if its ground or detail tile is, and
-  each row's runs of solid cells merge into one `BoundingRectangle` (the collision tutorial's).
-  There's a wall all the way round outside the edge too. Walking moves the feet one axis at a time
-  and pushes them back out of anything they hit, exactly like the lobby, so a wall stops you one way
-  and lets you slide along it the other. The feet box is 10 by 4 art pixels, narrower than a tile,
-  so a one-tile gap can be walked through without lining up perfectly.
-- **Props.** A prop stands on its foot like a person does and blocks the floor under it (its
-  footprint). Floor props sort with the people; wall props, like the torch sconces, go behind
-  everyone. A sconce or a campfire carries a light: where its flame goes and where its pool lands.
-  The things you use are props too, with a picture for each way they can be: shut and open, up
-  and down, asleep and awake. An arch, like Questeria's gate, has a gap down the middle of its
-  footprint to walk through, and a patch of flowers lies flat under everyone and blocks nothing.
-- **The camera** is The Black Box's `Camera2D`, except the world is in art pixels now and the
-  camera does the scaling, so the zoom is just a whole number. It eases after you, stops at the
-  edge of the map (or centres the map if it's smaller than the view), and rounds itself to whole
-  screen pixels. The walker snaps to whole screen pixels too, or it crawls.
-- **Sorting.** One world batch, back to front. The ground and detail tiles are at the back, wall
-  props in front of those, then everyone on the floor sorted by how far down the map their feet
-  are, then the overhead tiles. Questeria's buildings use that: each one's footprint is only its
-  front few tiles, so walking along the back of one, it's drawn in front of you and you go behind
-  the roof.
-- **The dark.** A dark map gets The Black Box's lobby trick: one low resolution texture of darkness
-  with the pools of light cut out of it, built once when the map loads, stretched over the map with
-  smooth sampling and drawn after everything, so you go dark when you walk out of the light. What's
-  new is that light stops at walls. Each texel walks the tiles between itself and the light and
-  looks for one that blocks it: an opaque tile (a wall; rubble, fences and tree trunks are solid
-  but you can see over them), or a door that's shut. A wall's face takes its light from the floor
-  in front of it, two rows down at most, because my first go walked the line from the face itself,
-  every face shut its own torch out of the floor beside it, and the pools came out square. The
-  dark only gets built again when a door opens or shuts. The torches flicker without rebuilding
-  anything: the glow texture goes over each pool additively, with a flicker made of three sine
-  waves at speeds that never line up.
+- **The floor.** Feet are a point with a 10 by 4 box over it, the same feet box the maps had. The
+  point has to stay on the room's floor band, inside its polygon and out of its ellipses (a
+  fountain, a well), and the box out of the footprints of whatever's standing in the room: the props,
+  the things you use, and anyone standing still. `World/Rooms/RoomWalker.cs` does the moving, one
+  axis at a time like The Black Box's lobby: a footprint pushes the feet back out right against its
+  edge, and a step that would leave the floor looks a little either side of itself for floor (up to
+  half as far again as the step), so walking along a sloping back edge or into a fountain slides you
+  along it instead of stopping you dead. Feet a scene left off the floor move freely until they're
+  back on it, so nobody's ever stuck. A/D walk along the room and W/S deeper and nearer; there's no
+  scaling with depth, the band's too shallow to need it.
+- **Facing.** Everyone faces left or right, and only ever left or right: `WalkerSprite.SideOnly` makes
+  setting up or down do nothing and turns someone to a point by which side of them it's on. Walking
+  mostly deeper or nearer keeps the way you face.
+- **Paths.** Clicking the floor walks there by A*, over a grid of 8 by 8 world-pixel cells (32 canvas
+  pixels) laid over the room: a cell's walkable if its middle is on the floor and no footprint, grown
+  by the feet box, covers it, so a path's feet clear everything and a straight stretch only has to be
+  looked along. `NavGrid` and `Pathfinder` take any cell size, corner and rule for what's solid. A click just past the edge of the band goes
+  to the nearest cell a path reaches, then the point itself if feet fit there. Above the floor
+  there's only the painting, so a click there that isn't on a door or a way out's chevrons goes
+  nowhere, and the cursor says so.
+- **People.** The townsfolk who wander stroll along the floor, never further deeper or nearer than
+  15% of how far they wander (`RoomWalker.Stroll` picks somewhere they fit). A patrol walks from one
+  end of its stretch to the other and back, resting at each end, and turns back early if something's
+  in its way. Everyone glances left and right. Someone walking about doesn't block you, the way
+  AQW's townsfolk don't, and stops short of you instead; someone standing does, and the paths go
+  round them. The Gull's Wager's crew stand on her deck, wherever she is, sorted between her and her
+  near rail.
+- **Followers** walk your trail as they always have, find a path if they fall behind or get stuck,
+  and come with you into the next room, where they're put behind you a party's spacing apart, along
+  the room before deeper or nearer (`RoomWalker.SpotsNear`).
+- **Ways out.** An edge exit is the last 12 world pixels (48 canvas pixels) at either end of the
+  floor: walk off the end, or click its chevrons, and you go. A stair is a strip at the back of the
+  floor (up) or the front (down) at its foot. A door is a box in the painting standing on the back of
+  the floor: E uses it when you're under it near the back of the floor, and a click on the doorway
+  or its badge walks you there and goes through. Each goes to another room of the zone, to a spawn in
+  another zone, or back out to wherever you came in. A locked one (the twin of a door or exit that's
+  there once a flag's set) plays the locked door and says why. Going through a door into another
+  zone keeps where you came in, in front of the door, so the building's way out puts you back there.
+- **Triggers** span the whole depth of the floor, so you can't walk round one. They and the ways out
+  go off as your feet walk into them, not while you stand in one, and not if you arrive standing in
+  one. A trigger that goes off once is kept in the save as used.
 - **Using things.** Whatever's nearest your feet and still has something to do (an open chest
-  doesn't) gets its name over it and `E · OPEN` or `PULL` or `READ` or `TRAVEL` under that. Reach
-  is a tile and a half, a bit more for a door, which is two tiles wide, and more for a sign, which
-  you can read from further off. `WorldState` has the rules: it reads and changes the save and hands
-  back what happened, a chest's lid coming up and then the gold, say, and the screen plays a sound
-  and puts up a line for each, the same as The Black Box's `RoundEngine` and `TableCues`. A door
-  doesn't get its sound from the rules: the screen plays it when it sees a door move, since a lever
-  across the room moves one too. Locked doors stay locked for now; keys and forcing them with a
-  roll come with the inventory and the dice.
-- **Triggers and exits** go off as your feet walk into them, not while you stand in one, and not
-  if you arrive standing in one. A trigger that goes off once is kept in the save as used. An exit
-  writes the autosave, then the loading screen takes you to the other map with its name on the
-  black between.
-- **Going inside.** An `entrance` is a shallow strip across the bottom of a building's door, so you
-  go in by walking into the door, not by brushing past it. Going through one keeps where you were in
-  the save, and the building's way out is an exit `to=back`, which puts you back outside that door,
-  a step out from it and facing away. Several doors can share one inside: Questeria's cottages are
-  two insides between five houses.
-- **What's been seen.** Every map keeps one bit per tile for whether it's been in sight: nine tiles
-  round your feet, cut off by walls and shut doors with the same line the light uses. It only looks
-  again when you step into another tile. A map with `fog = no` is seen all over from the start. The
-  map screen draws the tiles and the props at one screen pixel per art pixel, browned like an old
-  map, and lays one texel per tile of dark over what hasn't been seen, smooth sampled like the dark
-  on a dark map, so the edge is soft. Where an exit's been seen, it says where it goes.
-- **The world.** Each map says where it is on the world map, and the roads between them are wherever
-  the exits go, so the two can't disagree. A door into a building isn't a road. A map you've been on is a place with its name; a map
-  one of those leads to, that you haven't been on yet, is a mark with no name. Using a waypoint finds it, then opens the
-  world to travel from it to any other waypoint you've found. Fast travel autosaves the same as an
-  exit, and puts you beside the stone you've travelled to, since in front of it you'd be standing
-  in the way of it.
+  doesn't) gets its name over it and `E · OPEN` or `PULL` or `READ` or `TRAVEL` under that, and a
+  door you're at gets `E · ENTER` (or `E · LOCKED`). `WorldState` has the rules for things: it reads
+  and changes the save and hands back what happened, a chest's lid coming up and then the gold, say,
+  and the screen plays a sound and puts up a line for each, the same as The Black Box's `RoundEngine`
+  and `TableCues`. Using a waypoint finds it, then opens the zone map's world to travel from it to any
+  other waypoint you've found; travel puts you beside the stone, since in front of it you'd be in the
+  way of it.
+- **The camera** is locked to the room at 4x (`Camera2D.LockTo`), exactly the screen's height, so it
+  only slides along the room after you and stops at its ends. The wheel doesn't zoom.
+- **Drawing**, in order: `RoomScene.DrawBack` (the sky, the far layer, the tile strip and the mid
+  layer), one world batch sorted back to front by how far down the floor feet are (`RoomScene.Depth`;
+  a prop by its foot, less its `SortRise`), `RoomScene.DrawFront` (the foreground), `RoomScene.DrawDark`
+  in a dark room, then the light added over it (each torch's flicker, a scene's glows, the pool under
+  whatever the mouse is on), the path you'd walk, `IndicatorLayer` (badges, chevrons and their
+  labels, names over heads, glints; all at once while **Alt** is held), and the screen: the "!"s, the
+  lines over heads, the prompt, the cards and the heading with the zone's and the room's names. The
+  "!"s and the lines go over anyone's name plate, not on it. A marker off the screen gets an arrow at
+  the side it's off.
+- **Tint** is the colour of the light in a room. The room's layers, the props and everyone standing
+  in it, the party too, are multiplied by it, and nothing on the screen over them is: the heading, the
+  prompts, the markers and the cards stay their own colours. The flames aren't tinted either, since
+  they're the light and not what it falls on. It goes on a dark room as well as a lit one: the tint is
+  the colour of the light, and the dark is how much of it there is.
 
-| Map | What it is |
-| --- | --- |
-| `gulls-wager.map` | The deck of the Gull's Wager at night, two days out from Questeria: a ship's deck with its bow, rails and swinging lanterns, the mast with its sails furled, the wheel, the crew, and the sea all round. Where a new game starts. The voyage starts when you go to the rail |
-| `docks.map` | Saltwind Docks: the boardwalk, a jetty out to the pier the ship ties up at, fish stalls, net racks and the harbour bell, the fishmonger's, warehouses, the Rusty Anvil and the chandler's, a crowd, and the street up to the city. Where the ship comes in, and where the Red Gulls are shaking down Old Tomas |
-| `questeria.map` | The capital and the hub, lit, with no fog. The palace on its terrace to the north with the temple and the guildhall either side, and a chapel in its garden past the temple. The plaza in the middle with its fountain and the waypoint crystal. Houses to the west, and a Watch post where the harbour road comes in. The Lantern Market to the east: the Gilded Flagon, Fennick's quest board, two rows of stalls, the bakery, the forge, and gardens and cottages past it. The canal with a footbridge to a washing yard, a row of houses along the south of it, and the avenue to the city gate, with its own Watch post, and the old road. Twenty buildings, a door into most of them, and forty-five people |
-| `gilded-flagon.map` | Inside the Gilded Flagon: the bar, its kegs, tables and stools, the hearth, the innkeeper and the regulars |
-| `cottage-a.map`, `cottage-b.map` | Inside a cottage: a bed, a wardrobe, books, a table, and in the second a hearth |
-| `shop.map` | Inside the chandler's: the counter and the shelves |
-| `warehouse.map` | Inside a warehouse on the docks: crates, barrels and kegs |
-| `bakery.map`, `forge.map`, `chapel.map` | Inside the bakery, the forge and the chapel in Questeria |
-| `road.map` | The old road through Questeria's farmland at noon: hay, a wheat field and a scarecrow, a farmhouse, a windmill, a stream under a stone bridge, a great oak, blossom and wildflowers, and the wood thickening to the east. In from Questeria on the west; a camp off to the south with its fire still going and a chest; a fork where a path goes north to the barrow, with a sign and the second waypoint; and a tree down across the road to the east, which the woodcutters have sawn through once the Rangers' contract is taken, opening the way to the Mirewood |
-| `mirewood.map` | The Mirewood under a grey-violet twilight: green and flowering at its west edge, then black-veined trees, gloom moss, tar pools and a tar-streaked stream further in. The gloomfangs' clearing, the ranger trail with its bridge, Sera's camp with a waypoint, and the quarry's mouth |
-| `mirewood-quarry.map` | The Old Quarry: cut stone, roots and black crystal veins, two walls of roots Sera opens, the courier's body, and the Thornmother's den with the crystal spike |
-| `thornbridge.map` | The meadows outside Questeria's east gate, with the white wall along the west edge: the river and the old bridge, and a ragged tent camp of Doomward refugees, a healer's station, cookfires, and the treeline the Hollowed come out of |
-| `old-crown-vault.map` | Under the Sunspire: stone and gold, plates and dart traps, a pit and a ledge, the collapsed end of a hall where sappers dug in, treasuries, constructs at the doors, the Crown Door and its lever, the relic gallery and the Sunheart's empty pedestal |
-| `sunspire-keep.map` | The throne room (the sun throne on its dais, tall windows, banners) where the King gives audience, and the great hall with the war table on the way out |
-| `rusty-anvil.map` | A dark dockside dive in a smoky tint: the bar, the regulars, and Brannock at the corner table |
-| `barrow.map` | Dark and cold slate, seven torches and a little daylight down the steps. In up the steps, through a short dark passage into the hall, with the locked tomb door in the middle of its north wall, the stone door into the side room at the west end, and the lever that opens it at the east end |
+| Zone | Rooms, left to right | |
+| --- | --- | --- |
+| `gulls-wager` | deck | The Gull's Wager at night, two days out. Where a new game starts, and the voyage |
+| `docks` | pier, harbourside, fish-market | Saltwind Docks. The ship comes in at the harbourside, where the Red Gulls are shaking down Old Tomas; the Rusty Anvil's door is there too |
+| `questeria` | gate-plaza, festival-square, sunspire-steps, lantern-market, thornbridge-gate | The capital: the plaza in from the docks, the festival square with the waypoint and the city gate, the steps up to the keep and the vault (a stair up from the square), the Lantern Market with the Gilded Flagon, Fennick and the shops, and the east gate |
+| `road` | farmland, fork | The old road: the farms, then the fork with the camp, the barrow's gate and the way east to the Mirewood |
+| `barrow` | steps, hall, side-room | Down the steps into the hall, the tomb door, and the stone door to the side room |
+| `mirewood`, `mirewood-quarry` | edge, deep, camp; lip, cut, floor | The Mirewood and its Old Quarry, the roots Sera opens between the quarry's rooms |
+| `thornbridge` | camp-gate, tents, river-edge | The refugee camp outside the east gate |
+| `old-crown-vault`, `sunspire-keep` | entrance, halls, strongroom, treasury; great-hall | Under the Sunspire, and the King's hall |
+| `gilded-flagon`, `rusty-anvil` | taproom; bar | The inns. The camp waits in the Flagon's taproom |
+| `bakery`, `chapel`, `cottage-a`, `cottage-b`, `forge`, `shop`, `warehouse` | inside | One room each, through a door |
 
-`tint` is the colour of the light on a map. The ground, the props and everyone standing on it, the
-party too, are multiplied by it in the one world batch, so it costs nothing, and nothing on the
-screen over them is: the heading, the prompts, the markers and the cards stay their own colours. The
-flames aren't tinted either, since they're the light and not what it falls on, so a campfire still
-burns warm in a cold wood. It goes on a dark map as well as a lit one: the tint is the colour of the
-light, and the dark is how much of it there is. The Mirewood is both, a cool grey-violet twilight
-(`tint = 196 188 226`) that the campfires cut through.
+The old top-down tile maps the zones were converted from are kept in `tools/rooms/legacy/`, as
+`tools/rooms/convert_maps.py`'s input. The game doesn't read them: it walks, draws, fights and saves
+by the rooms alone.
+
+## Rooms
+
+Since the third milestone the world is side on, the way AdventureQuest Worlds lays out its maps: a
+place is a zone, a chain of painted rooms you walk along, left and right and a little way in depth
+along the floor. The arrows at the ends take you to the next room, and the doors in the painting
+take you inside. Everything in a room is my own art, the props, buildings and tilesets the top-down
+maps were made of, stood up side on and drawn in more detail.
+
+A zone is a text file in `Content/Zones/`, one `[room]` section a room, left to right. Its numbers are
+canvas pixels: a room is 1600 to 4800 wide and always 900 tall, and the game divides everything by 4
+(`ZoneCatalog.RoomScale`) once, so a walker, a prop or a reach keeps the size it had on the maps.
+Each room has its floor band (a polygon where feet can go, with ellipses it can't), its tile strip
+(`tiles`, `tiletop`, a `legend` and a `row` per row of tiles, and `detail` over them), what stands in
+its painted layers (`scenery far|mid|fore <prop> <x>`), the little things that move in it (`life` boxes
+of gulls, clouds, smoke, flags, shimmer, leaves, motes, ash or candles), its exits and doors (a door's
+box stands on the band's back edge, sized by its badge), and its spawns, people, props, chests,
+signs, triggers, scenes, camp seats and lights. `tools/rooms/zonefile.py` describes every line.
+
+What you see is `World/Rooms/RoomScene.cs` drawing the room's layers, from
+`Content/Rooms/<zone>/<room>/`, each at its own scale so its pixels stay square:
+
+| Layer | Screen pixels to an art pixel | Parallax | What's in it |
+| --- | --- | --- | --- |
+| `sky.png` | 4 | 0.1 | The title's blue going pink (twilight in the Mirewood, night at sea, the dark underground), two or three of its clouds, and over Questeria one of its floating islands |
+| `far.png` | 2 | 0.3 | The skyline: the palace, the temple, rooftops, trees, the city wall, the windmill, the title's city across the water and its mountains behind everything, cooled toward the sky with a few windows lit |
+| the tile strip | 4 | 1 | The floor, drawn by `Tilemap` from the room file |
+| `mid.png` | 3 | 1 | The buildings, each on its door, the street dressed the way the maps were (trees and garden walls, lamps, banners, stalls, crates, strings of lanterns, washing lines), or indoors the wall: beams and plaster, the keep's marble and gallery, the crypt's arches |
+| `fore.png` | 4 | 1.15 | What's between you and the room, dark, never more than 12% of the floor band |
+
+An interior has no sky or far layer and no parallax. In a dark room the dark (`LightMap`, with the
+lights cut out of it) goes over the floor, the mid layer, the people and the foreground, but not the
+sky or the far layer: a painted night sky already has its light. `doors.txt` says where each door's
+doorway is painted, which is what the door's outline and badge go round; what you click is the
+door's bigger box. `thumb.png` is the room for the zone map. The life loops are the title's clouds,
+its motes, sparkles and petals, the torch flame and its glow, and gulls and flags drawn a pixel at
+a time.
+
+The layers are painted by `tools/rooms/generate_room_placeholders.py`, out of the game's own art,
+until the rooms are painted by hand. It moves each building so its painted door is on its door
+line, fills the street in, and then gives everything a pass of detail: two-tone shadows where it
+stands, shadows under the eaves, light along the roofs' top and left edges (it's lit from the top
+left, and nothing's flipped), window boxes, posters, and moss and cracks, the moss cut out of the
+room's own tileset. It's seeded, so a rerun writes the same bytes. `--preview` writes what the game
+will show into a folder outside `Content/`, with the tile strip, the room's props and two townsfolk
+at their real size. For painting a room for real, `tools/rooms/make_room_template.py` writes its
+guide (the bands, the floor, every door's box, where the foreground may go), and
+`tools/rooms/cut_room.py` cuts the painting into the layers.
 
 ## The party
 
@@ -684,7 +654,7 @@ Black Box's table did. Nothing in it waits on time.
 | `EnemyCatalog`, `EncounterCatalog` | The foes' stat blocks, and every fight by the story's id |
 | `EnemyMind`, `CombatSimulator` | The AI, and `--simulate` |
 | `ShownFight`, `TurnPlan` | The fight as far as the screen's shown it, and what a click on your turn would do |
-| `World/MapCombatGrid` | The map a fight's on, as the engine sees it |
+| `World/Rooms/RoomCombatGrid` | The room's floor a fight's on, as the engine sees it, until M4's rows |
 | `Screens/ExploreScreen.Combat*` | The fight on the map: starting and ending it, playing it out, its cues, your turn, the cards, drawing it, its tips, and the proof run's hooks |
 | `Components/CombatHotbar`, `BudgetBar`, `InitiativeBar`, `UnitFrame`, `SoulLinkSigil` | The hotbar and END TURN, what's left of the turn, the turn order, the frame of whoever's turn it is, and the Soul-Link's meter |
 | `Components/CombatLog`, `CombatCard`, `TurnBanner`, `DamagePopups`, `CombatResult` | The log, the card by whatever's pointed at, the banner when a turn starts, the numbers that pop, and the panel at the end |
@@ -859,7 +829,7 @@ Escape or a click puts everything at its end at once. A cue line's `{if …}` is
 comes up. The director keeps the clock, the fades (drawn by the conversation, over the painting and
 under the panel), the sounds, the music and the slow; what happens to the world goes through
 `ICutsceneStage`, which takes actor ids, spawn names and world positions and nothing about tiles, so
-the rooms that replace the tile maps can be one too. `ExploreScreen` is the stage on a tile map.
+the side-on rooms can be one. `ExploreScreen` is the stage, in its room.
 Actor ids are `you`, `soulbound`, `party`, `both`, a companion by their origin id, anyone on the map
 by their id, and a cast id, which is everyone the map puts down as that one of the cast and every
 copy numbered after it; the plural is the same, so `royal-guards` is every royal guard in the keep,
@@ -977,7 +947,12 @@ that go with them; everyone who's a person has the one shape, and `Creatures` ha
 
 `WalkerSprite` is The Black Box's on the new layout: it cuts frames from a sheet, walks through
 columns 1 to 4, and fires `Stepped` on 1 and 3, when a foot lands, so the footsteps match the feet.
-The footstep is grass or stone depending on the ground tile under you. The party's sheets are
+The footstep is grass or stone depending on the tile in the room's strip under you. In the side-on
+rooms only rows 1 and 2 ever show, facing left and right (`WalkerSprite.SideOnly`): setting someone to
+face up or down does nothing, and turning to a point goes by which side of them it's on, for the
+party, the townsfolk's glances, a fight and a scene's cues alike. The sheets keep their four rows. A
+room's drawn at 4x, so a person's 48-pixel frame is 192 screen pixels tall, every pixel of it a 4 by
+4 square. The party's sheets are
 baked by the paperdoll, below. The townsfolk have sheets of their own, cut from my pictures already
 dressed, and since they only stand and walk, theirs stop after the first five columns.
 
@@ -1041,7 +1016,7 @@ because `bin/` gets deleted by every clean build.
 
 | File | What it is |
 | --- | --- |
-| `SaveData` | The whole save: the map (and where you came in, while you're inside a building), the party (each with where they're standing and what they're wearing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, the party's bag, the tutorial tips already shown, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, what's been seen of each map, and what everyone's holding in their sockets, as the scenes' hold and drop cues left it. It grows with the game: each system adds its field when it exists |
+| `SaveData` | The whole save: the zone and the room of it you're in (and where you came in, while you're inside a building), the party (each with where they're standing in the room and what they're wearing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, the party's bag, the tutorial tips already shown, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, every room that's been walked into, and what everyone's holding in their sockets, as the scenes' hold and drop cues left it. It grows with the game: each system adds its field when it exists |
 | `SaveSlot` | One slot as the form sees it: empty, occupied or unreadable, plus the line printed on it |
 | `SaveSystem` | Reads, writes and erases slots. The only thing in the project that touches a save file |
 
@@ -1051,7 +1026,7 @@ The same three decisions as The Black Box:
   crash mid-write leaves the old save intact. The one it replaced is kept as a `.bak`.
 - **Nothing throws.** A missing, locked or corrupt file comes back as a slot that says UNREADABLE
   and can be erased. So does a save from a newer build of the game, since writing it back would
-  quietly drop the fields this build doesn't know about, and so does a save on a map this build
+  quietly drop the fields this build doesn't know about, and so does a save in a zone this build
   doesn't have.
 - **Every file carries a `Version`.** `SaveSystem.Upgrade` is where an old file gets brought
   forward when a field changes, one version at a time. Version 2 is the party: version 1 had one X,
@@ -1061,24 +1036,31 @@ The same three decisions as The Black Box:
   the party and at camp gets dressed in their kit, and the bag gets the two healing potions a new
   game starts with. Version 5 is the act as a meter: Act 1 unless Act 1's last card has been seen.
   Version 6 is the sockets: the herring and Tomas's hook, if they've been given, go round your neck
-  and on your belt, where the voyage and the docks put them. Those old fields only make it as far as
-  `Upgrade` because `SaveData.Extra` keeps whatever this build doesn't have a property for.
+  and on your belt, where the voyage and the docks put them. Version 7 had the rooms' fields
+  beside the tile maps'. Version 8 is the rooms: a game finds its zone (its map's id) and its room
+  (the one whose old tiles the leader stood on, by the zone file's `legacy` rectangles, at the same
+  share of the way along it and halfway down its floor; the zone's start if none), the whole party
+  stands there and falls in behind you once the room's up, the way back out of the last building gets
+  the same, and every room of every map it had seen any of counts as visited. Those old fields only
+  make it as far as `Upgrade` because `SaveData.Extra` keeps whatever this build doesn't have a
+  property for, and the tile maps' map, way back and fog are read out of the file on their own.
 
 Enums go in by name (`"Facing": "Up"`), so reordering one is safe and renaming one breaks saves; a
-number where a name should be makes the slot unreadable. Things on a map are kept as `map/id`, like
-`road/camp` for the chest at the camp, so two maps can each have a chest called chest. What's been
-seen of a map is its bits packed eight to a byte, which JSON writes as base64. A list I've nulled by
+number where a name should be makes the slot unreadable. Things in a zone are kept as `zone/id`, like
+`road/camp` for the chest at the camp, so two zones can each have a chest called chest; a zone has
+its old map's id and keeps its objects' ids, so those needed no upgrading. A list I've nulled by
 hand comes back empty instead of crashing, a save with nobody in the party gets the starting party,
 anything in the bag or worn that this build hasn't got is dropped (something worn where it doesn't
-go goes back in the bag), hit points get pulled back between 0 and the most someone can have, and a position off the map or
-inside a wall puts you on the map's start. A class the game doesn't have makes the slot unreadable.
+go goes back in the bag), hit points get pulled back between 0 and the most someone can have, a party
+in a room that isn't there, or with its leader off the floor, goes to the zone's start, and feet that
+land inside something go to the nearest floor that's clear, or the room's first spawn. A class the game doesn't have makes the slot unreadable.
 
 A new game only goes in a numbered slot, and it's written as soon as you pick one, so if the slot
 can't be written the form can say so. Picking one that's full asks first (PICK IT AGAIN TO START
 OVER IT). ERASE asks too: the button turns into SURE?. While you play, the game writes the autosave
-every time you go from one map to another, by an exit or by fast travel, before anything fades, so
-it has exactly what the next map starts from. If it can't be written the game carries on and the
-next map says so. Saving where you like, and F5 and F9, come with the rest of saving at the end.
+every time you go into another room or zone, by a way out, a door or fast travel: before anything
+fades for another zone, so it has exactly what the next one starts from, and once you're in for
+another room of the same one. If it can't be written the game carries on and says so. Saving where you like, and F5 and F9, come with the rest of saving at the end.
 
 The volumes and the text speed aren't in a slot. They're in `%LOCALAPPDATA%\LegendQuest\settings.json`,
 since turning the music down shouldn't depend on which game is loaded.
@@ -1158,7 +1140,7 @@ fades the old one out and the new one in.
 | `Props/*.png` | `PropSprite` | Standing on the middle of the bottom edge. The old road's wood: oaks (green, pale, amber, and deepened), firs, bushes, a stump, a snag, a dead tree, ferns, long grass, mossy rocks, a log, a fallen tree, toadstools, the campfire and a bedroll. The barrow's: urns, a sarcophagus, the iron sconce a torch stands in, and the things you use, each a strip of two pictures (shut then open): a chest, a double door and a stone door in their frames, a lever, and the waypoint stone with its mark dark then lit. The sign is one picture |
 | Questeria's `Props/*.png` | `PropSprite` | The same, cut from my pictures: the palace, the temple, the guildhall, the city gate, the fountain, statues, lamps, banners, benches, market stalls, trees, bushes and flowers, the quest board, and the waypoint crystal, dim then lit. The houses: the four I painted whole, and townhouses, cottages, turret houses, a bakery, a chapel, a forge, a Watch post, warehouses, the Gilded Flagon with its sign, the Rusty Anvil and a fishmonger's, put together by `cut_supplied.py` from the walls, roofs, doors and shop fronts on my sheets, each in blue, pink, teal and plum roofs. The docks' fish stalls, net racks and harbour bell, crates, sacks and barrels, wells, pumps, washing lines, carts and planters |
 | `People/*.png` | `WalkerSprite` | Seventeen townsfolk, cut from my pictures, in the first five columns of the 10x4 layout: standing, and walking |
-| `map-marks.png` | `MapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
+| `map-marks.png` | `ZoneMapScreen`, `ExploreScreen` | 7 marks, 12x12, at 3x on the map screen: a place, a place you only know of, the ring round where you are, a waypoint stone, the brackets round where you're going, you on the local map, and one dot of a road. The map you're walking borrows the dot and the ring, at their own size, for the path you'd take |
 | `Paperdoll/*.png` | `Paperdoll` | The body, six hair styles (one of them bald), five faces, four beards, the skirt, the cape and the two tails in halves, four kinds of ears, two of horns, and the hats; and the gear: nine body armours, three helms, gloves, gauntlets, two kinds of boots, two shields and thirteen weapons. All in the youth's 10x4 layout and his key shades (metal and leather in keys of their own), so they stack and recolour. `Stout/` and `Small/` are every one of them again for the shorter builds. The cards on the strip and the faces in conversations are the head and shoulders of the standing frame, blown up |
 | `character-palettes.png` | `CharacterPalettes` | Five pixels by forty-five: one ramp per row, dark to light. Skins, hair, eyes, shirts, vests, legs and cloaks, each block with its key first |
 | `gear-palettes.png` | `Paperdoll` | Five pixels by ten: metal's keys and its four tints, then leather's keys and its four, one ramp a row, dark to light |
@@ -1166,9 +1148,10 @@ fades the old one out and the new one in.
 | `keycaps.png` | `KeyCaps` | 4 frames, 14x14, at 3x: an ivory key cap with a deeper lip along its bottom, nine-sliced so it's as wide as what's written on it, then the mouse with its left button, its right button and its wheel lit in torchlight |
 | `dice.png` | `DiceRollOverlay` | The d20, 9 frames of 40x40 at 4x: eight tumbling, then the face it lands on with the number drawn over it |
 | `dialogue-icons.png` | `DialogueScreen` | 6 icons, 12x12, at 2x, beside an option: a die for a check, a heart for a flirt, a lock, and the three voices |
-| `markers.png` | `ExploreScreen`, `MapScreen` | Two rows of 14x14 cells at 3x, gold then red: the "!" that bobs over someone with work for you (gold) or an event (red), and the arrows at the edge of the screen pointing to one that's off it, which the game turns a quarter at a time for every direction |
+| `markers.png` | `ExploreScreen`, `ZoneMapScreen` | Two rows of 14x14 cells at 3x, gold then red: the "!" that bobs over someone with work for you (gold) or an event (red), and the arrows at the edge of the screen pointing to one that's off it, which the game turns a quarter at a time for every direction |
 | `Paintings/*.png` | `PaintingSprite` | The story's paintings, each three to five layers on the title's 416x277 canvas at 4x, swaying against each other like the title: the pier in the storm the day you met, the oath under the red moon, and Questeria at dawn from the ship's rail. `weather.png`, `bolts.png`, `sigil.png`, `glint.png` and `lantern.png` are what moves over them: the rain and the lightning, the Soul-Bond's glow, glints on the water, and the pier's lantern swinging. Under the red moon the two figures are your own sheet and the Soul-Bound's, drawn black with the moon on their edges |
 | `Tiles/ship.png` | `Tilemap` | The Gull's Wager's deck: planks, the rails, the hull, the hatch, the bow and the stern in blocks, the bowsprit, a lantern on the rail that swings, and the night sea, animated |
+| `Rooms/<zone>/<room>/*.png` | `RoomScene`, the zone map | Each room's sky (4x), far layer (2x), mid layer (3x) and foreground (4x), at art resolution and drawn at their scales with their parallax, and its 200x113 thumbnail. `doors.txt` beside them is where each door's doorway is painted, in canvas pixels |
 | `Tiles/interior.png` | `Tilemap` | Inside the buildings: wood and stone floors, a rug with its edges, the back wall's face (plaster over wainscoting, two tiles tall) and the tops of the walls |
 | The ship's and the inside's `Props/*.png` | `PropSprite` | The ship you arrive on, seven frames: under full sail with its wake, the sail hauling up, furled, and moored with its lines ashore. Its near rail with the gangplank, six frames of the gate opening and the plank sliding out. The rowing boat, the mast with its sails furled and the crow's nest, the lanterns, the wheel and coils of rope. Inside: the bar, tables, chairs and stools, the hearth and candle stands (lit), kegs, a wardrobe, bookshelves, a desk, an anvil and tool racks, tapestries and plants, cut from my props sheet, and a bed |
 
@@ -1197,6 +1180,10 @@ python tools/generate_combat_art.py   # the fight's ability and condition icons,
 python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, the houses, the furniture and the townsfolk, out of tools/source/
 python tools/cut_supplied.py buildings  # just the houses (or name props to cut just those)
 python tools/generate_paperdoll.py    # the paperdoll sheets and the gear for all three builds, character-palettes.png and gear-palettes.png, off the youth (after cut_supplied.py's people)
+python tools/rooms/generate_room_placeholders.py   # every room's sky, far, mid and foreground layers, its thumbnail and doors.txt, out of the props, tiles and title pictures above (last)
+python tools/rooms/generate_room_placeholders.py --preview <folder>   # and what each room looks like in the game, outside Content
+python tools/rooms/make_room_template.py --out <folder>   # the guide each room is painted over
+python tools/rooms/cut_room.py <zone>/<room> background.png foreground.png   # a painted room cut into its layers (--test tries it on a made-up one)
 ```
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's
@@ -1287,7 +1274,7 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
 - `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, `ExploreScreen.Tutorial.cs` for the tutorial's tips, `ExploreScreen.Items.cs` for I and C, the shops and what goes in the bag, `ExploreScreen.Stage.cs` for the map as a conversation's stage, where its cues play (`ICutsceneStage`, played by `CutsceneDirector`), and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
-- `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
+- `World/` is the places: `World/Zones/` (`ZoneLoader` and `ZoneCatalog` to read the zones, `ZoneDefinition`, `RoomDefinition` and the `Room*` records), the `Map*` records the rooms reuse for what's in one (`MapPresence` for `when` and `unless`), `World/Rooms/` to draw, walk and fight in a room, `Tilemap` to draw a room's tile strip, `LightMap` for the dark, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
 - `Characters/` is the walking sprite and the shape of its frames (`WalkerSprite` and `WalkerShape`), the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), the beasts (`Creature` and `Creatures`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`), and `LegacyClips` for what a scene's clips come to on a sheet.
 - `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, `StageCue` and `Expressions` for the cues and faces the story's scripts carry (`StageDirection`, `CueSpot` and `CueFacing` for what a cue's words mean), the scripts compiled from `Story/` in `Dialogue/Scripts/Generated/`, and the hand-written ones in `Dialogue/Scripts/`, a file per chapter.
 - `Story/` is the story's tables (`Meters`, `KeyItems`, `Paintings`, `Tints`, `Cast`, the quest board's `Postings`, and `Banters`) and the plan the rest of the game is built from: the build plan, the writing guide, the scripts, the specs for rooms, combat, classes and art, and the generated registry (`Story/README.md` says what each is), with their two tools in `Story/tools/`.
@@ -1301,7 +1288,7 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.
 - `Enums/` is every enum in the game, one file each.
 - `Layers.cs` is the draw order, `Palette.cs` is the colours more than one screen uses, `Text.cs` draws a line of text with its shadow, and `Blends.cs` is the additive blend for anything that glows.
-- `Content/Maps/` is the map files. `tools/` is the art and sound generators, the cutting script and the asset check, and `tools/source/` is the pictures it cuts.
+- `Content/Zones/` is the zone files. `tools/` is the art and sound generators, the cutting script and the asset check, `tools/source/` is the pictures it cuts, and `tools/rooms/` is the room tools, with the old tile maps they were converted from in `tools/rooms/legacy/`.
 
 ## Assets
 

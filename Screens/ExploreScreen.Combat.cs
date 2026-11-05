@@ -16,18 +16,20 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// A fight on the map you're on: starting one, everyone taking their places, and how it ends, with
+/// A fight in the room you're in: starting one, everyone taking their places, and how it ends, with
 /// the loot, the experience and the conversation after, or the conversation for a fight you were
 /// allowed to lose, or game over.
 /// </summary>
 /// <remarks>
 /// <para>
-/// There's no arena: the fight is on this map, and its foes are the map's own people where they're
-/// standing, or turn up on their tiles. A conversation ends with DialogueEffect.Fight and the fight
-/// starts when it's over (OnDialogue notes it), the way a shop or a journey waits. The game's
-/// autosaved first, so a lost fight can be fought again. Everyone steps onto the middle of their
-/// tile, the nearest free one (the engine picks it), the battle's song comes in, and the dice for
-/// initiative fill the turn order in across the top.
+/// There's no arena: the fight is in this room, on a grid laid over its floor (RoomCombatGrid, M3's
+/// interim ground until M4's rows), and its foes are the room's own people where they're standing,
+/// or turn up on their tiles. A conversation ends with DialogueEffect.Fight and the fight starts
+/// when it's over (OnDialogue notes it), the way a shop or a journey waits. The game's autosaved
+/// first, so a lost fight can be fought again. Everyone steps onto the middle of their tile, the
+/// nearest free one (the engine picks it), the battle's song comes in, and the dice for initiative
+/// fill the turn order in across the top. In a fight that can kill, anyone standing about who isn't
+/// in it steps back to the far edge of the floor to watch, out of the way, and comes back after.
 /// </para>
 /// <para>
 /// The fight itself is in partials of its own: ExploreScreen.CombatPlayback runs it and plays each
@@ -37,17 +39,20 @@ namespace LegendQuest.Screens;
 /// Nobody in the party dies for good: someone whose death saves run out has fallen for the rest of
 /// the fight, and everyone's back up on 1 HP when it's won, or when a fight that's allowed to be lost
 /// is. It's only lost when every one of the party is down or fallen at once. A foe who dies leaves
-/// the map for the rest of the visit; its presence flag keeps it gone after that.
+/// the room for the rest of the visit; its presence flag keeps it gone after that.
 /// </para>
 /// </remarks>
 public partial class ExploreScreen
 {
-    /// <summary>How far below the middle of their tile someone's feet go, in world pixels, so they stand in it rather than on its top edge.</summary>
-    private static readonly Vector2 StandOffset = new(0f, 4f);
-
     /// <summary>How long everyone takes to step onto their tile when the fight starts, and how long the fight's name is up before the dice roll.</summary>
     private const float TakePlacesSeconds = 0.35f;
     private const float IntroSeconds = 1.1f;
+
+    /// <summary>How long anyone standing about takes to step back out of a lethal fight's way, and to come back once it's won or lost.</summary>
+    private const float StandBackSeconds = 0.8f;
+
+    /// <summary>How far onto the floor from its back edge they stand to watch, in world pixels.</summary>
+    private const float StandBackInset = 1f;
 
     /// <summary>How long someone who turns up takes to fade in.</summary>
     private const float ArriveSeconds = 0.5f;
@@ -76,14 +81,20 @@ public partial class ExploreScreen
     private readonly UnitFrame _unitFrame = new();
     private readonly CombatResult _result = new();
 
-    /// <summary>Everyone fighting's figure, by their id in the fight: the party's own walkers, the map's people who turned, and anyone who turned up.</summary>
+    /// <summary>Everyone fighting's figure, by their id in the fight: the party's own walkers, the room's people who turned, and anyone who turned up.</summary>
     private readonly Dictionary<string, WalkerSprite> _fighters = new();
 
-    /// <summary>The figures of those who turned up for the fight (a foe on a tile, a guest from nowhere), which aren't anyone on the map, so the fight draws and runs them itself.</summary>
+    /// <summary>The figures of those who turned up for the fight (a foe on a tile, a guest from nowhere), which aren't anyone in the room, so the fight draws and runs them itself.</summary>
     private readonly List<WalkerSprite> _spawned = new();
 
-    /// <summary>The map's people who died in a fight, kept off the map for the rest of this visit (RefreshPresence leaves them out).</summary>
-    private readonly HashSet<Npc> _fallen = new();
+    /// <summary>The room's people who died in a fight, as room/id, kept out of their room for the rest of this visit to the zone (RefreshPresence leaves them out).</summary>
+    private readonly HashSet<string> _fallen = new();
+
+    /// <summary>Everyone in the room who stepped back out of a lethal fight's way, and where they were standing before, to go back to.</summary>
+    private readonly Dictionary<Npc, Vector2> _standingBack = new();
+
+    /// <summary>The ground the fight's on: the room's floor, laid out in tiles when the fight starts.</summary>
+    private IFightGround _ground;
 
     /// <summary>The names of those of the party who got up when it was over, for a line each once the panel's gone.</summary>
     private readonly List<string> _backUp = new();
@@ -126,7 +137,8 @@ public partial class ExploreScreen
     }
 
     /// <summary>
-    /// Starts a fight on this map: the autosave, everyone into the fight and onto their tiles, the song,
+    /// Starts a fight in this room: the autosave, the room's floor laid out in tiles, everyone into the
+    /// fight and onto their tiles (and, if it can kill, everyone else back out of its way), the song,
     /// the fight's name across the screen, and the initiative dice after it.
     /// </summary>
     /// <param name="encounter">The fight.</param>
@@ -148,20 +160,23 @@ public partial class ExploreScreen
         _leaderBeforeFight = _game.Leader;
         _fighters.Clear();
         _spawned.Clear();
+        _standingBack.Clear();
         _backUp.Clear();
         _fightEnded = false;
         _lastOfYours = null;
         _reachFor = null;
         Cancel();
 
+        var ground = new RoomCombatGrid(_room);
+        _ground = ground;
         var setups = new List<CombatantSetup>();
-        Point gather = Tilemap.CellOf(Leader.Position);
+        Point gather = _ground.CellOf(Leader.Position);
 
         for (int i = 0; i < _game.Party.Count; i++)
         {
             PartyMember member = _game.Party[i];
             if (encounter.SitsOut.Contains(member.Id)) continue;
-            setups.Add(CombatantSetup.ForMember(member, Tilemap.CellOf(_walkers[i].Position), _walkers[i].Facing));
+            setups.Add(CombatantSetup.ForMember(member, _ground.CellOf(_walkers[i].Position), _walkers[i].Facing));
             _fighters[member.Id] = _walkers[i];
         }
 
@@ -171,13 +186,13 @@ public partial class ExploreScreen
             if (foe.Npc is string npcId)
             {
                 Npc npc = Turning(npcId);
-                setups.Add(CombatantSetup.ForFoe(foe, npcId, Tilemap.CellOf(npc.Walker.Position), npc.Walker.Facing));
+                setups.Add(CombatantSetup.ForFoe(foe, npcId, _ground.CellOf(npc.Walker.Position), npc.Walker.Facing));
                 _fighters[npcId] = npc.Walker;
                 continue;
             }
 
             string id = $"{foe.Enemy}-{i + 1}";
-            setups.Add(CombatantSetup.ForFoe(foe, id, foe.Cell ?? gather, Direction.Down));
+            setups.Add(CombatantSetup.ForFoe(foe, id, foe.Cell ?? gather, Direction.Left));
             _fighters[id] = Spawn(EnemyWalker(EnemyCatalog.Get(foe.Enemy)));
         }
 
@@ -192,9 +207,16 @@ public partial class ExploreScreen
         }
 
         var fighting = new HashSet<WalkerSprite>(_fighters.Values);
-        _combat = new CombatEngine(encounter, setups, new MapCombatGrid(_tilemap, FightFootprints(fighting)), _random) { Bag = _game.Bag };
+        if (!encounter.Nonlethal)
+            foreach (Npc npc in _npcs)
+                if (!fighting.Contains(npc.Walker) && npc.Definition.Aboard is null) _standingBack[npc] = npc.Walker.Position;
+        ground.Build(FightFootprints(fighting));
+
+        _combat = new CombatEngine(encounter, setups, _ground, _random) { Bag = _game.Bag };
         _shown = new ShownFight(_combat);
         TakePlaces();
+        _focus = Centre(_fighters.Values);
+        StandBackToWatch();
 
         _audio.PlaySong(encounter.Music);
         _log.Clear();
@@ -204,24 +226,23 @@ public partial class ExploreScreen
         _result.Hide();
         _log.Add($"{encounter.Name.ToUpperInvariant()}: the fight begins.", Palette.Gold);
         _banner.Show(encounter.Name.ToUpperInvariant(), RollLine, encounter.Boss ? Palette.Ember : Palette.Gold);
-        _focus = Centre(_fighters.Values);
 
         BeginPlayback(IntroSeconds);
         Play(_combat.Begin());
         BeginLessons();
     }
 
-    /// <summary>The map npc a foe line names, there or not: the fight brings them out whatever the flags say, since the encounter needs them.</summary>
-    /// <remarks>Throws if the map has nobody of that id at all, which is a mistake in EncounterCatalog or the map file.</remarks>
+    /// <summary>The room's npc a foe line names, there or not: the fight brings them out whatever the flags say, since the encounter needs them.</summary>
+    /// <remarks>Throws if the room has nobody of that id at all, which is a mistake in EncounterCatalog or the zone file (ZoneCatalog checks every encounter's npcs are in one room).</remarks>
     private Npc Turning(string npcId)
     {
         Npc npc = _everyNpc.Find(each => each.Definition.Id == npcId)
-            ?? throw new InvalidOperationException($"Encounter {_encounter.Id} has npc {npcId}, but {_map.Id}.map has nobody called that.");
+            ?? throw new InvalidOperationException($"Encounter {_encounter.Id} has npc {npcId}, but room {_room.Id} of Zones/{_zone.Id}.txt has nobody called that.");
         if (!_npcs.Contains(npc)) _npcs.Add(npc);
         return npc;
     }
 
-    /// <summary>Gets a figure that isn't anyone on the map ready to fight: its shadow loaded, faded out until it arrives, and drawn by the fight.</summary>
+    /// <summary>Gets a figure that isn't anyone in the room ready to fight: its shadow loaded, faded out until it arrives, and drawn by the fight.</summary>
     private WalkerSprite Spawn(WalkerSprite walker)
     {
         walker.LoadContent(_content);
@@ -244,7 +265,7 @@ public partial class ExploreScreen
         return new WalkerSprite { Sheet = sheet };
     }
 
-    /// <summary>A figure for a guest who isn't standing on the map: a companion as their origin dresses them, or a stat block's.</summary>
+    /// <summary>A figure for a guest who isn't standing in the room: a companion as their origin dresses them, or a stat block's.</summary>
     private WalkerSprite GuestWalker(string guest)
     {
         if (!Origins.Exists(guest)) return EnemyWalker(EnemyCatalog.Get(guest));
@@ -253,7 +274,7 @@ public partial class ExploreScreen
         return new WalkerSprite { Sheet = SheetFor(member.Look, Paperdoll.GearOf(member)) };
     }
 
-    /// <summary>What the fight's ground is built from: the props, the shut doors, and everyone standing about who isn't fighting (the party's sat-out members among them).</summary>
+    /// <summary>What the fight's ground is built from: the props, the shut doors, and everyone standing about who isn't fighting (the party's sat-out members among them), where they'll watch from.</summary>
     /// <param name="fighting">Everyone fighting's figure, left out, since the engine says where they stand.</param>
     private IEnumerable<BoundingRectangle> FightFootprints(HashSet<WalkerSprite> fighting)
     {
@@ -265,7 +286,10 @@ public partial class ExploreScreen
             foreach (BoundingRectangle footprint in sprite.Footprints) yield return footprint;
         }
         foreach (Npc npc in _npcs)
-            if (!fighting.Contains(npc.Walker)) yield return npc.Footprint;
+        {
+            if (fighting.Contains(npc.Walker)) continue;
+            yield return _standingBack.TryGetValue(npc, out Vector2 home) ? npc.FootprintAt(StandBack(home)) : npc.Footprint;
+        }
         foreach (WalkerSprite walker in _walkers)
             if (!fighting.Contains(walker)) yield return FeetAt(walker.Position);
     }
@@ -291,9 +315,29 @@ public partial class ExploreScreen
         }
     }
 
+    /// <summary>Everyone standing back out of the fight's way steps back to the far edge of the floor, and turns to watch it.</summary>
+    private void StandBackToWatch()
+    {
+        foreach ((Npc npc, Vector2 home) in _standingBack)
+        {
+            Glide(npc.Walker, StandBack(home), StandBackSeconds);
+            npc.Walker.Face(_focus);
+        }
+    }
+
+    /// <summary>Everyone who stepped back comes back to where they were standing, while the panel at the end of the fight is up.</summary>
+    private void ComeBack()
+    {
+        foreach ((Npc npc, Vector2 home) in _standingBack) Glide(npc.Walker, home, StandBackSeconds);
+    }
+
+    /// <summary>Where someone standing at a point stands back to: the far edge of the floor behind them.</summary>
+    /// <param name="feet">Where they were standing, in world pixels.</param>
+    private Vector2 StandBack(Vector2 feet) => new(feet.X, _room.BackEdgeAt(feet.X) + StandBackInset);
+
     /// <summary>Where someone's feet go to stand on a tile.</summary>
     /// <param name="cell">The tile.</param>
-    private static Vector2 FeetOn(Point cell) => NavGrid.Middle(cell) + StandOffset;
+    private Vector2 FeetOn(Point cell) => _ground.FeetOn(cell);
 
     /// <summary>The middle of a crowd of figures, for the camera to start on.</summary>
     private static Vector2 Centre(IEnumerable<WalkerSprite> walkers)
@@ -312,11 +356,19 @@ public partial class ExploreScreen
     /// <param name="id">Their id in the fight.</param>
     private WalkerSprite FighterWalker(string id) => id is null ? null : _fighters.GetValueOrDefault(id);
 
-    /// <summary>The fight's over and everything's been shown: on to the panel, game over, or for a fight to lose, its panel too.</summary>
+    /// <summary>Whether someone in the room died in a fight earlier in this visit to the zone, so they stay out of it.</summary>
+    /// <param name="npc">Who.</param>
+    private bool Fallen(Npc npc) => _fallen.Contains(FallenKey(npc));
+
+    /// <summary>What _fallen knows someone by: their room and their id, since a room's people are made again every time it's entered.</summary>
+    private string FallenKey(Npc npc) => $"{_room.Id}/{npc.Definition.Id}";
+
+    /// <summary>The fight's over and everything's been shown: on to the panel, game over, or for a fight to lose, its panel too. Anyone who stood back comes back while it's up.</summary>
     private void EndOfFight()
     {
         _fightEnded = true;
         Cancel();
+        ComeBack();
 
         if (_combat.Outcome == CombatOutcome.Victory)
         {
@@ -389,7 +441,7 @@ public partial class ExploreScreen
         Converse(DialogueCatalog.Get(then), null);
     }
 
-    /// <summary>Packs the fight away: the dead off the map, everyone standing again where they are, the party following you again, and the map's own song.</summary>
+    /// <summary>Packs the fight away: the dead out of the room, everyone standing again where they are (and anyone who stood back where they stood before), the party following you again, and the zone's own song.</summary>
     private void EndFight()
     {
         _game.Fight = null;
@@ -397,7 +449,7 @@ public partial class ExploreScreen
         {
             if (each.Side != Side.Foes || !each.IsDead) continue;
             Npc npc = _npcs.Find(standing => standing.Walker == FighterWalker(each.Id));
-            if (npc is not null) _fallen.Add(npc);
+            if (npc is not null) _fallen.Add(FallenKey(npc));
         }
 
         foreach (WalkerSprite walker in _fighters.Values)
@@ -406,11 +458,18 @@ public partial class ExploreScreen
             walker.IsWalking = false;
             if (!_spawned.Contains(walker)) walker.Opacity = 1f;
         }
+        foreach ((Npc npc, Vector2 home) in _standingBack)
+        {
+            npc.Walker.Position = home;
+            npc.Walker.IsWalking = false;
+        }
 
         _combat = null;
         _shown = null;
+        _ground = null;
         _fighters.Clear();
         _spawned.Clear();
+        _standingBack.Clear();
         _glides.Clear();
         _fades.Clear();
         _barks.Clear();
@@ -419,7 +478,7 @@ public partial class ExploreScreen
         _banner.Clear();
         _game.Leader = Math.Clamp(_leaderBeforeFight, 0, _walkers.Count - 1);
 
-        _audio.PlaySong(_map.Music);
+        _audio.PlaySong(_zone.Music);
         RefreshPresence();
         BuildNav();
         SeedTrail();

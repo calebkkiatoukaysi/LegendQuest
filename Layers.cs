@@ -72,9 +72,6 @@ public static class Layers
     private const float WorldFar = 0.90f;
     private const float WorldNear = 0.10f;
 
-    /// <summary>Overhead tiles: roofs and canopies, in front of everyone.</summary>
-    public const float Overhead = 0.04f;
-
     /// <summary>The layer for something standing on the floor. The further down the map, the more in front it is.</summary>
     /// <param name="footY">How far down the map its feet are, in world pixels.</param>
     /// <param name="mapHeight">How tall the map is, in world pixels.</param>

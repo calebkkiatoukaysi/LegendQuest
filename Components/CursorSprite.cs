@@ -6,7 +6,8 @@ namespace LegendQuest.Components;
 
 /// <summary>
 /// The mouse cursor, drawn by the game so it can change shape: an arrow, a ring to walk, a hand to
-/// use something, a speech bubble to talk, and a crossed circle where you can't go.
+/// use something, a speech bubble to talk, a crossed circle where you can't go, and a door over a
+/// room's doors and stairs.
 /// </summary>
 /// <remarks>
 /// A game service like the audio manager, so any screen can set the shape. Shape goes back to the
@@ -20,7 +21,7 @@ public class CursorSprite
     private const float Scale = 2f;
 
     /// <summary>The pixel of each frame that's the point the mouse is at: the arrow's tip, and the middle of the rest. In CursorShape order.</summary>
-    private static readonly Vector2[] Hotspots = { new(1, 1), new(8, 8), new(8, 8), new(8, 8), new(8, 8) };
+    private static readonly Vector2[] Hotspots = { new(1, 1), new(8, 8), new(8, 8), new(8, 8), new(8, 8), new(8, 8) };
 
     private Texture2D _sheet;
 

@@ -8,7 +8,7 @@ namespace LegendQuest.World;
 /// Something on a map you walk up to and use: a chest, a door, a lever, a sign or a waypoint stone.
 /// </summary>
 /// <remarks>
-/// Data only, like the rest of a MapDefinition. Whether it's open, pulled or found lives in the
+/// Data only, like the rest of a RoomDefinition. Whether it's open, pulled or found lives in the
 /// save, and WorldState is what reads and changes that. Only the settings its kind uses are set;
 /// the loader refuses the rest.
 /// </remarks>

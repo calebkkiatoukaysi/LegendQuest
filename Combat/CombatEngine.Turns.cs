@@ -215,7 +215,7 @@ public sealed partial class CombatEngine
         {
             EncounterFoe foe = wave.Foes[i];
             string id = $"{foe.Enemy}-round{wave.Round}-{i + 1}";
-            Combatant joined = Join(CombatantSetup.ForFoe(foe, id, foe.Cell ?? default, Direction.Down));
+            Combatant joined = Join(CombatantSetup.ForFoe(foe, id, foe.Cell ?? default, Direction.Left));
             Emit(CombatEventKind.Joined, joined, null, 0, $"{joined.Label} joins the fight!");
             RollInitiative(joined);
 

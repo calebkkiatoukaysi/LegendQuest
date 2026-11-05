@@ -35,7 +35,7 @@ public class SaveSlot
     {
         SaveSlotState.Occupied =>
             string.Format(CultureInfo.InvariantCulture, "{0}  ·  {1}  ·  {2}",
-                MapCatalog.Get(Data.MapId).Name.ToUpperInvariant(), Clock(Data.Playtime),
+                Where().ToUpperInvariant(), Clock(Data.Playtime),
                 Data.SavedUtc.ToLocalTime().ToString("d MMM yyyy", CultureInfo.InvariantCulture).ToUpperInvariant()),
 
         // Said plainly. A corrupt slot is the one place to drop the atmosphere and just tell the player.
@@ -43,6 +43,14 @@ public class SaveSlot
 
         _ => "EMPTY",
     };
+
+    /// <summary>Where the game is: the zone, and the room in it when the zone has more than one, like Saltwind Docks  ·  The Harbourside.</summary>
+    /// <remarks>Reading the slot checked the zone and the room are there, so neither can be missing.</remarks>
+    private string Where()
+    {
+        ZoneDefinition zone = ZoneCatalog.Get(Data.ZoneId);
+        return zone.Rooms.Count > 1 ? zone.Name + "  ·  " + zone.Room(Data.RoomId).Name : zone.Name;
+    }
 
     /// <summary>Formats a playtime as hours and minutes, which is all a slot has room for.</summary>
     /// <param name="time">The time to format.</param>

@@ -506,7 +506,7 @@ public class CharacterCreationScreen : MenuScreen
             return;
         }
 
-        LoadingScreen.Load(ScreenManager, MapCatalog.Get(_game.MapId).Name.ToUpperInvariant(), new ExploreScreen(_game));
+        LoadingScreen.Load(ScreenManager, ZoneCatalog.Get(_game.ZoneId).Name.ToUpperInvariant(), new ExploreScreen(_game));
     }
 
     /// <summary>Who speaks before the ship: the narrator, with no face, and the cast by name alone (Corra on the pier), since there's no walker to take a face off yet.</summary>

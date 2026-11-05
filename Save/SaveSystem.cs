@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Xna.Framework;
 using LegendQuest.Characters;
 using LegendQuest.Combat;
 using LegendQuest.Dialogue.Scripts;
@@ -38,7 +39,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 6;
+    public const int CurrentVersion = 8;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -89,7 +90,8 @@ public static class SaveSystem
         {
             if (!File.Exists(path)) return new SaveSlot { Index = slot, State = SaveSlotState.Empty };
 
-            SaveData data = JsonSerializer.Deserialize<SaveData>(File.ReadAllText(path), Options);
+            string text = File.ReadAllText(path);
+            SaveData data = JsonSerializer.Deserialize<SaveData>(text, Options);
 
             // A file holding just "null" is valid JSON and deserialises to null. Catch it here.
             if (data is null) return Unreadable(slot, "the file is empty");
@@ -97,11 +99,13 @@ public static class SaveSystem
             // A save from a newer build has fields this one would quietly drop if it wrote the slot back.
             if (data.Version > CurrentVersion) return Unreadable(slot, "it was saved by a newer version of the game");
 
-            // Loading it would mean walking onto a map that isn't there.
-            if (!MapCatalog.Contains(data.MapId)) return Unreadable(slot, "it's on a map called " + data.MapId + ", which this build doesn't have");
-
-            data = Upgrade(data);
+            // The tile maps' fields, which SaveData no longer has, for a save the tile maps wrote.
+            TileMapFields tiles = data.Version < 8 ? JsonSerializer.Deserialize<TileMapFields>(text, Options) : null;
+            data = Upgrade(data, tiles);
             Mend(data);
+
+            // Loading it would mean walking into a zone that isn't there.
+            if (!ZoneCatalog.Contains(data.ZoneId)) return Unreadable(slot, "it's in a zone called " + data.ZoneId + ", which this build doesn't have");
             return new SaveSlot { Index = slot, State = SaveSlotState.Occupied, Data = data };
         }
         catch (JsonException e)
@@ -203,11 +207,16 @@ public static class SaveSystem
     /// with. Version 5 is when the act became a meter: a game that hasn't seen Act 1's last card is
     /// in Act 1, and one that has is in Act 2. Version 6 is when the sockets went in: the herring and
     /// Tomas's hook, if they've been given, go where the voyage and the docks put them, your neck and
-    /// your belt. The old fields only survive the read because of SaveData.Extra.
+    /// your belt. Version 7 had the rooms' fields beside the tile maps', which only the tile maps kept
+    /// up; version 8 is when the game walked rooms: it finds its zone and room from its map and where
+    /// its leader stood, the party stands there, the way out of the last building gets the same, and
+    /// every room of every map it's seen counts as visited (IntoRooms). The old fields only survive the
+    /// read because of SaveData.Extra, and the tile maps' because Read reads them on their own.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
+    /// <param name="tiles">The tile maps' fields from the same file, for a save older than version 8; otherwise null.</param>
     /// <returns>The same game, in the shape this build expects.</returns>
-    private static SaveData Upgrade(SaveData data)
+    private static SaveData Upgrade(SaveData data, TileMapFields tiles)
     {
         if (data.Version < 2)
         {
@@ -301,8 +310,93 @@ public static class SaveSystem
             }
         }
 
+        if (data.Version < 8) IntoRooms(data, tiles);
+
         data.Version = CurrentVersion;
         return data;
+    }
+
+    /// <summary>Works out where in the rooms a game on the tile maps is: its zone and room, where the party stands there, the room the way out of the last building is in, and every room it's visited.</summary>
+    /// <remarks>
+    /// A zone has its map's id. The room is the one whose old tiles the leader's feet were on, by the
+    /// zone's legacy rectangles, with the leader as far along it as they were along those tiles and
+    /// halfway down the floor; with no room there, the zone's start. The rest of the party stand with
+    /// the leader, and the room puts them behind once it's up. The way back gets the same from BackMap
+    /// and BackX and BackY, which were the map's. Every room of every map in Seen has been visited, and
+    /// so has this one. The rooms' fields a version 7 file kept beside the tile maps' were never kept
+    /// up, so they're worked out again, and dropped from Extra with the tile maps'.
+    /// </remarks>
+    /// <param name="data">The save. Mend may not have been at it yet, so its party can be missing.</param>
+    /// <param name="tiles">The tile maps' fields from the same file.</param>
+    private static void IntoRooms(SaveData data, TileMapFields tiles)
+    {
+        foreach (string gone in TileMapExtras) data.Extra?.Remove(gone);
+        data.Visited ??= new HashSet<string>();
+        data.ZoneId = tiles.MapId ?? string.Empty;
+        data.RoomId = null;
+        if (!ZoneCatalog.Contains(data.ZoneId)) return;
+
+        PartyMember leader = data.Party is { Count: > 0 } ? data.Party[Math.Clamp(data.Leader, 0, data.Party.Count - 1)] : null;
+        (RoomDefinition room, Vector2 feet) = Locate(data.ZoneId, leader?.Feet ?? Vector2.Zero);
+        data.RoomId = room.Id;
+        foreach (PartyMember member in data.Party ?? Enumerable.Empty<PartyMember>())
+            if (member is not null) member.Feet = feet;
+
+        data.BackZone = data.BackRoom = null;
+        if (tiles.BackMap is string back && ZoneCatalog.Contains(back))
+        {
+            (RoomDefinition backRoom, Vector2 backFeet) = Locate(back, new Vector2(data.BackX, data.BackY));
+            data.BackZone = back;
+            data.BackRoom = backRoom.Id;
+            (data.BackX, data.BackY) = (backFeet.X, backFeet.Y);
+        }
+
+        foreach (string map in tiles.Seen?.Keys ?? Enumerable.Empty<string>())
+        {
+            if (!ZoneCatalog.Contains(map)) continue;
+            foreach (RoomDefinition seen in ZoneCatalog.Get(map).Rooms) data.Visited.Add(map + "/" + seen.Id);
+        }
+        data.Visited.Add(data.ZoneId + "/" + data.RoomId);
+    }
+
+    /// <summary>Where feet on an old tile map are in its zone: the room whose legacy rectangle they're in, as far along it as they were along that, halfway down its floor; or the zone's start, if no room's there.</summary>
+    /// <param name="zone">The zone, which is the map's id.</param>
+    /// <param name="mapFeet">Where the feet were on the map, in its world pixels.</param>
+    private static (RoomDefinition Room, Vector2 Feet) Locate(string zone, Vector2 mapFeet)
+    {
+        ZoneDefinition definition = ZoneCatalog.Get(zone);
+        Vector2 tile = mapFeet / Tilemap.TileSize;
+        foreach ((Rectangle old, string id) in definition.Legacy)
+        {
+            if (!old.Contains(tile)) continue;
+
+            RoomDefinition room = definition.Room(id);
+            float along = (tile.X - old.X) / old.Width;
+            float x = RoomMargin + along * (room.Width - 2f * RoomMargin);
+            return (room, new Vector2(x, (room.BackEdgeAt(x) + room.FrontEdgeAt(x)) / 2f));
+        }
+
+        ZoneCatalog.TryResolve(zone, ZoneLoader.StartSpawn, out RoomDefinition start, out MapSpawn at);
+        return (start, at.Feet);
+    }
+
+    /// <summary>How far in from each end of a room an old save's leader can land, in world pixels: the converter's margin, 64 canvas pixels.</summary>
+    private const float RoomMargin = 16f;
+
+    /// <summary>What a save older than version 8 has that this build doesn't: the tile maps' fields (read on their own, as TileMapFields), and the rooms' a version 7 file kept beside them, worked out again.</summary>
+    private static readonly string[] TileMapExtras = { "MapId", "BackMap", "Seen", "RoomX", "RoomY", "BackRoomX", "BackRoomY" };
+
+    /// <summary>The fields a save the tile maps wrote had that SaveData doesn't any more, read out of the same file on their own for IntoRooms.</summary>
+    private sealed class TileMapFields
+    {
+        /// <summary>The map the party was on, which is the zone's id.</summary>
+        public string MapId { get; set; }
+
+        /// <summary>The map the way out of the last building went back to; BackX and BackY were where on it.</summary>
+        public string BackMap { get; set; }
+
+        /// <summary>The maps that had been seen any of, by id.</summary>
+        public Dictionary<string, byte[]> Seen { get; set; }
     }
 
     /// <summary>The id Valen had before the Soul-Bound took his place.</summary>
@@ -325,7 +419,9 @@ public static class SaveSystem
     /// way Inventory keeps it, and something worn in a slot it doesn't go in goes back in the bag.
     /// Hit points out of range get pulled back in, after the equipment, since what's worn can add to
     /// the most there can be. Whoever's away is mended the same as the party and the camp. A socket
-    /// with nothing in it is dropped, and so is anyone left holding nothing.
+    /// with nothing in it is dropped, and so is anyone left holding nothing. A party in a room that
+    /// isn't there, or with its leader off the floor, goes to the zone's start; a way back to a room
+    /// that isn't there is forgotten; and the room you're in counts as visited.
     /// </remarks>
     /// <param name="data">The save, upgraded.</param>
     private static void Mend(SaveData data)
@@ -335,7 +431,6 @@ public static class SaveSystem
         data.Opened ??= new();
         data.Triggered ??= new();
         data.Waypoints ??= new();
-        data.Seen ??= new();
         data.Sockets ??= new();
         foreach (Dictionary<string, string> held in data.Sockets.Values)
         {
@@ -379,6 +474,33 @@ public static class SaveSystem
                 if (member.Spent[resource] <= 0) member.Spent.Remove(resource);
             member.Hp = Math.Clamp(member.Hp, 0, member.MaxHp);
         }
+
+        MendRooms(data);
+    }
+
+    /// <summary>Puts the room fields right: a room, the party on its floor, a way back that goes somewhere, and the room in Visited.</summary>
+    /// <param name="data">The save, its party mended.</param>
+    private static void MendRooms(SaveData data)
+    {
+        data.Visited ??= new();
+        if (!ZoneCatalog.Contains(data.ZoneId)) return;
+
+        ZoneDefinition zone = ZoneCatalog.Get(data.ZoneId);
+        RoomDefinition room = zone.Room(data.RoomId ?? string.Empty);
+        if (room is null || !room.OnFloor(data.LeaderMember.Feet))
+        {
+            ZoneCatalog.TryResolve(zone.Id, ZoneLoader.StartSpawn, out room, out MapSpawn start);
+            data.RoomId = room.Id;
+            foreach (PartyMember member in data.Party)
+            {
+                member.Feet = start.Feet;
+                member.Facing = start.Facing;
+            }
+        }
+
+        if (data.BackZone is not null && (!ZoneCatalog.Contains(data.BackZone) || ZoneCatalog.Get(data.BackZone).Room(data.BackRoom ?? string.Empty) is null))
+            data.BackZone = data.BackRoom = null;
+        data.Visited.Add(zone.Id + "/" + data.RoomId);
     }
 
     /// <summary>Drops anything in the bag that isn't an item or isn't there at all, and puts the rest back into stacks the way Inventory keeps them.</summary>

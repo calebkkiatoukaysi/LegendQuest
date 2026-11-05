@@ -1,48 +1,49 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using LegendQuest.Collisions;
 
 namespace LegendQuest.World;
 
 /// <summary>
-/// A map as something to draw, walk into and see across: its tiles cut from the tileset, drawn in
-/// three layers, the walls built from the solid ones, and which cells stop light and sight.
+/// A room's tile strip as something to draw and walk on: its tiles cut from the tileset and drawn in
+/// two layers, the ground under the floor band (and an interior's back wall) and what lies on it.
 /// </summary>
 /// <remarks>
 /// This is the tilemap exercise's Tilemap: cut the tileset into source rectangles in LoadContent,
-/// then draw the map in a double loop. What's new is the three layers, picking a variant per cell
-/// (and the part of a block), only drawing the tiles that are on screen, the walls, and the line of
-/// sight.
+/// then draw the tiles in a double loop. What's new is the two layers, picking a variant per cell
+/// (and the part of a block), the edges where one kind of ground meets another, the animated water,
+/// and only drawing the tiles that are on screen. The strip is drawn at an origin partway down its
+/// room, and has no walls: the room's floor band says where feet go.
 /// </remarks>
 public class Tilemap
 {
     /// <summary>One tile, in art pixels.</summary>
     public const int TileSize = 16;
 
-    private readonly MapDefinition _map;
-    private readonly List<BoundingRectangle> _walls = new();
+    private readonly TilesetDefinition _tileset;
+    private readonly int[,] _ground;
+    private readonly int[,] _detail;
+    private readonly int _width;
+    private readonly int _height;
 
-    /// <summary>Cells a shut door is standing in. They stop light and sight like a wall until it opens.</summary>
-    private readonly HashSet<Point> _shut = new();
+    /// <summary>Where the top left of the first tile is, in world pixels: how far down its room the strip starts.</summary>
+    private readonly Point _origin;
 
     private Texture2D _sheet;
     private Rectangle[] _frames;
 
-    /// <summary>The whole map, in world pixels.</summary>
-    public Rectangle Bounds => new(0, 0, _map.Width * TileSize, _map.Height * TileSize);
-
-    /// <summary>Everything nobody can walk through: runs of solid tiles, and a wall all the way round outside the edge.</summary>
-    public IReadOnlyList<BoundingRectangle> Walls => _walls;
-
-    /// <summary>Builds the walls for a map. The tiles themselves load in LoadContent.</summary>
-    /// <param name="map">The map.</param>
-    public Tilemap(MapDefinition map)
+    /// <summary>Gets a room's tile strip ready to draw, its top left at an origin. The tiles load in LoadContent.</summary>
+    /// <param name="strip">The strip's tiles.</param>
+    /// <param name="origin">Where its top left goes, in world pixels: (0, the room's TilesTop).</param>
+    public Tilemap(TileLayers strip, Point origin)
     {
-        _map = map;
-        BuildWalls();
+        _tileset = strip.Tileset;
+        _ground = strip.Ground;
+        _detail = strip.Detail;
+        _width = strip.Ground.GetLength(0);
+        _height = strip.Ground.GetLength(1);
+        _origin = origin;
     }
 
     /// <summary>Loads the tileset's sheet and cuts it into one source rectangle per tile.</summary>
@@ -50,7 +51,7 @@ public class Tilemap
     /// <param name="content">The content manager to load with.</param>
     public void LoadContent(ContentManager content)
     {
-        TilesetDefinition tileset = _map.Tileset;
+        TilesetDefinition tileset = _tileset;
         _sheet = content.Load<Texture2D>(tileset.Texture);
 
         int columns = _sheet.Width / TileSize;
@@ -66,25 +67,26 @@ public class Tilemap
         }
     }
 
-    /// <summary>Draws the three layers of whatever is on screen, the tiles that move on the frame the clock says.</summary>
+    /// <summary>Draws both layers of whatever is on screen, the tiles that move on the frame the clock says.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="spriteBatch">The SpriteBatch to render with, in world space, point-sampled, back to front.</param>
-    /// <param name="view">The part of the map on screen, in world pixels.</param>
-    /// <param name="tint">Colour multiplied into every tile. White for the map itself; the map screen browns it.</param>
+    /// <param name="view">The part of the world on screen, in world pixels.</param>
+    /// <param name="tint">Colour multiplied into every tile: the room's tint.</param>
     public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Rectangle view, Color tint)
     {
-        int x0 = Math.Max(0, view.Left / TileSize), x1 = Math.Min(_map.Width - 1, view.Right / TileSize);
-        int y0 = Math.Max(0, view.Top / TileSize), y1 = Math.Min(_map.Height - 1, view.Bottom / TileSize);
+        Point first = CellOf(new Vector2(view.Left - _origin.X, view.Top - _origin.Y));
+        Point last = CellOf(new Vector2(view.Right - _origin.X, view.Bottom - _origin.Y));
+        int x0 = Math.Max(0, first.X), x1 = Math.Min(_width - 1, last.X);
+        int y0 = Math.Max(0, first.Y), y1 = Math.Min(_height - 1, last.Y);
         float seconds = (float)gameTime.TotalGameTime.TotalSeconds;
 
         for (int y = y0; y <= y1; y++)
         {
             for (int x = x0; x <= x1; x++)
             {
-                DrawTile(spriteBatch, _map.Ground[x, y], x, y, seconds, tint, Layers.GroundTile);
+                DrawTile(spriteBatch, _ground[x, y], x, y, seconds, tint, Layers.GroundTile);
                 DrawEdges(spriteBatch, x, y, tint);
-                DrawTile(spriteBatch, _map.Detail[x, y], x, y, seconds, tint, Layers.DetailTile);
-                DrawTile(spriteBatch, _map.Overhead[x, y], x, y, seconds, tint, Layers.Overhead);
+                DrawTile(spriteBatch, _detail[x, y], x, y, seconds, tint, Layers.DetailTile);
             }
         }
     }
@@ -93,138 +95,48 @@ public class Tilemap
     /// <param name="world">The point, in world pixels.</param>
     public Surface SurfaceAt(Vector2 world)
     {
-        Point cell = CellOf(world);
-        if (cell.X < 0 || cell.Y < 0 || cell.X >= _map.Width || cell.Y >= _map.Height) return Surface.Stone;
-        return _map.Tileset[_map.Ground[cell.X, cell.Y]].Surface;
+        Point cell = CellOf(world - _origin.ToVector2());
+        if (cell.X < 0 || cell.Y < 0 || cell.X >= _width || cell.Y >= _height) return Surface.Stone;
+        return _tileset[_ground[cell.X, cell.Y]].Surface;
     }
 
-    /// <summary>Whether a cell stops people walking: its ground or its detail is solid. Off the map counts as solid.</summary>
-    /// <param name="x">The cell's column.</param>
-    /// <param name="y">The cell's row.</param>
-    public bool IsSolid(int x, int y)
-    {
-        if (x < 0 || y < 0 || x >= _map.Width || y >= _map.Height) return true;
-
-        TilesetDefinition tiles = _map.Tileset;
-        int detail = _map.Detail[x, y];
-        return tiles[_map.Ground[x, y]].Solid || detail != 0 && tiles[detail].Solid;
-    }
-
-    /// <summary>Whether a cell stops light and sight: an opaque tile, or a shut door. Off the map counts.</summary>
-    /// <param name="x">The cell's column.</param>
-    /// <param name="y">The cell's row.</param>
-    public bool BlocksSight(int x, int y)
-    {
-        if (x < 0 || y < 0 || x >= _map.Width || y >= _map.Height) return true;
-        if (_shut.Contains(new Point(x, y))) return true;
-
-        TilesetDefinition tiles = _map.Tileset;
-        int detail = _map.Detail[x, y];
-        return tiles[_map.Ground[x, y]].Opaque || detail != 0 && tiles[detail].Opaque;
-    }
-
-    /// <summary>Marks the cells a door stands in as shut (they stop light and sight) or open.</summary>
-    /// <param name="cells">The cells, in tiles.</param>
-    /// <param name="shut">True if the door is shut.</param>
-    public void Shut(Rectangle cells, bool shut)
-    {
-        for (int y = cells.Top; y < cells.Bottom; y++)
-        {
-            for (int x = cells.Left; x < cells.Right; x++)
-            {
-                if (shut) _shut.Add(new Point(x, y));
-                else _shut.Remove(new Point(x, y));
-            }
-        }
-    }
-
-    /// <summary>Whether anything that blocks sight is on the line between two cells, not counting the two ends.</summary>
-    /// <remarks>Bresenham, walked across the tiles. The ends don't count so a wall you're looking at is still seen, and so is a torch on one.</remarks>
-    /// <param name="from">One end, in tiles.</param>
-    /// <param name="to">The other end.</param>
-    public bool LineBlocked(Point from, Point to)
-    {
-        int x0 = from.X, y0 = from.Y, x1 = to.X, y1 = to.Y;
-        int dx = Math.Abs(x1 - x0), dy = -Math.Abs(y1 - y0);
-        int sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
-        int error = dx + dy;
-        int x = x0, y = y0;
-
-        while (x != x1 || y != y1)
-        {
-            int doubled = 2 * error;
-            if (doubled >= dy) { error += dy; x += sx; }
-            if (doubled <= dx) { error += dx; y += sy; }
-
-            if ((x != x1 || y != y1) && BlocksSight(x, y)) return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>The cell a point is in.</summary>
-    /// <param name="world">The point, in world pixels.</param>
-    public static Point CellOf(Vector2 world) =>
-        new((int)MathF.Floor(world.X / TileSize), (int)MathF.Floor(world.Y / TileSize));
+    /// <summary>The cell a point is in, measured from the strip's origin.</summary>
+    /// <param name="local">The point, in world pixels from the strip's top left.</param>
+    private static Point CellOf(Vector2 local) =>
+        new((int)MathF.Floor(local.X / TileSize), (int)MathF.Floor(local.Y / TileSize));
 
     /// <summary>Draws one cell of one layer, unless it's empty.</summary>
     private void DrawTile(SpriteBatch spriteBatch, int tile, int x, int y, float seconds, Color tint, float layerDepth)
     {
         if (tile == 0) return;
 
-        Rectangle source = _frames[_map.Tileset.FrameOf(tile, x, y, seconds)];
-        spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, tint,
-            0f, Vector2.Zero, 1f, SpriteEffects.None, layerDepth);
+        Rectangle source = _frames[_tileset.FrameOf(tile, x, y, seconds)];
+        spriteBatch.Draw(_sheet, CellCorner(x, y), source, tint, 0f, Vector2.Zero, 1f, SpriteEffects.None, layerDepth);
     }
 
-    /// <summary>Draws a ground tile's edges along whichever of its sides meet ground of another kind. Not along the edge of the map.</summary>
+    /// <summary>Draws a ground tile's edges along whichever of its sides meet ground of another kind. Not along the edge of the strip.</summary>
     private void DrawEdges(SpriteBatch spriteBatch, int x, int y, Color tint)
     {
-        int tile = _map.Ground[x, y];
-        if (tile == 0 || !_map.Tileset[tile].Edged) return;
+        int tile = _ground[x, y];
+        if (tile == 0 || !_tileset[tile].Edged) return;
 
         for (int side = 0; side < 4; side++)
         {
             int nx = x + Across[side], ny = y + Down[side];
-            if (nx < 0 || ny < 0 || nx >= _map.Width || ny >= _map.Height) continue;
+            if (nx < 0 || ny < 0 || nx >= _width || ny >= _height) continue;
 
-            int next = _map.Ground[nx, ny];
+            int next = _ground[nx, ny];
             if (next == 0 || next == tile) continue;
 
-            Rectangle source = _frames[_map.Tileset.EdgeFrame(tile, side)];
-            spriteBatch.Draw(_sheet, new Vector2(x * TileSize, y * TileSize), source, tint,
-                0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.GroundEdge);
+            Rectangle source = _frames[_tileset.EdgeFrame(tile, side)];
+            spriteBatch.Draw(_sheet, CellCorner(x, y), source, tint, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.GroundEdge);
         }
     }
+
+    /// <summary>Where a cell's top left is in the world.</summary>
+    private Vector2 CellCorner(int x, int y) => new(_origin.X + x * TileSize, _origin.Y + y * TileSize);
 
     /// <summary>Which way each side is: north, east, south, west.</summary>
     private static readonly int[] Across = { 0, 1, 0, -1 };
     private static readonly int[] Down = { -1, 0, 1, 0 };
-
-    /// <summary>Merges each row's runs of solid cells into one rectangle each, and walls the outside of the map in.</summary>
-    /// <remarks>Same as the lobby: a few dozen rectangles instead of one per tile.</remarks>
-    private void BuildWalls()
-    {
-        for (int y = 0; y < _map.Height; y++)
-        {
-            int runStart = -1;
-            for (int x = 0; x <= _map.Width; x++)
-            {
-                bool solid = x < _map.Width && IsSolid(x, y);
-                if (solid && runStart < 0) runStart = x;
-                if (!solid && runStart >= 0)
-                {
-                    _walls.Add(new BoundingRectangle(runStart * TileSize, y * TileSize, (x - runStart) * TileSize, TileSize));
-                    runStart = -1;
-                }
-            }
-        }
-
-        // One tile thick round the outside, so nobody walks off the edge.
-        float w = _map.Width * TileSize, h = _map.Height * TileSize;
-        _walls.Add(new BoundingRectangle(-TileSize, -TileSize, w + 2 * TileSize, TileSize));
-        _walls.Add(new BoundingRectangle(-TileSize, h, w + 2 * TileSize, TileSize));
-        _walls.Add(new BoundingRectangle(-TileSize, 0f, TileSize, h));
-        _walls.Add(new BoundingRectangle(w, 0f, TileSize, h));
-    }
 }

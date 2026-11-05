@@ -109,7 +109,7 @@ public class GameOverScreen : MenuScreen
         }
 
         SaveData game = latest.Data;
-        LoadingScreen.Load(ScreenManager, MapCatalog.Get(game.MapId).Name.ToUpperInvariant(), new ExploreScreen(game));
+        LoadingScreen.Load(ScreenManager, ZoneCatalog.Get(game.ZoneId).Name.ToUpperInvariant(), new ExploreScreen(game));
     }
 
     /// <summary>Goes back to the title, through the loading screen so everything under this fades out first.</summary>
