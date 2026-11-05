@@ -55,9 +55,10 @@ public sealed class DialogueNode
     public bool Board { get; init; }
 
     /// <summary>A sound to play as the line comes up, or null: a bell, a splash.</summary>
+    /// <remarks>For the hand-written lines. A script compiled from the story plays its sounds with sfx cues instead, when they come in the cues.</remarks>
     public Sfx? Sound { get; init; }
 
     /// <summary>What happens on the stage before the line shows, in order: the cue lines over it in the script.</summary>
-    /// <remarks>Kept and checked when the game starts, but nothing plays them yet. The script compiler works Painting, Board and Sound out from them, so a generated line looks right without.</remarks>
+    /// <remarks>CutsceneDirector plays them as the line comes up, and the line shows once they're done. The script compiler works Painting and Board out from them too, the way Legacy shows a backdrop and the quest board.</remarks>
     public IReadOnlyList<StageCue> Cues { get; init; } = new StageCue[0];
 }

@@ -75,7 +75,7 @@ public partial class ExploreScreen
         float pixel = _camera.Pixel;
         float alpha = TransitionAlpha;
         float clock = (float)gameTime.TotalGameTime.TotalSeconds;
-        Color tint = _map.Tint;
+        Color tint = WorldTint;
 
         // 1. The map, the marks on the ground, and everyone on it, sorted by how far down they stand.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);

@@ -112,6 +112,14 @@ public class SaveData
     /// <remarks>Packed, so a map is a few hundred bytes. JSON writes a byte array as base64, which keeps the file short.</remarks>
     public Dictionary<string, byte[]> Seen { get; set; } = new();
 
+    /// <summary>What everyone's holding in their sockets, as scenes' hold and drop cues left it: by who (an origin id, or someone's id on a map), then by socket (hand_front, neck, belt_front), the item's id.</summary>
+    /// <remarks>
+    /// Legacy characters draw none of it. It's kept so that whatever draws characters with their
+    /// items in their hands later finds them where the story put them, mid-game as much as from the
+    /// start: the herring on your neck from the voyage, Tomas's hook on your belt.
+    /// </remarks>
+    public Dictionary<string, Dictionary<string, string>> Sockets { get; set; } = new();
+
     /// <summary>Fields in the file that this build has no property for.</summary>
     /// <remarks>
     /// Without this System.Text.Json drops unknown fields on read, so a field I remove later would

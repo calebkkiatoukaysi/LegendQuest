@@ -176,6 +176,10 @@ trigger courier 14 6 w=3 h=2 talk=a1-c2-02-letter unless=courier-letter-read
 ; or made clean; her in front of it; the bones of what she's dragged in; and a chest in the far
 ; corner. A1-C2-02 starts as you come in, once the letter's read.
 trigger den 17 9 h=3 talk=a1-c2-02 when=courier-letter-read unless=thornmother-beaten
+
+; The way out of the den, back toward the quarry's mouth, where the Soul-Bound walks off to if the
+; crystal's to be purified (A1-C2-02).
+spawn quarry-mouth 14.5 9.5 facing=left
 prop black-crystal 26 6.6 unless=crystal-dealt-with
 prop black-crystal-shattered 26 6.6 when=crystal-shattered
 prop black-crystal-purified 26 6.6 when=crystal-purified

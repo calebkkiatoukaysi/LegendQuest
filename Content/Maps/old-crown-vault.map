@@ -218,6 +218,7 @@ trigger pedestal 17 7 w=4 h=1 say="The pedestal's gold cradle is empty, its pron
 ; along the gallery to him. Once he's called a truce the sappers come up through the cracked floor
 ; beside him, and the hole they made stays.
 npc kael 32 2.75 cast=kael facing=up unless=kael-recruited
+spawn relic-shelf 32 2.75 facing=up
 trigger kael-shelf 27 4 w=8 h=5 talk=a1-c4-02 unless=a1-c4-02 mark=yes
 prop sapper-hole 32.5 8 when=kael-truce
 npc sapper-1 30.5 6.5 creature=hollowed-sapper name="A Hollowed Sapper" facing=left when=kael-truce unless=sappers-beaten

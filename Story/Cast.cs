@@ -19,6 +19,9 @@ public static class Cast
     /// <summary>Hedda's look, which both her ids share: the map's and the as-built lines' refugee-mother, and the story's hedda.</summary>
     private static readonly CharacterLook HeddaLook = new() { Skin = 3, Face = 1, Eyes = 1, Hair = 3, HairColour = 0, Shirt = 4, Vest = 6, Legs = 1, LegsColour = 0, Cloak = 4 };
 
+    /// <summary>The Princess hooded, as she is in the Gilded Flagon: elara-hooded's look, and the one a swap cue gives elara by that name.</summary>
+    private static readonly CharacterLook ElaraHoodedLook = new() { Skin = 0, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Hat = 5, Shirt = 4, Vest = 6, LegsColour = 0, Cloak = 4 };
+
     private static readonly CastMember[] Table =
     {
         new("lookout", "Lookout", null, null),
@@ -96,10 +99,10 @@ public static class Cast
         // King in navy and gold with the small crown, the Chancellor in plum silk, and the palace's
         // messenger and guards in the same navy and gold. The hood, crown and circlet are hats 5, 4
         // and 6.
-        new("elara-hooded", "Princess Elara", null,
-            new CharacterLook { Skin = 0, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Hat = 5, Shirt = 4, Vest = 6, LegsColour = 0, Cloak = 4 }),
+        new("elara-hooded", "Princess Elara", null, ElaraHoodedLook),
         new("elara", "Princess Elara", null,
-            new CharacterLook { Skin = 0, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Hat = 6, Shirt = 1, Vest = 0, Legs = 1, LegsColour = 2, Cloak = 1 }),
+            new CharacterLook { Skin = 0, Face = 3, Eyes = 2, Hair = 4, HairColour = 2, Hat = 6, Shirt = 1, Vest = 0, Legs = 1, LegsColour = 2, Cloak = 1 },
+            new Dictionary<string, CharacterLook> { ["elara-hooded"] = ElaraHoodedLook }),
         new("leon", "King Leon", null,
             new CharacterLook { Skin = 0, Face = 1, Eyes = 4, Hair = 2, HairColour = 4, Beard = 4, Hat = 4, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 5 }),
         new("crane", "Lord Chancellor Crane", null,
@@ -117,13 +120,18 @@ public static class Cast
     private static readonly Dictionary<string, CastMember> ById = new();
 
     /// <summary>Indexes the table.</summary>
-    /// <remarks>Throws on purpose, so a typo shows up when the game starts. A member with a sheet has to have a townsfolk sheet by that name.</remarks>
+    /// <remarks>Throws on purpose, so a typo shows up when the game starts. A member with a sheet has to have a townsfolk sheet by that name, and every other look a member has needs a name of its own and a look to be.</remarks>
     static Cast()
     {
         foreach (CastMember member in Table)
         {
             if (member.Sheet is not null && !Townsfolk.Contains(member.Sheet))
                 throw new InvalidOperationException($"Cast member {member.Id} is drawn from {member.Sheet}, which isn't a townsfolk sheet.");
+            foreach ((string name, CharacterLook look) in member.Alternates ?? new Dictionary<string, CharacterLook>())
+            {
+                if (string.IsNullOrWhiteSpace(name) || name == member.Id || look is null)
+                    throw new InvalidOperationException($"Cast member {member.Id} has another look, {name}, that's unnamed, their own name, or nothing.");
+            }
             if (!ById.TryAdd(member.Id, member)) throw new InvalidOperationException($"Two cast members are called {member.Id}.");
         }
     }

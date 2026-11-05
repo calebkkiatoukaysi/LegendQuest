@@ -38,7 +38,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 5;
+    public const int CurrentVersion = 6;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -201,8 +201,9 @@ public static class SaveSystem
     /// is when there were items: everyone in the party and at camp gets dressed in their kit (a
     /// companion's own, or their class's), and the bag gets the healing potions a new game starts
     /// with. Version 5 is when the act became a meter: a game that hasn't seen Act 1's last card is
-    /// in Act 1, and one that has is in Act 2. The old fields only survive the read because of
-    /// SaveData.Extra.
+    /// in Act 1, and one that has is in Act 2. Version 6 is when the sockets went in: the herring and
+    /// Tomas's hook, if they've been given, go where the voyage and the docks put them, your neck and
+    /// your belt. The old fields only survive the read because of SaveData.Extra.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <returns>The same game, in the shape this build expects.</returns>
@@ -286,6 +287,20 @@ public static class SaveSystem
             data.SetMeter(Meters.Act, data.Flags.Contains(Act1Done) ? 2 : 1);
         }
 
+        if (data.Version < 6)
+        {
+            // Mend hasn't been at these either.
+            data.Items ??= new List<string>();
+            data.Sockets ??= new Dictionary<string, Dictionary<string, string>>();
+            foreach ((string item, string socket) in WornFromTheStart)
+            {
+                if (!data.Items.Contains(item)) continue;
+                if (!data.Sockets.TryGetValue(Origins.You, out Dictionary<string, string> yours))
+                    data.Sockets[Origins.You] = yours = new Dictionary<string, string>();
+                yours[socket] = item;
+            }
+        }
+
         data.Version = CurrentVersion;
         return data;
     }
@@ -299,6 +314,9 @@ public static class SaveSystem
     /// <summary>The flag Act 1's last card sets, which says a version 4 save is in Act 2.</summary>
     private const string Act1Done = "act1-done";
 
+    /// <summary>The key items a scene puts on you as it hands them over, and the socket each goes in: the voyage's herring round your neck, and Tomas's hook on your belt. A version 5 save that has them gets them there.</summary>
+    private static readonly (string Item, string Socket)[] WornFromTheStart = { ("herring-charm", "neck"), ("tomas-hook", "belt_front") };
+
     /// <summary>Puts back anything a hand-edited file left out or set to null, so nothing that reads the save has to check.</summary>
     /// <remarks>
     /// A save with nobody in the party gets the starting party, standing nowhere, which puts them on
@@ -306,7 +324,8 @@ public static class SaveSystem
     /// in the bag or worn that this build hasn't got is dropped, the bag is put back into stacks the
     /// way Inventory keeps it, and something worn in a slot it doesn't go in goes back in the bag.
     /// Hit points out of range get pulled back in, after the equipment, since what's worn can add to
-    /// the most there can be. Whoever's away is mended the same as the party and the camp.
+    /// the most there can be. Whoever's away is mended the same as the party and the camp. A socket
+    /// with nothing in it is dropped, and so is anyone left holding nothing.
     /// </remarks>
     /// <param name="data">The save, upgraded.</param>
     private static void Mend(SaveData data)
@@ -317,6 +336,15 @@ public static class SaveSystem
         data.Triggered ??= new();
         data.Waypoints ??= new();
         data.Seen ??= new();
+        data.Sockets ??= new();
+        foreach (Dictionary<string, string> held in data.Sockets.Values)
+        {
+            if (held is null) continue;
+            foreach (string socket in new List<string>(held.Keys))
+                if (string.IsNullOrEmpty(held[socket])) held.Remove(socket);
+        }
+        foreach (string who in new List<string>(data.Sockets.Keys))
+            if (data.Sockets[who] is not { Count: > 0 }) data.Sockets.Remove(who);
 
         data.Camp ??= new();
         data.Away ??= new();

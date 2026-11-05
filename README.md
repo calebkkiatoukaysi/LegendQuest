@@ -333,7 +333,7 @@ the Red Gulls stand on the docks until they're beaten, and the Watch only turns 
 
 | Kind | What it is | Settings |
 | --- | --- | --- |
-| `spawn` | Somewhere you can arrive. Every map needs one called `start` | `facing` (down if it isn't set) |
+| `spawn` | Somewhere you can arrive, or a mark a scene's stage cues put people at or walk them to (`bow`, `throne`). Every map needs one called `start` | `facing` (down if it isn't set) |
 | `prop` | Anything out of `PropCatalog`; the id is which one | none |
 | `npc` | Someone standing there (see People, under [The party](#the-party)), or a creature | `cast` (one of the story's people, from `Cast`), `name` with `sheet` (one of `Townsfolk`) or `look` (a number: someone the paperdoll dresses at random from it, for crowds), or `creature` (one of `Creatures`, called what it is unless `name` says otherwise), never two of them; `facing`, `say` (several lines go between `\|`, said in turn), `talk` (the conversation talking to them starts, while it can, instead of looking theirs up by their id), `wander` (how far they stroll, in tiles), and `aboard` (a prop on the map they stand on and move with, so the Gull's Wager's crew come into the harbour on her deck; they're on the prop, so the tiles under them can be water, and they can't wander) |
 | `light` | A pool of light with nothing drawn for it, like daylight down the barrow's steps | `reach` in tiles, `strength` 0 to 1 |
@@ -843,6 +843,44 @@ when there isn't one gets their `say` line over their head instead.
   `{sb_they}`, `{sb_them}` and `{sb_their}` are their pronouns, `{race}`, `{class}`, `{sb_race}` and
   `{sb_class}` are what the two of you are, and `{romance}` is whoever you're with. A capital on the
   token's first letter capitalises the word it gives.
+- **Stage cues** are what happens on the map around a line before it shows: someone put at a spawn
+  or beside someone, walking somewhere, turning, a clip, something held, a glow, the camera, a fade,
+  a shake, a tint, a sound, the music. A story script writes them on `!` lines over the line they're
+  for (`! place sera at treeline facing left · anim sera bow-lowered`), and the ones after the last
+  line are its `Closing`, played once that line's put away.
+
+How the cues play is `Story/01-build-plan.md` §5. `StageDirection` reads a cue's words, the same
+way for the game and for the start-up check. `CutsceneDirector` plays a line's cues as the line comes
+up: everyone has a queue of their own, so a cue waits for the last one on the same person (walking
+and clips take time; the rest is at once) while cues on different people go together; a fade, a
+wait, a backdrop, the camera, a travel-actor and a slow wait for everything before them and hold
+up everything after; and the line shows once nothing's left. The panel's down while they play, and
+Escape or a click puts everything at its end at once. A cue line's `{if …}` is looked at as the line
+comes up. The director keeps the clock, the fades (drawn by the conversation, over the painting and
+under the panel), the sounds, the music and the slow; what happens to the world goes through
+`ICutsceneStage`, which takes actor ids, spawn names and world positions and nothing about tiles, so
+the rooms that replace the tile maps can be one too. `ExploreScreen` is the stage on a tile map.
+Actor ids are `you`, `soulbound`, `party`, `both`, a companion by their origin id, anyone on the map
+by their id, and a cast id, which is everyone the map puts down as that one of the cast and every
+copy numbered after it; the plural is the same, so `royal-guards` is every royal guard in the keep,
+and `place royal-guard x4 at throne` makes `royal-guard-1` to `-4` round the throne. Someone a cue
+puts on the stage who isn't there, but is one of the cast or the creatures, is brought on.
+
+Legacy, which is how everything's drawn for now, does what build plan §5.3's Legacy column says. A
+spawn's spot is exactly where the map has it (the spawns a scene uses are in the map files beside
+who stands there), and beside, before, over and the crowd are the nearest spots the feet fit. Walking
+follows the mouse's A* paths at a walk. A clip shows one of the sheet's five poses where
+`LegacyClips` has one for it (a pommel strike is a strike, a heal is a cast, a fall is downed) and
+nothing where it doesn't, which isn't a fault; a pose is held through its line, and downed till a
+clip gets them up. What someone's holding goes in the save's sockets and isn't drawn. A light is a
+glow round whoever it's on (or whoever's holding it). The sigil comes up on the corner of the party's
+cards. A swap changes one of the cast to another of their looks in `Cast`. An echo is someone at
+half strength, a reflection and a trail are nothing, a tint fades the map's light to one of `Tints`
+over 0.6 s, a shake is the fights' screen shake, and backdrop and board are the line's painting and
+quest board, which the compiler has already put on it, so they aren't drawn twice. A travel-actor
+to another map takes the party when the conversation's over, since the map can't change under a
+scene that's still on it. The creation screen's scripts aren't on a map, so there their cues on the
+world do nothing; their fades, sounds and backdrops still play.
 
 `DialogueRunner` plays a script against the save the way The Black Box's discussion did: it draws
 nothing and takes its `Random`, and hands back what happened as events (a meter moved, a check
@@ -852,7 +890,10 @@ companion's approval moves while they're in the party, a toast says they approve
 Every script is checked when the game starts, after the maps: every line going somewhere that
 exists, every flag, meter, item, painting and person being real, every check having somewhere to go
 on a pass and a fail, every clock having somewhere to go when it runs out, and every map and spawn
-a conversation travels to existing. A mistake stops the game right there and says which line. A
+a conversation travels to existing. A mistake stops the game right there and says which line. So
+does a cue that couldn't play, in a debug build: its words wrong, or a spawn or someone it names
+that can't be on its script's map (the header's `map`, or the last one named over it in the story
+file); a release build writes those to the error log instead and skips the cue when it comes. A
 script can be marked as work (`MarkerKind.Quest`) or an event (`MarkerKind.Event`), which puts the
 gold or red "!" over whoever has it.
 
@@ -1000,7 +1041,7 @@ because `bin/` gets deleted by every clean build.
 
 | File | What it is |
 | --- | --- |
-| `SaveData` | The whole save: the map (and where you came in, while you're inside a building), the party (each with where they're standing and what they're wearing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, the party's bag, the tutorial tips already shown, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, and what's been seen of each map. It grows with the game: each system adds its field when it exists |
+| `SaveData` | The whole save: the map (and where you came in, while you're inside a building), the party (each with where they're standing and what they're wearing), who's waiting at camp and which of the party you're controlling, the play time, the gold, the key items, the party's bag, the tutorial tips already shown, what you're to do next, your voice, who you're with, the story's meters and flags, the chests and doors opened, the triggers used, the waypoints found, what's been seen of each map, and what everyone's holding in their sockets, as the scenes' hold and drop cues left it. It grows with the game: each system adds its field when it exists |
 | `SaveSlot` | One slot as the form sees it: empty, occupied or unreadable, plus the line printed on it |
 | `SaveSystem` | Reads, writes and erases slots. The only thing in the project that touches a save file |
 
@@ -1018,8 +1059,10 @@ The same three decisions as The Black Box:
   3 is the Soul-Bound: Valen becomes them, keeping his name and look, the placeholders go, and the
   Prologue counts as done, since those games started on the harbour. Version 4 is items: everyone in
   the party and at camp gets dressed in their kit, and the bag gets the two healing potions a new
-  game starts with. Those old fields only make it as far as `Upgrade` because `SaveData.Extra` keeps
-  whatever this build doesn't have a property for.
+  game starts with. Version 5 is the act as a meter: Act 1 unless Act 1's last card has been seen.
+  Version 6 is the sockets: the herring and Tomas's hook, if they've been given, go round your neck
+  and on your belt, where the voyage and the docks put them. Those old fields only make it as far as
+  `Upgrade` because `SaveData.Extra` keeps whatever this build doesn't have a property for.
 
 Enums go in by name (`"Facing": "Up"`), so reordering one is safe and renaming one breaks saves; a
 number where a name should be makes the slot unreadable. Things on a map are kept as `map/id`, like
@@ -1243,11 +1286,11 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 - `LegendQuestGame.cs` reads the maps, sets up the window, the screen manager and the sound, and puts the title up. `LegendQuestGame.Proof.cs` takes the proof shots.
 - `StateManagement/` is the game state management tutorial: `GameScreen`, `ScreenManager`, `MenuScreen` and `MenuEntry`, `LoadingScreen`, and the input classes from the advanced input tutorial. `InputState` is the only thing that reads the keyboard, mouse or pads.
-- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, `ExploreScreen.Tutorial.cs` for the tutorial's tips, `ExploreScreen.Items.cs` for I and C, the shops and what goes in the bag, and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
+- `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, `ExploreScreen.Tutorial.cs` for the tutorial's tips, `ExploreScreen.Items.cs` for I and C, the shops and what goes in the bag, `ExploreScreen.Stage.cs` for the map as a conversation's stage, where its cues play (`ICutsceneStage`, played by `CutsceneDirector`), and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
 - `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
-- `Characters/` is the walking sprite and the shape of its frames (`WalkerSprite` and `WalkerShape`), the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), the beasts (`Creature` and `Creatures`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
-- `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, `StageCue` and `Expressions` for the cues and faces the story's scripts carry, the scripts compiled from `Story/` in `Dialogue/Scripts/Generated/`, and the hand-written ones in `Dialogue/Scripts/`, a file per chapter.
-- `Story/` is the story's tables (`Meters`, `KeyItems`, `Paintings`, `Cast`, the quest board's `Postings`, and `Banters`) and the plan the rest of the game is built from: the build plan, the writing guide, the scripts, the specs for rooms, combat, classes and art, and the generated registry (`Story/README.md` says what each is), with their two tools in `Story/tools/`.
+- `Characters/` is the walking sprite and the shape of its frames (`WalkerSprite` and `WalkerShape`), the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), the beasts (`Creature` and `Creatures`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`), and `LegacyClips` for what a scene's clips come to on a sheet.
+- `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, `StageCue` and `Expressions` for the cues and faces the story's scripts carry (`StageDirection`, `CueSpot` and `CueFacing` for what a cue's words mean), the scripts compiled from `Story/` in `Dialogue/Scripts/Generated/`, and the hand-written ones in `Dialogue/Scripts/`, a file per chapter.
+- `Story/` is the story's tables (`Meters`, `KeyItems`, `Paintings`, `Tints`, `Cast`, the quest board's `Postings`, and `Banters`) and the plan the rest of the game is built from: the build plan, the writing guide, the scripts, the specs for rooms, combat, classes and art, and the generated registry (`Story/README.md` says what each is), with their two tools in `Story/tools/`.
 - `Tutorial/` is the tutorial's tips, which draw nothing: `TutorialTip`, every one of them in `TutorialCatalog`, and `Tutorials` for which a game has seen and which are waiting. `TutorialPanel` and `KeyCaps` in `Components/` show them.
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
 - `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the catalogs (`AbilityCatalog`, `ResourceCatalog`, `EnemyCatalog`, `EncounterCatalog`), `EnemyMind` for the AI, `CombatSimulator` for `--simulate`, and the grid it all happens on (`ICombatGrid`, `OpenGround`, `Measure`).

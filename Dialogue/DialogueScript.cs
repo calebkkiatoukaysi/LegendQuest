@@ -41,10 +41,14 @@ public sealed class DialogueScript
     /// <summary>The marker over whoever it's with, while talking to them would start it: a gold "!" for work or a quest, a red one for an event, or none.</summary>
     public MarkerKind Marker { get; init; }
 
+    /// <summary>The map it happens on, by its id in MapCatalog, or null for one that isn't on a map (the creation screen's).</summary>
+    /// <remarks>Only for the start-up check, which looks for the spawns and the people its cues name on it. Whatever map it's played over is the one its cues play on.</remarks>
+    public string Map { get; init; }
+
     /// <summary>Every line, in order. It starts on the first.</summary>
     public required IReadOnlyList<DialogueNode> Nodes { get; init; }
 
-    /// <summary>What happens on the stage after the last line, in order: the cue lines under it in the script. Kept and checked like a line's Cues, and not played yet either.</summary>
+    /// <summary>What happens on the stage after the last line, in order: the cue lines under it in the script. They play once the last line's put away, before the conversation goes.</summary>
     public IReadOnlyList<StageCue> Closing { get; init; } = new StageCue[0];
 
     /// <summary>Each node's place in Nodes, by id, built by Validate.</summary>

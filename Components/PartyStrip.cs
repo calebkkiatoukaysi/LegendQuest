@@ -137,6 +137,10 @@ public class PartyStrip
     /// <param name="leader">Which one you're controlling.</param>
     internal Point ProofCard(int index, int leader) => Card(index, leader).Center;
 
+    /// <summary>Where something that tall sits on the corner of the party's cards: its top left, at the left of the first card and just over it, clear of the leader's card when that's raised.</summary>
+    /// <param name="height">How tall it is, in screen pixels.</param>
+    public static Point Corner(int height) => new(Margin, LegendQuestGame.ScreenHeight - Margin - CardHeight - LeaderRaise - CardGap - height);
+
     /// <summary>Where one card is on screen.</summary>
     private static Rectangle Card(int i, int leader) => new(
         Margin + i * (CardWidth + CardGap),

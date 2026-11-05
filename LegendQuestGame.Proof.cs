@@ -329,7 +329,12 @@ public partial class LegendQuestGame
 
         switch (frame)
         {
-            // The two lines of the card, each up in full as it comes.
+            // The two lines of the card, each up in full as it comes. Its fade in from black is
+            // skipped, the way Escape would, so the first is up in time for its shot.
+            case 39:
+                talk?.ProofSkip();
+                return null;
+
             case 40:
                 return "prologue-card.png";
 

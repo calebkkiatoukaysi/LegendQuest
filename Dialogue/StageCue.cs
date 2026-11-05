@@ -11,9 +11,9 @@ namespace LegendQuest.Dialogue;
 /// <remarks>
 /// Data only, the way the script writes it: the verb, then the rest of its words in order, so
 /// "place soulbound at bow facing right" is Place("soulbound", "at", "bow", "facing", "right") and
-/// the words keep their meaning in one place, whatever plays them (build plan §5.3). Kept on the
-/// line and checked when the game starts; nothing plays them yet, so a scene reads the same with
-/// them as without.
+/// the words keep their meaning in one place, whatever plays them (build plan §5.3): StageDirection
+/// reads them. CutsceneDirector plays a line's cues before the line shows, and the game checks every
+/// one against the map its script happens on when it starts.
 /// </remarks>
 /// <param name="Verb">What it does, as the script writes it: place, walk, fade.</param>
 /// <param name="Args">The words after the verb, in order. "×4" is written x4.</param>
@@ -112,7 +112,7 @@ public sealed record StageCue(string Verb, IReadOnlyList<string> Args, IReadOnly
     public StageCue When(params DialogueCondition[] conditions) => this with { Conditions = Conditions.Concat(conditions).ToArray() };
 
     /// <summary>What's wrong with it, or null if it's well formed.</summary>
-    /// <remarks>Only its shape. Whether the actors, spawns and props it names are on the map is for whatever plays it to say.</remarks>
+    /// <remarks>Only that it has a verb and words. StageDirection reads the words, and whether the actors, spawns and props it names are on the map is for DialogueCatalog's check and whatever plays it to say.</remarks>
     public string Problem()
     {
         if (!KnownVerbs.Contains(Verb ?? string.Empty)) return $"says {Verb}, which isn't a cue's verb";

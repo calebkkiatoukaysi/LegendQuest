@@ -29,7 +29,11 @@ namespace LegendQuest.Screens;
 /// violet and faded, and no name over the line. Approval, gold, items, whoever joins, whoever goes
 /// to wait at camp and whoever goes away come up as toasts, and everything the runner did goes out
 /// through Happened as it happens, so the map under it can catch up (someone leaving, someone
-/// joining). Nothing under it moves while it's up.
+/// joining). Nothing under it moves while it's up, unless a line's stage cues move it: a
+/// CutsceneDirector plays each line's cues on the stage under it (the map) before the line shows,
+/// and the script's closing cues once the last line's put away. While they play the panel's down,
+/// and Escape or a click skips them. The fade they bring is drawn here, over the painting and under
+/// the panel.
 /// </remarks>
 public class DialogueScreen : GameScreen
 {
@@ -98,11 +102,13 @@ public class DialogueScreen : GameScreen
     private readonly InputAction _next = new(new[] { Buttons.A }, new[] { Keys.Enter, Keys.Space, Keys.E }, true);
     private readonly InputAction _up = new(new[] { Buttons.DPadUp }, new[] { Keys.Up, Keys.W }, true);
     private readonly InputAction _down = new(new[] { Buttons.DPadDown }, new[] { Keys.Down, Keys.S }, true);
+    private readonly InputAction _skip = new(new[] { Buttons.Start, Buttons.Back }, new[] { Keys.Escape }, true);
     private static readonly Keys[] Numbers = { Keys.D1, Keys.D2, Keys.D3, Keys.D4 };
 
     private readonly DialogueRunner _runner;
     private readonly SaveData _game;
     private readonly Func<string, (string Name, Texture2D Sheet)> _speaker;
+    private readonly ICutsceneStage _stage;
     private readonly FormPanel _panel = new();
     private readonly PaintingSprite _paintings = new();
     private readonly Paperdoll _paperdoll = new();
@@ -127,6 +133,12 @@ public class DialogueScreen : GameScreen
     private string _lastPainting;
     private float _paintingAlpha;
     private string _travel;
+    private CutsceneDirector _director;
+
+    /// <summary>Whether the line the runner's on is up, its cues done; whether its cues have started (they wait behind the dice); and whether the closing cues are playing.</summary>
+    private bool _lineUp;
+    private bool _staged;
+    private bool _closing;
 
     /// <summary>Raised once the conversation's over, as the screen goes, with where it sends the party ("map spawn"), or null.</summary>
     public event Action<string> Finished;
@@ -139,10 +151,12 @@ public class DialogueScreen : GameScreen
     /// <param name="game">The game it changes.</param>
     /// <param name="speaker">Who a speaker id is: their name and the sheet their face comes off.</param>
     /// <param name="random">Where the dice come from.</param>
-    public DialogueScreen(DialogueScript script, SaveData game, Func<string, (string Name, Texture2D Sheet)> speaker, Random random)
+    /// <param name="stage">Where its stage cues play: the map it's over, or null for none (the creation screen's), where only the fades, the waits and the sounds do anything.</param>
+    public DialogueScreen(DialogueScript script, SaveData game, Func<string, (string Name, Texture2D Sheet)> speaker, Random random, ICutsceneStage stage = null)
     {
         _game = game;
         _speaker = speaker;
+        _stage = stage;
         _runner = new DialogueRunner(script, game, random);
 
         IsPopup = true;
@@ -150,11 +164,13 @@ public class DialogueScreen : GameScreen
         TransitionOffTime = FadeTime;
     }
 
-    /// <summary>Loads the panel, the fonts, the icons, the chapter's card and the paintings (with the two of you, if you're in one), and starts the first line.</summary>
+    /// <summary>Loads the panel, the fonts, the icons, the chapter's card and the paintings (with the two of you, if you're in one), and starts the first line's cues.</summary>
     public override void Activate()
     {
         _content ??= new ContentManager(ScreenManager.Game.Services, "Content");
         _audio = ScreenManager.Game.Services.GetService<AudioManager>();
+        _director = new CutsceneDirector(_stage, _game, _audio, _runner.Script.Id);
+        _director.Backdrop += ShowBackdrop;
         _panel.LoadContent(_content, ScreenManager.GraphicsDevice);
         _paintings.LoadContent(_content);
         if (ShowsFigures()) BakeFigures();
@@ -178,12 +194,17 @@ public class DialogueScreen : GameScreen
         _content?.Unload();
     }
 
-    /// <summary>Shows the rest of a line, goes on, or picks an option: by key, by number, or by the mouse.</summary>
+    /// <summary>Shows the rest of a line, goes on, or picks an option: by key, by number, or by the mouse. While the cues play, Escape or a click skips them.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="input">The input this frame.</param>
     public override void HandleInput(GameTime gameTime, InputState input)
     {
-        if (_waiting || _runner.IsOver) return;
+        if (_waiting) return;
+        if (!_lineUp)
+        {
+            if (_skip.Occurred(input) || input.IsNewLeftClick) Skip();
+            return;
+        }
 
         bool typing = _shown < Length();
         bool pressed = _next.Occurred(input) || input.IsNewLeftClick && _options.Count == 0;
@@ -220,7 +241,7 @@ public class DialogueScreen : GameScreen
         else if (_next.Occurred(input)) Choose(_selected);
     }
 
-    /// <summary>Types the line out, runs a question's clock, fades the painting, and runs the toasts.</summary>
+    /// <summary>Plays the cues, types the line out once they're done, runs a question's clock, fades the painting, and runs the toasts.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="otherScreenHasFocus">Whether a screen above has the input.</param>
     /// <param name="coveredByOtherScreen">Whether a non-popup screen is on top.</param>
@@ -237,7 +258,9 @@ public class DialogueScreen : GameScreen
         _paintingAlpha = MathHelper.Clamp(_paintingAlpha + Math.Sign(target - _paintingAlpha) * seconds / PaintingFade, 0f, 1f);
         if (_painting is not null) _lastPainting = _painting;
 
-        if (_waiting || _runner.IsOver) return;
+        _director.Update(seconds);
+        CatchUp();
+        if (_waiting || !_lineUp) return;
         _shown += LettersPerSecond[_audio.Settings.Typing] * seconds;
 
         DialogueNode node = _runner.Current;
@@ -250,7 +273,7 @@ public class DialogueScreen : GameScreen
         Settle();
     }
 
-    /// <summary>Draws the painting or the veil, then the card (or the chapter's card) or the panel with the face, the name, the line and the options, then the toasts.</summary>
+    /// <summary>Draws the painting or the veil, the board, the cues' fade, then the card (or the chapter's card) or the panel with the face, the name, the line and the options, then the toasts. Only the first three while the cues play.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
@@ -259,6 +282,7 @@ public class DialogueScreen : GameScreen
         DialogueNode node = _shownNode;
         if (node is null) return;
         bool card = IsCard(node);
+        bool shown = _lineUp && !_waiting;
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         var screen = new Rectangle(0, 0, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight);
@@ -277,11 +301,15 @@ public class DialogueScreen : GameScreen
             spriteBatch.End();
         }
 
+        // The cues' fade covers all of that, and goes with the screen as it closes, not before.
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+        if (_director.Blackout > 0f)
+            spriteBatch.Draw(ScreenManager.BlankTexture, screen, Color.Black * (_director.Blackout * (IsExiting ? alpha : 1f)));
 
-        // While the dice are up the panel waits behind them with nothing on it, so it isn't drawn at all.
+        // While the dice are up the panel waits behind them with nothing on it, so it isn't drawn at
+        // all, and nor is it while the cues play.
         Rectangle panel = PanelBounds(node);
-        if (!card && !_waiting)
+        if (!card && shown)
         {
             _panel.Draw(spriteBatch, panel, alpha);
             DrawPortrait(spriteBatch, node, panel, alpha);
@@ -291,35 +319,44 @@ public class DialogueScreen : GameScreen
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        if (node.Speaker == Speakers.Chapter) DrawChapter(spriteBatch, alpha);
-        else if (card) DrawCard(spriteBatch, alpha);
-        else if (!_waiting) DrawWords(spriteBatch, node, panel, alpha);
+        if (_lineUp && node.Speaker == Speakers.Chapter) DrawChapter(spriteBatch, alpha);
+        else if (_lineUp && card) DrawCard(spriteBatch, alpha);
+        else if (shown) DrawWords(spriteBatch, node, panel, alpha);
         _toast.Draw(spriteBatch, alpha);
         spriteBatch.End();
     }
 
-    /// <summary>For the proof run: the same as pressing Enter, which shows the rest of a line, goes on, or picks the option that's selected.</summary>
+    /// <summary>For the proof run: the same as pressing Enter, which shows the rest of a line, goes on, or picks the option that's selected. Like Enter, it does nothing while the cues play.</summary>
     internal void ProofAdvance()
     {
-        if (_waiting || _runner.IsOver) return;
+        if (_waiting || !_lineUp) return;
         if (_shown < Length()) _shown = Length();
         else if (_options.Count == 0) Continue();
         else Choose(_selected);
     }
 
-    /// <summary>For the proof run: whether it's waiting on an option to be picked, with the question typed out.</summary>
-    internal bool ProofAsking => !_waiting && !_runner.IsOver && _options.Count > 0 && _shown >= Length();
+    /// <summary>For the proof run: the same as Escape while the cues play, which puts them at their end and brings the line up.</summary>
+    internal void ProofSkip()
+    {
+        if (!_waiting && !_lineUp) Skip();
+    }
 
-    /// <summary>For the proof run: the line it's on, so a shot can wait for the right one.</summary>
-    internal DialogueNode ProofLine => _runner.Current;
+    /// <summary>For the proof run: whether it's waiting on an option to be picked, with the question typed out.</summary>
+    internal bool ProofAsking => !_waiting && _lineUp && _options.Count > 0 && _shown >= Length();
+
+    /// <summary>For the proof run: the line that's up, so a shot can wait for the right one, or null while its cues play.</summary>
+    internal DialogueNode ProofLine => _lineUp ? _runner.Current : null;
 
     /// <summary>For the proof run: finishes typing the line, and nothing else, so a shot shows all of it.</summary>
-    internal void ProofFinishLine() => _shown = Math.Max(_shown, Length());
+    internal void ProofFinishLine()
+    {
+        if (_lineUp) _shown = Math.Max(_shown, Length());
+    }
 
     /// <summary>For the proof run: picks an option by its place on the panel, from 0, once the line's typed.</summary>
     internal void ProofChoose(int index)
     {
-        if (_waiting || _runner.IsOver) return;
+        if (_waiting || !_lineUp) return;
         _shown = Length();
         if (index < _options.Count) Choose(index);
     }
@@ -354,29 +391,94 @@ public class DialogueScreen : GameScreen
         _audio.Play(Sfx.MenuMove);
     }
 
-    /// <summary>Catches up with the runner: plays out what it did, then shows its line, or closes if it's over.</summary>
-    /// <remarks>A check puts the dice up first, and the line waits behind them.</remarks>
+    /// <summary>Catches up with the runner: plays out what it did, then starts its line's cues, or the closing's if it's over.</summary>
+    /// <remarks>A check puts the dice up first, and the cues and the line wait behind them. The line's said, and what it does happens, as it comes up after its cues.</remarks>
     private void Settle()
     {
         foreach (DialogueEvent happened in _runner.Drain()) Cue(happened);
 
+        _lineUp = false;
+        _staged = false;
         if (_runner.IsOver)
         {
             _painting = null;
-            if (!_waiting) Close();
+            Finish();
             return;
         }
 
+        _shownNode = _runner.Current;
+        _options = new ShownOption[0];
+        Stage();
+    }
+
+    /// <summary>Starts the line's cues, unless the dice are up or they've started already, and shows the line if there's nothing to wait for.</summary>
+    private void Stage()
+    {
+        if (_waiting || _staged || _runner.IsOver) return;
+
+        _staged = true;
+        _director.Play(_runner.Current.Cues, Where(_runner.Current));
+        CatchUp();
+    }
+
+    /// <summary>Once the cues are done: the line's said and comes up, with its painting, its sound and its options; or the screen closes after the closing's.</summary>
+    private void CatchUp()
+    {
+        if (_director.Playing) return;
+        if (_closing)
+        {
+            Close();
+            return;
+        }
+        if (!_staged || _lineUp) return;
+
         DialogueNode node = _runner.Current;
-        _shownNode = node;
+        _runner.Say();
+        foreach (DialogueEvent happened in _runner.Drain()) Cue(happened);
+
+        _lineUp = true;
         _options = _runner.Options();
         _selected = FirstOpen();
         _shown = 0f;
         _clock = 0f;
-        _painting = node.Painting;
-        if (node.Sound is Sfx sound) _audio.Play(sound);
         _wrapped = Text.Wrap(TextTokens.Fill(node.Line, _game), _font, IsCard(node) ? CardWidth : TextWidth);
         if (IsCard(node)) _shown = Length();
+        _painting = node.Painting;
+        if (node.Sound is Sfx sound) _audio.Play(sound);
+    }
+
+    /// <summary>Puts the cues that are playing at their end, which brings the line up.</summary>
+    private void Skip()
+    {
+        _director.Skip();
+        CatchUp();
+    }
+
+    /// <summary>The last line's put away: the closing cues, then the screen closes. Not while the dice are up; they call this as they go.</summary>
+    private void Finish()
+    {
+        if (_waiting || _closing) return;
+
+        _closing = true;
+        _director.Play(_runner.Script.Closing, "the closing");
+        CatchUp();
+    }
+
+    /// <summary>A backdrop cue has come: the line's painting goes up now. Under a full fade it's up at once, since there's nothing to see it fade in.</summary>
+    private void ShowBackdrop()
+    {
+        _painting = _runner.Current?.Painting;
+        if (_painting is not null) _lastPainting = _painting;
+        if (_director.Blackout >= 1f) _paintingAlpha = _painting is null ? 0f : 1f;
+    }
+
+    /// <summary>Which line a node is, for the log: its id, or where it is in the script.</summary>
+    private string Where(DialogueNode node)
+    {
+        if (node.Id is not null) return node.Id;
+        int at = 0;
+        while (_runner.Script.Nodes[at] != node) at++;
+        return "line " + at;
     }
 
     /// <summary>Turns one thing the runner did into a toast, a sound, or the dice, and passes it on.</summary>
@@ -390,7 +492,8 @@ public class DialogueScreen : GameScreen
                 dice.Closed += () =>
                 {
                     _waiting = false;
-                    if (_runner.IsOver) Close();
+                    if (_runner.IsOver) Finish();
+                    else Stage();
                 };
                 ScreenManager.AddScreen(dice);
                 break;
@@ -436,10 +539,11 @@ public class DialogueScreen : GameScreen
     private string NameOf(string id) =>
         (_game.Member(id) ?? _game.Camp.Find(waiting => waiting.Id == id) ?? _game.Away.Find(gone => gone.Id == id))?.Name ?? Origins.NameOf(id);
 
-    /// <summary>Closes the screen and says where the party's to go.</summary>
+    /// <summary>Closes the screen and says where the party's to go, once the stage has let go of what the scene put up.</summary>
     private void Close()
     {
         if (IsExiting) return;
+        _director.End();
         ExitScreen();
         Finished?.Invoke(_travel);
     }

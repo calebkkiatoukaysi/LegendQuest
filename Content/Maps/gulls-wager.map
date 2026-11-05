@@ -92,6 +92,9 @@ spawn start 18 10.2 facing=up
 ; red ! over it till then, so you get to walk the deck first.
 trigger voyage 11 11 w=3 h=4 talk=p-04 mark=yes
 
+; Where P-04 puts the Soul-Bound: at the bow rail, looking out to sea, till they turn to you.
+spawn bow 10.5 12.5 facing=left
+
 prop mast 22 12.5
 prop ship-wheel 32.5 12
 prop lantern-hanging 13.5 12.2

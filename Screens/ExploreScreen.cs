@@ -27,9 +27,10 @@ namespace LegendQuest.Screens;
 /// one walks and draws, ExploreScreen.Party has the party and the followers, ExploreScreen.Pointer
 /// has the mouse, ExploreScreen.World has using things, talking, triggers and the ways off the map,
 /// ExploreScreen.Banter has the banter and the lines over people's heads, ExploreScreen.Markers
-/// has the "!"s, ExploreScreen.Camp has whoever's waiting at camp, and ExploreScreen.Tutorial has
-/// the tutorial's tips. A fight on the map is ExploreScreen.Combat and the partials named after it,
-/// which take over the input, the running and the drawing while it's on.
+/// has the "!"s, ExploreScreen.Camp has whoever's waiting at camp, ExploreScreen.Tutorial has
+/// the tutorial's tips, and ExploreScreen.Stage is the map as a conversation's stage, where its cues
+/// play. A fight on the map is ExploreScreen.Combat and the partials named after it, which take over
+/// the input, the running and the drawing while it's on.
 /// </remarks>
 public partial class ExploreScreen : GameScreen
 {
@@ -119,6 +120,7 @@ public partial class ExploreScreen : GameScreen
         _nav = new NavGrid(_tilemap);
         _world = new WorldState(game, _map);
         _seen = new Discovery(_map, _tilemap, game);
+        SetUpStage();
 
         TransitionOnTime = FadeTime;
         TransitionOffTime = FadeTime;
@@ -252,7 +254,7 @@ public partial class ExploreScreen : GameScreen
         }
     }
 
-    /// <summary>Runs everything that moves on its own (the party, the people, the torches, the camera and the clock), checks what you've walked into, then runs the banter and lets the townsfolk talk.</summary>
+    /// <summary>Runs everything that moves on its own (the party, the people, the torches, the camera, the clock, and a scene's shake or tint still settling), checks what you've walked into, then runs the banter and lets the townsfolk talk.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="otherScreenHasFocus">Whether a screen above has the input.</param>
     /// <param name="coveredByOtherScreen">Whether a non-popup screen is on top.</param>
@@ -270,6 +272,7 @@ public partial class ExploreScreen : GameScreen
         }
 
         _game.PlaytimeSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+        SettleStage(gameTime);
         if (UpdateCombat(gameTime)) return;
 
         MoveTownsfolk(gameTime);
@@ -292,7 +295,7 @@ public partial class ExploreScreen : GameScreen
         Chatter();
     }
 
-    /// <summary>Draws the map and everyone on it in the map's tint, the dark over them, the light over that, the markers over everything, then what's on the screen itself.</summary>
+    /// <summary>Draws the map and everyone on it in the map's tint (or a scene's), the dark over them, the light over that, the markers over everything, then what's on the screen itself.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
@@ -303,9 +306,9 @@ public partial class ExploreScreen : GameScreen
         }
 
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-        Matrix world = _camera.Transform;
+        Matrix world = _camera.Transform * _cueShake.Transform;
         float pixel = _camera.Pixel;
-        Color tint = _map.Tint;
+        Color tint = WorldTint;
 
         // 1. The map: the three layers of tiles, and everything on the floor sorted by how far down the
         //    map it is, all in the map's tint. Not the flames, which are the light, not what it falls on.
@@ -314,7 +317,8 @@ public partial class ExploreScreen : GameScreen
         foreach (PropSprite prop in AllProps()) prop.Draw(spriteBatch, prop.Layer(_tilemap.Bounds.Height), tint);
         foreach (TorchSprite torch in _torches) torch.Draw(spriteBatch, Layers.WallFlame);
         foreach (Npc npc in _npcs) npc.Walker.Draw(spriteBatch, OnFloor(npc.Walker.Position), pixel, tint);
-        foreach (WalkerSprite walker in _walkers) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel, tint);
+        foreach (WalkerSprite walker in _walkers)
+            if (!_hiddenWalkers.Contains(walker)) walker.Draw(spriteBatch, OnFloor(walker.Position), pixel, tint);
         spriteBatch.End();
 
         // 2. On a dark map, the dark with the light cut out of it (linear, so the edges are soft).
@@ -325,11 +329,13 @@ public partial class ExploreScreen : GameScreen
             spriteBatch.End();
         }
 
-        // 3. Light, additive so it brightens what's under it: the flicker over each torch, and the
-        //    pool under whatever the mouse is on, which shows even in the dark.
+        // 3. Light, additive so it brightens what's under it: the flicker over each torch, the glow
+        //    round anyone a scene's lit, and the pool under whatever the mouse is on, which shows
+        //    even in the dark.
         spriteBatch.Begin(SpriteSortMode.Deferred, Blends.PremultipliedAdditive, SamplerState.LinearClamp, transformMatrix: world);
         if (_lightMap is not null)
             foreach (TorchSprite torch in _torches) torch.DrawGlow(spriteBatch, GlowRadius, GlowColor);
+        DrawGlows(spriteBatch);
         DrawHighlight(spriteBatch);
         spriteBatch.End();
 
@@ -362,9 +368,14 @@ public partial class ExploreScreen : GameScreen
         }
         spriteBatch.End();
 
-        // 7. The party's cards (point sampled), then all the writing.
+        // 7. The party's cards and the sigil on their corner if a scene's put it up (point sampled),
+        //    then all the writing.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
         if (!playing) _strip.DrawCards(spriteBatch, _game.Party, PartySheets(), _game.Leader, alpha);
+        spriteBatch.End();
+
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+        DrawSigil(spriteBatch, alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
@@ -453,13 +464,13 @@ public partial class ExploreScreen : GameScreen
         return sheet;
     }
 
-    /// <summary>Works out who and what's on the map with the flags as they are now, and who's marked. Builds the paths again if anything came or went.</summary>
+    /// <summary>Works out who and what's on the map with the flags as they are now (and anything a scene's shown or hidden), and who's marked. Builds the paths again if anything came or went.</summary>
     /// <returns>True if anything came or went.</returns>
     private bool RefreshPresence()
     {
         List<PropSprite> props = _everyProp.FindAll(prop => prop.Presence.Holds(_game.Flags));
-        List<Npc> npcs = _everyNpc.FindAll(npc => npc.Definition.Presence.Holds(_game.Flags) && !_fallen.Contains(npc));
-        var things = _everyThing.FindAll(each => each.Thing.Presence.Holds(_game.Flags));
+        List<Npc> npcs = _everyNpc.FindAll(npc => Present(npc.Definition.Id, npc.Definition.Presence) && !_fallen.Contains(npc));
+        var things = _everyThing.FindAll(each => Present(each.Thing.Id, each.Thing.Presence));
         bool changed = !props.SequenceEqual(_props) || !npcs.SequenceEqual(_npcs) || !things.SequenceEqual(_things);
 
         _props.Clear();

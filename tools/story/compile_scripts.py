@@ -23,6 +23,9 @@ The rules (build plan §4.1 and §5.3, the notation table in 04, and the M1 team
               ```text blocks are examples, skipped. Two blocks under one header are one script.
   headers     fields after " · ": with `x`, needs `a`, `!b` (a ! goes to Unless), unless `a`,
               marker quest|event|none, map `x`, as-built (the script is skipped: it's in the game).
+              map is the script's Map, for the game's start-up check of its cues; a script with no
+              map takes the last one named under the same ## or ### heading, as
+              Story/tools/build_registry.py does.
               Anything else, and words after a with or map's id, is a trigger note for the
               registry's Triggers (Story/tools/build_registry.py reads them the same way). needs and unless hold
               backticked flags and commas, nothing else; prose in them is an error.
@@ -50,7 +53,7 @@ The rules (build plan §4.1 and §5.3, the notation table in 04, and the M1 team
               question, so they're that line's. Cues after the last node are the script's Closing.
   jumps       every → x, pass x, fail y and timer target names a label in the same script, or end
   legacy      Painting from a backdrop that's in Story/Paintings.cs to the next backdrop; Board from
-              board on to board off; Sound from a node's first sfx cue that's a member of Sfx
+              board on to board off. Not Sound: CutsceneDirector plays the sfx cues themselves
 """
 import argparse
 import collections
@@ -178,7 +181,6 @@ class Tables:
         self.meters = {r.strip('"') if r.startswith('"') else consts.get(r, r) for r in rows}
         if not self.meters:
             raise Fatal("found no meters in Story/Meters.cs")
-        self.sfx = _enum("Enums/Sfx.cs", "Sfx")
         self.class_ids = _enum("Enums/ClassId.cs", "ClassId")
         self.voices = _enum("Enums/Voice.cs", "Voice") - {"None"}
         self.abilities = _enum("Enums/Ability.cs", "Ability")
@@ -229,7 +231,6 @@ class Node:
     cues: list = field(default_factory=list)
     painting: str = None
     board: bool = False
-    sound: str = None
 
 
 @dataclass
@@ -555,14 +556,12 @@ class Fill:
 
 
 def take_cues(node, cues, fill, tables):
-    """Gives a node its cues, and the Painting, Board and Sound they work out to."""
+    """Gives a node its cues, and the Painting and Board they work out to."""
     for verb, args, call in cues:
         if verb == "backdrop":
             fill.painting = args[0] if args[0] != "off" and args[0] in tables.paintings else None
         elif verb == "board":
             fill.board = args[0] == "on"
-        elif verb == "sfx" and node.sound is None and pascal(args[0]) in tables.sfx:
-            node.sound = "Sfx." + pascal(args[0])
         node.cues.append(call)
     node.painting, node.board = fill.painting, fill.board
 
@@ -843,6 +842,7 @@ def parse_file(name, tables, file_notes):
     stop = EMIT_SCOPE.get(name)
     stop_seen = False
     scripts, cur, target, section, scene = [], None, None, None, None
+    last_map = None           # the last map a header named under this ## or ### heading
     in_block = skip = False
     with open(path, encoding="utf-8") as f:
         lines = f.read().splitlines()
@@ -866,6 +866,7 @@ def parse_file(name, tables, file_notes):
             stop_seen = True
         if re.match(r"^#{1,3} ", s):
             cur = None
+            last_map = None
             if s.startswith("## "):
                 section, scene = s[3:].strip(), None
             elif s.startswith("### "):
@@ -882,6 +883,10 @@ def parse_file(name, tables, file_notes):
             cur = Script(source=name, kind=kind, id=sid, line=n, summary=scene or section or sid,
                          in_scope=name in EMIT_SCOPE and not stop_seen)
             read_header(cur, m.group("rest"), n, tables)
+            if cur.map:
+                last_map = cur.map
+            elif kind == "script":
+                cur.map = last_map
             scripts.append(cur)
     if in_block:
         file_notes.append((name, len(lines), None, "a ``` block that's never closed"))
@@ -1030,8 +1035,6 @@ def node_obj(nd):
         props.append(("Painting", cs_str(nd.painting), 3))
     if nd.board:
         props.append(("Board", "true", 3))
-    if nd.sound:
-        props.append(("Sound", nd.sound, 3))
     if nd.options:
         props.append(("Options", Arr("new DialogueOption[]", [option_obj(o) for o in nd.options], block=True), 4))
     return Obj("new()", props, block=bool(nd.options))
@@ -1040,6 +1043,8 @@ def node_obj(nd):
 def render_script(s):
     """The script's field, from its declaration to its };, at class indent."""
     props = [("Id", cs_str(s.id), 0)]
+    if s.map:
+        props.append(("Map", cs_str(s.map), 0))
     if s.with_:
         props.append(("With", cs_str(s.with_), 0))
     if s.needs:

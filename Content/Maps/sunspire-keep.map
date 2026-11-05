@@ -89,6 +89,13 @@ npc crane-court 24 7 cast=crane facing=down when=a1-c4-04
 npc guard-1 14.8 6.5 cast=royal-guard facing=down
 npc guard-2 28.2 6.5 cast=royal-guard facing=down
 
+; Where A1-C4-03 has them for the audience, which is where they stand: the King before the throne,
+; the Princess at his right hand, the Lord Chancellor at his left. Every guard here is a royal-guard,
+; so the audience's royal-guards are all of them.
+spawn throne 21.5 6.75 facing=down
+spawn throne-right 19 7 facing=down
+spawn throne-left 24 7 facing=down
+
 ; The windows down the back wall, the sun lying across the floor from each, and the banners between.
 prop light-shaft 4.0625 7.625
 prop light-shaft 9.0625 7.625
@@ -167,6 +174,9 @@ prop potted-plant 41 26
 prop book-crate 40.2 23.2
 npc crane-hall 32.6 27.8 cast=crane facing=left when=a1-c4-03 unless=a1-c4-04
 trigger hall-crane 1 28 w=42 h=2 talk=a1-c4-04 when=a1-c4-03 unless=a1-c4-04
+
+; Where A1-C4-04 leaves you: on down the hall from the Soul-Bound and the Chancellor, looking back.
+spawn gallery-end 11.5 29.5 facing=right
 
 ; What the two of you say: the windows as you go down the aisle, and the hall past the arch.
 trigger bark-keep-windows 17 11 w=10 h=3 bark=keep-windows

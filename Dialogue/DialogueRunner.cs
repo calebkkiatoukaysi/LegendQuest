@@ -16,7 +16,10 @@ namespace LegendQuest.Dialogue;
 /// The Black Box's DiscussionPeriod pattern: it draws nothing and takes its Random, so a script can
 /// be played through without a window. Every flag, meter, item, recruit, swap, leaving and coming
 /// back it changes goes straight into the save, and it hands back what happened as events for the
-/// screen to turn into toasts, dice and sounds. Not from a tutorial.
+/// screen to turn into toasts, dice and sounds. A line's effects happen when it's said (Say): the
+/// screen says it once it's up, after its stage cues, so someone a line sends to camp is still there
+/// for the cues that come before it, and going on past a line says it first if nothing has. Not from
+/// a tutorial.
 /// </remarks>
 public sealed class DialogueRunner
 {
@@ -27,6 +30,9 @@ public sealed class DialogueRunner
 
     /// <summary>Where it's up to in the script's nodes, or -1 once it's over.</summary>
     private int _at = -1;
+
+    /// <summary>Whether the line it's on has been said, and its effects have happened.</summary>
+    private bool _said;
 
     /// <summary>Starts a conversation on its first line that can be said.</summary>
     /// <param name="script">What gets said.</param>
@@ -50,7 +56,7 @@ public sealed class DialogueRunner
     public bool IsOver => _at < 0;
 
     /// <summary>The options under the current line that show: the open ones, and the locked ones greyed.</summary>
-    /// <remarks>Empty for a line that isn't a question, and for a question whose options are all hidden, which then reads on like any line.</remarks>
+    /// <remarks>Empty for a line that isn't a question, and for a question whose options are all hidden, which then reads on like any line. Asked once the line's said, since what it does can open or close them.</remarks>
     public IReadOnlyList<ShownOption> Options()
     {
         var shown = new List<ShownOption>();
@@ -72,19 +78,29 @@ public sealed class DialogueRunner
         return shown;
     }
 
-    /// <summary>Goes on past a line that isn't a question.</summary>
+    /// <summary>Says the line it's on: its effects happen, once. The screen does it as the line comes up.</summary>
+    public void Say()
+    {
+        if (IsOver || _said) return;
+        _said = true;
+        Apply(Current.Effects);
+    }
+
+    /// <summary>Goes on past a line that isn't a question, saying it first if it hasn't been.</summary>
     public void Continue()
     {
         if (IsOver) return;
+        Say();
         GoTo(Follow(_at, Current.Next));
     }
 
-    /// <summary>Picks an option: its effects, then its check if it has one, then wherever it goes.</summary>
+    /// <summary>Picks an option: the question's said if it hasn't been, then the option's effects, then its check if it has one, then wherever it goes.</summary>
     /// <param name="shown">One of what Options handed back. A greyed one does nothing.</param>
     public void Choose(ShownOption shown)
     {
         if (IsOver || !shown.Open) return;
 
+        Say();
         DialogueOption option = shown.Option;
         Apply(option.Effects);
 
@@ -105,6 +121,7 @@ public sealed class DialogueRunner
     public void TimeOut()
     {
         if (IsOver || Current.Seconds <= 0f) return;
+        Say();
         GoTo(Follow(_at, Current.Timeout));
     }
 
@@ -123,7 +140,7 @@ public sealed class DialogueRunner
         return from + 1 < _script.Nodes.Count ? from + 1 : -1;
     }
 
-    /// <summary>Goes to a line, skipping on past any whose conditions aren't met, and does what it does.</summary>
+    /// <summary>Goes to a line, skipping on past any whose conditions aren't met. What it does waits till it's said.</summary>
     /// <remarks>Gives up after as many skips as there are lines, so two lines that skip to each other end the conversation instead of hanging the game.</remarks>
     private void GoTo(int index)
     {
@@ -136,7 +153,7 @@ public sealed class DialogueRunner
             if (said)
             {
                 _at = index;
-                Apply(node.Effects);
+                _said = false;
                 return;
             }
             index = Follow(index, node.Next);

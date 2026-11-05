@@ -37,8 +37,9 @@ Text tokens are written exactly as the code has them: `{name}`, `{sb}`, `{sb_the
 ! fade in 2 · sfx heartbeat
 CARD: Every legend begins with a promise.
 CARD: Most end with one broken.  ~ act =1
-! sfx heartbeat-two
 ```
+
+**Build.** The heartbeat is `heartbeat`, the sound the game has: one beat on its own, then two in step, so the one cue plays both. The second cue this had after the card, `heartbeat-two`, named a sound there isn't, and it's gone.
 
 ### P-02 · Creation: you
 
@@ -293,14 +294,14 @@ SB: Two days of wolves eating woodcutters. Break it now and clean the stream aft
 #purify SB (cold): Your wood. Your call.
 ! walk soulbound to quarry-mouth
 NARRATOR: {sb} walks off to the quarry mouth and stays there.  ~ ambition +3 · set crystal-dealt-with · set a1-c2-02 · objective "Rest at the camp in the Mirewood" · travel mirewood camp  → end
-#shatter ! anim soulbound pommel-strike · sfx crystal-break
+#shatter ! anim soulbound pommel-strike · sfx crystal-pulse
 NARRATOR: The crystal splits. Black water runs out of the stone toward the stream.
 SB: Done. We'll fix the stream. Fast was right.
 SERA (cold): Fast was fast.  ~ set crystal-dealt-with · set a1-c2-02 · objective "Rest at the camp in the Mirewood" · travel mirewood camp  → end
 #guard SB (grin): Now that's a plan.  ~ fight a1-c2-02-guard-wave
 ```
 
-**Build.** The guard wave's fight is `a1-c2-02-guard-wave`, its id in the game. Winning it plays the as-built `a1-c2-02-guard-wave-after`, which turns the crystal white and takes you to camp. The other two ways end on what the build's last line did: `a1-c2-02` (the quarry's done; the camp scene waits for it), the objective, and the travel to the Mirewood's camp.
+**Build.** The crystal splitting is `crystal-pulse`, the sound the game has for the crystal. The guard wave's fight is `a1-c2-02-guard-wave`, its id in the game. Winning it plays the as-built `a1-c2-02-guard-wave-after`, which turns the crystal white and takes you to camp. The other two ways end on what the build's last line did: `a1-c2-02` (the quarry's done; the camp scene waits for it), the objective, and the travel to the Mirewood's camp.
 
 ### A1-C2-03 · Camp in the Mirewood
 
@@ -352,7 +353,7 @@ SB (cold) [quietly]: No. A man in a warm room writes them, and you stand out her
 
 ### A1-C3-02 · Thornbridge Camp
 
-#### script a1-c3-02 · with `mira` · needs `a1-c3-01` · unless `mira-supplies`, `mira-supplies-done`, `mira-recruited` · marker quest
+#### script a1-c3-02 · map `thornbridge` · with `mira` · needs `a1-c3-01` · unless `mira-supplies`, `mira-supplies-done`, `mira-recruited` · marker quest
 
 ```
 ! anim mira heal · hold mira hand_front light-glow
@@ -379,7 +380,7 @@ NARRATOR: Horns in the treeline. Grey shapes come out of the trees toward the te
 
 The errands version is as built: once the last of the three remedies is handed over (`supplies-delivered`), talking to Mira plays `a1-c3-02-story`, which ends on the `#before` lines.
 
-**Build.** Restored from the build: the `needs` and `unless`, without which talking to Mira would play this again once she's joined, and `mira-supplies` on the errands, which opens the remedies. The errands line names the errands the game has (`a1-c3-02-supplies-1` to `-3`); it named water barrels and blankets, which aren't there. The horns set `mira-supplies-done` and the objective instead of starting the fight: that flag brings the Hollowed out at the treeline on the `thornbridge` map, and walking up to them plays the as-built `a1-c3-02-raid` (two lines, then the fight, with Mira beside you). Started from here, the fight would put the party at the healer's station, twenty tiles from the raiders, and leave that trigger with nothing to do. The horn is `war-horn`, the sound the game has.
+**Build.** Restored from the build: the `needs` and `unless`, without which talking to Mira would play this again once she's joined, and `mira-supplies` on the errands, which opens the remedies. The header names its map, `thornbridge`, as the raid's after-scene below does by coming under it, so the game's start-up check knows who their cues can name. The errands line names the errands the game has (`a1-c3-02-supplies-1` to `-3`); it named water barrels and blankets, which aren't there. The horns set `mira-supplies-done` and the objective instead of starting the fight: that flag brings the Hollowed out at the treeline on the `thornbridge` map, and walking up to them plays the as-built `a1-c3-02-raid` (two lines, then the fight, with Mira beside you). Started from here, the fight would put the party at the healer's station, twenty tiles from the raiders, and leave that trigger with nothing to do. The horn is `war-horn`, the sound the game has.
 
 Barks in the raid:
 
@@ -450,7 +451,7 @@ KAEL: Can't. I've been paid half, and I'm very attached to the other half.  ~ fi
 #### script a1-c4-02-kael-after · plays when Kael yields
 
 ```
-! shake 0.6 · sfx wall-break
+! shake 0.6 · sfx thud
 NARRATOR: The wall behind the shelves cracks open. Grey hands come through it.
 KAEL (shock): Those aren't mine. Truce?
 ?
@@ -462,6 +463,8 @@ KAEL (shock): Those aren't mine. Truce?
 KAEL (smirk): Watch away. This is my good side.  → fight
 #fight NARRATOR: The sappers come through the wall.  ~ fight a1-c4-02-sappers
 ```
+
+**Build.** The wall cracking is `thud`, the sound the game has for something heavy landing.
 
 #### script a1-c4-02-sappers-after
 
@@ -514,7 +517,7 @@ LEON: One more thing. Brannock Ironvein knows that pass better than anyone alive
 
 ### A1-C4-04 · After court
 
-#### script a1-c4-04 · trigger in the long gallery
+#### script a1-c4-04 · map `sunspire-keep` · trigger in the long gallery
 
 ```
 ! place crane beside soulbound · camera soulbound · place you at gallery-end
@@ -526,6 +529,8 @@ CRANE (smile): Wars want a different sort of man. Something to think about, Sir 
 SB: I'm not a knight.
 CRANE: Not yet.  ~ ambition +5 · set crane-contact · set a1-c4-04
 ```
+
+**Build.** The header names its map, `sunspire-keep`, whose great hall is the long gallery, so the game's start-up check finds `gallery-end` and Crane there.
 
 ### A1-C4-05 · The Rusty Anvil
 

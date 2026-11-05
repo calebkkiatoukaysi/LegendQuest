@@ -24,11 +24,9 @@ public static class StoryPrologueAct1
             {
                 Speaker = Speakers.Card, Line = "Every legend begins with a promise.",
                 Cues = new[] { StageCue.Fade("in", "2"), StageCue.Sfx("heartbeat") },
-                Sound = Sfx.Heartbeat,
             },
             new() { Speaker = Speakers.Card, Line = "Most end with one broken.", Effects = new[] { DialogueEffect.SetMeter("act", 1) } },
         },
-        Closing = new[] { StageCue.Sfx("heartbeat-two") },
     };
 
     /// <summary>P-02 · Creation: you</summary>
@@ -98,7 +96,7 @@ public static class StoryPrologueAct1
     /// <summary>P-04 · The voyage</summary>
     public static readonly DialogueScript P_04 = new()
     {
-        Id = "p-04",
+        Id = "p-04", Map = "gulls-wager",
         Nodes = new DialogueNode[]
         {
             new()
@@ -167,7 +165,6 @@ public static class StoryPrologueAct1
                 Speaker = "lookout", Line = "Wraiths! Port side! They're coming up the hull!",
                 Effects = new[] { DialogueEffect.Set("wraiths-sighted"), DialogueEffect.Fight("p-05-wraiths") },
                 Cues = new[] { StageCue.Hold("you", "neck", "herring-charm"), StageCue.Sfx("ship-bell") },
-                Sound = Sfx.ShipBell,
             },
         },
     };
@@ -198,7 +195,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C1-01 · Saltwind Docks</summary>
     public static readonly DialogueScript A1_C1_01 = new()
     {
-        Id = "a1-c1-01",
+        Id = "a1-c1-01", Map = "docks",
         Nodes = new DialogueNode[]
         {
             new() { Speaker = "red-gull", Line = "Dock tax, grandfather. It's doubled since last week." },
@@ -244,7 +241,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C1-01 · Saltwind Docks</summary>
     public static readonly DialogueScript A1_C1_01_Gulls_After = new()
     {
-        Id = "a1-c1-01-gulls-after",
+        Id = "a1-c1-01-gulls-after", Map = "docks",
         Nodes = new DialogueNode[]
         {
             new()
@@ -307,7 +304,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C1-02 · The Lantern Market</summary>
     public static readonly DialogueScript A1_C1_02 = new()
     {
-        Id = "a1-c1-02", With = "fennick", Unless = new[] { "a1-c1-02" }, Marker = MarkerKind.Quest,
+        Id = "a1-c1-02", Map = "questeria", With = "fennick", Unless = new[] { "a1-c1-02" }, Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new()
@@ -346,7 +343,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C2-01 · The Mirewood's edge</summary>
     public static readonly DialogueScript A1_C2_01 = new()
     {
-        Id = "a1-c2-01",
+        Id = "a1-c2-01", Map = "mirewood",
         Nodes = new DialogueNode[]
         {
             new() { Speaker = Speakers.Chapter, Line = "Chapter 2  ·  The Rot in the Mirewood", Cues = new[] { StageCue.Tint("twilight") } },
@@ -370,7 +367,6 @@ public static class StoryPrologueAct1
                 Id = "wolves", Speaker = Speakers.Narrator, Line = "Something moves low between the trunks. Then three more somethings.",
                 Effects = new[] { DialogueEffect.Fight("a1-c2-01-gloomfangs") },
                 Cues = new[] { StageCue.Sfx("wolf-howl") },
-                Sound = Sfx.WolfHowl,
             },
         },
     };
@@ -378,14 +374,13 @@ public static class StoryPrologueAct1
     /// <summary>A1-C2-01 · The Mirewood's edge</summary>
     public static readonly DialogueScript A1_C2_01_Gloomfangs_After = new()
     {
-        Id = "a1-c2-01-gloomfangs-after",
+        Id = "a1-c2-01-gloomfangs-after", Map = "mirewood",
         Nodes = new DialogueNode[]
         {
             new()
             {
                 Speaker = Speakers.Narrator, Line = "An arrow takes the last wolf behind the ear. A Sylvan woman steps out of the trees, bow still drawn.",
                 Cues = new[] { StageCue.Sfx("bowshot"), StageCue.Place("sera", "at", "treeline", "facing", "left"), StageCue.Anim("sera", "bow-lowered") },
-                Sound = Sfx.Bowshot,
             },
             new() { Speaker = "sera", Line = "You're loud. Both of you. The whole wood heard you at the road." },
             new() { Speaker = Origins.SoulBound, Expression = "grin", Line = "You waited till we'd done the hard part, though." },
@@ -430,7 +425,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C2-02 · The Old Quarry</summary>
     public static readonly DialogueScript A1_C2_02_Letter = new()
     {
-        Id = "a1-c2-02-letter",
+        Id = "a1-c2-02-letter", Map = "mirewood-quarry",
         Nodes = new DialogueNode[]
         {
             new() { Speaker = "sera", Line = "Doomward cloth. This far west, on foot." },
@@ -452,7 +447,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C2-02 · The Old Quarry</summary>
     public static readonly DialogueScript A1_C2_02_Thornmother_After = new()
     {
-        Id = "a1-c2-02-thornmother-after",
+        Id = "a1-c2-02-thornmother-after", Map = "mirewood-quarry",
         Nodes = new DialogueNode[]
         {
             new()
@@ -503,7 +498,7 @@ public static class StoryPrologueAct1
             new()
             {
                 Id = "shatter", Speaker = Speakers.Narrator, Line = "The crystal splits. Black water runs out of the stone toward the stream.",
-                Cues = new[] { StageCue.Anim("soulbound", "pommel-strike"), StageCue.Sfx("crystal-break") },
+                Cues = new[] { StageCue.Anim("soulbound", "pommel-strike"), StageCue.Sfx("crystal-pulse") },
             },
             new() { Speaker = Origins.SoulBound, Line = "Done. We'll fix the stream. Fast was right." },
             new()
@@ -529,7 +524,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C2-03 · Camp in the Mirewood</summary>
     public static readonly DialogueScript A1_C2_03 = new()
     {
-        Id = "a1-c2-03",
+        Id = "a1-c2-03", Map = "mirewood",
         Nodes = new DialogueNode[]
         {
             new()
@@ -557,7 +552,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C3-01 · The east gate</summary>
     public static readonly DialogueScript A1_C3_01 = new()
     {
-        Id = "a1-c3-01",
+        Id = "a1-c3-01", Map = "thornbridge",
         Nodes = new DialogueNode[]
         {
             new() { Speaker = Speakers.Chapter, Line = "Chapter 3  ·  Ashes at Thornbridge" },
@@ -627,8 +622,8 @@ public static class StoryPrologueAct1
     /// <summary>A1-C3-02 · Thornbridge Camp</summary>
     public static readonly DialogueScript A1_C3_02 = new()
     {
-        Id = "a1-c3-02", With = "mira", Needs = new[] { "a1-c3-01" }, Unless = new[] { "mira-supplies", "mira-supplies-done", "mira-recruited" },
-        Marker = MarkerKind.Quest,
+        Id = "a1-c3-02", Map = "thornbridge", With = "mira", Needs = new[] { "a1-c3-01" },
+        Unless = new[] { "mira-supplies", "mira-supplies-done", "mira-recruited" }, Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new()
@@ -695,7 +690,6 @@ public static class StoryPrologueAct1
                     DialogueEffect.Objective("Stop the Hollowed at the treeline before they reach the camp"),
                 },
                 Cues = new[] { StageCue.Sfx("war-horn") },
-                Sound = Sfx.WarHorn,
             },
         },
     };
@@ -703,7 +697,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C3-02 · Thornbridge Camp</summary>
     public static readonly DialogueScript A1_C3_02_Raid_After = new()
     {
-        Id = "a1-c3-02-raid-after",
+        Id = "a1-c3-02-raid-after", Map = "thornbridge",
         Nodes = new DialogueNode[]
         {
             new() { Speaker = Speakers.Narrator, Line = "The Watch comes out of the gate as the last of the Hollowed falls." },
@@ -753,7 +747,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-01 · The Gilded Flagon</summary>
     public static readonly DialogueScript A1_C4_01 = new()
     {
-        Id = "a1-c4-01", With = "elara", Needs = new[] { "a1-c3" }, Unless = new[] { "a1-c4-01" }, Marker = MarkerKind.Quest,
+        Id = "a1-c4-01", Map = "gilded-flagon", With = "elara", Needs = new[] { "a1-c3" }, Unless = new[] { "a1-c4-01" }, Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new() { Speaker = Speakers.Chapter, Line = "Chapter 4  ·  The Sunheart", Conditions = new[] { DialogueCondition.Not("a1-c4-00") } },
@@ -776,7 +770,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-02 · The Old Crown Vault</summary>
     public static readonly DialogueScript A1_C4_02 = new()
     {
-        Id = "a1-c4-02", With = "kael", Unless = new[] { "kael-truce", "a1-c4-02" }, Marker = MarkerKind.Event,
+        Id = "a1-c4-02", Map = "old-crown-vault", With = "kael", Unless = new[] { "kael-truce", "a1-c4-02" }, Marker = MarkerKind.Event,
         Nodes = new DialogueNode[]
         {
             new()
@@ -801,13 +795,13 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-02 · The Old Crown Vault</summary>
     public static readonly DialogueScript A1_C4_02_Kael_After = new()
     {
-        Id = "a1-c4-02-kael-after",
+        Id = "a1-c4-02-kael-after", Map = "old-crown-vault",
         Nodes = new DialogueNode[]
         {
             new()
             {
                 Speaker = Speakers.Narrator, Line = "The wall behind the shelves cracks open. Grey hands come through it.",
-                Cues = new[] { StageCue.Shake("0.6"), StageCue.Sfx("wall-break") },
+                Cues = new[] { StageCue.Shake("0.6"), StageCue.Sfx("thud") },
             },
             new()
             {
@@ -846,14 +840,13 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-02 · The Old Crown Vault</summary>
     public static readonly DialogueScript A1_C4_02_Sappers_After = new()
     {
-        Id = "a1-c4-02-sappers-after",
+        Id = "a1-c4-02-sappers-after", Map = "old-crown-vault",
         Nodes = new DialogueNode[]
         {
             new()
             {
                 Speaker = "kael", Line = "Here's something for you. My buyer paid half up front, in these.",
                 Cues = new[] { StageCue.Anim("kael", "flip-coin"), StageCue.Hold("kael", "hand_front", "black-iron-coin"), StageCue.Sfx("coin") },
-                Sound = Sfx.Coin,
             },
             new() { Speaker = "kael", Line = "Doomward iron. Somebody in your nice clean city is on the other side's payroll." },
             new() { Speaker = "mira", Expression = "worried", Line = "Maleficio's agents pay in those. Whoever hired you is close to the crown." },
@@ -886,7 +879,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-03 · Sunspire Keep</summary>
     public static readonly DialogueScript A1_C4_03 = new()
     {
-        Id = "a1-c4-03",
+        Id = "a1-c4-03", Map = "sunspire-keep",
         Nodes = new DialogueNode[]
         {
             new()
@@ -958,7 +951,7 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-04 · After court</summary>
     public static readonly DialogueScript A1_C4_04 = new()
     {
-        Id = "a1-c4-04",
+        Id = "a1-c4-04", Map = "sunspire-keep",
         Nodes = new DialogueNode[]
         {
             new()
@@ -986,7 +979,8 @@ public static class StoryPrologueAct1
     /// <summary>A1-C4-05 · The Rusty Anvil</summary>
     public static readonly DialogueScript A1_C4_05 = new()
     {
-        Id = "a1-c4-05", With = "brannock", Needs = new[] { "a1-c4-03" }, Unless = new[] { "brannock-recruited" }, Marker = MarkerKind.Quest,
+        Id = "a1-c4-05", Map = "rusty-anvil", With = "brannock", Needs = new[] { "a1-c4-03" }, Unless = new[] { "brannock-recruited" },
+        Marker = MarkerKind.Quest,
         Nodes = new DialogueNode[]
         {
             new()

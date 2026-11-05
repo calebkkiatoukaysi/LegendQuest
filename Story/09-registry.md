@@ -27,7 +27,7 @@ None.
 | 04-script-prologue-act1.md | `a1-c2-03` | map `mirewood` · camp · plays when you rest at the camp |
 | 04-script-prologue-act1.md | `a1-c2-04` | as-built |
 | 04-script-prologue-act1.md | `a1-c3-01` | map `thornbridge` · plays on arrival at the east gate, once Fennick's paid |
-| 04-script-prologue-act1.md | `a1-c3-02` | with `mira` · needs `a1-c3-01` · unless `mira-supplies`, `mira-supplies-done`, `mira-recruited` · marker quest |
+| 04-script-prologue-act1.md | `a1-c3-02` | map `thornbridge` · with `mira` · needs `a1-c3-01` · unless `mira-supplies`, `mira-supplies-done`, `mira-recruited` · marker quest |
 | 04-script-prologue-act1.md | `a1-c3-02-raid-after` |  |
 | 04-script-prologue-act1.md | `a1-c4-00` | as-built |
 | 04-script-prologue-act1.md | `a1-c4-01` | map `gilded-flagon` · with `elara` · needs `a1-c3` · unless `a1-c4-01` · marker quest |
@@ -35,7 +35,7 @@ None.
 | 04-script-prologue-act1.md | `a1-c4-02-kael-after` | plays when Kael yields |
 | 04-script-prologue-act1.md | `a1-c4-02-sappers-after` |  |
 | 04-script-prologue-act1.md | `a1-c4-03` | map `sunspire-keep` · trigger at the throne |
-| 04-script-prologue-act1.md | `a1-c4-04` | trigger in the long gallery |
+| 04-script-prologue-act1.md | `a1-c4-04` | map `sunspire-keep` · trigger in the long gallery |
 | 04-script-prologue-act1.md | `a1-c4-05` | map `rusty-anvil` · with `brannock` · needs `a1-c4-03` · unless `brannock-recruited` · marker quest |
 | 04-script-prologue-act1.md | `a1-c5-01` | map `questeria` · trigger at the east gate · needs `a1-c4` |
 | 04-script-prologue-act1.md | `a1-c5-01-ford` | map `kestrel-ford` · trigger at the ford |
@@ -1053,11 +1053,11 @@ What starts each script, from the prose in its header: for whoever places the tr
 | `strait-cave` | sq-valencia-trail |
 | `sunfall-temple` | a2-c4-02 |
 | `sunscar-waste` | a2-c4-01, valencia-orla-died |
-| `sunspire-keep` | a1-c4-03, a1-c6-04, a1-c6-05, a1-c8-05, a1-c8-06, a2-c1-02, a2-c1-03, a2-c1-04, a2-c5-01, a3-c1-03, a3-c2-01, a3-c2-04, a3-c4-05, elara-a2, sb-heron-crane, sb-heron-elara, sb-heron-hall, sb-heron-letter |
+| `sunspire-keep` | a1-c4-03, a1-c4-04, a1-c6-04, a1-c6-05, a1-c8-05, a1-c8-06, a2-c1-02, a2-c1-03, a2-c1-04, a2-c5-01, a3-c1-03, a3-c2-01, a3-c2-04, a3-c4-05, elara-a2, sb-heron-crane, sb-heron-elara, sb-heron-hall, sb-heron-letter |
 | `sunspire-roof` | a1-c8-07, a3-c1-04 |
 | `sunspire-summit` | a3-c5-01, a3-c5-06 |
 | `sunward-cell` | a3-c3-02 |
-| `thornbridge` | a1-c3-01 |
+| `thornbridge` | a1-c3-01, a1-c3-02 |
 | `thornwall` | mira-tobin |
 | `watch-house` | a3-c3-05, train-hale |
 | `well-of-embers` | a1-c8-02 |
@@ -1066,7 +1066,6 @@ What starts each script, from the prose in its header: for whoever places the tr
 
 | Map | Spawns |
 | --- | --- |
-| `(map of a1-c4-04: see its header)` | gallery-end |
 | `(map of a1-c6-03: see its header)` | aldric-bier |
 | `(map of a1-c8-05: see its header)` | guild-gate |
 | `(map of a2-c3-04: see its header)` | camp-edge |
@@ -1129,7 +1128,7 @@ What starts each script, from the prose in its header: for whoever places the tr
 | `saint-lumen` | abbey-gate, chapel-door, cliff-top, cloister-shade, hives |
 | `strait-cave` | cave-back |
 | `sunscar-waste` | sunscar-edge |
-| `sunspire-keep` | council-door, council-table, council-window, courtyard-gate, desk, gallery-rail, hall-centre, hall-door, hall-window, quarters-door, study-desk, study-door, throne, throne-left, throne-right, window |
+| `sunspire-keep` | council-door, council-table, council-window, courtyard-gate, desk, gallery-end, gallery-rail, hall-centre, hall-door, hall-window, quarters-door, study-desk, study-door, throne, throne-left, throne-right, window |
 | `sunspire-roof` | parapet |
 | `sunspire-summit` | throne-ruin |
 | `sunward-cell` | cell-door, cell-window |

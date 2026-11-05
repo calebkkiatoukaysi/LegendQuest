@@ -367,7 +367,7 @@ public partial class ExploreScreen
         return false;
     }
 
-    /// <summary>Starts a conversation over the map. When it's over, whatever's to happen next does, and if it sends the party somewhere, it goes.</summary>
+    /// <summary>Starts a conversation over the map, with the map as the stage its cues play on. When it's over, whatever's to happen next does, and if it (or a travel-actor cue) sends the party somewhere, it goes.</summary>
     /// <param name="script">What gets said.</param>
     /// <param name="then">What happens after, or null.</param>
     private void Converse(DialogueScript script, Action then)
@@ -376,11 +376,13 @@ public partial class ExploreScreen
 
         Halt();
         _talking = true;
-        var talk = new DialogueScreen(script, _game, Speaker, _random);
+        var talk = new DialogueScreen(script, _game, Speaker, _random, this);
         talk.Happened += OnDialogue;
         talk.Finished += travel =>
         {
             _talking = false;
+            travel ??= _cueTravel;
+            _cueTravel = null;
             then?.Invoke();
             OpenAwaitedShop();
             StartAwaitedFight();

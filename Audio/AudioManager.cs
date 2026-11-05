@@ -97,6 +97,16 @@ public class AudioManager : GameComponent
         _fadingOut = true;
     }
 
+    /// <summary>Fades the song out and plays nothing after it, for a scene that wants quiet. The next PlaySong starts again.</summary>
+    public void StopSong()
+    {
+        _next = null;
+        if (_current is null) return;
+
+        if (Silent) Log.Add("song none");
+        _fadingOut = true;
+    }
+
     /// <summary>Plays one sound effect.</summary>
     /// <param name="sfx">Which one.</param>
     /// <param name="volume">How loud, before the settings, 0 to 1.</param>

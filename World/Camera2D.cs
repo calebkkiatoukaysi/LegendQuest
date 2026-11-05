@@ -97,6 +97,11 @@ public class Camera2D
         Centre = Clamp(Vector2.Lerp(Centre, target, t));
     }
 
+    /// <summary>Whether the camera's as good as on a point it's been following: within a distance of it, or of as near to it as the edge of the map lets the view get.</summary>
+    /// <param name="target">The world point.</param>
+    /// <param name="within">How near counts, in world pixels.</param>
+    public bool IsNear(Vector2 target, float within) => Vector2.Distance(Centre, Clamp(target)) <= within;
+
     /// <summary>Zooms in or out by whole steps, staying between MinZoom and MaxZoom.</summary>
     /// <param name="steps">How many steps in (positive) or out (negative).</param>
     /// <returns>True if the zoom changed.</returns>

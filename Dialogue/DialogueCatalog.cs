@@ -159,17 +159,25 @@ public static class DialogueCatalog
         }
     }
 
-    /// <summary>Checks every script can be played as written, and that everyone who says a line is someone.</summary>
-    /// <remarks>Throws on purpose. Call it after MapCatalog.LoadAll, since it checks where a Travel goes and who's on the maps.</remarks>
+    /// <summary>Checks every script can be played as written, that everyone who says a line is someone, and that every cue can play where its script happens.</summary>
+    /// <remarks>
+    /// Throws on purpose. Call it after MapCatalog.LoadAll, since it checks where a Travel goes and
+    /// who's on the maps. A cue that can't play (its words wrong, a spawn its map hasn't got, someone
+    /// who can't be there) throws in a debug build, with every such cue in the message, and in a
+    /// release build goes in the error log instead, and CutsceneDirector skips it when it comes.
+    /// </remarks>
     public static void ValidateAll()
     {
         HashSet<string> onMaps = PeopleOnMaps();
+        var faults = new List<string>();
         foreach (DialogueScript script in Registered)
         {
             script.Validate();
             CheckTravel(script);
             CheckSpeakers(script, onMaps);
+            CheckStaging(script, faults);
         }
+        Report(faults);
     }
 
     /// <summary>A script by id.</summary>
@@ -230,6 +238,45 @@ public static class DialogueCatalog
         }
     }
 
+    /// <summary>Notes every cue in a script that can't play: its words, and if the script's on a map, the spawns and the people they name.</summary>
+    /// <remarks>A script that isn't on a map (the creation screen's) only has its words checked. There's nobody on its stage, so what a cue does to the people on one does nothing there.</remarks>
+    private static void CheckStaging(DialogueScript script, List<string> faults)
+    {
+        Staging stage = null;
+        if (script.Map is not null)
+        {
+            if (!MapCatalog.Contains(script.Map))
+            {
+                faults.Add($"Dialogue {script.Id}: happens on {script.Map}, which isn't a map.");
+                return;
+            }
+            stage = new Staging(MapCatalog.Get(script.Map));
+        }
+
+        void Check(string where, IReadOnlyList<StageCue> cues)
+        {
+            foreach (StageCue cue in cues)
+            {
+                string problem = StageDirection.TryRead(cue, out StageDirection direction, out string wrong) ? stage?.Problem(direction) : wrong;
+                if (problem is not null) faults.Add($"Dialogue {script.Id}: {where} has a cue, {cue.Verb} {string.Join(' ', cue.Args)}, that {problem}.");
+            }
+        }
+
+        for (int i = 0; i < script.Nodes.Count; i++) Check(script.Nodes[i].Id ?? "line " + i, script.Nodes[i].Cues);
+        Check("the closing", script.Closing);
+    }
+
+    /// <summary>Throws with every cue that can't play, in a debug build; writes each to the error log in a release one.</summary>
+    private static void Report(List<string> faults)
+    {
+        if (faults.Count == 0) return;
+#if DEBUG
+        throw new InvalidOperationException(string.Join(Environment.NewLine, faults));
+#else
+        foreach (string fault in faults) Console.Error.WriteLine(fault);
+#endif
+    }
+
     /// <summary>Throws if a script travels somewhere that isn't a map, or onto a spawn the map doesn't have.</summary>
     private static void CheckTravel(DialogueScript script)
     {
@@ -250,5 +297,150 @@ public static class DialogueCatalog
             if (!MapCatalog.Get(where[0]).Spawns.ContainsKey(where[1]))
                 throw new InvalidOperationException($"Dialogue {script.Id}: travels to {where[0]}'s spawn {where[1]}, which it hasn't got.");
         }
+    }
+
+    /// <summary>
+    /// Who and what can be on a script's map, for checking its cues one after another: everyone the
+    /// map puts down, by their id and their cast id, its props and the things on it, and whoever the
+    /// cues so far have brought on.
+    /// </summary>
+    /// <remarks>
+    /// Someone can be on it if they're the party or both of you, one of the origins (you, the
+    /// Soul-Bound, or a companion who might be in the party), anyone the map puts down whether
+    /// they're there yet or not, or someone an earlier place or echo cue brought on: one of the cast
+    /// or the creatures, or their copies (place guard x4 brings on guard-1 to guard-4). A group's
+    /// name is everyone with that id or cast id and its copies, and so is its plural (royal-guards is
+    /// every royal-guard). It goes in the script's order, not the order it's played in, so a cue on
+    /// one branch sees whoever the cues above it on any branch brought on.
+    /// </remarks>
+    private sealed class Staging
+    {
+        private readonly MapDefinition _map;
+        private readonly HashSet<string> _people = new();
+        private readonly HashSet<string> _things = new();
+        private readonly HashSet<string> _brought = new();
+        private readonly HashSet<string> _groups = new();
+        private readonly HashSet<string> _held = new();
+
+        /// <summary>Starts from what the map puts down.</summary>
+        public Staging(MapDefinition map)
+        {
+            _map = map;
+            foreach (MapNpc npc in map.Npcs)
+            {
+                _people.Add(npc.Id);
+                if (npc.Cast is not null) _people.Add(npc.Cast);
+            }
+            foreach (MapProp prop in map.Props) _things.Add(prop.Prop.Id);
+            foreach (MapInteractable thing in map.Interactables) _things.Add(thing.Id);
+        }
+
+        /// <summary>Why a cue can't play on the map, or null if it can. Whoever a place or an echo brings on, and whatever a hold puts in someone's hand, are kept for the cues after it.</summary>
+        public string Problem(StageDirection cue)
+        {
+            switch (cue.Verb)
+            {
+                case "place":
+                    if (!Bring(cue.Actor, cue.Count)) return Nobody(cue.Actor);
+                    return cue.Spot.Kind switch
+                    {
+                        CueSpotKind.Spawn => Spawn(_map, cue.Spot.Name),
+                        CueSpotKind.Beside => Someone(cue.Spot.Name),
+                        CueSpotKind.Crowd => null,
+                        _ => IsActor(cue.Spot.Name) || _things.Contains(cue.Spot.Name) ? null : Nothing(cue.Spot.Name),
+                    };
+
+                case "walk":
+                case "camera":
+                    if (cue.Actor is not null && !IsActor(cue.Actor)) return Nobody(cue.Actor);
+                    return _map.Spawns.ContainsKey(cue.Target) || IsActor(cue.Target) ? null
+                        : $"goes to {cue.Target}, which isn't a spawn on {_map.Id} or anyone who can be there";
+
+                case "face":
+                    return Someone(cue.Actor) ?? (cue.Target is null ? null : Someone(cue.Target));
+
+                case "travel-actor":
+                    if (Someone(cue.Actor) is string missing) return missing;
+                    return MapCatalog.Contains(cue.Map) ? Spawn(MapCatalog.Get(cue.Map), cue.Spawn) : $"goes to {cue.Map}, which isn't a map";
+
+                case "anim":
+                    return Someone(cue.Actor) ?? (cue.Partner is null || IsActor(cue.Partner) || _things.Contains(cue.Partner) ? null : Nothing(cue.Partner));
+
+                case "hold":
+                    _held.Add(cue.Item);
+                    return Someone(cue.Actor);
+
+                case "light":
+                    return IsActor(cue.Actor) || KeyItems.Exists(cue.Actor) || _held.Contains(cue.Actor) ? null
+                        : $"lights {cue.Actor}, who isn't anyone who can be on {_map.Id}, a key item, or anything a cue's put in someone's hand";
+
+                case "show":
+                case "hide":
+                    if (!IsActor(cue.Actor) && !_things.Contains(cue.Actor)) return Nothing(cue.Actor);
+                    return cue.Target is null ? null : Spawn(_map, cue.Target);
+
+                case "swap":
+                    return Swap(cue);
+
+                case "echo":
+                    return Bring(cue.Actor, 0) ? null : Nobody(cue.Actor);
+
+                case "drop":
+                case "reflection":
+                case "trail":
+                    return Someone(cue.Actor);
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>Whether someone with this id can be on the map: the party, both of you, an origin, anyone it puts down, anyone brought on, a group, or a group's plural.</summary>
+        private bool IsActor(string id) =>
+            id is StageDirection.Party or StageDirection.Both || Origins.Exists(id) || _people.Contains(id) || _brought.Contains(id)
+            || _groups.Contains(id) || id.EndsWith('s') && (_people.Contains(id[..^1]) || _groups.Contains(id[..^1]));
+
+        /// <summary>Makes sure someone's on: anyone who can be there already is, and one of the cast or the creatures is brought on. Copies, numbered from 1, are brought on either way.</summary>
+        /// <returns>False if they can't be there and aren't someone who can be brought on.</returns>
+        private bool Bring(string id, int copies)
+        {
+            bool drawn = Cast.Get(id) is CastMember cast && (cast.Look is not null || cast.Sheet is not null) || Creatures.Get(id) is not null;
+            if (!drawn && !IsActor(id)) return false;
+
+            if (copies == 0)
+            {
+                _brought.Add(id);
+                return true;
+            }
+            _groups.Add(id);
+            for (int i = 1; i <= copies; i++) _brought.Add(id + "-" + i);
+            return true;
+        }
+
+        /// <summary>What's wrong with a swap: whoever it's on has to be one of the cast with that look (by their own id or the one the map gives them), or else it's an item, whose other pictures Legacy doesn't draw.</summary>
+        private string Swap(StageDirection cue)
+        {
+            if (KeyItems.Exists(cue.Actor) || _held.Contains(cue.Actor)) return null;
+            if (!IsActor(cue.Actor)) return Nobody(cue.Actor);
+
+            string castId = Cast.Get(cue.Actor) is not null ? cue.Actor : null;
+            foreach (MapNpc npc in _map.Npcs)
+                if (castId is null && npc.Id == cue.Actor) castId = npc.Cast;
+            return Cast.Get(castId)?.LookCalled(cue.Look) is not null ? null : $"changes {cue.Actor} to a look, {cue.Look}, that they haven't got in the cast";
+        }
+
+        /// <summary>Null if someone can be on the map, or why not.</summary>
+        private string Someone(string id) => IsActor(id) ? null : Nobody(id);
+
+        /// <summary>Why a cue naming someone who can't be there can't play.</summary>
+        private string Nobody(string id) =>
+            $"names {id}, who can't be on {_map.Id}: not the party, an origin, anyone the map puts down, or one of the cast or the creatures a cue's brought on";
+
+        /// <summary>Why a cue naming something that isn't there can't play.</summary>
+        private string Nothing(string id) => $"names {id}, which isn't anyone who can be on {_map.Id} or a prop or a thing on it";
+
+        /// <summary>Null if a map has a spawn by that name, or why not.</summary>
+        private static string Spawn(MapDefinition map, string spawn) =>
+            map.Spawns.ContainsKey(spawn) ? null : $"names the spawn {spawn}, which {map.Id} hasn't got";
     }
 }

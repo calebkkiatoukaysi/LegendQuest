@@ -60,6 +60,7 @@ prop cargo-barrel 14.1 4
 prop sconce 11.5 2.4
 prop sacks 11.8 3.6
 npc brannock 13 5.6 cast=brannock facing=down unless=brannock-recruited
+spawn corner-table 13 5.6 facing=down
 light corner-candle 13 5.8 reach=2.5 strength=0.8
 
 ; The tables: sailors at one under a ship's lantern, dockhands at the other, and the crates nobody

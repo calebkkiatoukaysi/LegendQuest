@@ -76,6 +76,20 @@ public partial class LegendQuestGame : Game
         base.Initialize();
     }
 
+    /// <summary>Reads every map and checks every table that's read from them: the conversations, the shops and the loot.</summary>
+    /// <remarks>
+    /// Throws on the first fault, with what and where. The game does it as it starts, and --validate
+    /// does it alone, with no window, so the data can be checked in a second instead of a proof run.
+    /// Nothing else reads the shops or the loot tables until a shop opens or a fight's won, so a bad
+    /// row in one would otherwise only show up then; reading them checks them now.
+    /// </remarks>
+    public static void LoadAndCheckData()
+    {
+        MapCatalog.LoadAll();
+        DialogueCatalog.ValidateAll();
+        _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
+    }
+
     /// <summary>Reads every map, loads all the sounds, then opens the gate and the title.</summary>
     /// <remarks>
     /// The first screens get added here instead of the constructor because the gate starts the title
@@ -84,12 +98,7 @@ public partial class LegendQuestGame : Game
     /// </remarks>
     protected override void LoadContent()
     {
-        MapCatalog.LoadAll();
-        DialogueCatalog.ValidateAll();
-
-        // Nothing else reads the shops or the loot tables until a shop opens or a fight's won, so
-        // a bad row in one would otherwise only show up then. Reading them checks them now.
-        _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
+        LoadAndCheckData();
 
         if (ProofDirectory is not null) BeginProof();
 
