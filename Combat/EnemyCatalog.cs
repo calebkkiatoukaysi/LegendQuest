@@ -20,9 +20,6 @@ namespace LegendQuest.Combat;
 /// </remarks>
 public static class EnemyCatalog
 {
-    /// <summary>Melee reach, for the stat blocks.</summary>
-    private const float Reach = Measure.MeleeReach;
-
     private static readonly EnemyDefinition[] Table =
     {
         // P-05, the tutorial: three of them over the rail, slow and weak, so the duo can learn on them.
@@ -34,18 +31,18 @@ public static class EnemyCatalog
         {
             Id = "sea-wraith", Name = "Sea-wraith", Creature = "sea-wraith", ArmourClass = 10, HitDice = Dice("3d8"), Speed = 7.5f,
             Scores = new AbilityScores { Strength = 10, Dexterity = 10, Constitution = 10, Intelligence = 6, Wisdom = 10, Charisma = 6 },
-            Attacks = new[] { new EnemyAttack("Clammy Grasp", 2, Dice("1d2"), DamageType.Cold, Reach, WeaponProperty.None) },
+            Attacks = new[] { new EnemyAttack("Clammy Grasp", 2, Dice("1d2"), DamageType.Cold, Reach.Melee, WeaponProperty.None) },
             LootTable = "sea-wraith", Xp = 25,
         },
 
-        // A1-C1-01: the Red Gulls shaking Tomas down, and their bosun. The thugs swing their cudgels
-        // badly (+1): three of them round the duo's softer half put the Soul-Bound down in most fights
-        // at +2.
+        // A1-C1-01: the Red Gulls shaking Tomas down, and their bosun. Still a brawl with cudgels, but in
+        // rows the Soul-Bound can step back behind you, so the thugs take a couple of hits each (2d6+2)
+        // and swing a little better (+2), and Grell's hook and cutlass (+5) are what can put you down.
         new()
         {
-            Id = "red-gull-thug", Name = "Red Gull Thug", Cast = "red-gull", ArmourClass = 10, HitDice = Dice("2d4"), Speed = 9f,
+            Id = "red-gull-thug", Name = "Red Gull Thug", Cast = "red-gull", ArmourClass = 10, HitDice = Dice("2d6+2"), Speed = 9f,
             Scores = new AbilityScores { Strength = 11, Dexterity = 11, Constitution = 11, Intelligence = 9, Wisdom = 9, Charisma = 10 },
-            Attacks = new[] { new EnemyAttack("Cudgel", 1, Dice("1d4"), DamageType.Bludgeoning, Reach, WeaponProperty.None) },
+            Attacks = new[] { new EnemyAttack("Cudgel", 2, Dice("1d4"), DamageType.Bludgeoning, Reach.Melee, WeaponProperty.None) },
             LootTable = "red-gull-thug", Xp = 25,
         },
         new()
@@ -54,19 +51,20 @@ public static class EnemyCatalog
             Scores = new AbilityScores { Strength = 13, Dexterity = 10, Constitution = 13, Intelligence = 10, Wisdom = 10, Charisma = 12 },
             Attacks = new[]
             {
-                new EnemyAttack("Hook Hand", 3, Dice("1d4+1"), DamageType.Piercing, Reach, WeaponProperty.None),
-                new EnemyAttack("Cutlass", 3, Dice("1d6+1"), DamageType.Slashing, Reach, WeaponProperty.None),
+                new EnemyAttack("Hook Hand", 5, Dice("1d4+1"), DamageType.Piercing, Reach.Melee, WeaponProperty.None),
+                new EnemyAttack("Cutlass", 5, Dice("1d6+1"), DamageType.Slashing, Reach.Melee, WeaponProperty.None),
             },
             Abilities = new[] { AbilityId.Multiattack },
             LootTable = "bosun-grell", Xp = 100,
         },
 
-        // A1-C2: the Mirewood's wolves, black smoke leaking from their eyes.
+        // A1-C2: the Mirewood's wolves, black smoke leaking from their eyes. A pack against a level-2
+        // party: a few hits each (3d6+3) and a real bite (+4, 1d6), with Pack Tactics and Trip.
         new()
         {
-            Id = "gloomfang", Name = "Gloomfang Wolf", Creature = "gloomfang", ArmourClass = 11, HitDice = Dice("2d4+1"), Speed = 12f,
+            Id = "gloomfang", Name = "Gloomfang Wolf", Creature = "gloomfang", ArmourClass = 11, HitDice = Dice("3d6+3"), Speed = 12f,
             Scores = new AbilityScores { Strength = 10, Dexterity = 14, Constitution = 11, Intelligence = 3, Wisdom = 12, Charisma = 6 },
-            Attacks = new[] { new EnemyAttack("Bite", 3, Dice("1d4"), DamageType.Piercing, Reach, WeaponProperty.None) },
+            Attacks = new[] { new EnemyAttack("Bite", 4, Dice("1d6"), DamageType.Piercing, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.PackTactics, AbilityId.Trip },
             LootTable = "gloomfang", Xp = 25,
         },
@@ -75,36 +73,39 @@ public static class EnemyCatalog
         // What makes her a boss is how long she stands and what she does to you while she does: hit
         // points and a thorn-hard hide a round or two past what her attacks alone would need, and a
         // swipe that knocks you flat (Trip), so her second attack comes with advantage and you're
-        // getting up instead of hitting back. None of it is more damage in one blow.
+        // getting up instead of hitting back. None of it is more damage in one blow: in rows she bites
+        // less surely than she did on the grid (+5), and lasts longer behind a harder hide.
         new()
         {
-            Id = "thornmother", Name = "The Thornmother", Creature = "thornmother", ArmourClass = 14, HitDice = Dice("10d10+20"), Speed = 9f,
+            Id = "thornmother", Name = "The Thornmother", Creature = "thornmother", ArmourClass = 15, HitDice = Dice("12d10+24"), Speed = 9f,
             Scores = new AbilityScores { Strength = 18, Dexterity = 10, Constitution = 15, Intelligence = 3, Wisdom = 12, Charisma = 7 },
             Attacks = new[]
             {
-                new EnemyAttack("Bite", 7, Dice("1d8+3"), DamageType.Piercing, Reach, WeaponProperty.None),
-                new EnemyAttack("Claws", 7, Dice("2d4+3"), DamageType.Slashing, Reach, WeaponProperty.None),
+                new EnemyAttack("Bite", 5, Dice("1d8+3"), DamageType.Piercing, Reach.Melee, WeaponProperty.None),
+                new EnemyAttack("Claws", 5, Dice("2d4+3"), DamageType.Slashing, Reach.Melee, WeaponProperty.None),
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.ThornBurst, AbilityId.Trip },
-            LootTable = "thornmother", Xp = 450,
+            LootTable = "thornmother", Xp = 450, Big = true,
         },
 
-        // A1-C3-02: Doomward's dead, come for Thornbridge.
+        // A1-C3-02: Doomward's dead, come for Thornbridge. The footmen are the weight of the raid (and
+        // the courier's escort in the guard wave): hard to put down (4d8+4) and heavy rusted blades
+        // (1d10+1), so they're what the front row has to hold. The hexers shoot from the back.
         new()
         {
-            Id = "hollowed-footman", Name = "Hollowed Footman", Creature = "hollowed-footman", ArmourClass = 13, HitDice = Dice("2d8+2"), Speed = 9f,
+            Id = "hollowed-footman", Name = "Hollowed Footman", Creature = "hollowed-footman", ArmourClass = 13, HitDice = Dice("4d8+4"), Speed = 9f,
             Scores = new AbilityScores { Strength = 13, Dexterity = 10, Constitution = 12, Intelligence = 5, Wisdom = 8, Charisma = 5 },
-            Attacks = new[] { new EnemyAttack("Rusted Longsword", 3, Dice("1d8+1"), DamageType.Slashing, Reach, WeaponProperty.None) },
+            Attacks = new[] { new EnemyAttack("Rusted Longsword", 3, Dice("1d10+1"), DamageType.Slashing, Reach.Melee, WeaponProperty.None) },
             LootTable = "hollowed-footman", Xp = 50,
         },
         new()
         {
-            Id = "hollowed-hexer", Name = "Hollowed Hexer", Creature = "hollowed-hexer", ArmourClass = 11, HitDice = Dice("2d8"), Speed = 9f,
+            Id = "hollowed-hexer", Name = "Hollowed Hexer", Creature = "hollowed-hexer", ArmourClass = 11, HitDice = Dice("3d8"), Speed = 9f,
             Scores = new AbilityScores { Strength = 9, Dexterity = 12, Constitution = 10, Intelligence = 13, Wisdom = 11, Charisma = 14 },
             Attacks = new[]
             {
-                new EnemyAttack("Ashen Bolt", 3, Dice("1d8"), DamageType.Necrotic, 18f, WeaponProperty.Ranged),
-                new EnemyAttack("Dagger", 3, Dice("1d4+1"), DamageType.Piercing, Reach, WeaponProperty.Finesse),
+                new EnemyAttack("Ashen Bolt", 3, Dice("1d8"), DamageType.Necrotic, Reach.Ranged, WeaponProperty.Ranged),
+                new EnemyAttack("Dagger", 3, Dice("1d4+1"), DamageType.Piercing, Reach.Melee, WeaponProperty.Finesse),
             },
             Abilities = new[] { AbilityId.Hex },
             LootTable = "hollowed-hexer", Xp = 100, Ranged = true,
@@ -112,23 +113,24 @@ public static class EnemyCatalog
 
         // A1-C4-02: the Hollowed who tunnelled into the vault, and the one who leads them. The sappers
         // are diggers, not soldiers (+3 with a pick), so five against four of them isn't a massacre of
-        // whoever's in leather.
+        // whoever's in leather; what makes them dangerous is how much digging they've survived (4d8+4)
+        // and the blasting powder they throw over the front row (AbilityCatalog's Blasting Charge).
         new()
         {
-            Id = "hollowed-sapper", Name = "Hollowed Sapper", Creature = "hollowed-sapper", ArmourClass = 12, HitDice = Dice("2d8+2"), Speed = 9f,
+            Id = "hollowed-sapper", Name = "Hollowed Sapper", Creature = "hollowed-sapper", ArmourClass = 12, HitDice = Dice("4d8+4"), Speed = 9f,
             Scores = new AbilityScores { Strength = 14, Dexterity = 11, Constitution = 13, Intelligence = 6, Wisdom = 8, Charisma = 5 },
-            Attacks = new[] { new EnemyAttack("Pick", 3, Dice("1d8+2"), DamageType.Piercing, Reach, WeaponProperty.None) },
+            Attacks = new[] { new EnemyAttack("Pick", 3, Dice("1d8+2"), DamageType.Piercing, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.BlastingCharge },
             LootTable = "hollowed-sapper", Xp = 50,
         },
         new()
         {
-            Id = "sapper-chief", Name = "Sapper Chief", Creature = "hollowed-sapper", ArmourClass = 14, HitDice = Dice("5d8+10"), Speed = 9f,
+            Id = "sapper-chief", Name = "Sapper Chief", Creature = "hollowed-sapper", ArmourClass = 14, HitDice = Dice("7d8+14"), Speed = 9f,
             Scores = new AbilityScores { Strength = 16, Dexterity = 11, Constitution = 14, Intelligence = 8, Wisdom = 10, Charisma = 8 },
             Attacks = new[]
             {
-                new EnemyAttack("Pick", 4, Dice("1d8+3"), DamageType.Piercing, Reach, WeaponProperty.None),
-                new EnemyAttack("Lantern", 5, Dice("1d6+3"), DamageType.Fire, Reach, WeaponProperty.None),
+                new EnemyAttack("Pick", 4, Dice("1d8+3"), DamageType.Piercing, Reach.Melee, WeaponProperty.None),
+                new EnemyAttack("Lantern", 5, Dice("1d6+3"), DamageType.Fire, Reach.Melee, WeaponProperty.None),
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.BlastingCharge },
             LootTable = "sapper-chief", Xp = 200,
@@ -139,23 +141,25 @@ public static class EnemyCatalog
         {
             Id = "vault-construct", Name = "Vault Construct", Creature = "vault-construct", ArmourClass = 15, HitDice = Dice("5d10+10"), Speed = 6f,
             Scores = new AbilityScores { Strength = 17, Dexterity = 8, Constitution = 15, Intelligence = 3, Wisdom = 10, Charisma = 1 },
-            Attacks = new[] { new EnemyAttack("Gilded Slam", 5, Dice("1d8+3"), DamageType.Bludgeoning, Reach, WeaponProperty.None) },
+            Attacks = new[] { new EnemyAttack("Gilded Slam", 5, Dice("1d8+3"), DamageType.Bludgeoning, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.Trip },
             LootTable = "vault-construct", Xp = 200,
         },
 
         // A1-C4-02's duel: Kael, quick and slippery, a rapier, a dagger and a feint a turn, smoke and
         // decoys. He gives up when he's hurt enough (EncounterCatalog's YieldsAt), so his hit points
-        // are only how long the duel lasts, and no body's searched.
+        // are only how long the duel lasts, and no body's searched. One duellist against four in rows
+        // only ever reaches whoever holds the front, so he's the best blade in Act 1 (+8, a 2d8+3
+        // rapier) and lasts (16d8+16) until he's cut through your shield and can reach the rest.
         new()
         {
-            Id = "kael-duel", Name = "Kael", Cast = "kael", ArmourClass = 15, HitDice = Dice("11d8+11"), Speed = 10.5f,
+            Id = "kael-duel", Name = "Kael", Cast = "kael", ArmourClass = 15, HitDice = Dice("16d8+16"), Speed = 10.5f,
             Scores = new AbilityScores { Strength = 10, Dexterity = 17, Constitution = 12, Intelligence = 13, Wisdom = 12, Charisma = 15 },
             Attacks = new[]
             {
-                new EnemyAttack("Rapier", 5, Dice("1d8+3"), DamageType.Piercing, Reach, WeaponProperty.Finesse),
-                new EnemyAttack("Off-hand Dagger", 5, Dice("1d4+3"), DamageType.Piercing, Reach, WeaponProperty.Finesse),
-                new EnemyAttack("Feint and Stab", 5, Dice("1d4+3"), DamageType.Piercing, Reach, WeaponProperty.Finesse),
+                new EnemyAttack("Rapier", 8, Dice("2d8+3"), DamageType.Piercing, Reach.Melee, WeaponProperty.Finesse),
+                new EnemyAttack("Off-hand Dagger", 8, Dice("1d6+3"), DamageType.Piercing, Reach.Melee, WeaponProperty.Finesse),
+                new EnemyAttack("Feint and Stab", 8, Dice("1d6+3"), DamageType.Piercing, Reach.Melee, WeaponProperty.Finesse),
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.SneakAttack, AbilityId.SmokeBomb, AbilityId.CunningDisengage },
             Xp = 200,
@@ -206,9 +210,9 @@ public static class EnemyCatalog
         bool reaches = false;
         foreach (EnemyAttack attack in row.Attacks)
         {
-            if (string.IsNullOrWhiteSpace(attack.Name) || attack.Damage.IsNone || attack.Range <= 0f)
-                throw new InvalidOperationException($"{name} has an attack with no name, damage or reach.");
-            reaches |= attack.Range > Reach;
+            if (string.IsNullOrWhiteSpace(attack.Name) || attack.Damage.IsNone || attack.Reach == Reach.Weapon)
+                throw new InvalidOperationException($"{name} has an attack with no name, damage or reach of its own.");
+            reaches |= attack.Reach is Reach.Ranged or Reach.AnyRow;
         }
         if (row.Ranged && !reaches) throw new InvalidOperationException($"{name} fights from range with nothing that reaches past melee.");
 

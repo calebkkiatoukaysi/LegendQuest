@@ -5,13 +5,13 @@ namespace LegendQuest.Screens;
 
 /// <summary>
 /// The fight's part of the proof run: starting a fight, having EnemyMind play the party so every
-/// story fight can be fought through, pointing at someone or a tile, picking an ability, and the
+/// story fight can be fought through, pointing at someone or a slot, picking an ability, and the
 /// moments a shot's worth taking.
 /// </summary>
 /// <remarks>
 /// Everything goes through the same code the player's does: aiming puts the proof run's pretend mouse
-/// (ProofStep moves it every frame) over someone's figure or a tile, so the plan, the rings, the path
-/// and the card all come up as they would; picking an ability is pressing its key; ProofClick, in
+/// (ProofStep moves it every frame) over someone's figure or a slot's plate, so the plan, the plates,
+/// the chevrons, the rings and the card all come up as they would; picking an ability is pressing its key; ProofClick, in
 /// ExploreScreen.Proof, clicks. With autoplay on, the panel at the end goes by itself after a moment.
 /// </remarks>
 public partial class ExploreScreen
@@ -41,9 +41,9 @@ public partial class ExploreScreen
         if (FighterWalker(id) is { } walker) ProofAimAt(walker.Position - new Vector2(0f, walker.Shape.Figure.Y / 2f));
     }
 
-    /// <summary>Puts the pretend mouse over a tile.</summary>
-    /// <param name="cell">The tile.</param>
-    internal void ProofAimAtCell(Point cell) => ProofAimAt(FeetOn(cell));
+    /// <summary>Puts the pretend mouse over a slot's plate.</summary>
+    /// <param name="slot">The slot.</param>
+    internal void ProofAimAtSlot(Slot slot) => ProofAimAt(_stage.FeetAt(slot));
 
     /// <summary>Presses the hotbar key for an ability, if whoever's turn it is has it: one used on yourself happens at once, anything else waits for a target.</summary>
     /// <param name="ability">The ability.</param>

@@ -589,6 +589,7 @@ public partial class ExploreScreen
         PropSprite sprite = null;
         foreach ((MapInteractable each, PropSprite drawn) in _things)
             if (each == thing) sprite = drawn;
+        if (sprite is null) return null;
         return (thing.Name.ToUpperInvariant(), "E  ·  " + thing.Prompt, _camera.ToScreen(thing.Foot - new Vector2(0f, sprite.Size.Y)));
     }
 

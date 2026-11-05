@@ -5,8 +5,9 @@ using LegendQuest.Items;
 namespace LegendQuest.Rules;
 
 /// <summary>
-/// One class: what it's called, its hit die, what it's trained to wear and wield, what it casts
-/// with, how fast it moves, and the kit it sets out in. The abilities are the combat engine's.
+/// One class: what it's called, what it adds to hit points, what it's trained to wear and wield,
+/// what it casts with, how fast it moves, and the kit it sets out in. The abilities are the combat
+/// engine's.
 /// </summary>
 public sealed class ClassDefinition
 {
@@ -22,8 +23,8 @@ public sealed class ClassDefinition
     /// <summary>What it's for, in a few words, for the creation screen.</summary>
     public required string Role { get; init; }
 
-    /// <summary>The biggest number on its hit die. At level 1 a character has this many hit points, plus their Constitution modifier.</summary>
-    public required int HitDie { get; init; }
+    /// <summary>What it adds to its wearer's most hit points, in percent, on top of what their level and Constitution give: +20 for the Warden, -10 for the Arcanist, 0 for most (10-classes.md §1.4).</summary>
+    public int HpModifier { get; init; }
 
     /// <summary>Where 5e's standard array (15, 14, 13, 12, 10, 8) goes for this class. The creation screen starts you on it.</summary>
     public required AbilityScores Recommended { get; init; }

@@ -1,25 +1,18 @@
-using System;
-
 namespace LegendQuest.Combat;
 
 /// <summary>
-/// What's left of someone's turn: the movement bar, the action circle, the bonus action triangle,
-/// and the reaction.
+/// What's left of someone's turn: the Shift, the action circle, the bonus action triangle, and the
+/// reaction.
 /// </summary>
 /// <remarks>
-/// 5e's action economy. Everything comes back at the start of the owner's own turn, the reaction
-/// included, so a reaction spent on someone else's turn is gone until then. Only the engine spends it.
+/// 5e's action economy, with BG3's free Shift in place of movement. Everything comes back at the
+/// start of the owner's own turn, the reaction included, so a reaction spent on someone else's turn
+/// is gone until then. Only the engine spends it.
 /// </remarks>
 public sealed class TurnBudget
 {
-    /// <summary>A hair of slack when comparing metres, so 1.5 m left pays for a 1.5 m step.</summary>
-    private const float Slack = 0.001f;
-
-    /// <summary>All the movement this turn, a Dash included.</summary>
-    public float Movement { get; private set; }
-
-    /// <summary>The movement still to spend, in metres.</summary>
-    public float MovementLeft { get; private set; }
+    /// <summary>Whether the turn's free Shift is still there.</summary>
+    public bool Shift { get; private set; }
 
     /// <summary>Whether the action's still there.</summary>
     public bool Action { get; private set; }
@@ -30,19 +23,18 @@ public sealed class TurnBudget
     /// <summary>Whether the reaction's still there. Everyone has theirs from the start of the fight.</summary>
     public bool Reaction { get; private set; } = true;
 
-    /// <summary>The movement the turn started with, before any Dash: what a Dash adds.</summary>
-    internal float Speed { get; private set; }
-
     /// <summary>Whether the Attack action's been taken this turn, which the off-hand attack needs first.</summary>
     internal bool Attacked { get; set; }
 
+    /// <summary>Actions this turn on top of the one (Action Surge), each spent before the action itself.</summary>
+    internal int ExtraActions { get; set; }
+
     /// <summary>Gives everything back at the start of the owner's turn.</summary>
-    /// <param name="movement">How far they can move this turn, in metres.</param>
-    internal void Start(float movement)
+    internal void Start()
     {
-        Speed = Movement = MovementLeft = MathF.Max(0f, movement);
-        Action = BonusAction = Reaction = true;
+        Shift = Action = BonusAction = Reaction = true;
         Attacked = false;
+        ExtraActions = 0;
     }
 
     /// <summary>Whether there's still enough to pay for something.</summary>
@@ -61,24 +53,16 @@ public sealed class TurnBudget
     {
         switch (cost)
         {
+            case ActionCost.Action when ExtraActions > 0: ExtraActions--; break;
             case ActionCost.Action: Action = false; break;
             case ActionCost.BonusAction: BonusAction = false; break;
             case ActionCost.Reaction: Reaction = false; break;
         }
     }
 
-    /// <summary>Whether there's enough movement left for a distance.</summary>
-    /// <param name="metres">How far.</param>
-    internal bool CanWalk(float metres) => MovementLeft + Slack >= metres;
+    /// <summary>Spends the turn's Shift: on a Shift, or on getting up from Prone.</summary>
+    internal void SpendShift() => Shift = false;
 
-    /// <summary>Spends movement.</summary>
-    /// <param name="metres">How far they went.</param>
-    internal void Walk(float metres) => MovementLeft = MathF.Max(0f, MovementLeft - metres);
-
-    /// <summary>A Dash: as much movement again as the turn started with.</summary>
-    internal void Dash()
-    {
-        Movement += Speed;
-        MovementLeft += Speed;
-    }
+    /// <summary>Gives the turn's Shift back, for a skill that comes with a free one (Cunning Step).</summary>
+    internal void GiveShift() => Shift = true;
 }

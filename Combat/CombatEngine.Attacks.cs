@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using LegendQuest.Items;
 using LegendQuest.Rules;
 
@@ -11,11 +10,15 @@ namespace LegendQuest.Combat;
 /// criticals, the damage and what rides on it, and the odds of all of it for the tooltip and the AI.
 /// </summary>
 /// <remarks>
-/// 5e's from the SRD 5.1. Advantage comes from help, a restrained or prone target, a Downed one within
-/// reach, and Pack Tactics; disadvantage from a dodging target, being restrained, prone, mocked or in
-/// armour you aren't trained for, a ranged attack with a foe beside you, and a Warden's shield. Any
-/// of each cancels out (AttackMath.Combine). A hit on someone Downed from beside them is a critical.
-/// Every roll is written out in full for the log.
+/// 5e's from the SRD 5.1, in rows. Advantage comes from help, a target that's restrained, Marked
+/// (once), Stunned or Blinded, a prone or Downed one for melee and reach, and Pack Tactics (another of
+/// the pack standing in its front row, and the target in the opposing front); disadvantage from a
+/// dodging target, a prone one for ranged, being restrained, prone, mocked, Poisoned, Blinded,
+/// Frightened or in armour you aren't trained for, and a Warden's shield next to the target. Any of
+/// each cancels out (AttackMath.Combine). A melee hit on someone Downed is a critical. Sneak Attack
+/// rides on advantage, or on a target an ally's hit this round, or one that's Marked or Prone. A foe
+/// adds the difficulty to its attack rolls and its DCs, and one that drains Focus takes it off whoever
+/// it hits. Every roll is written out in full for the log.
 /// </remarks>
 public sealed partial class CombatEngine
 {
@@ -28,7 +31,7 @@ public sealed partial class CombatEngine
     {
         if (user.Member is not null || !Has(user, AbilityId.Multiattack))
         {
-            AttackProfile weapon = user.Member is not null ? user.MainHand : BestAttack(user, target, user.Cell) ?? user.MainHand;
+            AttackProfile weapon = user.Member is not null ? user.MainHand : BestAttack(user, target) ?? user.MainHand;
             Strike(user, weapon, target, ability, false);
             return;
         }
@@ -71,7 +74,7 @@ public sealed partial class CombatEngine
     private void SpellAttack(Combatant user, AbilityDefinition ability, Combatant target)
     {
         var damage = new[] { new DamagePart(ability.Damage, ability.DamageType, null) };
-        bool ranged = ability.Range > Measure.MeleeReach;
+        bool ranged = ReachOf(user, ability) == Reach.Ranged;
         bool hit = ResolveAttack(user, target, ability, user.SpellAttack, SpellModifiers(user), ranged, false, damage,
             $"{user.Label} casts {ability.Name.ToUpperInvariant()} at {target.Label}", ability.DamageType);
 
@@ -79,27 +82,21 @@ public sealed partial class CombatEngine
         foreach (ConditionId condition in ability.Conditions) AddCondition(target, condition, ability.Turns, user, ability.Id);
     }
 
-    /// <summary>A save ability: everyone it catches saves against the DC, and takes its damage (once rolled for all of them) and its conditions if they fail.</summary>
-    private void SavingThrows(Combatant user, AbilityDefinition ability, Combatant target, Point cell)
+    /// <summary>A save ability: everyone it catches saves against the DC, and takes its damage (once rolled for all of them) and its conditions if they fail, and a pull or push.</summary>
+    /// <param name="user">Who.</param>
+    /// <param name="ability">What.</param>
+    /// <param name="target">At whom: its pick.</param>
+    private void SavingThrows(Combatant user, AbilityDefinition ability, Combatant target)
     {
-        var caught = new List<Combatant>();
-        if (ability.Target == TargetKind.Enemy) caught.Add(target);
-        else
-        {
-            Point centre = ability.Target == TargetKind.Self ? user.Cell : cell;
-            foreach (Combatant each in _combatants)
-            {
-                bool self = each == user && ability.Target == TargetKind.Self;
-                if (!self && !Beaten(each) && !each.IsOut && Measure.Within(each.Cell, centre, ability.Radius)) caught.Add(each);
-            }
-        }
+        bool single = ability.Shape == TargetShape.Foe;
+        IReadOnlyList<Combatant> caught = Caught(user, ability, target);
 
         string name = ability.Name.ToUpperInvariant();
-        string on = ability.Target == TargetKind.Enemy ? $" on {target.Label}" : string.Empty;
-        Emit(CombatEventKind.AbilityUsed, user, ability.Target == TargetKind.Enemy ? target : null, 0,
+        string on = single ? $" on {target.Label}" : string.Empty;
+        Emit(CombatEventKind.AbilityUsed, user, single ? target : null, 0,
             $"{user.Label} {(ability.Spell ? "casts" : "uses")} {name}{on}.", ability: ability.Id);
 
-        int dc = ability.Dc > 0 ? ability.Dc : user.SpellDc;
+        int dc = DcOf(user, ability);
         RollResult rolled = ability.Damage.IsNone ? null : ability.Damage.Roll(_random, name);
         int full = rolled is null ? 0 : Math.Max(0, rolled.Total);
         string kind = ability.DamageType.ToString().ToLowerInvariant();
@@ -115,10 +112,14 @@ public sealed partial class CombatEngine
             if (damage > 0) Damage(each, damage, ability.DamageType, user, false, ability.Id, rolled);
             if (saved || each.IsOut) continue;
             foreach (ConditionId condition in ability.Conditions) AddCondition(each, condition, ability.Turns, user, ability.Id, dc);
+            MoveRow(user, ability, each);
         }
     }
 
-    /// <summary>Darts that never miss, each rolling its own damage; any left when the target falls fly on to the nearest foe in sight.</summary>
+    /// <summary>The DC of a save someone's ability sets: its own, or their spell save DC, and a foe's share of the difficulty on top.</summary>
+    private static int DcOf(Combatant user, AbilityDefinition ability) => (ability.Dc > 0 ? ability.Dc : user.SpellDc) + user.RollBonus;
+
+    /// <summary>Darts that never miss, each rolling its own damage; any left when the target falls fly on to the first foe in slot order it can still reach.</summary>
     private void Darts(Combatant user, AbilityDefinition ability, Combatant target)
     {
         string name = ability.Name.ToUpperInvariant();
@@ -126,9 +127,9 @@ public sealed partial class CombatEngine
         Emit(CombatEventKind.AbilityUsed, user, target, 0, $"{user.Label} casts {name}.", ability: ability.Id);
 
         Combatant aim = target;
-        for (int dart = 0; dart < ability.Darts && Outcome == CombatOutcome.Ongoing; dart++)
+        for (int dart = 0; dart < ability.Count && Outcome == CombatOutcome.Ongoing; dart++)
         {
-            if (aim is null || aim.IsOut || Beaten(aim)) aim = NearestInSight(user, RangeOf(user, ability));
+            if (aim is null || aim.IsOut || Beaten(aim)) aim = NextAim(user, ability);
             if (aim is null) return;
 
             RollResult roll = ability.Damage.Roll(_random, name);
@@ -146,7 +147,8 @@ public sealed partial class CombatEngine
     private bool ResolveAttack(Combatant attacker, Combatant target, AbilityDefinition ability, int bonus,
         IReadOnlyList<(string Source, int Amount)> modifiers, bool ranged, bool sneaky, IReadOnlyList<DamagePart> damage, string action, DamageType kind)
     {
-        Advantage advantage = AdvantageOf(attacker, target, attacker.Cell, ranged, true, out Combatant protector);
+        bool marked = target.Has(ConditionId.Marked);
+        Advantage advantage = AdvantageOf(attacker, target, ranged, true, out Combatant protector);
         if (protector is not null)
         {
             protector.Budget.Spend(ActionCost.Reaction);
@@ -155,6 +157,11 @@ public sealed partial class CombatEngine
 
         int kept = AttackMath.D20(_random, advantage, out int first, out int second);
         var rolledWith = new List<(string Source, int Amount)>(modifiers);
+        if (attacker.RollBonus != 0)
+        {
+            bonus += attacker.RollBonus;
+            rolledWith.Add(("DIFFICULTY", attacker.RollBonus));
+        }
         int total = kept + bonus;
         bool hit = AttackMath.Hits(kept, bonus, target.ArmourClass);
         string lifted = string.Empty;
@@ -170,7 +177,7 @@ public sealed partial class CombatEngine
             RemoveCondition(attacker, ConditionId.Inspired);
         }
 
-        bool critical = hit && (kept == AttackMath.CriticalRoll || target.IsDown && Measure.Within(attacker.Cell, target.Cell, Measure.MeleeReach));
+        bool critical = hit && (kept == AttackMath.CriticalRoll || target.IsDown && !ranged);
         var d20 = new RollResult { Dice = Rolled(advantage, first, second), Modifiers = rolledWith, Total = total };
         string verdict = critical ? "CRITICAL HIT" : hit ? "HIT" : "MISS";
         string line = $"{action}{CombatText.AdvantageNote(advantage, first, second)}: {kept} {CombatText.Signed(bonus)}{lifted} = {total} vs AC {target.ArmourClass} - {verdict}.";
@@ -183,7 +190,7 @@ public sealed partial class CombatEngine
         }
 
         var parts = new List<DamagePart>(damage);
-        if (sneaky && SneakAttackApplies(attacker, target, advantage))
+        if (sneaky && SneakAttackApplies(attacker, target, advantage, marked))
         {
             attacker.SneakTurn = _turnNumber;
             parts.Add(new DamagePart(AbilityCatalog.Get(AbilityId.SneakAttack).Damage, kind, "sneak attack"));
@@ -195,6 +202,13 @@ public sealed partial class CombatEngine
         Emit(CombatEventKind.AttackRolled, attacker, target, total, $"{line} {written}.", d20, ability.Id);
         Emit(critical ? CombatEventKind.Critical : CombatEventKind.Hit, attacker, target, amount, null, null, ability.Id, kind);
         Damage(target, amount, kind, attacker, critical, ability.Id, rolled);
+
+        if (attacker.Enemy is { FocusDrain: > 0 } drainer && !target.IsDead && target.Focus > 0)
+        {
+            int drained = -target.ChangeFocus(-drainer.FocusDrain);
+            Emit(CombatEventKind.FocusChanged, attacker, target, -drained, $"{attacker.Label} drains {drained} Focus from {target.Label}.");
+        }
+        if (!target.IsOut) MoveRow(attacker, ability, target);
         return true;
     }
 
@@ -231,7 +245,7 @@ public sealed partial class CombatEngine
     {
         if (target.Has(ConditionId.Prone)) return;
         AbilityDefinition trip = AbilityCatalog.Get(AbilityId.Trip);
-        bool saved = RollSave(target, trip.Save ?? Ability.Strength, trip.Dc, trip.Name.ToUpperInvariant(), out RollResult roll, out string line);
+        bool saved = RollSave(target, trip.Save ?? Ability.Strength, DcOf(attacker, trip), trip.Name.ToUpperInvariant(), out RollResult roll, out string line);
         Emit(CombatEventKind.SaveRolled, attacker, target, roll.Total, line, roll, AbilityId.Trip);
         if (!saved) AddCondition(target, ConditionId.Prone, 0, attacker, AbilityId.Trip);
     }
@@ -279,28 +293,26 @@ public sealed partial class CombatEngine
         return AttackMath.Combine(advantages, disadvantages);
     }
 
-    /// <summary>Everything that gives an attack advantage or disadvantage, from where the attacker would be standing.</summary>
+    /// <summary>Everything that gives an attack advantage or disadvantage.</summary>
     /// <param name="attacker">Who.</param>
     /// <param name="target">At whom.</param>
-    /// <param name="from">The tile they'd attack from.</param>
-    /// <param name="ranged">Whether it's a ranged attack.</param>
-    /// <param name="consume">Whether to use up what's spent by attacking (Helped, Mocked), which only the real attack does.</param>
+    /// <param name="ranged">Whether it's a ranged attack, for Prone.</param>
+    /// <param name="consume">Whether to use up what's spent by attacking (Helped, Mocked, the target's Mark), which only the real attack does.</param>
     /// <param name="protector">A Warden whose shield would turn it to disadvantage, or null.</param>
-    private Advantage AdvantageOf(Combatant attacker, Combatant target, Point from, bool ranged, bool consume, out Combatant protector)
+    private Advantage AdvantageOf(Combatant attacker, Combatant target, bool ranged, bool consume, out Combatant protector)
     {
-        bool close = Measure.Within(from, target.Cell, Measure.MeleeReach);
         int advantages = 0, disadvantages = 0;
 
         if (attacker.Has(ConditionId.Helped)) advantages++;
-        if (target.Has(ConditionId.Restrained)) advantages++;
-        if ((target.Has(ConditionId.Prone) || target.IsDown) && close) advantages++;
-        if (Has(attacker, AbilityId.PackTactics) && AllyBeside(attacker, target)) advantages++;
+        if (target.Has(ConditionId.Restrained) || target.Has(ConditionId.Marked) || target.Has(ConditionId.Stunned) || target.Has(ConditionId.Blinded)) advantages++;
+        if ((target.Has(ConditionId.Prone) || target.IsDown) && !ranged) advantages++;
+        if (Has(attacker, AbilityId.PackTactics) && PackInFront(attacker) && Exposed(target)) advantages++;
 
-        if (target.Has(ConditionId.Prone) && !close) disadvantages++;
+        if (target.Has(ConditionId.Prone) && ranged) disadvantages++;
         if (target.Has(ConditionId.Dodging) && !target.IsOut) disadvantages++;
-        if (attacker.Has(ConditionId.Restrained) || attacker.Has(ConditionId.Prone) || attacker.Has(ConditionId.Mocked)) disadvantages++;
+        if (attacker.Has(ConditionId.Restrained) || attacker.Has(ConditionId.Prone) || attacker.Has(ConditionId.Mocked)
+            || attacker.Has(ConditionId.Poisoned) || attacker.Has(ConditionId.Blinded) || attacker.Has(ConditionId.Frightened)) disadvantages++;
         if (attacker.ArmourUntrained) disadvantages++;
-        if (ranged && HostileBeside(attacker, from)) disadvantages++;
 
         protector = disadvantages == 0 ? Protector(attacker, target) : null;
         if (protector is not null) disadvantages++;
@@ -309,53 +321,77 @@ public sealed partial class CombatEngine
         {
             RemoveCondition(attacker, ConditionId.Helped);
             RemoveCondition(attacker, ConditionId.Mocked);
+            RemoveCondition(target, ConditionId.Marked);
         }
         return AttackMath.Combine(advantages, disadvantages);
     }
 
-    /// <summary>A Warden beside the target with a shield up, a reaction to spend and the attacker in sight, who'd turn the attack to disadvantage; or null.</summary>
+    /// <summary>Whether another of someone's side is standing in their side's effective front row, for Pack Tactics.</summary>
+    private bool PackInFront(Combatant who)
+    {
+        foreach (Combatant each in Formation.InRow(who.Side, Formation.FrontOf(who.Side)))
+            if (each != who && Standing(each)) return true;
+        return false;
+    }
+
+    /// <summary>A Warden next to the target with a shield up and a reaction to spend, who'd turn an attack on it to disadvantage; or null.</summary>
     private Combatant Protector(Combatant attacker, Combatant target)
     {
         foreach (Combatant each in _combatants)
         {
             if (each == target || Hostile(each, target) || each.IsOut || !each.Budget.Reaction || !Has(each, AbilityId.Protection)) continue;
             if (each.Member?.WornIn(EquipmentSlot.OffHand) is not { Kind: ItemKind.Shield }) continue;
-            if (Measure.Within(each.Cell, target.Cell, Measure.MeleeReach) && CanSee(each.Cell, attacker.Cell)) return each;
+            if (Contains(Formation.NextTo(target), each)) return each;
         }
         return null;
     }
 
-    /// <summary>Whether Sneak Attack rides on a hit: the attacker has it, hasn't used it this turn, and has advantage, or an ally beside the target and no disadvantage.</summary>
-    private bool SneakAttackApplies(Combatant attacker, Combatant target, Advantage advantage) =>
-        Has(attacker, AbilityId.SneakAttack) && attacker.SneakTurn != _turnNumber
-        && (advantage == Advantage.Advantage || advantage == Advantage.Normal && AllyBeside(attacker, target));
-
-    /// <summary>Whether someone on the attacker's side, up and not the attacker, is beside the target.</summary>
-    private bool AllyBeside(Combatant attacker, Combatant target)
+    /// <summary>Whether Sneak Attack rides on a hit: the attacker has it and hasn't used it this turn, and has advantage, or a target an ally's hit this round, or one that's Marked or Prone.</summary>
+    /// <param name="attacker">Who.</param>
+    /// <param name="target">At whom.</param>
+    /// <param name="advantage">The attack's advantage.</param>
+    /// <param name="marked">Whether the target was Marked before the attack used the mark up.</param>
+    private bool SneakAttackApplies(Combatant attacker, Combatant target, Advantage advantage, bool marked)
     {
-        foreach (Combatant each in _combatants)
-            if (each != attacker && each.Side == attacker.Side && !each.IsOut && Measure.Within(each.Cell, target.Cell, Measure.MeleeReach)) return true;
+        if (!Has(attacker, AbilityId.SneakAttack) || attacker.SneakTurn == _turnNumber) return false;
+        return advantage == Advantage.Advantage || marked || target.Has(ConditionId.Prone) || HitByAlly(attacker, target);
+    }
+
+    /// <summary>Whether someone else on the attacker's side has hit the target this round.</summary>
+    private bool HitByAlly(Combatant attacker, Combatant target)
+    {
+        if (!_hitThisRound.TryGetValue(target.Id, out List<string> hitters)) return false;
+        foreach (string id in hitters)
+            if (id != attacker.Id && Find(id) is Combatant hitter && hitter.Side == attacker.Side) return true;
         return false;
     }
 
-    /// <summary>Whether a foe of someone's, still fighting, is beside a tile.</summary>
-    internal bool HostileBeside(Combatant who, Point cell)
+    /// <summary>Notes someone hitting someone else this round, for Sneak Attack.</summary>
+    private void NoteHit(Combatant source, Combatant target)
     {
-        foreach (Combatant each in _combatants)
-            if (Hostile(each, who) && !Beaten(each) && Measure.Within(each.Cell, cell, Measure.MeleeReach)) return true;
-        return false;
+        if (source is null || source == target) return;
+        if (!_hitThisRound.TryGetValue(target.Id, out List<string> hitters)) _hitThisRound[target.Id] = hitters = new List<string>();
+        if (!hitters.Contains(source.Id)) hitters.Add(source.Id);
     }
 
-    /// <summary>The foe's attack that does most against a target from a tile, of the ones that reach it; null if none does.</summary>
-    internal AttackProfile BestAttack(Combatant user, Combatant target, Point from)
+    /// <summary>Where a dart goes once its target has fallen: the first foe in slot order the ability can still reach, or null.</summary>
+    private Combatant NextAim(Combatant user, AbilityDefinition ability)
+    {
+        foreach (Combatant each in OnField(user.Side == Side.Party ? Side.Foes : Side.Party))
+            if (Standing(each) && CanReach(user, ReachOf(user, ability), each) && !each.Has(ConditionId.Frozen)) return each;
+        return null;
+    }
+
+    /// <summary>The foe's attack that does most against a target from where it stands, of the ones that reach it; null if none does.</summary>
+    internal AttackProfile BestAttack(Combatant user, Combatant target)
     {
         AttackProfile best = null;
         double most = -1.0;
         foreach (AttackProfile attack in user.Attacks)
         {
-            if (!Measure.Within(from, target.Cell, attack.Range)) continue;
-            Advantage advantage = AdvantageOf(user, target, from, attack.Ranged, false, out _);
-            double expected = AttackMath.HitChance(attack.Bonus, target.ArmourClass, advantage) * attack.AverageDamage;
+            if (!CanReach(user, attack.Reach, target)) continue;
+            Advantage advantage = AdvantageOf(user, target, attack.Ranged, false, out _);
+            double expected = AttackMath.HitChance(attack.Bonus + user.RollBonus, target.ArmourClass, advantage) * attack.AverageDamage;
             if (expected <= most) continue;
             most = expected;
             best = attack;
@@ -363,10 +399,10 @@ public sealed partial class CombatEngine
         return best;
     }
 
-    /// <summary>Whether a target can be hit by an attack from where the user stands: still in the fight, in reach, in sight.</summary>
+    /// <summary>Whether a target can be hit by an attack from where the user stands: still in the fight, on the field, not Frozen, in reach.</summary>
     private bool Aimable(Combatant user, AttackProfile attack, Combatant target) =>
         target is not null && !target.IsDead && !(target.Side == Side.Foes && Beaten(target)) && !(target.IsDown && _encounter.Nonlethal)
-        && Measure.Within(user.Cell, target.Cell, attack.Range) && CanSee(user.Cell, target.Cell);
+        && SlotOf(target) is not null && !target.Has(ConditionId.Frozen) && CanReach(user, attack.Reach, target);
 
     /// <summary>The standing foe with the fewest hit points that an attack can reach, for a Multiattack's follow-ups; null if none.</summary>
     private Combatant Weakest(Combatant user, AttackProfile attack)
@@ -377,24 +413,12 @@ public sealed partial class CombatEngine
         return weakest;
     }
 
-    /// <summary>The nearest foe still fighting that someone can see within a range; null if none.</summary>
-    private Combatant NearestInSight(Combatant user, float range)
-    {
-        Combatant nearest = null;
-        foreach (Combatant each in _combatants)
-        {
-            if (!Hostile(each, user) || each.IsOut || Beaten(each) || !Measure.Within(user.Cell, each.Cell, range) || !CanSee(user.Cell, each.Cell)) continue;
-            if (nearest is null || Measure.Steps(user.Cell, each.Cell) < Measure.Steps(user.Cell, nearest.Cell)) nearest = each;
-        }
-        return nearest;
-    }
-
     /// <summary>The modifiers on a spell attack, for the dice and the log: the casting ability, proficiency, and anything worn.</summary>
     private static List<(string Source, int Amount)> SpellModifiers(Combatant user)
     {
         var modifiers = new List<(string Source, int Amount)>();
         if (user.Casting is Ability casting) modifiers.Add((CombatStats.Abbreviation(casting), user.CastingModifier));
-        modifiers.Add(("PROF", AttackMath.ProficiencyBonus));
+        modifiers.Add(("PROF", LevelTable.Proficiency(user.Level)));
         if (user.SpellFocus != 0) modifiers.Add(("FOCUS", user.SpellFocus));
         return modifiers;
     }

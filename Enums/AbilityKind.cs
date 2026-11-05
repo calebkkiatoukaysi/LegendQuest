@@ -32,9 +32,6 @@ public enum AbilityKind
     /// <summary>Puts its conditions on the target, with no roll.</summary>
     Condition,
 
-    /// <summary>As much movement again.</summary>
-    Dash,
-
     /// <summary>Gets a Downed ally up with 1 HP, or helps one who's standing.</summary>
     Help,
 

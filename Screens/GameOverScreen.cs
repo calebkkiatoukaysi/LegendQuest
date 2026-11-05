@@ -9,20 +9,27 @@ using LegendQuest.World;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The party's fallen in a fight they weren't meant to lose: LOAD LAST SAVE or QUIT TO TITLE, over
-/// the map where it happened.
+/// The party's fallen in a fight they weren't meant to lose: what the difficulty offers (RETRY THE
+/// FIGHT, RETRY ON STORY, WIN THIS FIGHT) and QUIT TO TITLE, over the room where it happened.
 /// </summary>
 /// <remarks>
 /// A popup, so the fight stays drawn behind its veil. The pause menu's form, with the game over
-/// sting. LOAD LAST SAVE loads whichever slot was written last, which is the autosave from just
-/// before the fight unless you've saved since; it's dead if no slot has a game in it. Escape does
-/// nothing: there's no going back to a lost fight.
+/// sting. RETRY THE FIGHT loads whichever slot was written last, which is the autosave from just
+/// before the fight unless you've saved since, and a save made as a fight starts is that fight again,
+/// fresh, with the same allies; it's dead if no slot has a game in it. RETRY ON STORY does the same
+/// with the fight marked to be fought on Story (RetryState). WIN THIS FIGHT, which Story offers once
+/// a fight's been lost twice, hands the fight to the party and goes back to it for the win. Without
+/// any options (outside a fight) it's LOAD LAST SAVE. Escape does nothing: there's no going back to a
+/// lost fight.
 /// </remarks>
 public class GameOverScreen : MenuScreen
 {
     private const string Heading = "THE LIGHT GOES OUT";
     private const string Note = "THE PARTY HAS FALLEN. THE STORY ISN'T OVER YET.";
     private const string LoadLabel = "LOAD LAST SAVE";
+    private const string RetryLabel = "RETRY THE FIGHT";
+    private const string StoryLabel = "RETRY ON STORY";
+    private const string WinLabel = "WIN THIS FIGHT";
     private const string TitleLabel = "QUIT TO TITLE";
 
     private const int PanelWidth = 760;
@@ -33,6 +40,10 @@ public class GameOverScreen : MenuScreen
 
     private readonly FormPanel _panel = new();
     private readonly MenuEntry _load;
+    private readonly MenuEntry _story;
+
+    /// <summary>The fight that was lost, by its encounter id, or null outside one.</summary>
+    private readonly string _fight;
 
     private SpriteFont _font;
     private SpriteFont _detailFont;
@@ -40,18 +51,40 @@ public class GameOverScreen : MenuScreen
     private float _noteY;
 
     /// <summary>Builds the menu.</summary>
-    public GameOverScreen()
+    /// <param name="fight">The fight that was lost, by its encounter id, or null.</param>
+    /// <param name="options">What the difficulty offers (RetryState.Options); None for just LOAD LAST SAVE.</param>
+    /// <param name="win">What WIN THIS FIGHT does once the screen's gone (the fight conceded to the party), or null.</param>
+    public GameOverScreen(string fight = null, LossOptions options = LossOptions.None, Action win = null)
     {
+        _fight = fight;
         IsPopup = true;
         TransitionOnTime = FadeTime;
         TransitionOffTime = FadeTime;
 
-        _load = new MenuEntry(LoadLabel, Palette.Torch);
-        var title = new MenuEntry(TitleLabel, Palette.Ember);
+        _load = new MenuEntry(options.HasFlag(LossOptions.Retry) ? RetryLabel : LoadLabel, Palette.Torch);
         _load.Selected += LoadLastSave;
-        title.Selected += QuitToTitle;
-
         MenuEntries.Add(_load);
+
+        if (options.HasFlag(LossOptions.RetryOnStory))
+        {
+            _story = new MenuEntry(StoryLabel, Palette.Torch);
+            _story.Selected += RetryOnStory;
+            MenuEntries.Add(_story);
+        }
+
+        if (options.HasFlag(LossOptions.WinAfterTwoLosses) && win is not null)
+        {
+            var winning = new MenuEntry(WinLabel, Palette.Gold);
+            winning.Selected += () =>
+            {
+                ExitScreen();
+                win();
+            };
+            MenuEntries.Add(winning);
+        }
+
+        var title = new MenuEntry(TitleLabel, Palette.Ember);
+        title.Selected += QuitToTitle;
         MenuEntries.Add(title);
     }
 
@@ -64,7 +97,8 @@ public class GameOverScreen : MenuScreen
         _font = Content.Load<SpriteFont>("spectral-ui");
         _detailFont = Content.Load<SpriteFont>("spectral-detail");
         _load.Plate.Enabled = SaveSystem.Latest() is not null;
-        if (!_load.Plate.Enabled) SelectedEntry = 1;
+        if (_story is not null) _story.Plate.Enabled = _load.Plate.Enabled;
+        if (!_load.Plate.Enabled) SelectedEntry = MenuEntries.Count - 1;
 
         LayOut();
         Audio.Play(Sfx.GameOver);
@@ -95,7 +129,7 @@ public class GameOverScreen : MenuScreen
         base.Draw(gameTime);
     }
 
-    /// <summary>For the proof run, since it can't press keys: LOAD LAST SAVE.</summary>
+    /// <summary>For the proof run, since it can't press keys: RETRY THE FIGHT (or LOAD LAST SAVE).</summary>
     internal void ProofLoadLastSave() => LoadLastSave();
 
     /// <summary>Loads whichever slot was written last, onto its map. If it's gone since the screen came up, LOAD LAST SAVE just goes dead.</summary>
@@ -110,6 +144,14 @@ public class GameOverScreen : MenuScreen
 
         SaveData game = latest.Data;
         LoadingScreen.Load(ScreenManager, ZoneCatalog.Get(game.ZoneId).Name.ToUpperInvariant(), new ExploreScreen(game));
+    }
+
+    /// <summary>Marks the fight to be fought on Story, then loads the save from before it.</summary>
+    private void RetryOnStory()
+    {
+        if (SaveSystem.Latest() is null) return;
+        RetryState.PlayOnStory(_fight);
+        LoadLastSave();
     }
 
     /// <summary>Goes back to the title, through the loading screen so everything under this fades out first.</summary>

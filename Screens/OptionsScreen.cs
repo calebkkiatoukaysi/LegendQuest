@@ -14,7 +14,8 @@ namespace LegendQuest.Screens;
 /// <remarks>
 /// You hear a volume change right away since AudioManager reads the settings every frame. The file
 /// only gets written when the form closes, not on every press. Same as The Black Box, plus the
-/// text speed for the dialogue.
+/// text speed for the dialogue, and the difficulty (Story, Balanced, Tactician), which can't be
+/// changed in the middle of a fight: opened from the pause menu in one, its row says so.
 /// </remarks>
 public class OptionsScreen : MenuScreen
 {
@@ -24,6 +25,8 @@ public class OptionsScreen : MenuScreen
     private const string MusicLabel = "MUSIC";
     private const string SoundLabel = "SOUND";
     private const string TextSpeedLabel = "TEXT SPEED";
+    private const string DifficultyLabel = "DIFFICULTY";
+    private const string LockedNote = "THE DIFFICULTY CAN'T CHANGE MID-FIGHT";
     private const string TipsLabel = "TUTORIAL TIPS";
     private const string DisplayLabel = "DISPLAY";
     private const string BackLabel = "BACK";
@@ -32,8 +35,8 @@ public class OptionsScreen : MenuScreen
     private const float VolumeStep = 0.1f;
 
     private const int PanelWidth = 760;
-    private static readonly Point EntrySize = new(560, 70);
-    private const float EntryGap = 12f;
+    private static readonly Point EntrySize = new(560, 64);
+    private const float EntryGap = 10f;
     private const float HeadingGap = 30f;
 
     private static readonly TimeSpan FadeTime = TimeSpan.FromSeconds(0.25);
@@ -43,6 +46,7 @@ public class OptionsScreen : MenuScreen
     private readonly MenuEntry _music;
     private readonly MenuEntry _sound;
     private readonly MenuEntry _textSpeed;
+    private readonly MenuEntry _difficulty;
     private readonly MenuEntry _tips;
     private readonly MenuEntry _display;
 
@@ -51,9 +55,14 @@ public class OptionsScreen : MenuScreen
     private Rectangle _panelBounds;
     private float _noteY;
 
-    /// <summary>Builds the six adjustable entries and BACK.</summary>
-    public OptionsScreen()
+    /// <summary>Whether the difficulty's held where it is, because a fight's on.</summary>
+    private readonly bool _lockDifficulty;
+
+    /// <summary>Builds the seven adjustable entries and BACK.</summary>
+    /// <param name="lockDifficulty">Whether a fight's on, so the difficulty can't be changed.</param>
+    public OptionsScreen(bool lockDifficulty = false)
     {
+        _lockDifficulty = lockDifficulty;
         IsPopup = true;
         TransitionOnTime = FadeTime;
         TransitionOffTime = FadeTime;
@@ -62,6 +71,7 @@ public class OptionsScreen : MenuScreen
         _music = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _sound = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _textSpeed = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _difficulty = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _tips = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _display = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         var back = new MenuEntry(BackLabel, Palette.Bone);
@@ -70,6 +80,7 @@ public class OptionsScreen : MenuScreen
         _music.Adjusted += step => ChangeVolume(v => Audio.Settings.MusicVolume = v, Audio.Settings.MusicVolume, step);
         _sound.Adjusted += step => ChangeVolume(v => Audio.Settings.SfxVolume = v, Audio.Settings.SfxVolume, step);
         _textSpeed.Adjusted += ChangeTextSpeed;
+        _difficulty.Adjusted += ChangeDifficulty;
         _tips.Adjusted += _ => ToggleTips();
         _display.Adjusted += _ => ToggleFullScreen();
         back.Selected += Close;
@@ -78,6 +89,7 @@ public class OptionsScreen : MenuScreen
         MenuEntries.Add(_music);
         MenuEntries.Add(_sound);
         MenuEntries.Add(_textSpeed);
+        MenuEntries.Add(_difficulty);
         MenuEntries.Add(_tips);
         MenuEntries.Add(_display);
         MenuEntries.Add(back);
@@ -91,6 +103,7 @@ public class OptionsScreen : MenuScreen
         _panel.LoadContent(Content, ScreenManager.GraphicsDevice);
         _font = Content.Load<SpriteFont>("spectral-ui");
         _detailFont = Content.Load<SpriteFont>("spectral-detail");
+        _difficulty.Plate.Enabled = !_lockDifficulty;
 
         Relabel();
         LayOut();
@@ -118,7 +131,7 @@ public class OptionsScreen : MenuScreen
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp);
         Text.Draw(spriteBatch, _font, Heading, _panelBounds.Center.X, _panelBounds.Top + FormPanel.Padding,
             Palette.Heading * alpha, Palette.FormShadow * alpha, centred: true);
-        Text.Draw(spriteBatch, _detailFont, Note, _panelBounds.Center.X, _noteY,
+        Text.Draw(spriteBatch, _detailFont, _lockDifficulty ? LockedNote : Note, _panelBounds.Center.X, _noteY,
             Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
         spriteBatch.End();
 
@@ -147,6 +160,18 @@ public class OptionsScreen : MenuScreen
         Relabel();
     }
 
+    /// <summary>Steps the difficulty along, wrapping round at either end; nothing while a fight's on.</summary>
+    /// <param name="step">-1 or 1.</param>
+    private void ChangeDifficulty(int step)
+    {
+        if (_lockDifficulty) return;
+
+        Difficulty[] modes = Enum.GetValues<Difficulty>();
+        int next = (Array.IndexOf(modes, Audio.Settings.Mode) + step + modes.Length) % modes.Length;
+        Audio.Settings.Mode = modes[next];
+        Relabel();
+    }
+
     /// <summary>Switches the tutorial's tips on or off. A tip that's up goes as soon as you're back on the map.</summary>
     private void ToggleTips()
     {
@@ -171,6 +196,8 @@ public class OptionsScreen : MenuScreen
         _music.Text = Row(MusicLabel, Percent(settings.MusicVolume));
         _sound.Text = Row(SoundLabel, Percent(settings.SfxVolume));
         _textSpeed.Text = Row(TextSpeedLabel, settings.Typing.ToString().ToUpperInvariant());
+        string mode = settings.Mode.ToString().ToUpperInvariant();
+        _difficulty.Text = _lockDifficulty ? DifficultyLabel + "   " + mode : Row(DifficultyLabel, mode);
         _tips.Text = Row(TipsLabel, settings.TutorialTips ? "ON" : "OFF");
         _display.Text = Row(DisplayLabel, settings.FullScreen ? "FULL SCREEN" : "WINDOW");
     }

@@ -1,8 +1,9 @@
 """
 Combat art for Legend Quest: the ability icons, the condition icons, and the pieces the fight's
-screen is built from (the hotbar's slots, the initiative portraits, the action, bonus and reaction
-pips, the movement bar, death saves, the Soul-Link sigil, the rings and dots on the ground, and
-the things that fly).
+screen is built from (the hotbar's slots, the initiative portraits, the action, bonus, reaction and
+Shift pips, the Focus bar, death saves, the Soul-Link sigil, the rings under people's feet, the
+plates at the places in the rows and the chevron over one you can Shift to, a support's banner and
+its progress ring, and the things that fly).
 Run it from the repo root:
 
     python tools/generate_combat_art.py
@@ -518,6 +519,16 @@ def drink_elixir(ic):
         ic.glow(x, y, VIOLET[4], a)
 
 
+def backstab(ic):
+    """A dagger come down over the top of the front row, the arc it swung through above it."""
+    dagger(ic)
+    ic.flip(across=False, down=True)
+    end = arc(ic, "P", 12.0, 12.5, 8.5, 160, 28, 0.9, taper=0.6)
+    ic.poly("P", [(end[0] - 2.6, end[1] - 1.4), (end[0] + 2.4, end[1] - 1.8), (end[0] + 0.6, end[1] + 2.8)])
+    for x, y, a in ((20, 20, 230), (21, 19, 130), (19, 21, 130)):
+        ic.glow(x, y, RED[3], a)
+
+
 def end_turn(ic):
     ic.poly("E", [(7.0, 5.0), (17.0, 5.0), (17.0, 6.5), (13.3, 11.5), (13.3, 12.5), (17.0, 17.5), (17.0, 19.0),
                   (7.0, 19.0), (7.0, 17.5), (10.7, 12.5), (10.7, 11.5), (7.0, 6.5)])
@@ -586,6 +597,7 @@ ABILITIES = (
     ("blasting-charge", "foe", blasting_charge, None),
     ("thorn-burst", "foe", thorn_burst, None),
     ("drink-elixir", "arcane", drink_elixir, None),
+    ("backstab", "shadow", backstab, None),
 )
 
 #: The icons that aren't abilities, from the first cell of the fourth row: the End Turn button,
@@ -710,6 +722,99 @@ def mocked(ic):
     chevrons(ic, "M", False)
 
 
+def marked(ic):
+    """A red target: a ring with a dot in it."""
+    ic.ring("R", 6.0, 6.0, 2.4, 4.0)
+    ic.disc("R", 6.0, 6.0, 1.0)
+    ic.set(4, 3, "+")
+
+
+def taunted(ic):
+    """A bold orange "!", the shout that drew them."""
+    ic.rect("O", 4, 1, 7, 2)
+    ic.rect("O", 5, 3, 6, 6)
+    ic.rect("O", 5, 8, 6, 9)
+    ic.set(4, 1, "+")
+
+
+def burning(ic):
+    flame(ic, "O", 6.0, 0.8, 10.6, 7.4)
+    flame(ic, "^", 6.0, 4.6, 10.0, 3.6)
+    ic.set(6, 7, "+")
+
+
+def drop(ic, ch, cx, top, r):
+    """A drop of something, its point up."""
+    cy = top + r * 2.1
+    ic.disc(ch, cx, cy, r)
+    ic.poly(ch, [(cx, top), (cx + r * 0.95, cy - r * 0.3), (cx - r * 0.95, cy - r * 0.3)])
+    ic.set(int(cx - r * 0.45), int(cy - r * 0.2), "+")
+
+
+def bleeding(ic):
+    drop(ic, "R", 6.0, 1.2, 3.0)
+
+
+def frozen(ic):
+    """A crystal of ice: three strokes through the middle, a point on each end."""
+    for angle in (90, 30, 150):
+        t = math.radians(angle)
+        dx, dy = 4.6 * math.cos(t), 4.6 * math.sin(t)
+        ic.capsule("Q", 6.0 - dx, 6.0 - dy, 6.0 + dx, 6.0 + dy, 0.6)
+    ic.disc("+", 6.0, 6.0, 0.8)
+
+
+def poisoned(ic):
+    """A green drop with a bubble rising off it."""
+    drop(ic, "N", 5.0, 2.2, 2.7)
+    ic.disc("N", 9.4, 2.6, 1.1)
+
+
+def stunned(ic):
+    """Three gold stars going round."""
+    for cx, cy in ((3, 6), (8, 3), (8, 8)):
+        for dx, dy in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
+            ic.set(cx + dx, cy + dy, "G")
+        ic.set(cx, cy, "+")
+
+
+def blinded(ic):
+    """An eye, struck through."""
+    ic.ellipse("P", 6.0, 6.0, 4.8, 2.7)
+    ic.rect("o", 5, 5, 6, 6)
+    ic.capsule("R", 1.6, 10.2, 10.4, 1.8, 0.6)
+
+
+def frightened(ic):
+    """A skull."""
+    ic.stamp(["..PPPPPP..",
+              ".PPPPPPPP.",
+              ".PPPPPPPP.",
+              ".PooPPooP.",
+              ".PooPPooP.",
+              ".PPPPPPPP.",
+              "..PPPoPPP.",
+              "...PPPPP..",
+              "...PoPoP.."], 1, 1)
+    ic.set(3, 2, "+")
+
+
+def charmed(ic):
+    """A pink heart, glinting."""
+    ic.stamp([".MMM..MMM.",
+              "MMMMMMMMMM",
+              "MMMMMMMMMM",
+              "MMMMMMMMMM",
+              ".MMMMMMMM.",
+              "..MMMMMM..",
+              "...MMMM...",
+              "....MM...."], 1, 2)
+    ic.set(3, 3, "+")
+    ic.glow(10, 1, GLINT, 230)
+    ic.glow(10, 2, ROSE[4], 160)
+    ic.glow(9, 1, ROSE[4], 160)
+
+
 #: Every condition's icon, in ConditionId's order, which has to match.
 CONDITIONS = (
     ("downed", downed),
@@ -723,6 +828,16 @@ CONDITIONS = (
     ("stable", stable),
     ("helped", helped),
     ("mocked", mocked),
+    ("marked", marked),
+    ("taunted", taunted),
+    ("burning", burning),
+    ("bleeding", bleeding),
+    ("frozen", frozen),
+    ("poisoned", poisoned),
+    ("stunned", stunned),
+    ("blinded", blinded),
+    ("frightened", frightened),
+    ("charmed", charmed),
 )
 
 
@@ -752,8 +867,6 @@ HUD = (
     ("death-save-empty", 210, 0, 10, 10, 1),
     ("death-save-success", 220, 0, 10, 10, 1),
     ("death-save-failure", 230, 0, 10, 10, 1),
-    ("path-dot", 210, 10, 6, 6, 1),
-    ("path-dot-far", 216, 10, 6, 6, 1),
     ("soul-link-gold", 0, 32, 24, 24, 1),
     ("soul-link-flicker", 24, 32, 24, 24, 1),
     ("soul-link-violet", 48, 32, 24, 24, 1),
@@ -761,8 +874,6 @@ HUD = (
     ("soul-link-pulse", 96, 32, 24, 24, 1),
     ("target-foe", 120, 32, 24, 12, 4),
     ("target-ally", 120, 44, 24, 12, 4),
-    ("path-end", 216, 32, 16, 16, 1),
-    ("path-end-far", 232, 32, 16, 16, 1),
     ("arrow", 0, 56, 16, 16, 1),
     ("fire-bolt", 16, 56, 16, 16, 4),
     ("frost-ray", 80, 56, 16, 16, 4),
@@ -779,16 +890,23 @@ HUD = (
     ("reaction", 72, 88, 12, 12, 1),
     ("reaction-spent", 84, 88, 12, 12, 1),
     ("reaction-preview", 96, 88, 12, 12, 1),
-    ("move-track", 108, 88, 8, 8, 1),
-    ("move-fill", 116, 88, 8, 8, 1),
-    ("move-preview", 124, 88, 8, 8, 1),
-    ("move-over", 132, 88, 8, 8, 1),
-    ("move-tick", 140, 88, 2, 8, 1),
+    ("focus-track", 108, 88, 8, 8, 1),
+    ("focus-fill", 116, 88, 8, 8, 1),
+    ("focus-preview", 124, 88, 8, 8, 1),
+    ("focus-over", 132, 88, 8, 8, 1),
+    ("focus-tick", 140, 88, 2, 8, 1),
+    ("shift", 142, 88, 12, 12, 1),
+    ("shift-spent", 154, 88, 12, 12, 1),
+    ("shift-preview", 166, 88, 12, 12, 1),
+    ("shift-chevron", 178, 88, 10, 8, 2),
+    ("slot-plate", 0, 100, 28, 10, 5),
+    ("support-banner", 140, 100, 12, 16, 1),
+    ("progress-ring", 0, 116, 16, 16, 9),
 )
 
 #: hud.png's size, in pixels.
 HUD_WIDTH = 256
-HUD_HEIGHT = 100
+HUD_HEIGHT = 132
 
 
 # Frames: the hotbar's slots and the initiative portraits ------------------- #
@@ -840,12 +958,19 @@ def frame(img, ox, oy, w, h, colours, glints):
 #: A pip's size, in art pixels.
 PIP = 12
 
+def swap_arrows(px, py):
+    """The Shift's pip: two arrows passing, the top one going right and the bottom one left."""
+    return (1.5 <= px <= 7.5 and 2.6 <= py <= 4.6) or inside([(7.0, 0.8), (11.0, 3.6), (7.0, 6.4)], px, py) \
+        or (4.5 <= px <= 10.5 and 7.4 <= py <= 9.4) or inside([(5.0, 5.6), (1.0, 8.4), (5.0, 11.2)], px, py)
+
+
 #: Each pip's shape, and its ramp letter: a gold circle for the action, a teal triangle for the
-#: bonus action, a violet diamond for the reaction.
+#: bonus action, a violet diamond for the reaction, and two green arrows passing for the Shift.
 PIPS = (
     ("action", "G", lambda px, py: math.hypot(px - 6.0, py - 6.0) <= 4.6),
     ("bonus", "Q", lambda px, py: inside([(6.0, 1.2), (11.0, 10.4), (1.0, 10.4)], px, py)),
     ("reaction", "V", lambda px, py: inside([(6.0, 0.8), (11.2, 6.0), (6.0, 11.2), (0.8, 6.0)], px, py)),
+    ("shift", "N", swap_arrows),
 )
 
 #: A spent pip's hollow, and how far a preview pip is lifted toward white.
@@ -875,47 +1000,47 @@ def pip(img, ox, oy, shape, ch, state):
             img[oy + y][ox + x] = [r, g, b, 255]
 
 
-# The movement bar ---------------------------------------------------------- #
+# The Focus bar ------------------------------------------------------------- #
 #
 # Three-sliced: a cap three pixels wide each end and two in the middle that stretch, the middle the
-# same down every column. The track goes down first at the bar's full length, then the fill as far
-# as there's movement left, the preview over the part the path you're pointing at would use, and the
-# over piece instead when that's more than there is. A tick marks every tile.
+# same down every column. The track goes down first at the bar's full length (100 Focus), then the
+# fill as far as there's Focus, the preview over the part the skill you're pointing at would spend,
+# and the over piece instead when that's more than there is. A tick marks every ten.
 
-#: A movement piece's size, and the track's, the fill's, the preview's and the over piece's
-#: colours, top to bottom.
-MOVE = 8
-MOVE_TRACK = ((8, 10, 24), (14, 16, 36), (34, 40, 76))
-MOVE_FILL = ((253, 240, 204), (246, 204, 114), (226, 162, 76), (176, 108, 58))
-MOVE_PREVIEW = ((255, 255, 246), (255, 248, 222), (250, 232, 184), (220, 196, 140))
-MOVE_OVER = ((255, 200, 190), (240, 114, 108), (206, 58, 66), (148, 34, 54))
+#: A Focus piece's size, and the track's, the fill's, the preview's and the over piece's colours,
+#: top to bottom. Focus is a cool blue, so it can't be taken for health.
+BAR = 8
+FOCUS_TRACK = ((8, 10, 24), (14, 16, 36), (34, 40, 76))
+FOCUS_FILL = ((214, 236, 255), (120, 186, 250), (62, 128, 222), (36, 78, 164))
+FOCUS_PREVIEW = ((255, 255, 255), (232, 244, 255), (196, 224, 250), (150, 190, 236))
+FOCUS_OVER = ((255, 200, 190), (240, 114, 108), (206, 58, 66), (148, 34, 54))
 
 
-def move_piece(img, ox, oy, ramp=None):
+def bar_piece(img, ox, oy, ramp=None):
     """The track (ramp None) or one of the fills, which sit inside the track's edge."""
-    for y in range(MOVE):
-        for x in range(MOVE):
-            corner = x in (0, MOVE - 1) and y in (0, MOVE - 1)
-            edge = x in (0, MOVE - 1) or y in (0, MOVE - 1)
+    for y in range(BAR):
+        for x in range(BAR):
+            corner = x in (0, BAR - 1) and y in (0, BAR - 1)
+            edge = x in (0, BAR - 1) or y in (0, BAR - 1)
             if corner:
                 continue
             if ramp is None:
                 if edge:
                     c = INK
                 else:
-                    c = MOVE_TRACK[0] if y == 1 else MOVE_TRACK[2] if y == MOVE - 2 else MOVE_TRACK[1]
+                    c = FOCUS_TRACK[0] if y == 1 else FOCUS_TRACK[2] if y == BAR - 2 else FOCUS_TRACK[1]
             else:
-                if edge or (x in (1, MOVE - 2) and y in (1, MOVE - 2)):
+                if edge or (x in (1, BAR - 2) and y in (1, BAR - 2)):
                     continue
                 c = ramp[0] if y == 1 else ramp[1] if y <= 3 else ramp[2] if y <= 5 else ramp[3]
             img[oy + y][ox + x] = list(c) + [255]
 
 
-def move_tick(img, ox, oy):
+def bar_tick(img, ox, oy):
     """A notch across the bar: a dark line with a glint of the fill beside it."""
-    for y in range(1, MOVE - 1):
-        img[oy + y][ox] = list(MOVE_TRACK[0]) + [255]
-        img[oy + y][ox + 1] = list(MOVE_FILL[0]) + [140]
+    for y in range(1, BAR - 1):
+        img[oy + y][ox] = list(FOCUS_TRACK[0]) + [255]
+        img[oy + y][ox + 1] = list(FOCUS_FILL[0]) + [140]
 
 
 # Death saves --------------------------------------------------------------- #
@@ -1018,7 +1143,7 @@ def sigil(state):
 # Things on the ground ------------------------------------------------------ #
 
 #: A target ring's size and frames, and its colours (dark, mid, bright) under a foe and an ally.
-#: The path's dots and ends take the same colours: an ally's in reach, a foe's too far.
+#: The slot plates take the same colours for a foe's slot and an ally's you can reach.
 RING_WIDTH = 24
 RING_HEIGHT = 12
 RING_FRAMES = 4
@@ -1043,35 +1168,127 @@ def target_ring(img, ox, oy, colours):
                 img[oy + y][ox + f * RING_WIDTH + x] = list(c) + [255]
 
 
-def path_dot(img, ox, oy, colours):
-    """One dot of the path you're pointing along, a dark edge round it."""
-    dark, mid, bright = colours
-    for y in range(6):
-        for x in range(6):
-            if x in (0, 5) and y in (0, 5):
+# The slot plates ----------------------------------------------------------- #
+#
+# A flat oval on the floor at every place in the rows, seen from the side the way the floor is: a
+# rim with a soft dark edge outside it so it shows on any ground, and the floor showing through the
+# middle. Its five frames are what the slot is to the turn: plain, a foe you can reach, an ally you
+# can reach, caught in what you're aiming (filled), and somewhere you can Shift to.
+
+#: A plate's size and its frames' colours: the rim's dark and bright, the middle, and the middle's
+#: opacity.
+PLATE_WIDTH = 28
+PLATE_HEIGHT = 10
+PLATE_EMBER = ((150, 50, 20), (252, 198, 78), (242, 134, 44))
+PLATES = (
+    ((70, 64, 76), (232, 224, 206), (232, 224, 206), 34),
+    (RING_FOE[0], RING_FOE[2], RING_FOE[1], 64),
+    (RING_ALLY[0], RING_ALLY[2], RING_ALLY[1], 64),
+    (PLATE_EMBER[0], PLATE_EMBER[1], PLATE_EMBER[2], 150),
+    ((28, 76, 128), (160, 236, 244), (94, 194, 222), 56),
+)
+
+
+def slot_plate(img, ox, oy):
+    """The plate's five frames side by side."""
+    for f, (dark, bright, middle, opacity) in enumerate(PLATES):
+        for y in range(PLATE_HEIGHT):
+            for x in range(PLATE_WIDTH):
+                u = (x + 0.5 - PLATE_WIDTH / 2.0) / (PLATE_WIDTH / 2.0 - 0.5)
+                v = (y + 0.5 - PLATE_HEIGHT / 2.0) / (PLATE_HEIGHT / 2.0 - 0.5)
+                d = u * u + v * v
+                if d > 1.0:
+                    continue
+                if d > 0.80:
+                    c, a = dark, 190
+                elif d > 0.56:
+                    c, a = (bright if v < 0.2 else lerp_color(bright, dark, 0.35)), 255
+                else:
+                    c, a = middle, opacity
+                img[oy + y][ox + f * PLATE_WIDTH + x] = list(c) + [a]
+
+
+# The Shift chevron ---------------------------------------------------------- #
+
+#: The chevron over a slot you can Shift to, pointing down at its plate: lit, and bright for the one
+#: under the mouse. "o" is the outline, "#" the chevron, "+" its lit edge.
+CHEVRON = ("ooo....ooo",
+           "o+#o..o+#o",
+           ".o+#oo+#o.",
+           "..o+##+o..",
+           "...o##o...",
+           "....oo....",
+           "..........",
+           "..........")
+CHEVRON_COLOURS = (((160, 236, 244), (94, 194, 222)), ((255, 255, 255), (234, 255, 255)))
+
+
+def shift_chevron(img, ox, oy):
+    """The chevron's two frames: plain and under the mouse."""
+    for f, (lit, body) in enumerate(CHEVRON_COLOURS):
+        for y, row in enumerate(CHEVRON):
+            for x, ch in enumerate(row):
+                c = {"o": INK, "#": body, "+": lit}.get(ch)
+                if c:
+                    img[oy + y][ox + f * 10 + x] = list(c) + [255]
+
+
+# A support's banner ---------------------------------------------------------- #
+#
+# The ribbon a support's name and what it does are written on, behind the rows: three-sliced, four
+# pixels at each end and four in the middle that stretch. Navy cloth with a gold edge top and
+# bottom, square at its left end and cut in a swallowtail at its right.
+
+BANNER_WIDTH = 12
+BANNER_HEIGHT = 16
+BANNER_CLOTH = ((40, 48, 92), (20, 24, 50))
+BANNER_TRIM = ((250, 216, 139), (167, 101, 58))
+
+
+def support_banner(img, ox, oy):
+    w, h = BANNER_WIDTH, BANNER_HEIGHT
+    for y in range(h):
+        for x in range(w):
+            notch = x >= w - 4 and abs(y + 0.5 - h / 2.0) < (x - (w - 5)) * 1.2
+            if notch:
                 continue
-            if x in (0, 5) or y in (0, 5):
+            edge_notch = x >= w - 5 and abs(y + 0.5 - h / 2.0) < (x - (w - 6)) * 1.2
+            if y in (0, h - 1) or x == 0 or edge_notch:
                 c = INK
+            elif y == 1 or (x == 1 and y < h - 2):
+                c = BANNER_TRIM[0]
+            elif y == h - 2:
+                c = BANNER_TRIM[1]
             else:
-                c = bright if (x, y) == (1, 1) else mid if x + y < 6 else dark
+                c = lerp_color(BANNER_CLOTH[0], BANNER_CLOTH[1], (y - 2) / float(h - 5))
             img[oy + y][ox + x] = list(c) + [255]
 
 
-def path_end(img, ox, oy, colours, far):
-    """Where the path ends: a ring with a dot in it, or crossed through if it's too far, with a
-    soft dark edge so it shows on any ground."""
-    dark, mid, bright = colours
-    for y in range(16):
-        for x in range(16):
-            dx, dy = x + 0.5 - 8.0, y + 0.5 - 8.0
-            d = math.hypot(dx, dy)
-            off_cross = abs(abs(dx) - abs(dy))
-            mark = off_cross < 0.8 and d < 4.2 if far else d < 1.6
-            edge = off_cross < 1.8 and d < 4.6 if far else d < 2.6
-            if 4.6 < d < 6.4 or mark:
-                img[oy + y][ox + x] = list(bright if x + y < 14 else mid) + [255]
-            elif 3.6 < d < 7.4 or edge:
-                img[oy + y][ox + x] = list(dark) + [200]
+# A support's progress ring ------------------------------------------------------ #
+#
+# How far along something a support is holding out for is (the crystal's charge), as a ring that
+# fills clockwise from the top: frame k is k eighths of it.
+
+RING = 16
+PROGRESS_FRAMES = 9
+PROGRESS_TRACK = (34, 40, 76)
+PROGRESS_FILL = ((180, 152, 238), (234, 222, 255))
+
+
+def progress_ring(img, ox, oy):
+    for f in range(PROGRESS_FRAMES):
+        for y in range(RING):
+            for x in range(RING):
+                dx, dy = x + 0.5 - RING / 2.0, y + 0.5 - RING / 2.0
+                d = math.hypot(dx, dy)
+                if d > 7.6 or d < 4.4:
+                    continue
+                if d > 6.8 or d < 5.0:
+                    c = INK
+                else:
+                    turn = (math.degrees(math.atan2(dx, -dy)) % 360) / 360.0
+                    c = (PROGRESS_FILL[1] if dx + dy < 0 else PROGRESS_FILL[0]) if turn < f / 8.0 else PROGRESS_TRACK
+                img[oy + y][ox + f * RING + x] = list(c) + [255]
 
 
 # Things that fly ------------------------------------------------------------ #
@@ -1175,10 +1392,10 @@ def build_hud():
             x, y, _, _, _ = at[name + suffix]
             pip(img, x, y, shape, ch, state)
 
-    for name, ramp in (("move-track", None), ("move-fill", MOVE_FILL), ("move-preview", MOVE_PREVIEW), ("move-over", MOVE_OVER)):
+    for name, ramp in (("focus-track", None), ("focus-fill", FOCUS_FILL), ("focus-preview", FOCUS_PREVIEW), ("focus-over", FOCUS_OVER)):
         x, y, _, _, _ = at[name]
-        move_piece(img, x, y, ramp)
-    move_tick(img, *at["move-tick"][:2])
+        bar_piece(img, x, y, ramp)
+    bar_tick(img, *at["focus-tick"][:2])
 
     for kind in ("empty", "success", "failure"):
         x, y, _, _, _ = at["death-save-" + kind]
@@ -1190,10 +1407,10 @@ def build_hud():
 
     target_ring(img, *at["target-foe"][:2], RING_FOE)
     target_ring(img, *at["target-ally"][:2], RING_ALLY)
-    path_dot(img, *at["path-dot"][:2], RING_ALLY)
-    path_dot(img, *at["path-dot-far"][:2], RING_FOE)
-    path_end(img, *at["path-end"][:2], RING_ALLY, far=False)
-    path_end(img, *at["path-end-far"][:2], RING_FOE, far=True)
+    slot_plate(img, *at["slot-plate"][:2])
+    shift_chevron(img, *at["shift-chevron"][:2])
+    support_banner(img, *at["support-banner"][:2])
+    progress_ring(img, *at["progress-ring"][:2])
 
     for name, draw in SHOTS:
         x, y, w, h, frames = at[name]

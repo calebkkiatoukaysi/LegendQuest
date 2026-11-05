@@ -198,8 +198,10 @@ SB: Why east? What's at Greywatch?
 HALE: Orders. Mine come from people who don't explain them. Go and find some work.
 TOMAS: Here. It isn't much. It's kept me off the rocks forty years.  ~ give tomas-hook
 ! hold you belt_front tomas-hook
-SB (smile) [walking away]: Did you see his face? That's the pay. The coin's extra.  ~ set a1-c1-01 · objective "Find the quest board in the Lantern Market, up in the city"
+SB (smile) [walking away]: Did you see his face? That's the pay. The coin's extra.  ~ set a1-c1-01 · objective "Find the quest board in the Lantern Market, up in the city" · xp +100
 ```
+
+**Changed (M4).** The last line gives `xp +100`, an effect and no new words. The wraiths and the Gulls are worth 100 each at level 1, so that's the 300 that takes the party to level 2 for Chapter 2 (`11-combat.md` §6.3).
 
 ### A1-C1-02 · The Lantern Market
 
@@ -249,7 +251,7 @@ SERA: You're loud. Both of you. The whole wood heard you at the road.
 SB (grin): You waited till we'd done the hard part, though.
 SERA: I waited to see if you'd make it worse.
 ?
-  1. The Rangers' Lodge sent us. We want to help.  ~ affinity-sera +3  → name
+  1. The Rangers' Lodge sent us. We want to help.  ~ affinity-sera +3 · set lodge-told  → name
   2. ♥ Nice shot. Do you do that for everyone?  ~ affinity-sera +2 · set sera-flirt-1  → flirt
   3. We had it handled.  → handled
 #flirt SERA: Only for people worth an arrow. I haven't decided about you.  → name
@@ -262,6 +264,8 @@ SB (smile) [to you]: I like her. She's wrong, but I like her.  ~ join sera · se
 ```
 
 **Build.** Restored from the build: the bowshot, and on the last line `a1-c2-01` (the edge is over; the trigger at the black-veined trees checks it) and the objective for the quarry.
+
+**Changed (M4).** Option 1 sets `lodge-told`. Telling Sera the Lodge sent you is what brings the Lodge's wardens to the quarry lip in the Thornmother's fight (`11-combat.md` §4.1), and no line had set it. It's a flag only; no line changes.
 
 ### A1-C2-02 · The Old Quarry
 

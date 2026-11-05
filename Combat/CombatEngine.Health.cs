@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using LegendQuest.Characters;
 using LegendQuest.Items;
@@ -11,6 +12,11 @@ namespace LegendQuest.Combat;
 /// up, the abilities that heal or put conditions on people, concentration, and the Soul-Link's
 /// charge and barks.
 /// </summary>
+/// <remarks>
+/// A foe that's beaten (dead, given up, or knocked out in a fight to yield) leaves the field,
+/// and so does anyone who dies. A Downed party member keeps their slot. A guest at 0 hit points falls
+/// back instead of going down: out of the fight, with no death saves.
+/// </remarks>
 public sealed partial class CombatEngine
 {
     /// <summary>The lowest a concentration save's DC goes: 5e's 10, or half the damage if that's more.</summary>
@@ -26,7 +32,8 @@ public sealed partial class CombatEngine
     /// <param name="roll">The damage dice, for the screen.</param>
     private void Damage(Combatant target, int amount, DamageType kind, Combatant source, bool critical, AbilityId? ability, RollResult roll)
     {
-        if (target.IsDead || amount <= 0) return;
+        if (target.IsDead || target.FellBack || amount <= 0) return;
+        NoteHit(source, target);
 
         if (target.IsDown)
         {
@@ -51,6 +58,7 @@ public sealed partial class CombatEngine
             if (target.Side == Side.Foes && Beaten(target) && _yielded.Add(target.Id))
                 Emit(CombatEventKind.Log, target, null, 0, $"{target.Label} has had enough, and gives up the fight.");
         }
+        if (target.Side == Side.Foes && Beaten(target)) Formation.Remove(target);
 
         BarkIfHurt(target);
         CheckOutcome();
@@ -59,6 +67,11 @@ public sealed partial class CombatEngine
     /// <summary>Someone at 0 hit points: a foe dies, a party member goes Downed, and in a fight to yield anyone's knocked out, stable.</summary>
     private void Drop(Combatant who)
     {
+        if (who.Guest && who.Side == Side.Party)
+        {
+            FallBack(who);
+            return;
+        }
         if (who.Side == Side.Foes && !_encounter.Nonlethal)
         {
             Die(who);
@@ -81,6 +94,17 @@ public sealed partial class CombatEngine
         EndConcentration(who, false);
         who.ClearConditions();
         Emit(CombatEventKind.Died, who, who, 0, who.Side == Side.Party ? $"{who.Label} has fallen, out of the fight." : $"{who.Label} falls.");
+        Formation.Remove(who);
+        RefreshOrder();
+    }
+
+    /// <summary>A guest at 0 hit points falls back: out of the fight and off the field, with no death saves, and none the worse for the story.</summary>
+    private void FallBack(Combatant who)
+    {
+        who.FellBack = true;
+        EndConcentration(who, false);
+        Emit(CombatEventKind.FellBack, who, who, 0, $"{who.Label} falls back, out of the fight.");
+        Formation.Remove(who);
         RefreshOrder();
     }
 
@@ -121,9 +145,9 @@ public sealed partial class CombatEngine
         if (ability.Heals.IsNone)
         {
             int need = target.MaxHp - target.Hp;
-            int pool = user.Member is not null ? ResourceCatalog.Left(user.Member, ability.Resource) : need;
+            int pool = user.Pool.GetValueOrDefault(ability.Id);
             int amount = Math.Min(pool, need);
-            if (user.Member is not null) ResourceCatalog.Spend(user.Member, ability.Resource, amount);
+            user.Pool[ability.Id] = pool - amount;
             Emit(CombatEventKind.AbilityUsed, user, target, amount, $"{user.Label} uses {name}{on}: {amount} HP.", ability: ability.Id);
             Heal(target, amount, user);
             return;
@@ -137,13 +161,17 @@ public sealed partial class CombatEngine
         Heal(target, healed, user);
     }
 
-    /// <summary>Drinks something from the bag: its healing, and any spell slots it gives back.</summary>
-    private void Drink(Combatant user, AbilityDefinition ability)
+    /// <summary>Drinks something from the bag, or hands it to an ally next to them: its healing, and the Focus it gives back.</summary>
+    /// <param name="user">Who's drinking it, or handing it over.</param>
+    /// <param name="ability">What.</param>
+    /// <param name="drinker">Who drinks it: the user, or an ally next to them.</param>
+    private void Drink(Combatant user, AbilityDefinition ability, Combatant drinker)
     {
-        ItemDefinition item = ability.Item is not null ? ItemCatalog.Get(ability.Item) : PickPotion(user);
+        drinker ??= user;
+        ItemDefinition item = ability.Item is not null ? ItemCatalog.Get(ability.Item) : PickPotion(drinker);
         if (ability.Item is null) Bag.Remove(item.Id);
 
-        string text = $"{user.Label} drinks {item.Name.ToUpperInvariant()}";
+        string text = drinker == user ? $"{user.Label} drinks {item.Name.ToUpperInvariant()}" : $"{user.Label} hands {drinker.Label} {item.Name.ToUpperInvariant()}";
         RollResult roll = null;
         int healed = 0;
         if (!item.Heals.IsNone)
@@ -153,17 +181,16 @@ public sealed partial class CombatEngine
             text += $": {item.Heals} = {healed} HP";
         }
 
-        int restored = item.SlotsRestored > 0 ? ResourceCatalog.Restore(user.Member, item.SlotsRestored) : 0;
-        if (restored > 0) text += $"{(roll is null ? ":" : ",")} {restored} spell slot{(restored == 1 ? string.Empty : "s")} back";
-
-        Emit(CombatEventKind.AbilityUsed, user, user, healed, text + ".", roll, ability.Id);
-        Heal(user, healed, user);
+        if (item.FocusRestored > 0) text += $"{(roll is null ? ":" : ",")} {item.FocusRestored} Focus";
+        Emit(CombatEventKind.AbilityUsed, user, drinker, healed, text + ".", roll, ability.Id);
+        Heal(drinker, healed, user);
+        if (item.FocusRestored > 0) GainFocus(drinker, item.FocusRestored);
     }
 
     /// <summary>An ability that puts its conditions on someone without a roll: Dodge, Disengage, Hex, Bardic Inspiration, a smoke bomb.</summary>
     private void Bestow(Combatant user, AbilityDefinition ability, Combatant target)
     {
-        Combatant bearer = ability.Target == TargetKind.Self ? user : target;
+        Combatant bearer = target;
         string name = ability.Name.ToUpperInvariant();
         string text = bearer == user ? $"{user.Label} uses {name}." : $"{user.Label} {(ability.Spell ? "casts" : "uses")} {name} on {bearer.Label}.";
         Emit(CombatEventKind.AbilityUsed, user, bearer, 0, text, ability: ability.Id);
@@ -172,7 +199,7 @@ public sealed partial class CombatEngine
             AddCondition(bearer, condition, condition == ConditionId.Dodging ? 0 : ability.Turns, user, ability.Id, 0, ability.Damage);
     }
 
-    /// <summary>Help: a Downed ally beside you back up on 1 HP, or advantage on a standing one's next attack.</summary>
+    /// <summary>Help: a Downed ally back up on 1 HP, or advantage on a standing one's next attack.</summary>
     private void Help(Combatant user, AbilityDefinition ability, Combatant target)
     {
         if (target.IsDown)
@@ -190,7 +217,6 @@ public sealed partial class CombatEngine
     private void SoulLinkStrike(Combatant user, AbilityDefinition ability, Combatant target)
     {
         Combatant partner = Partner(user);
-        partner.Facing = FacingOf(partner.Cell, target.Cell, partner.Facing);
         SoulLink.Spend();
 
         if (!SoulLink.Struck && Find(Origins.SoulBound) is { IsDuo: true, IsOut: false } soulBound)

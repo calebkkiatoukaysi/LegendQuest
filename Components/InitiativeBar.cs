@@ -9,10 +9,13 @@ namespace LegendQuest.Components;
 
 /// <summary>
 /// The turn order across the top of the screen in a fight: a portrait for everyone, in the order
-/// they go, with their health under it and what's on them, and the round beside it.
+/// they go, with their health under it and what's on them, the round beside it, and after the last
+/// a banner for each support ("ODELLE'S CREW  ·  END OF ROUND"), since they act when the round ends.
 /// </summary>
 /// <remarks>
-/// Spec 6.7's initiative bar. It fills in a portrait at a time as the initiative dice are shown.
+/// Spec 6.7's initiative bar, as 11-combat §4's turn-order line. It sits along the top rather than
+/// over the bar so it never covers the front row's feet and plates. It fills in a portrait at a time
+/// as the initiative dice are shown.
 /// The party's portraits are framed in gold, the foes' in red, and whoever's turn it is sits lower
 /// in the bright frame with a pointer over them, so whose turn it is reads at a glance. A bar under
 /// each drains as the damage is shown, its lost part fading after the rest. Under that go the first
@@ -30,8 +33,12 @@ public class InitiativeBar
     private const int FrameHeight = 32;
     private const int Gap = 8;
 
-    /// <summary>How far down from the top the portraits are, and how much further down whoever's turn it is sits, in screen pixels.</summary>
-    private const int Top = 10;
+    /// <summary>How far down from the top the portraits are (under the fight's name and the keys in the corner, so nothing on the line meets them), and how much further down whoever's turn it is sits, in screen pixels.</summary>
+    private const int Top = 58;
+
+    /// <summary>The room kept left of the first portrait for the round, and the least room left of that, in screen pixels.</summary>
+    private const int RoundRoom = 120;
+    private const int SideMargin = 24;
     private const int CurrentDrop = 8;
 
     /// <summary>The health bar under a portrait: how far under it, and how tall, in screen pixels.</summary>
@@ -70,23 +77,39 @@ public class InitiativeBar
     /// <summary>The room between the pointer and the top of the portrait it points at, in screen pixels.</summary>
     private const int PointerGap = 2;
 
+    /// <summary>The room between the last portrait and the first support's banner, and between two banners, in screen pixels.</summary>
+    private const int SupportGap = 10;
+
+    /// <summary>What a support's entry says after its name.</summary>
+    private const string EndOfRound = "END OF ROUND";
+
     /// <summary>How full each bar's lost part still is, by who it's for.</summary>
     private readonly Dictionary<string, float> _drained = new();
+
+    /// <summary>The supports at the end of the line, as last given.</summary>
+    private IReadOnlyList<SupportView> _supports = Array.Empty<SupportView>();
 
     private CombatArt _art;
     private Texture2D _pixel;
     private SpriteFont _font;
+    private SupportBanner _banner;
 
-    /// <summary>Loads the font, and keeps the shared art and the pixel the bars are drawn with.</summary>
+    /// <summary>Loads the font, and keeps the shared art, the pixel the bars are drawn with, and the banner the supports' entries are drawn with.</summary>
     /// <param name="content">The content manager to load with.</param>
     /// <param name="art">The fight's sheets.</param>
     /// <param name="pixel">One white pixel: the screen manager's BlankTexture.</param>
-    public void LoadContent(ContentManager content, CombatArt art, Texture2D pixel)
+    /// <param name="banner">The supports' banner, loaded.</param>
+    public void LoadContent(ContentManager content, CombatArt art, Texture2D pixel, SupportBanner banner)
     {
         _font = content.Load<SpriteFont>("spectral-detail");
         _art = art;
         _pixel = pixel;
+        _banner = banner;
     }
+
+    /// <summary>Says which supports go at the end of the line. Call before At, Portrait or the draws, each frame.</summary>
+    /// <param name="supports">The supports, in the order they act.</param>
+    public void SetSupports(IReadOnlyList<SupportView> supports) => _supports = supports ?? Array.Empty<SupportView>();
 
     /// <summary>Lets every bar's lost part catch up with what's left.</summary>
     /// <param name="gameTime">The frame's timing.</param>
@@ -102,8 +125,12 @@ public class InitiativeBar
         }
     }
 
-    /// <summary>Forgets every bar, for a new fight.</summary>
-    public void Clear() => _drained.Clear();
+    /// <summary>Forgets every bar and every support, for a new fight.</summary>
+    public void Clear()
+    {
+        _drained.Clear();
+        _supports = Array.Empty<SupportView>();
+    }
 
     /// <summary>Which portrait the mouse is on.</summary>
     /// <param name="mouse">Where the mouse is, in screen pixels.</param>
@@ -117,16 +144,55 @@ public class InitiativeBar
         return null;
     }
 
-    /// <summary>Where a portrait is on screen.</summary>
+    /// <summary>Where a portrait is on screen: the portraits and the supports' banners after them centred across the top.</summary>
     /// <param name="index">Its place on the bar.</param>
     /// <param name="count">How many are on the bar.</param>
     /// <param name="current">Which is whoever's turn it is, or -1.</param>
-    public static Rectangle Portrait(int index, int count, int current)
+    public Rectangle Portrait(int index, int count, int current)
     {
         int width = (int)(FrameWidth * Scale), height = (int)(FrameHeight * Scale);
-        int whole = count * width + Math.Max(0, count - 1) * Gap;
-        int left = (LegendQuestGame.ScreenWidth - whole) / 2 + index * (width + Gap);
+        int left = Start(count) + index * (width + Gap);
         return new Rectangle(left, Top + (index == current ? CurrentDrop : 0), width, height);
+    }
+
+    /// <summary>Where each support's banner is on screen: after the last portrait, level with the portraits' middles.</summary>
+    /// <param name="count">How many portraits are on the bar.</param>
+    public Rectangle[] SupportBanners(int count)
+    {
+        int width = (int)(FrameWidth * Scale), height = (int)(FrameHeight * Scale);
+        var banners = new Rectangle[_supports.Count];
+        int x = Start(count) + count * (width + Gap) - Gap + SupportGap;
+        for (int i = 0; i < banners.Length; i++)
+        {
+            int bannerWidth = _banner.Width(Entry(_supports[i]));
+            banners[i] = new Rectangle(x, Top + height / 2 - SupportBanner.Height / 2, bannerWidth, SupportBanner.Height);
+            x += bannerWidth + SupportGap;
+        }
+        return banners;
+    }
+
+    /// <summary>Which support's banner the mouse is on.</summary>
+    /// <param name="mouse">Where the mouse is, in screen pixels.</param>
+    /// <param name="count">How many portraits are on the bar.</param>
+    /// <returns>Its place among the supports, or null.</returns>
+    public int? SupportAt(Point mouse, int count)
+    {
+        Rectangle[] banners = SupportBanners(count);
+        for (int i = 0; i < banners.Length; i++)
+            if (banners[i].Contains(mouse)) return i;
+        return null;
+    }
+
+    /// <summary>What a support's entry on the line says.</summary>
+    private static string Entry(SupportView support) => $"{support.Name}  ·  {EndOfRound}";
+
+    /// <summary>Where the first portrait starts across the screen, so the portraits and the banners after them are centred.</summary>
+    private int Start(int count)
+    {
+        int width = (int)(FrameWidth * Scale);
+        int whole = RoundRoom + count * width + Math.Max(0, count - 1) * Gap;
+        foreach (SupportView support in _supports) whole += SupportGap + _banner.Width(Entry(support));
+        return Math.Max(SideMargin, (LegendQuestGame.ScreenWidth - whole) / 2) + RoundRoom;
     }
 
     /// <summary>Draws the portraits, their bars, their conditions and the pointer. Goes in a point sampled batch.</summary>
@@ -170,6 +236,10 @@ public class InitiativeBar
                     spriteBatch.Draw(_pixel, new Rectangle(middle - PointerWidth / 2 + row, frame.Top - PointerHeight - PointerGap + row, PointerWidth - row * 2, 1), Palette.Gold * alpha);
             }
         }
+
+        Rectangle[] banners = SupportBanners(order.Count);
+        for (int i = 0; i < banners.Length; i++)
+            _banner.DrawArt(spriteBatch, banners[i], _supports[i].Icon, _supports[i].Lit, null, alpha);
     }
 
     /// <summary>Writes the round to the left of the portraits, and the count of any conditions past the first two. Goes in a linear sampled batch after DrawArt.</summary>
@@ -200,6 +270,10 @@ public class InitiativeBar
             float y = frame.Bottom + BarGap + BarHeight + UnderBar;
             Text.Draw(spriteBatch, _font, "+" + extra, x, y, Palette.Bone * alpha, Palette.Shadow * alpha);
         }
+
+        Rectangle[] banners = SupportBanners(order.Count);
+        for (int i = 0; i < banners.Length; i++)
+            _banner.DrawWords(spriteBatch, banners[i], Entry(_supports[i]), _supports[i].Lit, alpha);
     }
 
     /// <summary>Someone's share of their hit points, 0 to 1.</summary>

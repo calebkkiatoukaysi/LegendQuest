@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LegendQuest.Characters;
-using LegendQuest.Combat;
 using LegendQuest.Rules;
 using LegendQuest.Save;
 
@@ -15,8 +14,10 @@ namespace LegendQuest.Dialogue;
 /// <remarks>
 /// The Black Box's DiscussionPeriod pattern: it draws nothing and takes its Random, so a script can
 /// be played through without a window. Every flag, meter, item, recruit, swap, leaving and coming
-/// back it changes goes straight into the save, and it hands back what happened as events for the
-/// screen to turn into toasts, dice and sounds. A line's effects happen when it's said (Say): the
+/// back, and all the experience it changes goes straight into the save, and it hands back what
+/// happened as events for the screen to turn into toasts, dice and sounds. A change to a fight that's
+/// going (support-off, fight-add, fight-guest) can't go in the save: it comes back as a FightOrder
+/// event, for the screen to hand the fight once the interlude's over. A line's effects happen when it's said (Say): the
 /// screen says it once it's up, after its stage cues, so someone a line sends to camp is still there
 /// for the cues that come before it, and going on past a line says it first if nothing has. Not from
 /// a tutorial.
@@ -246,21 +247,40 @@ public sealed class DialogueRunner
                 case EffectKind.Fight:
                     _events.Add(new DialogueEvent(DialogueEventKind.Fight, effect.Id));
                     break;
+
+                case EffectKind.Experience:
+                    Experience(effect.Amount);
+                    break;
+
+                case EffectKind.SupportOff:
+                case EffectKind.FightAdd:
+                case EffectKind.FightGuest:
+                    _events.Add(new DialogueEvent(DialogueEventKind.FightOrder, effect.Id, effect.Amount) { Order = effect.Order });
+                    break;
             }
         }
     }
 
-    /// <summary>A long rest: everyone, in the party and at camp, back to full hit points with their spell slots and uses back.</summary>
+    /// <summary>A long rest: everyone, in the party and at camp, back to full hit points. Nothing else is spent between fights: Focus and cooldowns are each fight's own.</summary>
     private void Rest()
     {
-        foreach (PartyMember member in _game.Party.Concat(_game.Camp))
+        foreach (PartyMember member in _game.Party.Concat(_game.Camp)) member.Hp = member.MaxHp;
+    }
+
+    /// <summary>Experience for everyone, in the party, at camp and away, so nobody waiting falls behind: an event for it, and one for each level anyone goes up.</summary>
+    /// <param name="amount">How much each.</param>
+    private void Experience(int amount)
+    {
+        _events.Add(new DialogueEvent(DialogueEventKind.Experience, "xp", amount));
+        foreach (PartyMember member in _game.Party.Concat(_game.Camp).Concat(_game.Away))
         {
-            member.Hp = member.MaxHp;
-            ResourceCatalog.Recharge(member, RestKind.Long);
+            int from = member.Level;
+            Leveling.Award(member, amount);
+            for (int level = from + 1; level <= member.Level; level++) _events.Add(new DialogueEvent(DialogueEventKind.LevelUp, member.Id, level));
         }
     }
 
-    /// <summary>Someone joins: into the party if there's room, to wait at camp if not. Someone already waiting at camp comes out of it once there's room, and stays where they are until there is. Nobody joins twice, and someone who's away only comes back by Rejoin.</summary>
+    /// <summary>Someone joins: into the party if there's room, to wait at camp if not, at your level. Someone already waiting at camp comes out of it once there's room, and stays where they are until there is. Nobody joins twice, and someone who's away only comes back by Rejoin.</summary>
     private void Recruit(string id)
     {
         if (_game.InParty(id) || _game.Away.Exists(each => each.Id == id)) return;
@@ -270,10 +290,19 @@ public sealed class DialogueRunner
         if (waiting is not null && !joins) return;
 
         if (waiting is not null) _game.Camp.Remove(waiting);
-        PartyMember member = waiting ?? Origins.Create(id);
+        PartyMember member = waiting ?? JoinsAtYourLevel(Origins.Create(id));
         if (joins) _game.Party.Add(member);
         else _game.Camp.Add(member);
         _events.Add(new DialogueEvent(DialogueEventKind.Recruited, id, joins ? 1 : 0));
+    }
+
+    /// <summary>Someone new joins at your level, so the story's fights are tuned for them too: at full health, with no experience towards the next.</summary>
+    /// <param name="member">Who, fresh from their origin.</param>
+    private PartyMember JoinsAtYourLevel(PartyMember member)
+    {
+        Leveling.SetLevel(member, _game.Party.Count > 0 ? _game.You.Level : 1);
+        member.Hp = member.MaxHp;
+        return member;
     }
 
     /// <summary>Someone waiting at camp takes a companion's place in the party, and the companion goes to wait in their seat, so the party and the camp stay in the same order. Never you or the Soul-Bound: the story's about the two of you.</summary>

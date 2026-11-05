@@ -17,20 +17,21 @@ namespace LegendQuest.Screens;
 /// shown before what led to it. When there's nothing left to show it's either your turn, which waits
 /// for you, or someone else's, which waits a moment after their banner and then asks EnemyMind. A
 /// tip that holds everything holds the fight too, and so does the panel at the end until it's read.
-/// The camera follows whoever the beat's about.
+/// The camera holds on the middle of the fight (FightStage.Centre), and anyone who's got where they
+/// were walking turns to face the other side.
 /// </remarks>
 public partial class ExploreScreen
 {
     /// <summary>How long the fight waits after a foe's turn starts before it plays, so its banner can be read.</summary>
     private const float AiPauseSeconds = 0.45f;
 
-    /// <summary>How long the panel at the end waits before going by itself when the proof run's playing the party.</summary>
-    private const float AutoContinueSeconds = 2.5f;
+    /// <summary>How long the panel at the end waits before going by itself when the proof run's playing the party, in the fight's time: only if the run hasn't put it away after its shot (ExploreScreen.ProofFights), so the two never race.</summary>
+    private const float AutoContinueSeconds = 30f;
 
     /// <summary>The events still to show, in order.</summary>
     private readonly Queue<CombatEvent> _beats = new();
 
-    /// <summary>Each figure sliding from one point to another: a step from tile to tile, or onto a tile when the fight starts.</summary>
+    /// <summary>Each figure sliding from one point to another: to their slot as the fight starts, a Shift, or out of the fight's way.</summary>
     private readonly Dictionary<WalkerSprite, (Vector2 From, Vector2 To, float Clock, float Seconds)> _glides = new();
 
     /// <summary>Each figure fading in or out: the opacity it's going to and how much it changes a second.</summary>
@@ -58,13 +59,6 @@ public partial class ExploreScreen
     /// <summary>How long it's waited since a turn that isn't yours started.</summary>
     private float _aiWait;
 
-    /// <summary>Where the camera's heading: a point, or a figure it follows if there's one.</summary>
-    private Vector2 _focus;
-    private WalkerSprite _focusWalker;
-
-    /// <summary>The experience each of the party got, from the victory's event.</summary>
-    private int _victoryXp;
-
     /// <summary>Whether the proof run's having EnemyMind play the party's turns too, and how much faster than real time the fight runs for it.</summary>
     private bool _proofAutoplay;
     private float _combatSpeed = 1f;
@@ -90,8 +84,9 @@ public partial class ExploreScreen
         _holdLeft = hold;
         _aiWait = 0f;
         _autoContinue = 0f;
-        _victoryXp = 0;
-        _focusWalker = null;
+        _eventsShown = 0;
+        _intentsFor = null;
+        _intents.Clear();
     }
 
     /// <summary>Puts a command's events in line to be shown.</summary>
@@ -144,7 +139,7 @@ public partial class ExploreScreen
         _sigil.Update(time);
         _result.Update(time);
         _initiative.Update(time, OrderViews());
-        _camera.Follow(_focusWalker?.Position ?? _focus, gameTime);
+        _camera.Follow(_stage.Centre, gameTime);
 
         if (_tutorials.Current is { Blocking: true }) return true;
         if (_result.Showing)
@@ -224,8 +219,13 @@ public partial class ExploreScreen
             (Vector2 from, Vector2 to, float clock, float length) = _glides[walker];
             clock = MathF.Min(length, clock + seconds);
             walker.Position = Vector2.Lerp(from, to, clock / length);
-            if (clock >= length) _glides.Remove(walker);
-            else _glides[walker] = (from, to, clock, length);
+            if (clock < length)
+            {
+                _glides[walker] = (from, to, clock, length);
+                continue;
+            }
+            _glides.Remove(walker);
+            if (_restFacing.Remove(walker, out Direction facing)) walker.Facing = facing;
         }
 
         // Anyone who's got where they were sliding stops walking. A run of steps doesn't stutter: the
@@ -234,6 +234,10 @@ public partial class ExploreScreen
             if (!_glides.ContainsKey(walker)) walker.IsWalking = false;
         foreach (Npc npc in _standingBack.Keys)
             if (!_glides.ContainsKey(npc.Walker)) npc.Walker.IsWalking = false;
+        foreach (WalkerSprite walker in _supportFigures.Values)
+            if (!_glides.ContainsKey(walker)) walker.IsWalking = false;
+        foreach (WalkerSprite walker in _benched.Keys)
+            if (!_glides.ContainsKey(walker)) walker.IsWalking = false;
 
         foreach (WalkerSprite walker in new List<WalkerSprite>(_fades.Keys))
         {

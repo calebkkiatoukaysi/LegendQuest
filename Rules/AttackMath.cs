@@ -14,9 +14,6 @@ namespace LegendQuest.Rules;
 /// </remarks>
 public static class AttackMath
 {
-    /// <summary>What proficiency adds to an attack, a save DC or a check, at levels 1 to 4.</summary>
-    public const int ProficiencyBonus = 2;
-
     /// <summary>The roll that always hits, and hits as a critical.</summary>
     public const int CriticalRoll = Dice.D20;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LegendQuest.Combat;
 using LegendQuest.Rules;
 
 namespace LegendQuest.Items;
@@ -23,6 +24,9 @@ public static class ItemCatalog
 
     /// <summary>What a shield adds to AC, the SRD's +2. A magic one adds more.</summary>
     private const int ShieldAc = 2;
+
+    /// <summary>The Focus an elixir of focus gives back in a fight.</summary>
+    private const int ElixirFocus = 30;
 
     /// <summary>A tile's width, in metres.</summary>
     private const float Tile = 1.5f;
@@ -370,8 +374,8 @@ public static class ItemCatalog
         new()
         {
             Id = "elixir-of-focus", Name = "Elixir of Focus", Kind = ItemKind.Consumable, Icon = 46, Value = 120, Stacks = true,
-            Rarity = Rarity.Uncommon, SlotsRestored = 1,
-            Description = "A blue elixir that fizzes on the tongue and clears the head. It gives back one spent spell slot.",
+            Rarity = Rarity.Uncommon, FocusRestored = ElixirFocus,
+            Description = "A blue elixir that fizzes on the tongue and clears the head. Drunk in a fight, it gives back 30 Focus.",
         },
 
         // Materials: the story's loot, for selling.
@@ -498,21 +502,22 @@ public static class ItemCatalog
     /// <summary>What's wrong with a consumable's settings, or null. It has to do exactly one thing.</summary>
     private static string ConsumableProblem(ItemDefinition item)
     {
-        int effects = (item.Heals.IsNone ? 0 : 1) + (item.ThrownDamage.IsNone ? 0 : 1) + (item.SlotsRestored > 0 ? 1 : 0);
+        int effects = (item.Heals.IsNone ? 0 : 1) + (item.ThrownDamage.IsNone ? 0 : 1) + (item.FocusRestored > 0 ? 1 : 0);
+        if (item.FocusRestored is < 0 or > Combatant.MaxFocus) return $"gives back {item.FocusRestored} Focus, past the 0 to {Combatant.MaxFocus} there is";
         if (effects != 1) return $"is a consumable that does {effects} things, and it has to do one";
         return item.ThrownDamage.IsNone == item.ThrowRange > 0f ? "has to have a ThrowRange if and only if it's thrown" : null;
     }
 
     /// <summary>What's wrong with something that isn't a consumable having consumable settings, or null.</summary>
     private static string NotConsumableProblem(ItemDefinition item) =>
-        !item.Heals.IsNone || !item.ThrownDamage.IsNone || item.SlotsRestored != 0 || item.Kind != ItemKind.Weapon && item.ThrowRange != 0f
+        !item.Heals.IsNone || !item.ThrownDamage.IsNone || item.FocusRestored != 0 || item.Kind != ItemKind.Weapon && item.ThrowRange != 0f
             ? "does what a consumable does, and it isn't one"
             : null;
 
     /// <summary>Whether an item is magic: it adds to something beyond what its plain kind does.</summary>
     private static bool Magical(ItemDefinition item) =>
         item.AttackBonus > 0 || item.DamageBonus > 0 || !item.ExtraDamage.IsNone || item.SpeedBonus > 0f || item.MaxHpBonus > 0
-        || item.SpellAttackBonus > 0 || item.SlotsRestored > 0 || item.AcBonus > (item.Kind == ItemKind.Shield ? ShieldAc : 0);
+        || item.SpellAttackBonus > 0 || item.FocusRestored > 0 || item.AcBonus > (item.Kind == ItemKind.Shield ? ShieldAc : 0);
 
     /// <summary>Whether every character of some text is one the fonts can draw.</summary>
     private static bool Printable(string text)

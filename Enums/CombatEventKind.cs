@@ -13,10 +13,10 @@ public enum CombatEventKind
     /// <summary>Someone's turn started.</summary>
     TurnStarted,
 
-    /// <summary>Someone stepped one tile, from From to To.</summary>
-    Moved,
+    /// <summary>Someone Shifted, or was pulled or pushed, from one slot to another, From to To.</summary>
+    Shifted,
 
-    /// <summary>Someone left a foe's reach and the foe took its swing. The attack follows.</summary>
+    /// <summary>Someone left the front row and a foe in theirs took its swing. The attack follows.</summary>
     OpportunityAttack,
 
     /// <summary>An attack roll. Its text is the whole line, damage and all; the roll is the d20s.</summary>
@@ -28,7 +28,7 @@ public enum CombatEventKind
     /// <summary>The attack missed.</summary>
     Missed,
 
-    /// <summary>The attack was a natural 20 (or a hit on someone Downed beside the attacker): the dice doubled.</summary>
+    /// <summary>The attack was a natural 20 (or a melee hit on someone Downed): the dice doubled.</summary>
     Critical,
 
     /// <summary>Someone lost hit points. The amount is how many.</summary>
@@ -87,4 +87,22 @@ public enum CombatEventKind
 
     /// <summary>Someone said something mid-fight, in a bubble. The text is the line, which may hold the same tokens as a conversation's.</summary>
     Bark,
+
+    /// <summary>Someone's Focus went up or down. The amount is the change.</summary>
+    FocusChanged,
+
+    /// <summary>A support used its ability at the end of the round. The actor is the support's id, not a Combatant's; what it did follows.</summary>
+    SupportActed,
+
+    /// <summary>A guest at 0 hit points fell back out of the fight, unhurt for the story.</summary>
+    FellBack,
+
+    /// <summary>A round's last turn ended, before the supports act. The amount is its number.</summary>
+    RoundEnded,
+
+    /// <summary>The fight was given to the party ("Win this fight"). The victory follows.</summary>
+    Conceded,
+
+    /// <summary>The fight's paused for a conversation in the middle of it. The text is the conversation's id.</summary>
+    Interlude,
 }

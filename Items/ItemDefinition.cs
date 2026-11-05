@@ -113,8 +113,8 @@ public sealed class ItemDefinition
     /// <summary>A thrown consumable: the kind of damage ThrownDamage does.</summary>
     public DamageType ThrownDamageType { get; init; }
 
-    /// <summary>A consumable: how many spent spell slots drinking it gives back, lowest first. 0 for most.</summary>
-    public int SlotsRestored { get; init; }
+    /// <summary>A consumable: the Focus drinking it in a fight gives back, never past the most there is (an elixir's 30). 0 for most. Only a fight has Focus, so out of one it can't be drunk.</summary>
+    public int FocusRestored { get; init; }
 
     /// <summary>Where it's worn, from its Kind: a weapon in the main hand, a shield in the off hand, armour on the body, and so on. Null for what isn't worn.</summary>
     /// <remarks>A light weapon can go in the off hand as well; Fits says where something can go, and SlotOn where it should.</remarks>

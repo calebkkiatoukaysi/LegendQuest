@@ -9,6 +9,7 @@ using LegendQuest.Characters;
 using LegendQuest.Combat;
 using LegendQuest.Dialogue.Scripts;
 using LegendQuest.Items;
+using LegendQuest.Rules;
 using LegendQuest.Story;
 using LegendQuest.World;
 
@@ -39,7 +40,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 8;
+    public const int CurrentVersion = 9;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -210,8 +211,14 @@ public static class SaveSystem
     /// your belt. Version 7 had the rooms' fields beside the tile maps', which only the tile maps kept
     /// up; version 8 is when the game walked rooms: it finds its zone and room from its map and where
     /// its leader stood, the party stands there, the way out of the last building gets the same, and
-    /// every room of every map it's seen counts as visited (IntoRooms). The old fields only survive the
-    /// read because of SaveData.Extra, and the tile maps' because Read reads them on their own.
+    /// every room of every map it's seen counts as visited (IntoRooms). Version 9 is when there were
+    /// levels: everyone's at the level the story has the party at in the chapter its flags say it's in,
+    /// with no experience towards the next, and at their new most hit points, since the old ones were
+    /// out of a smaller most; and nothing's spent, since the rests' resources went with Focus (PartyMember
+    /// doesn't read Spent any more, so it's dropped as it's read). A fight that was going when it was
+    /// saved starts again from the beginning, as every loaded fight does (SaveData.Fight). The old fields
+    /// only survive the read because of SaveData.Extra, and the tile maps' because Read reads them on
+    /// their own.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <param name="tiles">The tile maps' fields from the same file, for a save older than version 8; otherwise null.</param>
@@ -312,9 +319,46 @@ public static class SaveSystem
 
         if (data.Version < 8) IntoRooms(data, tiles);
 
+        if (data.Version < 9) IntoLevels(data);
+
         data.Version = CurrentVersion;
         return data;
     }
+
+    /// <summary>Puts everyone in the party, at camp and away at the level the story has them at for where the game's up to, with no experience towards the next and their hit points full.</summary>
+    /// <remarks>Mend hasn't been at it yet, so a list or anyone in it can be null, and nobody's most hit points can be worked out (what they're wearing may not be there). Full is set as more than anyone can have, and Mend brings it down to their most.</remarks>
+    /// <param name="data">The save.</param>
+    private static void IntoLevels(SaveData data)
+    {
+        data.Flags ??= new HashSet<string>();
+        int level = LevelFromStory(data.Flags);
+        foreach (PartyMember member in (data.Party ?? Enumerable.Empty<PartyMember>()).Concat(data.Camp ?? Enumerable.Empty<PartyMember>()).Concat(data.Away ?? Enumerable.Empty<PartyMember>()))
+        {
+            if (member is null) continue;
+            member.Level = level;
+            member.Xp = 0;
+            member.Hp = int.MaxValue;
+        }
+    }
+
+    /// <summary>The level the story has the party at for the chapter a game's flags say it's in: the last chapter whose way in is open (LevelTable.ForChapter), or the Prologue's.</summary>
+    /// <param name="flags">The game's flags.</param>
+    private static int LevelFromStory(ISet<string> flags)
+    {
+        foreach ((string flag, int act, int chapter) in ChapterOpenedBy)
+            if (flags.Contains(flag)) return LevelTable.ForChapter(act, chapter);
+        return LevelTable.ForChapter(0, 0);
+    }
+
+    /// <summary>The flag that opens each chapter that's built, latest first: the one that closes the chapter before it.</summary>
+    private static readonly (string Flag, int Act, int Chapter)[] ChapterOpenedBy =
+    {
+        (Act1Chapter4.ChapterDone, 1, 5),
+        (Act1Chapter3.ChapterDone, 1, 4),
+        (Act1Chapter2.Paid, 1, 3),
+        (Act1Chapter1.BoardRead, 1, 2),
+        (Prologue.Done, 1, 1),
+    };
 
     /// <summary>Works out where in the rooms a game on the tile maps is: its zone and room, where the party stands there, the room the way out of the last building is in, and every room it's visited.</summary>
     /// <remarks>
@@ -468,10 +512,8 @@ public static class SaveSystem
             member.Scores ??= new();
             member.Look ??= new();
             member.Xp = Math.Max(0, member.Xp);
+            member.Level = Math.Clamp(member.Level, 1, LevelTable.MaxLevel);
             MendEquipment(member, data.Bag);
-            member.Spent ??= new();
-            foreach (string resource in new List<string>(member.Spent.Keys))
-                if (member.Spent[resource] <= 0) member.Spent.Remove(resource);
             member.Hp = Math.Clamp(member.Hp, 0, member.MaxHp);
         }
 

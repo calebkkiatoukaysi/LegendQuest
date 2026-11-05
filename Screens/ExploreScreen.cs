@@ -402,6 +402,12 @@ public partial class ExploreScreen : GameScreen
     /// <remarks>On activating, and again every time you change rooms; the room before it is let go of first. The party's figures carry over: Arrive or ChangeRoom puts them.</remarks>
     private void EnterRoom()
     {
+        // What was near you was in the room you've left; the next update finds what's near you here.
+        _near = null;
+        _nearNpc = null;
+        _nearDoor = null;
+        _nearMember = null;
+
         _scene?.Unload();
         _scene = new RoomScene(_room);
         _scene.LoadContent(ScreenManager.Game.Services, ScreenManager.GraphicsDevice);

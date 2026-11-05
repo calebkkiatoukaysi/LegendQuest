@@ -10,12 +10,15 @@ namespace LegendQuest.Screens;
 /// </summary>
 /// <remarks>
 /// The tips come a lesson at a time on your turns, in the order a turn goes: A FIGHT as it starts
-/// (it holds everything until it's read), then moving, attacking, the bonus action once the action's
-/// spent, and ending the turn; abilities from your second turn; the Soul-Link the first time it
-/// charges; Downed the first time one of yours goes down; and the fight's won. Each is once a game,
-/// and doing what a tip teaches before it comes means it never does. In an encounter marked Tutorial
-/// (the wraiths at sea) each lesson's thing pulses gold, the hotbar slot, END TURN, the ground you can
-/// reach or the foe to hit, until you've done it, so the first fight walks you through one turn.
+/// (it holds everything until it's read) and the allies, if the fight has any; then on your turn the
+/// rows, the Shift while it's unspent, attacking, Focus once a skill that costs it is on the bar,
+/// skills from your second turn, the bonus action once the action's spent, and ending the turn; the
+/// allies again the first time a support acts; the Soul-Link the first time it charges; Downed the
+/// first time one of yours goes down; and the fight's won. Each is once a game (11-combat §6.4: the
+/// first fight that uses each idea), and doing what a tip teaches before it comes means it never
+/// does. In an encounter marked Tutorial (the wraiths at sea) each lesson's thing pulses gold (the
+/// chevrons for the Shift, the Auto and the foes' plates for attacking, a skill's button, END TURN)
+/// until you've done it, so the first fight walks you through one turn.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -37,7 +40,7 @@ public partial class ExploreScreen
     /// <summary>Whether the last lesson asked for is still to come up, or is up.</summary>
     private bool LessonWaiting => _lessonAsked is string id && (!_tutorials.Seen(id) || _tutorials.Current?.Id == id);
 
-    /// <summary>Starts the lessons for a fight: nothing done yet, and the tip about fights first.</summary>
+    /// <summary>Starts the lessons for a fight: nothing done yet, the tip about fights first, and the one about allies if it has any.</summary>
     private void BeginLessons()
     {
         _open.Clear();
@@ -46,6 +49,7 @@ public partial class ExploreScreen
         _yourTurns = 0;
         _guided = _encounter.Tutorial && TutorialsOn;
         Lesson(TutorialCatalog.CombatStart);
+        if (_encounter.Guests.Count > 0 || _encounter.Supports.Count > 0) Lesson(TutorialCatalog.CombatAllies);
     }
 
     /// <summary>Puts a combat tip in line, if it's not been seen, and marks its lesson open.</summary>
@@ -66,18 +70,19 @@ public partial class ExploreScreen
         if (actor.Side == Side.Party && actor.Member is not null && !actor.Guest) _yourTurns++;
     }
 
-    /// <summary>Puts in line the lesson your turn's at, if the last one's come and gone: moving while you've moved nowhere, attacking while the action's there, an ability from your second turn, the bonus action once the action's spent, and ending the turn once there's nothing much left.</summary>
+    /// <summary>Puts in line the lesson your turn's at, if the last one's come and gone: the rows, the Shift while it's there to use, attacking while the action's there, Focus and skills from your second turn, the bonus action once the action's spent, and ending the turn once there's nothing much left.</summary>
     private void GuideTurn()
     {
         if (!TutorialsOn || LessonWaiting) return;
 
         Combatant me = _combat.Current;
         TurnBudget budget = me.Budget;
-        bool untouched = budget.MovementLeft >= budget.Movement;
 
-        if (untouched && budget.Action && Lesson(TutorialCatalog.CombatMove)) return;
-        if (budget.Action && _yourTurns >= 2 && HasOwn(me) && Lesson(TutorialCatalog.CombatAbility)) return;
+        if (budget.Action && Lesson(TutorialCatalog.CombatRows)) return;
+        if (budget.Action && budget.Shift && _combat.Shifts(me).Count > 0 && Lesson(TutorialCatalog.CombatShift)) return;
         if (budget.Action && Lesson(TutorialCatalog.CombatAttack)) return;
+        if (budget.Action && _yourTurns >= 2 && HasFocusSkill(me) && Lesson(TutorialCatalog.CombatFocus)) return;
+        if (budget.Action && _yourTurns >= 2 && HasOwn(me) && Lesson(TutorialCatalog.CombatAbility)) return;
         if (!budget.Action && budget.BonusAction && HasBonus(me) && Lesson(TutorialCatalog.CombatBonus)) return;
         if (!budget.Action) Lesson(TutorialCatalog.CombatEndTurn);
     }
@@ -91,41 +96,54 @@ public partial class ExploreScreen
         TutorialDone(tipId);
     }
 
-    /// <summary>Says which lessons using an ability has done: attacking, the Soul-Link, a class's own ability, a bonus action.</summary>
+    /// <summary>Says which lessons using an ability has done: attacking, the Soul-Link, a skill, Focus, a bonus action.</summary>
     /// <param name="ability">What was used.</param>
     private void LearnFrom(AbilityDefinition ability)
     {
-        if (ability.Id == AbilityId.Attack) Learn(TutorialCatalog.CombatAttack);
+        if (ability.Bar == BarSlot.Auto || ability.Id == AbilityId.Attack) Learn(TutorialCatalog.CombatAttack);
         else if (ability.Id == AbilityId.SoulLinkStrike) Learn(TutorialCatalog.CombatSoulLink);
-        else if (!AbilityCatalog.IsCommon(ability.Id)) Learn(TutorialCatalog.CombatAbility);
+        else if (IsSkill(ability)) Learn(TutorialCatalog.CombatAbility);
+        if (ability.Focus > 0) Learn(TutorialCatalog.CombatFocus);
         if (ability.Cost == ActionCost.BonusAction) Learn(TutorialCatalog.CombatBonus);
     }
 
     /// <summary>Whether a lesson's open and its thing should pulse.</summary>
     private bool Guided(string tipId) => _guided && _open.Contains(tipId);
 
-    /// <summary>Whether a hotbar slot pulses: Attack for attacking, a class's own for abilities, a bonus action's for the bonus action, the Soul-Link Strike for the Soul-Link.</summary>
-    /// <param name="ability">The slot's ability.</param>
+    /// <summary>Whether a hotbar button pulses: the Auto for attacking, a skill for skills, one that costs Focus for Focus, a bonus action's for the bonus action, the Soul-Link Strike for the Soul-Link.</summary>
+    /// <param name="ability">The button's ability.</param>
     private bool Guiding(AbilityDefinition ability) =>
-        Guided(TutorialCatalog.CombatAttack) && ability.Id == AbilityId.Attack
-        || Guided(TutorialCatalog.CombatAbility) && HotbarGroup(ability) == 0 && ability.Id is not (AbilityId.Attack or AbilityId.OffHandAttack)
+        Guided(TutorialCatalog.CombatAttack) && ability.Bar == BarSlot.Auto
+        || Guided(TutorialCatalog.CombatAbility) && IsSkill(ability)
+        || Guided(TutorialCatalog.CombatFocus) && ability.Focus > 0
         || Guided(TutorialCatalog.CombatBonus) && ability.Cost == ActionCost.BonusAction
         || Guided(TutorialCatalog.CombatSoulLink) && ability.Id == AbilityId.SoulLinkStrike;
 
     /// <summary>Whether END TURN pulses.</summary>
     private bool GuidingEndTurn => Guided(TutorialCatalog.CombatEndTurn);
 
-    /// <summary>Whether the ground you can reach pulses.</summary>
-    private bool GuidingMove => Guided(TutorialCatalog.CombatMove);
+    /// <summary>Whether the chevrons over the slots you can Shift to pulse.</summary>
+    private bool GuidingMove => Guided(TutorialCatalog.CombatShift);
 
-    /// <summary>Whether the foes' rings pulse, for the lesson on attacking.</summary>
+    /// <summary>Whether the foes' plates pulse, for the lesson on attacking.</summary>
     private bool GuidingAttack => Guided(TutorialCatalog.CombatAttack);
 
-    /// <summary>Whether someone has a usable ability of their class's own on the hotbar.</summary>
+    /// <summary>Whether an ability's one of the class's skills or its ultimate.</summary>
+    private static bool IsSkill(AbilityDefinition ability) => ability.Bar is BarSlot.Skill or BarSlot.Ultimate;
+
+    /// <summary>Whether someone has a usable skill on the hotbar.</summary>
     private bool HasOwn(Combatant me)
     {
         foreach (AbilityDefinition ability in _combat.Abilities(me))
-            if (!AbilityCatalog.IsCommon(ability.Id) && _combat.Unusable(me, ability) is null) return true;
+            if (IsSkill(ability) && _combat.Unusable(me, ability) is null) return true;
+        return false;
+    }
+
+    /// <summary>Whether someone has anything on the hotbar that costs Focus.</summary>
+    private bool HasFocusSkill(Combatant me)
+    {
+        foreach (AbilityDefinition ability in _combat.Abilities(me))
+            if (ability.Focus > 0) return true;
         return false;
     }
 

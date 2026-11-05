@@ -47,7 +47,7 @@ public enum EffectKind
     /// <summary>Starts a fight once the conversation's over, on the map it's on: the id is the encounter's, in EncounterCatalog.</summary>
     Fight,
 
-    /// <summary>A long rest for everyone, in the party and waiting at camp: hit points full, spell slots and every use back. The id is the kind of rest.</summary>
+    /// <summary>A long rest for everyone, in the party and waiting at camp: hit points full. The id is the kind of rest.</summary>
     Rest,
 
     /// <summary>Someone goes away for a while, out of the party or the camp: kept in the save, but nobody can pick them, talk to them or take them into a fight until they're back.</summary>
@@ -55,4 +55,16 @@ public enum EffectKind
 
     /// <summary>Someone who went away comes back, into the party even if it's full.</summary>
     Rejoin,
+
+    /// <summary>Experience for everyone, in the party, at camp and away (xp +n): the amount's how much, and Leveling takes them up the levels it reaches.</summary>
+    Experience,
+
+    /// <summary>A support in the fight that's going stops acting (support-off): the id is the support's. Only in a fight's interlude.</summary>
+    SupportOff,
+
+    /// <summary>More foes join the fight that's going (fight-add): the id is their EnemyCatalog id and the amount how many. Only in a fight's interlude.</summary>
+    FightAdd,
+
+    /// <summary>A guest joins the party's side of the fight that's going (fight-guest): the id is an origin or an EnemyCatalog id. Only in a fight's interlude.</summary>
+    FightGuest,
 }

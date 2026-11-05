@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using LegendQuest.Characters;
-using LegendQuest.Combat;
 
 namespace LegendQuest.Items;
 
@@ -27,8 +26,8 @@ public static class Wardrobe
         if (item.Slot is not null) return null;
         if (item.Kind == ItemKind.Material) return $"{item.Name} is for selling, not wearing.";
         if (!item.ThrownDamage.IsNone) return $"{item.Name} is for throwing, and that's for a fight.";
+        if (item.FocusRestored > 0) return $"{item.Name} gives back Focus, and that's for a fight.";
         if (!item.Heals.IsNone && member.Hp >= member.MaxHp) return $"{member.Name} isn't hurt.";
-        if (item.SlotsRestored > 0 && ResourceCatalog.SlotsSpent(member) == 0) return $"{member.Name} has no spent spell slots.";
         return null;
     }
 
@@ -59,19 +58,17 @@ public static class Wardrobe
         return id;
     }
 
-    /// <summary>Someone drinks something from the bag: a healing potion heals them, never past their most, and an elixir gives back spent spell slots.</summary>
-    /// <remarks>Check WhyNot first, so nothing's drunk to no effect.</remarks>
+    /// <summary>Someone drinks a healing potion from the bag, out of a fight: it heals them, never past their most.</summary>
+    /// <remarks>Check WhyNot first, so nothing's drunk to no effect. An elixir isn't drunk here: its Focus is only a fight's, and the fight drinks it.</remarks>
     /// <param name="member">Who drinks it.</param>
     /// <param name="bag">The party's bag. It has to have one.</param>
-    /// <param name="item">What they drink: a consumable that isn't thrown.</param>
+    /// <param name="item">What they drink: a consumable that heals.</param>
     /// <param name="random">Where the healing dice come from.</param>
-    /// <returns>The hit points it healed, or the spell slots it gave back.</returns>
+    /// <returns>The hit points it healed.</returns>
     public static int Drink(PartyMember member, Inventory bag, ItemDefinition item, Random random)
     {
-        if (item.Kind != ItemKind.Consumable || !item.ThrownDamage.IsNone) throw new ArgumentException($"{item.Id} isn't something you drink.", nameof(item));
+        if (item.Kind != ItemKind.Consumable || item.Heals.IsNone) throw new ArgumentException($"{item.Id} isn't something you drink out of a fight.", nameof(item));
         if (!bag.Remove(item.Id)) throw new InvalidOperationException($"There's no {item.Id} in the bag to drink.");
-
-        if (item.Heals.IsNone) return ResourceCatalog.Restore(member, item.SlotsRestored);
 
         int before = member.Hp;
         member.Hp = Math.Min(member.MaxHp, member.Hp + item.Heals.Roll(random, item.Name).Total);

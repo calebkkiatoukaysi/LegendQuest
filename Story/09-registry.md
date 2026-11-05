@@ -531,6 +531,7 @@ What starts each script, from the prose in its header: for whoever places the tr
 | `knows-voice-truth` | a3-c3-02, a3-c3-02-journal |
 | `leon-dead` | a3-c2-03 |
 | `letters-walk` | brannock-letters |
+| `lodge-told` | a1-c2-01-gloomfangs-after |
 | `mc-backed-sb-court` | a1-c4-03 |
 | `mc-claimed-valencia` | a2-c5-01 |
 | `mc-complicit-crane` | a1-c7-03 |
@@ -790,6 +791,7 @@ What starts each script, from the prose in its header: for whoever places the tr
 | `cp` | trial-ash-after, trial-vigil-after, trial-watch-after |
 | `eclipse-stage` | a2-c1-01, a2-c3-01, a2-c4-01, a2-c4-04-survive-after, a2-c5-04, a2-c6-05 |
 | `fame` | a1-c1-01, a1-c3-01, a1-c3-02-raid-after, a1-c7-05, enc-woodcutters-boy |
+| `xp` | a1-c1-01-gulls-after |
 
 ## Items (given, taken or held)
 

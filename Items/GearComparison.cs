@@ -89,7 +89,7 @@ public static class GearComparison
 
     /// <summary>How someone attacks with their main hand: the weapon in it, or a fist.</summary>
     private static AttackProfile MainHand(PartyMember member) =>
-        CombatStats.Weapon(member, EquipmentSlot.MainHand) ?? CombatStats.Unarmed(member.Scores);
+        CombatStats.Weapon(member, EquipmentSlot.MainHand) ?? CombatStats.Unarmed(member.Scores, member.Level);
 
     /// <summary>What a weapon in someone's off hand does on average, or 0 for no weapon there.</summary>
     private static double OffHandDamage(PartyMember member) =>

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 namespace LegendQuest.Combat;
 
 /// <summary>
-/// A fight as far as the screen has shown it: everyone's hit points, conditions and death saves,
-/// who's rolled for initiative, who's died, whose turn and which round it is, and the Soul-Link's
-/// charge, each as it was after the last event the screen played.
+/// A fight as far as the screen has shown it: everyone's hit points, Focus, conditions and death
+/// saves, where they stand in the rows, who's rolled for initiative, who's died or fallen back, whose
+/// turn and which round it is, and the Soul-Link's charge, each as it was after the last event the
+/// screen played.
 /// </summary>
 /// <remarks>
 /// The engine has done the whole of a command by the time it hands its events back, so reading its
@@ -27,6 +28,9 @@ public sealed class ShownFight
 
     private readonly CombatEngine _engine;
     private readonly Dictionary<string, int> _hp = new();
+    private readonly Dictionary<string, int> _focus = new();
+    private readonly Dictionary<string, List<Slot>> _slots = new();
+    private readonly HashSet<string> _fellBack = new();
     private readonly Dictionary<string, List<ConditionId>> _conditions = new();
     private readonly Dictionary<string, (int Successes, int Failures)> _deathSaves = new();
     private readonly HashSet<string> _rolled = new();
@@ -40,7 +44,11 @@ public sealed class ShownFight
     public ShownFight(CombatEngine engine)
     {
         _engine = engine;
-        foreach (Combatant each in engine.Combatants) Track(each, each.Hp);
+        foreach (Combatant each in engine.Combatants)
+        {
+            Track(each, each.Hp);
+            Place(each);
+        }
     }
 
     /// <summary>The round the screen's in, or 0 before the first is shown.</summary>
@@ -55,6 +63,28 @@ public sealed class ShownFight
     /// <summary>Someone's hit points as shown.</summary>
     /// <param name="who">Who.</param>
     public int Hp(Combatant who) => _hp.TryGetValue(who.Id, out int hp) ? hp : who.Hp;
+
+    /// <summary>Someone's Focus as shown, 0 to Combatant.MaxFocus.</summary>
+    /// <param name="who">Who.</param>
+    public int Focus(Combatant who) => _focus.TryGetValue(who.Id, out int focus) ? focus : who.Focus;
+
+    /// <summary>The slots someone's shown standing in: one, or two for someone big; none for someone who's left the rows.</summary>
+    /// <param name="who">Who.</param>
+    public IReadOnlyList<Slot> SlotsOf(Combatant who) =>
+        _slots.TryGetValue(who.Id, out List<Slot> slots) ? slots : Array.Empty<Slot>();
+
+    /// <summary>Who's shown standing in a slot, or null.</summary>
+    /// <param name="slot">The slot.</param>
+    public Combatant At(Slot slot)
+    {
+        foreach ((string id, List<Slot> slots) in _slots)
+            if (slots.Contains(slot)) return _engine.Find(id);
+        return null;
+    }
+
+    /// <summary>Whether a guest's been shown falling back out of the fight.</summary>
+    /// <param name="who">Who.</param>
+    public bool HasFallenBack(Combatant who) => _fellBack.Contains(who.Id);
 
     /// <summary>The conditions on someone as shown, in the order they went on.</summary>
     /// <param name="who">Who.</param>
@@ -77,14 +107,14 @@ public sealed class ShownFight
     /// <param name="who">Who.</param>
     public bool HasRolled(Combatant who) => _rolled.Contains(who.Id);
 
-    /// <summary>The turn order as shown: everyone who's rolled, in the engine's order, without the foes who've died. A fallen party member keeps their place, greyed, since they're still yours.</summary>
+    /// <summary>The turn order as shown: everyone who's rolled, in the engine's order, without the foes who've died or the guests who've fallen back. A fallen party member keeps their place, greyed, since they're still yours.</summary>
     public IReadOnlyList<Combatant> Order
     {
         get
         {
             var order = new List<Combatant>();
             foreach (Combatant each in _engine.Combatants)
-                if (_rolled.Contains(each.Id) && !(each.Side == Side.Foes && _died.Contains(each.Id))) order.Add(each);
+                if (_rolled.Contains(each.Id) && !(each.Side == Side.Foes && _died.Contains(each.Id)) && !_fellBack.Contains(each.Id)) order.Add(each);
             order.Sort(CompareInitiative);
             return order;
         }
@@ -100,7 +130,33 @@ public sealed class ShownFight
         switch (happened.Kind)
         {
             case CombatEventKind.Joined:
-                if (actor is not null) Track(actor, actor.MaxHp);
+                if (actor is null) break;
+                Track(actor, actor.MaxHp);
+                if (happened.To is Slot arrived) _slots[actor.Id] = new List<Slot> { arrived };
+                else Place(actor);
+                break;
+
+            case CombatEventKind.Shifted when actor is not null && happened.To is Slot to:
+                List<Slot> standing = SlotsOfList(actor.Id);
+                int at = happened.From is Slot from ? standing.IndexOf(from) : -1;
+                if (at >= 0) standing[at] = to;
+                else
+                {
+                    standing.Clear();
+                    standing.Add(to);
+                }
+                break;
+
+            case CombatEventKind.FocusChanged when (target ?? actor) is Combatant changed:
+                // The one whose Focus it is is the target: a drain's actor is the foe that drained it.
+                _focus[changed.Id] = Math.Clamp(Focus(changed) + happened.Amount, 0, Combatant.MaxFocus);
+                break;
+
+            case CombatEventKind.FellBack:
+                if ((target ?? actor) is not Combatant leaving) break;
+                _fellBack.Add(leaving.Id);
+                _slots.Remove(leaving.Id);
+                ConditionsOf(leaving.Id).Clear();
                 break;
 
             case CombatEventKind.InitiativeRolled:
@@ -160,6 +216,7 @@ public sealed class ShownFight
                 _died.Add(target.Id);
                 _hp[target.Id] = 0;
                 ConditionsOf(target.Id).Clear();
+                if (target.Side == Side.Foes) _slots.Remove(target.Id);
                 break;
 
             case CombatEventKind.SoulLinkCharged:
@@ -179,6 +236,25 @@ public sealed class ShownFight
         List<ConditionId> on = ConditionsOf(who.Id);
         on.Clear();
         foreach (ActiveCondition condition in who.Conditions) on.Add(condition.Id);
+    }
+
+    /// <summary>Starts showing someone where the formation has them now, with their Focus as it is.</summary>
+    private void Place(Combatant who)
+    {
+        _focus[who.Id] = who.Focus;
+        IReadOnlyList<Slot> slots = _engine.Formation.SlotsOf(who);
+        if (slots.Count > 0) _slots[who.Id] = new List<Slot>(slots);
+    }
+
+    /// <summary>Someone's shown slots, made if they've none yet.</summary>
+    private List<Slot> SlotsOfList(string id)
+    {
+        if (!_slots.TryGetValue(id, out List<Slot> slots))
+        {
+            slots = new List<Slot>();
+            _slots[id] = slots;
+        }
+        return slots;
     }
 
     /// <summary>Someone's shown conditions, made if they've none yet.</summary>

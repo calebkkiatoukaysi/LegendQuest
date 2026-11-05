@@ -78,7 +78,7 @@ public class HelpScreen : MenuScreen
     };
 
     /// <summary>Every control: what it does, its keys and buttons as caps, and the pad's way of doing it (empty when a pad has none).</summary>
-    /// <remarks>The fighting and the bag have their keys on their own tips, on their own pages.</remarks>
+    /// <remarks>The bag has its keys on its own tips, on its own page; a fight's keys are here as well as on its tips, since there are a few of them and they're the same every turn.</remarks>
     private static readonly (string What, string[] Keys, string Pad)[] Controls =
     {
         ("Walk", new[] { "W", "A", "S", "D", "ARROWS", KeyCaps.Click }, "Left stick or d-pad"),
@@ -89,6 +89,8 @@ public class HelpScreen : MenuScreen
         ("Put a tip away", new[] { "ENTER", KeyCaps.Click }, "X"),
         ("Go on, or roll the dice", new[] { "ENTER", "SPACE", KeyCaps.Click }, "A"),
         ("Answer a question", new[] { "1-4", KeyCaps.Click }, "D-pad, then A"),
+        ("Fight: Auto, skills and potion, then the strip", new[] { "1-6", "7-0", KeyCaps.Click }, string.Empty),
+        ("Fight: Shift a slot, end the turn, the log", new[] { "W", "A", "S", "D", "SPACE", "L" }, "D-pad, Y"),
         ("Pause, or go back", new[] { "ESC" }, "Start, or B"),
         ("Full screen", new[] { "F11" }, string.Empty),
     };

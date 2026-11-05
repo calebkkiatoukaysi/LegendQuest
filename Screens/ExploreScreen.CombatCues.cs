@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Globalization;
 using Microsoft.Xna.Framework;
 using LegendQuest.Characters;
@@ -15,11 +16,13 @@ namespace LegendQuest.Screens;
 /// poses, what flies, the sparks and the motes, the numbers, the shake, the sound and the log line.
 /// </summary>
 /// <remarks>
-/// The Black Box's TableCues and TableScreen.Effects for a grid: each CombatEvent is a beat with a
+/// The Black Box's TableCues and TableScreen.Effects, in rows: each CombatEvent is a beat with a
 /// length, and everything it sets off happens as it's shown. An attack winds up, then lunges or
 /// lets fly, and its log line goes in as the blow lands, with the hit's sparks, its sound and the
-/// shake right after; the number pops as the bar drains. A step is a slide from tile to tile. Every
-/// length is a named constant: quick enough that a turn doesn't drag, slow enough to follow.
+/// shake right after; the number pops as the bar drains. A Shift is a step from one slot to
+/// another, and everyone turns back to face the other side once they're there. The camera holds on
+/// the middle of the fight throughout. Every length is a named constant: quick enough that a turn
+/// doesn't drag, slow enough to follow.
 /// </remarks>
 public partial class ExploreScreen
 {
@@ -31,8 +34,8 @@ public partial class ExploreScreen
     /// <summary>A turn starting, so its banner's read before anything happens.</summary>
     private const float TurnSeconds = 0.6f;
 
-    /// <summary>One step from a tile to the next.</summary>
-    private const float StepSeconds = 0.17f;
+    /// <summary>A Shift from one slot to another.</summary>
+    private const float ShiftSeconds = 0.35f;
 
     /// <summary>A foe lashing out at someone pulling away.</summary>
     private const float OpportunitySeconds = 0.4f;
@@ -62,6 +65,10 @@ public partial class ExploreScreen
     private const float StabiliseSeconds = 0.5f;
     private const float ReviveSeconds = 0.6f;
     private const float DieSeconds = 0.9f;
+
+    /// <summary>The round ending with supports to act, and the fight handed to the party.</summary>
+    private const float RoundEndSeconds = 0.35f;
+    private const float ConcedeSeconds = 0.6f;
 
     /// <summary>The Soul-Link charging, someone joining, a line said, and a line in the log with nothing else to it.</summary>
     private const float ChargeSeconds = 0.75f;
@@ -158,10 +165,15 @@ public partial class ExploreScreen
         _beatStrike = null;
         _beatLine = null;
         _shown.Show(happened);
+        _eventsShown++;
 
-        Combatant actor = Fighter(happened.Actor), target = Fighter(happened.Target);
-        WalkerSprite by = FighterWalker(happened.Actor), on = FighterWalker(happened.Target);
+        Combatant actor = happened.Kind == CombatEventKind.SupportActed ? null : Fighter(happened.Actor);
+        Combatant target = Fighter(happened.Target);
+        WalkerSprite by = happened.Kind == CombatEventKind.SupportActed ? null : FighterWalker(happened.Actor);
+        WalkerSprite on = FighterWalker(happened.Target);
         AbilityDefinition ability = happened.Ability is AbilityId id ? AbilityCatalog.Get(id) : null;
+        if (actor is { Side: Side.Foes } && happened.Kind is CombatEventKind.AbilityUsed or CombatEventKind.AttackRolled)
+            _seenMoves.Add(MoveKey(actor, happened.Ability ?? AbilityId.Attack));
 
         switch (happened.Kind)
         {
@@ -180,11 +192,8 @@ public partial class ExploreScreen
                 CueTurn(actor, by);
                 break;
 
-            case CombatEventKind.Moved:
-                if (by is null) break;
-                Glide(by, FeetOn(happened.To), StepSeconds);
-                _focusWalker = by;
-                _beatLength = StepSeconds;
+            case CombatEventKind.Shifted:
+                CueShift(happened, actor, by);
                 break;
 
             case CombatEventKind.OpportunityAttack:
@@ -270,7 +279,6 @@ public partial class ExploreScreen
                 break;
 
             case CombatEventKind.Victory:
-                _victoryXp = happened.Amount;
                 _log.Add(happened.Text, Palette.Gold);
                 break;
 
@@ -280,6 +288,35 @@ public partial class ExploreScreen
 
             case CombatEventKind.Joined:
                 CueJoined(happened, actor);
+                break;
+
+            case CombatEventKind.FocusChanged:
+                if (happened.Text is null || on is null) break;
+                _popups.Word(HeadOf(on), $"{happened.Amount:+0;-0} FOCUS", CombatStyle.FocusText);
+                Say(happened.Text, actor);
+                _beatLength = ConditionSeconds;
+                break;
+
+            case CombatEventKind.SupportActed:
+                CueSupport(happened);
+                break;
+
+            case CombatEventKind.FellBack:
+                CueFellBack(happened);
+                break;
+
+            case CombatEventKind.RoundEnded:
+                _log.Add(happened.Text ?? $"END OF ROUND {happened.Amount}", Palette.Note);
+                if (_combat.Supports.Count > 0) _beatLength = RoundEndSeconds;
+                break;
+
+            case CombatEventKind.Conceded:
+                _log.Add(happened.Text ?? "THE FIGHT IS GIVEN TO YOU.", Palette.Gold);
+                _beatLength = ConcedeSeconds;
+                break;
+
+            case CombatEventKind.Interlude:
+                _log.Add(happened.Text ?? "A PAUSE IN THE FIGHT.", Palette.Note);
                 break;
 
             case CombatEventKind.Bark:
@@ -309,7 +346,6 @@ public partial class ExploreScreen
         if (actor is null) return;
 
         _aiWait = 0f;
-        _focusWalker = by;
         Cancel();
 
         string name = actor.Name.ToUpperInvariant();
@@ -340,7 +376,6 @@ public partial class ExploreScreen
         _beatLength = AbilitySeconds;
         if (by is null || ability is null) return;
 
-        _focusWalker = by;
         if (on is not null && on != by) by.Face(on.Position);
         by.Play(ability.Spell ? WalkerPose.Cast : WalkerPose.Strike, CastPoseSeconds);
 
@@ -355,11 +390,11 @@ public partial class ExploreScreen
             AbilityKind.Heal => Sfx.Heal,
             AbilityKind.Potion => Sfx.Potion,
             _ when ability.Spell => Sfx.Cast,
-            _ when ability.Conditions.Count > 0 && ability.Target == TargetKind.Self => Sfx.Shield,
+            _ when ability.Conditions.Count > 0 && ability.Shape == TargetShape.Self => Sfx.Shield,
             _ => null,
         };
         if (sound is Sfx play) _audio.Play(play);
-        if (ability.Kind is AbilityKind.Dash or AbilityKind.Help) _popups.Word(HeadOf(by), ability.Name.ToUpperInvariant(), Palette.Gold);
+        if (ability.Kind == AbilityKind.Help) _popups.Word(HeadOf(by), ability.Name.ToUpperInvariant(), Palette.Gold);
 
         string flying = CombatStyle.Projectile(ability.Id);
         if (flying is null || ability.Kind != AbilityKind.Save) return;
@@ -385,15 +420,13 @@ public partial class ExploreScreen
         if (by is null || on is null) return;
 
         by.Face(on.Position);
-        _focusWalker = null;
-        _focus = (by.Position + on.Position) / 2f;
 
         bool spell = ability?.Spell == true;
         Color light = ability is null ? Palette.Gold : CombatStyle.LightOf(ability);
         by.Play(spell ? WalkerPose.Cast : WalkerPose.WindUp, WindUpSeconds);
         if (spell) _effects.Motes(ChestOf(by), CastCloud, light, false);
 
-        string flying = Flying(happened, actor, ability);
+        string flying = Flying(actor, ability);
         _beatStrikeAt = WindUpSeconds;
         if (flying is null)
         {
@@ -428,7 +461,7 @@ public partial class ExploreScreen
         _beatLength = critical ? CriticalSeconds : HitSeconds;
         if (on is null) return;
 
-        DamageType kind = happened.DamageType ?? DamageType.Bludgeoning;
+        DamageType kind = happened.Type ?? DamageType.Bludgeoning;
         string flying = ability is { Kind: AbilityKind.AutoHit } && by is not null ? CombatStyle.Projectile(ability.Id) : null;
         if (flying is null)
         {
@@ -440,8 +473,6 @@ public partial class ExploreScreen
         float flight = FlightSeconds(from, to);
         _effects.Launch(flying, from, to, flight, CombatStyle.DamageColour(kind));
         _audio.Play(Sfx.Cast, LaunchVolume);
-        _focus = (by.Position + on.Position) / 2f;
-        _focusWalker = null;
         _beatStrikeAt = flight;
         _beatStrike = () => Land(by, on, kind, critical);
         _beatLength = flight + HitSeconds;
@@ -517,7 +548,6 @@ public partial class ExploreScreen
         }
 
         _popups.Word(HeadOf(on), saved ? "SAVED" : "FAILED", saved ? Palette.Bone : Palette.Ember);
-        _focusWalker = on;
     }
 
     /// <summary>Going down, a death save, stopping dying, getting up, and dying, each with its pose, its sound and its word.</summary>
@@ -525,7 +555,6 @@ public partial class ExploreScreen
     {
         Say(happened.Text, target);
         if (on is null || target is null) return;
-        _focusWalker = on;
 
         switch (happened.Kind)
         {
@@ -610,8 +639,6 @@ public partial class ExploreScreen
 
         _effects.Motes(ChestOf(on) - new Vector2(0f, FallFrom), FallCloud, Palette.Gold, true);
         _audio.Play(Sfx.SoulLink);
-        _focusWalker = null;
-        _focus = (by.Position + on.Position) / 2f;
         _beatStrikeAt = WindUpSeconds;
         _beatStrike = () =>
         {
@@ -623,21 +650,50 @@ public partial class ExploreScreen
         };
     }
 
-    /// <summary>Someone joining partway through: their figure fading in on their tile in a cloud of motes.</summary>
+    /// <summary>A Shift, or a pull or a push: whoever it is steps to their new slot and turns back to face the other side. A swap is two of these, one for each.</summary>
+    private void CueShift(CombatEvent happened, Combatant actor, WalkerSprite by)
+    {
+        if (happened.Text is not null) Say(happened.Text, actor);
+        _beatLength = ShiftSeconds;
+        if (by is null || actor is null || FeetOf(actor) is not Vector2 feet) return;
+
+        Glide(by, feet, ShiftSeconds);
+        _restFacing[by] = actor.Side == Side.Party ? Direction.Right : Direction.Left;
+    }
+
+    /// <summary>Someone joining partway through (a wave's foe, a guest who comes in a later round): their figure, the room's if they're standing in it, walking or fading in on their slot in a cloud of motes.</summary>
     private void CueJoined(CombatEvent happened, Combatant actor)
     {
         Say(happened.Text, actor);
-        if (actor?.Enemy is null) return;
+        if (actor is null || FeetOf(actor) is not Vector2 feet) return;
 
-        WalkerSprite walker = Spawn(EnemyWalker(actor.Enemy));
-        walker.Position = FeetOn(happened.From);
-        walker.Facing = actor.Facing;
-        _fighters[actor.Id] = walker;
-        FadeTo(walker, 1f, ArriveSeconds);
-        _effects.Motes(ChestOf(walker), HealCloud, Fading, false);
-        _popups.Word(HeadOf(walker), "JOINS THE FIGHT", CombatStyle.FoeLine);
-        _focusWalker = walker;
+        Direction facing = actor.Side == Side.Party ? Direction.Right : Direction.Left;
+        if (!_fighters.TryGetValue(actor.Id, out WalkerSprite walker))
+        {
+            walker = actor.Enemy is not null && actor.Side == Side.Foes ? Spawn(EnemyWalker(actor.Enemy)) : FigureForGuest(actor.Id);
+            _fighters[actor.Id] = walker;
+        }
+
+        if (walker.Opacity <= 0f)
+        {
+            walker.Position = feet;
+            walker.Facing = facing;
+            FadeTo(walker, 1f, ArriveSeconds);
+        }
+        else
+        {
+            WalkTo(walker, feet, facing, TakePlacesLeast, TakePlacesMost);
+        }
+        _effects.Motes(ChestOf(walker), HealCloud, actor.Side == Side.Foes ? Fading : CombatStyle.Blessing, false);
+        _popups.Word(HeadOf(walker), "JOINS THE FIGHT", actor.Side == Side.Foes ? CombatStyle.FoeLine : Palette.Gold);
         _beatLength = JoinSeconds;
+    }
+
+    /// <summary>The figure for a guest joining partway through: theirs if they're standing in the room, or one made for them.</summary>
+    private WalkerSprite FigureForGuest(string id)
+    {
+        Npc standing = _npcs.Find(npc => npc.Definition.Id == id || npc.Definition.Cast == id);
+        return standing?.Walker ?? Spawn(GuestWalker(id));
     }
 
     /// <summary>Someone in the fight by their id, or null.</summary>
@@ -667,14 +723,13 @@ public partial class ExploreScreen
     /// <summary>How long something takes to fly between two points.</summary>
     private static float FlightSeconds(Vector2 from, Vector2 to) => MathHelper.Clamp(Vector2.Distance(from, to) / ProjectileSpeed, FlightLeast, FlightMost);
 
-    /// <summary>What flies for an attack: the ability's own (a fire bolt, a flask), or an arrow for a weapon attack from further off than the tiles beside the attacker with a ranged weapon; null for a blow from close up.</summary>
-    private static string Flying(CombatEvent happened, Combatant actor, AbilityDefinition ability)
+    /// <summary>What flies for an attack: the ability's own (a fire bolt, a flask), or an arrow for a weapon attack by someone whose weapon shoots (a foe whose every attack does); null for a blow from close up.</summary>
+    private static string Flying(Combatant actor, AbilityDefinition ability)
     {
         if (ability is not null && CombatStyle.Projectile(ability.Id) is string piece) return piece;
-        if (actor is null || Measure.Steps(happened.From, happened.To) <= 1) return null;
-        foreach (AttackProfile attack in actor.Attacks)
-            if (attack.Ranged) return CombatStyle.Arrow;
-        return null;
+        if (actor is null) return null;
+        if (actor.Member is not null) return actor.MainHand.Ranged ? CombatStyle.Arrow : null;
+        return actor.Attacks.Count > 0 && actor.Attacks.All(attack => attack.Ranged) ? CombatStyle.Arrow : null;
     }
 
     /// <summary>Where a charge thrown into a crowd lands: on the first one it catches, from the save that follows it.</summary>

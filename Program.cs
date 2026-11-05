@@ -2,15 +2,31 @@
 using LegendQuest;
 using LegendQuest.Combat;
 
-// Three dev switches. --simulate <encounter-id> [runs] fights an encounter headless with the AI on both
-// sides, prints how it went, and quits without ever opening a window (--simulate all fights every
-// one). --proof <dir> plays through the screens, saves a picture of each one into <dir>, and quits;
+// Three dev switches. --simulate <encounter-id> [runs] [story|balanced|tactician] fights an encounter
+// headless with the AI on both sides, prints how it went against its targets, and quits without ever
+// opening a window, exiting 1 if anything failed (--simulate all fights every one; Balanced if no
+// difficulty's named, and Tactician's verdicts are only for information). --proof <dir> plays
+// through the screens, saves a picture of each one into <dir>, and quits;
 // --proof <dir> <part> stops after that part of the run (a ProofStage, like Docks). Anything else
 // starts the game. --validate reads every zone and checks every conversation, shop and loot table, the
 // way the game does as it starts, and quits: it prints what's wrong and exits 1, or exits 0.
 if (args.Length > 1 && args[0] == "--simulate")
 {
-    CombatSimulator.Run(args[1], args.Length > 2 && int.TryParse(args[2], out int runs) ? runs : CombatSimulator.DefaultRuns);
+    int runs = CombatSimulator.DefaultRuns;
+    Difficulty difficulty = Difficulty.Balanced;
+    for (int i = 2; i < args.Length; i++)
+    {
+        bool number = int.TryParse(args[i], out int count);
+        if (number && count > 0) runs = count;
+        else if (!number && Enum.TryParse(args[i], true, out Difficulty named) && Enum.IsDefined(named)) difficulty = named;
+        else
+        {
+            Console.Error.WriteLine($"--simulate: \"{args[i]}\" is neither a number of runs nor story, balanced or tactician.");
+            Environment.ExitCode = 1;
+            return;
+        }
+    }
+    if (!CombatSimulator.Run(args[1], runs, difficulty)) Environment.ExitCode = 1;
     return;
 }
 

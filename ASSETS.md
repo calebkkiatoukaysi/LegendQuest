@@ -692,7 +692,7 @@ Content/Combat/abilities.png - created by Caleb Kiatoukaysi for Legend Quest, an
 
 Content/Combat/conditions.png - created by Caleb Kiatoukaysi for Legend Quest, an icon for every condition, in ConditionId's order, drawn procedurally by tools/generate_combat_art.py, released under public domain
 
-Content/Combat/hud.png - created by Caleb Kiatoukaysi for Legend Quest, the pieces of the fight's screen: the hotbar's slots, the initiative portraits, the action, bonus action and reaction pips, the movement bar, death saves, the Soul-Link sigil in its five states, the target rings, the path's dots and ends, and the arrow, fire bolt, frost ray, radiant mote, eldritch blast, magic missile and flask in flight, drawn procedurally by tools/generate_combat_art.py, released under public domain
+Content/Combat/hud.png - created by Caleb Kiatoukaysi for Legend Quest, the pieces of the fight's screen: the hotbar's slots, the initiative portraits, the action, bonus action, reaction and Shift pips, the Focus bar, death saves, the Soul-Link sigil in its five states, the target rings, the plates at the places in the rows and the chevron over one you can Shift to, a support's banner and its progress ring, and the arrow, fire bolt, frost ray, radiant mote, eldritch blast, magic missile and flask in flight, drawn procedurally by tools/generate_combat_art.py, released under public domain
 
 Content/keycaps.png - created by Caleb Kiatoukaysi for Legend Quest, the key cap the tutorial tips and HOW TO PLAY write keys on, and the mouse with its left button, right button and wheel lit, drawn procedurally by tools/generate_ui.py, released under public domain
 

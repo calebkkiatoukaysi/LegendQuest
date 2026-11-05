@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using LegendQuest.Characters;
+using LegendQuest.Combat;
 using LegendQuest.Dialogue.Scripts;
 using LegendQuest.Dialogue.Scripts.Generated;
 using LegendQuest.Story;
@@ -159,7 +160,7 @@ public static class DialogueCatalog
         }
     }
 
-    /// <summary>Checks every script can be played as written, that everyone who says a line is someone, and that every cue can play where its script happens.</summary>
+    /// <summary>Checks every script can be played as written, that everyone who says a line is someone, that every cue can play where its script happens, and that every change to a fight is in one of its interludes.</summary>
     /// <remarks>
     /// Throws on purpose. Call it after ZoneCatalog.LoadAll, since it checks where a Travel goes and
     /// who's in the zones (which have every spawn and everyone their old maps had). A cue that can't
@@ -170,11 +171,13 @@ public static class DialogueCatalog
     public static void ValidateAll()
     {
         HashSet<string> onMaps = PeopleInZones();
+        Dictionary<string, List<EncounterDefinition>> interludes = Interludes();
         var faults = new List<string>();
         foreach (DialogueScript script in Registered)
         {
             script.Validate();
             CheckTravel(script);
+            CheckFightOrders(script, interludes);
             CheckSpeakers(script, onMaps);
             CheckStaging(script, faults);
         }
@@ -281,8 +284,8 @@ public static class DialogueCatalog
 #endif
     }
 
-    /// <summary>Throws if a script travels somewhere that isn't a zone, or onto a spawn it hasn't got.</summary>
-    private static void CheckTravel(DialogueScript script)
+    /// <summary>Every effect in a script, its lines' and its options'.</summary>
+    private static List<DialogueEffect> EffectsIn(DialogueScript script)
     {
         var effects = new List<DialogueEffect>();
         foreach (DialogueNode node in script.Nodes)
@@ -290,8 +293,50 @@ public static class DialogueCatalog
             effects.AddRange(node.Effects);
             foreach (DialogueOption option in node.Options) effects.AddRange(option.Effects);
         }
+        return effects;
+    }
 
-        foreach (DialogueEffect effect in effects)
+    /// <summary>Every script that's some fight's interlude, by its id, with the fights it's an interlude in.</summary>
+    private static Dictionary<string, List<EncounterDefinition>> Interludes()
+    {
+        var interludes = new Dictionary<string, List<EncounterDefinition>>();
+        foreach (EncounterDefinition encounter in EncounterCatalog.All)
+        {
+            foreach (EncounterWave wave in encounter.Waves)
+            {
+                if (wave.Interlude is null) continue;
+                if (!interludes.TryGetValue(wave.Interlude, out List<EncounterDefinition> fights)) interludes[wave.Interlude] = fights = new List<EncounterDefinition>();
+                if (!fights.Contains(encounter)) fights.Add(encounter);
+            }
+        }
+        return interludes;
+    }
+
+    /// <summary>Throws if a script changes a fight (support-off, fight-add, fight-guest) and isn't the interlude of a wave in one, or stands down a support that a fight it's an interlude in hasn't got.</summary>
+    /// <remarks>What fight-add and fight-guest bring in is checked with the effect itself (DialogueEffect.Problem).</remarks>
+    private static void CheckFightOrders(DialogueScript script, Dictionary<string, List<EncounterDefinition>> interludes)
+    {
+        foreach (DialogueEffect effect in EffectsIn(script))
+        {
+            if (effect.Order is not FightOrder order) continue;
+
+            if (!interludes.TryGetValue(script.Id, out List<EncounterDefinition> fights))
+                throw new InvalidOperationException($"Dialogue {script.Id}: changes a fight ({effect.Kind} {effect.Id}), and it isn't the interlude of any fight's wave: a fight only changes in one.");
+            if (order.Kind != FightOrderKind.SupportOff) continue;
+
+            foreach (EncounterDefinition fight in fights)
+            {
+                bool has = false;
+                foreach (EncounterSupport support in fight.Supports) has |= support.Id == order.Id;
+                if (!has) throw new InvalidOperationException($"Dialogue {script.Id}: stands down support {order.Id}, and {fight.Id}, which it's an interlude in, has no support called that.");
+            }
+        }
+    }
+
+    /// <summary>Throws if a script travels somewhere that isn't a zone, or onto a spawn it hasn't got.</summary>
+    private static void CheckTravel(DialogueScript script)
+    {
+        foreach (DialogueEffect effect in EffectsIn(script))
         {
             if (effect.Kind != EffectKind.Travel) continue;
 

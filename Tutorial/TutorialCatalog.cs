@@ -75,8 +75,17 @@ public static class TutorialCatalog
     /// <summary>A fight's turns. The combat screen shows it when the first fight starts.</summary>
     public const string CombatStart = "combat-start";
 
-    /// <summary>Moving on your turn. The combat screen shows it on your first turn.</summary>
-    public const string CombatMove = "combat-move";
+    /// <summary>The rows, and what reaches which. The combat screen shows it in the first fight, as it starts.</summary>
+    public const string CombatRows = "combat-rows";
+
+    /// <summary>Shifting: the once-a-turn swap or step between rows. The combat screen shows it on your first turn.</summary>
+    public const string CombatShift = "combat-shift";
+
+    /// <summary>Focus, what skills cost, and cooldowns. The combat screen shows it the first time you've a skill to use.</summary>
+    public const string CombatFocus = "combat-focus";
+
+    /// <summary>Guests and supports. The combat screen shows it in the first fight with an ally.</summary>
+    public const string CombatAllies = "combat-allies";
 
     /// <summary>Attacking. The combat screen shows it the first time an enemy's in reach.</summary>
     public const string CombatAttack = "combat-attack";
@@ -125,8 +134,9 @@ public static class TutorialCatalog
     private static readonly string[] Called =
     {
         Move, ShowAll, Use, Enter, Map, Waypoint, Help, Talk, Choices, Checks, Event, Work, Objective, Board,
-        Party, Companion, Approval, Camp, CombatStart, CombatMove, CombatAttack, CombatAbility, CombatBonus,
-        CombatEndTurn, CombatSoulLink, CombatDowned, CombatVictory, InventoryOpen, InventoryEquip, InventoryPotion, Loot,
+        Party, Companion, Approval, Camp, CombatStart, CombatRows, CombatShift, CombatAttack, CombatAbility, CombatFocus,
+        CombatBonus, CombatEndTurn, CombatSoulLink, CombatAllies, CombatDowned, CombatVictory, InventoryOpen, InventoryEquip,
+        InventoryPotion, Loot,
     };
 
     private static readonly TutorialTip[] Table =
@@ -245,12 +255,17 @@ public static class TutorialCatalog
         new()
         {
             Id = CombatStart, Topic = TipTopic.Combat, Title = "A fight", Anchor = TipAnchor.Centre, Blocking = true,
-            Body = "Everyone takes turns, in the order along the top. On yours, move, act, then end your turn.",
+            Body = "Everyone takes turns, in the order over the bar. On yours, shift if you like, act, then end your turn.",
         },
         new()
         {
-            Id = CombatMove, Topic = TipTopic.Combat, Title = "Moving in a fight", Anchor = TipAnchor.Right,
-            Body = "Click where to go. The path shows what it costs in metres, and turns red past what you've got left.",
+            Id = CombatRows, Topic = TipTopic.Combat, Title = "Front and back", Anchor = TipAnchor.Right,
+            Body = "Each side stands in two rows. Melee only reaches the front one; bows and spells reach anyone.",
+        },
+        new()
+        {
+            Id = CombatShift, Topic = TipTopic.Combat, Title = "Shifting", Anchor = TipAnchor.Right,
+            Body = "Once a turn, free: swap with a friend beside or behind you, or step to the other row. Leaving the front draws an attack.",
             Keys = new[] { KeyCaps.Click, "W", "A", "S", "D" },
         },
         new()
@@ -262,8 +277,13 @@ public static class TutorialCatalog
         new()
         {
             Id = CombatAbility, Topic = TipTopic.Combat, Title = "Abilities and spells", Anchor = TipAnchor.Right,
-            Body = "Your skills and spells are on the hotbar. Press 1 to 0 or click one, then a target. Right click cancels.",
+            Body = "Your skills and spells are on the bar. Press 1 to 0 or click one, then a target. Right click cancels.",
             Keys = new[] { "1-0", KeyCaps.Click, KeyCaps.RightClick },
+        },
+        new()
+        {
+            Id = CombatFocus, Topic = TipTopic.Combat, Title = "Focus", Anchor = TipAnchor.Right,
+            Body = "Skills cost Focus, the blue bar. It grows each turn and with every auto attack. A used skill may need turns to cool.",
         },
         new()
         {
@@ -283,13 +303,18 @@ public static class TutorialCatalog
         },
         new()
         {
+            Id = CombatAllies, Topic = TipTopic.Combat, Title = "Help at hand", Anchor = TipAnchor.Right,
+            Body = "Some fights bring allies. A guest fights in your rows; a support acts from behind them at the end of each round.",
+        },
+        new()
+        {
             Id = CombatDowned, Topic = TipTopic.Combat, Title = "Downed", Anchor = TipAnchor.Right,
             Body = "At 0 hit points a friend goes down, and rolls against death each turn. Help them up, or heal them.",
         },
         new()
         {
             Id = CombatVictory, Topic = TipTopic.Combat, Title = "The fight's won", Anchor = TipAnchor.Right,
-            Body = "Everyone who fought shares the experience, and whatever the fallen carried is yours to take.",
+            Body = "Everyone who fought gets the experience, and whatever the fallen carried is yours to take.",
         },
 
         // Gear.

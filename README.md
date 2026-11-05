@@ -606,126 +606,249 @@ says I and C.
 
 ## Combat
 
-Fights are turn-based 5e from the SRD 5.1, on the map you're on, a tile at a time (a tile is 1.5 m,
-and a diagonal step costs the same as a straight one). `Combat/` is the rules and draws nothing:
-`CombatEngine` takes the encounter, who's in it and where, the ground (`ICombatGrid`) and a
-`Random`, and every command (`Begin`, `Move`, `Use`, `EndTurn`, `RunAiTurn`) hands back the
-`CombatEvent`s it caused, in order, each with its whole log line ("SERA attacks GLOOMFANG: 14 + 5 =
-19 vs AC 13 - HIT. 1d8+3 = 9 piercing."), for the screen to play out at its own pace, the way The
-Black Box's table did. Nothing in it waits on time.
+Fights are turn-based 5e from the SRD 5.1, in side-view rows inside the room you're in, the way
+`Story/11-combat.md` lays them out. `Combat/` is the rules and draws nothing: `CombatEngine` takes the
+encounter, who's in it (`CombatantSetup`s), a `Random` and the `FightRules` (the difficulty, the
+story's flags, and where the kits come from), and every command (`Begin`, `Shift`, `Use`, `EndTurn`,
+`RunAiTurn`, `Apply`, `Concede`) hands back the `CombatEvent`s it caused, in order, each with its
+whole log line ("SERA casts PRODUCE FLAME at GLOOMFANG WOLF: 14 + 4 = 18 vs AC 11 - HIT. 1d8 = 6
+fire."), for the screen to play out at its own pace, the way The Black Box's table did. Nothing in
+it waits on time.
 
-- **Turns.** Initiative is d20 + Dexterity (ties to the higher Dexterity, then the party). A turn
-  has 9 m of movement (less in heavy armour you aren't strong enough for, 3 m less when Slowed, none
-  when Restrained), an action, a bonus action and a reaction.
-- **Moving.** Foes block you, allies you can walk through but not stop on. Leaving a foe's reach
-  without Disengaging gives it an opportunity attack, which spends its reaction.
-- **Attacks.** Advantage from Help, a restrained or prone target, a Downed one in reach, and Pack
-  Tactics; disadvantage from Dodge, being restrained, prone or mocked, armour you aren't trained
-  for, a ranged attack with a foe beside you, and a Warden's raised shield. A natural 20 doubles the
-  dice, and so does a hit on someone Downed from beside them.
-- **Kits.** Every class's level-1 kit is in `AbilityCatalog`, with the actions everyone has (Attack,
-  Off-hand, Dash, Disengage, Dodge, Help, Drink Potion, Drink Elixir, Alchemist's Fire). What's spent
-  goes in `PartyMember.Spent` by `ResourceCatalog`'s ids (`spell-slot-1`, `pact-slot`,
-  `second-wind`, `lay-on-hands`, `bardic-inspiration`), and `ResourceCatalog.Recharge` gives it back
-  on a short or long rest. Hex and Entangle need concentration, which damage can break.
+- **Rows.** Each side has a front row and a back row, in lanes: the party's front is slots 1 to 3
+  and its back 4 to 6, the foes' 1 to 4 and 5 to 8, so a lane's back slot is behind its front one. A
+  big foe (the Thornmother) takes two slots side by side. `Formation` is who stands where, and
+  `FightRoster` lines the party up: anyone whose auto attack is melee in front, everyone else at the
+  back, guests in the row they'd rather, and whoever the fight sits out left out of it.
+- **Reach.** Melee needs you in your side's front row and reaches only theirs; a reach weapon
+  reaches either row from your front and their front from your back; ranged attacks, spells and
+  "any row" skills (Backstab) reach anyone. A side's front is its back row once nobody's standing in
+  front, and a Downed party member keeps their slot but screens nobody. Shapes say who else a pick
+  catches: a foe and those beside it (Blasting Charge), a row (Entangle, Thorn Burst), a column, a
+  side, or random picks.
+- **Turns.** Initiative is d20 + Dexterity. A turn has a Shift, an action, a bonus action, and a
+  reaction to use before your next turn. A **Shift** is free, once a turn: swap with an ally next to
+  you, or step into an empty slot in the other row. Restrained, Prone and Slowed stop it, and
+  standing up from Prone spends it. Leaving the front row while a foe in theirs has melee and its
+  reaction gives the one that'd hurt most a swing first, unless you're Disengaged.
+- **Focus.** It replaces spell slots and per-rest uses. The party's side starts a fight on the
+  difficulty's (40 on Balanced), foes on 40; everyone gains 15 at the start of their own turn and 10
+  for each auto attack, up to 100, and it's gone when the fight ends. Skills cost Focus, some have a
+  cooldown counted in your own turns, and ultimates are once a fight. A stat block pays no Focus: a
+  foe's Focus skill is once a fight for it instead. A foe with `FocusDrain` takes Focus off whoever
+  it hits.
+- **Kits.** Until `10-classes.md`'s skills come in, everyone fights from the interim kits
+  (`AbilityCatalog.Interim`, through `IKitSource`): the class's auto attack, a skill or two, and the
+  shared actions (Dodge, Help, Drink Potion, which can be handed to an ally next to you, Alchemist's
+  Fire, Drink Elixir for 30 Focus, and the Soul-Link Strike).
+
+| Class | Auto | Skills (Focus / cooldown) |
+| --- | --- | --- |
+| Fighter | Attack | Second Wind (bonus) 20/4; Defence |
+| Rogue | Attack, with Sneak Attack | Backstab 20/0, any row; Cunning Step (bonus) 20/2: a free Shift nobody gets a swing at, and Dodging |
+| Cleric | Sacred Flame | Cure Wounds 25/1; Healing Word (bonus) 20/1 |
+| Wizard | Fire Bolt | Magic Missile 25/1, three darts; Ray of Frost 15/0, Slowed |
+| Paladin | Attack | Lay on Hands 20, from a pool of 5 a level a fight; Protection |
+| Druid | Produce Flame | Entangle 30/3, a row Restrained 2 turns; Healing Word (bonus) 20/1 |
+| Warlock | Eldritch Blast | Hex (bonus) 20 |
+| Bard | Vicious Mockery | Bardic Inspiration (bonus) 20/1; Healing Word (bonus) 20/1 |
+
+- **Attacks.** Advantage from Help, and on a Restrained, Marked, Stunned, Blinded or Prone target
+  (Prone gives ranged disadvantage instead), Pack Tactics (another of the pack standing in its front row, and you in
+  yours), and a Downed target hit in melee, which is a critical too; disadvantage from Dodge,
+  Poisoned, Frightened, Blinded, being mocked, armour you aren't trained for, and a Warden's raised
+  shield over someone next to them. Sneak Attack rides on advantage, on a target an ally hit this
+  round, and on a Marked or Prone one. Burning, Bleeding and Poisoned hurt at the start of a turn;
+  Frozen and Stunned lose it; Taunted and Charmed narrow who can be picked.
 - **Going down.** A party member at 0 is Downed and rolls death saves on their turn; a hit on them is
-  a failure (two for a critical), a 20 gets them up on 1 HP, and healing or Help gets them up any time.
-  Foes at 0 die. A fight to yield (Kael's duel) or a brawl (the Red Gulls) knocks people out
-  instead; the duel ends when Kael gives up.
+  a failure (two for a critical), a 20 gets them up on 1 HP, and healing or Help gets them up any
+  time. Foes at 0 die. A fight to yield (Kael's duel) or a brawl (the Red Gulls) knocks people out
+  instead; the duel ends when Kael gives up. Nobody in the party dies for good: whoever's fallen gets
+  up on 1 HP once it's won.
 - **The Soul-Link.** When you and the Soul-Bound both hit the same foe between your turns it
   charges; at two charges either of you can spend it on the Soul-Link Strike, both weapons and 1d8
-  radiant on a sure hit, and the Soul-Bound says their P-05 lines as bark events.
-- **Waves.** An encounter can bring more foes on a later round, sooner if everyone before them is
-  beaten, and guests who fight on your side (Mira at Thornbridge, Kael against the sappers). It can
-  also sit party members out (`SitsOut`: Sera, while she draws the rot out of the crystal).
-- **The AI.** `EnemyMind` floods out everywhere the one whose turn it is could walk, scores every
-  ability on everyone from there (hit chance times damage, the chance of dropping them, how hurt and
-  how dangerous they are, what the walk risks in opportunity attacks, staying out of reach for
-  anyone who fights from range), does the best thing, and goes again. Getting someone up is worth
-  less each time they've already gone down that fight, so nobody spends every turn hauling up a
-  friend who's knocked straight back down. Every weight is a named constant. It has no randomness
-  of its own, so a seed replays a fight exactly.
+  radiant on a sure hit, if you can both reach the foe with your autos. While `soul-bond-broken` is
+  set it's off.
+- **Allies.** A **guest** (`EncounterGuest`) stands in a slot on your side and EnemyMind plays them;
+  at 0 they fall back out of the fight, unhurt for the story (Mira at Thornbridge, Kael against the
+  sappers). A **support** (`EncounterSupport`) stands behind the rows where nobody can hit it, and at
+  the end of each round from its `FromRound` it does one sure thing (Odelle's crew's boat-hooks,
+  Tomas's net, Sera's arrows from the trees, the Lodge's wardens, the Watch's crossbows); a script
+  can stand it down (`support-off`). Either can wait on a story flag (`When`): the wardens only come
+  if Tamsin was told the Lodge sent you.
+- **Waves and endings.** An encounter can bring more foes on a later round (sooner if everyone
+  before them is beaten), each to its slot or the nearest free one, end after so many rounds
+  (`EndsAfterRounds`: hold the den for five while Sera draws the rot out, her ring filling as it
+  goes), and sit party members out (`SitsOut`).
+
+### Difficulty and levels
+
+`Settings.Difficulty` picks one of `11-combat.md` §6.1's modes, changeable any time outside a fight;
+`DifficultyRules` holds what each changes, for foes only, never a guest:
+
+| | Story | Balanced (default) | Tactician |
+| --- | --- | --- | --- |
+| Foe hit points | -35% | as tuned | +25% |
+| Foe to-hit and save DCs | -2 | as tuned | +1 |
+| Your side's Focus at the start | 60 | 40 | 30 |
+| After a story fight | Full heal | Heal half of what's missing | Nothing |
+| Losing | Retry, and "Win this fight" after two losses | Retry, or retry on Story for this fight | Retry |
+
+Levels come from experience: `LevelTable.Expected` is the level the story has the party at for a
+fight (§6.3: level 1 in the Prologue and A1-C1, 2 in A1-C2 and A1-C3, 3 in A1-C4), a story fight
+gives about a third of a level at that level, less above it and more below, and `Leveling` brings
+the hit points with each.
+
+### The AI
+
+`EnemyMind` plays whoever's turn it is, foe or guest, or the party under `--simulate`. For staying
+put and for every slot a Shift could take them to (tried on with `Formation.Try` and put back), it
+scores every ability they could use on everyone it could be pointed at, and Shifting alone, does the
+best, and goes again until nothing's worth doing. A score is in points of damage, every weight a
+named constant: an attack is its hit chance times its damage, plus the chance it drops the target,
+how hurt and how dangerous they are, and what it puts on them; healing a point is worth a little
+more; getting someone up is worth the most, and less each time they've gone down already, so
+nobody spends every turn hauling up a friend who's knocked straight back down; a skill with a price
+(Focus, a cooldown, once a fight) costs a little, so autos come first unless the skill buys more.
+
+A Shift costs what its opportunity attack would do (the damage, and the chance it drops them), or
+just the bonus action if Cunning Step can slip away first, and earns whatever it does for where
+the side stands: an archer or caster behind a front row is worth 4, and the side is charged twice
+for what the foes' melee could do to it in a round, each foe at the one of them it'd pick by its own
+sums, with the cost of getting them back up if it dropped them. So the rogue steps back behind your
+shield and Backstabs from there, a hurt friend stops standing in front, and the foes' fragile stay
+behind theirs. Something on themselves (a potion, Second Wind) is done before a dangerous Shift,
+not after. `Predict` gives the would-be pick without acting, for the intent icon over a foe. It has
+no randomness of its own, so a seed replays a fight exactly.
 
 | File | What it is |
 | --- | --- |
-| `CombatEngine` | The rules, in partials: turns and waves, movement, abilities, attacks, health, and the odds for the tooltip |
-| `Combatant`, `TurnBudget`, `ActiveCondition` | Someone in a fight, what's left of their turn, and what's on them |
-| `AbilityCatalog`, `ResourceCatalog`, `CombatStats` | What everyone can do, what it spends, and a party member's numbers from their kit |
-| `EnemyCatalog`, `EncounterCatalog` | The foes' stat blocks, and every fight by the story's id |
-| `EnemyMind`, `CombatSimulator` | The AI, and `--simulate` |
+| `CombatEngine` | The rules, in partials: turns, waves and endings; the rows, reach, Shift and pulls; allies and orders; abilities and their prices; attacks; health; and the odds for the tooltip |
+| `Formation`, `Slot`, `FightRoster` | Who stands where, one place to stand, and how a fight lines up |
+| `Combatant`, `TurnBudget`, `ActiveCondition` | Someone in a fight (their Focus and cooldowns too), what's left of their turn, and what's on them |
+| `AbilityCatalog`, `IKitSource`, `CombatStats` | What everyone can do and the interim kits, where kits come from, and a party member's numbers from what they wear |
+| `EnemyCatalog`, `EncounterCatalog` | The foes' stat blocks, and every fight by the story's id with its slots, waves, guests and supports |
+| `FightRules`, `DifficultyRules`, `Rules/LevelTable`, `Characters/Leveling` | What a fight's played by, what each difficulty changes, and the levels |
+| `EnemyMind`, `CombatSimulator`, `StallWatch` | The AI, `--simulate`, and why a simulated fight never finished |
 | `ShownFight`, `TurnPlan` | The fight as far as the screen's shown it, and what a click on your turn would do |
-| `World/Rooms/RoomCombatGrid` | The room's floor a fight's on, as the engine sees it, until M4's rows |
-| `Screens/ExploreScreen.Combat*` | The fight on the map: starting and ending it, playing it out, its cues, your turn, the cards, drawing it, its tips, and the proof run's hooks |
-| `Components/CombatHotbar`, `BudgetBar`, `InitiativeBar`, `UnitFrame`, `SoulLinkSigil` | The hotbar and END TURN, what's left of the turn, the turn order, the frame of whoever's turn it is, and the Soul-Link's meter |
+| `World/Rooms/FightStage` | Where each slot stands in the room |
+| `Screens/ExploreScreen.Combat*` | The fight in the room: starting and ending it, playing it out, its cues, your turn, the cards, drawing it, its tips, and the proof run's hooks |
+| `Components/CombatHotbar`, `BudgetBar`, `InitiativeBar`, `UnitFrame`, `SoulLinkSigil`, `SupportBanner` | The bar and END TURN, what's left of the turn, the turn order, the frame of whoever's turn it is, the Soul-Link's meter, and a support's banner |
 | `Components/CombatLog`, `CombatCard`, `TurnBanner`, `DamagePopups`, `CombatResult` | The log, the card by whatever's pointed at, the banner when a turn starts, the numbers that pop, and the panel at the end |
 | `Components/CombatEffects`, `ScreenShake`, `CombatStyle`, `CombatArt` | What's thrown about (sparks, motes, what flies), the shake, the colours and sounds of each kind of damage, and the fight's sheets |
 
+### The simulator
+
 ```
-dotnet run -- --simulate a1-c1-01-gulls 2000   # fight it 2000 times headless, AI on both sides
-dotnet run -- --simulate all                   # every encounter, 1000 times each
+dotnet run -- --simulate a1-c1-01-gulls 2000      # fight it 2000 times headless, AI on both sides
+dotnet run -- --simulate all 200                  # every encounter, 200 times each, on Balanced
+dotnet run -- --simulate all 200 story            # the same on Story (or tactician)
 ```
 
-`--simulate` opens no window. The party is the default level-1 one (you as a Blademaster, the
-Soul-Bound as a Shadowstep, and the companions who'd be there, with the two potions you start with)
-on open ground a move away from the foes, and it prints the win rate, the rounds, and each member's
-hit points left and how often they went down. A fight that runs into the 30-round cap is counted
-as unfinished, and `StallWatch` says why from its last five rounds: a revive treadmill, a
-stand-off, one side unable to hurt the other, or just a slow fight. The targets are constants in `CombatSimulator`: the
-tutorial 98% or more, story fights 80 to 92%, bosses 65 to 80%. These are the simulator's own
-numbers, `--simulate all 1000` with its seed, after tuning; nothing ran into the round cap.
+`--simulate` opens no window. Each run lines up the party the story would have there (you as a
+Blademaster, the Soul-Bound as a Shadowstep, and the companions who'd be with you) at
+`LevelTable.Expected`, fresh, in the interim kits, with the two potions a party sets out with,
+through `FightRoster` as the game does, with the fight's guests and supports and the foes in their
+slots, on the difficulty asked for. An ally who only comes on a story flag is fought both ways: the
+verdict is on the fight without them, the harder one, and the fight with them is printed beside it.
+Every fight starts again from the seed, so it prints the same whether it's fought alone or with the
+rest, and two runs print the same thing. A fight still going after 30 rounds is unfinished, and
+`StallWatch` says why from its last five: a revive treadmill, a stand-off, one side unable to hurt
+the other, or just a slow fight.
 
-| Encounter | Target | Won | Rounds | Who goes down most |
-| --- | --- | --- | --- | --- |
-| `p-05-wraiths` | 98%+ | 100% | 4.0 | nobody |
-| `a1-c1-01-gulls` | 80-92% | 88.3% | 6.1 | the Soul-Bound, 71% |
-| `a1-c2-01-gloomfangs` | 80-92% | 89.6% | 4.8 | the Soul-Bound, 49% |
-| `a1-c2-02-thornmother` | 65-80% | 78.4% | 8.8 | the Soul-Bound, 98% |
-| `a1-c2-02-guard-wave` | 80-92% | 83.9% | 6.0 | the Soul-Bound, 61% |
-| `a1-c3-02-raid` | 80-92% | 81.4% | 8.3 | the Soul-Bound, 78% |
-| `a1-c4-02-kael` | 80-92% | 88.3% | 6.2 | the Soul-Bound, 91% |
-| `a1-c4-02-sappers` | 80-92% | 81.3% | 5.1 | the Soul-Bound, 81% |
+Each fight prints its own tables (how it went, and each member's hit points left, how often they
+went down or a guest fell back, and died), then the report, one line a fight: FIGHT, KIND, LV,
+ALLIES, WON, TARGET, ROUNDS, MOST DOWNED (the one of the party who went down in the most runs), CAP,
+UNFINISHED and VERDICT. It exits 1 if anything fails. The targets are §6.2's, constants in
+`CombatSimulator`:
 
-Getting there took two things the first runs showed up. A fighter in heavy armour kept picking the
-same Downed friend up every turn and never hit back, so a handful of fights never ended; picking
-someone up is now worth less each time they've gone down in the fight. And the Soul-Bound, a
-Shadowstep in leather, died in nearly a quarter of the Red Gulls fights, which the story can't
-have, so that fight is a brawl with cudgels now: nobody dies in it, and Grell is alive to beg after.
-In the game nobody in the party dies for good in any fight: whoever's fallen gets up on 1 HP once
-it's won.
+| Kind | Won, on Balanced | Most downed may be |
+| --- | --- | --- |
+| The tutorial | 99%+ | 40% |
+| Random fights | 97%+ | 40% |
+| Story fights | 92 to 97% | 40% |
+| Mini-bosses (the Thornmother, Kael's duel) | 88 to 94% | 70% |
+| Bosses | 82 to 90% | 70% |
+| The Sovereign | 78 to 88% | 70% |
 
-How I'd tune one that's off: hit points first, since they change how long a fight lasts without
-changing what each turn feels like; then the to-hit, which changes how often anyone goes down; damage
-last, because a level-1 party has so few hit points that one more point a hit is a lot. A boss gets
-its AC and hit points moved, not its attacks, since they're what makes it frightening. Waves are the
-last thing to move, since they change the shape of the fight. `EnemyMind`'s weights are how foes
-behave, not how hard they are, so they stay put unless a foe's doing something silly. The leather
-Shadowstep and Wildcaller are the party's soft spots, so most fights are tuned round how quickly
-they go down.
+On Story every fight has to be won 99% of the time or more; Tactician's verdicts are for
+information, about 15 points under Balanced's. Nothing may be unfinished. These are the numbers
+after the retune, `--simulate all 200` with its seed, on Balanced (8 of 8 pass; on Story every fight
+is 99.5% or more):
 
-What the story asks of a fight comes before any of that. The wraiths at sea take two hits each and
-only chill you, so the Soul-Link fills against them and nobody goes down while they learn. The Red
-Gulls are a brawl, so nobody dies on the docks and Grell's alive to beg. The Thornmother frightens
-by lasting (her hit points and a thorn-hard hide) and by knocking you flat (Trip), not by hitting
-harder. The guard wave comes in three, the pack, the courier's dead escort, then a straggler, while
-Sera sits it out at the crystal. The sappers are diggers, a point worse with a pick than a soldier
-would be.
+| Encounter | Kind | Lv | Allies | Won | Rounds | Who goes down most |
+| --- | --- | --- | --- | --- | --- | --- |
+| `p-05-wraiths` | Tutorial | 1 | Odelle's crew | 100% | 4.1 | nobody |
+| `a1-c1-01-gulls` | Story | 1 | Tomas | 97.0% | 5.5 | the Soul-Bound, 20% |
+| `a1-c2-01-gloomfangs` | Story | 2 | Sera in the trees | 97.0% | 5.2 | the Soul-Bound, 12.5% |
+| `a1-c2-02-thornmother` | MiniBoss | 2 | (the wardens, if told) | 91.0% (99.5% with them) | 11.0 | the Soul-Bound, 52% |
+| `a1-c2-02-guard-wave` | Story | 2 | Sera at the crystal | 93.0% | 5.0 | the Soul-Bound, 30% |
+| `a1-c3-02-raid` | Story | 2 | Mira; the Watch | 96.0% | 10.1 | the Soul-Bound, 32.5% |
+| `a1-c4-02-kael` | MiniBoss | 3 | none | 89.0% | 9.1 | you, 66% |
+| `a1-c4-02-sappers` | Story | 3 | Kael | 93.5% | 9.5 | Mira, 37% |
+
+### Tuning
+
+How to tune one that's off, in this order (§7): the supports' dice and the round they start, since
+an ally is the gentlest way to change a fight without changing it; Focus (a foe's `FocusDrain`, then
+the kits' costs and cooldowns); foe hit points, which change how long a fight lasts without
+changing what each turn feels like; foe to-hit, which changes how often anyone goes down; damage,
+since one more point a hit is a lot at these levels; and waves and `EndsAfterRounds` last, since
+they change the shape of the fight. A boss gets its AC and hit points moved, not its attacks.
+`EnemyMind`'s weights are how everyone behaves, not how hard a fight is, so they move only when
+someone's doing something silly. Tune on 600 runs or more, since 200 is about three points either
+way, and confirm on 200.
+
+The rows retune started from every story fight won 100% of the time and the Soul-Bound, the AC 13
+Shadowstep, going down in up to 99% of the Thornmother's. Three things were silly first, and are
+`EnemyMind`'s: nobody ever left the front row, so whoever had the least armour took every swing;
+a hurt rogue stepped back past a foe and then drank its potion, so the swing dropped it first; and
+the wraiths dodged rather than hit, since every foe in front counted as one beside you. With those
+fixed, the numbers that moved:
+
+- **Supports:** Tomas's net and Sera's arrows from the trees from round 3, not 2, and the Watch from
+  round 4, not 3.
+- **Kits:** Backstab has no cooldown, so the rogue can fight from the back row every turn it has the
+  Focus; Cunning Step's cooldown is 2, not 3.
+- **The Gulls:** thugs 2d6+2 hit points (from 2d4) and +2 (from +1); Grell +5 (from +3).
+- **The wolves:** 3d6+3 hit points (from 2d4+1), and a bite at +4 for 1d6 (from +3 for 1d4).
+- **The Thornmother:** AC 15 (from 14) and 12d10+24 hit points (from 10d10+20), with her bite and
+  claws at +5 (from +7): she lasts, and knocks you flat, and hits less surely.
+- **The Hollowed:** footmen 4d8+4 hit points (from 2d8+2) with a 1d10+1 blade (from 1d8+1); hexers
+  3d8 (from 2d8).
+- **The sappers:** 4d8+4 hit points (from 2d8+2), still +3 with a pick; the chief 7d8+14 (from
+  5d8+10); Blasting Charge 2d6+2 (from 2d6).
+- **Kael:** 16d8+16 hit points (from 11d8+11), +8 (from +5), a 2d8+3 rapier and 1d6+3 off-hand and
+  feint (from 1d8+3 and 1d4+3): one duellist against four only ever reaches whoever holds the front.
+
+What the story asks of a fight comes before any of that. The wraiths at sea only chill you, so the
+Soul-Link fills against them and nobody goes down while they learn. The Red Gulls are a brawl, so
+nobody dies on the docks and Grell's alive to beg. The Thornmother frightens by lasting (her hit
+points and a thorn-hard hide) and by knocking you flat (Trip), not by hitting harder. The guard wave
+comes in three, the pack, the courier's dead escort, then a straggler, while Sera sits it out at
+the crystal. The sappers are diggers, a point worse with a pick than a soldier would be.
 
 ### On screen
 
-A fight happens on the map you're on. A conversation that ends with `DialogueEffect.Fight` starts
-it when it's over, the way a shop or a journey waits for the talking to end, and the game's
-autosaved first, so a lost fight can be fought again. Everyone steps onto the middle of their tile
-(the nearest free one, if theirs is taken or under a shelf), foes who were standing about turn,
-foes who turn up fade in where they arrive, guests join you at your side, and anyone the encounter
-`SitsOut` stays where they are. The battle's song comes in, the fight's name goes across the
-screen, and the initiative dice fill the turn order in along the top a portrait at a time.
+A fight happens in the room you're in, side-on, in rows. A conversation that ends with
+`DialogueEffect.Fight` starts it when it's over, the way a shop or a journey waits for the talking
+to end, and the game's autosaved first, so a lost fight can be fought again. `World/Rooms/FightStage`
+lays the slots out across the room's fight range: your side's front and back rows on the left, the
+foes' on the right, front rows facing each other across the middle. The party walks to its slots
+and the foes standing about walk to theirs; foes who turn up fade in at theirs; guests take free
+slots on your side, and supports (Odelle's crew, Tomas, the Watch on the wall, Sera at the
+treeline) stand behind the rows with a banner saying what they'll do at the end of each round.
+Anyone else in the room steps back to the far edge to watch, or leaves by the nearest edge if the
+fight's to the death, and comes back after. The battle's song comes in, the fight's name goes
+across the screen, and the initiative dice fill the turn order in along the top a portrait at a
+time, with the supports' line at the end of it.
 
 The engine works each command out whole, and `ExploreScreen.CombatPlayback` shows what it caused a
 beat at a time, the way The Black Box's table read its round a line at a time. `ShownFight` keeps
 up with what's been shown, so the bars, the turn order and the death saves never get ahead of the
 picture. `ExploreScreen.CombatCues` is what each beat looks and sounds like:
 
-- **A step** is a slide from tile to tile, walking.
+- **A Shift** is a walk to the new slot, swapping with whoever's there.
 - **An attack** winds up, then lunges, or lets fly (an arrow, a fire bolt, a frost ray, an eldritch
   blast, a flask lobbed in an arc, each turned to where it's going and trailing its colour). Its
   log line goes in as it lands, with the sparks in the damage's colour, the damage's sound, the
@@ -745,19 +868,20 @@ picture. `ExploreScreen.CombatCues` is what each beat looks and sounds like:
 - **A turn** starts with its banner (YOUR TURN, or whose it is) and the camera going to them. A
   foe's turn waits a moment so its banner can be read, then EnemyMind plays it, at the same pace.
 
-On your turn the hotbar along the bottom is whoever's turn it is: the fighting slots (the weapon
-and the class's own), the Soul-Link Strike, moving about, and the bag, each with its key, what's
-left of what it spends, and END TURN after them. Over it are the action's circle, the bonus
-action's triangle, the reaction and the movement bar, each pale for what the thing you're pointing
-at would spend. Pointing at the ground shows the tiles you can reach, the path there and what it
-costs, the part past your movement in the other colour, and an ember ring under every foe it'd let
-swing at you. Pointing at someone shows the card: their health and armour, what's on them, and what
-a click would do, with the engine's own odds ("72% TO HIT", "4 TO 11 SLASHING", "DC 13 DEX SAVE  ·
-58% THEY FAIL"), the range, and the walk into reach if there is one. Anything that can't be done
-says why, in the engine's words. Everything on the screen has a card: a slot (what it costs, how
-far it reaches, its dice and its DC, what's left of it until which rest), the budget's parts, the
-sigil, a condition, an always-on ability. The frame in the bottom left is whoever's turn it is,
-the log is up the left side over it, and the tips come up on the right.
+On your turn the bar along the bottom is whoever's turn it is: their portrait, health and Focus,
+six buttons on 1 to 6 (the auto attack, three skills, the ultimate and a potion, each with its Focus
+cost and any cooldown), a small strip on 7 to 0 for Dodge, Help, a throw and an elixir, the
+Soul-Link sigil (click it to strike when it's charged), and END TURN. Over it are the action's
+circle, the bonus action's triangle, the reaction and the Shift pip, each pale for what the thing
+you're pointing at would spend. Plates glow under every slot; picking or pointing at a skill lights
+the plates it can reach, so the row a melee swing can't get past shows plainly, and tints whoever
+its shape would catch. Chevrons mark where you can Shift, and pointing at one rings any foe that'd
+get a swing at you for leaving the front. Pointing at someone shows the card: their health and
+armour, what's on them, and what a click would do, with the engine's own odds ("72% TO HIT",
+"4 TO 11 SLASHING", "DC 13 DEX SAVE  ·  58% THEY FAIL"). Anything that can't be done says why, in
+the engine's words ("Needs 25 Focus.", "Ready in 2 turns."). Over each foe is its health, and once
+you've seen it do something, what it means to do next. Everything on the screen has a card. L
+shows the log; the tips come up on the right.
 
 When the last foe's beaten the panel comes up with the experience, the gold and what the fallen
 carried (each foe's `LootTable` and the encounter's, rolled into the gold and the bag), the
@@ -768,13 +892,13 @@ stays off the map for the rest of the visit, and its presence flag keeps it off 
 no saving mid-fight, and no inventory: what's worn can't change in the middle of one.
 
 The first fight, the wraiths at sea, is marked `Tutorial`: the combat tips come a lesson at a time
-on your turns (moving, attacking, the bonus action once the action's spent, ending the turn,
-abilities from your second turn, the Soul-Link the first time it charges), and with tips on,
-whatever each is about pulses gold until you've done it: the ground you can reach, the foes, the
-slot, END TURN. In any other fight the same tips come once, the first time their moment does.
+on your turns (the rows and who can reach whom, Shift, attacking, Focus and the skills, the bonus
+action once the action's spent, allies, ending the turn, the Soul-Link the first time it charges),
+and with tips on, whatever each is about pulses gold until you've done it: the plates, the foes,
+the button, END TURN. In any other fight the same tips come once, the first time their moment does.
 
 The proof run has `ProofAutoplay(on, speed)` to have EnemyMind play the party too (the panel at the
-end goes by itself), `ProofAimAtFighter(id)` and `ProofAimAtCell(cell)` to point,
+end goes by itself), `ProofAimAtFighter(id)` and `ProofAimAtSlot(slot)` to point,
 `ProofPressAbility(id)` to pick a slot, `ProofClick()` to click, `ProofShowLog(shown)` and
 `ProofContinue()`, and `ProofInFight`, `ProofYourTurn` and `ProofFightOver` to wait on.
 
@@ -1280,7 +1404,7 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `Story/` is the story's tables (`Meters`, `KeyItems`, `Paintings`, `Tints`, `Cast`, the quest board's `Postings`, and `Banters`) and the plan the rest of the game is built from: the build plan, the writing guide, the scripts, the specs for rooms, combat, classes and art, and the generated registry (`Story/README.md` says what each is), with their two tools in `Story/tools/`.
 - `Tutorial/` is the tutorial's tips, which draw nothing: `TutorialTip`, every one of them in `TutorialCatalog`, and `Tutorials` for which a game has seen and which are waiting. `TutorialPanel` and `KeyCaps` in `Components/` show them.
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
-- `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the catalogs (`AbilityCatalog`, `ResourceCatalog`, `EnemyCatalog`, `EncounterCatalog`), `EnemyMind` for the AI, `CombatSimulator` for `--simulate`, and the grid it all happens on (`ICombatGrid`, `OpenGround`, `Measure`).
+- `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the rows it all happens in (`Formation`, `Slot`, `FightRoster`), the rules a fight's played by (`FightRules`, `DifficultyRules`, `IKitSource`), the catalogs (`AbilityCatalog`, `EnemyCatalog`, `EncounterCatalog`, with the encounters' `EncounterGuest`s and `EncounterSupport`s), `EnemyMind` for the AI, and `CombatSimulator` and `StallWatch` for `--simulate`.
 - `Items/` is everything that can be carried, worn or sold: `ItemDefinition` and `ItemCatalog`, the bag (`Inventory` over the save's `ItemStack`s), the shops (`ShopDefinition`, `ShopCatalog`) and what foes drop (`LootTable`, `LootResult`, `LootTableCatalog`). The inventory's and the shops' rules are here too, drawing nothing: `Wardrobe`, `Trade`, `GearComparison`, `ItemReadout` and `BagOrder`.
 - `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.

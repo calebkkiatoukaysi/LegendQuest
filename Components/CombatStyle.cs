@@ -50,6 +50,12 @@ public static class CombatStyle
     /// <summary>What a foe's lines in the log are written in: a soft red, so the eye can tell whose turn did what.</summary>
     public static readonly Color FoeLine = new(240, 164, 150);
 
+    /// <summary>What Focus is written in (a skill's cost, the Focus left): the Focus bar's cool blue, light enough to read on the navy.</summary>
+    public static readonly Color FocusText = new(150, 200, 255);
+
+    /// <summary>The ember the opportunist's ring under a foe is drawn in, and the tint over a slot a skill would catch.</summary>
+    public static readonly Color Threat = new(255, 132, 64);
+
     /// <summary>Each kind of damage: its sparks' colour, and the sound of it landing.</summary>
     private static readonly Dictionary<DamageType, (Color Colour, Sfx Sound)> Damage = new()
     {
@@ -94,6 +100,16 @@ public static class CombatStyle
         [ConditionId.Stable] = true,
         [ConditionId.Helped] = true,
         [ConditionId.Mocked] = false,
+        [ConditionId.Marked] = false,
+        [ConditionId.Taunted] = false,
+        [ConditionId.Burning] = false,
+        [ConditionId.Bleeding] = false,
+        [ConditionId.Frozen] = false,
+        [ConditionId.Poisoned] = false,
+        [ConditionId.Stunned] = false,
+        [ConditionId.Blinded] = false,
+        [ConditionId.Frightened] = false,
+        [ConditionId.Charmed] = false,
     };
 
     /// <summary>What each condition does, in a line, for its icon's card.</summary>
@@ -110,6 +126,16 @@ public static class CombatStyle
         [ConditionId.Stable] = "Downed but no longer dying: no more death saves, still out until healed.",
         [ConditionId.Helped] = "Advantage on their next attack.",
         [ConditionId.Mocked] = "Rattled: disadvantage on their next attack.",
+        [ConditionId.Marked] = "The next attack on them has advantage.",
+        [ConditionId.Taunted] = "Their attacks have to go at whoever taunted them, when they can.",
+        [ConditionId.Burning] = "On fire: damage at the start of each of their turns.",
+        [ConditionId.Bleeding] = "Damage at the start of each of their turns.",
+        [ConditionId.Frozen] = "Stopped in time: they skip their turns, and only an area can reach them.",
+        [ConditionId.Poisoned] = "Damage at the start of each of their turns, and disadvantage on their attacks.",
+        [ConditionId.Stunned] = "They skip their turns, and attacks on them have advantage.",
+        [ConditionId.Blinded] = "Disadvantage on their attacks, and attacks on them have advantage.",
+        [ConditionId.Frightened] = "Disadvantage on their attacks.",
+        [ConditionId.Charmed] = "They can't attack whoever charmed them.",
     };
 
     /// <summary>Checks every kind of damage and every condition has its look, and that everything that flies is on hud.png.</summary>

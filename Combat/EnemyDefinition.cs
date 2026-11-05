@@ -53,4 +53,10 @@ public sealed class EnemyDefinition
 
     /// <summary>Whether it fights from range, so the AI keeps it away from the front.</summary>
     public bool Ranged { get; init; }
+
+    /// <summary>Whether it's big enough to stand across two slots side by side (the Thornmother). Nothing can pull or push it.</summary>
+    public bool Big { get; init; }
+
+    /// <summary>The Focus each of its hits takes from whoever it hits, as well as the damage, or 0.</summary>
+    public int FocusDrain { get; init; }
 }

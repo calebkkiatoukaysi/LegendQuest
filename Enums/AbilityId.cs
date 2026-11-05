@@ -19,10 +19,10 @@ public enum AbilityId
     /// <summary>A bonus-action attack with a light weapon in the off hand, after attacking with a light one in the main hand.</summary>
     OffHandAttack,
 
-    /// <summary>Spends the action on as much movement again.</summary>
+    /// <summary>In no kit since fights went to rows: kept for its icon's place.</summary>
     Dash,
 
-    /// <summary>Moving doesn't provoke opportunity attacks for the rest of the turn.</summary>
+    /// <summary>Leaving the front row doesn't give anyone an opportunity attack for the rest of the turn. In no kit since fights went to rows.</summary>
     Disengage,
 
     /// <summary>Attacks against you have disadvantage until your next turn.</summary>
@@ -50,13 +50,13 @@ public enum AbilityId
 
     // Rogue.
 
-    /// <summary>An extra 1d6 once a turn with a finesse or ranged weapon, with advantage or an ally beside the target.</summary>
+    /// <summary>An extra 1d6 once a turn with a finesse or ranged weapon, with advantage, or on a target an ally's hit this round, or one that's Marked or Prone.</summary>
     SneakAttack,
 
-    /// <summary>Cunning Action: Dash as a bonus action.</summary>
+    /// <summary>Cunning Action: Dash as a bonus action. In no kit since fights went to rows: kept for its icon's place.</summary>
     CunningDash,
 
-    /// <summary>Cunning Action: Disengage as a bonus action.</summary>
+    /// <summary>Cunning Step: a free Shift nobody gets a swing at, and Dodging, as a bonus action.</summary>
     CunningDisengage,
 
     // Cleric.
@@ -86,7 +86,7 @@ public enum AbilityId
     /// <summary>A pool of healing by touch, spent a hit point at a time.</summary>
     LayOnHands,
 
-    /// <summary>The Protection fighting style: the reaction that turns an attack on someone beside you to disadvantage, with a shield up.</summary>
+    /// <summary>The Protection fighting style: the reaction that turns an attack on someone next to you to disadvantage, with a shield up.</summary>
     Protection,
 
     // Druid (and Healing Word).
@@ -118,7 +118,7 @@ public enum AbilityId
     /// <summary>The Attack action makes every one of the foe's attacks, not just one.</summary>
     Multiattack,
 
-    /// <summary>Advantage on an attack when another of the foe's side is beside the target.</summary>
+    /// <summary>Advantage on an attack on someone in the front when another of the foe's side is standing in its own front row.</summary>
     PackTactics,
 
     /// <summary>A melee hit knocks the target Prone unless they make a Strength save.</summary>
@@ -130,11 +130,16 @@ public enum AbilityId
     /// <summary>A lit charge of blasting powder thrown into a crowd: fire on everyone near where it lands.</summary>
     BlastingCharge,
 
-    /// <summary>Thorns burst out of the Thornmother's hide into everyone beside her.</summary>
+    /// <summary>Thorns burst out of the Thornmother's hide into the row in front of her.</summary>
     ThornBurst,
 
     // Anyone, again: the hotbar puts it beside Drink Potion.
 
     /// <summary>An elixir of focus out of the party's bag, as a bonus action: a spent spell slot back.</summary>
     DrinkElixir,
+
+    // Rogue, again: the rows' first skill that reaches past the front.
+
+    /// <summary>A weapon strike on any foe, front row or back.</summary>
+    Backstab,
 }

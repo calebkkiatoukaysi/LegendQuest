@@ -42,8 +42,9 @@ The rules (build plan §4.1 and §5.3, the notation table in 04, and the M1 team
               twelve faces; the callback is stripped; → end ends the script
   effects     ~ a · b: set f, clear f, m +n, m -n, m =n, gold ±n, give x, take x, join x, fight x,
               objective "…", travel map spawn, rest, voice v, shop x, swap a b, leave x, rejoin x
-              (rejoin valencia also adds affinity-valencia +5 if mc-claimed-valencia). train, cp, xp,
-              support-off, fight-add and fight-guest parse, but come with M4 and M5.
+              (rejoin valencia also adds affinity-valencia +5 if mc-claimed-valencia), xp +n,
+              support-off x, fight-add enemy n, fight-guest x. The game's start-up check holds the
+              last three to a fight's interlude. train and cp parse, but come with M5.
   options     "  1. ♥ [needs c] [locked c] [PERSUADE 13 · adv a, b] text  ~ effects  → jump". A check
               is [LABEL dc · adv …] or [CHECK skill dc · adv …], DC 12 if left out, and jumps
               "→ pass x · fail y". A question has two to four options.
@@ -103,10 +104,6 @@ END = "end"               # DialogueScript.End
 LATER_EFFECTS = {         # effects the notation has and the model doesn't yet (build plan §3.4): milestone, form
     "train": ("M5", "train <trainer>"),
     "cp": ("M5", "cp +n"),
-    "xp": ("M4", "xp +n"),
-    "support-off": ("M4", "support-off <id>"),
-    "fight-add": ("M4", "fight-add <enemy> <n>"),
-    "fight-guest": ("M4", "fight-guest <id>"),
 }
 REJOIN_BUMPS = {"valencia": ("affinity-valencia", 5, "mc-claimed-valencia")}   # build plan §3.2
 ENC_FIELD = re.compile(r"^(?:fight|event|merchant|companion|rare|once|(?:regions|acts|party|time|approach) .+|(?:weight|cooldown) \d+)$")
@@ -434,6 +431,20 @@ def parse_effect(e, s, n, tables):
         return [f"DialogueEffect.Swap({cs_str(words[1])}, {cs_str(words[2])})"] if takes(2, "two ids") else []
     if verb == "rest":
         return ["DialogueEffect.Rest()"] if takes(0, "nothing after it") else []
+    if verb == "xp":
+        if len(words) != 2 or not re.match(r"^\+[1-9]\d*$", words[1]):
+            s.note(n, f"`{e}`: xp takes +n, more than none")
+            return []
+        return [f"DialogueEffect.Experience({int(words[1])})"]
+    if verb == "support-off":
+        return [f"DialogueEffect.SupportOff({cs_str(words[1])})"] if takes(1, "a support's id") else []
+    if verb == "fight-guest":
+        return [f"DialogueEffect.FightGuest({cs_str(words[1])})"] if takes(1, "a guest's id") else []
+    if verb == "fight-add":
+        if len(words) != 3 or not ID.match(words[1]) or not re.match(r"^[1-9]\d*$", words[2]):
+            s.note(n, f"`{e}`: fight-add takes an enemy and how many, 1 or more")
+            return []
+        return [f"DialogueEffect.FightAdd({cs_str(words[1])}, {int(words[2])})"]
     if verb == "voice":
         if not takes(1, "a voice"):
             return []

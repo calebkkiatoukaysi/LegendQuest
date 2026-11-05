@@ -99,7 +99,7 @@ public static class CombatStats
     /// <param name="member">Who.</param>
     /// <param name="ability">Which save.</param>
     public static int SaveBonus(PartyMember member, Ability ability) =>
-        member.Scores.Modifier(ability) + (Array.IndexOf(Saves[member.Class], ability) >= 0 ? AttackMath.ProficiencyBonus : 0);
+        member.Scores.Modifier(ability) + (Array.IndexOf(Saves[member.Class], ability) >= 0 ? LevelTable.Proficiency(member.Level) : 0);
 
     /// <summary>The ability their class casts with, or null if it doesn't.</summary>
     /// <param name="member">Who.</param>
@@ -123,7 +123,7 @@ public static class CombatStats
         Ability ability = ranged || finesse && dexterity > strength ? Ability.Dexterity : Ability.Strength;
         int modifier = member.Scores.Modifier(ability);
 
-        int proficiency = ClassCatalog.Get(member.Class).Proficient(item) ? AttackMath.ProficiencyBonus : 0;
+        int proficiency = ClassCatalog.Get(member.Class).Proficient(item) ? LevelTable.Proficiency(member.Level) : 0;
 
         var modifiers = new List<(string, int)> { (Abbreviation(ability), modifier) };
         if (proficiency != 0) modifiers.Add(("PROF", proficiency));
@@ -134,25 +134,27 @@ public static class CombatStats
         int flat = (slot == EquipmentSlot.OffHand ? Math.Min(0, modifier) : modifier) + item.DamageBonus + WornDamageBonus(member);
 
         return new AttackProfile(item.Name, modifier + proficiency + item.AttackBonus, modifiers, dice with { Bonus = dice.Bonus + flat },
-            item.DamageType, item.ExtraDamage, item.ExtraDamageType, item.Range > 0f ? item.Range : Measure.MeleeReach, item.Properties);
+            item.DamageType, item.ExtraDamage, item.ExtraDamageType, AttackProfile.ReachOf(item.Properties), item.Properties);
     }
 
     /// <summary>A fist, for anyone with nothing better in reach: 1 + Strength bludgeoning, and everyone's proficient.</summary>
     /// <param name="scores">Whose scores.</param>
-    public static AttackProfile Unarmed(AbilityScores scores)
+    /// <param name="level">Their level, for their proficiency.</param>
+    public static AttackProfile Unarmed(AbilityScores scores, int level = 1)
     {
         int strength = scores.Modifier(Ability.Strength);
-        var modifiers = new List<(string, int)> { ("STR", strength), ("PROF", AttackMath.ProficiencyBonus) };
-        return new AttackProfile("Unarmed Strike", strength + AttackMath.ProficiencyBonus, modifiers,
+        int proficiency = LevelTable.Proficiency(level);
+        var modifiers = new List<(string, int)> { ("STR", strength), ("PROF", proficiency) };
+        return new AttackProfile("Unarmed Strike", strength + proficiency, modifiers,
             new DiceExpression(0, 0, Math.Max(UnarmedDamage, UnarmedDamage + strength)), DamageType.Bludgeoning,
-            DiceExpression.None, DamageType.Bludgeoning, Measure.MeleeReach, WeaponProperty.None);
+            DiceExpression.None, DamageType.Bludgeoning, Reach.Melee, WeaponProperty.None);
     }
 
     /// <summary>One of a foe's attacks, as a profile.</summary>
     /// <param name="attack">The attack from its stat block.</param>
     public static AttackProfile Of(EnemyAttack attack) =>
         new(attack.Name, attack.Bonus, new List<(string, int)> { ("ATTACK", attack.Bonus) }, attack.Damage, attack.DamageType,
-            DiceExpression.None, attack.DamageType, attack.Range, attack.Properties);
+            DiceExpression.None, attack.DamageType, attack.Reach, attack.Properties);
 
     /// <summary>The damage bonus from anything worn that isn't a weapon (gauntlets of might), which every weapon hit gets.</summary>
     private static int WornDamageBonus(PartyMember member)

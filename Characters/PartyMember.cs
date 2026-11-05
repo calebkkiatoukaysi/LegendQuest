@@ -19,6 +19,12 @@ namespace LegendQuest.Characters;
 /// </remarks>
 public class PartyMember
 {
+    /// <summary>The hit points everyone has at level 1 before Constitution and their class: 10-classes.md §1.4's.</summary>
+    public const int FirstLevelHp = 10;
+
+    /// <summary>The hit points each level after the first adds, before Constitution.</summary>
+    public const int LevelHp = 7;
+
     /// <summary>Who they are, for the game rather than the screen: you, or one of the companions in Origins.</summary>
     public string Id { get; set; } = string.Empty;
 
@@ -28,10 +34,10 @@ public class PartyMember
     /// <summary>Their class.</summary>
     public ClassId Class { get; set; }
 
-    /// <summary>Their level. Everyone's level 1 in the skeleton; levelling up comes later.</summary>
+    /// <summary>Their level, 1 to LevelTable.MaxLevel. Leveling changes it, by experience or outright.</summary>
     public int Level { get; set; } = 1;
 
-    /// <summary>The experience they've earned. Nothing spends it until there's levelling up.</summary>
+    /// <summary>The experience they've earned towards their next level: LevelTable.ToNext of it takes them up, and what's left over carries on.</summary>
     public int Xp { get; set; }
 
     /// <summary>Their six ability scores.</summary>
@@ -43,9 +49,6 @@ public class PartyMember
     /// <summary>What they're wearing and holding, by slot, as item ids in ItemCatalog. A slot that's missing is empty.</summary>
     /// <remarks>Change it with Equip, Unequip and PutOn, which keep the hands right and the hit points in range.</remarks>
     public Dictionary<EquipmentSlot, string> Equipment { get; set; } = new();
-
-    /// <summary>How many uses of each limited thing they've spent since they last rested, by the resource's id: spell slots, Second Wind, the Lay on Hands pool. One that's missing has none spent.</summary>
-    public Dictionary<string, int> Spent { get; set; } = new();
 
     /// <summary>How they look.</summary>
     public CharacterLook Look { get; set; } = new();
@@ -63,13 +66,20 @@ public class PartyMember
     public Direction Facing { get; set; }
 
     /// <summary>The most hit points they can have.</summary>
-    /// <remarks>5e at level 1: the class's whole hit die plus the Constitution modifier, never less than 1, plus whatever anything they're wearing adds.</remarks>
+    /// <remarks>
+    /// 10-classes.md §1.4: 10 and the Constitution modifier at level 1, and 7 and it again each level
+    /// after, with the class's HpModifier on top (rounded to the nearest), never less than 1; then
+    /// whatever anything they're wearing adds.
+    /// </remarks>
     [JsonIgnore]
     public int MaxHp
     {
         get
         {
-            int most = Math.Max(1, ClassCatalog.Get(Class).HitDie + Scores.Modifier(Ability.Constitution));
+            int constitution = Scores.Modifier(Ability.Constitution);
+            int levels = Math.Clamp(Level, 1, LevelTable.MaxLevel) - 1;
+            int fromLevel = FirstLevelHp + constitution + levels * (LevelHp + constitution);
+            int most = Math.Max(1, (int)Math.Round(fromLevel * (100 + ClassCatalog.Get(Class).HpModifier) / 100.0, MidpointRounding.AwayFromZero));
             foreach (ItemDefinition item in Worn) most += item.MaxHpBonus;
             return most;
         }

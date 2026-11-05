@@ -12,12 +12,12 @@ using LegendQuest.Rules;
 namespace LegendQuest.Components;
 
 /// <summary>
-/// The character sheet, as the inventory's right-hand page: level, class and experience, their
-/// people and what their class is for, proficiency, the six scores with their modifiers and saves,
-/// how they attack, and their class's abilities with what's left of anything they spend.
+/// The character sheet, as the inventory's right-hand page: level, class and the experience to the
+/// next level, their people and what their class is for, proficiency, the six scores with their
+/// modifiers and saves, how they attack, and their class's abilities with what each costs in a fight.
 /// </summary>
 /// <remarks>
-/// Every number comes from where a fight gets it (CombatStats, ResourceCatalog, AbilityCatalog), so
+/// Every number comes from where a fight gets it (CombatStats, LevelTable, AbilityCatalog), so
 /// the sheet can't disagree with the dice. It's laid out again whenever it's shown someone, and an
 /// ability's row can be picked with the keys or the mouse to read what it does in the box at the
 /// bottom, the way a long description shouldn't crowd the list. Anything that won't fit above the
@@ -145,18 +145,26 @@ public class CharacterSheet
         }
     }
 
-    /// <summary>Their level and class, their experience, and their people and what their class is for.</summary>
+    /// <summary>Their level and class, the experience to their next level, and their people and what their class is for.</summary>
     /// <returns>Where the next part starts.</returns>
     private float LayOutHeader(PartyMember member, float y)
     {
         ClassDefinition kind = ClassCatalog.Get(member.Class);
         string level = "LEVEL " + member.Level.ToString(CultureInfo.InvariantCulture) + "  " + kind.Name.ToUpperInvariant();
         Word(level, _area.Left, y, Palette.Heading, big: true);
-        Word(member.Xp.ToString(CultureInfo.InvariantCulture) + " XP", _area.Right, y + (_font.LineSpacing - _detailFont.LineSpacing) / 2f, Palette.Note, right: true);
+        Word(ToNextLevel(member), _area.Right, y + (_font.LineSpacing - _detailFont.LineSpacing) / 2f, Palette.Note, right: true);
         y += _font.LineSpacing;
 
         Word(member.Look.Ancestry + Separator + kind.Role, _area.Left, y, Palette.Note);
         return y + _detailFont.LineSpacing;
+    }
+
+    /// <summary>How far they are from their next level, like "480 XP TO LEVEL 3", or that they're at the highest.</summary>
+    private static string ToNextLevel(PartyMember member)
+    {
+        if (member.Level >= LevelTable.MaxLevel) return "HIGHEST LEVEL";
+        int left = Math.Max(0, LevelTable.ToNext(member.Level) - member.Xp);
+        return left.ToString(CultureInfo.InvariantCulture) + " XP TO LEVEL " + (member.Level + 1).ToString(CultureInfo.InvariantCulture);
     }
 
     /// <summary>A tile for each score with its modifier, and each save's bonus under its tile, in gold for the class's own saves.</summary>
@@ -184,17 +192,18 @@ public class CharacterSheet
     {
         Word("TO HIT", _area.Left + HitColumn, y, Palette.Note);
         Word("DAMAGE", _area.Left + DamageColumn, y, Palette.Note);
-        Word("PROFICIENCY " + ItemReadout.Signed(AttackMath.ProficiencyBonus), _area.Right, y, Palette.Gold, right: true);
+        int proficiency = LevelTable.Proficiency(member.Level);
+        Word("PROFICIENCY " + ItemReadout.Signed(proficiency), _area.Right, y, Palette.Gold, right: true);
         y = Heading("ATTACKS", y);
-        y = Attack(CombatStats.Weapon(member, EquipmentSlot.MainHand) ?? CombatStats.Unarmed(member.Scores), y);
+        y = Attack(CombatStats.Weapon(member, EquipmentSlot.MainHand) ?? CombatStats.Unarmed(member.Scores, member.Level), y);
         if (CombatStats.Weapon(member, EquipmentSlot.OffHand) is AttackProfile offHand) y = Attack(offHand, y);
 
         if (CombatStats.CastingAbility(member) is Ability casting)
         {
             int modifier = member.Scores.Modifier(casting);
             Word("Spells (" + CombatStats.Abbreviation(casting) + ")", _area.Left, y, Palette.Bone);
-            Word(ItemReadout.Signed(AttackMath.ProficiencyBonus + modifier + CombatStats.SpellAttackBonus(member)), _area.Left + HitColumn, y, Palette.Gold);
-            Word("Save DC " + (SpellDcBase + AttackMath.ProficiencyBonus + modifier).ToString(CultureInfo.InvariantCulture), _area.Left + DamageColumn, y, Palette.Bone);
+            Word(ItemReadout.Signed(proficiency + modifier + CombatStats.SpellAttackBonus(member)), _area.Left + HitColumn, y, Palette.Gold);
+            Word("Save DC " + (SpellDcBase + proficiency + modifier).ToString(CultureInfo.InvariantCulture), _area.Left + DamageColumn, y, Palette.Bone);
             y += _detailFont.LineSpacing;
         }
 
@@ -219,7 +228,7 @@ public class CharacterSheet
         return y + _detailFont.LineSpacing;
     }
 
-    /// <summary>Their class's abilities, a row each with what it costs and what's left of what it spends, and the room under them for the picked one's description.</summary>
+    /// <summary>Their class's abilities, a row each with what it costs in a fight, and the room under them for the picked one's description.</summary>
     private void LayOutAbilities(PartyMember member, float y)
     {
         y = Heading("ABILITIES", y);
@@ -228,14 +237,14 @@ public class CharacterSheet
             AbilityDefinition ability = AbilityCatalog.Get(id);
             if (y + _detailFont.LineSpacing > _area.Bottom) break;
             _abilities.Add((new Rectangle(_area.Left, (int)y, _area.Width, _detailFont.LineSpacing), ability));
-            Word(Tag(member, ability), _area.Right, y, Palette.Note, right: true);
+            Word(Tag(ability), _area.Right, y, Palette.Note, right: true);
             y += _detailFont.LineSpacing;
         }
         _detailTop = y + HeadingGap * 2;
     }
 
-    /// <summary>What an ability costs to use and what's left of what it spends, like "BONUS ACTION  ·  1 / 1 LEFT", or "2 / 2 SLOTS" for a spell.</summary>
-    private static string Tag(PartyMember member, AbilityDefinition ability)
+    /// <summary>What an ability costs to use in a fight, like "BONUS ACTION  ·  20 FOCUS  ·  COOLDOWN 4", or "ONCE A FIGHT".</summary>
+    private static string Tag(AbilityDefinition ability)
     {
         var parts = new List<string>
         {
@@ -247,12 +256,9 @@ public class CharacterSheet
                 _ => "ACTION",
             },
         };
-        if (ability.Cantrip) parts.Add("CANTRIP");
-        if (ability.Resource is string resource)
-        {
-            int left = ResourceCatalog.Left(member, resource), most = ResourceCatalog.Get(resource).Max(member);
-            parts.Add(left.ToString(CultureInfo.InvariantCulture) + " / " + most.ToString(CultureInfo.InvariantCulture) + (ability.Spell ? " SLOTS" : " LEFT"));
-        }
+        if (ability.Focus > 0) parts.Add(ability.Focus.ToString(CultureInfo.InvariantCulture) + " FOCUS");
+        if (ability.Cooldown > 0) parts.Add("COOLDOWN " + ability.Cooldown.ToString(CultureInfo.InvariantCulture));
+        if (ability.OncePerFight) parts.Add("ONCE A FIGHT");
         return string.Join(Separator, parts);
     }
 

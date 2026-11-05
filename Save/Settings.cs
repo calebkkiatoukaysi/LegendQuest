@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace LegendQuest.Save;
 
 /// <summary>
-/// The settings that aren't part of a game: the three volumes, full screen or not, how fast text types out, and whether the tutorial's tips come up.
+/// The settings that aren't part of a game: the three volumes, full screen or not, how fast text types out, whether the tutorial's tips come up, and how hard the fights are.
 /// </summary>
-/// <remarks>Not in the save slots on purpose. Turning the music down shouldn't depend on which game you loaded.</remarks>
+/// <remarks>Not in the save slots on purpose. Turning the music down shouldn't depend on which game you loaded, and the difficulty's changeable any time outside a fight (build plan §10).</remarks>
 public class Settings
 {
     /// <summary>Everything. Gets multiplied into the other two.</summary>
@@ -27,10 +27,21 @@ public class Settings
     /// <summary>Whether the tutorial's tips come up as you play. On to start with; a file from before there were tips doesn't have it, and gets it on.</summary>
     public bool TutorialTips { get; set; } = true;
 
+    /// <summary>How hard the fights are, by name. Balanced to start with; a file from before there was a choice doesn't have it, and gets Balanced.</summary>
+    public string Difficulty { get; set; } = nameof(LegendQuest.Difficulty.Balanced);
+
     /// <summary>TextSpeed as the enum, or Normal if the file has something it doesn't recognise.</summary>
     [JsonIgnore]
     public TextSpeed Typing =>
         Enum.TryParse(TextSpeed, out TextSpeed speed) && Enum.IsDefined(speed) ? speed : LegendQuest.TextSpeed.Normal;
+
+    /// <summary>Difficulty as the enum, or Balanced if the file has something it doesn't recognise. Setting it sets Difficulty by name.</summary>
+    [JsonIgnore]
+    public Difficulty Mode
+    {
+        get => Enum.TryParse(Difficulty, out Difficulty mode) && Enum.IsDefined(mode) ? mode : LegendQuest.Difficulty.Balanced;
+        set => Difficulty = value.ToString();
+    }
 
     /// <summary>Clamps every volume to 0 to 1, in case the file got edited by hand.</summary>
     /// <returns>This, so it can be chained.</returns>

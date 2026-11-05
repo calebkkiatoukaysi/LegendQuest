@@ -43,7 +43,8 @@ public class PauseMenuScreen : MenuScreen
     /// <summary>Builds the menu.</summary>
     /// <param name="inventory">What INVENTORY does once the menu's closed, or null for a menu without it.</param>
     /// <param name="note">The line under the heading, or null for the usual one. A fight uses it to say why there's no saving.</param>
-    public PauseMenuScreen(Action inventory = null, string note = null)
+    /// <param name="lockDifficulty">Whether a fight's on, so OPTIONS holds the difficulty where it is.</param>
+    public PauseMenuScreen(Action inventory = null, string note = null, bool lockDifficulty = false)
     {
         _note = note ?? Note;
         IsPopup = true;
@@ -57,7 +58,7 @@ public class PauseMenuScreen : MenuScreen
         var title = new MenuEntry(TitleLabel, Palette.Ember);
 
         resume.Selected += ExitScreen;
-        options.Selected += () => ScreenManager.AddScreen(new OptionsScreen());
+        options.Selected += () => ScreenManager.AddScreen(new OptionsScreen(lockDifficulty));
         help.Selected += () => ScreenManager.AddScreen(new HelpScreen());
         title.Selected += QuitToTitle;
 

@@ -69,6 +69,12 @@ public partial class ExploreScreen
     /// <summary>The beats still to play on this visit, built the first frame they're needed.</summary>
     private Queue<ProofBeat> _proofBeats;
 
+    /// <summary>How many of this visit's beats are done, so a fight lost partway through it can pick the visit up again after the reload instead of starting it over in the wrong room.</summary>
+    internal static int ProofBeatsDone;
+
+    /// <summary>How many beats the next visit skips as already done: set when a lost fight's save is loaded, spent when the visit's beats are built.</summary>
+    internal static int ProofResumeAt;
+
     /// <summary>Whether the run's holding Alt down.</summary>
     private bool _proofAlt;
 
@@ -80,11 +86,25 @@ public partial class ExploreScreen
     {
         if (frame < Settled) return null;
 
-        _proofBeats ??= new Queue<ProofBeat>(beats());
+        if (_proofBeats is null)
+        {
+            _proofBeats = new Queue<ProofBeat>(beats());
+            ProofBeatsDone = 0;
+
+            // Back from a lost fight: what came before it has happened, and the save it loaded is
+            // from just before the fight, so the visit carries on from the beat that was playing.
+            for (; ProofResumeAt > 0 && _proofBeats.Count > 0; ProofResumeAt--, ProofBeatsDone++) _proofBeats.Dequeue();
+            ProofResumeAt = 0;
+        }
+
         while (_proofBeats.Count > 0)
         {
             ProofTick tick = _proofBeats.Peek()();
-            if (tick.Done) _proofBeats.Dequeue();
+            if (tick.Done)
+            {
+                _proofBeats.Dequeue();
+                ProofBeatsDone++;
+            }
             if (tick.Shot is not null) return tick.Shot;
             if (!tick.Done) return null;
         }

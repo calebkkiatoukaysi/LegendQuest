@@ -14,12 +14,12 @@ namespace LegendQuest.Combat;
 /// <param name="DamageType">The kind of damage it does.</param>
 /// <param name="Extra">Extra damage a magic weapon does on top (the ember dagger's fire), or None.</param>
 /// <param name="ExtraType">The kind of the extra damage.</param>
-/// <param name="Range">How far it reaches, in metres.</param>
+/// <param name="Reach">Which rows it reaches: Ranged for a ranged weapon, Reach for a reach weapon, Melee for the rest.</param>
 /// <param name="Properties">The weapon's properties: Finesse and Ranged matter to the rules here.</param>
 public sealed record AttackProfile(string Name, int Bonus, IReadOnlyList<(string Source, int Amount)> Modifiers, DiceExpression Damage,
-    DamageType DamageType, DiceExpression Extra, DamageType ExtraType, float Range, WeaponProperty Properties)
+    DamageType DamageType, DiceExpression Extra, DamageType ExtraType, Reach Reach, WeaponProperty Properties)
 {
-    /// <summary>Whether it's a ranged attack: disadvantage with a foe beside you, and no opportunity attacks with it.</summary>
+    /// <summary>Whether it's a ranged attack: Prone works the other way against it, and nobody makes an opportunity attack with it.</summary>
     public bool Ranged => (Properties & WeaponProperty.Ranged) != 0;
 
     /// <summary>Whether Sneak Attack can ride on it: a finesse or a ranged weapon.</summary>
@@ -27,4 +27,9 @@ public sealed record AttackProfile(string Name, int Bonus, IReadOnlyList<(string
 
     /// <summary>The damage it does on average, extra included, for the AI.</summary>
     public double AverageDamage => Damage.Average + (Extra.IsNone ? 0.0 : Extra.Average);
+
+    /// <summary>The reach a weapon's properties give it.</summary>
+    /// <param name="properties">The weapon's properties.</param>
+    public static Reach ReachOf(WeaponProperty properties) =>
+        (properties & WeaponProperty.Ranged) != 0 ? Reach.Ranged : (properties & WeaponProperty.Reach) != 0 ? Reach.Reach : Reach.Melee;
 }

@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using LegendQuest.Characters;
 using LegendQuest.Rules;
 
 namespace LegendQuest.Combat;
 
 /// <summary>
-/// Someone in a fight: a party member or a foe, where they stand, how hurt they are, what's on them,
-/// and what's left of their turn.
+/// Someone in a fight: a party member or a foe, how hurt they are, what's on them, their Focus, and
+/// what's left of their turn. Where they stand is the fight's Formation.
 /// </summary>
 /// <remarks>
 /// A party member's hit points are their PartyMember's, so what they lose in a fight they've still
@@ -20,6 +19,9 @@ public sealed class Combatant
     /// <summary>What a spell save DC starts from, before proficiency and the casting modifier.</summary>
     private const int SpellDcBase = 8;
 
+    /// <summary>The most Focus anyone can hold.</summary>
+    public const int MaxFocus = 100;
+
     private readonly List<ActiveCondition> _conditions = new();
 
     /// <summary>A foe's abilities that have been used and haven't recharged, or that only work once a fight.</summary>
@@ -29,18 +31,15 @@ public sealed class Combatant
     private int _hp;
 
     /// <summary>Sets someone up from how the fight starts them.</summary>
-    /// <param name="setup">Who, where, and on which side.</param>
-    /// <param name="cell">The tile they actually start on (the setup's, or the nearest free one).</param>
+    /// <param name="setup">Who, and on which side.</param>
     /// <param name="joined">How many joined before them, which breaks the last of initiative's ties.</param>
-    internal Combatant(CombatantSetup setup, Point cell, int joined)
+    internal Combatant(CombatantSetup setup, int joined)
     {
         Id = setup.Id;
         Side = setup.Side;
         Member = setup.Member;
         Enemy = setup.Enemy;
         Guest = setup.Guest;
-        Cell = cell;
-        Facing = setup.Facing is Direction.Left or Direction.Right ? setup.Facing : Side == Side.Foes ? Direction.Left : Direction.Right;
         Joined = joined;
 
         if (Member is not null)
@@ -49,14 +48,13 @@ public sealed class Combatant
             Scores = Member.Scores;
             MaxHp = Member.MaxHp;
             ArmourClass = CombatStats.ArmourClassOf(Member);
-            Speed = CombatStats.SpeedOf(Member);
             ArmourUntrained = CombatStats.ArmourUntrained(Member);
             Casting = CombatStats.CastingAbility(Member);
             SpellFocus = CombatStats.SpellAttackBonus(Member);
 
             AttackProfile main = CombatStats.Weapon(Member, EquipmentSlot.MainHand);
             AttackProfile off = CombatStats.Weapon(Member, EquipmentSlot.OffHand);
-            MainHand = main ?? CombatStats.Unarmed(Scores);
+            MainHand = main ?? CombatStats.Unarmed(Scores, Member.Level);
             bool pair = main is not null && off is not null && Light(main) && Light(off);
             OffHand = pair ? off : null;
             Attacks = new[] { MainHand };
@@ -68,7 +66,6 @@ public sealed class Combatant
             MaxHp = Math.Max(1, (int)Enemy.HitDice.Average);
             _hp = MaxHp;
             ArmourClass = Enemy.ArmourClass;
-            Speed = Enemy.Speed;
 
             var attacks = new AttackProfile[Enemy.Attacks.Count];
             for (int i = 0; i < attacks.Length; i++) attacks[i] = CombatStats.Of(Enemy.Attacks[i]);
@@ -76,11 +73,11 @@ public sealed class Combatant
             MainHand = attacks[0];
         }
 
-        // The melee attack they'd swing as someone runs past, and so how far they threaten.
+        // The melee attack they'd swing at someone leaving the front row.
         AttackProfile melee = null;
         foreach (AttackProfile attack in Attacks)
             if (!attack.Ranged && (melee is null || attack.AverageDamage > melee.AverageDamage)) melee = attack;
-        Melee = melee ?? CombatStats.Unarmed(Scores);
+        Melee = melee ?? CombatStats.Unarmed(Scores, Level);
     }
 
     /// <summary>Who they are: a party member's origin id, or the foe's map npc id or spawned id.</summary>
@@ -101,23 +98,14 @@ public sealed class Combatant
     /// <summary>Whether they're fighting on the party's side without being in it, so the AI plays them.</summary>
     public bool Guest { get; }
 
-    /// <summary>The tile they're on.</summary>
-    public Point Cell { get; set; }
-
-    /// <summary>Which way they're facing: left or right, never up or down. Set up facing either of those, they start facing their side's way, the party right and the foes left.</summary>
-    public Direction Facing { get; set; }
-
     /// <summary>The hit points they have now.</summary>
     public int Hp => Member?.Hp ?? _hp;
 
     /// <summary>The most hit points they can have.</summary>
-    public int MaxHp { get; }
+    public int MaxHp { get; private set; }
 
     /// <summary>Their armour class.</summary>
     public int ArmourClass { get; }
-
-    /// <summary>How far they can move in a turn, in metres, before conditions.</summary>
-    public float Speed { get; }
 
     /// <summary>Their initiative roll's total. Higher goes first.</summary>
     public int Initiative { get; internal set; }
@@ -148,6 +136,18 @@ public sealed class Combatant
 
     /// <summary>How many times they've been Downed this fight.</summary>
     public int Downs { get; internal set; }
+
+    /// <summary>Their Focus, from 0 to MaxFocus: what their skills cost.</summary>
+    public int Focus { get; internal set; }
+
+    /// <summary>How many of their own turns have started this fight, which cooldowns are counted in.</summary>
+    public int TurnsTaken { get; internal set; }
+
+    /// <summary>Whether they're a guest who fell back out of the fight at 0 hit points: off the field and out of the turn order, with no death saves.</summary>
+    public bool FellBack { get; internal set; }
+
+    /// <summary>Whether they stand across two slots side by side: a big foe.</summary>
+    public bool Big => Enemy?.Big ?? false;
 
     /// <summary>Whether they're you or the Soul-Bound, who share the Soul-Link.</summary>
     public bool IsDuo => Member is not null && !Guest && (Id == Origins.You || Id == Origins.SoulBound);
@@ -182,20 +182,35 @@ public sealed class Combatant
     /// <summary>The number of the turn they last used Sneak Attack on, since it's once a turn.</summary>
     internal int SneakTurn { get; set; } = -1;
 
+    /// <summary>What's added to their attack rolls and to the DCs they set: a foe's share of the difficulty, and 0 for everyone else.</summary>
+    internal int RollBonus { get; set; }
+
+    /// <summary>For each ability on a cooldown, the TurnsTaken it's ready again on.</summary>
+    internal Dictionary<AbilityId, int> ReadyOn { get; } = new();
+
+    /// <summary>The once-a-fight abilities they've used.</summary>
+    internal HashSet<AbilityId> UsedThisFight { get; } = new();
+
+    /// <summary>What's left in each of their pools this fight (Lay on Hands), in hit points.</summary>
+    internal Dictionary<AbilityId, int> Pool { get; } = new();
+
+    /// <summary>Everything they have in the fight, in bar order, from the fight's kits.</summary>
+    internal IReadOnlyList<AbilityId> Kit { get; set; }
+
     /// <summary>Their level: a party member's, or 1 for a foe.</summary>
     internal int Level => Member?.Level ?? 1;
 
     /// <summary>Their casting modifier, or 0 if they don't cast.</summary>
     internal int CastingModifier => Casting is Ability ability ? Scores.Modifier(ability) : 0;
 
-    /// <summary>Their spell save DC: 8 + proficiency + the casting modifier.</summary>
-    internal int SpellDc => SpellDcBase + AttackMath.ProficiencyBonus + CastingModifier;
+    /// <summary>Their spell save DC: 8 + proficiency at their level + the casting modifier.</summary>
+    internal int SpellDc => SpellDcBase + LevelTable.Proficiency(Level) + CastingModifier;
 
     /// <summary>What anything they're wearing adds to their spell attacks.</summary>
     internal int SpellFocus { get; }
 
     /// <summary>Their spell attack bonus: proficiency + the casting modifier + anything worn.</summary>
-    internal int SpellAttack => AttackMath.ProficiencyBonus + CastingModifier + SpellFocus;
+    internal int SpellAttack => LevelTable.Proficiency(Level) + CastingModifier + SpellFocus;
 
     /// <summary>What they add to a saving throw: the modifier, and proficiency for a party member's class saves.</summary>
     /// <param name="ability">Which save.</param>
@@ -237,6 +252,25 @@ public sealed class Combatant
         hp = Math.Clamp(hp, 0, MaxHp);
         if (Member is not null) Member.Hp = hp;
         else _hp = hp;
+    }
+
+    /// <summary>Changes their Focus, kept between 0 and MaxFocus.</summary>
+    /// <param name="by">How much, up or down.</param>
+    /// <returns>How much it actually changed.</returns>
+    internal int ChangeFocus(int by)
+    {
+        int before = Focus;
+        Focus = Math.Clamp(Focus + by, 0, MaxFocus);
+        return Focus - before;
+    }
+
+    /// <summary>Scales a foe's hit points for the difficulty, keeping them at full health. A party member's are left alone.</summary>
+    /// <param name="by">What to multiply them by.</param>
+    internal void ScaleHp(float by)
+    {
+        if (Member is not null) return;
+        MaxHp = Math.Max(1, (int)MathF.Round(MaxHp * by));
+        _hp = MaxHp;
     }
 
     /// <summary>Whether a foe's ability is spent: used and not recharged, or once a fight and used.</summary>

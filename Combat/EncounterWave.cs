@@ -7,6 +7,11 @@ namespace LegendQuest.Combat;
 /// before them is beaten if that's sooner.
 /// </summary>
 /// <param name="Round">The round they arrive at the start of. 2 or later.</param>
-/// <param name="Foes">Who arrives. Each one turns up on its tile, so none of them is a map npc.</param>
+/// <param name="Foes">Who arrives, each in its slot. None of them is a map npc.</param>
 /// <param name="Bark">What the Soul-Bound shouts when they come, or null.</param>
-public sealed record EncounterWave(int Round, IReadOnlyList<EncounterFoe> Foes, string Bark);
+/// <param name="Interlude">
+/// A conversation played as they come, before the round goes on, by its DialogueCatalog id, or null.
+/// Its fight-add, fight-guest and support-off change the fight. A stub until the fights that use it
+/// (M7): validation turns down an encounter with one.
+/// </param>
+public sealed record EncounterWave(int Round, IReadOnlyList<EncounterFoe> Foes, string Bark, string Interlude = null);

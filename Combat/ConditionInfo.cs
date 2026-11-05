@@ -23,6 +23,16 @@ public static class ConditionInfo
         [ConditionId.Stable] = ("Stable", "stable"),
         [ConditionId.Helped] = ("Helped", "helped"),
         [ConditionId.Mocked] = ("Rattled", "rattled"),
+        [ConditionId.Marked] = ("Marked", "marked"),
+        [ConditionId.Taunted] = ("Taunted", "taunted"),
+        [ConditionId.Burning] = ("Burning", "burning"),
+        [ConditionId.Bleeding] = ("Bleeding", "bleeding"),
+        [ConditionId.Frozen] = ("Frozen", "frozen in time"),
+        [ConditionId.Poisoned] = ("Poisoned", "poisoned"),
+        [ConditionId.Stunned] = ("Stunned", "stunned"),
+        [ConditionId.Blinded] = ("Blinded", "blinded"),
+        [ConditionId.Frightened] = ("Frightened", "frightened"),
+        [ConditionId.Charmed] = ("Charmed", "charmed"),
     };
 
     /// <summary>Checks every condition has its words.</summary>

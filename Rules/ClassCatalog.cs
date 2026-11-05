@@ -8,13 +8,14 @@ namespace LegendQuest.Rules;
 /// Every class, by ClassId.
 /// </summary>
 /// <remarks>
-/// A static table keyed by the enum, like The Black Box's ItemCatalog. The hit dice, armour,
-/// shields, martial weapons and casting abilities are 5e's, from the SRD 5.1: a d10 for a fighter
-/// or a paladin, a d8 for a rogue, a cleric, a druid, a warlock or a bard, a d6 for a wizard. One
-/// simplification: every class here is trained with every simple weapon, where the SRD gives
-/// wizards and druids a shorter list, so Sera's shortbow is hers to use. The Hexblade fights with a
-/// pact blade, so it's trained with the shortsword in its kit. The names are the story's own; the
-/// kits are the team's, each class's weapon, shield and armour plus what everyone sets out in.
+/// A static table keyed by the enum, like The Black Box's ItemCatalog. The armour, shields, martial
+/// weapons and casting abilities are 5e's, from the SRD 5.1. Hit points aren't: they come from level
+/// and Constitution, with each class's modifier on top, 10-classes.md §1.4's (+20% for the Warden,
+/// +10% for the Blademaster, -10% for the Arcanist, nothing for the rest). One simplification:
+/// every class here is trained with every simple weapon, where the SRD gives wizards and druids a
+/// shorter list, so Sera's shortbow is hers to use. The Hexblade fights with a pact blade, so it's
+/// trained with the shortsword in its kit. The names are the story's own; the kits are the team's,
+/// each class's weapon, shield and armour plus what everyone sets out in.
 /// </remarks>
 public static class ClassCatalog
 {
@@ -22,60 +23,63 @@ public static class ClassCatalog
     /// <remarks>Before Table, since static fields are set in the order they're written and Table's kits read this.</remarks>
     private static readonly string[] Basics = { "travelling-cloak", "leather-boots" };
 
+    /// <summary>The most a class can change hit points by, either way, in percent.</summary>
+    private const int MostHpModifier = 50;
+
     private static readonly ClassDefinition[] Table =
     {
         new()
         {
-            Id = ClassId.Fighter, Name = "Blademaster", Role = "Frontline weapon specialist.", HitDie = 10,
+            Id = ClassId.Fighter, Name = "Blademaster", Role = "Frontline weapon specialist.", HpModifier = 10,
             Recommended = new AbilityScores { Strength = 15, Dexterity = 13, Constitution = 14, Intelligence = 8, Wisdom = 12, Charisma = 10 },
             ArmourUpTo = ArmourCategory.Heavy, Shields = true, MartialWeapons = true,
             StartingKit = Kit("longsword", "wooden-shield", "chain-mail"),
         },
         new()
         {
-            Id = ClassId.Rogue, Name = "Shadowstep", Role = "Stealth, crits and lockpicking.", HitDie = 8,
+            Id = ClassId.Rogue, Name = "Shadowstep", Role = "Stealth, crits and lockpicking.",
             Recommended = new AbilityScores { Strength = 8, Dexterity = 15, Constitution = 14, Intelligence = 12, Wisdom = 10, Charisma = 13 },
             ArmourUpTo = ArmourCategory.Light, WeaponsAlso = new[] { "longsword", "rapier", "shortsword" },
             StartingKit = Kit("shortsword", "dagger", "leather-armour"),
         },
         new()
         {
-            Id = ClassId.Cleric, Name = "Lightbearer", Role = "Support and holy damage.", HitDie = 8,
+            Id = ClassId.Cleric, Name = "Lightbearer", Role = "Support and holy damage.",
             Recommended = new AbilityScores { Strength = 13, Dexterity = 10, Constitution = 14, Intelligence = 8, Wisdom = 15, Charisma = 12 },
             ArmourUpTo = ArmourCategory.Medium, Shields = true, CastingAbility = Ability.Wisdom,
             StartingKit = Kit("mace", "wooden-shield", "scale-mail"),
         },
         new()
         {
-            Id = ClassId.Wizard, Name = "Arcanist", Role = "Studied spellcaster, burst damage.", HitDie = 6,
+            Id = ClassId.Wizard, Name = "Arcanist", Role = "Studied spellcaster, burst damage.", HpModifier = -10,
             Recommended = new AbilityScores { Strength = 8, Dexterity = 13, Constitution = 14, Intelligence = 15, Wisdom = 12, Charisma = 10 },
             ArmourUpTo = ArmourCategory.None, CastingAbility = Ability.Intelligence,
             StartingKit = Kit("quarterstaff", "mage-robes"),
         },
         new()
         {
-            Id = ClassId.Paladin, Name = "Warden", Role = "Oath-bound tank and healer.", HitDie = 10,
+            Id = ClassId.Paladin, Name = "Warden", Role = "Oath-bound tank and healer.", HpModifier = 20,
             Recommended = new AbilityScores { Strength = 15, Dexterity = 10, Constitution = 13, Intelligence = 8, Wisdom = 12, Charisma = 14 },
             ArmourUpTo = ArmourCategory.Heavy, Shields = true, MartialWeapons = true, CastingAbility = Ability.Charisma,
             StartingKit = Kit("longsword", "steel-shield", "chain-mail"),
         },
         new()
         {
-            Id = ClassId.Druid, Name = "Wildcaller", Role = "Nature magic, a beast companion.", HitDie = 8,
+            Id = ClassId.Druid, Name = "Wildcaller", Role = "Nature magic, a beast companion.",
             Recommended = new AbilityScores { Strength = 10, Dexterity = 13, Constitution = 14, Intelligence = 12, Wisdom = 15, Charisma = 8 },
             ArmourUpTo = ArmourCategory.Medium, Shields = true, WeaponsAlso = new[] { "scimitar" }, CastingAbility = Ability.Wisdom,
             StartingKit = Kit("quarterstaff", "hide-armour", "wooden-shield"),
         },
         new()
         {
-            Id = ClassId.Warlock, Name = "Hexblade", Role = "Pact magic that drains life.", HitDie = 8,
+            Id = ClassId.Warlock, Name = "Hexblade", Role = "Pact magic that drains life.",
             Recommended = new AbilityScores { Strength = 8, Dexterity = 13, Constitution = 14, Intelligence = 10, Wisdom = 12, Charisma = 15 },
             ArmourUpTo = ArmourCategory.Light, WeaponsAlso = new[] { "shortsword" }, CastingAbility = Ability.Charisma,
             StartingKit = Kit("shortsword", "leather-armour"),
         },
         new()
         {
-            Id = ClassId.Bard, Name = "Skald", Role = "Buffs, debuffs and persuasion.", HitDie = 8,
+            Id = ClassId.Bard, Name = "Skald", Role = "Buffs, debuffs and persuasion.",
             Recommended = new AbilityScores { Strength = 8, Dexterity = 14, Constitution = 13, Intelligence = 10, Wisdom = 12, Charisma = 15 },
             ArmourUpTo = ArmourCategory.Light, WeaponsAlso = new[] { "longsword", "rapier", "shortsword" }, CastingAbility = Ability.Charisma,
             StartingKit = Kit("rapier", "leather-armour"),
@@ -90,7 +94,7 @@ public static class ClassCatalog
     {
         foreach (ClassDefinition row in Table)
         {
-            if (row.HitDie < 1) throw new InvalidOperationException($"Class {row.Id} has a d{row.HitDie} for a hit die.");
+            if (row.HpModifier is < -MostHpModifier or > MostHpModifier) throw new InvalidOperationException($"Class {row.Id} changes hit points by {row.HpModifier}%.");
             if (row.Speed < 1) throw new InvalidOperationException($"Class {row.Id} moves {row.Speed} m a turn.");
 
             foreach (string weapon in row.WeaponsAlso)

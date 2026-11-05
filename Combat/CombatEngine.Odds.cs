@@ -1,59 +1,60 @@
 using System;
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using LegendQuest.Items;
 using LegendQuest.Rules;
 
 namespace LegendQuest.Combat;
 
 /// <summary>
-/// The odds: what an ability would do to someone from a tile, worked out without rolling anything,
+/// The odds: what an ability would do to someone from where everyone stands, worked out without rolling anything,
 /// for the hover tooltip and for EnemyMind's sums.
 /// </summary>
 /// <remarks>
 /// The hit chance is AttackMath's exact one; a save's is counted the same way, face by face. The
 /// damage range is the dice's least and most, with Sneak Attack and Hex in it when they'd ride on
 /// the hit. A critical's doubled dice aren't in the most, since the tooltip shows what to expect.
+/// It's from where everyone stands now, with a foe's share of the difficulty in its rolls.
 /// </remarks>
 public sealed partial class CombatEngine
 {
-    /// <summary>What an ability would do to a target if it were used from a tile.</summary>
+    /// <summary>What an ability would do to a target from where everyone stands now.</summary>
     /// <param name="who">Who'd use it.</param>
     /// <param name="ability">What.</param>
-    /// <param name="target">At whom: null for one on themselves.</param>
-    /// <param name="from">The tile they'd use it from.</param>
-    internal AttackPreview Estimate(Combatant who, AbilityDefinition ability, Combatant target, Point from)
+    /// <param name="target">At whom: null for one with no pick.</param>
+    public AttackPreview Estimate(Combatant who, AbilityDefinition ability, Combatant target)
     {
-        if (target is null && ability.Target is TargetKind.Enemy or TargetKind.Ally) return Nothing;
+        if (target is null && !NoPick(ability)) return Nothing;
         target ??= who;
         switch (ability.Kind)
         {
             case AbilityKind.Weapon:
-                return WeaponOdds(who, target, from);
+                return WeaponOdds(who, target);
 
             case AbilityKind.OffHand:
-                return who.OffHand is null ? Nothing : AttackOdds(who, target, from, who.OffHand.Bonus, who.OffHand.Damage, who.OffHand.Extra, who.OffHand.Ranged, who.OffHand.Sneaky);
+                return who.OffHand is null ? Nothing : AttackOdds(who, target, who.OffHand.Bonus, who.OffHand.Damage, who.OffHand.Extra, who.OffHand.Ranged, who.OffHand.Sneaky);
 
             case AbilityKind.Thrown:
                 ItemDefinition item = ItemCatalog.Get(ability.Item);
-                return AttackOdds(who, target, from, who.Scores.Modifier(Ability.Dexterity), item.ThrownDamage, DiceExpression.None, true, false);
+                return AttackOdds(who, target, who.Scores.Modifier(Ability.Dexterity), item.ThrownDamage, DiceExpression.None, true, false);
 
             case AbilityKind.SpellAttack:
-                return AttackOdds(who, target, from, who.SpellAttack, ability.Damage, DiceExpression.None, ability.Range > Measure.MeleeReach, false);
+                bool ranged = ReachOf(who, ability) == Reach.Ranged;
+                return AttackOdds(who, target, who.SpellAttack, ability.Damage, DiceExpression.None, ranged, false);
 
             case AbilityKind.Save:
-                int dc = ability.Dc > 0 ? ability.Dc : who.SpellDc;
+                int dc = DcOf(who, ability);
                 Ability save = ability.Save ?? Ability.Dexterity;
                 string text = $"DC {dc} {CombatStats.Abbreviation(save)} SAVE";
                 int least = ability.SaveHalves ? ability.Damage.Min / 2 : 0;
                 return new AttackPreview(FailChance(target, save, dc), Math.Max(0, least), Math.Max(0, ability.Damage.Max), text, SaveAdvantage(target, save), false);
 
             case AbilityKind.AutoHit:
-                return new AttackPreview(1.0, ability.Darts * ability.Damage.Min, ability.Darts * ability.Damage.Max, null, Advantage.Normal, false);
+                return new AttackPreview(1.0, ability.Count * ability.Damage.Min, ability.Count * ability.Damage.Max, null, Advantage.Normal, false);
 
             case AbilityKind.Heal:
                 if (ability.Heals.IsNone)
                 {
-                    int pool = who.Member is not null ? ResourceCatalog.Left(who.Member, ability.Resource) : target.MaxHp;
+                    int pool = who.Pool.GetValueOrDefault(ability.Id);
                     int amount = Math.Min(pool, target.MaxHp - target.Hp);
                     return new AttackPreview(1.0, amount, amount, null, Advantage.Normal, true);
                 }
@@ -61,7 +62,7 @@ public sealed partial class CombatEngine
                 return new AttackPreview(1.0, Math.Max(0, ability.Heals.Min + flat), Math.Max(0, ability.Heals.Max + flat), null, Advantage.Normal, true);
 
             case AbilityKind.Potion:
-                DiceExpression heals = ability.Item is not null ? ItemCatalog.Get(ability.Item).Heals : PickPotion(who)?.Heals ?? DiceExpression.None;
+                DiceExpression heals = ability.Item is not null ? ItemCatalog.Get(ability.Item).Heals : PickPotion(target)?.Heals ?? DiceExpression.None;
                 return new AttackPreview(1.0, Math.Max(0, heals.Min), Math.Max(0, heals.Max), null, Advantage.Normal, true);
 
             case AbilityKind.SoulLink:
@@ -80,32 +81,33 @@ public sealed partial class CombatEngine
     private static AttackPreview Nothing => new(1.0, 0, 0, null, Advantage.Normal, false);
 
     /// <summary>The Attack action's odds: a party member's weapon, or every attack of a foe's that reaches (all of them with Multiattack, the best one without).</summary>
-    private AttackPreview WeaponOdds(Combatant who, Combatant target, Point from)
+    private AttackPreview WeaponOdds(Combatant who, Combatant target)
     {
-        if (who.Member is not null) return AttackOdds(who, target, from, who.MainHand.Bonus, who.MainHand.Damage, who.MainHand.Extra, who.MainHand.Ranged, who.MainHand.Sneaky);
+        if (who.Member is not null) return AttackOdds(who, target, who.MainHand.Bonus, who.MainHand.Damage, who.MainHand.Extra, who.MainHand.Ranged, who.MainHand.Sneaky);
 
-        AttackProfile best = BestAttack(who, target, from) ?? who.MainHand;
-        AttackPreview odds = AttackOdds(who, target, from, best.Bonus, best.Damage, best.Extra, best.Ranged, best.Sneaky);
+        AttackProfile best = BestAttack(who, target) ?? who.MainHand;
+        AttackPreview odds = AttackOdds(who, target, best.Bonus, best.Damage, best.Extra, best.Ranged, best.Sneaky);
         if (!Has(who, AbilityId.Multiattack)) return odds;
 
         int min = 0, max = 0;
         foreach (AttackProfile attack in who.Attacks)
         {
-            if (!Measure.Within(from, target.Cell, attack.Range)) continue;
+            if (!CanReach(who, attack.Reach, target)) continue;
             min += attack.Damage.Min;
             max += attack.Damage.Max;
         }
         return odds with { Min = Math.Max(0, min), Max = Math.Max(odds.Max, max) };
     }
 
-    /// <summary>An attack roll's odds and damage from a tile, with Sneak Attack and Hex in the damage when they'd ride on it.</summary>
-    private AttackPreview AttackOdds(Combatant who, Combatant target, Point from, int bonus, DiceExpression damage, DiceExpression extra, bool ranged, bool sneaky)
+    /// <summary>An attack roll's odds and damage, with Sneak Attack and Hex in the damage when they'd ride on it.</summary>
+    private AttackPreview AttackOdds(Combatant who, Combatant target, int bonus, DiceExpression damage, DiceExpression extra, bool ranged, bool sneaky)
     {
-        Advantage advantage = AdvantageOf(who, target, from, ranged, false, out _);
+        bonus += who.RollBonus;
+        Advantage advantage = AdvantageOf(who, target, ranged, false, out _);
         int min = damage.Min + (extra.IsNone ? 0 : extra.Min);
         int max = damage.Max + (extra.IsNone ? 0 : extra.Max);
 
-        if (sneaky && SneakAttackApplies(who, target, advantage))
+        if (sneaky && SneakAttackApplies(who, target, advantage, target.Has(ConditionId.Marked)))
         {
             DiceExpression sneak = AbilityCatalog.Get(AbilityId.SneakAttack).Damage;
             min += sneak.Min;

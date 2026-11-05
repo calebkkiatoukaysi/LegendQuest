@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendQuest.Audio;
+using LegendQuest.Combat;
 using LegendQuest.Components;
 using LegendQuest.Dialogue;
 using LegendQuest.Items;
@@ -83,13 +84,17 @@ public partial class LegendQuestGame : Game
     /// Nothing else reads the shops or the loot tables until a shop opens or a fight's won, so a bad
     /// row in one would otherwise only show up then; reading them checks them now. The zones are read
     /// before the conversations, which check their travels against them, and the rest of the zones'
-    /// checks (talks, barks, every fight's foes together) wait for the conversations.
+    /// checks (talks, barks, every fight's foes together) wait for the conversations. Then who's drawn
+    /// for each fight's supports, which is often someone standing in a zone, and that every room a
+    /// fight's fought in has room on its floor for the fight's slots.
     /// </remarks>
     public static void LoadAndCheckData()
     {
         ZoneCatalog.LoadAll();
         DialogueCatalog.ValidateAll();
         ZoneCatalog.ValidateAfterDialogue();
+        EncounterCatalog.ValidateAfterZones();
+        foreach (RoomDefinition room in EncounterCatalog.FightRooms()) FightStage.Check(room);
         _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
     }
 

@@ -146,8 +146,8 @@ public static class ItemReadout
             lines.Add("Heals " + item.Heals + ", " + item.Heals.Average.ToString("0.#", CultureInfo.InvariantCulture) + " on average");
         if (!item.ThrownDamage.IsNone)
             lines.Add("Thrown " + Metres(item.ThrowRange) + " m: " + item.ThrownDamage + " " + Lower(item.ThrownDamageType));
-        if (item.SlotsRestored > 0)
-            lines.Add("Gives back " + item.SlotsRestored.ToString(CultureInfo.InvariantCulture) + " spent spell slot" + (item.SlotsRestored == 1 ? string.Empty : "s"));
+        if (item.FocusRestored > 0)
+            lines.Add("In a fight: +" + item.FocusRestored.ToString(CultureInfo.InvariantCulture) + " Focus");
     }
 
     /// <summary>What wearing it adds: AC, damage, speed, hit points, spell attacks.</summary>

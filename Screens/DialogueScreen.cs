@@ -528,6 +528,17 @@ public class DialogueScreen : GameScreen
                 _audio.Play(Sfx.Waypoint);
                 break;
 
+            case DialogueEventKind.Experience:
+                if (happened.Amount <= 0) break;
+                _toast.Show("+" + happened.Amount + " XP");
+                _audio.Play(Sfx.Pickup);
+                break;
+
+            case DialogueEventKind.LevelUp:
+                _toast.Show(NameOf(happened.Id) + " reaches level " + happened.Amount);
+                _audio.Play(Sfx.Approve);
+                break;
+
             case DialogueEventKind.Travel:
                 _travel = happened.Id;
                 break;

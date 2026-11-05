@@ -20,11 +20,11 @@ internal sealed class StallWatch
     /// <summary>The party spent its turns getting people up, and none of the foes got hurt.</summary>
     public const string Treadmill = "revive treadmill: the party kept getting people up who went straight back down, and hurt nobody";
 
-    /// <summary>Nobody hurt anybody, though somebody was moving.</summary>
-    public const string StandOffMoving = "stand-off: nobody hurt anybody, though people were moving (out of reach, or walled in)";
+    /// <summary>Nobody hurt anybody, though somebody was Shifting.</summary>
+    public const string StandOffMoving = "stand-off: nobody hurt anybody, though people were shifting (out of reach, or shuffling the rows)";
 
-    /// <summary>Nobody hurt anybody, and nobody moved.</summary>
-    public const string StandOffStill = "stand-off: nobody hurt anybody or moved (everyone left thinks there's nothing worth doing)";
+    /// <summary>Nobody hurt anybody, and nobody Shifted.</summary>
+    public const string StandOffStill = "stand-off: nobody hurt anybody or shifted (everyone left thinks there's nothing worth doing)";
 
     /// <summary>The foes went unhurt while the party was hurt.</summary>
     public const string PartyHarmless = "the party couldn't hurt the foes";
@@ -41,7 +41,7 @@ internal sealed class StallWatch
     /// <summary>The round the events are up to.</summary>
     private int _round;
 
-    /// <summary>The last round a foe lost hit points, the last a party member did, and the last anyone took a step.</summary>
+    /// <summary>The last round a foe lost hit points, the last a party member did, and the last anyone Shifted (or was pulled or pushed).</summary>
     private int _foesHurt, _partyHurt, _moved;
 
     /// <summary>Takes in what a command caused.</summary>
@@ -56,7 +56,7 @@ internal sealed class StallWatch
                 case CombatEventKind.RoundStarted:
                     _round = happened.Amount;
                     break;
-                case CombatEventKind.Moved:
+                case CombatEventKind.Shifted:
                     _moved = _round;
                     break;
                 case CombatEventKind.Revived:

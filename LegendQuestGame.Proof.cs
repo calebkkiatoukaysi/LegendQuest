@@ -496,7 +496,7 @@ public partial class LegendQuestGame
     /// <summary>
     /// A fight the party lost, fought again the way a player would: LOAD LAST SAVE, which is the
     /// autosave from just before it, on dice seeded one further along so it doesn't go the same way.
-    /// The part of the run starts over in the zone that's loaded, and plays its beats back up to the fight.
+    /// The part of the run picks up in the zone that's loaded, from the beat that was playing when the fight began.
     /// </summary>
     /// <exception cref="InvalidOperationException">If the run's lost more fights than it's allowed, which means a fight's too hard, not unlucky.</exception>
     private void FightAgain(GameOverScreen over)
@@ -505,6 +505,7 @@ public partial class LegendQuestGame
             throw new InvalidOperationException($"The proof run has lost {_proofLosses} fights; one of them is too hard for the party, not just unlucky.");
 
         ExploreScreen.ProofSeed++;
+        ExploreScreen.ProofResumeAt = ExploreScreen.ProofBeatsDone;
         over.ProofLoadLastSave();
         _proofSubject = null;
         _proofWaitStart = _proofFrame;

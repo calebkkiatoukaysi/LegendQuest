@@ -295,7 +295,12 @@ public static class StoryPrologueAct1
             new()
             {
                 Speaker = Origins.SoulBound, Expression = "smile", Direction = "walking away", Line = "Did you see his face? That's the pay. The coin's extra.",
-                Effects = new[] { DialogueEffect.Set("a1-c1-01"), DialogueEffect.Objective("Find the quest board in the Lantern Market, up in the city") },
+                Effects = new[]
+                {
+                    DialogueEffect.Set("a1-c1-01"),
+                    DialogueEffect.Objective("Find the quest board in the Lantern Market, up in the city"),
+                    DialogueEffect.Experience(100),
+                },
                 Cues = new[] { StageCue.Hold("you", "belt_front", "tomas-hook") },
             },
         },
@@ -389,7 +394,11 @@ public static class StoryPrologueAct1
                 Speaker = "sera", Line = "I waited to see if you'd make it worse.",
                 Options = new DialogueOption[]
                 {
-                    new() { Text = "The Rangers' Lodge sent us. We want to help.", Effects = new[] { DialogueEffect.Add("affinity-sera", 3) }, Next = "name" },
+                    new()
+                    {
+                        Text = "The Rangers' Lodge sent us. We want to help.",
+                        Effects = new[] { DialogueEffect.Add("affinity-sera", 3), DialogueEffect.Set("lodge-told") }, Next = "name",
+                    },
                     new()
                     {
                         Text = "Nice shot. Do you do that for everyone?", Flirt = true,

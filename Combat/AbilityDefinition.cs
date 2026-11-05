@@ -5,19 +5,20 @@ using LegendQuest.Rules;
 namespace LegendQuest.Combat;
 
 /// <summary>
-/// One ability: what it's called, what it costs, what it's pointed at, how far it reaches, and what
-/// it rolls and does.
+/// One ability: what it's called, what it costs, who it's pointed at and who it catches, which rows
+/// it reaches, where it goes on the bar, and what it rolls and does.
 /// </summary>
 /// <remarks>
 /// Data, like an ItemDefinition. Kind says how the engine resolves it and the rest fills that in, so
-/// most abilities need no code of their own. Ranges are metres (a tile is 1.5 m).
+/// most abilities need no code of their own. Shape and Reach are 11-combat.md §2's; Focus, cooldowns
+/// and once a fight are §3.2's.
 /// </remarks>
 public sealed class AbilityDefinition
 {
     /// <summary>Which ability this is.</summary>
     public required AbilityId Id { get; init; }
 
-    /// <summary>What it's called on the hotbar and in the log.</summary>
+    /// <summary>What it's called on the bar and in the log.</summary>
     public required string Name { get; init; }
 
     /// <summary>What it does, for its tooltip: a sentence or two.</summary>
@@ -28,18 +29,6 @@ public sealed class AbilityDefinition
 
     /// <summary>What part of the turn it spends.</summary>
     public ActionCost Cost { get; init; }
-
-    /// <summary>What it's pointed at.</summary>
-    public TargetKind Target { get; init; }
-
-    /// <summary>How far it reaches, in metres. Zero for a weapon means the weapon's own reach or range, and for something thrown, the item's.</summary>
-    public float Range { get; init; }
-
-    /// <summary>For an area, how far from the tile it's centred on it reaches, in metres. On a Self ability it's a burst round the user that catches everyone else that close.</summary>
-    public float Radius { get; init; }
-
-    /// <summary>Whether the user has to be able to see the target (or the tile) to use it.</summary>
-    public bool NeedsSight { get; init; }
 
     /// <summary>Whether an ally target has to be somebody other than the user.</summary>
     public bool NotSelf { get; init; }
@@ -71,9 +60,6 @@ public sealed class AbilityDefinition
     /// <summary>Whether it needs the caster's concentration: taking damage can break it, and casting another ends it.</summary>
     public bool Concentration { get; init; }
 
-    /// <summary>For AutoHit, how many darts, each one rolling Damage on its own.</summary>
-    public int Darts { get; init; }
-
     /// <summary>The hit points it gives back, before what's added to them. None for no healing (and for Lay on Hands, which heals what its pool allows).</summary>
     public DiceExpression Heals { get; init; } = DiceExpression.None;
 
@@ -86,24 +72,42 @@ public sealed class AbilityDefinition
     /// <summary>Whether it's a spell: it rolls with the casting ability, and armour you aren't trained in stops it.</summary>
     public bool Spell { get; init; }
 
-    /// <summary>The level of slot a spell spends: 0 for a cantrip, or for anything that isn't a spell.</summary>
-    public int SpellSlotLevel { get; init; }
-
-    /// <summary>The resource it spends, by its ResourceCatalog id, or null if it's free.</summary>
-    public string Resource { get; init; }
-
-    /// <summary>How much of Resource one use spends.</summary>
-    public int Spends { get; init; } = 1;
-
     /// <summary>The item in the party's bag it uses up, by its ItemCatalog id, or null.</summary>
     public string Item { get; init; }
 
     /// <summary>For a foe, the d6 roll at the start of its turn that gives it back once it's been used (5 is "recharge 5-6"), or 0 if it doesn't need one.</summary>
     public int RechargeOn { get; init; }
 
-    /// <summary>The rest that gives its uses back, from its resource. None for a free one.</summary>
-    public RestKind Recharge => Resource is null ? RestKind.None : ResourceCatalog.Get(Resource).Recharge;
+    /// <summary>Who it catches once it's pointed: one person, or a pattern of slots round them (CombatEngine.Caught).</summary>
+    public TargetShape Shape { get; init; }
 
-    /// <summary>Whether it's a cantrip: a spell that costs no slot.</summary>
-    public bool Cantrip => Spell && SpellSlotLevel == 0;
+    /// <summary>Which rows it can get at, and from which. Weapon takes it from the weapon in hand.</summary>
+    public Reach Reach { get; init; }
+
+    /// <summary>How many: RandomFoes' picks, or darts that each roll Damage on their own.</summary>
+    public int Count { get; init; }
+
+    /// <summary>The Focus it costs, or 0.</summary>
+    public int Focus { get; init; }
+
+    /// <summary>How many of the user's next turns it can't be used on once it has been, or 0.</summary>
+    public int Cooldown { get; init; }
+
+    /// <summary>Whether it works once a fight: every ultimate, and the foes' abilities that used to spend something.</summary>
+    public bool OncePerFight { get; init; }
+
+    /// <summary>The Focus using it gives back: an auto attack's 10, or 0.</summary>
+    public int FocusGain { get; init; }
+
+    /// <summary>Where it goes on the bar, which lays the bar out.</summary>
+    public BarSlot Bar { get; init; }
+
+    /// <summary>For a pool (Lay on Hands), the hit points it holds a fight for each of the user's levels, or 0 for no pool.</summary>
+    public int PoolPerLevel { get; init; }
+
+    /// <summary>Whether it moves its target between its rows when it lands.</summary>
+    public RowMove RowMove { get; init; }
+
+    /// <summary>Whether it comes with a free Shift that no opportunity attack follows (Cunning Step).</summary>
+    public bool FreeShift { get; init; }
 }

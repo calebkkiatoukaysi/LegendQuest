@@ -7,14 +7,15 @@ using LegendQuest.Combat;
 namespace LegendQuest.Components;
 
 /// <summary>
-/// The Soul-Link's meter in a fight: the sigil of the two clasped hands beside the hotbar, with a pip
-/// for each charge under it.
+/// The Soul-Link's meter in a fight: the sigil of the two clasped hands on the bar beside the hotbar,
+/// with a pip for each charge under it. Clicking it strikes.
 /// </summary>
 /// <remarks>
 /// The story's five states of the sigil, read as the meter: grey with a gold pulse while the bond's
 /// empty and waiting, gold once it's charged, gold with a glow behind it and READY when it's full,
 /// the one-frame violet flicker as a charge lands, violet while one of the two of you is down, and
-/// broken grey when the two of you aren't both in the fight. Pointing at it says how it fills. A
+/// broken grey when the two of you aren't both in the fight or the bond's broken. Pointing at it says
+/// how it fills, and clicking it picks the Soul-Link Strike when it's full. A
 /// scene's sigil cues put it up outside a fight too (Mark and DrawMark), on the corner of the party's
 /// cards, in the state the cue says: gold for on and gold, gold with its glow for glow, violet,
 /// broken grey for grey and cold, nothing for off, and the two flickers for a flash.
@@ -22,11 +23,14 @@ namespace LegendQuest.Components;
 public class SoulLinkSigil
 {
     /// <summary>How much the sigil is blown up, and its pips.</summary>
-    private const float Scale = 3f;
+    private const float Scale = 2f;
+
+    /// <summary>How much a scene's sigil (DrawMark) is blown up, on the corner of the party's cards.</summary>
+    private const float MarkScale = 3f;
     private const float PipScale = 1f;
 
-    /// <summary>Where it is: right of the frame of whoever's turn it is, its bottom level with the hotbar's, in screen pixels.</summary>
-    private const int Left = 458;
+    /// <summary>Where it is: on the bar between the budget and the hotbar, its middle (and its pips') level with the hotbar's, in screen pixels.</summary>
+    private const int Left = 496;
     private const int PipRoom = 18;
 
     /// <summary>The room between two pips, in screen pixels.</summary>
@@ -51,7 +55,6 @@ public class SoulLinkSigil
     private const float GlowReach = 0.55f;
     private const float GlowStrength = 0.55f;
 
-    private const string Label = "SOUL-LINK";
     private const string Ready = "READY";
 
     private CombatArt _art;
@@ -65,11 +68,14 @@ public class SoulLinkSigil
     private SigilState _flash;
     private float _flashLeft;
 
-    /// <summary>How big the sigil is on screen, either way, in screen pixels.</summary>
-    public static int Size => (int)(CombatIcons.Piece("soul-link-gold").Width * Scale);
+    /// <summary>How big a scene's sigil is on screen, either way, in screen pixels.</summary>
+    public static int Size => (int)(CombatIcons.Piece("soul-link-gold").Width * MarkScale);
+
+    /// <summary>How big the fight's sigil on the bar is, either way, in screen pixels.</summary>
+    private static int BarSize => (int)(CombatIcons.Piece("soul-link-gold").Width * Scale);
 
     /// <summary>Where the sigil is on screen.</summary>
-    public static Rectangle Bounds => new(Left, CombatHotbar.Top + CombatHotbar.SlotSize - Size - PipRoom, Size, Size);
+    public static Rectangle Bounds => new(Left, CombatHotbar.Top + (CombatHotbar.SlotSize - BarSize - PipRoom) / 2, BarSize, BarSize);
 
     /// <summary>Whether a scene's put it up outside a fight, in a state that shows or a flash.</summary>
     public bool Marked => _flashLeft > 0f || _marked is SigilState state && state != SigilState.Off;
@@ -143,7 +149,7 @@ public class SoulLinkSigil
             glow.Inflate((int)(bounds.Width * GlowReach), (int)(bounds.Height * GlowReach));
             spriteBatch.Draw(_glow, glow, Palette.Gold * (GlowStrength * MathHelper.Lerp(GlowLeast, 1f, breathe) * alpha));
         }
-        _art.Piece(spriteBatch, piece, bounds.Location.ToVector2(), Scale, Color.White * alpha);
+        _art.Piece(spriteBatch, piece, bounds.Location.ToVector2(), MarkScale, Color.White * alpha);
     }
 
     /// <summary>Draws the sigil in its state and its pips. Goes in a point sampled batch.</summary>
@@ -180,7 +186,7 @@ public class SoulLinkSigil
             _art.Piece(spriteBatch, i < charge ? "action" : "action-spent", new Vector2(MathF.Round(x + i * (pip.Width * PipScale + PipGap)), bounds.Bottom + PipDrop), PipScale, Color.White * alpha);
     }
 
-    /// <summary>Writes READY over a full sigil. Goes in a linear sampled batch after DrawArt.</summary>
+    /// <summary>Writes READY over a full sigil, out over the floor above the bar. Goes in a linear sampled batch after DrawArt.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in screen space, linear-sampled, deferred.</param>
     /// <param name="active">Whether the two of you are both in the fight.</param>
     /// <param name="charge">Its charge as shown.</param>
@@ -188,10 +194,8 @@ public class SoulLinkSigil
     public void DrawWords(SpriteBatch spriteBatch, bool active, int charge, float alpha)
     {
         Rectangle bounds = Bounds;
-        bool ready = active && charge >= SoulLink.Full;
-        // From the sigil's left edge rather than its middle, so the word runs out over the empty
-        // room above the hotbar and not back over the frame of whoever's turn it is.
-        Text.Draw(spriteBatch, _font, ready ? Ready : Label, bounds.Left, bounds.Top - _font.LineSpacing,
-            (ready ? Palette.Gold : Palette.Note) * alpha, Palette.Shadow * alpha);
+        if (!active || charge < SoulLink.Full) return;
+        // Only when it's full, so the floor above the bar is left alone the rest of the time.
+        Text.Draw(spriteBatch, _font, Ready, bounds.Center.X, CombatHotbar.BarTop - _font.LineSpacing, Palette.Gold * alpha, Palette.Shadow * alpha, centred: true);
     }
 }

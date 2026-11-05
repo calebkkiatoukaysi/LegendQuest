@@ -62,7 +62,7 @@ public static class CombatIcons
     private const int HudWidth = 256;
 
     /// <summary>How tall hud.png is, in pixels. HUD_HEIGHT in the script.</summary>
-    private const int HudHeight = 100;
+    private const int HudHeight = 132;
 
     /// <summary>
     /// Every ability's icon, in AbilityId's order: an ability's icon is the cell numbered (int)its
@@ -75,7 +75,7 @@ public static class CombatIcons
         "cunning-dash", "cunning-disengage", "sacred-flame", "healing-word", "cure-wounds", "fire-bolt",
         "ray-of-frost", "magic-missile", "lay-on-hands", "protection", "produce-flame", "entangle",
         "eldritch-blast", "hex", "vicious-mockery", "bardic-inspiration", "multiattack", "pack-tactics",
-        "trip", "smoke-bomb", "blasting-charge", "thorn-burst", "drink-elixir",
+        "trip", "smoke-bomb", "blasting-charge", "thorn-burst", "drink-elixir", "backstab",
     };
 
     /// <summary>
@@ -88,7 +88,8 @@ public static class CombatIcons
     private static readonly string[] Conditions =
     {
         "downed", "prone", "slowed", "disengaged", "dodging", "restrained", "hexed", "inspired", "stable",
-        "helped", "mocked",
+        "helped", "mocked", "marked", "taunted", "burning", "bleeding", "frozen", "poisoned", "stunned", "blinded",
+        "frightened", "charmed",
     };
 
     /// <summary>
@@ -98,13 +99,17 @@ public static class CombatIcons
     /// <remarks>
     /// The frames have a black edge, a bevel and a trim round a well FrameInset in: draw the frame,
     /// then the icon or the face in the well. A disabled slot wants its icon drawn greyed as well.
-    /// The pips come full, spent (a hollow) and preview (pale, for what the move you're pointing at
-    /// would spend). The movement pieces are three-sliced, a three-pixel cap at each end and the
-    /// two middle columns stretched: the track first at the bar's length, then the fill as far as
-    /// there's movement, then the preview or the over piece, and a tick every tile. The death saves
-    /// are 10x10 sockets. The Soul-Link sigil's five states are the story's: gold, the one-frame
-    /// violet flicker, violet, broken grey, and grey with gold coming back. The target rings go under
-    /// someone's feet and turn over their four frames. The things that fly point right with their
+    /// The pips (the action, bonus, reaction and Shift) come full, spent (a hollow) and preview
+    /// (pale, for what the thing you're pointing at would spend). The Focus pieces are three-sliced,
+    /// a three-pixel cap at each end and the two middle columns stretched: the track first at the
+    /// bar's length, then the fill as far as there's Focus, then the preview or the over piece, and a
+    /// tick every ten. The death saves are 10x10 sockets. The Soul-Link sigil's five states are the
+    /// story's: gold, the one-frame violet flicker, violet, broken grey, and grey with gold coming
+    /// back. The target rings go under someone's feet and turn over their four frames. The slot
+    /// plate's five frames are a place in the rows plain, a foe's you can reach, an ally's you can
+    /// reach, caught (filled), and one to Shift to; the Shift chevron points down at a plate, plain
+    /// and under the mouse. The support banner is three-sliced across (four, four stretched, four),
+    /// and the progress ring's frame k is k eighths full. The things that fly point right with their
     /// middle at the middle of the frame, for turning to where they're going.
     /// </remarks>
     private static readonly (string Name, Rectangle Source, int Frames)[] Pieces =
@@ -119,8 +124,6 @@ public static class CombatIcons
         ("death-save-empty", new Rectangle(210, 0, 10, 10), 1),
         ("death-save-success", new Rectangle(220, 0, 10, 10), 1),
         ("death-save-failure", new Rectangle(230, 0, 10, 10), 1),
-        ("path-dot", new Rectangle(210, 10, 6, 6), 1),
-        ("path-dot-far", new Rectangle(216, 10, 6, 6), 1),
         ("soul-link-gold", new Rectangle(0, 32, 24, 24), 1),
         ("soul-link-flicker", new Rectangle(24, 32, 24, 24), 1),
         ("soul-link-violet", new Rectangle(48, 32, 24, 24), 1),
@@ -128,8 +131,6 @@ public static class CombatIcons
         ("soul-link-pulse", new Rectangle(96, 32, 24, 24), 1),
         ("target-foe", new Rectangle(120, 32, 24, 12), 4),
         ("target-ally", new Rectangle(120, 44, 24, 12), 4),
-        ("path-end", new Rectangle(216, 32, 16, 16), 1),
-        ("path-end-far", new Rectangle(232, 32, 16, 16), 1),
         ("arrow", new Rectangle(0, 56, 16, 16), 1),
         ("fire-bolt", new Rectangle(16, 56, 16, 16), 4),
         ("frost-ray", new Rectangle(80, 56, 16, 16), 4),
@@ -146,11 +147,18 @@ public static class CombatIcons
         ("reaction", new Rectangle(72, 88, 12, 12), 1),
         ("reaction-spent", new Rectangle(84, 88, 12, 12), 1),
         ("reaction-preview", new Rectangle(96, 88, 12, 12), 1),
-        ("move-track", new Rectangle(108, 88, 8, 8), 1),
-        ("move-fill", new Rectangle(116, 88, 8, 8), 1),
-        ("move-preview", new Rectangle(124, 88, 8, 8), 1),
-        ("move-over", new Rectangle(132, 88, 8, 8), 1),
-        ("move-tick", new Rectangle(140, 88, 2, 8), 1),
+        ("focus-track", new Rectangle(108, 88, 8, 8), 1),
+        ("focus-fill", new Rectangle(116, 88, 8, 8), 1),
+        ("focus-preview", new Rectangle(124, 88, 8, 8), 1),
+        ("focus-over", new Rectangle(132, 88, 8, 8), 1),
+        ("focus-tick", new Rectangle(140, 88, 2, 8), 1),
+        ("shift", new Rectangle(142, 88, 12, 12), 1),
+        ("shift-spent", new Rectangle(154, 88, 12, 12), 1),
+        ("shift-preview", new Rectangle(166, 88, 12, 12), 1),
+        ("shift-chevron", new Rectangle(178, 88, 10, 8), 2),
+        ("slot-plate", new Rectangle(0, 100, 28, 10), 5),
+        ("support-banner", new Rectangle(140, 100, 12, 16), 1),
+        ("progress-ring", new Rectangle(0, 116, 16, 16), 9),
     };
 
     /// <summary>Each ability icon's cell on its sheet, extras included, by name without its hyphens.</summary>

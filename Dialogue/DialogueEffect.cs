@@ -10,13 +10,13 @@ using LegendQuest.Story;
 namespace LegendQuest.Dialogue;
 
 /// <summary>
-/// Something a line or an option does to the game: a flag, a meter, gold, an item, what to do
-/// next, someone joining, going away or coming back, your voice, somewhere to go, a shop to open,
-/// or a fight to start.
+/// Something a line or an option does to the game: a flag, a meter, gold, an item, experience, what
+/// to do next, someone joining, going away or coming back, your voice, somewhere to go, a shop to
+/// open, a fight to start, or, in a fight's interlude, a change to the fight.
 /// </summary>
 /// <param name="Kind">What it does.</param>
-/// <param name="Id">The flag, meter, item, text, origin, voice, "map spawn", "waiting member", shop or encounter it's about.</param>
-/// <param name="Amount">How much, for meters and gold.</param>
+/// <param name="Id">The flag, meter, item, text, origin, voice, "map spawn", "waiting member", shop, encounter, support, enemy or guest it's about.</param>
+/// <param name="Amount">How much, for meters, gold and experience, and how many foes for FightAdd.</param>
 public readonly record struct DialogueEffect(EffectKind Kind, string Id, int Amount = 0)
 {
     /// <summary>What has to hold, when its line is said or its option picked, for it to happen at all. Null for always.</summary>
@@ -79,8 +79,34 @@ public readonly record struct DialogueEffect(EffectKind Kind, string Id, int Amo
     /// <param name="encounter">The fight, by its id in EncounterCatalog.</param>
     public static DialogueEffect Fight(string encounter) => new(EffectKind.Fight, encounter);
 
-    /// <summary>A long rest for everyone: the night at camp or in a bed at the inn. Nothing else gives one yet; short rests come with the camp screen.</summary>
+    /// <summary>A long rest for everyone: the night at camp or in a bed at the inn. It heals; nothing else is spent between fights.</summary>
     public static DialogueEffect Rest() => new(EffectKind.Rest, nameof(RestKind.Long));
+
+    /// <summary>Experience for everyone, in the party, at camp and away (xp +n).</summary>
+    /// <param name="amount">How much each. More than 0.</param>
+    public static DialogueEffect Experience(int amount) => new(EffectKind.Experience, "xp", amount);
+
+    /// <summary>A support in the fight that's going stops acting for the rest of it (support-off): the wall falls, the battlemages are spent. Only in a fight's interlude.</summary>
+    /// <param name="support">The support, by its id in the encounter.</param>
+    public static DialogueEffect SupportOff(string support) => new(EffectKind.SupportOff, support);
+
+    /// <summary>More foes join the fight that's going (fight-add). Only in a fight's interlude.</summary>
+    /// <param name="enemy">What they fight as, by EnemyCatalog id.</param>
+    /// <param name="count">How many. 1 or more.</param>
+    public static DialogueEffect FightAdd(string enemy, int count) => new(EffectKind.FightAdd, enemy, count);
+
+    /// <summary>A guest joins the party's side of the fight that's going (fight-guest). Only in a fight's interlude.</summary>
+    /// <param name="guest">Who: an origin id, or an EnemyCatalog id.</param>
+    public static DialogueEffect FightGuest(string guest) => new(EffectKind.FightGuest, guest);
+
+    /// <summary>What it changes about a fight that's going, for a SupportOff, FightAdd or FightGuest: what the screen hands CombatEngine.Apply. Null for any other kind.</summary>
+    public FightOrder Order => Kind switch
+    {
+        EffectKind.SupportOff => new FightOrder(FightOrderKind.SupportOff, Id, 0),
+        EffectKind.FightAdd => new FightOrder(FightOrderKind.AddFoes, Id, Amount),
+        EffectKind.FightGuest => new FightOrder(FightOrderKind.AddGuest, Id, 0),
+        _ => null,
+    };
 
     /// <summary>The same effect, happening only if all of these hold as well as any it had already.</summary>
     /// <param name="conditions">What has to hold.</param>
@@ -98,7 +124,7 @@ public readonly record struct DialogueEffect(EffectKind Kind, string Id, int Amo
     }
 
     /// <summary>What's wrong with it, or null if it's well formed: its conditions first, then what it does.</summary>
-    /// <remarks>Where a Travel goes gets checked by DialogueCatalog, which runs after the maps have all been read.</remarks>
+    /// <remarks>Where a Travel goes gets checked by DialogueCatalog, which runs after the maps have all been read, and so does whether a change to a fight is in one of its interludes, with a support it has.</remarks>
     public string Problem()
     {
         foreach (DialogueCondition condition in Conditions ?? Array.Empty<DialogueCondition>())
@@ -120,6 +146,11 @@ public readonly record struct DialogueEffect(EffectKind Kind, string Id, int Amo
             EffectKind.Travel when Id.Split(' ').Length != 2 => $"travels to '{Id}', which isn't a map and a spawn",
             EffectKind.Shop when !ShopCatalog.Exists(Id) => $"opens a shop, {Id}, that doesn't exist",
             EffectKind.Fight when !EncounterCatalog.Exists(Id) => $"starts a fight, {Id}, that isn't in EncounterCatalog",
+            EffectKind.Experience when Amount <= 0 => $"gives {Amount} experience, and it has to be more than none",
+            EffectKind.FightAdd when !EnemyCatalog.Exists(Id) => $"adds {Id} to the fight, which isn't in EnemyCatalog",
+            EffectKind.FightAdd when Amount < 1 => $"adds {Amount} {Id} to the fight",
+            EffectKind.FightGuest when !Origins.Exists(Id) && !EnemyCatalog.Exists(Id) => $"brings {Id} into the fight as a guest, who's neither an origin nor an enemy",
+            EffectKind.FightGuest when Id is Origins.You or Origins.SoulBound => $"brings {Id} into the fight as a guest, who's always in the party",
             _ => null,
         };
     }
