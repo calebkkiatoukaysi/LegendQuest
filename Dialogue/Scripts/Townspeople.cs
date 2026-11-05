@@ -8,7 +8,7 @@ namespace LegendQuest.Dialogue.Scripts;
 /// the palace terrace's, and the hooks for the four side quests on the board.
 /// </summary>
 /// <remarks>
-/// Only Old Tomas and Sergeant Brisk are STORY.md's; the rest are mine, written round its bible (the
+/// Only Old Tomas and Sergeant Brisk are the story's; the rest are mine, written round its bible (the
 /// Watch sent east, the Mirewood going wrong, the Princess riding out on her own). The side quests
 /// (SQ-Cellar, SQ-Ledger, SQ-Tollroad and SQ-Widow) are only hooks until they're built: hearing one
 /// sets a flag, and none of them touches what you're to do next, which stays the main quest's. Each

@@ -8,7 +8,7 @@ namespace LegendQuest.Combat;
 /// it's won.
 /// </summary>
 /// <remarks>
-/// The ids are STORY.md's scene ids, so the conversation that starts a fight names it, and the fight
+/// The ids are the story's scene ids, so the conversation that starts a fight names it, and the fight
 /// can slot in where its card was. The foes that are on the map already are named by their npc ids;
 /// anyone else turns up on a tile.
 /// </remarks>

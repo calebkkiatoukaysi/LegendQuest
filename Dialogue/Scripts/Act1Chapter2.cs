@@ -9,7 +9,8 @@ namespace LegendQuest.Dialogue.Scripts;
 /// Fennick paying out back in the city.
 /// </summary>
 /// <remarks>
-/// STORY.md's A1-C2-01 to A1-C2-03, and what it leaves for the game to fill: Sera talking the
+/// A1-C2-01 to A1-C2-03 are compiled from Story/04-script-prologue-act1.md into StoryPrologueAct1;
+/// this class keeps their flags by name, and the scenes 04 leaves as built: Sera talking the
 /// quarry's root walls open, the courier's letter as a scene of its own, Fennick's pay with the hook
 /// to the east gate (A1-C2-04), and the Lodge's ranger and the busker once you're back. Each fight
 /// splits its scene in two: the conversation before it ends by starting it, and winning it plays the
@@ -23,9 +24,6 @@ public static class Act1Chapter2
 {
     private const string You = Origins.You;
     private const string SoulBound = Origins.SoulBound;
-
-    /// <summary>Sera's approval.</summary>
-    private const string SeraAffinity = "affinity-sera";
 
     /// <summary>What the Rangers' contract pays: triple, the way Fennick said.</summary>
     private const int ContractPay = 90;
@@ -90,89 +88,6 @@ public static class Act1Chapter2
     /// <summary>Fennick's paid for the Mirewood and pointed you at the east gate.</summary>
     public const string Paid = "a1-c2-04";
 
-    /// <summary>A1-C2-01 up to the fight: into the Mirewood, and the gloomfangs in the clearing.</summary>
-    public static readonly DialogueScript Edge = new()
-    {
-        Id = "a1-c2-01",
-        Nodes = new DialogueNode[]
-        {
-            new() { Speaker = Speakers.Chapter, Line = "Chapter 2  ·  The Rot in the Mirewood" },
-            new() { Speaker = Speakers.Narrator, Line = "The Mirewood is green at its edge, but the birds have already stopped singing. Further in, black runs through the bark of the trees like veins." },
-            new() { Speaker = SoulBound, Direction = "sniffing the air", Line = "Smell that? Like a burnt-out forge." },
-            new() { Speaker = You, Line = "Smells like triple pay.", Conditions = new[] { DialogueCondition.Speaks(Voice.Pragmatic) } },
-            new() { Speaker = You, Line = "Smells like people in trouble.", Conditions = new[] { DialogueCondition.Speaks(Voice.Honorable) } },
-            new() { Speaker = You, Line = "Smells like your cooking.", Conditions = new[] { DialogueCondition.Speaks(Voice.Witty) } },
-            new()
-            {
-                Speaker = SoulBound, Direction = "laughing", Line = "Everything smells like money to you. It's why I keep you around.",
-                Conditions = new[] { DialogueCondition.Speaks(Voice.Pragmatic) },
-            },
-            new() { Speaker = SoulBound, Direction = "the grin going", Line = "Yeah. It does.", Conditions = new[] { DialogueCondition.Speaks(Voice.Honorable) } },
-            new() { Speaker = SoulBound, Line = "Rude. Accurate, but rude.", Conditions = new[] { DialogueCondition.Speaks(Voice.Witty) } },
-
-            new() { Speaker = Speakers.Narrator, Sound = Sfx.WolfHowl, Line = "A howl, close. Four wolves come out of the trees with their heads low, and black smoke leaks from their eyes like tears." },
-            new()
-            {
-                Speaker = SoulBound, Direction = "drawing", Line = "Nice doggies. Nice, horrible doggies.",
-                Effects = new[] { DialogueEffect.Fight("a1-c2-01-gloomfangs") },
-            },
-        },
-    };
-
-    /// <summary>The rest of A1-C2-01, once the gloomfangs are beaten: the one that gets up again, Sera's arrow, and Sera joining.</summary>
-    /// <remarks>EncounterCatalog's a1-c2-01-gloomfangs plays it when the fight's won, which has set GloomfangsBeaten.</remarks>
-    public static readonly DialogueScript SeraJoins = new()
-    {
-        Id = "a1-c2-01-gloomfangs-after",
-        Nodes = new DialogueNode[]
-        {
-            // The rot won't let the last of them lie, which is how Sera gets the last word.
-            new()
-            {
-                Speaker = Speakers.Narrator,
-                Line = "The last gloomfang won't stay down. It drags itself up out of the bracken with the smoke pouring from its eyes, and goes for {sb}'s throat.",
-            },
-            new() { Speaker = Speakers.Narrator, Sound = Sfx.Bowshot, Line = "An arrow out of the dark takes it in mid-leap. It's dead before it lands at {sb}'s feet." },
-            new() { Speaker = Speakers.Narrator, Line = "A woman steps out of the trees with her bow still drawn: a Sylvan in green and brown leathers, a braid over one shoulder." },
-            new() { Speaker = "sera", Line = "You're loud. Both of you. The whole forest heard you coming." },
-            new() { Speaker = SoulBound, Direction = "grinning", Line = "And yet you waited until we'd done the hard part." },
-            new()
-            {
-                Speaker = "sera", Line = "I waited to see if you'd make it worse. You didn't. Barely.",
-                Options = new DialogueOption[]
-                {
-                    new() { Text = "We're here from the Rangers' Lodge. We want to help.", Next = "lodge", Effects = new[] { DialogueEffect.Add(SeraAffinity, 5) } },
-                    new()
-                    {
-                        Text = "Nice shot. You do this often, or just for us?", Next = "flirt", Flirt = true,
-                        Effects = new[] { DialogueEffect.Add(SeraAffinity, 3), DialogueEffect.Set(SeraFlirt) },
-                    },
-                    new() { Text = "We had it handled.", Next = "handled" },
-                },
-            },
-            new() { Id = "lodge", Speaker = "sera", Line = "Tamsin's lot. About time they sent someone who'd actually come in.", Next = "warden" },
-            new() { Id = "flirt", Speaker = "sera", Line = "Only for people worth the arrow. Jury's still out.", Next = "warden" },
-            new() { Id = "handled", Speaker = "sera", Direction = "a look at the dead wolf", Line = "Clearly." },
-
-            new() { Id = "warden", Speaker = "sera", Direction = "lowering the bow at last", Line = "Sera Vantis, warden of this stretch of wood. The wolves aren't mad. They're poisoned." },
-            new() { Speaker = "sera", Line = "Something in the old quarry is bleeding black into the roots. Every creature that drinks from the stream turns." },
-            new() { Speaker = Speakers.Narrator, Line = "She crouches by the last wolf and closes its eyes with two fingers. The smoke stops." },
-            new() { Speaker = SoulBound, Line = "So we find it and smash it." },
-            new() { Speaker = "sera", Line = "So we find it and understand it. Then we decide." },
-            new() { Speaker = SoulBound, Direction = "to you, half joking", Line = "I like her. She's wrong, but I like her." },
-            new() { Speaker = "sera", Direction = "without looking round", Line = "I can hear you." },
-            new()
-            {
-                Speaker = "sera", Line = "The quarry's east, where the rot's worst. Keep up, and keep quiet.",
-                Effects = new[]
-                {
-                    DialogueEffect.Recruit("sera"), DialogueEffect.Set(SeraRecruited), DialogueEffect.Set(EdgeDone),
-                    DialogueEffect.Objective("Find the old quarry deep in the Mirewood"),
-                },
-            },
-        },
-    };
-
     /// <summary>The quarry's first root wall, and Sera talking it open.</summary>
     public static readonly DialogueScript FirstRoots = new()
     {
@@ -222,52 +137,6 @@ public static class Act1Chapter2
         },
     };
 
-    /// <summary>A1-C2-02, at the bottom of the quarry: the dead Doomward courier, and the letter in his satchel.</summary>
-    public static readonly DialogueScript Letter = new()
-    {
-        Id = "a1-c2-02-letter",
-        Nodes = new DialogueNode[]
-        {
-            new() { Speaker = Speakers.Narrator, Sound = Sfx.CrystalPulse, Line = "Somewhere ahead, something pulses, slow as a heartbeat. You feel it in your teeth." },
-            new() { Speaker = Speakers.Narrator, Line = "A man in charred robes sits against the rock as if he stopped for a rest and never got up. There's a satchel at his side." },
-            new() { Speaker = "sera", Line = "Doomward robes. This far west?" },
-            new() { Speaker = Speakers.Narrator, Line = "In the satchel: hard bread, a knife, and a letter under a black seal pressed with a cube." },
-            new()
-            {
-                Speaker = You, Direction = "reading", Line = "'...the Master's shards seed the land ahead of the army. Let the rot soften Fable before we arrive...'",
-                Effects = new[] { DialogueEffect.Give("courier-letter"), DialogueEffect.Set(LetterRead) },
-            },
-            new()
-            {
-                Speaker = SoulBound, Direction = "low", Line = "An army. Coming here.",
-                Options = new DialogueOption[]
-                {
-                    new() { Text = "Then somebody has to tell the King.", Next = "king" },
-                    new() { Text = "The crystal first. Armies later.", Next = "first" },
-                    new()
-                    {
-                        Text = "Well. That's ruined my afternoon.", Next = "afternoon",
-                        Conditions = new[] { DialogueCondition.Speaks(Voice.Witty) }, Locked = true,
-                    },
-                },
-            },
-            new() { Id = "king", Speaker = SoulBound, Line = "Would a king listen to two sellswords off a boat?" },
-            new() { Speaker = SoulBound, Direction = "folding the letter away", Line = "...Then we'd better be worth listening to.", Next = "awake" },
-            new() { Id = "first", Speaker = "sera", Line = "Finally. Someone sensible.", Next = "awake" },
-            new() { Id = "afternoon", Speaker = SoulBound, Line = "Your afternoon? I was going to retire on this contract." },
-            new()
-            {
-                Id = "awake", Speaker = Speakers.Narrator, Sound = Sfx.CrystalPulse,
-                Line = "The pulse comes again from the den at the quarry's end, deeper now. Something very big shifts its weight in the dark.",
-            },
-            new()
-            {
-                Speaker = "sera", Direction = "nocking an arrow", Line = "Whatever's guarding it is awake.",
-                Effects = new[] { DialogueEffect.Objective("Go into the den at the bottom of the quarry") },
-            },
-        },
-    };
-
     /// <summary>A1-C2-02 up to the fight: the den, the crystal, and what's become of the bear that guards it.</summary>
     public static readonly DialogueScript Thornmother = new()
     {
@@ -291,78 +160,6 @@ public static class Act1Chapter2
         },
     };
 
-    /// <summary>The rest of A1-C2-02, once the Thornmother's beaten: the woodcutters, the party's first argument, and out to camp, or the den to hold while Sera purifies the crystal.</summary>
-    /// <remarks>EncounterCatalog's a1-c2-02-thornmother plays it when the fight's won, which has set ThornmotherBeaten. Holding the den is a fight of its own, and Guarded is the rest of that way.</remarks>
-    public static readonly DialogueScript Crystal = new()
-    {
-        Id = "a1-c2-02-thornmother-after",
-        Nodes = new DialogueNode[]
-        {
-            new() { Speaker = Speakers.Narrator, Line = "The Thornmother goes down like a falling tree, and the thorns in her hide crumble to black dust." },
-            new() { Speaker = Speakers.Narrator, Line = "Sera kneels and rests a hand on the bear's muzzle until the crystal light in its eyes goes out." },
-            new()
-            {
-                Speaker = Speakers.Narrator, Sound = Sfx.CrystalPulse,
-                Line = "Behind them, the crystal pulses on. Among the bones at its foot lie two pairs of boots, and a woodcutter's axe-belt with no axe in it.",
-            },
-            new() { Speaker = SoulBound, Direction = "quietly", Line = "The missing woodcutters." },
-            new() { Speaker = "sera", Direction = "getting up", Line = "If we shatter it, the corruption spills into the stream. We need to draw it out slowly. Purify it. That takes a day, maybe two." },
-            new() { Speaker = SoulBound, Line = "And in two days how many more animals turn? How many more woodcutters? We smash it now." },
-            new() { Speaker = "sera", Line = "Smash it and the rot goes into the water. Every farm downriver drinks it." },
-            new()
-            {
-                Speaker = Speakers.Narrator, Line = "They both turn to you.",
-                Options = new DialogueOption[]
-                {
-                    new()
-                    {
-                        Text = "Sera's right. We purify it.", Next = "purify",
-                        Effects = new[] { DialogueEffect.Add(SeraAffinity, 10), DialogueEffect.Set(CrystalPurified), DialogueEffect.Set(SeraPurified) },
-                    },
-                    new()
-                    {
-                        Text = "{sb}'s right. Smash it.", Next = "shatter",
-                        Effects = new[]
-                        {
-                            DialogueEffect.Add(SeraAffinity, -5), DialogueEffect.Add(Meters.Bond, 5),
-                            DialogueEffect.Set(CrystalShattered), DialogueEffect.Set(StreamQuest),
-                        },
-                    },
-                    new()
-                    {
-                        Text = "Sera purifies it. {sb} and I hold the quarry.", Next = "guard",
-                        Effects = new[] { DialogueEffect.Add(SeraAffinity, 5), DialogueEffect.Add(Meters.Bond, 2) },
-                    },
-                },
-            },
-
-            new() { Id = "purify", Speaker = SoulBound, Line = "Fine. Your forest, your call." },
-            new()
-            {
-                Speaker = Speakers.Narrator, Line = "{sb} turns and walks back up the quarry alone, and doesn't look round.",
-                Effects = new[] { DialogueEffect.Add(Meters.Ambition, 3) },
-            },
-            new() { Speaker = Speakers.Narrator, Line = "Sera lays both hands on the crystal's roots. Slowly, very slowly, the black starts to drain out of it, and the stone underneath turns white." },
-            new() { Speaker = "sera", Line = "Two days. Less, now there's nothing feeding it.", Next = "camp" },
-
-            new() { Id = "shatter", Speaker = Speakers.Narrator, Line = "{sb} doesn't need telling twice. One blow, two, and on the third the crystal bursts with a scream that isn't quite a sound." },
-            new() { Speaker = SoulBound, Line = "See? Done. Sometimes the fast way is the right way." },
-            new() { Speaker = Speakers.Narrator, Line = "Black sludge wells out of the broken stump, finds the stream, and goes with it." },
-            new() { Speaker = "sera", Direction = "watching it go", Line = "...That's in the water now. All the way to the river farms." },
-            new() { Speaker = SoulBound, Line = "Then we'll clean the stream as well. One thing at a time.", Next = "camp" },
-
-            // The compromise: the guard wave. Sera starts, and the quarry answers.
-            new() { Id = "guard", Speaker = "sera", Line = "Then hold it. Everything left in this wood will come for the light the moment I start." },
-            new()
-            {
-                Speaker = Speakers.Narrator, Sound = Sfx.WolfHowl, Line = "She lays both hands on the crystal's roots. Out in the passage, something howls, and something else answers it.",
-                Effects = new[] { DialogueEffect.Fight("a1-c2-02-guard-wave") }, Next = DialogueScript.End,
-            },
-
-            NightFalls("camp"),
-        },
-    };
-
     /// <summary>The compromise's end, once the den's held: the crystal shining, the two of you back to back, and out to camp.</summary>
     /// <remarks>EncounterCatalog's a1-c2-02-guard-wave plays it when the fight's won, which has set CrystalGuarded. The crystal only turns white once the den's been held.</remarks>
     public static readonly DialogueScript Guarded = new()
@@ -377,59 +174,6 @@ public static class Act1Chapter2
             },
             new() { Speaker = SoulBound, Direction = "breathing hard, grinning", Line = "Back to back. Just like home." },
             NightFalls(null),
-        },
-    };
-
-    /// <summary>A1-C2-03: the night camp, the Soul-Bound by the fire, and Sera watching from the dark.</summary>
-    public static readonly DialogueScript Camp = new()
-    {
-        Id = "a1-c2-03",
-        Nodes = new DialogueNode[]
-        {
-            new()
-            {
-                Speaker = Speakers.Narrator, Line = "Night. A small fire in a ring of stones. Sera has taken the first watch up on the rocks, out of the light.",
-                Effects = new[] { DialogueEffect.Rest() },
-            },
-            new()
-            {
-                Speaker = Speakers.Narrator, Line = "{sb} came back to the fire an hour after dark, said nothing about the quarry, and handed you half an apple.",
-                Conditions = new[] { DialogueCondition.Is(SeraPurified) },
-            },
-            new()
-            {
-                Speaker = SoulBound, Line = "Wolves, a bear made of thorns, and a rock that had it coming. Good day's work.",
-                Conditions = new[] { DialogueCondition.Is(CrystalShattered) },
-            },
-            new()
-            {
-                Speaker = SoulBound, Direction = "rolling a sore shoulder", Line = "My arms are going to fall off. Worth it, though.",
-                Conditions = new[] { DialogueCondition.Is(CrystalGuarded) },
-            },
-            new()
-            {
-                Speaker = SoulBound, Direction = "poking the fire", Line = "Remember the first night we ever slept rough? Under Harrow's hay barge, hiding from his men?",
-                Options = new DialogueOption[]
-                {
-                    new() { Text = "You snored the whole night.", Next = "snored" },
-                    new() { Text = "You kept the rats off me till morning.", Next = "rats" },
-                },
-            },
-            new() { Id = "snored", Speaker = SoulBound, Line = "I did not. That was the barge. Barges snore.", Next = "army" },
-            new() { Id = "rats", Speaker = SoulBound, Line = "And you kept the cold off me. Fair trade. Always has been." },
-            new() { Id = "army", Speaker = SoulBound, Direction = "the smile fading", Line = "An army, {name}. Marching on a kingdom that doesn't even know it. Someone should be ready." },
-            new() { Speaker = You, Line = "Someone like us?" },
-            new() { Speaker = SoulBound, Direction = "smiling at the flames", Line = "Who else?" },
-            new()
-            {
-                Speaker = Speakers.Narrator, Line = "Up on the rocks, Sera isn't watching the trees. She's watching {sb}. She doesn't say a word.",
-                Effects = new[] { DialogueEffect.Set(SeraNoticedSb) },
-            },
-            new()
-            {
-                Speaker = SoulBound, Direction = "lying back", Line = "Get some sleep. I'll wake you for second watch. Then it's back to Questeria, and Fennick owes us triple.",
-                Effects = new[] { DialogueEffect.Set(CampDone), DialogueEffect.Objective("Go back to Questeria and collect from Questmaster Fennick") },
-            },
         },
     };
 
@@ -463,7 +207,7 @@ public static class Act1Chapter2
             new() { Speaker = SoulBound, Line = "Then we'll be taking it.", Conditions = new[] { DialogueCondition.Is(CrystalShattered) } },
             new()
             {
-                Speaker = "fennick", Sound = Sfx.Coin, Line = "Triple, as promised. The Lodge made me count it twice.",
+                Speaker = "fennick", Sound = Sfx.Coin, Line = "Triple, as promised. I'd like it noted that you didn't ask what it was.",
                 Effects = new[] { DialogueEffect.Gold(ContractPay), DialogueEffect.Add(Meters.Fame, 2) },
             },
             new()

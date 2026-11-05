@@ -421,10 +421,14 @@ public partial class ExploreScreen
     /// <remarks>
     /// The party first, then whoever's on the map (whoever's waiting at camp too), then the story's
     /// cast wherever they are. A creature has no face to give: its sheet isn't a person's, so the
-    /// portrait's crop would come off the wrong part of it, and its frame is left empty.
+    /// portrait's crop would come off the wrong part of it, and its frame is left empty. A voice is
+    /// whoever it's the voice of, found the same way, with no name: it's heard, not said by anyone
+    /// there.
     /// </remarks>
     private (string Name, Texture2D Sheet) Speaker(string id)
     {
+        if (Speakers.VoiceOf(id) is string whose) return (string.Empty, Speaker(whose).Sheet);
+
         for (int i = 0; i < _game.Party.Count; i++)
             if (_game.Party[i].Id == id) return (_game.Party[i].Name, _walkers[i].Sheet);
         foreach (Npc npc in _everyNpc)
@@ -506,7 +510,7 @@ public partial class ExploreScreen
 
         float t = _arrivalClock / CardSeconds;
         float shown = MathHelper.Clamp(MathF.Min(t * 4f, (1f - t) * 3f), 0f, 1f) * alpha;
-        _chapterCard.Draw(spriteBatch, FirstChapter, shown);
+        _chapterCard.Draw(spriteBatch, FirstChapter, _game.Meter(Meters.Act), shown);
     }
 
     /// <summary>What you're to do next, under the map's name, on its smudge.</summary>

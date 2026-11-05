@@ -14,9 +14,9 @@ namespace LegendQuest.Dialogue;
 /// </summary>
 /// <remarks>
 /// The Black Box's DiscussionPeriod pattern: it draws nothing and takes its Random, so a script can
-/// be played through without a window. Every flag, meter, item, recruit and swap it changes goes
-/// straight into the save, and it hands back what happened as events for the screen to turn into
-/// toasts, dice and sounds. Not from a tutorial.
+/// be played through without a window. Every flag, meter, item, recruit, swap, leaving and coming
+/// back it changes goes straight into the save, and it hands back what happened as events for the
+/// screen to turn into toasts, dice and sounds. Not from a tutorial.
 /// </remarks>
 public sealed class DialogueRunner
 {
@@ -145,10 +145,13 @@ public sealed class DialogueRunner
     }
 
     /// <summary>Does what a line or an option does to the game, and notes it for the screen.</summary>
+    /// <remarks>An effect whose conditions don't hold is skipped. They're looked at as it comes, so an effect before it can change them.</remarks>
     private void Apply(IReadOnlyList<DialogueEffect> effects)
     {
         foreach (DialogueEffect effect in effects)
         {
+            if (!effect.Applies(_game)) continue;
+
             switch (effect.Kind)
             {
                 case EffectKind.SetFlag:
@@ -203,6 +206,14 @@ public sealed class DialogueRunner
                     if (effect.Id.Split(' ') is [string waiting, string member]) Swap(waiting, member);
                     break;
 
+                case EffectKind.Leave:
+                    Leave(effect.Id);
+                    break;
+
+                case EffectKind.Rejoin:
+                    Rejoin(effect.Id);
+                    break;
+
                 case EffectKind.Voice:
                     _game.Voice = Enum.Parse<Voice>(effect.Id);
                     break;
@@ -232,10 +243,10 @@ public sealed class DialogueRunner
         }
     }
 
-    /// <summary>Someone joins: into the party if there's room, to wait at camp if not. Someone already waiting at camp comes out of it once there's room, and stays where they are until there is. Nobody joins twice.</summary>
+    /// <summary>Someone joins: into the party if there's room, to wait at camp if not. Someone already waiting at camp comes out of it once there's room, and stays where they are until there is. Nobody joins twice, and someone who's away only comes back by Rejoin.</summary>
     private void Recruit(string id)
     {
-        if (_game.InParty(id)) return;
+        if (_game.InParty(id) || _game.Away.Exists(each => each.Id == id)) return;
 
         PartyMember waiting = _game.Camp.Find(each => each.Id == id);
         bool joins = _game.Party.Count < Origins.PartySize;
@@ -260,5 +271,48 @@ public sealed class DialogueRunner
         (_game.Camp[seat], _game.Party[place]) = (_game.Party[place], _game.Camp[seat]);
         _events.Add(new DialogueEvent(DialogueEventKind.Recruited, member, 0));
         _events.Add(new DialogueEvent(DialogueEventKind.Recruited, waiting, 1));
+    }
+
+    /// <summary>Someone goes away for a while: out of the party, or out of the camp, and into Away till a Rejoin brings them back. Nobody goes twice, and you never go: the party's yours.</summary>
+    /// <remarks>
+    /// You keep control of whoever you were controlling, or of yourself if they're the one going. It
+    /// tells the screen as a Recruited event of -1, so the map catches its figures up the way it does
+    /// for someone joining.
+    /// </remarks>
+    /// <param name="id">Who, by origin id.</param>
+    private void Leave(string id)
+    {
+        if (id == Origins.You) return;
+
+        int place = _game.Party.FindIndex(each => each.Id == id);
+        PartyMember member = place >= 0 ? _game.Party[place] : _game.Camp.Find(each => each.Id == id);
+        if (member is null) return;
+
+        if (place < 0)
+        {
+            _game.Camp.Remove(member);
+        }
+        else
+        {
+            PartyMember leader = place == _game.Leader ? _game.You : _game.LeaderMember;
+            _game.Party.RemoveAt(place);
+            _game.Leader = Math.Max(0, _game.Party.IndexOf(leader));
+        }
+        _game.Away.Add(member);
+        _events.Add(new DialogueEvent(DialogueEventKind.Recruited, id, -1));
+    }
+
+    /// <summary>Someone who went away comes back into the party, even if it's full: it can hold Origins.MostInParty for a while. Past that they wait at camp. Someone who isn't away stays where they are.</summary>
+    /// <param name="id">Who, by origin id.</param>
+    private void Rejoin(string id)
+    {
+        PartyMember member = _game.Away.Find(each => each.Id == id);
+        if (member is null) return;
+
+        bool joins = _game.Party.Count < Origins.MostInParty;
+        _game.Away.Remove(member);
+        if (joins) _game.Party.Add(member);
+        else _game.Camp.Add(member);
+        _events.Add(new DialogueEvent(DialogueEventKind.Recruited, id, joins ? 1 : 0));
     }
 }

@@ -58,6 +58,10 @@ public class SaveData
     /// <summary>Whoever's been recruited with the party already full, waiting at camp.</summary>
     public List<PartyMember> Camp { get; set; } = new();
 
+    /// <summary>Whoever's gone away for a while (a script's Leave), till a Rejoin brings them back.</summary>
+    /// <remarks>Not in the party and not at camp, so nobody can pick them, talk to them, swap them in or take them into a fight. They keep their kit, hit points and the rest while they're gone.</remarks>
+    public List<PartyMember> Away { get; set; } = new();
+
     /// <summary>The party's gold.</summary>
     public int Gold { get; set; }
 
@@ -141,7 +145,7 @@ public class SaveData
         return null;
     }
 
-    /// <summary>Whether someone's in the party.</summary>
+    /// <summary>Whether someone's in the party. Not if they're waiting at camp, or away.</summary>
     /// <param name="id">Their origin id.</param>
     public bool InParty(string id) => Member(id) is not null;
 

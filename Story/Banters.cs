@@ -11,7 +11,7 @@ namespace LegendQuest.Story;
 /// townsfolk talking to each other.
 /// </summary>
 /// <remarks>
-/// Mine, not STORY.md's, written round its bible: the Watch half gone east, ash on the wind from
+/// Mine, not the story's, written round its bible: the Watch half gone east, ash on the wind from
 /// Doomward, the Mirewood going wrong, the Princess riding out on her own. The Soul-Bound does most
 /// of the talking, and you only get a word or two in, since how you sound is the player's to pick.
 /// A companion's line is only said if they're in the party, so theirs are asides that stand on

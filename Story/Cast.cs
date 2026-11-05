@@ -11,11 +11,14 @@ namespace LegendQuest.Story;
 /// <remarks>
 /// A map puts one of them down with npc ... cast=(id), and a conversation's line from that id
 /// gets their name and face whether they're on the map or not (the lookout up the mast never is).
-/// Looks are STORY.md's, as near as the paperdoll gets: the Red Gulls' bandanas, the Watch's helms,
+/// Looks are the story's, as near as the paperdoll gets: the Red Gulls' bandanas, the Watch's helms,
 /// Odelle's tricorn.
 /// </remarks>
 public static class Cast
 {
+    /// <summary>Hedda's look, which both her ids share: the map's and the as-built lines' refugee-mother, and the story's hedda.</summary>
+    private static readonly CharacterLook HeddaLook = new() { Skin = 3, Face = 1, Eyes = 1, Hair = 3, HairColour = 0, Shirt = 4, Vest = 6, Legs = 1, LegsColour = 0, Cloak = 4 };
+
     private static readonly CastMember[] Table =
     {
         new("lookout", "Lookout", null, null),
@@ -32,6 +35,11 @@ public static class Cast
             new CharacterLook { Skin = 2, Hair = 1, HairColour = 0, Hat = 3, Shirt = 1, Vest = 0, LegsColour = 2, Cloak = 1 }),
         new("fennick", "Questmaster Fennick", null,
             new CharacterLook { Skin = 1, Face = 1, Eyes = 4, Hair = 1, HairColour = 4, Beard = 2, Shirt = 4, Vest = 5, LegsColour = 4 }),
+
+        // Kettle Cove, remembered (P-03): Corra, the Soul-Bound's mother, the net-mender, as she was the
+        // day of the squall. A cove-blue shawl, and a skirt the brown of oiled nets.
+        new("corra", "Corra", null,
+            new CharacterLook { Skin = 3, Face = 1, Eyes = 4, Hair = 3, HairColour = 0, Shirt = 4, Vest = 5, Legs = 1, LegsColour = 0, Cloak = 1 }),
 
         // The townspeople who'll stop and talk (Townspeople's conversations). Mine, not the story's,
         // but for Sergeant Brisk, who's in the Watch's helm and blue like the rest of it.
@@ -71,10 +79,11 @@ public static class Cast
 
         // Thornbridge (Act1Chapter3): Hedda and her daughter Lise, and the three sick Mira's remedies
         // go to: an old orchard farmer, a boy with a fever, and a glassblower with burned hands. Mine,
-        // written round STORY.md's refugee mother. Sacking, charcoal and oat: everything they own has
-        // walked three weeks.
-        new("refugee-mother", "Hedda", null,
-            new CharacterLook { Skin = 3, Face = 1, Eyes = 1, Hair = 3, HairColour = 0, Shirt = 4, Vest = 6, Legs = 1, LegsColour = 0, Cloak = 4 }),
+        // written round the story's refugee mother. Sacking, charcoal and oat: everything they own has
+        // walked three weeks. Hedda is refugee-mother on the map and in the as-built lines, and hedda
+        // in the story's scripts, in the one look.
+        new("refugee-mother", "Hedda", null, HeddaLook),
+        new("hedda", "Hedda", null, HeddaLook),
         new("refugee-child", "Lise", "child", null),
         new("refugee-1", "Old Aurek", null,
             new CharacterLook { Skin = 3, Face = 3, Eyes = 4, Hair = 5, HairColour = 4, Beard = 3, Shirt = 4, Vest = 6, LegsColour = 0, Cloak = 4 }),

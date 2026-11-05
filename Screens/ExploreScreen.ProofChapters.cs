@@ -79,7 +79,7 @@ public partial class ExploreScreen
         yield return Into("roots-2-sera", Direction.Up);
         yield return Read();
         yield return Into("courier", Direction.Up);
-        yield return Read((Asked, "quarry-letter.png"));
+        yield return Read(("you", "quarry-letter.png"));
         yield return Stop();
         yield return Shot("quarry-den.png");
         yield return Answer(0);
@@ -90,7 +90,6 @@ public partial class ExploreScreen
     /// <summary>The camp that night, then a word with Sera, then home from the camp's stone.</summary>
     private IEnumerable<ProofBeat> CampBeats()
     {
-        yield return Answer(1);
         yield return Read(("soulbound", "mirewood-camp.png"));
         yield return Shot("mirewood-camp-after.png");
         foreach (ProofBeat beat in TalkToFollower("sera")) yield return beat;
@@ -113,7 +112,7 @@ public partial class ExploreScreen
     private IEnumerable<ProofBeat> ThornbridgeBeats()
     {
         yield return Answer(1);
-        yield return Read((Speakers.Chapter, "thornbridge-card.png"), (Asked, "thornbridge-gate.png"), ("refugee-mother", "thornbridge-mother.png"));
+        yield return Read((Speakers.Chapter, "thornbridge-card.png"), (Asked, "thornbridge-gate.png"), ("hedda", "thornbridge-mother.png"));
         yield return Shot("thornbridge.png");
         foreach (ProofBeat beat in TalkTo("mira")) yield return beat;
         yield return Answer(1);
@@ -127,7 +126,7 @@ public partial class ExploreScreen
         yield return Read();
         yield return Stop();
         yield return Shot("thornbridge-hollowed.png");
-        yield return Answer(1, 0);
+        yield return Answer(1);
         yield return Into("raid", Direction.Right);
         yield return Read((Speakers.Card, "thornbridge-raid.png"), (Asked, "thornbridge-crowd.png"));
         yield return Stop();
@@ -173,7 +172,6 @@ public partial class ExploreScreen
         yield return Answer(1);
         yield return Read(("leon", "keep-leon.png"), (Asked, "keep-choice.png"));
         yield return Shot("keep.png");
-        yield return Answer(0);
         yield return Into("hall-crane", Direction.Down);
         yield return Read(("crane", "keep-crane.png"));
         yield return Stop();

@@ -102,7 +102,7 @@ public static class CombatIcons
     /// would spend). The movement pieces are three-sliced, a three-pixel cap at each end and the
     /// two middle columns stretched: the track first at the bar's length, then the fill as far as
     /// there's movement, then the preview or the over piece, and a tick every tile. The death saves
-    /// are 10x10 sockets. The Soul-Link sigil's five states are STORY.md's: gold, the one-frame
+    /// are 10x10 sockets. The Soul-Link sigil's five states are the story's: gold, the one-frame
     /// violet flicker, violet, broken grey, and grey with gold coming back. The target rings go under
     /// someone's feet and turn over their four frames. The things that fly point right with their
     /// middle at the middle of the frame, for turning to where they're going.

@@ -78,7 +78,7 @@ NARRATOR: The cuts healed into a mark. It's never faded.
 
 ### P-04 · The voyage
 
-#### script p-04 · map `gulls-wager` · with `soulbound` at the bow rail · marker event
+#### script p-04 · map `gulls-wager` · trigger at the bow rail, where {sb} is (the map marks it)
 
 The deck is walkable first, with the crew's barks as built. The scene starts at the bow.
 
@@ -113,11 +113,13 @@ SB: And one day, a kingdom. Only a small one. Somewhere nobody kneels in the mud
 NARRATOR: A herring, whittled from driftwood, on a waxed cord. {sb} is wearing its twin.   [CALLBACK herring]
 SB: For luck. Don't lose it. I'm not carving another one on a boat this size.  ~ give herring-charm
 ! hold you neck herring-charm
-! sfx bell
-LOOKOUT: Wraiths! Port side! They're coming up the hull!  ~ fight p-05-wraiths
+! sfx ship-bell
+LOOKOUT: Wraiths! Port side! They're coming up the hull!  ~ set wraiths-sighted · fight p-05-wraiths
 ```
 
 The two herrings are live items (art spec §6). Yours stays on your neck socket for the whole game unless you take it off in the inventory; {sb}'s stays on theirs until A3-C2-04.
+
+**Build.** The header has no `with`: the marked trigger at the bow starts this, and a `with` on {sb} that nothing stops would replay the voyage every time you talked to {sb}. The bell is `ship-bell`, the sound the game has. The lookout's line sets `wraiths-sighted`, which brings the wraiths up over the rail on the `gulls-wager` map.
 
 ### P-05 · The sea-wraiths
 
@@ -136,8 +138,10 @@ The guided fight as built. {sb}'s barks:
 ODELLE: There she is. Questeria. Pretty from out here.
 ODELLE: Keep a hand on your purses once you're in.
 SB (smile): Look at the size of it.
-CHAPTER: Prologue · Two Names, One Oath
+CHAPTER: Prologue  ·  Two Names, One Oath  ~ rest · set prologue-done · travel docks start
 ```
+
+**Build.** The card is spaced like the game's other chapter cards, and carries what the as-built dawn did: `rest`, since the fight leaves everyone on 1 HP; `prologue-done`, which the ship's arrival in the harbour waits for; and the travel to the docks.
 
 ---
 
@@ -147,7 +151,7 @@ CHAPTER: Prologue · Two Names, One Oath
 
 ### A1-C1-01 · Saltwind Docks
 
-#### script a1-c1-01 · map `docks` · with `red-gull` · marker event
+#### script a1-c1-01 · map `docks` · trigger at the Red Gulls once you've landed (the map marks it)
 
 ```
 RED GULL: Dock tax, grandfather. It's doubled since last week.
@@ -166,6 +170,8 @@ NARRATOR: {sb} is already walking over.  → fight
 #fight NARRATOR: Cudgels come out. A Stoneborn with a hook for a hand shoulders to the front.
 GRELL: Two off the boat, and already telling me how my harbour works. Gulls. Collect.  ~ fight a1-c1-01-gulls
 ```
+
+**Build.** The header has no `with`: nobody on the docks map is called `red-gull` (the thugs are `gull-1` to `gull-3`, in the Red Gulls' look), and the marked trigger round them starts the scene.
 
 #### script a1-c1-01-gulls-after · plays when the fight is won
 
@@ -218,6 +224,7 @@ SB: You said triple.  ~ set a1-c1-02 · objective "Take the Rangers' contract to
 
 ```
 ! tint twilight
+CHAPTER: Chapter 2  ·  The Rot in the Mirewood
 SB: Smell that? Like a forge somebody let go out.
 {if voice:honorable} YOU: Smells like someone's in trouble.  → honorable
 {if voice:pragmatic} YOU: Smells like triple pay.  → pragmatic
@@ -225,12 +232,16 @@ SB: Smell that? Like a forge somebody let go out.
 #honorable SB: Then let's not be late.  → wolves
 #pragmatic SB: That's my practical one.  → wolves
 #witty SB: I'll remember that next time you're hungry.  → wolves
+! sfx wolf-howl
 #wolves NARRATOR: Something moves low between the trunks. Then three more somethings.  ~ fight a1-c2-01-gloomfangs
 ```
+
+**Build.** Restored from the build: the chapter's card, which opens every chapter after the first, and the howl as the wolves come.
 
 #### script a1-c2-01-gloomfangs-after
 
 ```
+! sfx bowshot
 ! place sera at treeline facing left · anim sera bow-lowered
 NARRATOR: An arrow takes the last wolf behind the ear. A Sylvan woman steps out of the trees, bow still drawn.
 SERA: You're loud. Both of you. The whole wood heard you at the road.
@@ -246,21 +257,29 @@ SERA: I waited to see if you'd make it worse.
 SERA: The wolves aren't mad. Something in the old quarry is leaking into the roots, and anything that drinks from the stream goes wrong.
 SB: So we find it and break it.
 SERA: We find it and find out what it is. Then we decide.
-SB (smile) [to you]: I like her. She's wrong, but I like her.  ~ join sera · set sera-recruited
+SB (smile) [to you]: I like her. She's wrong, but I like her.  ~ join sera · set sera-recruited · set a1-c2-01 · objective "Find the old quarry deep in the Mirewood"
 ```
+
+**Build.** Restored from the build: the bowshot, and on the last line `a1-c2-01` (the edge is over; the trigger at the black-veined trees checks it) and the objective for the quarry.
 
 ### A1-C2-02 · The Old Quarry
 
-#### script a1-c2-02-courier · map `mirewood-quarry` · trigger at the courier's body
+#### script a1-c2-02-letter · map `mirewood-quarry` · trigger at the courier's body
+
+The game calls this scene `a1-c2-02-letter`, and ids don't change.
 
 ```
 SERA: Doomward cloth. This far west, on foot.
 NARRATOR: There's a letter in the satchel, sealed with a black cube.
-YOU [reading]: "The Master's shards seed the ground ahead of the army. Let the rot soften Fable before we come."  ~ give courier-letter
-SB [low]: An army. Coming here. And the palace is planning a festival.
+YOU [reading]: "The Master's shards seed the ground ahead of the army. Let the rot soften Fable before we come."  ~ give courier-letter · set courier-letter-read
+SB [low]: An army. Coming here. And the palace is planning a festival.  ~ objective "Go into the den at the bottom of the quarry"
 ```
 
-#### script a1-c2-02-crystal · trigger at the crystal · plays after `a1-c2-02-thornmother` is won
+**Build.** Restored from the build: `courier-letter-read`, which opens the den (the `mirewood-quarry` trigger waits for it) and stops the courier's trigger playing again, and the objective for the den. The den, and the Thornmother's fight it starts, are as built (`a1-c2-02`), and so are the two root walls Sera parts on the way down (`a1-c2-02-roots-1`, `a1-c2-02-roots-2`).
+
+#### script a1-c2-02-thornmother-after · plays when `a1-c2-02-thornmother` is won
+
+The game calls this `a1-c2-02-thornmother-after`, the scene the Thornmother's fight plays when it's won, and ids don't change.
 
 ```
 ! anim sera kneel
@@ -273,13 +292,15 @@ SB: Two days of wolves eating woodcutters. Break it now and clean the stream aft
   3. Both. Sera works. {sb} and I hold the quarry.  ~ affinity-sera +3 · bond +2 · set crystal-guarded  → guard
 #purify SB (cold): Your wood. Your call.
 ! walk soulbound to quarry-mouth
-NARRATOR: {sb} walks off to the quarry mouth and stays there.  ~ ambition +3 · set crystal-dealt-with  → end
+NARRATOR: {sb} walks off to the quarry mouth and stays there.  ~ ambition +3 · set crystal-dealt-with · set a1-c2-02 · objective "Rest at the camp in the Mirewood" · travel mirewood camp  → end
 #shatter ! anim soulbound pommel-strike · sfx crystal-break
 NARRATOR: The crystal splits. Black water runs out of the stone toward the stream.
 SB: Done. We'll fix the stream. Fast was right.
-SERA (cold): Fast was fast.  ~ set crystal-dealt-with  → end
-#guard SB (grin): Now that's a plan.  ~ fight a1-c2-02-hold
+SERA (cold): Fast was fast.  ~ set crystal-dealt-with · set a1-c2-02 · objective "Rest at the camp in the Mirewood" · travel mirewood camp  → end
+#guard SB (grin): Now that's a plan.  ~ fight a1-c2-02-guard-wave
 ```
+
+**Build.** The guard wave's fight is `a1-c2-02-guard-wave`, its id in the game. Winning it plays the as-built `a1-c2-02-guard-wave-after`, which turns the crystal white and takes you to camp. The other two ways end on what the build's last line did: `a1-c2-02` (the quarry's done; the camp scene waits for it), the objective, and the travel to the Mirewood's camp.
 
 ### A1-C2-03 · Camp in the Mirewood
 
@@ -291,12 +312,16 @@ SB: An army, {name}. Marching on a kingdom that's busy stringing lanterns. Someb
 YOU: Somebody like us?
 SB (smile): Who else is there?
 ! place sera at camp-edge facing left · camera sera
-NARRATOR: Past the firelight, Sera is watching {sb}. She doesn't say anything.  ~ set sera-noticed-sb · set a1-c2-03 · rest
+NARRATOR: Past the firelight, Sera is watching {sb}. She doesn't say anything.  ~ set sera-noticed-sb · set a1-c2-03 · rest · objective "Go back to Questeria and collect from Questmaster Fennick"
 ```
+
+**Build.** Restored from the build: the objective back to Fennick.
 
 ### A1-C2-04 · Triple pay
 
-As built (Fennick pays out). One line changes: Fennick's last line is now `FENNICK: Triple, as promised. I'd like it noted that you didn't ask what it was.`
+#### script a1-c2-04 · as-built
+
+As built (Fennick pays out). One line changes: Fennick's pay line, the one with the coin, is now `FENNICK: Triple, as promised. I'd like it noted that you didn't ask what it was.`
 
 ---
 
@@ -304,9 +329,10 @@ As built (Fennick pays out). One line changes: Fennick's last line is now `FENNI
 
 ### A1-C3-01 · The east gate
 
-#### script a1-c3-01 · map `thornbridge` · with `brisk` · marker event
+#### script a1-c3-01 · map `thornbridge` · plays on arrival at the east gate, once Fennick's paid
 
 ```
+CHAPTER: Chapter 3  ·  Ashes at Thornbridge
 BRISK: Chancellor's orders. Nobody from Doomward inside the walls. Could be sickness. Could be spies.
 HEDDA (afraid): We walked three weeks. Lise hasn't eaten since yesterday.
 SB: Look at her, Sergeant. That's your spy.
@@ -316,15 +342,17 @@ SB (cold) [quietly]: No. A man in a warm room writes them, and you stand out her
   1. Then we'll bring the food out to them.  ~ fame +1  → food
   2. [PERSUADE] Let the sick through. We'll answer for it.  → pass let · fail shove
   3. [needs voice:pragmatic] He's right. We don't know who's out there.  ~ bond -5 · ambition +2  → right
-#food SB: Fine. Somebody's going to answer for this one day, though.  ~ set a1-c3-01  → end
-#let BRISK (tired): The sick. Only the sick. And I never saw you.  ~ fame +2 · bond +3 · set a1-c3-01  → end
-#shove NARRATOR: {sb} shoves the sergeant into the gatepost. A guard draws. You get between them before it goes any further.  ~ ambition +3 · set brisk-shoved · set a1-c3-01  → end
-#right SB (shock): Who are you right now?  ~ set a1-c3-01  → end
+#food SB: Fine. Somebody's going to answer for this one day, though.  ~ set a1-c3-01 · objective "Find the healer down by the river"  → end
+#let BRISK (tired): The sick. Only the sick. And I never saw you.  ~ fame +2 · bond +3 · set brisk-persuaded · set a1-c3-01 · objective "Find the healer down by the river"  → end
+#shove NARRATOR: {sb} shoves the sergeant into the gatepost. A guard draws. You get between them before it goes any further.  ~ ambition +3 · set brisk-shoved · set a1-c3-01 · objective "Find the healer down by the river"  → end
+#right SB (shock): Who are you right now?  ~ set a1-c3-01 · objective "Find the healer down by the river"  → end
 ```
+
+**Build.** The header has no `with`: the scene plays on arrival at the gate (the `thornbridge` map's scene), and talking to Brisk plays his own lines. Restored from the build: the chapter's card; `brisk-persuaded` when the gate's talked open, which Brisk and Hedda read afterwards; and the objective for the healer.
 
 ### A1-C3-02 · Thornbridge Camp
 
-#### script a1-c3-02 · with `mira` · marker quest
+#### script a1-c3-02 · with `mira` · needs `a1-c3-01` · unless `mira-supplies`, `mira-supplies-done`, `mira-recruited` · marker quest
 
 ```
 ! anim mira heal · hold mira hand_front light-glow
@@ -337,7 +365,7 @@ MIRA: Mira Ashgrove. I was an archivist in Doomward, at the Ember Archive. Befor
   2. You're dead on your feet. Let us help first.  ~ affinity-mira +5  → errands
   3. ♥ An archivist and a healer. That hardly seems fair.  ~ affinity-mira +2 · set mira-flirt-1  → flirt
 #flirt MIRA (smile) [tired]: Flattery won't feed anyone. Thank you, though.  → before
-#errands MIRA: Then the water barrels, the blankets and the boy with the fever, in that order.  ~ objective "Help Mira: water, blankets, and the boy in the end tent"  → end
+#errands MIRA: Then the farmer's cough, the boy's fever and the glassblower's hands, in that order. They're down by the water.  ~ set mira-supplies · objective "Take Mira's remedies to the three sick refugees by the river"  → end
 #before MIRA: Before my teacher opened the Box. Maleficio. He wanted to end the famines in the east, and for a while he did.
 MIRA: First he needed enough power to fix the harvest. Then enough to fix the council. Then everything after that.
 MIRA: Every step made sense when he took it. That's the part I can't get past.
@@ -345,11 +373,13 @@ MIRA: Every step made sense when he took it. That's the part I can't get past.
 SB: The council, though. Maybe he wasn't wrong about the council.
 MIRA (angry): He burned the council. In their hall. With their children at the windows.
 SB (worried) [hands up]: I didn't mean that. I meant the arguing. I'm sorry.
-! sfx horn
-NARRATOR: Horns in the treeline. Grey shapes come out of the trees toward the tents.  ~ fight a1-c3-02-raid
+! sfx war-horn
+NARRATOR: Horns in the treeline. Grey shapes come out of the trees toward the tents.  ~ set mira-supplies-done · objective "Stop the Hollowed at the treeline before they reach the camp"
 ```
 
-The errands version plays the `#before` lines when the last errand is done (`a1-c3-02-errands-done`), as built.
+The errands version is as built: once the last of the three remedies is handed over (`supplies-delivered`), talking to Mira plays `a1-c3-02-story`, which ends on the `#before` lines.
+
+**Build.** Restored from the build: the `needs` and `unless`, without which talking to Mira would play this again once she's joined, and `mira-supplies` on the errands, which opens the remedies. The errands line names the errands the game has (`a1-c3-02-supplies-1` to `-3`); it named water barrels and blankets, which aren't there. The horns set `mira-supplies-done` and the objective instead of starting the fight: that flag brings the Hollowed out at the treeline on the `thornbridge` map, and walking up to them plays the as-built `a1-c3-02-raid` (two lines, then the fight, with Mira beside you). Started from here, the fight would put the party at the healer's station, twenty tiles from the raiders, and leave that trigger with nothing to do. The horn is `war-horn`, the sound the game has.
 
 Barks in the raid:
 
@@ -374,8 +404,10 @@ SB (tired): I'm all right. I'm all right.  → mira
 SB: Nobody's coming for you. Not the Watch. Not the king. So we will.
 NARRATOR: Somebody starts saying {sb}'s name. Then the whole camp is.  → mira
 #mira MIRA [quietly, to you]: {sb} runs hot. I knew someone else who ran hot like that.
-MIRA: Watch {sb_them} for me?  ~ join mira · set mira-recruited · set a1-c3
+MIRA: Watch {sb_them} for me?  ~ join mira · set mira-recruited · set a1-c3 · objective "Go back into the city; the Gilded Flagon's a good place to be found"
 ```
+
+**Build.** Restored from the build: the objective back into the city.
 
 ---
 
@@ -383,23 +415,28 @@ MIRA: Watch {sb_them} for me?  ~ join mira · set mira-recruited · set a1-c3
 
 ### A1-C4-00 · The messenger
 
+#### script a1-c4-00 · as-built
+
 As built.
 
 ### A1-C4-01 · The Gilded Flagon
 
-#### script a1-c4-01 · map `gilded-flagon` · with `elara-hooded` · marker quest
+#### script a1-c4-01 · map `gilded-flagon` · with `elara` · needs `a1-c3` · unless `a1-c4-01` · marker quest
 
 ```
+{if !a1-c4-00} CHAPTER: Chapter 4  ·  The Sunheart
 ELARA: Sit. Don't bow, people are watching. You're the two from Thornbridge.
 ELARA: Three nights ago someone got into the Old Crown Vault under the city and took the Sunheart. It powers the old ward-walls. Without it, the walls are just walls.
 ELARA: My father wants it kept quiet. I want it back before anyone outside this booth knows it's gone.
 SB: Why us? You've got guards.
-ELARA: I've got guards. I don't know which of them took it.  ~ set a1-c4-01 · objective "Find the Sunheart in the Old Crown Vault"
+ELARA: I've got guards. I don't know which of them took it.  ~ set a1-c4-01 · objective "Find the Sunheart in the Old Crown Vault, below the Sunspire"
 ```
+
+**Build.** Restored from the build: `with elara` (her id on the `gilded-flagon` map; `elara-hooded` is her look there), the `needs` and `unless` that keep this to the booth and to once (without them, talking to Elara at court would play it again), the chapter's card for when the messenger hasn't found you first, and "below the Sunspire" in the objective, since nothing in the booth says where the vault's door is.
 
 ### A1-C4-02 · The Old Crown Vault
 
-#### script a1-c4-02 · map `old-crown-vault` · with `kael` · marker event
+#### script a1-c4-02 · map `old-crown-vault` · with `kael` · unless `kael-truce`, `a1-c4-02` · marker event
 
 ```
 ! place kael at relic-shelf · hold kael belt_front sunheart · light kael sunheart on
@@ -407,6 +444,8 @@ KAEL: Oh. Company. I'd say make yourselves at home, but it's the king's home, an
 SB: Put it down.
 KAEL: Can't. I've been paid half, and I'm very attached to the other half.  ~ fight a1-c4-02-kael
 ```
+
+**Build.** Restored from the build: the `unless`, without which talking to Kael would start the duel again once he's joined.
 
 #### script a1-c4-02-kael-after · plays when Kael yields
 
@@ -427,7 +466,7 @@ KAEL (smirk): Watch away. This is my good side.  → fight
 #### script a1-c4-02-sappers-after
 
 ```
-! anim kael flip-coin · hold kael hand_front black-iron-coin
+! anim kael flip-coin · hold kael hand_front black-iron-coin · sfx coin
 KAEL: Here's something for you. My buyer paid half up front, in these.
 KAEL: Doomward iron. Somebody in your nice clean city is on the other side's payroll.
 MIRA (worried): Maleficio's agents pay in those. Whoever hired you is close to the crown.
@@ -435,8 +474,10 @@ KAEL: Never saw a face. Hood, good perfume, talked like a man who's never carrie
 ! drop kael belt_front
 SB: You're good. You're wasted on pockets. Come with us.
 KAEL: Is that a job or a friendship? I'm only any good at one of them.
-SB: Both. You'll pick it up.  ~ give sunheart · join kael · set kael-recruited · set a1-c4-02
+SB: Both. You'll pick it up.  ~ give sunheart · join kael · set kael-recruited · set a1-c4-02 · objective "Take the Sunheart to the Sunspire Keep"
 ```
+
+**Build.** Restored from the build: the coin's sound, and the objective to the keep.
 
 ### A1-C4-03 · Sunspire Keep
 
@@ -488,7 +529,7 @@ CRANE: Not yet.  ~ ambition +5 · set crane-contact · set a1-c4-04
 
 ### A1-C4-05 · The Rusty Anvil
 
-#### script a1-c4-05 · map `rusty-anvil` · with `brannock` · marker quest
+#### script a1-c4-05 · map `rusty-anvil` · with `brannock` · needs `a1-c4-03` · unless `brannock-recruited` · marker quest
 
 ```
 ! place brannock at corner-table · anim brannock slump
@@ -508,6 +549,8 @@ BRANNOCK [studying {sb}]: Careful, youngling. Every warlord I ever fought starte
 BRANNOCK: Dawn, then. I'll be the one who isn't sober.  ~ join brannock · set brannock-recruited · set a1-c4 · objective "Meet the caravan at the east gate at dawn"
 ```
 
+**Build.** Restored from the build: the `needs` and `unless`, without which talking to Brannock would play this before the audience, and again once he's joined.
+
 ---
 
 ## Chapter 5 · "The Road to Greywatch"
@@ -520,7 +563,7 @@ New from here on. The chapter opens on the `kestrel-ford` map, which is the high
 
 ```
 ! place garrick by lead-wagon
-CHAPTER: Chapter 5 · The Road to Greywatch
+CHAPTER: Chapter 5  ·  The Road to Greywatch
 GARRICK: Six wagons, two days and one bad ford. If you hear me shout, get between the wagons and the trees.
 KAEL: What if we hear you scream?
 GARRICK: Then it's already too late, and you can do as you like.  ~ set a1-c5-01 · travel kestrel-ford start
@@ -597,8 +640,8 @@ ALDRIC: Then you're all the help I'm getting. Eat. Sleep if you can. Tomorrow we
 #### script a1-c6-01 · map `greywatch` · plays on waking · needs `a1-c5-03`
 
 ```
-! tint night · sfx horn
-CHAPTER: Chapter 6 · The Hollow Knight
+! tint night · sfx war-horn
+CHAPTER: Chapter 6  ·  The Hollow Knight
 ALDRIC: Walls! Everyone who can hold a spear, on the walls!  ~ fight a1-c6-01-walls
 ```
 
@@ -729,7 +772,7 @@ VOICE(sb): Good men make lovely kings in peacetime.   [CALLBACK lovely-kings]
 NARRATOR: In the glass, {sb}'s reflection smiles a moment after {sb} does.
 SB: Just until I understand it.
 ! sigil soulbound flicker-violet · hold soulbound pouch shard
-CHAPTER: End of Chapter 6 · The Knock at the Door  ~ ambition +10 · set sb-kept-shard
+CHAPTER: End of Chapter 6  ·  The Knock at the Door  ~ ambition +10 · set sb-kept-shard
 ```
 
 From now on {sb}'s belt pouch gives off a faint violet light on dark maps (art spec §6). Nobody remarks on it until Valencia.
@@ -746,7 +789,7 @@ The winter is the first stretch of the game where you choose the order. Four que
 
 ```
 ! tint snow · place leon reviewing-troops
-CHAPTER: Chapter 7 · The Snowmelt
+CHAPTER: Chapter 7  ·  The Snowmelt
 LEON: Fable hasn't called its banners in forty years. Most of these men have never seen a war. I'd like it to stay that way for them.
 ! place soulbound at training-yard · anim soulbound strike · trail soulbound violet
 RECRUIT: Sir {sb}, how do you hit that hard?
@@ -808,7 +851,7 @@ NARRATOR: {sb} does it anyway.  ~ set sb-controls-crane · set a1-c7-03  → end
 
 ### A1-C7-04 · Across the Ashen Strait
 
-#### script a1-c7-04 · map `ashen-strait` · plays on arrival · needs `a1-c7-03`, two of `sb-heron-done`, `sera-silverbark-done`, `brannock-letters-done`
+#### script a1-c7-04 · map `ashen-strait` · plays on arrival · needs `a1-c7-03`, `winter-two-done` · a gate set by code: `winter-two-done`, once two of `sb-heron-done`, `sera-silverbark-done` and `brannock-letters-done` are set
 
 ```
 ! tint ash
@@ -860,7 +903,7 @@ Mira's Ember Index resolves in the Archive's lowest stacks (`mira-index-end` in 
 
 ```
 ! place maleficio at pit-edge · hold maleficio hand_front black-box · light maleficio box on
-CHAPTER: Chapter 8 · The Hunger at the Heart
+CHAPTER: Chapter 8  ·  The Hunger at the Heart
 MALEFICIO: Mira. You came home.
 MALEFICIO: And you've brought my favourite Fabler. You've carried a piece of me all winter, haven't you? Every time you held it, I felt you want something.
 ! face party soulbound
@@ -961,5 +1004,5 @@ SB: That's why I won't end up like him.
 ! anim both clasp-hands · sigil both glow · sigil soulbound flicker-violet 1 frame
 ! camera north · show noxhallow-silhouette
 NARRATOR: Far to the north, under a cold moon, a black castle with red windows.
-CHAPTER: End of Act 1 · The Hunger at the Heart  ~ ambition +5 · set act1-done
+CHAPTER: End of Act 1  ·  The Hunger at the Heart  ~ ambition +5 · set act1-done
 ```

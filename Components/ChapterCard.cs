@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LegendQuest.Components;
 
 /// <summary>
-/// The card a chapter opens on: the act in small gold capitals, and the chapter's name big under it,
+/// The card a chapter opens on: the act it's in, in small gold capitals, and the chapter's name big under it,
 /// on a soft dark smudge across the middle of the screen.
 /// </summary>
 /// <remarks>
@@ -14,8 +14,11 @@ namespace LegendQuest.Components;
 /// </remarks>
 public class ChapterCard
 {
-    /// <summary>The act every chapter so far is in, over the chapter's name.</summary>
-    private const string Act = "ACT 1  ·  THE HUNGER AT THE HEART";
+    /// <summary>The acts, over the chapter's name, by the act meter: none before the first, and none on the Prologue's own card.</summary>
+    private static readonly string[] Acts = { null, "ACT 1  ·  THE HUNGER AT THE HEART", "ACT 2  ·  THE LONG ECLIPSE", "ACT 3  ·  SOUL-BOUND" };
+
+    /// <summary>How the Prologue's card starts, which goes without an act over it.</summary>
+    private const string Prologue = "Prologue";
 
     /// <summary>How far above the middle of the screen the top of the card is, in screen pixels.</summary>
     private const float Rise = 80f;
@@ -47,15 +50,17 @@ public class ChapterCard
     /// <summary>Draws the card in the middle of the screen.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in screen space, linear-sampled.</param>
     /// <param name="chapter">The chapter's name, like "Chapter 2  ·  The Rot in the Mirewood".</param>
+    /// <param name="act">The act it's in, from the act meter.</param>
     /// <param name="shown">How much of it is showing, 0 to 1, with the screen's own fade in it.</param>
-    public void Draw(SpriteBatch spriteBatch, string chapter, float shown)
+    public void Draw(SpriteBatch spriteBatch, string chapter, int act, float shown)
     {
         float top = LegendQuestGame.ScreenHeight / 2f - Rise;
         float width = _small.MeasureString(chapter).X * Breadth;
         var area = new Rectangle((int)((LegendQuestGame.ScreenWidth - width) / 2f), (int)top, (int)width, Height);
 
         Text.DrawBacking(spriteBatch, _glow, area, Ends, Backing * shown);
-        Text.DrawCentered(spriteBatch, _small, Act, top, Palette.Gold * shown, Palette.Shadow * shown);
+        string over = chapter.StartsWith(Prologue) || act < 0 || act >= Acts.Length ? null : Acts[act];
+        if (over is not null) Text.DrawCentered(spriteBatch, _small, over, top, Palette.Gold * shown, Palette.Shadow * shown);
         Text.DrawCentered(spriteBatch, _big, chapter, top + _small.LineSpacing + Gap, Palette.Bone * shown, Palette.Shadow * shown);
     }
 }

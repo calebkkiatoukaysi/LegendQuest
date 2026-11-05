@@ -949,7 +949,7 @@ def death_save(img, ox, oy, kind):
 
 # The Soul-Link sigil ------------------------------------------------------- #
 #
-# STORY.md 2.6: two interlocking hands in a circle, in five states. Gold while the bond is whole; gold
+# The story's sigil: two interlocking hands in a circle, in five states. Gold while the bond is whole; gold
 # with a violet edge, the one frame of flicker that shows it going wrong; violet; grey and broken;
 # and grey with gold coming back through the cracks.
 

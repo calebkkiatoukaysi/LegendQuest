@@ -13,7 +13,7 @@ namespace LegendQuest.Characters;
 /// like everyone else's (ten columns, four rows, one for each way it faces), but in a frame of its own
 /// size, with its feet in the middle of the bottom, two pixels up. The Hollowed were people, so they
 /// have a person's shape. For now they stand, look round and stroll like the townsfolk; they fight
-/// when there's fighting. Sizes are STORY.md's.
+/// when there's fighting. Sizes are the story's.
 /// </remarks>
 public static class Creatures
 {

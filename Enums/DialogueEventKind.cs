@@ -20,7 +20,7 @@ public enum DialogueEventKind
     /// <summary>What you're to do next changed.</summary>
     Objective,
 
-    /// <summary>Someone joined, or went to wait at camp.</summary>
+    /// <summary>Someone joined, went to wait at camp, or went away.</summary>
     Recruited,
 
     /// <summary>A check was rolled. The result is on the event.</summary>

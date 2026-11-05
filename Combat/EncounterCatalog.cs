@@ -9,7 +9,7 @@ using LegendQuest.Items;
 namespace LegendQuest.Combat;
 
 /// <summary>
-/// Every fight in the story so far, by STORY.md's encounter id.
+/// Every fight in the story so far, by the story's encounter id (Story/09-registry.md lists them all).
 /// </summary>
 /// <remarks>
 /// The foes on a map already are its npcs (Content/Maps): the wraiths over the Gull's Wager's rail
@@ -24,7 +24,7 @@ namespace LegendQuest.Combat;
 /// </remarks>
 public static class EncounterCatalog
 {
-    /// <summary>The share of his hit points Kael calls the duel off at: STORY.md's 30%.</summary>
+    /// <summary>The share of his hit points Kael calls the duel off at: the story's 30%.</summary>
     private const float KaelYields = 0.3f;
 
     private static readonly EncounterDefinition[] Table =
@@ -66,7 +66,7 @@ public static class EncounterCatalog
 
         // A1-C2-02, the compromise: the two of you hold the den while Sera draws the rot out of the
         // crystal (so she sits it out), and what's left of the quarry's corrupted comes down the
-        // passage at you, a few at a time, the way STORY.md's guard wave does: the pack, then the
+        // passage at you, a few at a time, the way the story's guard wave does: the pack, then the
         // courier's dead escort, then a straggler.
         new()
         {

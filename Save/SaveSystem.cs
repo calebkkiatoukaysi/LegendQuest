@@ -38,7 +38,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 4;
+    public const int CurrentVersion = 5;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -200,7 +200,9 @@ public static class SaveSystem
     /// harbour, so the Prologue's behind it: without that flag the ship would never come in. Version 4
     /// is when there were items: everyone in the party and at camp gets dressed in their kit (a
     /// companion's own, or their class's), and the bag gets the healing potions a new game starts
-    /// with. The old fields only survive the read because of SaveData.Extra.
+    /// with. Version 5 is when the act became a meter: a game that hasn't seen Act 1's last card is
+    /// in Act 1, and one that has is in Act 2. The old fields only survive the read because of
+    /// SaveData.Extra.
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <returns>The same game, in the shape this build expects.</returns>
@@ -276,6 +278,14 @@ public static class SaveSystem
             data.Bag.Add(ItemCatalog.HealingPotion, SaveData.StartingPotions);
         }
 
+        if (data.Version < 5)
+        {
+            // Mend hasn't been at these either.
+            data.Flags ??= new HashSet<string>();
+            data.Meters ??= new Dictionary<string, int>();
+            data.SetMeter(Meters.Act, data.Flags.Contains(Act1Done) ? 2 : 1);
+        }
+
         data.Version = CurrentVersion;
         return data;
     }
@@ -286,13 +296,17 @@ public static class SaveSystem
     /// <summary>What a version 2 save that never had Valen calls its Soul-Bound, since the Soul-Bound has no default name.</summary>
     private const string UpgradedSoulBoundName = "Valen";
 
+    /// <summary>The flag Act 1's last card sets, which says a version 4 save is in Act 2.</summary>
+    private const string Act1Done = "act1-done";
+
     /// <summary>Puts back anything a hand-edited file left out or set to null, so nothing that reads the save has to check.</summary>
     /// <remarks>
     /// A save with nobody in the party gets the starting party, standing nowhere, which puts them on
-    /// the map's start. Anything in the bag or worn that this build hasn't got is dropped, the bag is
-    /// put back into stacks the way Inventory keeps it, and something worn in a slot it doesn't go in
-    /// goes back in the bag. Hit points out of range get pulled back in, after the equipment, since
-    /// what's worn can add to the most there can be.
+    /// the map's start, and one with more than Origins.MostInParty loses the ones past it. Anything
+    /// in the bag or worn that this build hasn't got is dropped, the bag is put back into stacks the
+    /// way Inventory keeps it, and something worn in a slot it doesn't go in goes back in the bag.
+    /// Hit points out of range get pulled back in, after the equipment, since what's worn can add to
+    /// the most there can be. Whoever's away is mended the same as the party and the camp.
     /// </remarks>
     /// <param name="data">The save, upgraded.</param>
     private static void Mend(SaveData data)
@@ -305,10 +319,12 @@ public static class SaveSystem
         data.Seen ??= new();
 
         data.Camp ??= new();
+        data.Away ??= new();
         if (data.Fight is not null && !EncounterCatalog.Exists(data.Fight)) data.Fight = null;
         data.Items ??= new();
         data.Meters ??= new();
         data.Camp.RemoveAll(member => member is null);
+        data.Away.RemoveAll(member => member is null);
         data.Items.RemoveAll(item => !KeyItems.Exists(item));
         foreach (string meter in new List<string>(data.Meters.Keys))
         {
@@ -319,11 +335,11 @@ public static class SaveSystem
 
         data.Party ??= new();
         data.Party.RemoveAll(member => member is null);
-        if (data.Party.Count > Origins.PartySize) data.Party.RemoveRange(Origins.PartySize, data.Party.Count - Origins.PartySize);
+        if (data.Party.Count > Origins.MostInParty) data.Party.RemoveRange(Origins.MostInParty, data.Party.Count - Origins.MostInParty);
         if (data.Party.Count == 0) data.Party = new List<PartyMember> { Origins.Create(Origins.You), Origins.Create(Origins.SoulBound) };
         if (data.Leader < 0 || data.Leader >= data.Party.Count) data.Leader = 0;
 
-        foreach (PartyMember member in data.Party.Concat(data.Camp))
+        foreach (PartyMember member in data.Party.Concat(data.Camp).Concat(data.Away))
         {
             member.Name ??= string.Empty;
             member.Scores ??= new();

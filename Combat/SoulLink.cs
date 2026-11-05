@@ -8,7 +8,7 @@ namespace LegendQuest.Combat;
 /// turns, and once it's full either of you can spend it on the Soul-Link Strike.
 /// </summary>
 /// <remarks>
-/// STORY.md's P-05. "Between your turns" is from the end of the hitter's last turn: if the other one
+/// The story's P-05. "Between your turns" is from the end of the hitter's last turn: if the other one
 /// hit that foe since then, the bond charges, whichever order initiative puts the two of you in.
 /// One charge a turn at most, so a strike that hits twice doesn't fill it twice. The barks are the
 /// Soul-Bound's lines from P-05, which the engine hands to the screen as Bark events.

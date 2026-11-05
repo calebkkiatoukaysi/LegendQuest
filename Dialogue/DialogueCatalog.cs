@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using LegendQuest.Characters;
 using LegendQuest.Dialogue.Scripts;
+using LegendQuest.Dialogue.Scripts.Generated;
+using LegendQuest.Story;
 using LegendQuest.World;
 
 namespace LegendQuest.Dialogue;
@@ -11,21 +14,24 @@ namespace LegendQuest.Dialogue;
 /// <remarks>
 /// Checked all at once when the game starts, after the maps, so a typo in any script stops the
 /// game right there instead of halfway through a scene, and a script that sends you to a map or a
-/// spawn that isn't there is caught too. Talking to someone plays their first script in this list
-/// that can start, so a later one for the same person goes after the earlier ones.
+/// spawn that isn't there, or has a line said by nobody the game knows, is caught too. Talking to
+/// someone plays their first script in this list that can start, so a later one for the same person
+/// goes after the earlier ones. The list is the hand-written table, in its order, then every
+/// generated script the table doesn't already hold, in the story files' order; one compiled to
+/// replace a hand-written script goes in the table at that script's place, so the order holds.
 /// </remarks>
 public static class DialogueCatalog
 {
     private static readonly DialogueScript[] Table =
     {
-        Prologue.TitleCard,
-        Prologue.YourVoice,
-        Prologue.Remembered,
-        Prologue.Voyage,
-        Prologue.Dawn,
-        Act1Chapter1.Docks,
-        Act1Chapter1.Grell,
-        Act1Chapter1.LanternMarket,
+        StoryPrologueAct1.P_01,
+        StoryPrologueAct1.P_02,
+        StoryPrologueAct1.P_03,
+        StoryPrologueAct1.P_04,
+        StoryPrologueAct1.P_05_Wraiths_After,
+        StoryPrologueAct1.A1_C1_01,
+        StoryPrologueAct1.A1_C1_01_Gulls_After,
+        StoryPrologueAct1.A1_C1_02,
 
         // The later chapters' lines for people who already had some, ahead of their old ones so
         // they win while they can start: Fennick's pay, Tamsin and Lark once you're back from the
@@ -80,21 +86,21 @@ public static class DialogueCatalog
         Shops.ApothecaryHello,
         Shops.ApothecaryAgain,
 
-        Act1Chapter2.Edge,
-        Act1Chapter2.SeraJoins,
+        StoryPrologueAct1.A1_C2_01,
+        StoryPrologueAct1.A1_C2_01_Gloomfangs_After,
         Act1Chapter2.FirstRoots,
         Act1Chapter2.SecondRoots,
-        Act1Chapter2.Letter,
+        StoryPrologueAct1.A1_C2_02_Letter,
         Act1Chapter2.Thornmother,
-        Act1Chapter2.Crystal,
+        StoryPrologueAct1.A1_C2_02_Thornmother_After,
         Act1Chapter2.Guarded,
-        Act1Chapter2.Camp,
-        Act1Chapter3.Gate,
+        StoryPrologueAct1.A1_C2_03,
+        StoryPrologueAct1.A1_C3_01,
         Act1Chapter3.MotherCamp,
         Act1Chapter3.MotherAfter,
         Act1Chapter3.ChildCamp,
         Act1Chapter3.ChildAfter,
-        Act1Chapter3.Mira,
+        StoryPrologueAct1.A1_C3_02,
         Act1Chapter3.MiraWaiting,
         Act1Chapter3.MiraStory,
         Act1Chapter3.MiraReady,
@@ -105,21 +111,21 @@ public static class DialogueCatalog
         Act1Chapter3.SupplyThree,
         Act1Chapter3.SickThreeAfter,
         Act1Chapter3.Raid,
-        Act1Chapter3.Aftermath,
+        StoryPrologueAct1.A1_C3_02_Raid_After,
         Act1Chapter4.Messenger,
         Act1Chapter4.MessengerWaiting,
-        Act1Chapter4.Summons,
-        Act1Chapter4.Vault,
-        Act1Chapter4.Truce,
-        Act1Chapter4.KaelJoins,
-        Act1Chapter4.Audience,
-        Act1Chapter4.Crane,
+        StoryPrologueAct1.A1_C4_01,
+        StoryPrologueAct1.A1_C4_02,
+        StoryPrologueAct1.A1_C4_02_Kael_After,
+        StoryPrologueAct1.A1_C4_02_Sappers_After,
+        StoryPrologueAct1.A1_C4_03,
+        StoryPrologueAct1.A1_C4_04,
         Act1Chapter4.LeonAfter,
         Act1Chapter4.ElaraAfter,
         Act1Chapter4.CraneAfter,
         Act1Chapter4.KeepGuard,
         Act1Chapter4.ElaraGuard,
-        Act1Chapter4.Brannock,
+        StoryPrologueAct1.A1_C4_05,
         Act1Chapter4.Barkeep,
         Act1Chapter4.BarkeepAfter,
 
@@ -137,24 +143,32 @@ public static class DialogueCatalog
         Companions.BrannockJoined,
     };
 
+    /// <summary>Every script, in the order talking to someone looks through them: Table, then the generated scripts it doesn't hold.</summary>
+    private static readonly IReadOnlyList<DialogueScript> Registered = Register();
+
     private static readonly Dictionary<string, DialogueScript> ById = new();
 
     /// <summary>Indexes every script by id, so the maps can check the ones they name while they're read.</summary>
-    /// <remarks>Throws on purpose if two have the same id.</remarks>
+    /// <remarks>Throws on purpose if two have the same id, or if one's missing: a field read before the class that holds it had set it.</remarks>
     static DialogueCatalog()
     {
-        foreach (DialogueScript script in Table)
+        foreach (DialogueScript script in Registered)
+        {
+            if (script is null) throw new InvalidOperationException("A script in the catalog is null: it was read before its class had made it.");
             if (!ById.TryAdd(script.Id, script)) throw new InvalidOperationException($"Two scripts are called {script.Id}.");
+        }
     }
 
-    /// <summary>Checks every script can be played as written.</summary>
-    /// <remarks>Throws on purpose. Call it after MapCatalog.LoadAll, since it checks where a Travel goes.</remarks>
+    /// <summary>Checks every script can be played as written, and that everyone who says a line is someone.</summary>
+    /// <remarks>Throws on purpose. Call it after MapCatalog.LoadAll, since it checks where a Travel goes and who's on the maps.</remarks>
     public static void ValidateAll()
     {
-        foreach (DialogueScript script in Table)
+        HashSet<string> onMaps = PeopleOnMaps();
+        foreach (DialogueScript script in Registered)
         {
             script.Validate();
             CheckTravel(script);
+            CheckSpeakers(script, onMaps);
         }
     }
 
@@ -168,9 +182,52 @@ public static class DialogueCatalog
     /// <param name="flags">The game's flags.</param>
     public static DialogueScript For(string npcId, ISet<string> flags)
     {
-        foreach (DialogueScript script in Table)
+        foreach (DialogueScript script in Registered)
             if (script.With == npcId && script.CanStart(flags)) return script;
         return null;
+    }
+
+    /// <summary>The table, then every generated script that isn't in it already, each in its own order.</summary>
+    /// <remarks>By reference, not by id: a generated script slotted into the table is the same one, and a hand-written one with a generated one's id is two scripts called the same, which the index throws on.</remarks>
+    private static DialogueScript[] Register()
+    {
+        var registered = new List<DialogueScript>(Table);
+        var slotted = new HashSet<DialogueScript>(Table, ReferenceEqualityComparer.Instance);
+        foreach (DialogueScript script in GeneratedScripts.All)
+            if (!slotted.Contains(script)) registered.Add(script);
+        return registered.ToArray();
+    }
+
+    /// <summary>The id of everyone a map puts down, and the cast id of any of them who's one of the cast.</summary>
+    private static HashSet<string> PeopleOnMaps()
+    {
+        var people = new HashSet<string>();
+        foreach (MapDefinition map in MapCatalog.All)
+        {
+            foreach (MapNpc npc in map.Npcs)
+            {
+                people.Add(npc.Id);
+                if (npc.Cast is not null) people.Add(npc.Cast);
+            }
+        }
+        return people;
+    }
+
+    /// <summary>Throws if a line's said by nobody the game knows: not an origin, the cast, one of Speakers, someone on a map, or the voice of an origin or one of the cast.</summary>
+    /// <remarks>Without it a typo in a speaker plays as a blank face with the id for a name.</remarks>
+    private static void CheckSpeakers(DialogueScript script, HashSet<string> onMaps)
+    {
+        for (int i = 0; i < script.Nodes.Count; i++)
+        {
+            string speaker = script.Nodes[i].Speaker;
+            bool known = Speakers.VoiceOf(speaker) is string whose
+                ? Origins.Exists(whose) || Cast.Get(whose) is not null
+                : Speakers.Exists(speaker) || Origins.Exists(speaker) || Cast.Get(speaker) is not null || onMaps.Contains(speaker);
+            if (known) continue;
+
+            string where = script.Nodes[i].Id ?? "line " + i;
+            throw new InvalidOperationException($"Dialogue {script.Id}: {where} is said by {speaker}, who isn't an origin, one of the cast, one of Speakers, anyone on a map, or the voice of an origin or one of the cast.");
+        }
     }
 
     /// <summary>Throws if a script travels somewhere that isn't a map, or onto a spawn the map doesn't have.</summary>

@@ -351,7 +351,7 @@ The walk is ten doors on the city and road maps; the other twenty-nine letters g
 | A farmer who closes the door | `NARRATOR: The door shuts. After a minute it opens again, and a hand takes the letter.` |
 | Hester, last | (the script below) |
 
-#### script brannock-letters-end · map `kestrel-ford` · trigger at Hester's door · needs `letters-walk` and the nine others
+#### script brannock-letters-end · map `kestrel-ford` · trigger at Hester's door · needs `letters-walk`, `letters-doors-done` · a gate set by code: `letters-doors-done`, once the nine other doors in the table above have played
 
 ```
 ! place hester at cottage-door · anim brannock stand
@@ -833,7 +833,7 @@ KAEL: I'm talking so the guards think we're guards. It's a technique.
 SERA: It's a noise.
 ```
 
-#### banter party-all-siege · `questeria-plain`, the night before A3-C4-01 · needs any three companions
+#### banter party-all-siege · `questeria-plain`, the night before A3-C4-01 · needs `siege-eve-three` · a gate set by code: `siege-eve-three`, once three companions are with you that night
 
 ```
 BRANNOCK: Sleep, the lot of you. Tomorrow you'll want it.

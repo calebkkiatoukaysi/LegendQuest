@@ -44,6 +44,9 @@ public sealed class DialogueScript
     /// <summary>Every line, in order. It starts on the first.</summary>
     public required IReadOnlyList<DialogueNode> Nodes { get; init; }
 
+    /// <summary>What happens on the stage after the last line, in order: the cue lines under it in the script. Kept and checked like a line's Cues, and not played yet either.</summary>
+    public IReadOnlyList<StageCue> Closing { get; init; } = new StageCue[0];
+
     /// <summary>Each node's place in Nodes, by id, built by Validate.</summary>
     private Dictionary<string, int> _index;
 
@@ -67,7 +70,8 @@ public sealed class DialogueScript
     /// <remarks>
     /// Throws on purpose, like the Black Box's. Every fault here is a typo that would otherwise only
     /// show up halfway through a conversation in front of a player: a Next pointing nowhere, a
-    /// question with one option, a check with nowhere to go, an effect naming a meter that isn't one.
+    /// question with one option, a check with nowhere to go, an effect naming a meter that isn't one,
+    /// a face that isn't one of the twelve, a cue with a verb nothing knows.
     /// </remarks>
     /// <exception cref="InvalidOperationException">If it couldn't be played as written.</exception>
     public void Validate()
@@ -93,7 +97,9 @@ public sealed class DialogueScript
             if (string.IsNullOrWhiteSpace(node.Line)) throw Fail($"{where} says nothing");
             CheckTarget(where, "Next", node.Next);
             CheckAll(where, node.Conditions, node.Effects);
+            CheckCues(where, node.Cues);
             if (node.Painting is not null && !Paintings.Exists(node.Painting)) throw Fail($"{where} shows a painting, {node.Painting}, that doesn't exist");
+            if (node.Expression is not null && !Expressions.Exists(node.Expression)) throw Fail($"{where} is said with a face, {node.Expression}, that isn't one of the twelve");
 
             if (node.Options.Count > 0 && (node.Options.Count < FewestOptions || node.Options.Count > MostOptions))
                 throw Fail($"{where} has {node.Options.Count} options; a question has {FewestOptions} to {MostOptions}");
@@ -122,6 +128,8 @@ public sealed class DialogueScript
                     if (condition.Problem() is string problem) throw Fail($"{what}'s advantage {problem}");
             }
         }
+
+        CheckCues("the closing", Closing);
     }
 
     /// <summary>Throws if a target names a line that isn't there. Null and End are fine.</summary>
@@ -138,6 +146,13 @@ public sealed class DialogueScript
             if (condition.Problem() is string problem) throw Fail($"{where} has a condition that {problem}");
         foreach (DialogueEffect effect in effects)
             if (effect.Problem() is string problem) throw Fail($"{where} has an effect that {problem}");
+    }
+
+    /// <summary>Throws if any cue is badly formed.</summary>
+    private void CheckCues(string where, IReadOnlyList<StageCue> cues)
+    {
+        foreach (StageCue cue in cues)
+            if (cue.Problem() is string problem) throw Fail($"{where} has a cue that {problem}");
     }
 
     /// <summary>The exception for a fault, with the script's id on the front.</summary>

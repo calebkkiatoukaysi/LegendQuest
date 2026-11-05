@@ -8,7 +8,7 @@ namespace LegendQuest.Dialogue.Scripts;
 /// Kael and Brannock say when you walk up to them between the story's scenes.
 /// </summary>
 /// <remarks>
-/// Mine, not STORY.md's, written to COMPANIONS.md: each companion's wound, voice and approval table
+/// Mine, not the story's, written to COMPANIONS.md: each companion's wound, voice and approval table
 /// are there, and every approval number here comes from those tables. Talking to a follower plays
 /// the first of their conversations in DialogueCatalog that can start, so each person's play in
 /// order: each needs a flag from the story and stops once it's set its own. They're written in the

@@ -55,7 +55,7 @@ public partial class LegendQuestGame
     private const int ProofNewGame = 215;
 
     /// <summary>The frame the new game's run from the slots to the ship ends on, counted from when it starts.</summary>
-    private const int ProofNewGameEnd = 442;
+    private const int ProofNewGameEnd = 446;
 
     /// <summary>The slot the proof breaks on purpose, and then erases.</summary>
     private const int ProofBrokenSlot = 1;
@@ -329,10 +329,12 @@ public partial class LegendQuestGame
 
         switch (frame)
         {
+            // The two lines of the card, each up in full as it comes.
             case 40:
                 return "prologue-card.png";
 
             case 41:
+            case 42:
                 talk?.ProofAdvance();
                 return null;
 
@@ -398,13 +400,17 @@ public partial class LegendQuestGame
                 creation?.ProofBegin();
                 return null;
 
-            // The pier, what you remember (that she always wanted more), and the red moon.
+            // The pier's two lines, Corra asking what you remember (that she always wanted more), the
+            // red moon, the oath, and the mark.
             case 360:
+            case 361:
+            case 362:
+            case 363:
                 talk?.ProofAdvance();
                 return null;
 
-            case 361:
-                talk?.ProofAdvance();
+            case 398:
+                talk?.ProofFinishLine();
                 return null;
 
             case 400:
@@ -422,6 +428,10 @@ public partial class LegendQuestGame
                 return "prologue-red-moon.png";
 
             case 441:
+            case 442:
+            case 443:
+            case 444:
+            case 445:
                 talk?.ProofAdvance();
                 return null;
 

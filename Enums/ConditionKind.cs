@@ -25,4 +25,22 @@ public enum ConditionKind
 
     /// <summary>You're a particular class.</summary>
     Class,
+
+    /// <summary>Someone isn't in the party: at camp, away, or never recruited.</summary>
+    NotInParty,
+
+    /// <summary>One meter is over another, or at it or over it.</summary>
+    MeterCompare,
+
+    /// <summary>The story's in a particular act.</summary>
+    Act,
+
+    /// <summary>A key item's in the bag.</summary>
+    HasItem,
+
+    /// <summary>A key item isn't in the bag.</summary>
+    LacksItem,
+
+    /// <summary>At least one of several other conditions is true.</summary>
+    AnyOf,
 }

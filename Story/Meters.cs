@@ -5,7 +5,7 @@ namespace LegendQuest.Story;
 
 /// <summary>
 /// Every meter the story keeps: how close you are to the Soul-Bound, how far they're drifting,
-/// each companion's approval, your renown, and how far the sun's gone.
+/// each companion's approval, your renown, how far the sun's gone, and which act it is.
 /// </summary>
 /// <remarks>
 /// The numbers are the story's. Kept as a table like the class catalog, so a typo in a script's
@@ -26,6 +26,10 @@ public static class Meters
     /// <summary>How far the Long Eclipse has gone, 0 to 5.</summary>
     public const string EclipseStage = "eclipse-stage";
 
+    /// <summary>Which act the story's in, 1 to 3, set by the cards that open each act. 0 is a new game before the first of them.</summary>
+    /// <remarks>A meter rather than a flag per act, so a line can ask for one act with act:2 and a save carries it for free.</remarks>
+    public const string Act = "act";
+
     /// <summary>The most fame there is. It isn't really capped; it just has to stop somewhere.</summary>
     private const int MostFame = 999;
 
@@ -43,6 +47,7 @@ public static class Meters
         new("affinity-valencia-sb", 0, 0, 100, null),
         new(Fame, 0, 0, MostFame, null),
         new(EclipseStage, 0, 0, 5, null),
+        new(Act, 0, 0, 3, null),
     };
 
     private static readonly Dictionary<string, MeterDefinition> ById = new();

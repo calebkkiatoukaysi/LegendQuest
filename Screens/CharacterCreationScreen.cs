@@ -7,10 +7,11 @@ using Microsoft.Xna.Framework.Input;
 using LegendQuest.Characters;
 using LegendQuest.Components;
 using LegendQuest.Dialogue;
-using LegendQuest.Dialogue.Scripts;
+using LegendQuest.Dialogue.Scripts.Generated;
 using LegendQuest.Rules;
 using LegendQuest.Save;
 using LegendQuest.StateManagement;
+using LegendQuest.Story;
 using LegendQuest.World;
 
 namespace LegendQuest.Screens;
@@ -125,9 +126,8 @@ public class CharacterCreationScreen : MenuScreen
     public static void Begin(ScreenManager screens, int slot)
     {
         SaveData game = SaveData.NewGame(Origins.Create(Origins.You), Origins.Create(Origins.SoulBound));
-        screens.Game.Services.GetService<Audio.AudioManager>().Play(Sfx.Heartbeat);
 
-        var card = new DialogueScreen(Prologue.TitleCard, game, NoFace, new Random());
+        var card = new DialogueScreen(StoryPrologueAct1.P_01, game, NoFace, new Random());
         card.Finished += _ => screens.AddScreen(new CharacterCreationScreen(slot, game, soulBound: false));
         screens.AddScreen(card);
     }
@@ -481,7 +481,7 @@ public class CharacterCreationScreen : MenuScreen
         _member.Name = name.Length > 0 ? name : DefaultName;
         _busy = true;
 
-        DialogueScript scene = _soulBound ? Prologue.Remembered : Prologue.YourVoice;
+        DialogueScript scene = _soulBound ? StoryPrologueAct1.P_03 : StoryPrologueAct1.P_02;
         var talk = new DialogueScreen(scene, _game, NoFace, _random);
         talk.Finished += _ =>
         {
@@ -509,8 +509,8 @@ public class CharacterCreationScreen : MenuScreen
         LoadingScreen.Load(ScreenManager, MapCatalog.Get(_game.MapId).Name.ToUpperInvariant(), new ExploreScreen(_game));
     }
 
-    /// <summary>The narrator has no face, and nobody else talks before the ship.</summary>
-    private static (string Name, Texture2D Sheet) NoFace(string id) => (string.Empty, null);
+    /// <summary>Who speaks before the ship: the narrator, with no face, and the cast by name alone (Corra on the pier), since there's no walker to take a face off yet.</summary>
+    private static (string Name, Texture2D Sheet) NoFace(string id) => (Cast.Get(id)?.Name ?? string.Empty, null);
 
     /// <summary>Bakes them again and writes every row's value onto its plate.</summary>
     private void Refresh()

@@ -15,6 +15,7 @@ public static class KeyItems
 {
     private static readonly KeyItem[] Table =
     {
+        new("herring-charm", "Driftwood Herring", "A driftwood herring with knife-cut scales, on a waxed cord."),
         new("tomas-hook", "Tomas's Lucky Hook", "A brass fish hook on a cord. Luck, he says."),
         new("courier-letter", "Courier's Letter", "Charred paper with a cube pressed into its seal."),
         new("black-iron-coin", "Black-Iron Coin", "A black coin stamped with a cube."),

@@ -569,7 +569,7 @@ The dream is a real projection through the crown. `sb-doubt-seed` gives advantag
 
 ### A3-C4-01 · The muster
 
-#### script a3-c4-01 · map `questeria-plain` · plays on arrival · needs `a3-c3-07`, two of `sq3-sunward`, `sq3-ashfall`, `sq3-gilded`, `sq3-hale`
+#### script a3-c4-01 · map `questeria-plain` · plays on arrival · needs `a3-c3-07`, `liberations-two-done` · a gate set by code: `liberations-two-done`, once two of `sq3-sunward`, `sq3-ashfall`, `sq3-gilded` and `sq3-hale` are set
 
 The units on the field come from the liberation flags (night-riders, Ashfall fighters, the Order, nothing for Hale, who's inside).
 

@@ -25,9 +25,11 @@ namespace LegendQuest.Screens;
 /// kept as small as the words let it so the painting shows, a card line is big in the middle of
 /// the screen, and a chapter's line is its card, the same one the ship coming in ends on. If a
 /// painting has the two of you in it, you and the Soul-Bound are baked when it opens and handed to
-/// the painting. Approval, gold, items, whoever joins and whoever goes to wait at camp come up as
-/// toasts, and everything the runner did goes out through Happened as it happens, so the map under
-/// it can catch up (someone leaving, someone joining). Nothing under it moves while it's up.
+/// the painting. A voice is heard and not seen: whoever it is has their face on the panel, tinted
+/// violet and faded, and no name over the line. Approval, gold, items, whoever joins, whoever goes
+/// to wait at camp and whoever goes away come up as toasts, and everything the runner did goes out
+/// through Happened as it happens, so the map under it can catch up (someone leaving, someone
+/// joining). Nothing under it moves while it's up.
 /// </remarks>
 public class DialogueScreen : GameScreen
 {
@@ -71,6 +73,9 @@ public class DialogueScreen : GameScreen
 
     /// <summary>How far up from the bottom of the screen the hint under a card goes.</summary>
     private const float CardHintRise = 60f;
+
+    /// <summary>What a voice's face is drawn with: the violet of force in a fight, at 70%, so it's someone heard and not there.</summary>
+    private static readonly Color VoiceTint = new Color(178, 142, 255) * 0.7f;
 
     /// <summary>The bar a question on a clock drains, and its colour.</summary>
     private const int ClockHeight = 6;
@@ -411,8 +416,12 @@ public class DialogueScreen : GameScreen
                 break;
 
             case DialogueEventKind.Recruited:
-                bool joins = happened.Amount == 1;
-                _toast.Show(NameOf(happened.Id) + (joins ? " joins the party" : " will wait at " + MapCatalog.Get(MapCatalog.Camp).Name));
+                _toast.Show(NameOf(happened.Id) + (happened.Amount switch
+                {
+                    1 => " joins the party",
+                    0 => " will wait at " + MapCatalog.Get(MapCatalog.Camp).Name,
+                    _ => " leaves the party",
+                }));
                 _audio.Play(Sfx.Waypoint);
                 break;
 
@@ -423,9 +432,9 @@ public class DialogueScreen : GameScreen
         Happened?.Invoke(happened);
     }
 
-    /// <summary>What someone who's just joined or gone to wait is called: their own name if they're in the party or the camp, or their origin's if they're somehow in neither.</summary>
+    /// <summary>What someone who's just joined, gone to wait or gone away is called: their own name if they're in the party, the camp or away, or their origin's if they're somehow in none of them.</summary>
     private string NameOf(string id) =>
-        (_game.Member(id) ?? _game.Camp.Find(waiting => waiting.Id == id))?.Name ?? Origins.NameOf(id);
+        (_game.Member(id) ?? _game.Camp.Find(waiting => waiting.Id == id) ?? _game.Away.Find(gone => gone.Id == id))?.Name ?? Origins.NameOf(id);
 
     /// <summary>Closes the screen and says where the party's to go.</summary>
     private void Close()
@@ -475,7 +484,7 @@ public class DialogueScreen : GameScreen
         return new Rectangle(PanelLeft, PanelBottom - height, PanelWidth, height);
     }
 
-    /// <summary>The speaker's face, in its frame, on the left of the panel.</summary>
+    /// <summary>The speaker's face, in its frame, on the left of the panel. A voice's is tinted.</summary>
     private void DrawPortrait(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
         if (node.Speaker == Speakers.Narrator) return;
@@ -484,7 +493,8 @@ public class DialogueScreen : GameScreen
         int size = (int)(Bust.Width * PortraitScale);
         var face = new Rectangle(panel.Left + Inset, panel.Top + Inset, size, size);
         _panel.Draw(spriteBatch, new Rectangle(face.X - PortraitFrame, face.Y - PortraitFrame, size + PortraitFrame * 2, size + PortraitFrame * 2), alpha);
-        if (sheet is not null) spriteBatch.Draw(sheet, face, Bust, Color.White * alpha);
+        Color tint = Speakers.VoiceOf(node.Speaker) is null ? Color.White : VoiceTint;
+        if (sheet is not null) spriteBatch.Draw(sheet, face, Bust, tint * alpha);
     }
 
     /// <summary>The icon beside each option that has one: a die for a check, a heart for a flirt, the voice for a voice's, a lock for the rest that need something.</summary>
@@ -509,7 +519,7 @@ public class DialogueScreen : GameScreen
         spriteBatch.Draw(ScreenManager.BlankTexture, bar, ClockColor * alpha);
     }
 
-    /// <summary>The speaker's name and how they say it, the line as far as it's typed, the options once it's done, and the hint.</summary>
+    /// <summary>The speaker's name (none for a voice) and how they say it, the line as far as it's typed, the options once it's done, and the hint.</summary>
     private void DrawWords(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
         bool narrator = node.Speaker == Speakers.Narrator;
@@ -517,13 +527,15 @@ public class DialogueScreen : GameScreen
 
         if (!narrator)
         {
-            string name = TextTokens.Fill(_speaker(node.Speaker).Name, _game).ToUpperInvariant();
-            Text.Draw(spriteBatch, _detailFont, name, left, top, Palette.Torch * alpha, Palette.FormShadow * alpha);
-            if (node.Direction is not null)
+            float after = left;
+            if (Speakers.VoiceOf(node.Speaker) is null)
             {
-                float after = left + _detailFont.MeasureString(name).X + 18f;
-                Text.Draw(spriteBatch, _detailFont, TextTokens.Fill(node.Direction, _game), after, top, Palette.Note * alpha, Palette.FormShadow * alpha);
+                string name = TextTokens.Fill(_speaker(node.Speaker).Name, _game).ToUpperInvariant();
+                Text.Draw(spriteBatch, _detailFont, name, left, top, Palette.Torch * alpha, Palette.FormShadow * alpha);
+                after += _detailFont.MeasureString(name).X + 18f;
             }
+            if (node.Direction is not null)
+                Text.Draw(spriteBatch, _detailFont, TextTokens.Fill(node.Direction, _game), after, top, Palette.Note * alpha, Palette.FormShadow * alpha);
         }
 
         int letters = (int)_shown;
@@ -583,7 +595,7 @@ public class DialogueScreen : GameScreen
     /// <summary>A chapter's card: the act over the chapter's name, on its smudge in the middle of the screen.</summary>
     private void DrawChapter(SpriteBatch spriteBatch, float alpha)
     {
-        _chapterCard.Draw(spriteBatch, TextTokens.Fill(_shownNode.Line, _game), alpha);
+        _chapterCard.Draw(spriteBatch, TextTokens.Fill(_shownNode.Line, _game), _game.Meter(Meters.Act), alpha);
         DrawCardHint(spriteBatch, alpha);
     }
 

@@ -32,7 +32,7 @@ public enum EffectKind
     /// <summary>Someone joins the party, or waits at camp if it's full. Someone already waiting comes along once there's room.</summary>
     Recruit,
 
-    /// <summary>Someone waiting at camp takes a companion's place in the party, and the companion waits in their seat: the id is "waiting member", both origin ids. Only the camp's offer does it, so it has no DialogueEffect of its own.</summary>
+    /// <summary>Someone waiting at camp takes a companion's place in the party, and the companion waits in their seat: the id is "waiting member", both origin ids. The camp's offer does it, and so can a script.</summary>
     Swap,
 
     /// <summary>Picks the voice you talk in.</summary>
@@ -49,4 +49,10 @@ public enum EffectKind
 
     /// <summary>A long rest for everyone, in the party and waiting at camp: hit points full, spell slots and every use back. The id is the kind of rest.</summary>
     Rest,
+
+    /// <summary>Someone goes away for a while, out of the party or the camp: kept in the save, but nobody can pick them, talk to them or take them into a fight until they're back.</summary>
+    Leave,
+
+    /// <summary>Someone who went away comes back, into the party even if it's full.</summary>
+    Rejoin,
 }

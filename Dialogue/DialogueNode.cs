@@ -18,7 +18,7 @@ public sealed class DialogueNode
     /// <summary>What options and other lines call it, or null if nothing points at it.</summary>
     public string Id { get; init; }
 
-    /// <summary>Who says it: an origin id, a cast id, someone on the map, or one of Speakers.</summary>
+    /// <summary>Who says it: an origin id, a cast id, someone on the map, one of Speakers, or a voice (Speakers.VoicePrefix and an origin or cast id) for someone heard and not seen.</summary>
     public required string Speaker { get; init; }
 
     /// <summary>What they say. May hold {name}, {sb} and the other tokens.</summary>
@@ -26,6 +26,9 @@ public sealed class DialogueNode
 
     /// <summary>How they say it, shown small beside their name: grinning, quietly. Null for nothing.</summary>
     public string Direction { get; init; }
+
+    /// <summary>The face they say it with, one of Expressions, or null for neutral. Legacy portraits have the one face, so they don't show it.</summary>
+    public string Expression { get; init; }
 
     /// <summary>What has to be true for it to be said at all.</summary>
     public IReadOnlyList<DialogueCondition> Conditions { get; init; } = new DialogueCondition[0];
@@ -53,4 +56,8 @@ public sealed class DialogueNode
 
     /// <summary>A sound to play as the line comes up, or null: a bell, a splash.</summary>
     public Sfx? Sound { get; init; }
+
+    /// <summary>What happens on the stage before the line shows, in order: the cue lines over it in the script.</summary>
+    /// <remarks>Kept and checked when the game starts, but nothing plays them yet. The script compiler works Painting, Board and Sound out from them, so a generated line looks right without.</remarks>
+    public IReadOnlyList<StageCue> Cues { get; init; } = new StageCue[0];
 }

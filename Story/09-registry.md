@@ -15,26 +15,28 @@ None.
 | 04-script-prologue-act1.md | `p-01` | plays first, before the creation screen |
 | 04-script-prologue-act1.md | `p-02` | plays when the creation screen confirms you |
 | 04-script-prologue-act1.md | `p-03` | plays after the creation screen's second pass, for `soulbound` |
-| 04-script-prologue-act1.md | `p-04` | map `gulls-wager` · with `soulbound` at the bow rail · marker event |
+| 04-script-prologue-act1.md | `p-04` | map `gulls-wager` · trigger at the bow rail, where {sb} is (the map marks it) |
 | 04-script-prologue-act1.md | `p-05-wraiths-after` | plays when the fight is won |
-| 04-script-prologue-act1.md | `a1-c1-01` | map `docks` · with `red-gull` · marker event |
+| 04-script-prologue-act1.md | `a1-c1-01` | map `docks` · trigger at the Red Gulls once you've landed (the map marks it) |
 | 04-script-prologue-act1.md | `a1-c1-01-gulls-after` | plays when the fight is won |
 | 04-script-prologue-act1.md | `a1-c1-02` | map `questeria` · with `fennick` · unless `a1-c1-02` · marker quest |
 | 04-script-prologue-act1.md | `a1-c2-01` | map `mirewood` · trigger at the black-veined trees |
 | 04-script-prologue-act1.md | `a1-c2-01-gloomfangs-after` |  |
-| 04-script-prologue-act1.md | `a1-c2-02-courier` | map `mirewood-quarry` · trigger at the courier's body |
-| 04-script-prologue-act1.md | `a1-c2-02-crystal` | trigger at the crystal · plays after `a1-c2-02-thornmother` is won |
+| 04-script-prologue-act1.md | `a1-c2-02-letter` | map `mirewood-quarry` · trigger at the courier's body |
+| 04-script-prologue-act1.md | `a1-c2-02-thornmother-after` | plays when `a1-c2-02-thornmother` is won |
 | 04-script-prologue-act1.md | `a1-c2-03` | map `mirewood` · camp · plays when you rest at the camp |
-| 04-script-prologue-act1.md | `a1-c3-01` | map `thornbridge` · with `brisk` · marker event |
-| 04-script-prologue-act1.md | `a1-c3-02` | with `mira` · marker quest |
+| 04-script-prologue-act1.md | `a1-c2-04` | as-built |
+| 04-script-prologue-act1.md | `a1-c3-01` | map `thornbridge` · plays on arrival at the east gate, once Fennick's paid |
+| 04-script-prologue-act1.md | `a1-c3-02` | with `mira` · needs `a1-c3-01` · unless `mira-supplies`, `mira-supplies-done`, `mira-recruited` · marker quest |
 | 04-script-prologue-act1.md | `a1-c3-02-raid-after` |  |
-| 04-script-prologue-act1.md | `a1-c4-01` | map `gilded-flagon` · with `elara-hooded` · marker quest |
-| 04-script-prologue-act1.md | `a1-c4-02` | map `old-crown-vault` · with `kael` · marker event |
+| 04-script-prologue-act1.md | `a1-c4-00` | as-built |
+| 04-script-prologue-act1.md | `a1-c4-01` | map `gilded-flagon` · with `elara` · needs `a1-c3` · unless `a1-c4-01` · marker quest |
+| 04-script-prologue-act1.md | `a1-c4-02` | map `old-crown-vault` · with `kael` · unless `kael-truce`, `a1-c4-02` · marker event |
 | 04-script-prologue-act1.md | `a1-c4-02-kael-after` | plays when Kael yields |
 | 04-script-prologue-act1.md | `a1-c4-02-sappers-after` |  |
 | 04-script-prologue-act1.md | `a1-c4-03` | map `sunspire-keep` · trigger at the throne |
 | 04-script-prologue-act1.md | `a1-c4-04` | trigger in the long gallery |
-| 04-script-prologue-act1.md | `a1-c4-05` | map `rusty-anvil` · with `brannock` · marker quest |
+| 04-script-prologue-act1.md | `a1-c4-05` | map `rusty-anvil` · with `brannock` · needs `a1-c4-03` · unless `brannock-recruited` · marker quest |
 | 04-script-prologue-act1.md | `a1-c5-01` | map `questeria` · trigger at the east gate · needs `a1-c4` |
 | 04-script-prologue-act1.md | `a1-c5-01-ford` | map `kestrel-ford` · trigger at the ford |
 | 04-script-prologue-act1.md | `a1-c5-01-ambush-after` |  |
@@ -50,7 +52,7 @@ None.
 | 04-script-prologue-act1.md | `a1-c7-01` | map `questeria-plain` · plays on arrival · needs `sb-kept-shard` |
 | 04-script-prologue-act1.md | `a1-c7-02` | map `arcanum-spire` · with `thessaly` · marker quest |
 | 04-script-prologue-act1.md | `a1-c7-03` | map `low-ring` · trigger at Gannet's counting house · needs `a1-c7-02` |
-| 04-script-prologue-act1.md | `a1-c7-04` | map `ashen-strait` · plays on arrival · needs `a1-c7-03`, two of `sb-heron-done`, `sera-silverbark-done`, `brannock-letters-done` |
+| 04-script-prologue-act1.md | `a1-c7-04` | map `ashen-strait` · plays on arrival · needs `a1-c7-03`, `winter-two-done` · a gate set by code: `winter-two-done`, once two of `sb-heron-done`, `sera-silverbark-done` and `brannock-letters-done` are set |
 | 04-script-prologue-act1.md | `a1-c7-05` | map `ashfall` · with `brenna` · marker event |
 | 04-script-prologue-act1.md | `a1-c8-01-echo` | map `ember-archive` · trigger at the first memory spot |
 | 04-script-prologue-act1.md | `a1-c8-02` | map `well-of-embers` · trigger at the rim |
@@ -71,7 +73,7 @@ None.
 | 05-script-act2.md | `a2-c2-02` | plays at dusk, after `a2-c2-01-vale` · map `saint-lumen` |
 | 05-script-act2.md | `a2-c2-02-vale-reveals` |  |
 | 05-script-act2.md | `a2-c2-02-raid-after` |  |
-| 05-script-act2.md | `a2-c2-03` | map `abbey-chapel` · plays when you enter · needs `a2-c2-02`, `!valencia-fled` (or `valencia-found` after the trail) |
+| 05-script-act2.md | `a2-c2-03` | map `abbey-chapel` · plays when you enter · needs `a2-c2-02`, `!valencia-fled` · plain flags: it plays after the trail too, since SQ-Valencia's-Trail clears `valencia-fled` when it sets `valencia-found` |
 | 05-script-act2.md | `a2-c3-01` | map `morvaine-pass` · plays on arrival |
 | 05-script-act2.md | `a2-c3-02-maren` | map `hollowmere` · with `maren-elder` |
 | 05-script-act2.md | `a2-c3-02-pell` | with `pell` · marker quest |
@@ -129,7 +131,7 @@ None.
 | 06-script-act3.md | `a3-c3-05` | map `watch-house` · with `hale` · marker quest |
 | 06-script-act3.md | `a3-c3-06` | plays at the camp when two liberations are done |
 | 06-script-act3.md | `a3-c3-07` | map `gulls-wager` (dream) · plays on your next rest after `a3-c3-06` |
-| 06-script-act3.md | `a3-c4-01` | map `questeria-plain` · plays on arrival · needs `a3-c3-07`, two of `sq3-sunward`, `sq3-ashfall`, `sq3-gilded`, `sq3-hale` |
+| 06-script-act3.md | `a3-c4-01` | map `questeria-plain` · plays on arrival · needs `a3-c3-07`, `liberations-two-done` · a gate set by code: `liberations-two-done`, once two of `sq3-sunward`, `sq3-ashfall`, `sq3-gilded` and `sq3-hale` are set |
 | 06-script-act3.md | `a3-c4-03` | map `deepvault` · trigger at Thessaly's crystal · with `mira` |
 | 06-script-act3.md | `a3-c4-04` | map `questeria` · Lantern Market, burning · needs `kael-with-sb` · plays at the market's north end |
 | 06-script-act3.md | `a3-c4-04-kael-duel-after` |  |
@@ -162,7 +164,7 @@ None.
 | 07-companions.md | `kael-kitchen` | map `low-ring` · with `kael` · needs `kael-lane-kept` · trigger at the old laundry on Tallow Lane |
 | 07-companions.md | `brannock-hester` | map `kestrel-ford` · trigger at Hester's door · needs `hester-known` |
 | 07-companions.md | `brannock-letters` | map `rusty-anvil` · with `brannock` · needs `hester-met`, `a1-c7-01` · marker quest |
-| 07-companions.md | `brannock-letters-end` | map `kestrel-ford` · trigger at Hester's door · needs `letters-walk` and the nine others |
+| 07-companions.md | `brannock-letters-end` | map `kestrel-ford` · trigger at Hester's door · needs `letters-walk`, `letters-doors-done` · a gate set by code: `letters-doors-done`, once the nine other doors in the table above have played |
 | 07-companions.md | `mira-index` | map `ashfall` · with `mira` · needs `a1-c7-05`, `mira-quest-hook` · marker quest |
 | 07-companions.md | `mira-tobin` | map `thornwall` · trigger at the levy's camp · needs `tobin-alive`, `thornwall-guided` |
 | 07-companions.md | `mira-index-end` | map `ember-archive` · trigger at the lowest stacks · needs `a1-c8-01`, `mira-quest-hook` |
@@ -197,7 +199,7 @@ None.
 | 07-companions.md | `party-sera-valencia` | `noxhallow-falls` base · `with:sera, with:valencia` |
 | 07-companions.md | `party-mira-brannock-a3` | `mirewood` camp · `with:mira, with:brannock` · needs `a3-c3-01` |
 | 07-companions.md | `party-kael-sera-a3` | `questeria` roofs (SQ3-Hale) · `with:kael, with:sera` |
-| 07-companions.md | `party-all-siege` | `questeria-plain`, the night before A3-C4-01 · needs any three companions |
+| 07-companions.md | `party-all-siege` | `questeria-plain`, the night before A3-C4-01 · needs `siege-eve-three` · a gate set by code: `siege-eve-three`, once three companions are with you that night |
 | 08-random-encounters.md | `rnd-lost` | plays instead of game over after a random fight |
 | 08-random-encounters.md | `enc-wren` | event · regions `saltwind` · acts 1 · party `with:kael` · once · weight 10 |
 | 08-random-encounters.md | `enc-gull-stragglers` | fight · regions `saltwind` · acts 1 · needs `grell-gone` · once · approach spotted · weight 8 |
@@ -258,12 +260,157 @@ None.
 | 10-classes.md | `train-corwin` | map `gilded-chapterhouse` · needs `a2-c6-04` · marker event · trainer |
 | 10-classes.md | `trial-vigil-after` |  |
 
+## Triggers
+
+What starts each script, from the prose in its header: for whoever places the trigger on the map, or the code that plays it. The compiler doesn't read these (build plan §4.1 rule 1).
+
+| File | Id | Trigger |
+| --- | --- | --- |
+| 04-script-prologue-act1.md | `p-01` | plays first, before the creation screen |
+| 04-script-prologue-act1.md | `p-02` | plays when the creation screen confirms you |
+| 04-script-prologue-act1.md | `p-03` | plays after the creation screen's second pass, for `soulbound` |
+| 04-script-prologue-act1.md | `p-04` | trigger at the bow rail, where {sb} is (the map marks it) |
+| 04-script-prologue-act1.md | `p-05-wraiths-after` | plays when the fight is won |
+| 04-script-prologue-act1.md | `a1-c1-01` | trigger at the Red Gulls once you've landed (the map marks it) |
+| 04-script-prologue-act1.md | `a1-c1-01-gulls-after` | plays when the fight is won |
+| 04-script-prologue-act1.md | `a1-c2-01` | trigger at the black-veined trees |
+| 04-script-prologue-act1.md | `a1-c2-02-letter` | trigger at the courier's body |
+| 04-script-prologue-act1.md | `a1-c2-02-thornmother-after` | plays when `a1-c2-02-thornmother` is won |
+| 04-script-prologue-act1.md | `a1-c2-03` | camp · plays when you rest at the camp |
+| 04-script-prologue-act1.md | `a1-c3-01` | plays on arrival at the east gate, once Fennick's paid |
+| 04-script-prologue-act1.md | `a1-c4-02-kael-after` | plays when Kael yields |
+| 04-script-prologue-act1.md | `a1-c4-03` | trigger at the throne |
+| 04-script-prologue-act1.md | `a1-c4-04` | trigger in the long gallery |
+| 04-script-prologue-act1.md | `a1-c5-01` | trigger at the east gate |
+| 04-script-prologue-act1.md | `a1-c5-01-ford` | trigger at the ford |
+| 04-script-prologue-act1.md | `a1-c5-03` | trigger at the inner gate |
+| 04-script-prologue-act1.md | `a1-c6-01` | plays on waking |
+| 04-script-prologue-act1.md | `a1-c6-01-gate-after` | plays when the courtyard is cleared |
+| 04-script-prologue-act1.md | `a1-c6-02` | plays straight after `a1-c6-01-varkhul-after` |
+| 04-script-prologue-act1.md | `a1-c6-03` | plays straight after `a1-c6-02` |
+| 04-script-prologue-act1.md | `a1-c6-04` | trigger at the throne |
+| 04-script-prologue-act1.md | `a1-c6-05` | {sb}'s quarters · plays as {sb} |
+| 04-script-prologue-act1.md | `a1-c7-01` | plays on arrival |
+| 04-script-prologue-act1.md | `a1-c7-03` | trigger at Gannet's counting house |
+| 04-script-prologue-act1.md | `a1-c7-04` | plays on arrival · a gate set by code: `winter-two-done`, once two of `sb-heron-done`, `sera-silverbark-done` and `brannock-letters-done` are set |
+| 04-script-prologue-act1.md | `a1-c8-01-echo` | trigger at the first memory spot |
+| 04-script-prologue-act1.md | `a1-c8-02` | trigger at the rim |
+| 04-script-prologue-act1.md | `a1-c8-05` | plays straight after |
+| 04-script-prologue-act1.md | `a1-c8-06` | plays on arrival |
+| 05-script-act2.md | `a2-c1-01` | plays on arrival |
+| 05-script-act2.md | `a2-c1-02` | plays that night |
+| 05-script-act2.md | `a2-c1-02-vesk` | trigger at the lectern |
+| 05-script-act2.md | `a2-c1-04` | courtyard · plays the next morning |
+| 05-script-act2.md | `a2-c2-01` | plays on arrival |
+| 05-script-act2.md | `a2-c2-02` | plays at dusk, after `a2-c2-01-vale` |
+| 05-script-act2.md | `a2-c2-03` | plays when you enter · plain flags: it plays after the trail too, since SQ-Valencia's-Trail clears `valencia-fled` when it sets `valencia-found` |
+| 05-script-act2.md | `a2-c3-01` | plays on arrival |
+| 05-script-act2.md | `a2-c3-02` | trigger at the village's far gate |
+| 05-script-act2.md | `a2-c3-03-door` | trigger at the conservatory door |
+| 05-script-act2.md | `a2-c3-03-echo-1` | memory spot 1 |
+| 05-script-act2.md | `a2-c3-03-echo-2` | memory spot 2 |
+| 05-script-act2.md | `a2-c3-03-echo-3` | memory spot 3 · plays when all prisms are lit |
+| 05-script-act2.md | `a2-c3-04` | camp · plays when you rest after `a2-c3-03-mordain` is won |
+| 05-script-act2.md | `a2-c4-01` | plays on arrival |
+| 05-script-act2.md | `a2-c4-02` | trigger at the great mural |
+| 05-script-act2.md | `a2-c4-03` | trigger at the sanctum altar |
+| 05-script-act2.md | `a2-c4-04` | plays straight after |
+| 05-script-act2.md | `a2-c4-05` | plays straight after |
+| 05-script-act2.md | `a2-c5-01` | war room · plays on arrival |
+| 05-script-act2.md | `a2-c5-02-corwin` | courtyard trigger |
+| 05-script-act2.md | `a2-c5-02-corwin-death` | plays in A2-C6-05 if `corwin-dead` |
+| 05-script-act2.md | `a2-c5-03` | treasury trigger |
+| 05-script-act2.md | `a2-c5-04` | plays on arrival |
+| 05-script-act2.md | `a2-c6-01` | plays straight after |
+| 05-script-act2.md | `a2-c6-02` | plays straight after |
+| 05-script-act2.md | `a2-c6-05` | plays straight after |
+| 05-script-act2.md | `a2-c6-06` | plays on arrival |
+| 05-script-act2.md | `a2-c6-07` | plays that night as {sb} |
+| 06-script-act3.md | `a3-c1-01` | plays first, as {sb} |
+| 06-script-act3.md | `a3-c1-02` | map `questeria` (Protectorate state) · plays on arrival, as you |
+| 06-script-act3.md | `a3-c1-02-sera` | plays at the city gate |
+| 06-script-act3.md | `a3-c1-03` | trigger at the throne |
+| 06-script-act3.md | `a3-c2-01` | plays on your next rest after `a3-c1-04` · your quarters |
+| 06-script-act3.md | `a3-c2-02-landing` | trigger on each landing |
+| 06-script-act3.md | `a3-c2-02` | trigger at the vault floor |
+| 06-script-act3.md | `a3-c2-03` | plays straight after |
+| 06-script-act3.md | `a3-c2-04` | balcony, then the small council room · plays at dawn |
+| 06-script-act3.md | `a3-c2-05-grate` | trigger at the sewer grate |
+| 06-script-act3.md | `a3-c2-05-chase-after` | plays when the chase ends |
+| 06-script-act3.md | `a3-c3-01` | map `mirewood` (camp state) · plays on arrival |
+| 06-script-act3.md | `a3-c3-02-journal` | trigger at the conservatory desk |
+| 06-script-act3.md | `a3-c3-03` | map `ashfall` (garrison state) |
+| 06-script-act3.md | `a3-c3-06` | plays at the camp when two liberations are done |
+| 06-script-act3.md | `a3-c3-07` | map `gulls-wager` (dream) · plays on your next rest after `a3-c3-06` |
+| 06-script-act3.md | `a3-c4-01` | plays on arrival · a gate set by code: `liberations-two-done`, once two of `sq3-sunward`, `sq3-ashfall`, `sq3-gilded` and `sq3-hale` are set |
+| 06-script-act3.md | `a3-c4-03` | trigger at Thessaly's crystal |
+| 06-script-act3.md | `a3-c4-04` | Lantern Market, burning · plays at the market's north end |
+| 06-script-act3.md | `a3-c4-05` | plays after the fight `a3-c4-05-stairs`, which starts at the foot of the grand stair (`11-combat.md` §4.1) |
+| 06-script-act3.md | `a3-c5-01` | plays on arrival |
+| 06-script-act3.md | `a3-c5-02-doubt` | plays when {sb} reaches a quarter of health in phase 3 |
+| 06-script-act3.md | `a3-c5-04` | plays straight after |
+| 06-script-act3.md | `a3-c5-05` | plays straight after |
+| 06-script-act3.md | `a3-c5-06` | map `sunspire-summit` (ruined state) · plays a week later |
+| 06-script-act3.md | `a3-c5-07` | plays straight after |
+| 07-companions.md | `brannock-greywatch` | trigger at Aldric's bier |
+| 07-companions.md | `sb-heron-letter` | plays at your next rest after `heron-marks` |
+| 07-companions.md | `sb-heron-hall` | trigger at the throne · plays at the winter's end |
+| 07-companions.md | `sb-heron-crane` | Crane's study |
+| 07-companions.md | `sera-spike` | plays at your next rest |
+| 07-companions.md | `sera-silverbark` | trigger at the silverbark |
+| 07-companions.md | `kael-gannet` | plays inside Gannet's counting house, as part of A1-C7-03, before {sb} leaves |
+| 07-companions.md | `kael-kitchen` | trigger at the old laundry on Tallow Lane |
+| 07-companions.md | `brannock-hester` | trigger at Hester's door |
+| 07-companions.md | `brannock-letters-end` | trigger at Hester's door · a gate set by code: `letters-doors-done`, once the nine other doors in the table above have played |
+| 07-companions.md | `mira-tobin` | trigger at the levy's camp |
+| 07-companions.md | `mira-index-end` | trigger at the lowest stacks |
+| 07-companions.md | `valencia-willing-news` | plays at the camp in `morvaine-pass` |
+| 07-companions.md | `valencia-willing` | trigger at the cells |
+| 07-companions.md | `valencia-orla-died` | plays on A2-C4-01's arrival |
+| 07-companions.md | `valencia-dawn` | plays after `a2-c6-05` |
+| 07-companions.md | `sb-a2-crane` | plays at the next camp |
+| 07-companions.md | `corra-letter-2` | plays on arrival at `sunspire-keep` after `a2-c6-06` |
+| 07-companions.md | `sb-birthday-parcel` | map `mirewood` (camp state) · plays the first time you come back to camp after any liberation |
+| 07-companions.md | `corra-letter-3` | plays at the camp after `a3-c3-06` |
+| 07-companions.md | `sera-a3-romance` | trigger under the silverbark (it's at camp if `sera-charter`; otherwise at the camp's oak) |
+| 07-companions.md | `elara-a3-camp` | map `mirewood` (camp state) |
+| 07-companions.md | `party-valencia-kael` | `saint-lumen` to `morvaine-pass` road · `with:valencia, with:kael` |
+| 07-companions.md | `party-valencia-mira` | `glasswood` entrance · `with:valencia, with:mira` |
+| 07-companions.md | `party-brannock-valencia` | `sunscar-waste` · `with:brannock, with:valencia` |
+| 07-companions.md | `party-sera-valencia` | `noxhallow-falls` base · `with:sera, with:valencia` |
+| 07-companions.md | `party-mira-brannock-a3` | `mirewood` camp · `with:mira, with:brannock` |
+| 07-companions.md | `party-kael-sera-a3` | `questeria` roofs (SQ3-Hale) · `with:kael, with:sera` |
+| 07-companions.md | `party-all-siege` | `questeria-plain`, the night before A3-C4-01 · a gate set by code: `siege-eve-three`, once three companions are with you that night |
+| 08-random-encounters.md | `rnd-lost` | plays instead of game over after a random fight |
+| 08-random-encounters.md | `enc-odelle-crew` | once per act |
+| 08-random-encounters.md | `sq-pell-door` | trigger at the gate |
+| 08-random-encounters.md | `sq-pell-cellar` | trigger at the cellar door |
+| 08-random-encounters.md | `sq-valencia-trail` | trigger at the back of the cave |
+| 10-classes.md | `train-imra` | trainer |
+| 10-classes.md | `train-hale` | trainer |
+| 10-classes.md | `train-tomas` | trainer |
+| 10-classes.md | `train-odelle` | trainer |
+| 10-classes.md | `train-tamsin` | trainer |
+| 10-classes.md | `train-thessaly` | trainer |
+| 10-classes.md | `train-brenna` | trainer |
+| 10-classes.md | `brannock-teach` | trainer |
+| 10-classes.md | `mira-teach` | trainer |
+| 10-classes.md | `kael-teach` | trainer |
+| 10-classes.md | `valencia-teach` | trainer |
+| 10-classes.md | `elara-teach` | trainer |
+| 10-classes.md | `train-anselle` | trainer |
+| 10-classes.md | `train-orla` | trainer |
+| 10-classes.md | `train-isadora` | camp · plays when you rest with the journal unread |
+| 10-classes.md | `train-corwin` | trainer |
+
 ## Flags set
 
 | Flag | Where |
 | --- | --- |
 | `a1-c1-01` | a1-c1-01-gulls-after |
 | `a1-c1-02` | a1-c1-02 |
+| `a1-c2-01` | a1-c2-01-gloomfangs-after |
+| `a1-c2-02` | a1-c2-02-thornmother-after |
 | `a1-c2-03` | a1-c2-03 |
 | `a1-c3` | a1-c3-02-raid-after |
 | `a1-c3-01` | a1-c3-01 |
@@ -337,21 +484,23 @@ None.
 | `brannock-recruited` | a1-c4-05 |
 | `brannock-saw-sb-reach` | a1-c8-03-hungering-after |
 | `brannock-wary-sb` | a1-c4-05 |
+| `brisk-persuaded` | a1-c3-01 |
 | `brisk-shoved` | a1-c3-01 |
 | `corra-told` | corra-letter-3 |
 | `corwin-dead` | a2-c5-02-corwin |
 | `corwin-hostile` | a2-c2-02-vale-reveals |
 | `corwin-saved` | a2-c5-02-courtyard-after |
+| `courier-letter-read` | a1-c2-02-letter |
 | `crane-contact` | a1-c4-04 |
 | `crane-died-cell` | a2-c5-03 |
 | `crane-double` | a2-c3-03-echo-3 |
 | `crane-trial` | a2-c5-03 |
 | `crown-fights-both` | a3-c5-02-doubt |
 | `crown-forged` | a3-c2-02 |
-| `crystal-dealt-with` | a1-c2-02-crystal |
-| `crystal-guarded` | a1-c2-02-crystal |
-| `crystal-purified` | a1-c2-02-crystal |
-| `crystal-shattered` | a1-c2-02-crystal |
+| `crystal-dealt-with` | a1-c2-02-thornmother-after |
+| `crystal-guarded` | a1-c2-02-thornmother-after |
+| `crystal-purified` | a1-c2-02-thornmother-after |
+| `crystal-shattered` | a1-c2-02-thornmother-after |
 | `deserters-sent` | enc-deserters |
 | `elara-confided` | elara-a2 |
 | `eye-bearer-sb` | a2-c6-02 |
@@ -406,8 +555,11 @@ None.
 | `mira-romance-3` | mira-camp-c5 |
 | `mira-romance-4` | mira-romance-winter |
 | `mira-romanced` | mira-index-end |
+| `mira-supplies` | a1-c3-02 |
+| `mira-supplies-done` | a1-c3-02 |
 | `mira-suspects` | a1-c8-05 |
 | `mira-suspects-crown` | mira-a3-warn |
+| `prologue-done` | p-05-wraiths-after |
 | `protectorate-act` | a3-c1-03 |
 | `protectorate-limited` | a3-c1-03 |
 | `saw-leviathan` | enc-leviathan-shadow |
@@ -475,6 +627,7 @@ None.
 | `varkhul-beaten` | a1-c6-01-varkhul-after |
 | `vial-used` | a3-c5-02-vial |
 | `willing-started` | valencia-willing-news |
+| `wraiths-sighted` | p-04 |
 
 ## Flags read
 
@@ -483,8 +636,13 @@ None.
 | `a1-c1-01` | train-odelle, train-tomas |
 | `a1-c1-02` | a1-c1-02 |
 | `a1-c2-01` | enc-woodcutters-boy |
-| `a1-c3` | train-hale, train-tamsin |
+| `a1-c3` | a1-c4-01, train-hale, train-tamsin |
+| `a1-c3-01` | a1-c3-02 |
 | `a1-c4` | a1-c5-01, enc-doomward-scouts |
+| `a1-c4-00` | a1-c4-01 |
+| `a1-c4-01` | a1-c4-01 |
+| `a1-c4-02` | a1-c4-02 |
+| `a1-c4-03` | a1-c4-05 |
 | `a1-c5-01-done` | a1-c5-02 |
 | `a1-c5-03` | a1-c6-01 |
 | `a1-c6-03` | a1-c6-04, brannock-greywatch, enc-doomward-scouts |
@@ -516,8 +674,9 @@ None.
 | `ashfall-loyal-sb` | a2-c5-01, a3-c2-04, a3-c3-03, enc-brenna-raiders |
 | `brannock-fell` | a3-c5-06 |
 | `brannock-letters-delivered` | enc-relief-ghost |
-| `brannock-letters-done` | a1-c7-04, brannock-teach, enc-brannock-drink |
+| `brannock-letters-done` | brannock-teach, enc-brannock-drink |
 | `brannock-quest-hook` | brannock-camp-c5 |
+| `brannock-recruited` | a1-c4-05 |
 | `brannock-survived` | a3-c5-06 |
 | `corwin-hostile` | a2-c5-02-corwin, valencia-willing |
 | `corwin-saved` | a2-c6-03-severin-after, a3-c3-04, train-corwin, trial-vigil-after |
@@ -542,12 +701,15 @@ None.
 | `kael-quest-hook` | kael-gannet |
 | `kael-romance-3` | kael-kitchen, kael-romance-winter |
 | `kael-romanced` | a3-c4-04, kael-romance-winter, mira-index-end |
+| `kael-truce` | a1-c4-02 |
 | `kael-turned` | a3-c5-06, kael-a3-romance |
 | `kael-with-sb` | a3-c2-04, a3-c4-04 |
 | `kael-with-you` | a3-c2-05-grate |
 | `kael-wounded` | a3-c5-06 |
 | `knows-voice-truth` | a3-c3-03, a3-c3-07, a3-c5-01 |
+| `letters-doors-done` | brannock-letters-end |
 | `letters-walk` | brannock-letters-end |
+| `liberations-two-done` | a3-c4-01 |
 | `mc-denied-act` | a3-c3-05, a3-c4-01 |
 | `mc-heard-sb-valencia` | a2-c3-04-morning, a2-c6-06 |
 | `mc-noticed-shard` | a1-c7-03, a1-c8-02, a2-c6-06 |
@@ -558,17 +720,19 @@ None.
 | `mira-index-done` | mira-teach |
 | `mira-index-shared` | a3-c3-02, mira-a3-warn |
 | `mira-quest-hook` | mira-index, mira-index-end |
+| `mira-recruited` | a1-c3-02 |
 | `mira-reunion` | mira-index-end |
 | `mira-romance-3` | mira-romance-winter |
 | `mira-romance-4` | mira-index-end |
 | `mira-romanced` | kael-kitchen |
+| `mira-supplies` | a1-c3-02 |
+| `mira-supplies-done` | a1-c3-02 |
 | `mira-talk-2-done` | enc-black-iron |
 | `sb-controls-crane` | sb-heron-1 |
 | `sb-crowd-loved` | a1-c6-04 |
 | `sb-doubt` | a3-c5-02-doubt |
 | `sb-doubt-seed` | a3-c5-01 |
 | `sb-executed-crane` | sb-a2-crane |
-| `sb-heron-done` | a1-c7-04 |
 | `sb-heron-petition` | a3-c3-07 |
 | `sb-herring` | a3-c5-01 |
 | `sb-kept-shard` | a1-c7-01 |
@@ -583,26 +747,22 @@ None.
 | `sera-romance-3` | sera-silverbark |
 | `sera-romance-4` | sera-romance-winter |
 | `sera-romanced` | kael-kitchen, mira-index-end |
-| `sera-silverbark-done` | a1-c7-04 |
 | `sera-spiked` | sera-a3-warn, sera-romance-winter |
 | `severin-alive` | a3-c3-02 |
 | `severin-dead` | a3-c3-02-journal |
 | `shard-semi-exposed` | a1-c8-05 |
+| `siege-eve-three` | party-all-siege |
 | `silverbark-spike` | sera-spike |
 | `silverbark-table` | sera-table |
 | `soul-bond-broken` | enc-checkpoint |
 | `sq-pell-hook` | a2-c3-02 |
 | `sq-pell-started` | sq-pell-door |
-| `sq3-ashfall` | a3-c4-01 |
-| `sq3-gilded` | a3-c4-01, train-corwin |
-| `sq3-hale` | a3-c4-01 |
-| `sq3-sunward` | a3-c4-01 |
+| `sq3-gilded` | train-corwin |
 | `thornwall-guided` | mira-tobin |
 | `tobin-alive` | mira-tobin |
 | `vale-clue-3` | a2-c2-01-vale |
 | `valencia-fled` | a2-c2-03, sq-valencia-trail |
 | `valencia-flirt-1` | a2-c3-03-echo-3 |
-| `valencia-found` | a2-c2-03 |
 | `valencia-orla-saved` | a2-c6-01, enc-bees, train-orla, valencia-orla-died |
 | `valencia-quest-hook` | valencia-willing-news |
 | `valencia-recruited` | valencia-talk-1 |
@@ -610,6 +770,7 @@ None.
 | `valencia-romanced` | kael-kitchen, mira-index-end, valencia-dawn |
 | `valencia-talk-2-done` | valencia-teach |
 | `willing-started` | valencia-orla-died, valencia-willing |
+| `winter-two-done` | a1-c7-04 |
 
 ## Meters
 
@@ -621,11 +782,11 @@ None.
 | `affinity-kael` | a1-c4-02-kael-after, a2-c5-03, enc-wren, kael-a3-romance, kael-a3-warn, kael-camp-c5, kael-gannet, kael-kitchen, kael-romance-winter |
 | `affinity-kael-sb` | a1-c4-02-kael-after, a2-c5-03, kael-a3-warn, kael-camp-c5, kael-gannet |
 | `affinity-mira` | a1-c3-02, a1-c7-05, enc-apricot, enc-black-iron, mira-a3-romance, mira-camp-c5, mira-index-end, mira-romance-winter, mira-tobin |
-| `affinity-sera` | a1-c2-01-gloomfangs-after, a1-c2-02-crystal, enc-black-iron, enc-honey-pedlar, enc-woodcutters-boy, sera-a3-romance, sera-camp-c5, sera-romance-winter, sera-spike, sera-table, sera-writ |
+| `affinity-sera` | a1-c2-01-gloomfangs-after, a1-c2-02-thornmother-after, enc-black-iron, enc-honey-pedlar, enc-woodcutters-boy, sera-a3-romance, sera-camp-c5, sera-romance-winter, sera-spike, sera-table, sera-writ |
 | `affinity-valencia` | a2-c2-01-vale, a2-c2-02-vale-reveals, a2-c2-03, a2-c3-03-echo-3, a2-c4-03, a2-c4-04-survive-after, a2-c6-01, a2-c6-02, a2-c6-03-severin-after, a2-willing-cells-after, enc-bees, enc-tithe-riders, sq-valencia-trail, valencia-a3-romance, valencia-orla-died, valencia-talk-1, valencia-talk-2, valencia-willing |
 | `affinity-valencia-sb` | a2-c2-02-vale-reveals, a2-c6-01, a2-c6-03-severin-after, valencia-talk-2 |
-| `ambition` | a1-c1-01, a1-c1-01-gulls-after, a1-c2-02-crystal, a1-c3-01, a1-c3-02-raid-after, a1-c4-04, a1-c5-02, a1-c6-04, a1-c6-05, a1-c7-03, a1-c7-05, a1-c8-03-hungering-after, a1-c8-07, a2-c1-03, a2-c2-03, a2-c3-02, a2-c4-04, a2-c4-04-survive-after, a2-c4-05, a2-c5-01, a2-c5-03, a2-c6-02, a2-c6-03-severin-after, a2-c6-06, a2-c6-07, a3-c2-03, enc-pilgrims, enc-sb-whittle, p-03, sb-a2-purge, sb-heron-1, sb-heron-crane, sb-heron-hall |
-| `bond` | a1-c1-01, a1-c1-01-gulls-after, a1-c2-02-crystal, a1-c3-01, a1-c3-02-raid-after, a1-c4-03, a1-c5-02, a1-c6-03, a1-c6-04, a1-c7-03, a1-c8-02, a1-c8-03-hungering-after, a2-c1-03, a2-c3-02, a2-c3-04-morning, a2-c4-04-survive-after, a2-c5-03, a2-c6-02, a2-c6-06, a3-c1-03, a3-c1-04, a3-c2-02, a3-c2-04, a3-c3-07, a3-c5-01, a3-c5-04, corra-letter-2, enc-net-mender, enc-pilgrims, kael-gannet, p-03, p-04, sb-a2-crane, sb-a2-purge, sb-birthday-parcel, sb-heron-1, sb-heron-elara, sb-heron-hall, sb-heron-letter |
+| `ambition` | a1-c1-01, a1-c1-01-gulls-after, a1-c2-02-thornmother-after, a1-c3-01, a1-c3-02-raid-after, a1-c4-04, a1-c5-02, a1-c6-04, a1-c6-05, a1-c7-03, a1-c7-05, a1-c8-03-hungering-after, a1-c8-07, a2-c1-03, a2-c2-03, a2-c3-02, a2-c4-04, a2-c4-04-survive-after, a2-c4-05, a2-c5-01, a2-c5-03, a2-c6-02, a2-c6-03-severin-after, a2-c6-06, a2-c6-07, a3-c2-03, enc-pilgrims, enc-sb-whittle, p-03, sb-a2-purge, sb-heron-1, sb-heron-crane, sb-heron-hall |
+| `bond` | a1-c1-01, a1-c1-01-gulls-after, a1-c2-02-thornmother-after, a1-c3-01, a1-c3-02-raid-after, a1-c4-03, a1-c5-02, a1-c6-03, a1-c6-04, a1-c7-03, a1-c8-02, a1-c8-03-hungering-after, a2-c1-03, a2-c3-02, a2-c3-04-morning, a2-c4-04-survive-after, a2-c5-03, a2-c6-02, a2-c6-06, a3-c1-03, a3-c1-04, a3-c2-02, a3-c2-04, a3-c3-07, a3-c5-01, a3-c5-04, corra-letter-2, enc-net-mender, enc-pilgrims, kael-gannet, p-03, p-04, sb-a2-crane, sb-a2-purge, sb-birthday-parcel, sb-heron-1, sb-heron-elara, sb-heron-hall, sb-heron-letter |
 | `cp` | trial-ash-after, trial-vigil-after, trial-watch-after |
 | `eclipse-stage` | a2-c1-01, a2-c3-01, a2-c4-01, a2-c4-04-survive-after, a2-c5-04, a2-c6-05 |
 | `fame` | a1-c1-01, a1-c3-01, a1-c3-02-raid-after, a1-c7-05, enc-woodcutters-boy |
@@ -647,7 +808,7 @@ None.
 | `corra-letter-2` | corra-letter-2 |
 | `corra-letter-3` | corra-letter-3 |
 | `corwin-sword` | a3-c3-04, train-corwin |
-| `courier-letter` | a1-c2-02-courier |
+| `courier-letter` | a1-c2-02-letter |
 | `crate` | enc-odelle-crew |
 | `crown-box-half` | a3-c5-02-sovereign-after |
 | `crown-dusk-dawn` | a3-c2-02, a3-c2-03, a3-c2-04, a3-c5-01 |
@@ -750,7 +911,7 @@ None.
 | `MASON` | enc-statue |
 | `MIRA` | a1-c3-02, a1-c3-02-raid-after, a1-c4-02-sappers-after, a1-c4-03, a1-c5-01-ambush-after, a1-c6-02, a1-c6-03, a1-c7-02, a1-c7-04, a1-c8-01-echo, a1-c8-02-maleficio-after, a1-c8-03-hungering-after, a2-c1-02-vesk-after, a2-c1-04, a2-c2-03, a2-c4-02, a2-c4-03, a3-c2-05-chase-after, a3-c3-01, a3-c3-02, a3-c3-02-journal, a3-c3-06, a3-c4-03, a3-c5-05, enc-apricot, enc-black-iron, enc-crown-hollowed, enc-stopped-hare, mira-a2, mira-a3-romance, mira-a3-warn, mira-camp-c5, mira-index, mira-index-end, mira-romance-winter, mira-teach, mira-tobin, party-all-siege, party-mira-brannock-a3, party-valencia-mira |
 | `MORDAIN` | a2-c3-03-echo-3 |
-| `NARRATOR` | a1-c1-01, a1-c1-01-gulls-after, a1-c2-01, a1-c2-01-gloomfangs-after, a1-c2-02-courier, a1-c2-02-crystal, a1-c2-03, a1-c3-01, a1-c3-02, a1-c3-02-raid-after, a1-c4-02-kael-after, a1-c4-04, a1-c6-01-gate-after, a1-c6-01-varkhul-after, a1-c6-02, a1-c6-03, a1-c6-04, a1-c6-05, a1-c7-01, a1-c7-03, a1-c8-02, a1-c8-02-maleficio-after, a1-c8-03-hungering-after, a1-c8-05, a1-c8-06, a1-c8-07, a2-c1-01, a2-c1-02-vesk-after, a2-c2-02-vale-reveals, a2-c3-01, a2-c3-03-door, a2-c3-03-echo-3, a2-c4-03, a2-c4-04, a2-c4-04-survive-after, a2-c5-02-corwin, a2-c5-03, a2-c5-04, a2-c6-01, a2-c6-03-severin-after, a2-c6-05, a2-c6-06, a2-c6-07, a3-c1-01, a3-c1-03, a3-c1-04, a3-c2-02, a3-c2-03, a3-c2-04, a3-c2-05-chase-after, a3-c2-05-grate, a3-c3-06, a3-c3-07, a3-c4-05, a3-c5-02-doubt, a3-c5-02-sovereign-after, a3-c5-02-vial, a3-c5-04, a3-c5-05, a3-c5-06, a3-c5-07, brannock-camp-c5, brannock-greywatch, brannock-letters, brannock-letters-end, corra-letter-2, corra-letter-3, enc-apricot, enc-ash-hounds, enc-bees, enc-black-iron, enc-burr, enc-checkpoint, enc-crown-hollowed, enc-drowned, enc-glass-scorpions, enc-leviathan-shadow, enc-mirage, enc-noon-wights, enc-relief-ghost, enc-rockjaws, enc-rot-boars, enc-statue, enc-stopped-hare, enc-tithe-riders, enc-woodcutters-boy, enc-wren, kael-kitchen, kael-romance-winter, mira-index, mira-tobin, p-02, p-03, p-04, rnd-lost, sb-a2-crane, sb-birthday-parcel, sb-heron-crane, sb-heron-hall, sera-romance-winter, sera-silverbark, sera-spike, sera-table, sq-pell-door, train-corwin, train-isadora |
+| `NARRATOR` | a1-c1-01, a1-c1-01-gulls-after, a1-c2-01, a1-c2-01-gloomfangs-after, a1-c2-02-letter, a1-c2-02-thornmother-after, a1-c2-03, a1-c3-01, a1-c3-02, a1-c3-02-raid-after, a1-c4-02-kael-after, a1-c4-04, a1-c6-01-gate-after, a1-c6-01-varkhul-after, a1-c6-02, a1-c6-03, a1-c6-04, a1-c6-05, a1-c7-01, a1-c7-03, a1-c8-02, a1-c8-02-maleficio-after, a1-c8-03-hungering-after, a1-c8-05, a1-c8-06, a1-c8-07, a2-c1-01, a2-c1-02-vesk-after, a2-c2-02-vale-reveals, a2-c3-01, a2-c3-03-door, a2-c3-03-echo-3, a2-c4-03, a2-c4-04, a2-c4-04-survive-after, a2-c5-02-corwin, a2-c5-03, a2-c5-04, a2-c6-01, a2-c6-03-severin-after, a2-c6-05, a2-c6-06, a2-c6-07, a3-c1-01, a3-c1-03, a3-c1-04, a3-c2-02, a3-c2-03, a3-c2-04, a3-c2-05-chase-after, a3-c2-05-grate, a3-c3-06, a3-c3-07, a3-c4-05, a3-c5-02-doubt, a3-c5-02-sovereign-after, a3-c5-02-vial, a3-c5-04, a3-c5-05, a3-c5-06, a3-c5-07, brannock-camp-c5, brannock-greywatch, brannock-letters, brannock-letters-end, corra-letter-2, corra-letter-3, enc-apricot, enc-ash-hounds, enc-bees, enc-black-iron, enc-burr, enc-checkpoint, enc-crown-hollowed, enc-drowned, enc-glass-scorpions, enc-leviathan-shadow, enc-mirage, enc-noon-wights, enc-relief-ghost, enc-rockjaws, enc-rot-boars, enc-statue, enc-stopped-hare, enc-tithe-riders, enc-woodcutters-boy, enc-wren, kael-kitchen, kael-romance-winter, mira-index, mira-tobin, p-02, p-03, p-04, rnd-lost, sb-a2-crane, sb-birthday-parcel, sb-heron-crane, sb-heron-hall, sera-romance-winter, sera-silverbark, sera-spike, sera-table, sq-pell-door, train-corwin, train-isadora |
 | `NET-MENDER` | enc-net-mender |
 | `ODELLE` | p-05-wraiths-after, train-odelle |
 | `ORLA` | a2-c2-01-orla, a2-willing-cells-after, enc-bees, train-orla, valencia-willing |
@@ -763,8 +924,8 @@ None.
 | `RED GULL` | a1-c1-01, enc-gull-stragglers |
 | `ROYAL GUARD` | a2-c1-02 |
 | `SAILOR` | enc-odelle-crew |
-| `SB` | a1-c1-01, a1-c1-01-gulls-after, a1-c1-02, a1-c2-01, a1-c2-01-gloomfangs-after, a1-c2-02-courier, a1-c2-02-crystal, a1-c2-03, a1-c3-01, a1-c3-02, a1-c3-02-raid-after, a1-c4-01, a1-c4-02, a1-c4-02-kael-after, a1-c4-02-sappers-after, a1-c4-03, a1-c4-04, a1-c4-05, a1-c5-01-ambush-after, a1-c5-01-ford, a1-c5-02, a1-c5-03, a1-c6-02, a1-c6-03, a1-c6-04, a1-c6-05, a1-c7-01, a1-c7-02, a1-c7-03, a1-c7-05, a1-c8-02, a1-c8-03-hungering-after, a1-c8-05, a1-c8-07, a2-c1-01, a2-c1-03, a2-c2-02-vale-reveals, a2-c2-03, a2-c3-02, a2-c3-04, a2-c3-04-morning, a2-c4-02, a2-c4-03, a2-c4-04, a2-c4-04-survive-after, a2-c4-05, a2-c5-01, a2-c5-03, a2-c6-01, a2-c6-02, a2-c6-03-severin-after, a2-c6-06, a2-c6-07, a3-c1-01, a3-c1-03, a3-c1-04, a3-c2-02, a3-c2-03, a3-c2-04, a3-c3-07, a3-c5-01, a3-c5-02-doubt, a3-c5-02-sovereign-after, a3-c5-02-vial, a3-c5-04, corra-letter-2, enc-kael-prices, enc-mirage, enc-net-mender, enc-pilgrims, enc-sb-whittle, kael-gannet, p-03, p-04, p-05-wraiths-after, sb-a2-crane, sb-a2-purge, sb-heron-1, sb-heron-crane, sb-heron-elara, sb-heron-hall, sb-heron-letter, sb-heron-tomas |
-| `SERA` | a1-c2-01-gloomfangs-after, a1-c2-02-courier, a1-c2-02-crystal, a1-c8-02, a2-c4-05, a3-c1-02-sera, a3-c2-05-grate, a3-c3-06, a3-c5-05, enc-burr, enc-honey-pedlar, enc-otters, enc-statue, party-all-siege, party-kael-sera-a3, party-sera-valencia, sera-a2, sera-a3-romance, sera-a3-warn, sera-camp-c5, sera-romance-winter, sera-silverbark, sera-spike, sera-table, sera-writ, train-tamsin |
+| `SB` | a1-c1-01, a1-c1-01-gulls-after, a1-c1-02, a1-c2-01, a1-c2-01-gloomfangs-after, a1-c2-02-letter, a1-c2-02-thornmother-after, a1-c2-03, a1-c3-01, a1-c3-02, a1-c3-02-raid-after, a1-c4-01, a1-c4-02, a1-c4-02-kael-after, a1-c4-02-sappers-after, a1-c4-03, a1-c4-04, a1-c4-05, a1-c5-01-ambush-after, a1-c5-01-ford, a1-c5-02, a1-c5-03, a1-c6-02, a1-c6-03, a1-c6-04, a1-c6-05, a1-c7-01, a1-c7-02, a1-c7-03, a1-c7-05, a1-c8-02, a1-c8-03-hungering-after, a1-c8-05, a1-c8-07, a2-c1-01, a2-c1-03, a2-c2-02-vale-reveals, a2-c2-03, a2-c3-02, a2-c3-04, a2-c3-04-morning, a2-c4-02, a2-c4-03, a2-c4-04, a2-c4-04-survive-after, a2-c4-05, a2-c5-01, a2-c5-03, a2-c6-01, a2-c6-02, a2-c6-03-severin-after, a2-c6-06, a2-c6-07, a3-c1-01, a3-c1-03, a3-c1-04, a3-c2-02, a3-c2-03, a3-c2-04, a3-c3-07, a3-c5-01, a3-c5-02-doubt, a3-c5-02-sovereign-after, a3-c5-02-vial, a3-c5-04, corra-letter-2, enc-kael-prices, enc-mirage, enc-net-mender, enc-pilgrims, enc-sb-whittle, kael-gannet, p-03, p-04, p-05-wraiths-after, sb-a2-crane, sb-a2-purge, sb-heron-1, sb-heron-crane, sb-heron-elara, sb-heron-hall, sb-heron-letter, sb-heron-tomas |
+| `SERA` | a1-c2-01-gloomfangs-after, a1-c2-02-letter, a1-c2-02-thornmother-after, a1-c8-02, a2-c4-05, a3-c1-02-sera, a3-c2-05-grate, a3-c3-06, a3-c5-05, enc-burr, enc-honey-pedlar, enc-otters, enc-statue, party-all-siege, party-kael-sera-a3, party-sera-valencia, sera-a2, sera-a3-romance, sera-a3-warn, sera-camp-c5, sera-romance-winter, sera-silverbark, sera-spike, sera-table, sera-writ, train-tamsin |
 | `SEVERIN` | a2-c4-04, a2-c4-04-survive-after, a2-c5-04, a3-c3-02 |
 | `SISTER VALE` | a2-c2-01-vale |
 | `TAMSIN` | sera-table, train-tamsin |
@@ -780,7 +941,7 @@ None.
 | `VORLAITH` | a3-c5-02-sovereign-after, a3-c5-07 |
 | `VREYA` | a2-c2-02, a2-c2-02-raid-after |
 | `WREN` | enc-wren, kael-kitchen |
-| `YOU` | a1-c1-01-gulls-after, a1-c2-01, a1-c2-02-courier, a1-c2-03, a1-c5-02, a1-c7-03, a1-c7-05, a1-c8-07, a2-c1-04, a3-c1-04, a3-c2-05-chase-after, a3-c4-03, p-04, sb-heron-1 |
+| `YOU` | a1-c1-01-gulls-after, a1-c2-01, a1-c2-02-letter, a1-c2-03, a1-c5-02, a1-c7-03, a1-c7-05, a1-c8-07, a2-c1-04, a3-c1-04, a3-c2-05-chase-after, a3-c4-03, p-04, sb-heron-1 |
 
 ## Fights
 
@@ -788,8 +949,7 @@ None.
 | --- | --- |
 | `a1-c1-01-gulls` | a1-c1-01 |
 | `a1-c2-01-gloomfangs` | a1-c2-01 |
-| `a1-c2-02-hold` | a1-c2-02-crystal |
-| `a1-c3-02-raid` | a1-c3-02 |
+| `a1-c2-02-guard-wave` | a1-c2-02-thornmother-after |
 | `a1-c4-02-kael` | a1-c4-02 |
 | `a1-c4-02-sappers` | a1-c4-02-kael-after |
 | `a1-c5-01-ambush` | a1-c5-01-ford |
@@ -866,7 +1026,7 @@ None.
 | `blood-house` | sq-pell-cellar, sq-pell-door |
 | `blood-orrery` | a2-c5-04 |
 | `deepvault` | a2-c6-06, a2-c6-07, a3-c4-03 |
-| `docks` | a1-c1-01, sb-heron-tomas, train-odelle, train-tomas |
+| `docks` | a1-c1-01, p-05-wraiths-after, sb-heron-tomas, train-odelle, train-tomas |
 | `ember-archive` | a1-c8-01-echo, mira-index-end |
 | `gilded-chapterhouse` | a3-c3-04, train-corwin, valencia-willing |
 | `gilded-flagon` | a1-c4-01 |
@@ -876,8 +1036,8 @@ None.
 | `hollowmere` | a2-c3-02-maren, valencia-dawn |
 | `kestrel-ford` | a1-c5-01, a1-c5-01-ford, brannock-hester, brannock-letters-end |
 | `low-ring` | a1-c7-03, a3-c2-05-grate, kael-gannet, kael-kitchen |
-| `mirewood` | a1-c2-01, a1-c2-03, a3-c2-05-chase-after, a3-c3-01, elara-a3-camp, sb-birthday-parcel, sera-silverbark, sera-spike |
-| `mirewood-quarry` | a1-c2-02-courier |
+| `mirewood` | a1-c2-01, a1-c2-02-thornmother-after, a1-c2-03, a3-c2-05-chase-after, a3-c3-01, elara-a3-camp, sb-birthday-parcel, sera-silverbark, sera-spike |
+| `mirewood-quarry` | a1-c2-02-letter |
 | `morvaine-pass` | a2-c3-01 |
 | `noxhallow` | a2-c5-02-corwin, a2-c5-03 |
 | `old-crown-vault` | a1-c4-02 |
@@ -947,7 +1107,7 @@ None.
 | `blood-house` | cellar-cot, gate |
 | `blood-orrery` | balcony-drop, orrery-heart |
 | `deepvault` | quarters-bed, vault-stair |
-| `docks` | gangway, net-rack |
+| `docks` | gangway, net-rack, start |
 | `ember-archive` | stack-shelf |
 | `gilded-chapterhouse` | cell, cell-door, chapter-altar |
 | `glasswood` | conservatory-door |
@@ -956,7 +1116,7 @@ None.
 | `hollowmere` | doorway |
 | `kestrel-ford` | cottage-door, start |
 | `low-ring` | counting-desk, desk, laundry-door, sewer-grate, sewer-mouth, stove |
-| `mirewood` | camp-edge, fire, resistance-camp, silverbark, stump-table, treeline |
+| `mirewood` | camp, camp-edge, fire, resistance-camp, silverbark, stump-table, treeline |
 | `noxhallow` | courtyard, gate-ruin, treasury-chest |
 | `old-crown-vault` | relic-shelf |
 | `proving-hall` | hall-floor |

@@ -2,8 +2,8 @@
 
 This is the companion bible: who the people who walk beside you are, what they want, what they
 need, how they talk, what they approve of, and where each of them is going across Acts 1 to 3.
-`STORY.md` (Caleb's script) is the source of truth for every fixed beat; this file deepens it and
-never contradicts it. Where it invents (a name, a village, a memory), it invents round what the
+Caleb's scripts in `Story/` (`04` to `08`) are the source of truth for every fixed beat; this file
+deepens them and never contradicts them. Where it invents (a name, a village, a memory), it invents round what the
 script already says, so a line in the script reads truer for knowing this.
 
 It's written for whoever writes the next scene. Read a companion's entry before you write a word

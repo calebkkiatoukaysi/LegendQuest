@@ -15,13 +15,30 @@ BUILT_FLAGS = {  # set by code that's already in the repo (Act 1 Chapters 1-4, C
     "a1-c3", "a1-c4", "a1-c4-03", "a1-c4-04", "sb-quest-hook", "sb-shared-catch", "sb-tell-me",
     "sera-quest-hook", "sera-flirt-2", "mira-quest-hook", "mira-flirt-2", "mira-heard-crane", "kael-quest-hook",
     "kael-flirt-2", "brannock-quest-hook", "brannock-wary-sb", "mira-talk-2-done", "sb-crowd-loved",
-    "a1-c3-02-errands-done", "valencia-recruited", "sera-recruited", "mira-recruited", "kael-recruited",
+    "valencia-recruited", "sera-recruited", "mira-recruited", "kael-recruited",
     "brannock-recruited", "kael-with-sb", "kael-with-you",  # set by A3-C2-04's meter comparison (code)
     "brannock-survived", "brannock-fell",                    # set by A3-C4-05's check (code)
     "ide-rescued",
     "vale-clue-1", "vale-clue-2", "vale-clue-3",              # set by examine objects on saint-lumen (map)
+    "winter-two-done", "liberations-two-done",                # gate flags set by code when two of a header's flags are
+    "letters-doors-done", "siege-eve-three",                  # all ten letters delivered; three companions in the party
 }
 SYSTEM_PREFIXES = ("enc-",)
+ENC_FIELD = re.compile(r"^(?:fight|event|merchant|companion|rare|once|(?:regions|acts|party|time|approach) .+|(?:weight|cooldown) \d+)$")
+
+def trigger_notes(sid, header):
+    """The prose in a header: what starts the script, for whoever places its trigger (build plan §4.1 rule 1).
+    Everything but with, needs, unless, marker, map, as-built and an encounter's entry fields, as tools/story/compile_scripts.py reads them."""
+    notes = []
+    for f in (f.strip() for f in header.split(" · ")):
+        m = re.match(r"^(?:with|map) `[\w-]+`(.*)$", f)
+        if m:
+            if m.group(1).strip(): notes.append(f)   # with `soulbound` at the bow rail
+            continue
+        if not f or f == "as-built" or re.match(r"^(?:needs|unless) ", f) or re.match(r"^marker (?:quest|event|none)$", f): continue
+        if sid.startswith("enc-") and ENC_FIELD.match(f): continue
+        notes.append(f)
+    return notes
 
 def blocks():
     for f in FILES:
@@ -115,6 +132,9 @@ def main():
     out += ["## Problems", ""] + ([f"- {p}" for p in problems] or ["None."]) + [""]
     out += ["## Scripts", "", "| File | Id | Header |", "| --- | --- | --- |"]
     out += [f"| {f} | `{s}` | {h.replace('|', '/')} |" for f, s, h in scripts] + [""]
+    out += ["## Triggers", "", "What starts each script, from the prose in its header: for whoever places the trigger on the map, or the code that plays it. The compiler doesn't read these (build plan §4.1 rule 1).", "",
+            "| File | Id | Trigger |", "| --- | --- | --- |"]
+    out += [f"| {f} | `{s}` | {' · '.join(notes).replace('|', '/')} |" for f, s, h in scripts if (notes := trigger_notes(s, h))] + [""]
     def table(title, d, col):
         rows = [f"## {title}", "", f"| {col} | Where |", "| --- | --- |"]
         rows += [f"| `{k}` | {', '.join(sorted(map(str, v)))} |" for k, v in sorted(d.items(), key=lambda kv: str(kv[0]))]

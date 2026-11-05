@@ -18,7 +18,7 @@ public static class LookOptions
     /// <summary>The skins.</summary>
     public static IReadOnlyList<string> Skins { get; } = new[] { "FAIR", "PORCELAIN", "GOLDEN", "TAN", "BROWN", "DEEP" };
 
-    /// <summary>A line about each people, for the creation screen, in Ancestry's order. STORY.md's flavour.</summary>
+    /// <summary>A line about each people, for the creation screen, in Ancestry's order. The story's flavour.</summary>
     public static IReadOnlyList<string> Peoples { get; } = new[]
     {
         "Adaptable, from every corner of Fable.",

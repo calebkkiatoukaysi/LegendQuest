@@ -33,9 +33,8 @@ public partial class ExploreScreen
     internal const int QuesteriaAgainProofEnd = Settled + 26;
     internal const int BarrowProofEnd = Settled + 593;
 
-    /// <summary>How often a conversation gets a press while the proof run's reading it, how long a window of reading lasts, and how long a line's held for its shot.</summary>
+    /// <summary>How often a conversation gets a press while the proof run's reading it, and how long a line's held for its shot.</summary>
     private const int ProofReadEvery = 6;
-    private const int ProofReadFrames = 80;
     private const int ProofHoldFrames = 20;
 
     /// <summary>The choices still to make at this visit's questions, the clock the presses go by, the shots taken, the shot a line's being held for, and a frame to count on from.</summary>
@@ -46,8 +45,8 @@ public partial class ExploreScreen
     private int _proofHoldClock;
     private int _proofMark;
 
-    /// <summary>When each of Questeria's conversations gets read, after Settled: the Soul-Bound's as you come in, and Fennick's.</summary>
-    private static readonly int[] ProofReads = { 72, 880 };
+    /// <summary>When each of Questeria's conversations gets read, after Settled, and for how many frames: the Soul-Bound's as you come in, and Fennick's, whose six lines take two presses each.</summary>
+    private static readonly (int At, int Frames)[] ProofReads = { (72, 80), (880, 92) };
 
     /// <summary>A direction to walk in instead of reading the keyboard, while the proof run is driving.</summary>
     private Vector2? _proofMove;
@@ -90,7 +89,7 @@ public partial class ExploreScreen
         };
     }
 
-    /// <summary>The deck at night, with the red "!" at the bow: a walk up to it, then the Prologue's voyage read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE WITH YOU), the sea-wraiths and Questeria at dawn, and off to the harbour.</summary>
+    /// <summary>The deck at night, with the red "!" at the bow: a walk up to it, then the Prologue's voyage read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE), the sea-wraiths and Questeria at dawn, and off to the harbour.</summary>
     private string VoyageStep(int frame)
     {
         if (frame == Settled) return "voyage.png";
@@ -311,9 +310,9 @@ public partial class ExploreScreen
     /// <summary>Questeria, in off the harbour: the Soul-Bound in the street, the townsfolk about the plaza, behind a roof, both zooms, the path round a statue and a click to walk it, the elder, the canal, Tab and a card, Fennick and the quest board, you off on your own, the waypoint, the map, then in through the Gilded Flagon's door.</summary>
     private string QuesteriaStep(int frame)
     {
-        foreach (int read in ProofReads)
+        foreach ((int at, int frames) in ProofReads)
         {
-            if (frame < Settled + read || frame >= Settled + read + ProofReadFrames) continue;
+            if (frame < Settled + at || frame >= Settled + at + frames) continue;
             ProofTalk();
             return null;
         }

@@ -11,7 +11,7 @@ namespace LegendQuest.Components;
 /// for each charge under it.
 /// </summary>
 /// <remarks>
-/// STORY.md's five states of the sigil, read as the meter: grey with a gold pulse while the bond's
+/// The story's five states of the sigil, read as the meter: grey with a gold pulse while the bond's
 /// empty and waiting, gold once it's charged, gold with a glow behind it and READY when it's full,
 /// the one-frame violet flicker as a charge lands, violet while one of the two of you is down, and
 /// broken grey when the two of you aren't both in the fight. Pointing at it says how it fills.

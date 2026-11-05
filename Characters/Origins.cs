@@ -11,7 +11,7 @@ namespace LegendQuest.Characters;
 /// <remarks>
 /// You and the Soul-Bound are made on the creation screen, so theirs are only where it starts:
 /// the Soul-Bound has no name until you give them one. The companions are the story's: their
-/// peoples, classes and looks come from STORY.md, and every score spread is 5e's standard array
+/// peoples, classes and looks come from the story, and every score spread is 5e's standard array
 /// put where their class wants it (ClassCatalog's recommended one). Their kits are the story's
 /// too, where it gives them weapons of their own: Sera's bow, Kael's twin daggers, Brannock's
 /// battered round shield. Mira sets out in her class's.
@@ -26,6 +26,9 @@ public static class Origins
 
     /// <summary>The most people in the party at once. Anyone else recruited waits at camp.</summary>
     public const int PartySize = 4;
+
+    /// <summary>The most the party can ever hold: one over PartySize, for the stretch of the story when someone who went away comes back to a full party. Recruiting still stops at PartySize.</summary>
+    public const int MostInParty = PartySize + 1;
 
     private static readonly Origin[] Table =
     {

@@ -6,7 +6,7 @@ namespace LegendQuest.Story;
 /// The contracts on the Lantern Market's quest board.
 /// </summary>
 /// <remarks>
-/// STORY.md's A1-C1-02: the main quest's posting, from the Rangers' Lodge, glows among the side
+/// The story's A1-C1-02: the main quest's posting, from the Rangers' Lodge, glows among the side
 /// quests, which are hooks for now (Rats in the Flagon, the Missing Ledger, the Tollroad Bandits and
 /// the Bellringer's Widow). Placeholders, like every line.
 /// </remarks>

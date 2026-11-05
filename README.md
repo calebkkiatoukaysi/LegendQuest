@@ -70,6 +70,17 @@ dotnet run -- --proof shots       # play through the screens, save a picture of 
 dotnet run -- --proof shots Docks # the same, but stop after that part of the run (a ProofStage)
 ```
 
+The story has four checks of its own, run before every commit with `dotnet build` and
+`python tools/check_assets.py` (`Story/01-build-plan.md` §0):
+
+```
+python tools/story/compile_scripts.py          # Story/04 to 08 into Dialogue/Scripts/Generated/
+python tools/story/compile_scripts.py --check  # exit 1 if the generated C# is out of date, a script won't read, or an id is in both
+python tools/story/compile_scripts.py --diff a1-c3-02  # a hand-written script beside the one generated for it
+python story/tools/lint_dialogue.py            # the writing guide's mechanical rules
+python story/tools/build_registry.py --check   # rewrites Story/09-registry.md; exit 1 if a flag is read but never set
+```
+
 It's the same harness as The Black Box's. It goes through the title, the options, the save slots
 for loading (and erases a broken slot the way a player would, ERASE then SURE?), the save slots for
 a new game, then the Prologue: its card, the creation screen (you as you start, then named, and
@@ -799,8 +810,12 @@ end goes by itself), `ProofAimAtFighter(id)` and `ProofAimAtCell(cell)` to point
 
 ## Conversations
 
-A conversation is a `DialogueScript`, written in C# in `Dialogue/Scripts/`, a file per chapter. It
-says who it's with, the flags it `Needs` and the ones that stop it (`Unless`), and its lines.
+A conversation is a `DialogueScript`. The story's are written in `Story/04` to `08` in the notation
+`Story/01-build-plan.md` §4 gives, and `tools/story/compile_scripts.py` turns them into C# in
+`Dialogue/Scripts/Generated/` (nobody edits those: a wrong line is fixed in the `.md` and compiled
+again). The rest are written in C# in `Dialogue/Scripts/`, a file per chapter, beside the constants
+that name every chapter's flags. A script says who it's with, the flags it `Needs` and the ones that
+stop it (`Unless`), and its lines.
 `DialogueCatalog.For` picks what someone says: the first of theirs that can start. Talking to them
 when there isn't one gets their `say` line over their head instead.
 
@@ -1125,7 +1140,7 @@ Every PNG in `Content/` is made by a script:
 
 ```
 python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png, dialogue-icons.png, markers.png and keycaps.png
-python tools/generate_world.py        # the crypt and forest tilesets, their props (cut or drawn), the torch flame, glow.png and mote.png
+python tools/generate_world.py        # the crypt tileset (and the forest one, which no map uses now), their props (cut or drawn), the torch flame, glow.png and mote.png
 python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship and its deck, its gangplank, mast, lanterns, wheel and rope, and the rowing boat
 python tools/generate_interiors.py    # the inside of the buildings: the interior tileset, the bed, and the taverns' tables and booth
 python tools/generate_meadow.py       # the meadow tileset and the farmland's props, the refugee camp, and the east gate from outside
@@ -1134,6 +1149,8 @@ python tools/generate_keep.py         # Sunspire Keep's tileset, the throne and 
 python tools/generate_vault.py        # the Old Crown Vault's tileset, its doors, shelves, gold, traps and the Sunheart's pedestal
 python tools/generate_creatures.py    # the creatures' sheets: gloomfangs, the Thornmother, the Hollowed and the vault's constructs
 python tools/generate_paintings.py    # the story's paintings and what moves over them, out of the title's pictures
+python tools/generate_items.py        # the item icons and the inventory's slots
+python tools/generate_combat_art.py   # the fight's ability and condition icons, and the pieces of its screen
 python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, the houses, the furniture and the townsfolk, out of tools/source/
 python tools/cut_supplied.py buildings  # just the houses (or name props to cut just those)
 python tools/generate_paperdoll.py    # the paperdoll sheets and the gear for all three builds, character-palettes.png and gear-palettes.png, off the youth (after cut_supplied.py's people)
@@ -1229,8 +1246,8 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `Screens/` is every screen. The explore screen is in partials: `ExploreScreen.cs` for walking and drawing, `ExploreScreen.Party.cs` for the party and the followers, `ExploreScreen.Pointer.cs` for the mouse, `ExploreScreen.World.cs` for using things, triggers, exits, doors in and out and travel, `ExploreScreen.Story.cs` for conversations, scenes, the townsfolk strolling and the ship coming in, `ExploreScreen.Banter.cs` for banter, chatter and the bubbles, `ExploreScreen.Markers.cs` for the markers, `ExploreScreen.Camp.cs` for whoever's waiting at camp and swapping places with them, `ExploreScreen.Tutorial.cs` for the tutorial's tips, `ExploreScreen.Items.cs` for I and C, the shops and what goes in the bag, and `ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen.ProofChapters.cs` for its part of the proof schedule.
 - `World/` is the maps: `MapLoader` (with `MapObjectLine` for the `[objects]`) and `MapCatalog` to read them, `MapDefinition` and the `Map*` records for what's in one (`MapPresence` for `when` and `unless`), `Tilemap` to draw one, build its walls and see across it, `LightMap` for the dark, `Discovery` for what's been seen, `WorldState` for the rules of using things, `NavGrid`, `Pathfinder` and `BinaryHeap` for A*, `Camera2D`, and the tileset and prop catalogues.
 - `Characters/` is the walking sprite and the shape of its frames (`WalkerSprite` and `WalkerShape`), the party (`PartyMember`, `Origin` and `Origins`), people on maps (`Npc`, and their sheets in `Townsfolk`), the beasts (`Creature` and `Creatures`), and how everyone looks (`CharacterLook`, `LookOptions`, `Paperdoll` and `CharacterPalettes`).
-- `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, and the scripts themselves in `Dialogue/Scripts/`, a file per chapter.
-- `Story/` is the story's tables: `Meters`, `KeyItems`, `Paintings`, `Cast`, the quest board's `Postings`, and `Banters`.
+- `Dialogue/` is conversations: the script's parts (`DialogueScript`, `DialogueNode`, `DialogueOption`, `DialogueCheck`, `DialogueCondition`, `DialogueEffect`), `DialogueRunner` to play one, `TextTokens` for the words in braces, `DialogueCatalog` for every one of them, `StageCue` and `Expressions` for the cues and faces the story's scripts carry, the scripts compiled from `Story/` in `Dialogue/Scripts/Generated/`, and the hand-written ones in `Dialogue/Scripts/`, a file per chapter.
+- `Story/` is the story's tables (`Meters`, `KeyItems`, `Paintings`, `Cast`, the quest board's `Postings`, and `Banters`) and the plan the rest of the game is built from: the build plan, the writing guide, the scripts, the specs for rooms, combat, classes and art, and the generated registry (`Story/README.md` says what each is), with their two tools in `Story/tools/`.
 - `Tutorial/` is the tutorial's tips, which draw nothing: `TutorialTip`, every one of them in `TutorialCatalog`, and `Tutorials` for which a game has seen and which are waiting. `TutorialPanel` and `KeyCaps` in `Components/` show them.
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
 - `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the catalogs (`AbilityCatalog`, `ResourceCatalog`, `EnemyCatalog`, `EncounterCatalog`), `EnemyMind` for the AI, `CombatSimulator` for `--simulate`, and the grid it all happens on (`ICombatGrid`, `OpenGround`, `Measure`).

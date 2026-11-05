@@ -184,7 +184,7 @@ VREYA (laugh): You think you're saving her? You're only the next ones who want h
 
 ### A2-C2-03 · Valencia
 
-#### script a2-c2-03 · map `abbey-chapel` · plays when you enter · needs `a2-c2-02`, `!valencia-fled` (or `valencia-found` after the trail)
+#### script a2-c2-03 · map `abbey-chapel` · plays when you enter · needs `a2-c2-02`, `!valencia-fled` · plain flags: it plays after the trail too, since SQ-Valencia's-Trail clears `valencia-fled` when it sets `valencia-found`
 
 ```
 ! tint moonlight · place valencia at altar-steps · anim valencia sit
