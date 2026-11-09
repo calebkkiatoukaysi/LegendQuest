@@ -5,13 +5,18 @@ before every commit:
     python tools/check_assets.py
 
 It fails with a list of problems if:
-  - a file under Content/ or tools/source/, or a script in tools/ or tools/rooms/, isn't named in ASSETS.md
+  - a file under Content/ or tools/source/, or a script in tools/, tools/rooms/ or tools/rig/, isn't named in
+    ASSETS.md
   - ASSETS.md names a file that doesn't exist
   - a /build: or /copy: line in Content.mgcb points at a file that doesn't exist
   - a file under Content/ isn't in Content.mgcb
   - a room in Content/Zones/ is missing a painted layer in Content/Rooms/ (its mid layer, foreground,
-    thumbnail and doors.txt, and outdoors its sky and far layer), or a folder in Content/Rooms/ is
-    for no room at all
+    thumbnail and doors.txt, and outdoors its sky and far layer; a layer too wide for one texture is
+    there as pieces, <layer>-0.png and on), or a folder in Content/Rooms/ is for no room at all (but
+    Content/Rooms/Life, the life loops' pictures, is for every room). A room the owner has painted
+    (its pictures in tools/source/rooms/<zone>/<room>/) is flat once tools/rooms/cut_room.py has cut
+    it: a mid layer, a thumbnail and doors.txt, a foreground only if it has one, and no sky or far
+    layer, which it fails on as not cut yet
 
 One exception to the last one: a font file counts as in Content.mgcb when a .spritefont that is in
 it names the font. The pipeline reads the TTF through the .spritefont and bakes the letters out of
@@ -40,12 +45,23 @@ PATH_PATTERN = re.compile(r"(?:Content|tools)/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
 
 FONT_PATTERN = re.compile(r"<FontName>\s*([^<]+?)\s*</FontName>")
 
-#: The folders of scripts ASSETS.md has to name every one of.
-SCRIPT_FOLDERS = ("tools", os.path.join("tools", "rooms"))
+#: The folders of scripts ASSETS.md has to name every one of. tools/rig keeps the drawing library
+#: (vector.py, style.py, theme.py) the room painters and the parts tools draw with.
+SCRIPT_FOLDERS = ("tools", os.path.join("tools", "rooms"), os.path.join("tools", "rig"))
 
-#: What every room's folder in Content/Rooms/ has, and what only a street's (outdoors) has too.
+#: What every room's folder in Content/Rooms/ has, and what only a street's (outdoors) has too. A
+#: layer (mid, fore, sky, far) wider than the widest texture is there as pieces instead,
+#: <layer>-0.png, <layer>-1.png and on (tools/rooms/roomkit.py's layer_files).
 ROOM_FILES = ("mid.png", "fore.png", "thumb.png", "doors.txt")
 STREET_FILES = ("sky.png", "far.png")
+LAYER_FILES = ("mid.png", "fore.png", "sky.png", "far.png")
+
+#: Folders in Content/Rooms/ that are for every room, not one: the life loops' pictures.
+SHARED_ROOM_FOLDERS = ("Life",)
+
+#: Where the owner's paintings of the rooms are, <zone>/<room>/bg-1.png and on (tools/rooms/cut_room.py).
+ROOM_SOURCES = os.path.join(ROOT, "tools", "source", "rooms")
+FLAT_FILES = ("mid.png", "thumb.png", "doors.txt")
 
 
 def rel(path):
@@ -91,8 +107,8 @@ def fonts_named_by(spritefonts):
 
 
 def rooms():
-    """Every room in Content/Zones/, as (its paint folder, whether it's a street), read straight off
-    the zone files: its [room] line, and its kind and paint settings if it has them."""
+    """Every room in Content/Zones/, as (its paint folder, whether it's a street, zone/room), read
+    straight off the zone files: its [room] line, and its kind and paint settings if it has them."""
     found = []
     folder = os.path.join(CONTENT, "Zones")
     if not os.path.isdir(folder):
@@ -109,7 +125,7 @@ def rooms():
                 if head or line.startswith("["):
                     if room:
                         found.append(room)
-                    room = [zone + "/" + head.group(1), True] if head else None
+                    room = [zone + "/" + head.group(1), True, zone + "/" + head.group(1)] if head else None
                 elif room and re.match(r"kind\s*=\s*interior$", line):
                     room[1] = False
                 elif room and line.startswith("paint"):
@@ -119,18 +135,54 @@ def rooms():
     return [tuple(r) for r in found]
 
 
+def layer_there(path):
+    """Whether a layer is in Content/Rooms/ whole or in pieces: 2 for both (which is wrong), 1 for
+    either, 0 for neither."""
+    whole = os.path.isfile(os.path.join(ROOT, path))
+    pieces = 0
+    if path.endswith(LAYER_FILES):
+        stem = path[:-len(".png")]
+        while os.path.isfile(os.path.join(ROOT, "%s-%d.png" % (stem, pieces))):
+            pieces += 1
+    return 2 if whole and pieces else 1 if whole or pieces else 0
+
+
 def room_problems(content_files):
     """Rooms missing a painted file, and folders in Content/Rooms/ that are for no room."""
     problems = []
     painted = set()
-    for paint, street in rooms():
+    for paint, street, key in rooms():
         painted.add(paint)
+        if os.path.isfile(os.path.join(ROOM_SOURCES, *key.split("/"), "bg-1.png")):
+            for name in FLAT_FILES:
+                path = "Content/Rooms/" + paint + "/" + name
+                there = layer_there(path)
+                if there != 1:
+                    problems.append("room " + paint + (" has no " if not there else " has both " + path + " and its pieces: ")
+                                    + ("" if there else path + " ") + "(run tools/rooms/cut_room.py " + key + ")")
+            for name in STREET_FILES:
+                if layer_there("Content/Rooms/" + paint + "/" + name):
+                    problems.append("room " + paint + " is painted in tools/source/rooms/" + key + "/ but still has its "
+                                    + name[:-4] + " layer: it isn't cut yet (run tools/rooms/cut_room.py " + key + ")")
+            continue
         for name in ROOM_FILES + (STREET_FILES if street else ()):
             path = "Content/Rooms/" + paint + "/" + name
-            if not os.path.isfile(os.path.join(ROOT, path)):
-                problems.append("room " + paint + " has no " + path + " (run tools/rooms/generate_room_placeholders.py)")
+            whole = os.path.isfile(os.path.join(ROOT, path))
+            pieces = 0
+            if name in LAYER_FILES:
+                stem = path[:-len(".png")]
+                while os.path.isfile(os.path.join(ROOT, "%s-%d.png" % (stem, pieces))):
+                    pieces += 1
+            if whole and pieces:
+                problems.append("room " + paint + " has " + path + " and its pieces too (run tools/rooms/paint_all.py)")
+            elif not whole and not pieces:
+                problems.append("room " + paint + " has no " + path + " (run tools/rooms/paint_all.py, or "
+                                "tools/rooms/generate_room_placeholders.py for a room with no recipe)")
     for path in content_files:
-        if path.startswith("Content/Rooms/") and path.rsplit("/", 1)[0][len("Content/Rooms/"):] not in painted:
+        if not path.startswith("Content/Rooms/"):
+            continue
+        folder = path.rsplit("/", 1)[0][len("Content/Rooms/"):]
+        if folder not in painted and folder.split("/")[0] not in SHARED_ROOM_FOLDERS:
             problems.append(path + " is for a room that isn't in Content/Zones")
     return problems
 

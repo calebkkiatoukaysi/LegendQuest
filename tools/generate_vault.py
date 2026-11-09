@@ -1666,7 +1666,7 @@ def vault_drawn():
 
 if __name__ == "__main__":
     print("Generating the Old Crown Vault for Legend Quest...")
-    build_sheet(VAULT_TILES, os.path.join(OUT, "Tiles", "vault.png"))
+    print("  Tiles/vault.png: painted by tools/rooms/paint_tiles.py now; not written here")
     for name, picture in vault_drawn().items():
         write_png(os.path.join(OUT, "Props", name + ".png"), picture)
     print("Done.")

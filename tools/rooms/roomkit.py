@@ -58,7 +58,32 @@ LAYERS = {
 }
 
 TILE = 16
-"""A tile, in art pixels; the strip draws them at 4x, 64 canvas pixels."""
+"""A tile, in world pixels: the strip draws them 64 canvas pixels across. A sheet's tiles are
+however many texels it was painted at: 16 for the old pixel sets, 64 for the painted ones
+(TilesetDefinition.TileTexels); it's always COLUMNS tiles wide, so its width says which."""
+
+COLUMNS = 8
+"""Tiles across a tileset sheet."""
+
+MAX_TEXTURE = 4096
+"""The widest texture the game's graphics profile (HiDef) takes. A painted layer wider than this is
+written in pieces, <layer>-0.png, <layer>-1.png ..., each no wider, left to right, and RoomScene
+draws them side by side (layer_files)."""
+
+
+def piece_widths(width):
+    """How a layer `width` texels wide is cut into pieces no wider than MAX_TEXTURE: as few as
+    will do, as even as they can be, left to right."""
+    n = max(1, -(-int(width) // MAX_TEXTURE))
+    each = -(-int(width) // n)
+    return [min(each, int(width) - i * each) for i in range(n)]
+
+
+def layer_files(name, width):
+    """The file names (without .png) a painted layer `width` texels wide is written as: the
+    layer's own name, or its pieces' (sky-0, sky-1 ...) when it's wider than MAX_TEXTURE."""
+    widths = piece_widths(width)
+    return [name] if len(widths) == 1 else ["%s-%d" % (name, i) for i in range(len(widths))]
 
 THUMB_W, THUMB_H = 200, 113
 
@@ -436,9 +461,22 @@ class Tileset:
     def edged(self, tid):
         return self.tiles[tid - 1][4]
 
+    @property
+    def texels(self):
+        """How many texels a tile is on this sheet: 16 for a pixel set, 64 for a painted one."""
+        return self.sheet.w // COLUMNS
+
     def tile(self, frame):
-        cols = self.sheet.w // TILE
-        return self.sheet.crop(frame % cols * TILE, frame // cols * TILE, TILE, TILE)
+        """A frame of the sheet at 16 x 16, as the placeholders work in: a painted sheet's tile is
+        averaged down to it."""
+        k = self.texels
+        img = self.sheet.crop(frame % COLUMNS * k, frame // COLUMNS * k, k, k)
+        return img if k == TILE else _shrink(img, k // TILE)
+
+    def tile_full(self, frame):
+        """A frame of the sheet at the sheet's own texels."""
+        k = self.texels
+        return self.sheet.crop(frame % COLUMNS * k, frame // COLUMNS * k, k, k)
 
     def tile_named(self, name, variant=0, x=0, y=0):
         """A tile's picture by name: its variant'th variant, the block cell at (x, y)."""
@@ -449,6 +487,28 @@ class Tileset:
 
     def has(self, name):
         return name in self.ids
+
+
+def _shrink(img, k):
+    """An Img averaged down k times (premultiplied), for a painted tile the placeholders want at 16."""
+    w, h = img.w // k, img.h // k
+    out = Img(w, h)
+    b = img.buf
+    for y in range(h):
+        for x in range(w):
+            r = g = bl = a = 0
+            for yy in range(y * k, y * k + k):
+                o = (yy * img.w + x * k) * 4
+                for _ in range(k):
+                    al = b[o + 3]
+                    r += b[o] * al
+                    g += b[o + 1] * al
+                    bl += b[o + 2] * al
+                    a += al
+                    o += 4
+            if a:
+                out.set(x, y, (r // a, g // a, bl // a, a // (k * k)))
+    return out
 
 
 _tilesets = None

@@ -18,7 +18,7 @@ namespace LegendQuest.World;
 /// </remarks>
 public class Tilemap
 {
-    /// <summary>One tile, in art pixels.</summary>
+    /// <summary>One tile, in world pixels.</summary>
     public const int TileSize = 16;
 
     private readonly TilesetDefinition _tileset;
@@ -33,6 +33,9 @@ public class Tilemap
     private Texture2D _sheet;
     private Rectangle[] _frames;
 
+    /// <summary>World pixels to a texel of the sheet: 1 for a pixel set, a quarter for a painted one.</summary>
+    private float _texelScale = 1f;
+
     /// <summary>Gets a room's tile strip ready to draw, its top left at an origin. The tiles load in LoadContent.</summary>
     /// <param name="strip">The strip's tiles.</param>
     /// <param name="origin">Where its top left goes, in world pixels: (0, the room's TilesTop).</param>
@@ -46,24 +49,26 @@ public class Tilemap
         _origin = origin;
     }
 
-    /// <summary>Loads the tileset's sheet and cuts it into one source rectangle per tile.</summary>
-    /// <remarks>Throws if the sheet hasn't got every tile the tileset lists. That means the generator and TilesetCatalog don't match.</remarks>
+    /// <summary>Loads the tileset's sheet and cuts it into one source rectangle per tile, TileTexels across.</summary>
+    /// <remarks>Throws if the sheet hasn't got every tile the tileset lists. That means the painter and TilesetCatalog don't match.</remarks>
     /// <param name="content">The content manager to load with.</param>
     public void LoadContent(ContentManager content)
     {
         TilesetDefinition tileset = _tileset;
         _sheet = content.Load<Texture2D>(tileset.Texture);
+        int texels = tileset.TileTexels;
+        _texelScale = (float)TileSize / texels;
 
-        int columns = _sheet.Width / TileSize;
-        int rows = _sheet.Height / TileSize;
+        int columns = _sheet.Width / texels;
+        int rows = _sheet.Height / texels;
         if (columns * rows < tileset.FrameCount)
-            throw new InvalidOperationException($"{tileset.Texture}.png has room for {columns * rows} tiles; the {tileset.Id} tileset needs {tileset.FrameCount}. Run tools/generate_world.py.");
+            throw new InvalidOperationException($"{tileset.Texture}.png has room for {columns * rows} tiles of {texels} texels; the {tileset.Id} tileset needs {tileset.FrameCount}. Run tools/rooms/paint_tiles.py.");
 
         _frames = new Rectangle[columns * rows];
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < columns; x++)
-                _frames[y * columns + x] = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
+                _frames[y * columns + x] = new Rectangle(x * texels, y * texels, texels, texels);
         }
     }
 
@@ -111,7 +116,7 @@ public class Tilemap
         if (tile == 0) return;
 
         Rectangle source = _frames[_tileset.FrameOf(tile, x, y, seconds)];
-        spriteBatch.Draw(_sheet, CellCorner(x, y), source, tint, 0f, Vector2.Zero, 1f, SpriteEffects.None, layerDepth);
+        spriteBatch.Draw(_sheet, CellCorner(x, y), source, tint, 0f, Vector2.Zero, _texelScale, SpriteEffects.None, layerDepth);
     }
 
     /// <summary>Draws a ground tile's edges along whichever of its sides meet ground of another kind. Not along the edge of the strip.</summary>
@@ -129,7 +134,7 @@ public class Tilemap
             if (next == 0 || next == tile) continue;
 
             Rectangle source = _frames[_tileset.EdgeFrame(tile, side)];
-            spriteBatch.Draw(_sheet, CellCorner(x, y), source, tint, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.GroundEdge);
+            spriteBatch.Draw(_sheet, CellCorner(x, y), source, tint, 0f, Vector2.Zero, _texelScale, SpriteEffects.None, Layers.GroundEdge);
         }
     }
 

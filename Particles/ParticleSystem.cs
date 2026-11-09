@@ -38,6 +38,9 @@ public abstract class ParticleSystem
     /// <summary>The texture to load. Set in InitializeConstants.</summary>
     protected string textureFilename;
 
+    /// <summary>How many times its particles' own scale each is drawn at: 1, or less for a picture painted bigger (Repaint).</summary>
+    private float _drawScale = 1f;
+
     /// <summary>The fewest particles one AddParticles makes.</summary>
     protected int minNumParticles;
 
@@ -75,6 +78,16 @@ public abstract class ParticleSystem
         particle.Rotation += particle.AngularVelocity * dt;
 
         particle.TimeSinceStart += dt;
+    }
+
+    /// <summary>Draws the system's particles with another picture, painted <paramref name="texels"/> times the size of its own, smoothly. Call it before LoadContent. A room's life uses it for its painted smoke, leaves and sparkles; the title keeps its own.</summary>
+    /// <param name="texture">The picture, by content name.</param>
+    /// <param name="texels">How many times bigger it's painted than the picture it stands in for.</param>
+    public void Repaint(string texture, float texels)
+    {
+        textureFilename = texture;
+        _drawScale = 1f / texels;
+        samplerState = SamplerState.LinearClamp;
     }
 
     /// <summary>Loads the texture and works out its middle.</summary>
@@ -118,7 +131,7 @@ public abstract class ParticleSystem
             if (!p.Active) continue;
 
             spriteBatch.Draw(_texture, p.Position, null, p.Color,
-                p.Rotation, _origin, p.Scale, SpriteEffects.None, 0f);
+                p.Rotation, _origin, p.Scale * _drawScale, SpriteEffects.None, 0f);
         }
 
         spriteBatch.End();

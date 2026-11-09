@@ -10,21 +10,40 @@ using LegendQuest.Particles;
 namespace LegendQuest.World;
 
 /// <summary>
-/// The little things moving in a room (12-rooms §3.2), out of the game's own pictures and particles:
-/// the title's clouds drifting across the sky, gulls, chimney smoke, flags, glints on water, falling
-/// leaves, motes, ash, and candle flames with their glow.
+/// The little things moving in a room (12-rooms §3.2): clouds drifting across the sky, gulls,
+/// chimney smoke, flags, glints on water, falling leaves, motes, ash, and candle flames with their
+/// glow, all painted to match the rooms by tools/rooms/paint_life.py into Content/Rooms/Life.
 /// </summary>
 /// <remarks>
 /// Each of the room's life lines is a box. Clouds drift in the sky layer at its parallax; gulls,
 /// flags and candles are drawn into the mid layer's batch; the particles go behind the people
 /// (smoke, glints) or in front of them (motes, leaves, ash). The particle systems were tuned for the
 /// title, which is in screen pixels, so they run in screen pixels here too: the boxes are scaled up
-/// by RoomScale for them, and their batch scaled back down.
+/// by RoomScale for them, and their batch scaled back down; a room repaints them with its own
+/// pictures (ParticleSystem.Repaint), painted PaintedParticles times the size of the title's. Every
+/// painted picture here is drawn at the size its sheet says, one texel to a screen pixel.
 /// </remarks>
 internal sealed class LifeLoops
 {
-    /// <summary>The clouds' cells on Title/clouds.png, as TitleBackgroundScreen cuts them.</summary>
-    private const int CloudWidth = 132, CloudHeight = 60, CloudCells = 6;
+    /// <summary>Where the painted pictures are.</summary>
+    private const string Life = "Rooms/Life/";
+
+    /// <summary>A cloud in world pixels, and how many different ones Rooms/Life/clouds has side by side.</summary>
+    private const int CloudWidth = 132, CloudCells = 6;
+
+    /// <summary>A gull's picture across, in world pixels; Rooms/Life/gull is its two wingbeats side by side.</summary>
+    private const float GullWidth = 16f;
+    private const int GullFrames = 2;
+
+    /// <summary>A flag's cloth across, in world pixels, Rooms/Life/flag's frames of it waving, how long each is up, and the pole's thickness.</summary>
+    private const float FlagWidth = 16f, FlagFrameTime = 0.11f, PoleWidth = 1.5f;
+    private const int FlagFrames = 8;
+
+    /// <summary>Where the pole's top is in a flag's frame, in world pixels from its top left.</summary>
+    private static readonly Vector2 FlagTop = new(1.5f, 2f);
+
+    /// <summary>How many times bigger the painted particles are than the title's.</summary>
+    private const float PaintedParticles = 4f;
 
     /// <summary>How many clouds drift in each box, and how fast, in world pixels a second.</summary>
     private const int CloudsPerBox = 2;
@@ -33,9 +52,8 @@ internal sealed class LifeLoops
     /// <summary>A gull to so many world pixels of its box, how fast they glide, how far and how often they bob, and how long a wingbeat is.</summary>
     private const float GullSpacing = 90f, GullSpeedMin = 9f, GullSpeedMax = 17f, GullBob = 3f, GullBobRate = 0.8f, WingBeat = 0.22f;
 
-    /// <summary>A flag to so many world pixels of its box, and how fast its cloth ripples.</summary>
-    private const float FlagSpacing = 80f, FlagRipple = 5f;
-    private const int FlagLength = 9, FlagDepth = 5;
+    /// <summary>A flag to so many world pixels of its box.</summary>
+    private const float FlagSpacing = 80f;
 
     /// <summary>A candle to so many world pixels of its box, and how big its flame is.</summary>
     private const float CandleSpacing = 50f, CandleScale = 0.5f;
@@ -56,15 +74,6 @@ internal sealed class LifeLoops
     private static readonly Color SmokeColor = new Color(200, 196, 214) * 0.35f;
     private static readonly Color MoteColor = new Color(255, 222, 160) * 0.6f;
     private static readonly Color AshColor = new Color(176, 170, 186) * 0.5f;
-    private static readonly Color GullWing = new(244, 244, 240), GullTip = new(70, 64, 80), GullBody = new(220, 220, 226);
-    private static readonly Color FlagCloth = new(228, 108, 152), FlagHem = new(236, 188, 82), FlagPole = new(126, 72, 50);
-
-    /// <summary>A gull's two wingbeats, as pixels about its middle: wings up, then down.</summary>
-    private static readonly (Point At, int Colour)[][] GullFrames =
-    {
-        new[] { (new Point(-3, -2), 1), (new Point(3, -2), 1), (new Point(-2, -1), 0), (new Point(2, -1), 0), (new Point(-1, 0), 2), (new Point(0, 0), 2), (new Point(1, 0), 2) },
-        new[] { (new Point(-3, 1), 1), (new Point(3, 1), 1), (new Point(-2, 0), 0), (new Point(2, 0), 0), (new Point(-1, 0), 2), (new Point(0, 0), 2), (new Point(1, 0), 2) },
-    };
 
     private readonly float _skyWidth;
     private readonly List<(int Cell, Vector2 At, float Speed)> _clouds = new();
@@ -77,8 +86,7 @@ internal sealed class LifeLoops
     private readonly SparkleParticleSystem _shimmer;
     private readonly PetalParticleSystem _leaves;
 
-    private Texture2D _cloudSheet;
-    private Texture2D _pixel;
+    private Texture2D _cloudSheet, _gullSheet, _flagSheet, _pole;
     private float _clock;
 
     /// <summary>Sets up a room's life from its life lines: where each cloud, gull, flag and candle starts, seeded on where its box is so a room's always the same.</summary>
@@ -111,7 +119,7 @@ internal sealed class LifeLoops
                     break;
                 case "candle":
                     for (float x = box.Left + CandleSpacing / 2f; x < box.Right; x += CandleSpacing)
-                        _candles.Add(new TorchSprite(new Vector2(x, box.Bottom), CandleScale));
+                        _candles.Add(new TorchSprite(new Vector2(x, box.Bottom), CandleScale, Life + "candle"));
                     break;
                 default:
                     var area = new Rectangle((int)(box.X * scale), (int)(box.Y * scale), (int)(box.Width * scale), (int)(box.Height * scale));
@@ -127,15 +135,24 @@ internal sealed class LifeLoops
         if (Of("ash") > 0) _ash = new MoteParticleSystem(Of("ash"), AshColor);
         if (Of("shimmer") > 0) _shimmer = new SparkleParticleSystem(Of("shimmer") * 2);
         if (Of("leaves") > 0) _leaves = new PetalParticleSystem(Of("leaves") * 4);
+        _smoke?.Repaint(Life + "smoke", PaintedParticles);
+        _motes?.Repaint(Life + "mote", PaintedParticles);
+        _ash?.Repaint(Life + "ash", PaintedParticles);
+        _shimmer?.Repaint(Life + "sparkle", PaintedParticles);
+        _leaves?.Repaint(Life + "leaf", PaintedParticles);
     }
 
-    /// <summary>Loads the clouds, the candles' flames and the particles' pictures.</summary>
+    /// <summary>Loads the clouds, gulls, flags, the candles' flames and the particles' pictures.</summary>
     /// <param name="content">The room's content manager.</param>
-    /// <param name="pixel">A white pixel, for the gulls and flags.</param>
-    public void LoadContent(ContentManager content, Texture2D pixel)
+    public void LoadContent(ContentManager content)
     {
-        _pixel = pixel;
-        if (_clouds.Count > 0) _cloudSheet = content.Load<Texture2D>("Title/clouds");
+        if (_clouds.Count > 0) _cloudSheet = content.Load<Texture2D>(Life + "clouds");
+        if (_gulls.Count > 0) _gullSheet = content.Load<Texture2D>(Life + "gull");
+        if (_flags.Count > 0)
+        {
+            _flagSheet = content.Load<Texture2D>(Life + "flag");
+            _pole = content.Load<Texture2D>(Life + "flag-pole");
+        }
         foreach (TorchSprite candle in _candles) candle.LoadContent(content);
         _smoke?.LoadContent(content);
         _motes?.LoadContent(content);
@@ -192,8 +209,12 @@ internal sealed class LifeLoops
     /// <param name="tint">The room's light colour.</param>
     public void DrawSky(SpriteBatch spriteBatch, float skyLeft, Color tint)
     {
+        if (_cloudSheet is null) return;
+        int width = _cloudSheet.Width / CloudCells;
+        float scale = (float)CloudWidth / width;
         foreach ((int cell, Vector2 at, _) in _clouds)
-            spriteBatch.Draw(_cloudSheet, new Vector2(skyLeft + at.X, at.Y), new Rectangle(cell * CloudWidth, 0, CloudWidth, CloudHeight), tint);
+            spriteBatch.Draw(_cloudSheet, new Vector2(skyLeft + at.X, at.Y), new Rectangle(cell * width, 0, width, _cloudSheet.Height), tint,
+                0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
     }
 
     /// <summary>Draws the gulls, the flags and the candles' flames into the mid layer's batch.</summary>
@@ -201,25 +222,32 @@ internal sealed class LifeLoops
     /// <param name="tint">The room's light colour.</param>
     public void DrawMid(SpriteBatch spriteBatch, Color tint)
     {
-        Color[] gullColours = { Tinted(GullWing, tint), Tinted(GullTip, tint), Tinted(GullBody, tint) };
-        foreach ((Vector2 at, float speed, float phase, _, _) in _gulls)
+        if (_gullSheet is not null)
         {
-            int frame = (int)((_clock + phase) / WingBeat) % 2;
-            var middle = new Point((int)at.X, (int)(at.Y + MathF.Sin(_clock * GullBobRate * MathHelper.TwoPi + phase) * GullBob));
-            foreach ((Point offset, int colour) in GullFrames[frame])
-                spriteBatch.Draw(_pixel, new Rectangle(middle.X + offset.X, middle.Y + offset.Y, 1, 1), gullColours[colour]);
+            int width = _gullSheet.Width / GullFrames;
+            float scale = GullWidth / width;
+            var origin = new Vector2(width / 2f, _gullSheet.Height / 2f);
+            foreach ((Vector2 at, float speed, float phase, _, _) in _gulls)
+            {
+                int frame = (int)((_clock + phase) / WingBeat) % GullFrames;
+                var middle = new Vector2(at.X, at.Y + MathF.Sin(_clock * GullBobRate * MathHelper.TwoPi + phase) * GullBob);
+                spriteBatch.Draw(_gullSheet, middle, new Rectangle(frame * width, 0, width, _gullSheet.Height), tint, 0f, origin, scale,
+                    speed < 0f ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            }
         }
 
-        foreach ((Vector2 pole, float height, float phase) in _flags)
+        if (_flagSheet is not null)
         {
-            spriteBatch.Draw(_pixel, new Rectangle((int)pole.X, (int)(pole.Y - height), 1, (int)height), Tinted(FlagPole, tint));
-            for (int c = 0; c < FlagLength; c++)
+            int width = _flagSheet.Width / FlagFrames;
+            float scale = FlagWidth / width;
+            foreach ((Vector2 pole, float height, float phase) in _flags)
             {
-                int depth = Math.Max(1, FlagDepth - c * (FlagDepth - 1) / (FlagLength - 1));
-                int wave = (int)MathF.Round(MathF.Sin(_clock * FlagRipple - c * 0.7f + phase) * 1.2f);
-                var top = new Point((int)pole.X + 1 + c, (int)(pole.Y - height) + wave);
-                spriteBatch.Draw(_pixel, new Rectangle(top.X, top.Y, 1, 1), Tinted(FlagHem, tint));
-                spriteBatch.Draw(_pixel, new Rectangle(top.X, top.Y + 1, 1, depth - 1), Tinted(FlagCloth, tint));
+                var top = new Vector2(pole.X, pole.Y - height);
+                spriteBatch.Draw(_pole, new Vector2(pole.X - PoleWidth / 2f, top.Y), null, tint, 0f, Vector2.Zero,
+                    new Vector2(PoleWidth / _pole.Width, height / _pole.Height), SpriteEffects.None, 0f);
+                int frame = (int)(_clock / FlagFrameTime + phase / MathHelper.TwoPi * FlagFrames) % FlagFrames;
+                spriteBatch.Draw(_flagSheet, top, new Rectangle(frame * width, 0, width, _flagSheet.Height), tint, 0f, FlagTop / scale, scale,
+                    SpriteEffects.None, 0f);
             }
         }
 
@@ -271,8 +299,6 @@ internal sealed class LifeLoops
 
     /// <summary>The batch matrix the particles draw with: screen pixels scaled back down into the world, then the camera.</summary>
     private static Matrix ScreenSpace(Matrix world) => Matrix.CreateScale(1f / ZoneCatalog.RoomScale) * world;
-
-    private static Color Tinted(Color colour, Color tint) => new(colour.ToVector4() * tint.ToVector4());
 
     private static float Next(Random random, float min, float max) => min + (float)random.NextDouble() * (max - min);
 }

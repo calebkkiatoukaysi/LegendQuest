@@ -1814,8 +1814,8 @@ if __name__ == "__main__":
     build_glow()
     build_mote()
     build_flame()
-    build_sheet(FOREST_TILES, os.path.join(OUT, "Tiles", "forest.png"))
-    build_sheet(CRYPT_TILES, os.path.join(OUT, "Tiles", "crypt.png"))
+    print("  Tiles/forest.png: painted by tools/rooms/paint_tiles.py now; not written here")
+    print("  Tiles/crypt.png: painted by tools/rooms/paint_tiles.py now; not written here")
     for made in (forest_cuts, forest_drawn, road_drawn, props_cuts, barrow_drawn):
         for name, picture in made().items():
             write_png(os.path.join(OUT, "Props", name + ".png"), picture)

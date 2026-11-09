@@ -28,10 +28,11 @@ The project's requirements, and where each one is met:
 
 - **A tilemap rendered for some elements of the game.** Every room's floor is a tilemap. The room
   file in `Content/Zones/` lays out the rows of ground under the floor band (and an interior's back
-  wall) as characters, each a 16x16 tile in the zone's tileset (`World/TilesetCatalog.cs`, one sheet a
-  set in `Content/Tiles/`). `World/Zones/ZoneLoader.cs` reads them, and `World/Tilemap.cs` draws them
-  at 4x under everyone: a variant picked per cell, edges where one kind of ground meets another, and
-  animated water. The footsteps read the tile under your feet. All 19 zones, 37 rooms, have one;
+  wall) as characters, each a tile 16 world pixels square in the zone's tileset (`World/TilesetCatalog.cs`,
+  one sheet a set in `Content/Tiles/`, painted 64 texels a tile by `tools/rooms/paint_tiles.py`).
+  `World/Zones/ZoneLoader.cs` reads them, and `World/Tilemap.cs` cuts the sheet by its `TileTexels` and
+  draws them one texel to a screen pixel under everyone: a variant picked per cell, edges where one kind
+  of ground meets another, and animated water. The footsteps read the tile under your feet. All 19 zones, 37 rooms, have one;
   [Rooms](#rooms) has the format and the layers.
 - **Serialization of game state to create and load a save file.** `Save/SaveSystem.cs` writes the
   whole game, `Save/SaveData.cs`, to a JSON file with `System.Text.Json`, and reads it back: the map
@@ -402,34 +403,70 @@ box stands on the band's back edge, sized by its badge), and its spawns, people,
 signs, triggers, scenes, camp seats and lights. `tools/rooms/zonefile.py` describes every line.
 
 What you see is `World/Rooms/RoomScene.cs` drawing the room's layers, from
-`Content/Rooms/<zone>/<room>/`, each at its own scale so its pixels stay square:
+`Content/Rooms/<zone>/<room>/`. Every layer is the screen's height, and is drawn at the scale its
+height gives: a painted layer is 900 texels tall, one texel to a screen pixel, so nothing is blown
+up; a room not painted yet still has its placeholder's layers, 225, 450 or 300 tall, drawn 4, 2 or
+3 times. A layer wider than the widest texture (4096) is written in pieces, `mid-0.png`,
+`mid-1.png` and on, drawn side by side.
 
-| Layer | Screen pixels to an art pixel | Parallax | What's in it |
-| --- | --- | --- | --- |
-| `sky.png` | 4 | 0.1 | The title's blue going pink (twilight in the Mirewood, night at sea, the dark underground), two or three of its clouds, and over Questeria one of its floating islands |
-| `far.png` | 2 | 0.3 | The skyline: the palace, the temple, rooftops, trees, the city wall, the windmill, the title's city across the water and its mountains behind everything, cooled toward the sky with a few windows lit |
-| the tile strip | 4 | 1 | The floor, drawn by `Tilemap` from the room file |
-| `mid.png` | 3 | 1 | The buildings, each on its door, the street dressed the way the maps were (trees and garden walls, lamps, banners, stalls, crates, strings of lanterns, washing lines), or indoors the wall: beams and plaster, the keep's marble and gallery, the crypt's arches |
-| `fore.png` | 4 | 1.15 | What's between you and the room, dark, never more than 12% of the floor band |
+| Layer | Parallax | What's in it |
+| --- | --- | --- |
+| `sky.png` | 0.1 | A painted sky, blue going pink by day (dusk, night or twilight where the room wants it), its clouds, the sun or the moon |
+| `far.png` | 0.3 | The distance, softer and cooler: mountains, hills, the city's roofs, the Sunspire, the sea |
+| the tile strip | 1 | The floor, drawn by `Tilemap` from the room file |
+| `mid.png` | 1 | The buildings, each on its door, and the street's dressing (trees, stalls, lanterns, banners, crates), or indoors the wall |
+| `fore.png` | 1.15 | What's between you and the room, dark, never more than 12% of the floor band |
 
 An interior has no sky or far layer and no parallax. In a dark room the dark (`LightMap`, with the
 lights cut out of it) goes over the floor, the mid layer, the people and the foreground, but not the
 sky or the far layer: a painted night sky already has its light. `doors.txt` says where each door's
 doorway is painted, which is what the door's outline and badge go round; what you click is the
-door's bigger box. `thumb.png` is the room for the zone map. The life loops are the title's clouds,
-its motes, sparkles and petals, the torch flame and its glow, and gulls and flags drawn a pixel at
-a time.
+door's bigger box. `thumb.png` is the room for the zone map. The life loops (`LifeLoops`) are
+painted too, in `Content/Rooms/Life`: drifting clouds, gulls, waving flags, torch and candle flames
+with their glow, and the smoke, motes, ash, sparkles and petals the particles draw with.
 
-The layers are painted by `tools/rooms/generate_room_placeholders.py`, out of the game's own art,
-until the rooms are painted by hand. It moves each building so its painted door is on its door
-line, fills the street in, and then gives everything a pass of detail: two-tone shadows where it
-stands, shadows under the eaves, light along the roofs' top and left edges (it's lit from the top
-left, and nothing's flipped), window boxes, posters, and moss and cracks, the moss cut out of the
-room's own tileset. It's seeded, so a rerun writes the same bytes. `--preview` writes what the game
-will show into a folder outside `Content/`, with the tile strip, the room's props and two townsfolk
-at their real size. For painting a room for real, `tools/rooms/make_room_template.py` writes its
-guide (the bands, the floor, every door's box, where the foreground may go), and
-`tools/rooms/cut_room.py` cuts the painting into the layers.
+The rooms are painted in the game's illustrated style (crisp dark outlines, cel shading lit from
+the top left, soft gradients only in the sky and the distance) by `tools/rooms/paint_all.py`: one
+recipe a room, in a module a family (`paint_rooms_questeria.py` and the rest), each built out of
+`tools/rooms/paint.py`, the drawing library (skies, mountains, castles, houses put together from
+walls, roofs, windows and doors sized to the room file's door boxes, towers, gates, stairs, trees,
+props and interiors), on the rig's `vector.py` and `style.py`. It paints the floor tilesets too
+(`paint_tiles.py`, 64 texels a tile, so `Tilemap` draws a tile one texel to a screen pixel:
+`TilesetDefinition.TileTexels`), the floor props (`paint_props.py`, into `Content/Props/Painted`,
+which `PropSprite` draws in place of the old picture, 4 texels to a world pixel), and the life
+loops (`paint_life.py`), and keeps `Content.mgcb` and `ASSETS.md` up to date. It's seeded, so a
+rerun writes the same bytes, and `--preview` writes what the game will show into a folder outside
+`Content/`, with the tile strip, the props and two of the cast at their real size.
+
+A room with no recipe yet still has the layers `tools/rooms/generate_room_placeholders.py` put
+together out of the game's old pixel art.
+
+I'm painting the rooms myself, in ChatGPT, and these tools turn the pictures into rooms
+(`tools/rooms/sourcekit.py` has the details):
+
+```
+python tools/rooms/make_room_template.py      # the guide for every panel of every room, in shots/art/room-templates/
+python tools/rooms/cut_room.py                # every room with its pictures: the flat mid layer, foreground, doors.txt, thumbnail
+python tools/rooms/cut_tiles.py               # the floor textures into the tilesets, and tiles-<tileset>.txt, what each needs
+python tools/rooms/check_room_sources.py      # what's painted and what's still to do
+```
+
+A room W canvas pixels wide is painted in panels, ChatGPT's 1536 x 1024 landscapes: one for a room
+1600 wide, else ceil((W - 1600) / 1400) + 1, each 1600 pixels of the room, overlapping the next by
+200 and the last against the room's end. Only the middle 1536 x 864 of each (16:9) is used; the top
+and bottom 80 rows are bleed. Each panel's guide, `<zone>-<room>-<i>.png` (from 1), marks the bleed,
+the horizon or the back wall's foot, the floor band to keep plain, every door's box with its badge
+and name, the ways out, and the overlaps that have to carry on from the next panel. The pictures go
+in `tools/source/rooms/<zone>/<room>/`: `bg-<i>.png`, the whole scene, and `fg-<i>.png` if a panel
+has a foreground strip (on transparency or a flat #FF00FF). `cut_room.py` resizes each band to
+1600 x 900, cross-fades the panels across their overlaps, and writes the room flat: the one picture
+as its mid layer, opaque down to the floor band, where it fades into the tile strip, so the floor
+stays a tilemap; the foreground keyed off its backdrop; no sky or far layer, which is what tells
+`RoomScene` the room is flat, nothing sliding. It writes doors.txt from the zone file's door boxes and
+the thumbnail, and puts it all in `Content.mgcb` and `ASSETS.md`. The floor textures are
+`tools/source/tiles/<tileset>/<tile>.png`, 1024 x 1024 and seamless, and `cut_tiles.py` resamples them
+to 64 texels onto the sheet in `TilesetCatalog`'s order, keeping any tile there's no texture for. A
+room with no pictures keeps the art it has, and the painters leave a room with pictures alone.
 
 ## The party
 
@@ -1306,8 +1343,9 @@ python tools/cut_supplied.py buildings  # just the houses (or name props to cut 
 python tools/generate_paperdoll.py    # the paperdoll sheets and the gear for all three builds, character-palettes.png and gear-palettes.png, off the youth (after cut_supplied.py's people)
 python tools/rooms/generate_room_placeholders.py   # every room's sky, far, mid and foreground layers, its thumbnail and doors.txt, out of the props, tiles and title pictures above (last)
 python tools/rooms/generate_room_placeholders.py --preview <folder>   # and what each room looks like in the game, outside Content
-python tools/rooms/make_room_template.py --out <folder>   # the guide each room is painted over
-python tools/rooms/cut_room.py <zone>/<room> background.png foreground.png   # a painted room cut into its layers (--test tries it on a made-up one)
+python tools/rooms/make_room_template.py   # the 1536x1024 guide each panel of each room is painted over, in shots/art/room-templates/
+python tools/rooms/cut_room.py             # my paintings of the rooms, in tools/source/rooms/, cut into them (Rooms above)
+python tools/rooms/cut_tiles.py            # my floor textures, in tools/source/tiles/, cut into the tilesets
 ```
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's

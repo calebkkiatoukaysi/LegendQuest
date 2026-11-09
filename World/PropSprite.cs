@@ -10,10 +10,22 @@ namespace LegendQuest.World;
 /// <summary>
 /// One prop on the map: its picture, where it stands, and the floor under it nobody can walk through.
 /// </summary>
-/// <remarks>The Black Box's LobbyProp, reading what it is from a PropDefinition instead of being told in code.</remarks>
+/// <remarks>
+/// The Black Box's LobbyProp, reading what it is from a PropDefinition instead of being told in code.
+/// A prop is drawn from its painted picture, Content/Props/Painted/(id).png, if
+/// tools/rooms/paint_props.py has painted one: the same frames, each PaintedTexels times the size of
+/// the old picture's, drawn that many times smaller, so it's one texel to a screen pixel in a room and
+/// stands exactly where the old one did. Otherwise it's the old picture, a texel to a world pixel.
+/// </remarks>
 public class PropSprite
 {
+    /// <summary>Texels to a world pixel in a painted prop's picture: a room's 4 screen pixels to a world pixel.</summary>
+    public const int PaintedTexels = 4;
+
     private Texture2D _texture;
+
+    /// <summary>Texels to a world pixel in the picture it's drawn from: PaintedTexels, or 1 for an old one.</summary>
+    private int _texels = 1;
 
     /// <summary>What kind of prop it is.</summary>
     public PropDefinition Definition { get; }
@@ -33,8 +45,8 @@ public class PropSprite
     /// <summary>Which of its pictures to draw: 0 is shut (or up, or asleep), 1 is open. The ship and the gangplank have more, which the arrival steps through.</summary>
     public int Frame { get; set; }
 
-    /// <summary>How big one of its pictures is, in art pixels. Only known once it's loaded.</summary>
-    public Point Size => new(_texture.Width / Definition.Frames, _texture.Height);
+    /// <summary>How big one of its pictures is, in world (art) pixels. Only known once it's loaded.</summary>
+    public Point Size => new(_texture.Width / Definition.Frames / _texels, _texture.Height / _texels);
 
     /// <summary>Puts a prop where the map says.</summary>
     /// <param name="placed">The prop and its foot, from the map.</param>
@@ -63,15 +75,30 @@ public class PropSprite
         Footprints = footprints;
     }
 
-    /// <summary>Loads the picture.</summary>
-    /// <remarks>Throws if the picture doesn't split evenly into its frames. That means the generator and PropCatalog don't match.</remarks>
+    /// <summary>Loads the picture: the painted one if there is one, else the old one.</summary>
+    /// <remarks>Throws if the picture doesn't split evenly into its frames. That means the painter and PropCatalog don't match.</remarks>
     /// <param name="content">The content manager to load with.</param>
     public void LoadContent(ContentManager content)
     {
-        _texture = content.Load<Texture2D>(Definition.Texture);
-        if (_texture.Width % Definition.Frames != 0)
-            throw new InvalidOperationException($"{Definition.Texture}.png is {_texture.Width} wide, which doesn't split into {Definition.Frames} pictures. Run tools/generate_world.py, or tools/cut_supplied.py for Questeria's.");
+        string painted = PaintedTexture(Definition.Texture);
+        try
+        {
+            _texture = content.Load<Texture2D>(painted);
+            _texels = PaintedTexels;
+        }
+        catch (ContentLoadException)
+        {
+            _texture = content.Load<Texture2D>(Definition.Texture);
+            _texels = 1;
+        }
+        if (_texture.Width % (Definition.Frames * _texels) != 0 || _texture.Height % _texels != 0)
+            throw new InvalidOperationException($"{(_texels == 1 ? Definition.Texture : painted)}.png is {_texture.Width} x {_texture.Height}, which doesn't split into {Definition.Frames} pictures of whole world pixels. Run tools/rooms/paint_props.py.");
     }
+
+    /// <summary>Where a prop's painted picture is: Props/(id) becomes Props/Painted/(id).</summary>
+    /// <param name="texture">The prop's own picture, by content name.</param>
+    public static string PaintedTexture(string texture) =>
+        texture.StartsWith("Props/", StringComparison.Ordinal) ? "Props/Painted/" + texture["Props/".Length..] : texture;
 
     /// <summary>Where it sorts on its map: behind everyone if it's on a wall, under everyone if it's lying on the ground, otherwise by how far down the map its foot is.</summary>
     /// <param name="mapHeight">How tall the map is, in world pixels.</param>
@@ -88,11 +115,11 @@ public class PropSprite
     /// <param name="tint">What to multiply it by: white on the map itself, the paper colour on the map screen.</param>
     public void Draw(SpriteBatch spriteBatch, float layerDepth, Color tint)
     {
-        Point size = Size;
-        var source = new Rectangle(Frame * size.X, 0, size.X, size.Y);
-        var origin = new Vector2(size.X / 2, size.Y);
+        int width = _texture.Width / Definition.Frames, height = _texture.Height;
+        var source = new Rectangle(Frame * width, 0, width, height);
+        var origin = new Vector2(width / _texels / 2 * _texels, height);
         Vector2 at = Foot + Offset;
         spriteBatch.Draw(_texture, new Vector2(MathF.Round(at.X), MathF.Round(at.Y)), source, tint,
-            0f, origin, 1f, SpriteEffects.None, layerDepth);
+            0f, origin, 1f / _texels, SpriteEffects.None, layerDepth);
     }
 }

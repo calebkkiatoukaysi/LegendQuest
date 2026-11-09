@@ -6,8 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LegendQuest.Components;
 
 /// <summary>
-/// A torch's flame, and the light flickering round it. The flame is cut from torch-flame.png and
-/// the light is the glow texture drawn additively over whatever is already lit.
+/// A torch's flame, and the light flickering round it. The flame is cut from a sheet painted by
+/// tools/rooms/paint_life.py (Rooms/Life/flame, or Rooms/Life/candle for the little ones) and the
+/// light is the glow texture drawn additively over whatever is already lit.
 /// </summary>
 /// <remarks>
 /// The pool of light itself is baked into whatever is behind the torch. This only adds the part
@@ -17,7 +18,7 @@ namespace LegendQuest.Components;
 /// </remarks>
 public class TorchSprite
 {
-    /// <summary>One frame of torch-flame.png in art pixels, and how many frames there are. Has to match FLAME_W, FLAME_H and FLAME_FRAMES in tools/generate_world.py.</summary>
+    /// <summary>One frame of the flame in art pixels, and how many frames there are. A sheet can be painted at any number of texels to an art pixel (its frames are Width / Frames across); has to match FLAME in tools/rooms/paint_life.py.</summary>
     private const int FrameWidth = 12;
     private const int FrameHeight = 20;
     private const int Frames = 6;
@@ -37,9 +38,13 @@ public class TorchSprite
     private readonly float[] _phases = new float[FlickerWaves.Length];
     private readonly float _frameOffset;
 
+    private readonly string _sheet;
     private Texture2D _flame;
     private Texture2D _glow;
     private float _clock;
+
+    /// <summary>Texels to an art pixel on the flame's sheet, known once it's loaded.</summary>
+    private int _texels = 1;
 
     /// <summary>How bright the light is this frame, about 0.7 to 1.</summary>
     private float _flicker = FlickerBase;
@@ -47,16 +52,18 @@ public class TorchSprite
     /// <summary>The bottom middle of the flame, where it sits in its sconce.</summary>
     public Vector2 Position { get; }
 
-    /// <summary>How much the art is blown up. Whole numbers only, so the pixels stay square.</summary>
+    /// <summary>How big the flame is: 1 is FrameWidth by FrameHeight art pixels.</summary>
     public float Scale { get; }
 
     /// <summary>Puts a torch somewhere.</summary>
     /// <param name="position">The bottom middle of the flame.</param>
-    /// <param name="scale">How much the art is blown up.</param>
-    public TorchSprite(Vector2 position, float scale)
+    /// <param name="scale">How big the flame is: 1 is FrameWidth by FrameHeight art pixels.</param>
+    /// <param name="sheet">The flame's sheet, by content name: a torch's, or a candle's painted at its own smaller size.</param>
+    public TorchSprite(Vector2 position, float scale, string sheet = "Rooms/Life/flame")
     {
         Position = position;
         Scale = scale;
+        _sheet = sheet;
 
         // Seeded from the position so each torch flickers its own way, and the same way every time.
         var random = new Random((int)(position.X * 31f + position.Y * 17f));
@@ -68,8 +75,9 @@ public class TorchSprite
     /// <param name="content">The content manager to load with.</param>
     public void LoadContent(ContentManager content)
     {
-        _flame = content.Load<Texture2D>("torch-flame");
+        _flame = content.Load<Texture2D>(_sheet);
         _glow = content.Load<Texture2D>("glow");
+        _texels = Math.Max(1, _flame.Width / Frames / FrameWidth);
     }
 
     /// <summary>Runs the flame and the flicker.</summary>
@@ -89,10 +97,11 @@ public class TorchSprite
     public void Draw(SpriteBatch spriteBatch, float layerDepth)
     {
         int frame = (int)((_clock + _frameOffset) / FrameTime) % Frames;
-        var source = new Rectangle(frame * FrameWidth, 0, FrameWidth, FrameHeight);
-        var origin = new Vector2(FrameWidth / 2, FrameHeight);
+        int width = _flame.Width / Frames, height = _flame.Height;
+        var source = new Rectangle(frame * width, 0, width, height);
+        var origin = new Vector2(width / 2, height);
 
-        spriteBatch.Draw(_flame, Position, source, Color.White, 0f, origin, Scale, SpriteEffects.None, layerDepth);
+        spriteBatch.Draw(_flame, Position, source, Color.White, 0f, origin, Scale * FrameWidth / width, SpriteEffects.None, layerDepth);
     }
 
     /// <summary>Draws the flickering light round the flame. Goes in an additive, linear sampled batch.</summary>

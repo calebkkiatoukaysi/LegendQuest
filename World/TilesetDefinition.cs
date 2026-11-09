@@ -20,6 +20,9 @@ public sealed class TilesetDefinition
     /// <summary>The sheet, by content name.</summary>
     public required string Texture { get; init; }
 
+    /// <summary>How many texels across a tile is on its sheet: 16 for a set drawn a pixel at a time, 64 for one painted by tools/rooms/paint_tiles.py. A tile is Tilemap.TileSize world pixels either way, so a painted one is one texel to a screen pixel.</summary>
+    public int TileTexels { get; init; } = 16;
+
     /// <summary>Every tile, in sheet order.</summary>
     public required IReadOnlyList<TileDefinition> Tiles { get; init; }
 

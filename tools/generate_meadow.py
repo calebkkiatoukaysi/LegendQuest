@@ -1659,7 +1659,7 @@ def meadow_cuts():
 
 if __name__ == "__main__":
     print("Generating the meadow art for Legend Quest...")
-    build_sheet(MEADOW_TILES, os.path.join(OUT, "Tiles", "meadow.png"))
+    print("  Tiles/meadow.png: painted by tools/rooms/paint_tiles.py now; not written here")
     for made in (meadow_drawn, meadow_cuts):
         for name, picture in made().items():
             write_png(os.path.join(OUT, "Props", name + ".png"), picture)

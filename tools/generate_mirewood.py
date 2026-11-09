@@ -2250,8 +2250,8 @@ def quarry_drawn():
 
 if __name__ == "__main__":
     print("Generating the Mirewood and the Old Quarry for Legend Quest...")
-    build_sheet(MIREWOOD_TILES, os.path.join(OUT, "Tiles", "mirewood.png"))
-    build_sheet(QUARRY_TILES, os.path.join(OUT, "Tiles", "quarry.png"))
+    print("  Tiles/mirewood.png: painted by tools/rooms/paint_tiles.py now; not written here")
+    print("  Tiles/quarry.png: painted by tools/rooms/paint_tiles.py now; not written here")
     for made in (blackvein_trees, mirewood_drawn, quarry_drawn):
         for name, picture in made().items():
             write_png(os.path.join(OUT, "Props", name + ".png"), picture)

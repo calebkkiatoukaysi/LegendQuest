@@ -1,47 +1,61 @@
 """
-Writes the guide a room is painted over (12-rooms 3.5): one picture per room, as wide as the room
-and 900 tall, in canvas pixels, out of its room file.
+Writes the layout guides the owner paints each room over in ChatGPT (12-rooms 3.5): one 1536 x 1024
+picture a panel, out of the room's zone file, the shape ChatGPT makes its landscapes in.
 
-    python tools/rooms/make_room_template.py --out <folder>                  # every room in Content/Zones
-    python tools/rooms/make_room_template.py --out <folder> docks questeria/lantern-market
+    python tools/rooms/make_room_template.py                          # every room in Content/Zones
+    python tools/rooms/make_room_template.py docks questeria/lantern-market
     python tools/rooms/make_room_template.py --out <folder> --zones <folder of zone files>
 
-It marks, in flat colours with labels in a little pixel font:
+A room is painted in panels (sourcekit.py has the geometry): one for a room 1600 wide, else
+ceil((width - 1600) / 1400) + 1, each 1600 canvas pixels of the room, overlapping the next by 200,
+the last against the room's right end. Each panel's guide is
+shots/art/room-templates/<zone>-<room>-<i>.png, i counting from 1 left to right, and the owner's
+painting of it is saved as tools/source/rooms/<zone>/<room>/bg-<i>.png (cut_room.py). Each guide
+shows, in light outlines and pale washes so a painting can go straight over it:
 
-- the three bands cut_room.py cuts a painted background along: the sky above the horizon line, the
-  far layer between it and the roofline, the mid layer below (an interior is all mid layer);
-- the floor band, shaded and hatched, where feet can go, with any blocks (the fountain) ringed;
-- the tile strip under it, on its 64-pixel grid, which the game draws itself;
-- every door's box, the size its badge gives it, with where the badge floats over it;
-- the edge exits, and the up and down exits;
-- where the foreground may go: anywhere below the band, and no more than 12% of the band itself;
-- a figure the size a person stands (128 by 192) at each spawn, for scale.
+- the 16:9 band that's used (the middle 1536 x 864) and the bleed above and below it, which is
+  cropped: sky above, ground below;
+- the horizon outdoors, and the floor band's back edge: where the buildings and their doors stand,
+  or indoors where the back wall meets the floor;
+- the floor band, shaded and labelled "keep open: plain ground", where the characters walk (the
+  game's tile strip is the floor there);
+- every door's box from the zone file, outlined and labelled with its badge's kind and its name,
+  and the stairs up and down;
+- the edge exits, marked with chevrons and where they go;
+- the overlap with each neighbouring panel, hatched: "must continue the neighbour panel";
+- the panel's number, the room, where the panel is along it, and the file to save the painting as.
 
-The guides are a brief for whoever paints, so they go wherever --out says, never in Content.
-
-Only needs CPython, and there's nothing random in it.
+The guides are a brief, not game content, so they never go in Content. Deterministic: the same
+bytes every run. Only needs CPython and numpy.
 """
 
 import argparse
-import math
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from roomkit import (  # noqa: E402
-    CANVAS_H, CONTENT, FORE_LIMIT, Img, band, door_boxes, load_zone, paint_bands, zone_files,
-)
+import numpy as np
 
-SKY = (206, 222, 248)
-FAR = (226, 218, 242)
-MID = (246, 240, 228)
-FLOOR = (236, 206, 176)
-STRIP = (222, 214, 204)
-FORE = (196, 228, 196)
-DOOR = (226, 72, 84)
-EXIT = (64, 120, 210)
-INK = (58, 32, 38)
-FIGURE = (120, 96, 160)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import roomkit  # noqa: E402
+import sourcekit as sk  # noqa: E402
+from roomkit import CANVAS_H, CONTENT  # noqa: E402
+
+PAPER = (246, 244, 239)
+SKY = (233, 240, 250)
+DISTANCE = (239, 241, 234)
+WALL = (243, 237, 229)
+FLOOR = (241, 229, 207)
+GROUND = (235, 223, 202)
+BLEED = (229, 229, 229)
+BLEED_HATCH = (214, 214, 214)
+BLEED_INK = (140, 140, 140)
+HORIZON_INK = (112, 152, 212)
+FLOOR_INK = (178, 140, 96)
+DOOR_INK = (212, 94, 104)
+EXIT_INK = (84, 128, 206)
+EXIT_WASH = (221, 230, 247)
+OVERLAP_INK = (160, 132, 212)
+INK = (118, 106, 100)
 
 #: A 3x5 pixel font, enough for the labels: each glyph is five rows of three.
 FONT = {
@@ -68,132 +82,299 @@ FONT = {
     ":": ("000", "010", "000", "010", "000"), "%": ("101", "001", "010", "100", "101"),
     "'": ("010", "010", "000", "000", "000"), ",": ("000", "000", "000", "010", "100"),
     "(": ("001", "010", "010", "010", "001"), ")": ("100", "010", "010", "010", "100"),
+    "<": ("001", "010", "100", "010", "001"), ">": ("100", "010", "001", "010", "100"),
+    "!": ("010", "010", "010", "000", "010"), "?": ("110", "001", "010", "000", "010"),
+    "&": ("010", "101", "010", "101", "011"), "+": ("000", "010", "111", "010", "000"),
+    "=": ("000", "111", "000", "111", "000"), "_": ("000", "000", "000", "000", "111"),
 }
 
 
-def text(img, x, y, s, colour=INK, size=3):
-    """Writes a label in the pixel font, size canvas pixels to a font pixel."""
-    for ch in s.upper():
-        glyph = FONT.get(ch, FONT[" "])
-        for gy, row in enumerate(glyph):
-            for gx, bit in enumerate(row):
-                if bit == "1":
-                    img.fill(x + gx * size, y + gy * size, size, size, colour)
-        x += 4 * size
-    return x
+class Sheet:
+    """A guide being drawn: RGB, float64, 0..255, 1536 x 1024."""
 
+    def __init__(self):
+        self.px = np.zeros((sk.PANEL_H, sk.PANEL_W, 3))
+        self.px[...] = PAPER
 
-def dashed(img, y, colour, label):
-    for x in range(0, img.w, 24):
-        img.fill(x, y - 1, 14, 3, colour)
-    text(img, 12, y + 6, label, colour)
+    def fill(self, x0, y0, x1, y1, colour, alpha=1.0):
+        x0, y0 = max(0, int(round(x0))), max(0, int(round(y0)))
+        x1, y1 = min(sk.PANEL_W, int(round(x1))), min(sk.PANEL_H, int(round(y1)))
+        if x1 > x0 and y1 > y0:
+            area = self.px[y0:y1, x0:x1]
+            area[...] = area * (1 - alpha) + np.array(colour, np.float64) * alpha
 
+    def hatch(self, x0, y0, x1, y1, colour, alpha=1.0, spacing=18, width=2, slope=1):
+        """Diagonal lines over a box, `slope` 1 or -1."""
+        x0, y0 = max(0, int(round(x0))), max(0, int(round(y0)))
+        x1, y1 = min(sk.PANEL_W, int(round(x1))), min(sk.PANEL_H, int(round(y1)))
+        if x1 <= x0 or y1 <= y0:
+            return
+        ys, xs = np.mgrid[y0:y1, x0:x1]
+        on = ((xs + slope * ys) % spacing) < width
+        area = self.px[y0:y1, x0:x1]
+        area[on] = area[on] * (1 - alpha) + np.array(colour, np.float64) * alpha
 
-def outline(img, x, y, w, h, colour, thick=3):
-    img.fill(x, y, w, thick, colour)
-    img.fill(x, y + h - thick, w, thick, colour)
-    img.fill(x, y, thick, h, colour)
-    img.fill(x + w - thick, y, thick, h, colour)
-
-
-def shade_box(img, x, y, w, h, colour, alpha):
-    for yy in range(max(0, y), min(img.h, y + h)):
-        for xx in range(max(0, x), min(img.w, x + w)):
-            img.blend(xx, yy, colour, alpha)
-
-
-def template(room):
-    """The guide for one room."""
-    w = room.width
-    img = Img(w, CANVAS_H, MID + (255,))
-    horizon, roofline = paint_bands(room)
-    top, bottom = band(room)
-    if room.kind == "street":
-        img.fill(0, 0, w, horizon, SKY)
-        img.fill(0, horizon, w, roofline - horizon, FAR)
-    # The tile strip on its grid.
-    t = room.tiles
-    img.fill(0, t.top, w, CANVAS_H - t.top, STRIP)
-    for x in range(0, w, 64):
-        img.fill(x, t.top, 1, CANVAS_H - t.top, (200, 190, 182))
-    for y in range(t.top, CANVAS_H, 64):
-        img.fill(0, y, w, 1, (200, 190, 182))
-    # The floor band, shaded and hatched, and the blocks in it.
-    for x in range(w):
-        y0, y1 = int(room.back_edge_at(x)), int(room.front_edge_at(x))
-        for y in range(y0, y1):
-            img.set(x, y, FLOOR if (x + y) % 16 > 1 else (214, 176, 140))
-        img.fill(x, y0 - 1, 1, 3, INK)
-        img.fill(x, y1 - 1, 1, 3, INK)
-    for b in room.blocks:
-        for i in range(720):
-            a = i / 720 * 2 * math.pi
-            img.fill(int(b.cx + b.rx * math.cos(a)) - 1, int(b.cy + b.ry * math.sin(a)) - 1, 3, 3, INK)
-    # Where the foreground may go: below the band freely, and at most 12% of the band.
-    for x in range(w):
-        y1 = int(room.front_edge_at(x))
-        for y in range(y1 + 2, CANVAS_H):
-            if (x - y) % 12 < 3:
-                img.set(x, y, FORE)
-    text(img, 12, CANVAS_H - 26, "FOREGROUND HERE, AND AT MOST %d%% OF THE FLOOR BAND" % int(FORE_LIMIT * 100), (60, 120, 60))
-    text(img, 12, int(top) + 10, "FLOOR BAND: FEET GO HERE. THE TILE STRIP UNDER IT IS DRAWN BY THE GAME")
-    if room.kind == "street":
-        dashed(img, horizon, EXIT, "HORIZON: SKY ABOVE (PARALLAX 0.1)")
-        dashed(img, roofline, (120, 80, 170), "ROOFLINE: FAR LAYER ABOVE (0.3), MID BELOW (1.0)")
-    else:
-        text(img, 12, 12, "INTERIOR: ALL ONE LAYER, NO PARALLAX")
-    # Doors, with their badges.
-    for d, (bx, by, bw, bh) in door_boxes(room):
-        shade_box(img, int(bx), int(by), int(bw), int(bh), DOOR, 60)
-        outline(img, int(bx), int(by), int(bw), int(bh), DOOR)
-        cx, cy = int(bx + bw / 2), int(by) - 30 - 22
-        for yy in range(-22, 23):
-            for xx in range(-22, 23):
-                if xx * xx + yy * yy <= 22 * 22:
-                    img.set(cx + xx, cy + yy, DOOR if xx * xx + yy * yy > 18 * 18 else (255, 236, 236))
-        text(img, int(bx) + 6, int(by) + 8, d.badge, DOOR, 2)
-        text(img, int(bx) + 6, int(by) + 22, d.name.replace("’", "'")[:18], DOOR, 2)
-    # Exits.
-    for e in room.exits:
-        if e.side in ("west", "east"):
-            x = 0 if e.side == "west" else w - 48
-            shade_box(img, x, int(top), 48, int(bottom - top), EXIT, 70)
-            text(img, x + 4, int(bottom) - 20, e.side[0].upper(), EXIT, 4)
+    def hline(self, y, x0, x1, colour, width=2, dash=0):
+        y = int(round(y))
+        if dash:
+            for x in range(int(x0), int(x1), dash * 2):
+                self.fill(x, y - width // 2, min(x + dash, x1), y - width // 2 + width, colour)
         else:
-            x = int(e.x)
-            y = int(room.back_edge_at(x))
-            outline(img, x - 80, y - 120, 160, 120, EXIT)
-            text(img, x - 72, y - 112, "STAIRS " + e.side.upper(), EXIT, 2)
-    # A person, for scale, at each spawn.
-    for s in room.spawns:
-        x, y = int(s.x), int(s.y)
-        outline(img, x - 64, y - 192, 128, 192, FIGURE, 2)
-        img.fill(x - 20, y - 180, 40, 40, FIGURE)
-        img.fill(x - 28, y - 132, 56, 90, FIGURE)
-        img.fill(x - 24, y - 42, 18, 42, FIGURE)
-        img.fill(x + 6, y - 42, 18, 42, FIGURE)
-        text(img, x - 60, y + 6, s.name[:14], FIGURE, 2)
-    text(img, w - 12 - 4 * 3 * len(room.paint), 12 if room.kind == "street" else 30, room.paint.upper())
-    return img
+            self.fill(x0, y - width // 2, x1, y - width // 2 + width, colour)
+
+    def vline(self, x, y0, y1, colour, width=2, dash=0):
+        x = int(round(x))
+        if dash:
+            for y in range(int(y0), int(y1), dash * 2):
+                self.fill(x - width // 2, y, x - width // 2 + width, min(y + dash, y1), colour)
+        else:
+            self.fill(x - width // 2, y0, x - width // 2 + width, y1, colour)
+
+    def box(self, x0, y0, x1, y1, colour, width=2):
+        self.hline(y0 + width // 2, x0, x1, colour, width)
+        self.hline(y1 - width + width // 2, x0, x1, colour, width)
+        self.vline(x0 + width // 2, y0, y1, colour, width)
+        self.vline(x1 - width + width // 2, y0, y1, colour, width)
+
+    def stroke(self, points, colour, width=3):
+        """A polyline, stamped a square at a time."""
+        for (ax, ay), (bx, by) in zip(points, points[1:]):
+            n = int(max(abs(bx - ax), abs(by - ay))) + 1
+            for t in np.linspace(0.0, 1.0, n):
+                x, y = ax + (bx - ax) * t, ay + (by - ay) * t
+                self.fill(x - width / 2, y - width / 2, x + width / 2, y + width / 2, colour)
+
+    def text(self, x, y, s, colour=INK, size=3):
+        """Writes a label in the pixel font, size pixels to a font pixel; returns where it ends."""
+        for ch in s.upper().replace("’", "'"):
+            glyph = FONT.get(ch, FONT[" "])
+            for gy, row in enumerate(glyph):
+                for gx, bit in enumerate(row):
+                    if bit == "1":
+                        self.fill(x + gx * size, y + gy * size, x + (gx + 1) * size, y + (gy + 1) * size, colour)
+            x += 4 * size
+        return x
+
+    def rgba(self):
+        out = np.zeros((sk.PANEL_H, sk.PANEL_W, 4), np.uint8)
+        out[..., :3] = np.rint(np.clip(self.px, 0, 255)).astype(np.uint8)
+        out[..., 3] = 255
+        return out
+
+
+def text_width(s, size):
+    return len(s) * 4 * size - size
+
+
+def wrap(words, size, width):
+    """Lines of words no wider than width pixels at a font size."""
+    lines, line = [], ""
+    for w in words.split():
+        trial = (line + " " + w).strip()
+        if line and text_width(trial, size) > width:
+            lines.append(line)
+            line = w
+        else:
+            line = trial
+    if line:
+        lines.append(line)
+    return lines
+
+
+def label_in(sheet, lines, x0, x1, y, colour, size):
+    """Lines of text centred between x0 and x1 from y down, each kept on the picture."""
+    for line in lines:
+        w = text_width(line, size)
+        x = min(max((x0 + x1 - w) / 2, 6), sk.PANEL_W - 6 - w)
+        sheet.text(int(round(x)), int(round(y)), line, colour, size)
+        y += 7 * size
+    return y
+
+
+def place_names(zones=None):
+    """Every zone's and room's name, for the exits' labels: {zone id: name, "zone/room": name}."""
+    names = {}
+    for zone, room in sk.rooms(zones):
+        names[zone.id] = zone.name
+        names["%s/%s" % (zone.id, room.id)] = room.name
+    return names
+
+
+def exit_label(zone, e, names):
+    """Where an exit goes, as its label in the game says it."""
+    t = e.target
+    if t.kind == "locked":
+        return "locked"
+    if t.kind == "back":
+        return "back out"
+    if e.label:
+        return e.label
+    if t.kind == "room":
+        return names.get("%s/%s" % (zone.id, t.place), t.place)
+    return names.get(t.place, t.place)
+
+
+def template(zone, room, i, names=None):
+    """The guide for panel i (from 0) of a room."""
+    names = names or {}
+    lefts = sk.panel_lefts(room.width)
+    n = len(lefts)
+    left = lefts[i]
+    s = sk.SCALE
+    sheet = Sheet()
+
+    def X(x):
+        return (x - left) * s
+
+    def Y(y):
+        return sk.BLEED + y * s
+
+    top, bottom = roomkit.band(room)
+    horizon = sk.horizon(room)
+    xs = np.arange(sk.PANEL_W)
+    canvas_x = left + (xs + 0.5) / s
+    back = np.array([room.back_edge_at(x) for x in canvas_x])
+    front = np.array([room.front_edge_at(x) for x in canvas_x])
+
+    # The washes: sky and distance outdoors (a wall indoors), the floor band, the ground below it.
+    for col in range(sk.PANEL_W):
+        yb, yf = Y(back[col]), Y(front[col])
+        if horizon is not None:
+            sheet.fill(col, sk.BLEED, col + 1, Y(horizon), SKY)
+            sheet.fill(col, Y(horizon), col + 1, yb, DISTANCE)
+        else:
+            sheet.fill(col, sk.BLEED, col + 1, yb, WALL)
+        sheet.fill(col, yb, col + 1, yf, FLOOR)
+        sheet.fill(col, yf, col + 1, sk.PANEL_H - sk.BLEED, GROUND)
+    for b in room.blocks:
+        cx, cy = X(b.cx), Y(b.cy)
+        pts = [(cx + b.rx * s * np.cos(a), cy + b.ry * s * np.sin(a)) for a in np.linspace(0, 2 * np.pi, 97)]
+        sheet.stroke(pts, FLOOR_INK, 2)
+        label_in(sheet, wrap("THE GAME DRAWS WHAT STANDS HERE", 2, 2 * b.rx * s - 20), cx - b.rx * s, cx + b.rx * s,
+                 cy - 10, FLOOR_INK, 2)
+
+    # The bleed, cropped off.
+    for y0, y1 in ((0, sk.BLEED), (sk.PANEL_H - sk.BLEED, sk.PANEL_H)):
+        sheet.fill(0, y0, sk.PANEL_W, y1, BLEED)
+        sheet.hatch(0, y0, sk.PANEL_W, y1, BLEED_HATCH)
+    sheet.hline(sk.BLEED, 0, sk.PANEL_W, BLEED_INK, 2, dash=10)
+    sheet.hline(sk.PANEL_H - sk.BLEED, 0, sk.PANEL_W, BLEED_INK, 2, dash=10)
+
+    # The lines: the horizon, the back of the floor, its front.
+    if horizon is not None:
+        sheet.hline(Y(horizon), 0, sk.PANEL_W, HORIZON_INK, 2, dash=14)
+        sheet.text(10, int(Y(horizon)) - 22, "HORIZON", HORIZON_INK, 3)
+    for col in range(sk.PANEL_W):
+        sheet.fill(col, Y(back[col]) - 1, col + 1, Y(back[col]) + 1, FLOOR_INK)
+    for col in range(0, sk.PANEL_W, 20):
+        sheet.fill(col, Y(front[col]) - 1, col + 10, Y(front[col]) + 1, FLOOR_INK)
+    back_words = ("THE BACK WALL MEETS THE FLOOR ON THIS LINE" if room.kind == "interior"
+                  else "BACK OF THE FLOOR: BUILDINGS AND DOORS STAND ON THIS LINE")
+    sheet.text(60, int(Y(back[60])) + 8, back_words, FLOOR_INK, 2)
+    sheet.text(60, int(Y(front[60])) + 8, "FRONT OF THE FLOOR", FLOOR_INK, 2)
+    if horizon is not None:
+        sheet.text(sk.PANEL_W - 14 - text_width("SKY", 3), int(Y(horizon)) - 22, "SKY", INK, 3)
+        words = "DISTANCE: FAR-OFF LAND, SEA OR ROOFS"
+        sheet.text(sk.PANEL_W - 14 - text_width(words, 2), int(Y(horizon)) + 10, words, INK, 2)
+    else:
+        sheet.text(sk.PANEL_W - 14 - text_width("BACK WALL", 3), int(Y(back[-1])) - 22, "BACK WALL", INK, 3)
+
+    # The floor band's label, in the middle of what this panel shows of it.
+    mid_y = Y((top + bottom) / 2)
+    label_in(sheet, ["KEEP OPEN: PLAIN GROUND"], 0, sk.PANEL_W, mid_y - 26, FLOOR_INK, 5)
+    label_in(sheet, ["(WHERE THE CHARACTERS WALK)"], 0, sk.PANEL_W, mid_y + 16, FLOOR_INK, 3)
+
+    # The overlaps with the panels either side.
+    before, after = sk.neighbours(room.width, i)
+    for part, slope in ((before, 1), (after, -1)):
+        if part is None:
+            continue
+        x0, x1, other = part
+        a, b = X(x0), X(x1)
+        sheet.hatch(a, sk.BLEED, b, sk.PANEL_H - sk.BLEED, OVERLAP_INK, 0.45, spacing=22, width=2, slope=slope)
+        for edge in (a, b):
+            if 2 < edge < sk.PANEL_W - 2:
+                sheet.vline(edge, sk.BLEED, sk.PANEL_H - sk.BLEED, OVERLAP_INK, 3, dash=12)
+        words = "MUST CONTINUE THE NEIGHBOUR PANEL: PANEL %d" % (other + 1)
+        y = label_in(sheet, wrap(words, 3, b - a - 16), a, b, sk.BLEED + 14, OVERLAP_INK, 3)
+        label_in(sheet, wrap("MATCH IT EXACTLY ACROSS THIS STRIP", 2, b - a - 16), a, b, y + 2, OVERLAP_INK, 2)
+
+    # The doors, and the stairs.
+    boxes = [(d.badge.upper(), d.name, room.door_box(d), DOOR_INK) for d, _ in roomkit.door_boxes(room)]
+    for e in room.exits:
+        if e.side in ("up", "down"):
+            y = room.back_edge_at(e.x)
+            boxes.append(("STAIRS " + e.side.upper(), exit_label(zone, e, names), (e.x - 80, y - 120, 160, 120), EXIT_INK))
+    for kind, name, (bx, by, bw, bh), colour in boxes:
+        a, b = X(bx), X(bx + bw)
+        if b < 0 or a > sk.PANEL_W:
+            continue
+        sheet.fill(a, Y(by), b, Y(by + bh), colour, 0.10)
+        sheet.box(a, Y(by), b, Y(by + bh), colour, 3)
+        va, vb = max(a, 0), min(b, sk.PANEL_W)
+        if vb - va < 40:
+            continue
+        for size in (3, 2):
+            lines = [kind] + wrap(name, size, vb - va - 10)
+            if all(text_width(line, size) <= vb - va - 8 for line in lines):
+                break
+        label_in(sheet, lines, va, vb, Y(by) + 10, colour, size)
+
+    # The ways out at the room's ends.
+    sides = {}
+    for e in room.exits:
+        if e.side in ("west", "east") and (e.side not in sides or sides[e.side].target.kind == "locked"):
+            sides[e.side] = e
+    for side, e in sorted(sides.items()):
+        x0 = 0 if side == "west" else room.width - 48
+        a, b = X(x0), X(x0 + 48)
+        if b < 0 or a > sk.PANEL_W:
+            continue
+        sheet.fill(a, Y(top), b, Y(bottom), EXIT_WASH)
+        sheet.box(a, Y(top), b, Y(bottom), EXIT_INK, 2)
+        cy = Y((top + bottom) / 2)
+        for k in range(3):
+            tip = (a + 8 + k * 12) if side == "west" else (b - 8 - k * 12)
+            back_x = tip + 14 if side == "west" else tip - 14
+            sheet.stroke([(back_x, cy - 16), (tip, cy), (back_x, cy + 16)], EXIT_INK, 4)
+        words = "WAY OUT %s: %s" % (side.upper(), exit_label(zone, e, names))
+        w = text_width(words, 3)
+        tx = b + 10 if side == "west" else a - 10 - w
+        sheet.text(int(tx), int(cy) + 40, words, EXIT_INK, 3)
+
+    # What it is, and where it goes.
+    title = "PANEL %d OF %d   %s/%s: %s   CANVAS X %d TO %d OF %d" % (
+        i + 1, n, zone.id, room.id, room.name, left, left + sk.SPAN, room.width)
+    sheet.text(14, 14, title, INK, 4 if text_width(title, 4) <= sk.PANEL_W - 28 else 3)
+    sheet.text(14, 50, "BLEED, CROPPED OFF: KEEP PAINTING THE %s UP TO THE EDGE. ONLY THE 16:9 BAND BETWEEN "
+               "THE DASHED LINES IS USED." % ("CEILING" if room.kind == "interior" else "SKY"), BLEED_INK, 2)
+    sheet.text(14, sk.PANEL_H - sk.BLEED + 14, "BLEED, CROPPED OFF: KEEP PAINTING THE GROUND DOWN TO THE EDGE.", BLEED_INK, 2)
+    save = "SAVE AS TOOLS/SOURCE/ROOMS/%s/%s/BG-%d.PNG   (A FOREGROUND STRIP, IF ANY: FG-%d.PNG)" % (zone.id, room.id, i + 1, i + 1)
+    sheet.text(14, sk.PANEL_H - 40, save, INK, 3 if text_width(save, 3) <= sk.PANEL_W - 28 else 2)
+    return sheet.rgba()
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Write the painting guide for each room.")
+    ap = argparse.ArgumentParser(description="Write the 1536x1024 guide for every panel of every room.")
     ap.add_argument("only", nargs="*", help="zones or zone/room (default: all)")
     ap.add_argument("--zones", default=os.path.join(CONTENT, "Zones"))
-    ap.add_argument("--out", required=True, help="where the guides go (not in Content)")
+    ap.add_argument("--out", default=sk.TEMPLATES, help="where the guides go (default shots/art/room-templates)")
     args = ap.parse_args()
     if os.path.abspath(args.out).startswith(os.path.abspath(CONTENT)):
         sys.exit("The guides are a brief for painting, not game content: name a folder outside Content.")
-    files = zone_files(args.zones)
-    if not files:
-        sys.exit("No zone files in %s." % args.zones)
-    for path in files:
-        zone = load_zone(path)
-        for room in zone.rooms:
-            if args.only and zone.id not in args.only and "%s/%s" % (zone.id, room.id) not in args.only:
-                continue
-            template(room).save(os.path.join(args.out, "%s-%s.png" % (zone.id, room.id)))
+    try:
+        sk.check_picks(args.only, args.zones)
+    except sk.SourceError as e:
+        sys.exit(str(e))
+    count = 0
+    names = place_names(args.zones)
+    for zone, room in sk.rooms(args.zones):
+        if not sk.wanted(zone, room, args.only):
+            continue
+        for i in range(sk.panel_count(room.width)):
+            sk.write_png(os.path.join(args.out, "%s-%s-%d.png" % (zone.id, room.id, i + 1)), template(zone, room, i, names))
+            count += 1
+    print("make_room_template: %d guide%s in %s." % (count, "" if count == 1 else "s", sk.shown(args.out)))
 
 
 if __name__ == "__main__":

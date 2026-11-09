@@ -365,7 +365,7 @@ FURNITURE = {
 
 if __name__ == "__main__":
     print("Generating the insides of Questeria's buildings for Legend Quest...")
-    build_tiles()
+    print("  Tiles/interior.png: painted by tools/rooms/paint_tiles.py now; not written here")
     for name, draw in FURNITURE.items():
         write_png(os.path.join(OUT, "Props", name + ".png"), draw())
     print("Done.")

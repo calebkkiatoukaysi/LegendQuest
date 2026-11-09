@@ -70,6 +70,14 @@ from roomkit import (  # noqa: E402
 )
 
 OUT = os.path.join(CONTENT, "Rooms")
+SOURCES = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "source", "rooms")
+
+
+def has_sources(zone_id, room_id):
+    """Whether the owner has painted a room (tools/source/rooms/<zone>/<room>/): cut_room.py cuts
+    those, so this leaves them be."""
+    folder = os.path.join(SOURCES, zone_id, room_id)
+    return os.path.isdir(folder) and any(not n.startswith(".") for n in os.listdir(folder))
 
 # --------------------------------------------------------------------------- #
 # The palette: generate_harbour.py's, which is the style sheet's
@@ -2227,6 +2235,9 @@ def main():
         zone = load_zone(path)
         for room in zone.rooms:
             if not wanted(zone, room, args.only):
+                continue
+            if args.out == OUT and has_sources(zone.id, room.id):
+                print("    %s/%s: the owner's painting (tools/source/rooms), which cut_room.py cuts; left as it is" % (zone.id, room.id))
                 continue
             theme_name, layers, doors, share = build_room(zone, room)
             folder = os.path.join(args.out, *room.paint.split("/"))

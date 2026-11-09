@@ -15,15 +15,21 @@ namespace LegendQuest.World;
 /// </summary>
 /// <remarks>
 /// <para>
-/// The layers are Content/Rooms/(Paint)/sky, far, mid and fore, painted by
-/// tools/rooms/generate_room_placeholders.py at art resolution, each drawn at its own scale so its
-/// pixels stay square: the sky at 4 screen pixels to an art pixel, the far layer at 2, the mid layer
-/// at 3 (the buildings at the size they always were) and the foreground at 4. A layer with parallax p
-/// slides p times as far as the room does: the sky 0.1, the far layer 0.3, the mid layer and the tile
-/// strip 1, the foreground 1.15. An interior has no sky or far layer and no parallax. The mid layer's
-/// buildings stand on the floor band's back edge with their doorways on their door boxes, and
-/// doors.txt beside the layers says where each doorway is painted (DoorArt). If a layer hasn't been
-/// painted, the room's scenery lines are drawn from the props' own pictures instead.
+/// The layers are Content/Rooms/(Paint)/sky, far, mid and fore, painted by tools/rooms/paint_all.py
+/// (or, for a room it has no recipe for yet, tools/rooms/generate_room_placeholders.py). A layer is
+/// always the screen's height, 900 canvas pixels, at whatever resolution it was painted at, so each
+/// is drawn at the scale its height gives (RoomHeight / its height): a painted layer is 900 texels
+/// tall and drawn one texel to a screen pixel; a placeholder's sky and foreground are 225 tall (4 screen
+/// pixels to a texel), its far layer 450 (2) and its mid layer 300 (3). A layer wider than the widest
+/// texture the graphics profile takes is written in pieces, (layer)-0, (layer)-1 and on, drawn side by
+/// side. A layer with parallax p slides p times as far as the room does: the sky 0.1, the far layer
+/// 0.3, the mid layer and the tile strip 1, the foreground 1.15. A flat room has no sky or far layer
+/// and nothing slides: an interior, or a room painted as one picture, sky to floor, which
+/// tools/rooms/cut_room.py makes its mid layer (opaque down to the floor band, where the tile strip
+/// shows through) with a foreground if it has one. The mid layer's buildings stand on the floor
+/// band's back edge with their doorways on their door boxes, and doors.txt beside the layers says
+/// where each doorway is painted (DoorArt). If a layer of a room that isn't flat hasn't been painted,
+/// the room's scenery lines are drawn from the props' own pictures instead.
 /// </para>
 /// <para>
 /// To wire it into ExploreScreen:
@@ -44,10 +50,10 @@ namespace LegendQuest.World;
 /// </remarks>
 public sealed class RoomScene
 {
-    /// <summary>Screen pixels to an art pixel in each layer. The world is RoomScale screen pixels to a world pixel.</summary>
-    private const float SkyScale = 4f, FarScale = 2f, MidScale = 3f, ForeScale = 4f;
+    /// <summary>Screen pixels to an art pixel for each layer drawn from the props' own pictures, when it hasn't been painted. The world is RoomScale screen pixels to a world pixel.</summary>
+    private const float FarScale = 2f, MidScale = 3f, ForeScale = 4f;
 
-    /// <summary>How far each layer slides for every world pixel the camera does, outdoors.</summary>
+    /// <summary>How far each layer slides for every world pixel the camera does, unless the room is flat.</summary>
     private const float SkyParallax = 0.1f, FarParallax = 0.3f, ForeParallax = 1.15f;
 
     /// <summary>Half the screen's width in world pixels: what something in a sliding layer is placed about, so it's where it should be when the camera's centred on it.</summary>
@@ -75,8 +81,12 @@ public sealed class RoomScene
 
     private ContentManager _content;
     private LightMap _lightMap;
-    private Texture2D _sky, _far, _mid, _fore;
+    /// <summary>Each painted layer's pieces, left to right (most layers are one), or null if it hasn't been painted.</summary>
+    private List<Texture2D> _sky, _far, _mid, _fore;
     private Texture2D _pixel;
+
+    /// <summary>Whether the room has no sky and no far layer: an interior, or a street painted as one picture. Nothing in it slides.</summary>
+    private bool _flat;
 
     /// <summary>Gets a room ready to draw. Nothing loads until LoadContent.</summary>
     /// <param name="room">The room.</param>
@@ -105,14 +115,15 @@ public sealed class RoomScene
             _sky = Layer("sky");
             _far = Layer("far");
         }
+        _flat = _sky is null && _far is null;
         _mid = Layer("mid");
         _fore = Layer("fore");
-        if (_far is null && _room.Kind == RoomKind.Street) ComposePieces("far", FarParallax, FarScale);
+        if (_far is null && !_flat) ComposePieces("far", FarParallax, FarScale);
         if (_mid is null) ComposePieces("mid", 1f, MidScale);
-        if (_fore is null) ComposePieces("fore", Parallax(ForeParallax), ForeScale);
+        if (_fore is null && !_flat) ComposePieces("fore", Parallax(ForeParallax), ForeScale);
 
         ReadDoorArt();
-        _life.LoadContent(_content, _pixel);
+        _life.LoadContent(_content);
 
         if (!_room.Dark) return;
         _lightMap = new LightMap(Bounds, _room.Ambient, Lights());
@@ -131,7 +142,7 @@ public sealed class RoomScene
     /// <param name="gameTime">The frame's timing.</param>
     public void Update(GameTime gameTime) => _life.Update(gameTime);
 
-    /// <summary>Draws everything behind the people with the screen still: the sky and the far layer (outdoors), the tile strip, the mid layer, and the life that's behind everyone.</summary>
+    /// <summary>Draws everything behind the people with the screen still: the sky and the far layer (unless the room is flat), the tile strip, the mid layer, and the life that's behind everyone.</summary>
     /// <param name="gameTime">The frame's timing, for the water's ripples.</param>
     /// <param name="spriteBatch">The SpriteBatch, not begun.</param>
     /// <param name="camera">The camera, locked to the room.</param>
@@ -139,7 +150,7 @@ public sealed class RoomScene
     public void DrawBack(GameTime gameTime, SpriteBatch spriteBatch, Camera2D camera, Color tint) =>
         DrawBack(gameTime, spriteBatch, camera, tint, Matrix.Identity);
 
-    /// <summary>Draws everything behind the people: the sky and the far layer (outdoors), the tile strip, the mid layer, and the life that's behind everyone.</summary>
+    /// <summary>Draws everything behind the people: the sky and the far layer (unless the room is flat), the tile strip, the mid layer, and the life that's behind everyone.</summary>
     /// <param name="gameTime">The frame's timing, for the water's ripples.</param>
     /// <param name="spriteBatch">The SpriteBatch, not begun.</param>
     /// <param name="camera">The camera, locked to the room.</param>
@@ -148,17 +159,17 @@ public sealed class RoomScene
     public void DrawBack(GameTime gameTime, SpriteBatch spriteBatch, Camera2D camera, Color tint, Matrix shake)
     {
         Matrix world = camera.Transform * shake;
-        if (_room.Kind == RoomKind.Street)
+        if (!_flat)
         {
             // Out of the dark: a painted night sky already has its light.
             BlendState blend = _lightMap is null ? BlendState.AlphaBlend : LightMap.OutOfTheDark;
             spriteBatch.Begin(SpriteSortMode.Deferred, blend, SamplerState.PointClamp, transformMatrix: world);
             float skyLeft = LayerLeft(camera, SkyParallax);
-            if (_sky is not null) DrawLayer(spriteBatch, _sky, skyLeft, SkyScale, tint);
+            if (_sky is not null) DrawLayer(spriteBatch, _sky, skyLeft, tint);
             else DrawSkyBands(spriteBatch, skyLeft, tint);
             _life.DrawSky(spriteBatch, skyLeft, tint);
             float farLeft = LayerLeft(camera, FarParallax);
-            if (_far is not null) DrawLayer(spriteBatch, _far, farLeft, FarScale, tint);
+            if (_far is not null) DrawLayer(spriteBatch, _far, farLeft, tint);
             else DrawPieces(spriteBatch, "far", farLeft, FarScale, tint);
             spriteBatch.End();
         }
@@ -168,7 +179,7 @@ public sealed class RoomScene
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
-        if (_mid is not null) DrawLayer(spriteBatch, _mid, 0f, MidScale, tint);
+        if (_mid is not null) DrawLayer(spriteBatch, _mid, 0f, tint);
         else DrawPieces(spriteBatch, "mid", 0f, MidScale, tint);
         _life.DrawMid(spriteBatch, tint);
         spriteBatch.End();
@@ -192,7 +203,7 @@ public sealed class RoomScene
         Matrix world = camera.Transform * shake;
         float left = LayerLeft(camera, Parallax(ForeParallax));
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
-        if (_fore is not null) DrawLayer(spriteBatch, _fore, left, ForeScale, tint);
+        if (_fore is not null) DrawLayer(spriteBatch, _fore, left, tint);
         else DrawPieces(spriteBatch, "fore", left, ForeScale, tint);
         spriteBatch.End();
 
@@ -231,23 +242,42 @@ public sealed class RoomScene
     /// <param name="door">One of the room's doors.</param>
     public BoundingRectangle DoorArt(RoomDoor door) => _doorArt.TryGetValue(door.Id, out BoundingRectangle art) ? art : door.Area;
 
-    /// <summary>A layer's parallax in this room: none indoors.</summary>
-    private float Parallax(float outdoors) => _room.Kind == RoomKind.Interior ? 1f : outdoors;
+    /// <summary>A layer's parallax in this room: none in a flat one.</summary>
+    private float Parallax(float outdoors) => _flat ? 1f : outdoors;
 
     /// <summary>Where a layer's left edge goes in the world for where the camera is, on a whole screen pixel so it doesn't shimmer.</summary>
     private static float LayerLeft(Camera2D camera, float parallax) =>
         MathF.Round((1f - parallax) * camera.Left * camera.Zoom) / camera.Zoom;
 
-    /// <summary>Draws a painted layer with its left edge at a world x, at its scale.</summary>
-    private static void DrawLayer(SpriteBatch spriteBatch, Texture2D layer, float left, float scale, Color tint) =>
-        spriteBatch.Draw(layer, new Vector2(left, 0f), null, tint, 0f, Vector2.Zero, scale / ZoneCatalog.RoomScale, SpriteEffects.None, 0f);
+    /// <summary>Draws a painted layer with its left edge at a world x: each piece at the scale its height gives (the layer is the room's height), the next starting where it ends.</summary>
+    private static void DrawLayer(SpriteBatch spriteBatch, List<Texture2D> pieces, float left, Color tint)
+    {
+        float x = left;
+        foreach (Texture2D piece in pieces)
+        {
+            float scale = ZoneCatalog.RoomHeight / piece.Height;
+            spriteBatch.Draw(piece, new Vector2(x, 0f), null, tint, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            x += piece.Width * scale;
+        }
+    }
 
-    /// <summary>Loads one of the room's painted layers, or null if it hasn't been painted.</summary>
-    private Texture2D Layer(string name)
+    /// <summary>Loads one of the room's painted layers: the one picture, or its pieces (name-0, name-1 ...) if it was too wide for one; null if it hasn't been painted.</summary>
+    private List<Texture2D> Layer(string name)
+    {
+        Texture2D whole = TryLoad($"Rooms/{_room.Paint}/{name}");
+        if (whole is not null) return new List<Texture2D> { whole };
+
+        var pieces = new List<Texture2D>();
+        for (Texture2D piece; (piece = TryLoad($"Rooms/{_room.Paint}/{name}-{pieces.Count}")) is not null;) pieces.Add(piece);
+        return pieces.Count > 0 ? pieces : null;
+    }
+
+    /// <summary>Loads a picture from the room's content manager, or null if there isn't one.</summary>
+    private Texture2D TryLoad(string asset)
     {
         try
         {
-            return _content.Load<Texture2D>($"Rooms/{_room.Paint}/{name}");
+            return _content.Load<Texture2D>(asset);
         }
         catch (ContentLoadException)
         {

@@ -1251,7 +1251,7 @@ def keep_props():
 
 if __name__ == "__main__":
     print("Generating Sunspire Keep for Legend Quest...")
-    build_sheet(KEEP_TILES, os.path.join(OUT, "Tiles", "keep.png"))
+    print("  Tiles/keep.png: painted by tools/rooms/paint_tiles.py now; not written here")
     for name, picture in keep_props().items():
         write_png(os.path.join(OUT, "Props", name + ".png"), picture)
     print("Done.")

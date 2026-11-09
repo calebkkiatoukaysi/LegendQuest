@@ -7,12 +7,15 @@ namespace LegendQuest.World;
 /// Every tileset, by the id map files use.
 /// </summary>
 /// <remarks>
-/// The tile lists have to match the lists in tools/generate_world.py (and tools/cut_supplied.py for
-/// Questeria), in the same order, since that's the order the tiles are on the sheet. Tilemap throws
-/// when it loads a sheet that's the wrong size, which is what a mismatch looks like.
+/// The tile lists are the order the tiles are on the sheet: tools/rooms/paint_tiles.py paints every
+/// sheet from these lists (read off this file), 64 texels a tile. Tilemap throws when it loads a sheet
+/// that's the wrong size, which is what a mismatch looks like.
 /// </remarks>
 public static class TilesetCatalog
 {
+    /// <summary>Texels across a tile on every sheet: they're all painted by tools/rooms/paint_tiles.py, one texel to a screen pixel.</summary>
+    private const int PaintedTexels = 64;
+
     /// <summary>How long each frame of the water's ripples is up, in seconds. The harbour's and the night sea's are the same.</summary>
     private const float WaterFrameSeconds = 0.35f;
 
@@ -30,6 +33,7 @@ public static class TilesetCatalog
     {
         Id = "questeria",
         Texture = "Tiles/questeria",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             new() { Name = "plaza", Variants = 6 },
@@ -53,6 +57,7 @@ public static class TilesetCatalog
     {
         Id = "ship",
         Texture = "Tiles/ship",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             new() { Name = "sea", Variants = 3, Frames = 4, FrameSeconds = WaterFrameSeconds, Solid = true },
@@ -78,6 +83,7 @@ public static class TilesetCatalog
     {
         Id = "interior",
         Texture = "Tiles/interior",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             new() { Name = "floor-wood", Variants = 3 },
@@ -100,6 +106,7 @@ public static class TilesetCatalog
     {
         Id = "crypt",
         Texture = "Tiles/crypt",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Ground.
@@ -136,6 +143,7 @@ public static class TilesetCatalog
     {
         Id = "forest",
         Texture = "Tiles/forest",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Ground. The undergrowth is what's under the deep wood: you can't push through it.
@@ -171,6 +179,7 @@ public static class TilesetCatalog
     {
         Id = "meadow",
         Texture = "Tiles/meadow",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Ground. You can't get through the stream, a hedge or the wall, and you can't see past the wall.
@@ -217,6 +226,7 @@ public static class TilesetCatalog
     {
         Id = "mirewood",
         Texture = "Tiles/mirewood",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Ground, lush at the west edge and rotten by the quarry. The undergrowth and the rock
@@ -267,6 +277,7 @@ public static class TilesetCatalog
     {
         Id = "quarry",
         Texture = "Tiles/quarry",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Ground.
@@ -307,6 +318,7 @@ public static class TilesetCatalog
     {
         Id = "keep",
         Texture = "Tiles/keep",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Floors.
@@ -339,6 +351,7 @@ public static class TilesetCatalog
     {
         Id = "vault",
         Texture = "Tiles/vault",
+        TileTexels = PaintedTexels,
         Tiles = new TileDefinition[]
         {
             // Ground. The pit stops you walking but not seeing, like rubble does.
