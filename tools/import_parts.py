@@ -1,6 +1,6 @@
 """
-Cuts the character parts made in ChatGPT into the game's sockets and atlases: the two bases, every
-face and every armor so far. The capes, helms and weapons go in the same way as they come.
+Cuts the character parts made in ChatGPT into the game's sockets and atlases: the two bases and every
+face, hair, helm, armor, cape, weapon and off-hand item there is.
 
     python tools/import_parts.py           # import everything in tools/source/characters
     python tools/import_parts.py --check   # say what's out of date and change nothing (exit 1 if anything is)
@@ -37,6 +37,10 @@ for pixel, on the base's 1024 x 1536 canvas on solid black. This:
     skin showing, so the game tints it to the face's; and its Base and Trim, the two biggest
     materials it's made of by colour (materials), with the tone each was painted, so the game can
     dye them to the colours the player picks;
+  - cuts each cape (capes/cape-<x>.png) into what it painted in the black behind and round the
+    figure, grown a few pixels in under the body's edge, with its Base and Trim to dye; and each
+    weapon and off-hand item (weapons/weapon-<x>.png, weapons/offhand-<x>.png) into the changed
+    pieces that reach a hand, leaving out the base's fingers where ChatGPT redrew them;
   - shrinks every layer to PART_SCALE on the canvas's own grid, so a part drawn at its socket lands
     on the pixel it was painted on, records each one's pivot (its socket in its own pixels), and
     packs them into atlas pages, one set per slot;
@@ -100,7 +104,8 @@ SOCKETS = ("root", "neck", "crown", "chest", "back", "hand.near", "hand.far")
 SLOT_SOCKET = {"body": "root", "head": "neck", "face": "neck", "armor": "root", "cape": "back", "helm": "neck",
                "weapon": "hand.near", "offhand": "hand.far"}
 #: The folders under tools/source/characters a slot's parts are in.
-FOLDERS = {"face": "faces", "armor": "armors", "hair": "hairs", "helm": "helms"}
+FOLDERS = {"face": "faces", "armor": "armors", "hair": "hairs", "helm": "helms", "cape": "capes", "weapon": "weapons",
+           "offhand": "weapons"}
 
 # The faces painted before the head was fixed, head and hair together on the bases with their
 # features: each is split into its face and its hair (split_face).
@@ -152,6 +157,12 @@ FADE = 28
 EDGE = 6
 #: How near the head a separate piece (a loose strand, an earring) has to be to stay.
 NEAR = 12
+#: A held piece (a weapon, an off-hand item) is the changed pieces that come within HAND_REACH of
+#: either hand's middle (a fist is about 120 by 100, so this reaches a little past its edges, where a
+#: blade or a pommel starts); a cape is grown UNDER pixels in under the body's edge, in its own
+#: colours, so the body's soft edge never shows the background through it.
+HAND_REACH = 90
+UNDER = 4
 #: An armor's skin: how far from the base's own pixel it can be and still be all skin, and how much
 #: further it fades to none.
 SKIN_SAME = 20
@@ -698,6 +709,58 @@ def armor_layer(base, rgb):
     return colour, alpha, np.stack([skin, base_mask, trim_mask], axis=2), tones
 
 
+def changed_pieces(base, rgb, where):
+    """What a part painted, within `where`: the pixels on the figure that differ from the base,
+    opened so the base's outlines ChatGPT moved a pixel or two stay out, then grown back along
+    their thin ends. Returns (colour, alpha, the pieces)."""
+    colour, alpha = key_black(rgb)
+    distance = np.abs(rgb.astype(np.float64) - base.rgb).max(axis=2)
+    raw = (alpha > 0.5) & (distance > CHANGED) & where
+    kept = ic.grow(erode(raw, THIN), THIN) & raw
+    for _ in range(REGROW):
+        kept = ic.grow(kept, 1) & raw
+    return colour, alpha, kept
+
+
+def cape_layer(base, rgb):
+    """A cape's layer on its base: what it painted in the black behind and round the figure (a cape
+    is never over the body), grown UNDER pixels in under the body's edge in its own colours, with
+    its Base and Trim to dye: (colour, alpha, mask, tones)."""
+    behind = base.alpha < 0.5
+    colour, alpha, kept = changed_pieces(base, rgb, behind)
+    alpha = keep_near_main(alpha * kept)
+    there = alpha > 0.5
+    under = ic.grow(there, UNDER) & ~behind & ~there
+    if under.any():
+        beside = ic.local_mean(colour, there.astype(np.float64), (UNDER + 1, UNDER * 3))
+        fill = under & ~np.isnan(beside[:, :, 0])
+        colour[fill] = beside[fill]
+        alpha[fill] = 1.0
+    nothing = np.zeros(alpha.shape)
+    (base_mask, trim_mask), tones = armor_dyes(rgb, alpha, nothing)
+    return colour, alpha, np.stack([nothing, base_mask, trim_mask], axis=2), tones
+
+
+def hand_layer(base, rgb):
+    """A weapon's or an off-hand item's layer on its base: the changed pieces that reach a hand,
+    without the base's own fingers where ChatGPT redrew them (skin painted where the base had skin),
+    so a gloved hand never gets a bare fist drawn over it. Nothing on it is dyed: (colour, alpha,
+    None, None)."""
+    fingers = (skin_weight(rgb) > 0.5) & (base.skin > 0.5)
+    colour, alpha, kept = changed_pieces(base, rgb, ~fingers)
+    hands = np.zeros(alpha.shape, bool)
+    for socket in ("hand.near", "hand.far"):
+        x, y = base.sockets[socket]
+        hands[max(0, int(y) - HAND_REACH):int(y) + HAND_REACH, max(0, int(x) - HAND_REACH):int(x) + HAND_REACH] = True
+    labels, count = ic.components(kept)
+    reach = np.unique(labels[hands & kept])
+    kept &= np.isin(labels, reach[reach > 0])
+    alpha = alpha * kept
+    if not (alpha > 0.5).any():
+        fail("a weapon or off-hand item has nothing near either hand: did ChatGPT put it in the hand?")
+    return colour, alpha, None, None
+
+
 # --------------------------------------------------------------------------- #
 # Dye masks: where a part can be recoloured, and the colour it was painted there
 # --------------------------------------------------------------------------- #
@@ -1192,6 +1255,17 @@ def build(check, vector=VECTOR):
         colour, alpha = drawn(aid, colour, alpha)
         layers[aid] = ("armor", base, shrink(colour, alpha, mask), {"tones": tones})
         report.append("  %-24s %s, dyes %s" % (aid, base, ", ".join("none" if t is None else "#%02x%02x%02x" % tuple(int(round(v)) for v in t) for t in tones)))
+    # The capes, painted in the black behind the figure, and what the hands hold.
+    for slot in ("cape", "weapon", "offhand"):
+        for pid in part_ids(slot):
+            base = base_of(pid, edits)
+            if base is None:
+                fail("tools/source/characters/%s/%s.png isn't a %s in Story/13-art-prompts.md §6, or what it edits isn't" % (FOLDERS[slot], pid, slot))
+            cutter = cape_layer if slot == "cape" else hand_layer
+            colour, alpha, mask, tones = cutter(bases[base], load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png")))
+            colour, alpha = drawn(pid, colour, alpha)
+            layers[pid] = (slot, base, shrink(colour, alpha, mask), {"tones": tones} if tones else {})
+            report.append("  %-24s %s" % (pid, base))
 
     # The atlases, a set of pages per slot; a part's mask goes beside it on its page.
     by_slot = {}

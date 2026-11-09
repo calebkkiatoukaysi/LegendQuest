@@ -106,6 +106,8 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 >
 > ARMOR SHEETS. Sometimes I'll attach an armor sheet: four copies of the base standing full length, side by side in columns divided by thin grey lines. Then dress each figure in the outfit I list for its column, and keep every figure, its bald head and its pose exactly where they are, as in a single edit. Clothes stay inside their own column.
 >
+> HELM, CAPE AND WEAPON SHEETS. Sometimes I'll attach a helm sheet (four blank figures from the top of the head to the hips) or a cape or weapon sheet (four full figures, a little smaller, side by side). Then give each figure the helm, the cape or the held item I list for its column, keep every figure exactly where it is, as in a single edit, and keep each part inside its own column.
+>
 > The game layers them back to front: cape, armor, face, hair or helm, weapon.
 >
 > THE RULES FOR EVERY IMAGE:
@@ -158,6 +160,18 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 > This is an ARMOR SHEET: four copies of the same bald base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Dress each figure in a different outfit, following the numbered list below; the figures are numbered 1 to 4 from left to right. Each outfit is the body from the jawline down: replace the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit, fitted to that exact body and pose, its collar at the neck, gloves or bare hands on the same clenched fists, boots or shoes on the same feet. Where an outfit leaves skin showing, keep the base's tan skin there. In every column keep the figure exactly where it is, at the same size and in the same pose, with the same bald head and the same face, untouched above the jawline. Loose clothes (sleeves, skirts, coat tails, pauldrons) may widen the outline, but they must stay inside their own column and never cross a grey line; the arms, legs, hands and feet stay exactly where they are. Make each outfit its own: don't let colours or pieces of one leak into another. Use exactly the base's art style: crisp dark outlines, flat cel shading, light from the upper left. Don't move, resize, crop or flip any figure; keep the grey lines and the black background; no text, numbers or labels anywhere. Give it back as one PNG, 1536 × 1024. The outfits:
 
+**Helm sheet**
+
+> This is a HELM SHEET: four copies of the same blank base character from the top of the head to the hips, side by side in four equal columns divided by thin grey lines, on a solid black background. Put a different helm, hood, hat, crown or mask on each head, following the numbered list below; the figures are numbered 1 to 4 from left to right. Hair and helm are one slot: a helm replaces the hair, so if one should show hair (under a brim, round a circlet or a crown), paint that hair in as part of it; otherwise add none. Fit each to its head's exact size, angle and position, and where it leaves the face open, keep the blank face exactly as it is. A helm may hang down over the neck and shoulders (a hood's drape, a mail coif, a plume, a veil), but keep each inside its own column, keep every head and body exactly where it is, as in a single edit, and keep the grey lines and the black exactly as they are.
+
+**Cape sheet**
+
+> This is a CAPE SHEET: four copies of the same base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Give each figure a different cape, cloak, tail or back piece, following the numbered list below; the figures are numbered 1 to 4 from left to right. A cape hangs behind the body: paint it only in the black space behind and around each figure, never over the body, the arms, the head or the underwear, and put no straps, clasps or collars across the front of the body. Each figure's back faces the LEFT of its column, so a cape shows past the left edge of the shoulders, back and legs, above the shoulders behind the neck, and between and below the legs. Keep every figure exactly where it is, at the same size and in the same pose, with the same bald head and face; keep each cape inside its own column, never across a grey line; and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
+
+**Weapon sheet**
+
+> This is a WEAPON SHEET: four copies of the same base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Give each figure a different weapon or held item, following the numbered list below; the figures are numbered 1 to 4 from left to right. An item goes in the NEAR hand, the lit fist on the LEFT of each figure, unless the list says otherwise: the grip passes through the curled fingers, the fingers stay exactly as they are and close over it, and the item shows above and below the fist. The far hand, on the right of each figure, holds something only when the list says so. Keep every figure exactly where it is, at the same size and in the same pose, with the same bald head, face and body; keep each item whole and inside its own column, never across a grey line; and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
+
 **Creature**
 
 > Use the attached image ONLY as a reference for the art style (line weight, cel shading, colouring, light) and for scale (a standard adult is that tall). Draw a new creature, full body, facing right, on a solid black background, in exactly that style. The creature:
@@ -202,6 +216,8 @@ The owner's call (2026-11-08): the parts are drawn in ChatGPT as clean vector-st
 > - FACE SHEET: eight blank heads, 4 across and 2 down. Paint one face per cell in the order I list them (1-4 along the top row, 5-8 along the bottom).
 > - HAIR SHEET: four blank figures from the head to the hips, side by side. One hairstyle per column, numbered 1-4 from the left.
 > - ARMOR SHEET: four full figures side by side, 1536 x 1024. One outfit per column, numbered 1-4 from the left.
+> - HELM SHEET: four blank figures from the top of the head to the hips, side by side. One helm per column, numbered 1-4 from the left.
+> - CAPE SHEET or WEAPON SHEET: four full figures side by side, 1536 x 1024. One cape, or one held item, per column, numbered 1-4 from the left.
 > Keep every figure exactly where it is in its cell, keep each part inside its own cell, and keep the grey lines and the black.
 >
 > THE RULES FOR EVERY IMAGE
@@ -3253,6 +3269,548 @@ Edit the attached base image: dress the body in a mage's robe to the ankle in de
 
 The game's cloaks, helms and weapons (`Items/ItemCatalog.cs`) and the hats in `Characters/LookOptions.cs`, plus every character's signature pieces. Shields are drawn on the far forearm; a character's own sword-and-shield or pair of blades is one piece.
 
+### 6.0 Sheets (four at a time)
+
+The owner's call (2026-11-08): the capes, helms and weapons four at a time, like the hair and the armors. Every card in §6.1 to §6.3 that's painted on a base is in one sheet here (29 sheets for the 107 P0 parts, 8 for P1's 25, 13 for P2's 38), each one ChatGPT picture. The attached template (`tools/source/characters/<kind>-sheet-male.png` or `-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the base: a helm sheet's are the blank base from the top of the canvas to the hips, at full size, with room for a crown; a cape sheet's and a weapon sheet's are the whole figure, a little smaller than an armor sheet's, with room behind the back for a cloak and over the head for a staff. `python tools/part_sheet.py cut <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/helms/`, `capes/` or `weapons/<id>.png`. A sheet holds one priority, so the opening chapters' parts are done first; the cards that edit another part (`weapon-black-box`, `weapon-brannock-1`, `weapon-brannock-41`, `weapon-brannock-42`) stay single, as do any redos.
+
+Each sheet's prompt is its kind's sheet block (§2.3) and the list below it.
+
+| Sheet | Base | Priority | Cells, in order |
+|---|---|---|---|
+| `cape-sheet-m01` | `base-male` | P0 | `cape-tail-ember`, `cape-watch`, `cape-watch-captain`, `cape-royal` |
+| `cape-sheet-m02` | `base-male` | P0 | `cape-leon`, `cape-travelling`, `cape-blanket`, `cape-short-lavender` |
+| `cape-sheet-m03` | `base-male` | P1 | `cape-protection`, `cape-campaign`, `cape-varkhul` |
+| `cape-sheet-m04` | `base-male` | P2 | `cape-severin`, `cape-severin-wings`, `cape-thrall-knight`, `cape-corwin` |
+| `cape-sheet-m05` | `base-male` | P2 | `cape-gilded` |
+| `cape-sheet-f01` | `base-female` | P0 | `cape-sb`, `cape-sera`, `cape-tail-wolf`, `cape-tail-hawk` |
+| `cape-sheet-f02` | `base-female` | P0 | `cape-tail-bear`, `cape-elara-hooded`, `cape-tamsin`, `cape-old-woman` |
+| `cape-sheet-f03` | `base-female` | P1 | `cape-ash`, `cape-pedlar-pack` |
+| `cape-sheet-f04` | `base-female` | P2 | `cape-valencia` |
+| `helm-sheet-m01` | `base-male` | P0 | `helm-watch`, `helm-watch-crest`, `helm-royal-guard`, `helm-crown` |
+| `helm-sheet-m02` | `base-male` | P0 | `helm-kael-hood`, `helm-beret`, `helm-knit-cap`, `helm-bandana-red` |
+| `helm-sheet-m03` | `base-male` | P0 | `helm-bandana`, `helm-hollowed-kettle`, `helm-hollowed-hood`, `helm-sapper-goggles` |
+| `helm-sheet-m04` | `base-male` | P0 | `helm-sapper-faceplate`, `helm-straw-hat`, `helm-flat-cap`, `helm-leather-cap` |
+| `helm-sheet-m05` | `base-male` | P0 | `helm-iron-helm` |
+| `helm-sheet-m06` | `base-male` | P1 | `helm-kettle`, `helm-varkhul`, `helm-nasal`, `helm-bandit-hood` |
+| `helm-sheet-m07` | `base-male` | P2 | `helm-corwin`, `helm-gilded`, `helm-crown-thorns`, `helm-vesk-wolf` |
+| `helm-sheet-m08` | `base-male` | P2 | `helm-mordain-beak`, `helm-vorlaith`, `helm-warden`, `helm-bronze-crest` |
+| `helm-sheet-m09` | `base-male` | P2 | `helm-morion` |
+| `helm-sheet-f01` | `base-female` | P0 | `helm-tricorn`, `helm-circlet`, `helm-hood-charcoal`, `helm-wide-brim` |
+| `helm-sheet-f02` | `base-female` | P0 | `helm-kerchief`, `helm-circlet-of-focus` |
+| `helm-sheet-f03` | `base-female` | P1 | `helm-lace-cap` |
+| `helm-sheet-f04` | `base-female` | P2 | `helm-abbey-hood`, `helm-bee-veil`, `helm-circlet-silver`, `helm-vreya-crown` |
+| `helm-sheet-f05` | `base-female` | P2 | `helm-crown-dusk-dawn` |
+| `weapon-sheet-m01` | `base-male` | P0 | `weapon-dagger`, `weapon-shortsword`, `weapon-longsword`, `weapon-rapier` |
+| `weapon-sheet-m02` | `base-male` | P0 | `weapon-scimitar`, `weapon-handaxe`, `weapon-battleaxe`, `weapon-greatsword` |
+| `weapon-sheet-m03` | `base-male` | P0 | `weapon-warhammer`, `weapon-mace`, `weapon-quarterstaff`, `weapon-spear` |
+| `weapon-sheet-m04` | `base-male` | P0 | `weapon-shortbow`, `weapon-longbow`, `weapon-light-crossbow`, `weapon-ember-dagger` |
+| `weapon-sheet-m05` | `base-male` | P0 | `offhand-wooden-shield`, `offhand-steel-shield`, `offhand-warden-shield`, `offhand-dagger` |
+| `weapon-sheet-m06` | `base-male` | P0 | `offhand-shortsword`, `offhand-scimitar`, `offhand-handaxe`, `offhand-ember-dagger` |
+| `weapon-sheet-m07` | `base-male` | P0 | `weapon-kael-knives`, `weapon-kael-rapier`, `weapon-brannock`, `weapon-cutlass` |
+| `weapon-sheet-m08` | `base-male` | P0 | `weapon-gaff`, `weapon-cudgel`, `weapon-watch-kit`, `weapon-halberd` |
+| `weapon-sheet-m09` | `base-male` | P0 | `weapon-telescope`, `weapon-tack-hammer`, `weapon-walking-stick`, `weapon-tin-cup` |
+| `weapon-sheet-m10` | `base-male` | P0 | `weapon-quill-letter`, `weapon-letter`, `weapon-letters`, `weapon-stew-pot` |
+| `weapon-sheet-m11` | `base-male` | P0 | `weapon-silk-bolt`, `weapon-lute`, `weapon-hollowed-sword`, `weapon-hexer-staff` |
+| `weapon-sheet-m12` | `base-male` | P0 | `weapon-sapper-pick`, `weapon-chief-pick-lantern`, `weapon-toy-sword`, `weapon-pitchfork` |
+| `weapon-sheet-m13` | `base-male` | P0 | `weapon-crate`, `weapon-hammer-tongs` |
+| `weapon-sheet-m14` | `base-male` | P1 | `weapon-thornwood-bow`, `weapon-sunsteel-blade`, `weapon-mallet`, `weapon-spade` |
+| `weapon-sheet-m15` | `base-male` | P1 | `weapon-heron-cane`, `weapon-felling-axe`, `weapon-oil-lamp`, `weapon-varkhul-greatsword` |
+| `weapon-sheet-m16` | `base-male` | P1 | `weapon-cultist-dagger`, `weapon-climber-hook`, `weapon-relief-kit` |
+| `weapon-sheet-m17` | `base-male` | P2 | `weapon-corwin-kit`, `weapon-corwin-sword`, `weapon-gilded-kit`, `weapon-mace-shield` |
+| `weapon-sheet-m18` | `base-male` | P2 | `weapon-spear-lantern`, `weapon-vesk-sword`, `weapon-mordain-glaive`, `weapon-unmade-spear-shield` |
+| `weapon-sheet-m19` | `base-male` | P2 | `weapon-pike`, `weapon-warden-kit`, `weapon-protectorate-kit`, `weapon-raider-kit` |
+| `weapon-sheet-f01` | `base-female` | P0 | `weapon-sb-blades`, `weapon-sera-longbow`, `weapon-netting-needle`, `weapon-loaf` |
+| `weapon-sheet-f02` | `base-female` | P0 | `weapon-rag-doll`, `weapon-tankard`, `weapon-scrolls`, `weapon-broom` |
+| `weapon-sheet-f03` | `base-female` | P0 | `weapon-coin`, `weapon-practice-sword`, `weapon-flat-cap-held`, `weapon-basket` |
+| `weapon-sheet-f04` | `base-female` | P0 | `weapon-flower-basket`, `weapon-pilgrim-staff`, `weapon-peel`, `weapon-spindle` |
+| `weapon-sheet-f05` | `base-female` | P0 | `weapon-coin-purse`, `weapon-feather-duster` |
+| `weapon-sheet-f06` | `base-female` | P1 | `weapon-staff-ring`, `weapon-ledger-pen`, `weapon-folded-shawl`, `weapon-sketchbook` |
+| `weapon-sheet-f07` | `base-female` | P2 | `weapon-lantern`, `weapon-smoker`, `weapon-night-flowers`, `weapon-vreya-blade` |
+| `weapon-sheet-f08` | `base-female` | P2 | `weapon-glass-lamp`, `weapon-map` |
+
+#### `cape-sheet-m01` · Cape sheet: 4 capes (An Emberkin's ember tail, The Watch's short cape, The Watch captain's cloak, The palace's ochre cloak) · P0
+
+**Basis:** Edits `cape-sheet-male`. Cells: 1 `cape-tail-ember`, 2 `cape-watch`, 3 `cape-watch-captain`, 4 `cape-royal`.
+
+1. An Emberkin's ember tail: A thin crimson tail growing from the small of the back, curving down and back to about the knee, its tip glowing like a live ember, red through orange to yellow.
+2. The Watch's short cape: A short navy-blue cape from the shoulders to the middle of the back, fastened with a small brass clasp.
+3. The Watch captain's cloak: A navy-blue cloak to the knee, fastened at one shoulder with a brass clasp.
+4. The palace's ochre cloak: An ochre-gold cloak from the shoulders to the knee, with a white lining.
+I'll save it as cape-sheet-m01.png.
+
+#### `cape-sheet-m02` · Cape sheet: 4 capes (King Leon's cloak, Travelling cloak, A blanket worn as a cloak, A short lavender cape) · P0
+
+**Basis:** Edits `cape-sheet-male`. Cells: 1 `cape-leon`, 2 `cape-travelling`, 3 `cape-blanket`, 4 `cape-short-lavender`.
+
+1. King Leon's cloak: A long navy-blue cloak from the shoulders to the floor, heavy and plain.
+2. Travelling cloak: A heavy dark-green wool travelling cloak to the calf, its hood down, a simple iron clasp, a little frayed at the hem.
+3. A blanket worn as a cloak: A worn charcoal wool blanket round the shoulders, tied at the chest, hanging to the backs of the knees.
+4. A short lavender cape: A short lavender cape over the shoulders, reaching the middle of the back, with a small silver clasp.
+I'll save it as cape-sheet-m02.png.
+
+#### `cape-sheet-m03` · Cape sheet: 3 capes (Cloak of protection, Aldric's campaign cloak, Varkhul's tattered cloak) · P1
+
+**Basis:** Edits `cape-sheet-male`. Cells: 1 `cape-protection`, 2 `cape-campaign`, 3 `cape-varkhul`.
+
+1. Cloak of protection: A fine cloak to the calf in deep blue-grey, with a subtle pattern of small silver stars woven into it, a silver clasp and a faint shimmer along its edge.
+2. Aldric's campaign cloak: An old campaign cloak in faded brick red, patched and singed at the hem, to the knee.
+3. Varkhul's tattered cloak: A tattered ash-grey cloak hanging in strips, scorched at the edges.
+Leave figure 4 exactly as it is, with nothing added.
+I'll save it as cape-sheet-m03.png.
+
+#### `cape-sheet-m04` · Cape sheet: 4 capes (Severin's velvet cape, Severin's cape, spread like wings, A thrall-knight's cape, Sir Corwin's white cloak) · P2
+
+**Basis:** Edits `cape-sheet-male`. Cells: 1 `cape-severin`, 2 `cape-severin-wings`, 3 `cape-thrall-knight`, 4 `cape-corwin`.
+
+1. Severin's velvet cape: A long black velvet cape lined in wine red, hanging from the shoulders to the ground.
+2. Severin's cape, spread like wings: The same long black velvet cape lined in wine red, spread out wide on either side like the wings of a huge bat, its edges ragged and stretched into points.
+3. A thrall-knight's cape: A black cape lined in wine red, to the calf, ragged at the hem.
+4. Sir Corwin's white cloak: A white cloak edged in gold, to the calf.
+I'll save it as cape-sheet-m04.png.
+
+#### `cape-sheet-m05` · Cape sheet: 1 cape (A Gilded knight's cape) · P2
+
+**Basis:** Edits `cape-sheet-male`. Cells: 1 `cape-gilded`.
+
+1. A Gilded knight's cape: A short white cape to the middle of the back, edged with a thin gold line.
+Leave figures 2, 3 and 4 exactly as they are, with nothing added.
+I'll save it as cape-sheet-m05.png.
+
+#### `cape-sheet-f01` · Cape sheet: 4 capes (The Soul-Bound's cape, Sera's shoulder cape, A Wildkin wolf's tail, A Wildkin hawk's tail feathers) · P0
+
+**Basis:** Edits `cape-sheet-female`. Cells: 1 `cape-sb`, 2 `cape-sera`, 3 `cape-tail-wolf`, 4 `cape-tail-hawk`.
+
+1. The Soul-Bound's cape: A long charcoal cape that hangs from the shoulders to the calves, plain, with a little wear at the hem.
+2. Sera's shoulder cape: A short dark-moss-green wool shoulder cape with its hood down, fastened at the collar with a wooden toggle, reaching the middle of the back.
+3. A Wildkin wolf's tail: A bushy grey-brown wolf's tail growing from the small of the back, hanging down and back to below the knee.
+4. A Wildkin hawk's tail feathers: A short fan of barred brown-and-cream tail feathers growing from the small of the back, angled down and back.
+I'll save it as cape-sheet-f01.png.
+
+#### `cape-sheet-f02` · Cape sheet: 4 capes (A Wildkin bear's tail, A plain charcoal cloak, The Lodge's teal cloak and hawk feathers, An old woman's rose cape) · P0
+
+**Basis:** Edits `cape-sheet-female`. Cells: 1 `cape-tail-bear`, 2 `cape-elara-hooded`, 3 `cape-tamsin`, 4 `cape-old-woman`.
+
+1. A Wildkin bear's tail: A short, round, furry black bear's tail at the small of the back.
+2. A plain charcoal cloak: A plain charcoal wool cloak to the calf, hanging from the shoulders, no ornament at all.
+3. The Lodge's teal cloak and hawk feathers: A short teal ranger's cloak to the middle of the back, and below its hem a short fan of barred brown-and-cream tail feathers growing from the small of the back.
+4. An old woman's rose cape: A short hooded cape in a deep, dusty rose (not wine red), the hood down, to the middle of the back.
+I'll save it as cape-sheet-f02.png.
+
+#### `cape-sheet-f03` · Cape sheet: 2 capes (An ash-grey hooded cloak, A pedlar's pack frame) · P1
+
+**Basis:** Edits `cape-sheet-female`. Cells: 1 `cape-ash`, 2 `cape-pedlar-pack`.
+
+1. An ash-grey hooded cloak: A long ash-grey cloak with its hood down, ragged and singed at the hem, to the calf.
+2. A pedlar's pack frame: A wooden pack frame on the back, strapped over the shoulders and loaded high with coils of rope, pots, a lantern and cloth bundles.
+Leave figures 3 and 4 exactly as they are, with nothing added.
+I'll save it as cape-sheet-f03.png.
+
+#### `cape-sheet-f04` · Cape sheet: 1 cape (Valencia's cape) · P2
+
+**Basis:** Edits `cape-sheet-female`. Cells: 1 `cape-valencia`.
+
+1. Valencia's cape: A long cape in charcoal-black, lined with wine red, falling from the shoulders to the ground.
+Leave figures 2, 3 and 4 exactly as they are, with nothing added.
+I'll save it as cape-sheet-f04.png.
+
+#### `helm-sheet-m01` · Helm sheet: 4 helms (The Watch helm, The Watch captain's crested helm, The Royal Guard's helm, A small gold crown) · P0
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-watch`, 2 `helm-watch-crest`, 3 `helm-royal-guard`, 4 `helm-crown`.
+
+1. The Watch helm: An open-faced steel helm with a brass rim and no crest.
+2. The Watch captain's crested helm: An open-faced steel helm with a brass rim and a short, stiff crest of navy horsehair running from front to back.
+3. The Royal Guard's helm: A polished steel helm with a gold-trimmed brim and a short navy plume.
+4. A small gold crown: A small, plain gold crown, a simple band with low points and one ruby at the front.
+I'll save it as helm-sheet-m01.png.
+
+#### `helm-sheet-m02` · Helm sheet: 4 helms (Kael's pointed hood, A beret, A knitted cap, A Red Gull bandana) · P0
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-kael-hood`, 2 `helm-beret`, 3 `helm-knit-cap`, 4 `helm-bandana-red`.
+
+1. Kael's pointed hood: A charcoal hood worn up, ending in a soft point at the back, the edge of the face in shadow (the game draws the horns over it).
+2. A beret: A soft navy beret worn tilted, with a short white feather.
+3. A knitted cap: A dark-blue knitted fisherman's cap, snug and rolled at the brim.
+4. A Red Gull bandana: A raspberry-red bandana tied over the head, knotted at the back with the ends hanging.
+I'll save it as helm-sheet-m02.png.
+
+#### `helm-sheet-m03` · Helm sheet: 4 helms (A bandana, A rusted kettle helm, A hexer's deep hood, A sapper's cap and goggles) · P0
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-bandana`, 2 `helm-hollowed-kettle`, 3 `helm-hollowed-hood`, 4 `helm-sapper-goggles`.
+
+1. A bandana: A dark grey bandana tied over the head, knotted at the back with the ends hanging.
+2. A rusted kettle helm: A rusted, dented iron kettle helm with a wide brim, sitting low.
+3. A hexer's deep hood: A deep, ragged, ash-stained hood worn up and pulled far forward, hiding the face except the lower jaw.
+4. A sapper's cap and goggles: A battered leather cap with ear flaps and a pair of cracked brass goggles pushed up on it.
+I'll save it as helm-sheet-m03.png.
+
+#### `helm-sheet-m04` · Helm sheet: 4 helms (A cracked iron faceplate, A straw hat, A flat cap, Leather cap) · P0
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-sapper-faceplate`, 2 `helm-straw-hat`, 3 `helm-flat-cap`, 4 `helm-leather-cap`.
+
+1. A cracked iron faceplate: A cracked iron faceplate riveted to a leather hood, covering the whole face, with ember-orange light glowing through its eye slits and cracks.
+2. A straw hat: A battered, wide straw hat.
+3. A flat cap: A slate-blue flat cap.
+4. Leather cap: A padded brown leather cap with ear flaps, stitched in panels.
+I'll save it as helm-sheet-m04.png.
+
+#### `helm-sheet-m05` · Helm sheet: 1 helm (Iron helm) · P0
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-iron-helm`.
+
+1. Iron helm: A closed iron helm with a narrow visor slit and a riveted brow band, hiding the whole head.
+Leave figures 2, 3 and 4 exactly as they are, with nothing added.
+I'll save it as helm-sheet-m05.png.
+
+#### `helm-sheet-m06` · Helm sheet: 4 helms (A kettle helm, Varkhul's cracked helm, An old-pattern nasal helm, A bandit's hood and scarf) · P1
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-kettle`, 2 `helm-varkhul`, 3 `helm-nasal`, 4 `helm-bandit-hood`.
+
+1. A kettle helm: A plain steel kettle helm with a wide brim, a size too big, tipped back.
+2. Varkhul's cracked helm: A closed great helm of blackened iron, the visor cracked down the middle, and through the crack a single burning ember-orange eye.
+3. An old-pattern nasal helm: An old-fashioned round-topped steel helm with a nose guard.
+4. A bandit's hood and scarf: A ragged brown hood worn up, and a dirty brown scarf pulled up over the nose.
+I'll save it as helm-sheet-m06.png.
+
+#### `helm-sheet-m07` · Helm sheet: 4 helms (Sir Corwin's plumed helm, A Gilded knight's helm, The crown of thorns, Vesk's wolf helm) · P2
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-corwin`, 2 `helm-gilded`, 3 `helm-crown-thorns`, 4 `helm-vesk-wolf`.
+
+1. Sir Corwin's plumed helm: An open-faced gilded helm with a tall white plume rising from the crest.
+2. A Gilded knight's helm: An open-faced steel helm with a narrow gold band and no plume.
+3. The crown of thorns: A circlet of black iron wrought into thorns.
+4. Vesk's wolf helm: A closed black helm with thin wine-red trim, shaped like a snarling wolf's head, the snout forming the visor, two red points of light in the eye slits.
+I'll save it as helm-sheet-m07.png.
+
+#### `helm-sheet-m08` · Helm sheet: 4 helms (Mordain's beaked helm, Vorlaith's crown of clock-hands, A Protectorate warden's great helm, A crested bronze helm) · P2
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-mordain-beak`, 2 `helm-vorlaith`, 3 `helm-warden`, 4 `helm-bronze-crest`.
+
+1. Mordain's beaked helm: A closed black helm with thin wine-red trim, drawn out into a long, curved beak like a carrion bird's, with round red-glass eyepieces.
+2. Vorlaith's crown of clock-hands: A crown made of broken clock-hands of old, dark iron and brass, of different sizes, pointing every way.
+3. A Protectorate warden's great helm: A closed great helm of steel with a violet enamel finish, a narrow visor slit and a gold crest ridge.
+4. A crested bronze helm: An ancient bronze helm with cheek guards and a tall horsehair crest, faded and slightly greyed.
+I'll save it as helm-sheet-m08.png.
+
+#### `helm-sheet-m09` · Helm sheet: 1 helm (A crested open helm) · P2
+
+**Basis:** Edits `helm-sheet-male`. Cells: 1 `helm-morion`.
+
+1. A crested open helm: A steel open helm with a high comb crest and an upturned brim, faded and slightly greyed.
+Leave figures 2, 3 and 4 exactly as they are, with nothing added.
+I'll save it as helm-sheet-m09.png.
+
+#### `helm-sheet-f01` · Helm sheet: 4 helms (A tricorn hat, A gold circlet, A charcoal hood, A wide-brimmed hat) · P0
+
+**Basis:** Edits `helm-sheet-female`. Cells: 1 `helm-tricorn`, 2 `helm-circlet`, 3 `helm-hood-charcoal`, 4 `helm-wide-brim`.
+
+1. A tricorn hat: A weathered black tricorn hat with a thin gold trim.
+2. A gold circlet: A slim gold circlet with a small sapphire at the brow.
+3. A charcoal hood: A deep charcoal wool hood worn up and pulled forward, hiding the whole head and putting the upper face in shadow.
+4. A wide-brimmed hat: A wide-brimmed tan felt hat with a band of braided cord.
+I'll save it as helm-sheet-f01.png.
+
+#### `helm-sheet-f02` · Helm sheet: 2 helms (A kerchief, Circlet of focus) · P0
+
+**Basis:** Edits `helm-sheet-female`. Cells: 1 `helm-kerchief`, 2 `helm-circlet-of-focus`.
+
+1. A kerchief: A cream kerchief tied over the hair, knotted at the nape.
+2. Circlet of focus: A slim silver circlet with a small blue stone at the brow that gives off a faint glow.
+Leave figures 3 and 4 exactly as they are, with nothing added.
+I'll save it as helm-sheet-f02.png.
+
+#### `helm-sheet-f03` · Helm sheet: 1 helm (A lace cap) · P1
+
+**Basis:** Edits `helm-sheet-female`. Cells: 1 `helm-lace-cap`.
+
+1. A lace cap: A small white lace cap pinned on top of the head.
+Leave figures 2, 3 and 4 exactly as they are, with nothing added.
+I'll save it as helm-sheet-f03.png.
+
+#### `helm-sheet-f04` · Helm sheet: 4 helms (The abbey's square hood, A bee veil, A silver circlet, Vreya's crowned helm) · P2
+
+**Basis:** Edits `helm-sheet-female`. Cells: 1 `helm-abbey-hood`, 2 `helm-bee-veil`, 3 `helm-circlet-silver`, 4 `helm-vreya-crown`.
+
+1. The abbey's square hood: A stiff, square-cornered grey hood worn up, with a white linen band inside it, hiding all the hair and shading the eyes.
+2. A bee veil: A wide-brimmed straw hat with a fine honey-coloured mesh bee veil, pinned up at the front so the face shows and hanging down at the back and sides.
+3. A silver circlet: A slender, simple silver circlet with a tiny dark-red stone.
+4. Vreya's crowned helm: An open-faced black helm with thin wine-red trim, crowned with a ring of tall, sharp points, framing the face.
+I'll save it as helm-sheet-f04.png.
+
+#### `helm-sheet-f05` · Helm sheet: 1 helm (The crown of dusk and dawn) · P2
+
+**Basis:** Edits `helm-sheet-female`. Cells: 1 `helm-crown-dusk-dawn`.
+
+1. The crown of dusk and dawn: A crown of black iron braided with strands of gold glass, a jagged black crystal splinter set at the front glowing violet.
+Leave figures 2, 3 and 4 exactly as they are, with nothing added.
+I'll save it as helm-sheet-f05.png.
+
+#### `weapon-sheet-m01` · Weapon sheet: 4 weapons (Dagger, Shortsword, Longsword, Rapier) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-dagger`, 2 `weapon-shortsword`, 3 `weapon-longsword`, 4 `weapon-rapier`.
+
+1. Dagger: In the near hand, a plain steel dagger with a leather-wrapped grip, held low, point forward.
+2. Shortsword: In the near hand, a plain steel shortsword with a simple crossguard and a leather grip, held low, point forward.
+3. Longsword: In the near hand, a plain steel longsword with a straight crossguard and a leather-wrapped grip, held low, point forward.
+4. Rapier: In the near hand, a slim rapier with a swept steel hilt, held low, point forward.
+I'll save it as weapon-sheet-m01.png.
+
+#### `weapon-sheet-m02` · Weapon sheet: 4 weapons (Scimitar, Hand axe, Battleaxe, Greatsword) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-scimitar`, 2 `weapon-handaxe`, 3 `weapon-battleaxe`, 4 `weapon-greatsword`.
+
+1. Scimitar: In the near hand, a curved steel scimitar with a brass guard, held low.
+2. Hand axe: In the near hand, a short hand axe with a steel head and a wooden haft, held low.
+3. Battleaxe: In the near hand, a long-hafted bearded battleaxe with a heavy steel head, held across the body.
+4. Greatsword: A two-handed steel greatsword held in both hands in front of the body, point down near the ground.
+I'll save it as weapon-sheet-m02.png.
+
+#### `weapon-sheet-m03` · Weapon sheet: 4 weapons (Warhammer, Mace, Quarterstaff, Spear) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-warhammer`, 2 `weapon-mace`, 3 `weapon-quarterstaff`, 4 `weapon-spear`.
+
+1. Warhammer: In the near hand, a warhammer with a square steel head and a back spike on a wooden haft, held low.
+2. Mace: In the near hand, a flanged steel mace with a leather grip, held low.
+3. Quarterstaff: In the near hand, a plain ash-wood quarterstaff, a little taller than a person, held upright with its foot on the ground.
+4. Spear: In the near hand, a plain spear with a leaf-shaped steel head, held upright with its butt on the ground.
+I'll save it as weapon-sheet-m03.png.
+
+#### `weapon-sheet-m04` · Weapon sheet: 4 weapons (Shortbow, Longbow, Light crossbow, Ember dagger) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-shortbow`, 2 `weapon-longbow`, 3 `weapon-light-crossbow`, 4 `weapon-ember-dagger`.
+
+1. Shortbow: In the near hand, a strung recurved shortbow, held low and vertical by its grip.
+2. Longbow: In the near hand, a strung plain wooden longbow, taller than a person's shoulder, held upright by its grip.
+3. Light crossbow: In the near hand, a small crossbow of wood and steel, held by its grip and pointed at the ground.
+4. Ember dagger: In the near hand, a dagger with a blade of dark metal that glows orange along its edge like a coal, held low.
+I'll save it as weapon-sheet-m04.png.
+
+#### `weapon-sheet-m05` · Weapon sheet: 4 weapons (Wooden shield, Steel shield, Warden's shield, Dagger, in the off hand) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `offhand-wooden-shield`, 2 `offhand-steel-shield`, 3 `offhand-warden-shield`, 4 `offhand-dagger`.
+
+1. Wooden shield: On the FAR arm only (the one on the right): strap to the outside of it, the hand through the grip, a round wooden shield with an iron rim and a central iron boss, scuffed; the near hand stays empty.
+2. Steel shield: On the FAR arm only (the one on the right): strap to the outside of it, the hand through the grip, a steel heater shield with a rolled rim; the near hand stays empty.
+3. Warden's shield: On the FAR arm only (the one on the right): strap to the outside of it, the hand through the grip, a tall steel kite shield with a brass rim and an embossed oak-leaf emblem; the near hand stays empty.
+4. Dagger, in the off hand: In the FAR hand only (the one on the right), a plain steel dagger with a leather-wrapped grip, held low, point forward; the near hand stays empty.
+I'll save it as weapon-sheet-m05.png.
+
+#### `weapon-sheet-m06` · Weapon sheet: 4 weapons (Shortsword, in the off hand, Scimitar, in the off hand, Hand axe, in the off hand, Ember dagger, in the off hand) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `offhand-shortsword`, 2 `offhand-scimitar`, 3 `offhand-handaxe`, 4 `offhand-ember-dagger`.
+
+1. Shortsword, in the off hand: In the FAR hand only (the one on the right), a plain steel shortsword with a simple crossguard and a leather grip, held low, point forward; the near hand stays empty.
+2. Scimitar, in the off hand: In the FAR hand only (the one on the right), a curved steel scimitar with a brass guard, held low; the near hand stays empty.
+3. Hand axe, in the off hand: In the FAR hand only (the one on the right), a short hand axe with a steel head and a wooden haft, held low; the near hand stays empty.
+4. Ember dagger, in the off hand: In the FAR hand only (the one on the right), a dagger with a blade of dark metal that glows orange along its edge like a coal, held low; the near hand stays empty.
+I'll save it as weapon-sheet-m06.png.
+
+#### `weapon-sheet-m07` · Weapon sheet: 4 weapons (Kael's twin knives, Kael's rapier and parrying dagger, Brannock's sword and shield, Cutlass) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-kael-knives`, 2 `weapon-kael-rapier`, 3 `weapon-brannock`, 4 `weapon-cutlass`.
+
+1. Kael's twin knives: A pair of long knives with red cord wound round their grips, one in each hand, the near one held reversed.
+2. Kael's rapier and parrying dagger: A slim rapier with a swept hilt in the near hand, extended forward in a fencer's guard, and a parrying dagger held reversed in the far hand.
+3. Brannock's sword and shield: A plain, heavy longsword in the near hand, held low, and a battered round wooden shield with an iron rim strapped to the far forearm, its rim still bare.
+4. Cutlass: In the near hand, a notched cutlass with a brass basket guard, held casually, point down.
+I'll save it as weapon-sheet-m07.png.
+
+#### `weapon-sheet-m08` · Weapon sheet: 4 weapons (A fisherman's gaff, Cudgel, The Watch's spear and shield, Halberd) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-gaff`, 2 `weapon-cudgel`, 3 `weapon-watch-kit`, 4 `weapon-halberd`.
+
+1. A fisherman's gaff: In the near hand, a long wooden gaff with an iron hook at the end, held upright like a walking staff.
+2. Cudgel: In the near hand, a knotted oak cudgel bound with iron bands, held low.
+3. The Watch's spear and shield: A plain spear held upright in the near hand, and a round wooden shield with a brass boss on the far forearm.
+4. Halberd: In the near hand, a tall halberd with a polished blade, held upright, its butt on the ground.
+I'll save it as weapon-sheet-m08.png.
+
+#### `weapon-sheet-m09` · Weapon sheet: 4 weapons (A brass telescope, A tack hammer and a notice, A walking stick, A tin cup) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-telescope`, 2 `weapon-tack-hammer`, 3 `weapon-walking-stick`, 4 `weapon-tin-cup`.
+
+1. A brass telescope: In the near hand, a brass telescope, half extended.
+2. A tack hammer and a notice: A small tack hammer in the near hand, and a fresh notice on a clipboard in the far hand, its writing only scribbled lines.
+3. A walking stick: In the near hand, a crooked wooden walking stick, its foot on the ground, taking the weight.
+4. A tin cup: In the near hand, a dented tin cup of water.
+I'll save it as weapon-sheet-m09.png.
+
+#### `weapon-sheet-m10` · Weapon sheet: 4 weapons (A quill and a sealed letter, A sealed letter, A bundle of letters, A stew pot) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-quill-letter`, 2 `weapon-letter`, 3 `weapon-letters`, 4 `weapon-stew-pot`.
+
+1. A quill and a sealed letter: A quill pen in the near hand, and a folded letter with a dark wax seal in the far hand.
+2. A sealed letter: In the near hand, a rolled letter with a gold wax seal and a ribbon.
+3. A bundle of letters: In the near hand, a bundle of sealed letters tied with string.
+4. A stew pot: A steaming iron stew pot carried in front with both hands, a cloth wrapped round the handle.
+I'll save it as weapon-sheet-m10.png.
+
+#### `weapon-sheet-m11` · Weapon sheet: 4 weapons (A bolt of silk, A lute, A rusted longsword, A hexer's crystal staff) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-silk-bolt`, 2 `weapon-lute`, 3 `weapon-hollowed-sword`, 4 `weapon-hexer-staff`.
+
+1. A bolt of silk: A bolt of rose-coloured silk draped over the far forearm, the near hand raised, patting a pocket.
+2. A lute: A small round-backed lute held across the body, mid-strum.
+3. A rusted longsword: In the near hand, a long, rusted, notched longsword held low, its point dragging.
+4. A hexer's crystal staff: In the near hand, a crooked staff of blackened wood topped with a jagged cluster of black crystal wrapped in a soft violet glow.
+I'll save it as weapon-sheet-m11.png.
+
+#### `weapon-sheet-m12` · Weapon sheet: 4 weapons (A pick and a lit charge, A pick and a burning lantern, A wooden toy sword, A pitchfork) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-sapper-pick`, 2 `weapon-chief-pick-lantern`, 3 `weapon-toy-sword`, 4 `weapon-pitchfork`.
+
+1. A pick and a lit charge: A heavy iron pick in the near hand, and a round clay blasting charge with its fuse sparking in the far hand.
+2. A pick and a burning lantern: A big two-handed pick held in the near hand, and in the far hand a large iron lantern with its door open and fire roaring inside.
+3. A wooden toy sword: In the near hand, a small wooden toy sword.
+4. A pitchfork: In the near hand, a wooden pitchfork resting on the near shoulder.
+I'll save it as weapon-sheet-m12.png.
+
+#### `weapon-sheet-m13` · Weapon sheet: 2 weapons (A crate on the shoulder, A forging hammer and tongs) · P0
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-crate`, 2 `weapon-hammer-tongs`.
+
+1. A crate on the shoulder: A wooden crate carried on the far shoulder and steadied with the far hand, the near hand free.
+2. A forging hammer and tongs: A forging hammer in the near hand, and a pair of tongs in the far hand.
+Leave figures 3 and 4 exactly as they are, with nothing added.
+I'll save it as weapon-sheet-m13.png.
+
+#### `weapon-sheet-m14` · Weapon sheet: 4 weapons (Thornwood bow, Sunsteel blade, A mallet, A spade) · P1
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-thornwood-bow`, 2 `weapon-sunsteel-blade`, 3 `weapon-mallet`, 4 `weapon-spade`.
+
+1. Thornwood bow: In the near hand, a strung bow of dark, twisted living wood with thorns along its back and small green leaves at the tips, held upright.
+2. Sunsteel blade: In the near hand, a longsword of bright, pale-gold steel with a sunburst on the guard and a faint warm glow, held low.
+3. A mallet: In the near hand, a wooden mallet.
+4. A spade: In the near hand, a spade resting over the near shoulder.
+I'll save it as weapon-sheet-m14.png.
+
+#### `weapon-sheet-m15` · Weapon sheet: 4 weapons (A heron-headed cane, A felling axe, An oil lamp, Varkhul's greatsword) · P1
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-heron-cane`, 2 `weapon-felling-axe`, 3 `weapon-oil-lamp`, 4 `weapon-varkhul-greatsword`.
+
+1. A heron-headed cane: In the near hand, a slim cane with a silver heron's-head handle.
+2. A felling axe: In the near hand, a long felling axe resting over the near shoulder.
+3. An oil lamp: In the near hand, a small brass oil lamp, lit.
+4. Varkhul's greatsword: A huge two-handed greatsword of black iron held in both hands with the point down, a jagged black splinter of crystal set in its hilt pulsing with violet light.
+I'll save it as weapon-sheet-m15.png.
+
+#### `weapon-sheet-m16` · Weapon sheet: 3 weapons (A cube-pommelled dagger, A hooked blade, An old-pattern spear and kite shield) · P1
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-cultist-dagger`, 2 `weapon-climber-hook`, 3 `weapon-relief-kit`.
+
+1. A cube-pommelled dagger: In the near hand, a black iron dagger with a small cube-shaped pommel.
+2. A hooked blade: In the near hand, a short, rusted hooked blade.
+3. An old-pattern spear and kite shield: A plain spear held upright in the near hand, and a kite-shaped wooden shield painted navy with a faded gold sun on the far forearm.
+Leave figure 4 exactly as it is, with nothing added.
+I'll save it as weapon-sheet-m16.png.
+
+#### `weapon-sheet-m17` · Weapon sheet: 4 weapons (Sir Corwin's sword and sun shield, Sir Corwin's sword, too big, A Gilded knight's sword and shield, A mace and a small shield) · P2
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-corwin-kit`, 2 `weapon-corwin-sword`, 3 `weapon-gilded-kit`, 4 `weapon-mace-shield`.
+
+1. Sir Corwin's sword and sun shield: A longsword with a gold hilt and a sun-shaped pommel held upright in the near hand, and a round steel shield with a gold sun boss on the far forearm.
+2. Sir Corwin's sword, too big: A longsword with a gold hilt and a sun-shaped pommel, too long for the bearer, held upright in front of the body in both hands.
+3. A Gilded knight's sword and shield: A plain longsword in the near hand, and a white kite shield with a gold sun on the far forearm.
+4. A mace and a small shield: A flanged mace in the near hand, and a small round steel shield on the far forearm.
+I'll save it as weapon-sheet-m17.png.
+
+#### `weapon-sheet-m18` · Weapon sheet: 4 weapons (A spear and a lantern, Vesk's black sword, Mordain's glaive, An ancient spear and bronze shield) · P2
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-spear-lantern`, 2 `weapon-vesk-sword`, 3 `weapon-mordain-glaive`, 4 `weapon-unmade-spear-shield`.
+
+1. A spear and a lantern: A plain spear held upright in the near hand, and a lit iron lantern hanging from the far hand.
+2. Vesk's black sword: A long black sword held in front, point down, both gauntleted hands crossed on the pommel.
+3. Mordain's glaive: In the near hand, a long glaive with a thin, curved blade, held upright.
+4. An ancient spear and bronze shield: A long bronze-tipped spear held upright in the near hand, and a round bronze shield on the far forearm, faded and slightly greyed.
+I'll save it as weapon-sheet-m18.png.
+
+#### `weapon-sheet-m19` · Weapon sheet: 4 weapons (A pike, A tower shield and halberd, A cudgel and a violet shield, An axe and a grey shield) · P2
+
+**Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-pike`, 2 `weapon-warden-kit`, 3 `weapon-protectorate-kit`, 4 `weapon-raider-kit`.
+
+1. A pike: In the near hand, a very long pike held upright, faded and slightly greyed.
+2. A tower shield and halberd: A heavy halberd in the near hand, and a tall rectangular tower shield, violet with a gold crown, on the far forearm.
+3. A cudgel and a violet shield: A wooden cudgel in the near hand, and a round wooden shield with a brass boss, freshly painted violet, on the far forearm.
+4. An axe and a grey shield: A bearded axe in the near hand, and a round wooden shield painted grey on the far forearm.
+I'll save it as weapon-sheet-m19.png.
+
+#### `weapon-sheet-f01` · Weapon sheet: 4 weapons (The Soul-Bound's blades, Sera's longbow, A netting needle, A loaf) · P0
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-sb-blades`, 2 `weapon-sera-longbow`, 3 `weapon-netting-needle`, 4 `weapon-loaf`.
+
+1. The Soul-Bound's blades: A short sword in the near hand, held low and forward, and a dagger held reversed along the far forearm.
+2. Sera's longbow: A plain, strung longbow taller than the figure's head, held upright in the near hand, and a single grey-fletched arrow held loosely in the far hand.
+3. A netting needle: In the near hand, a wooden netting needle threaded with tarred twine.
+4. A loaf: In the near hand, a round loaf of bread, held protectively.
+I'll save it as weapon-sheet-f01.png.
+
+#### `weapon-sheet-f02` · Weapon sheet: 4 weapons (A rag doll, A tankard, An armful of scrolls, A broom) · P0
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-rag-doll`, 2 `weapon-tankard`, 3 `weapon-scrolls`, 4 `weapon-broom`.
+
+1. A rag doll: In the near hand, a battered cloth doll held by one arm.
+2. A tankard: In the near hand, a pewter tankard.
+3. An armful of scrolls: An armful of rolled scrolls tied with ribbon and closed with wax seals, held against the chest.
+4. A broom: In the near hand, a straw broom held upright.
+I'll save it as weapon-sheet-f02.png.
+
+#### `weapon-sheet-f03` · Weapon sheet: 4 weapons (A coin on the knuckles, A wooden practice sword, A cap held in both hands, A covered basket) · P0
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-coin`, 2 `weapon-practice-sword`, 3 `weapon-flat-cap-held`, 4 `weapon-basket`.
+
+1. A coin on the knuckles: In the near hand, a copper coin balanced on the knuckles of the near hand.
+2. A wooden practice sword: In the near hand, a wooden practice sword resting on the near shoulder.
+3. A cap held in both hands: An old flat cap held against the chest in both hands.
+4. A covered basket: In the near hand, a wicker basket with a cloth over it, hung over the near forearm.
+I'll save it as weapon-sheet-f03.png.
+
+#### `weapon-sheet-f04` · Weapon sheet: 4 weapons (A flower basket, A pilgrim's staff, A baker's peel and a loaf, A drop spindle) · P0
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-flower-basket`, 2 `weapon-pilgrim-staff`, 3 `weapon-peel`, 4 `weapon-spindle`.
+
+1. A flower basket: A wide wicker basket of pink roses, white lilies and daisies over the far arm, and a single rose held out in the near hand.
+2. A pilgrim's staff: In the near hand, a tall pilgrim's staff with a small brass bell tied at the top.
+3. A baker's peel and a loaf: A long wooden baker's peel in the near hand, and a round loaf tucked in the crook of the far arm.
+4. A drop spindle: In the near hand, a drop spindle with a length of navy-and-gold thread.
+I'll save it as weapon-sheet-f04.png.
+
+#### `weapon-sheet-f05` · Weapon sheet: 2 weapons (A purse of coins, A feather duster) · P0
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-coin-purse`, 2 `weapon-feather-duster`.
+
+1. A purse of coins: In the near hand, a small cloth bag of coins, held up and jingled.
+2. A feather duster: In the near hand, a feather duster.
+Leave figures 3 and 4 exactly as they are, with nothing added.
+I'll save it as weapon-sheet-f05.png.
+
+#### `weapon-sheet-f06` · Weapon sheet: 4 weapons (Thessaly's ringed staff, A ledger and a pen, A folded shawl, A sketchbook) · P1
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-staff-ring`, 2 `weapon-ledger-pen`, 3 `weapon-folded-shawl`, 4 `weapon-sketchbook`.
+
+1. Thessaly's ringed staff: In the near hand, a tall staff of dark wood topped with a plain open ring of silver metal, held upright.
+2. A ledger and a pen: A thick leather-bound ledger tucked under the far arm, and a pen in the near hand.
+3. A folded shawl: In the near hand, a folded knitted shawl, held out as if offering it.
+4. A sketchbook: A sketchbook held open against the chest in the far hand, and a stick of charcoal in the near hand.
+I'll save it as weapon-sheet-f06.png.
+
+#### `weapon-sheet-f07` · Weapon sheet: 4 weapons (A lit lantern, A beekeeper's smoker, A sprig of night-flowers, Vreya's wavy blade) · P2
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-lantern`, 2 `weapon-smoker`, 3 `weapon-night-flowers`, 4 `weapon-vreya-blade`.
+
+1. A lit lantern: In the near hand, a brass lantern, lit, its warm light on the near side of the face.
+2. A beekeeper's smoker: In the near hand, a tin beekeeper's smoker with bellows, a wisp of pale smoke curling from its spout, two or three bees nearby.
+3. A sprig of night-flowers: In the near hand, a sprig of pale, star-shaped night-flowers.
+4. Vreya's wavy blade: In the near hand, a long, wavy-bladed black sword held over the near shoulder.
+I'll save it as weapon-sheet-f07.png.
+
+#### `weapon-sheet-f08` · Weapon sheet: 2 weapons (A glowing glass lamp, A rolled map) · P2
+
+**Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-glass-lamp`, 2 `weapon-map`.
+
+1. A glowing glass lamp: In the near hand, a small glass lamp glowing with a cool white magical light.
+2. A rolled map: In the near hand, a rolled map tied with a cord.
+Leave figures 3 and 4 exactly as they are, with nothing added.
+I'll save it as weapon-sheet-f08.png.
+
 ### 6.1 Capes
 
 #### `cape-sb` · The Soul-Bound's cape · P0
@@ -4519,18 +5077,21 @@ What each item in `Items/ItemCatalog.cs` puts on whoever's wearing it, on each b
 
 ### 7.2 The party's own gear
 
-A companion's starting kit is drawn as their own pieces, not the shop's: Sera's shortbow is her longbow, and Brannock's longsword and shield are the one piece. These rows win over §7.1 while that character wears that item in that slot, on their own recipe; `—` draws nothing there, because another piece already holds it. Anything else they put on draws as §7.1 says.
+A companion's starting kit is drawn as their own pieces, not the shop's: Sera's shortbow is her longbow, and Brannock's longsword and shield are the one piece. These rows win over §7.1 while that character wears that item in that slot, on their own recipe; `—` draws nothing there, because another piece already holds it. Everyone starts in a travelling cloak (the class kits' basics, `Rules/ClassCatalog.cs`); the Soul-Bound's, Sera's and Kael's draws as their own cape or tail, so it's their recipe's piece that shows (added 2026-11-09, when the first cape test showed the plain cloak hiding the Soul-Bound's). Anything else they put on draws as §7.1 says.
 
 | Who | Slot | Item | Part |
 | --- | --- | --- | --- |
 | `soulbound` | main hand | `shortsword` | `weapon-sb-blades` |
 | `soulbound` | off hand | `dagger` | — |
 | `soulbound` | body | `leather-armour` | `armor-sb-traveller` |
+| `soulbound` | cloak | `travelling-cloak` | `cape-sb` |
 | `sera` | main hand | `shortbow` | `weapon-sera-longbow` |
 | `sera` | body | `leather-armour` | `armor-sera` |
+| `sera` | cloak | `travelling-cloak` | `cape-sera` |
 | `kael` | main hand | `dagger` | `weapon-kael-knives` |
 | `kael` | off hand | `dagger` | — |
 | `kael` | body | `leather-armour` | `armor-kael` |
+| `kael` | cloak | `travelling-cloak` | `cape-tail-ember` |
 | `mira` | body | `scale-mail` | `armor-mira` |
 | `brannock` | main hand | `longsword` | `weapon-brannock` |
 | `brannock` | off hand | `wooden-shield` | — |

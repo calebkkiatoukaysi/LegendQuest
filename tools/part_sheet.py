@@ -3,9 +3,9 @@ Part sheets: several parts in one ChatGPT picture instead of one picture each.
 
     python tools/part_sheet.py templates                  # the blank sheets, from the bases
     python tools/part_sheet.py cut <png> <sheet-id> [--force]
-    python tools/part_sheet.py list                       # the sheets and their cells, from Story/13 §4.0, §4.9 and §5.0
+    python tools/part_sheet.py list                       # the sheets and their cells, from Story/13 §4.0, §4.9, §5.0 and §6.0
 
-Three kinds, each a 1536x1024 picture of cells with thin grey lines between them, on black:
+Six kinds, each a 1536x1024 picture of cells with thin grey lines between them, on black:
 
   - a face sheet (face-sheet-*, Story/13 §4.0): four columns and two rows of 384x512 cells, each the
     same crop of one blank base at full size (its head, neck and shoulders). ChatGPT paints a
@@ -16,23 +16,34 @@ Three kinds, each a 1536x1024 picture of cells with thin grey lines between them
     ARMOR_SCALE (640 x 960, cropped to the cell round the figure). ChatGPT dresses each figure in a
     different outfit. At that scale a standard adult is still 844 pixels tall, more than the parts
     keep (tools/import_parts.py's PART_SCALE), so nothing's lost against a single edit.
+  - a helm sheet (helm-sheet-*, §6.0): four columns of 384x1024 cells, each the blank base at full
+    size from the top of the canvas, room over the head for a crown or a plume, to the hips. ChatGPT
+    puts a helm, hood, hat or crown on each head.
+  - a cape sheet and a weapon sheet (cape-sheet-*, weapon-sheet-*, §6.0): four columns of 384x1024
+    cells, each the whole base at GEAR_SCALE, a little smaller than an armor's so there's room
+    behind the back for a cloak and over the head for a staff. ChatGPT hangs a cape behind each
+    figure, or puts a weapon in each near hand (and, where the item says, something in the far one).
+    A standard adult is still 756 pixels tall, more than the parts keep.
 
-`templates` writes tools/source/characters/face-sheet-male.png, face-sheet-female.png,
-hair-sheet-male.png, hair-sheet-female.png, armor-sheet-male.png and armor-sheet-female.png. The face
-and hair sheets are made from the blank bases (base-male-blank.png, base-female-blank.png) once
-they're there, and from the bases till then; run it again when they come.
+`templates` writes the blank sheets, <kind>-sheet-male.png and <kind>-sheet-female.png for each kind,
+into tools/source/characters. The face, hair and helm sheets are made from the blank bases
+(base-male-blank.png, base-female-blank.png) once they're there, and from the bases till then; run it
+again when they come.
 
 `cut` keeps the sheet ChatGPT sent back as tools/source/characters/sheets/<sheet-id>.png, then for
 each cell:
   - finds how far ChatGPT shifted it, up to SEARCH pixels each way, by matching edges against the
-    template where the part leaves the base alone: the neck and shoulders under a face, the bald
-    head over an armor. An armor's figure is matched on its fists as well, and on a range of scales
-    (SCALES), since ChatGPT sometimes draws the whole figure a little bigger or smaller;
+    template where the part leaves the base alone: the neck and shoulders under a face, the waist
+    and arms under a helm, the bald head over an armor, a cape or a weapon. A scaled figure (an
+    armor's, a cape's, a weapon's) is matched on its fists or its chest as well (WINDOWS), and on a
+    range of scales (SCALES), since ChatGPT sometimes draws the whole figure a little bigger or smaller;
   - puts the shifted cell back where it came from on the base's canvas, leaving out the grey lines:
-    a face is pasted onto a copy of its base; an armor is resampled (Mitchell, on premultiplied
-    colour) back up to full size onto black. Either way the result lines up with the base exactly as
-    a single edit would;
-  - saves it as tools/source/characters/faces/<id>.png or armors/<id>.png, and warns when the match
+    a face, a hair or a helm is pasted onto a copy of its base; an armor is resampled (Mitchell, on
+    premultiplied colour) back up to full size onto black; a cape or a weapon is resampled too, and
+    kept only where it differs from its template (only_changed), the base's own pixels everywhere
+    else. Either way the result lines up with the base exactly as a single edit would;
+  - saves it as tools/source/characters/<folder>/<id>.png (faces, hairs, armors, helms, capes,
+    weapons), and warns when the match
     is poor (ChatGPT moved or rescaled the figure: make that part on its own) or when the part runs
     off the cell (it's cut there).
 Then it rewrites its own section of ASSETS.md from what's on disk. tools/import_parts.py takes the
@@ -64,6 +75,14 @@ KEEP_OFF_LINES = 8  # pixels this close to a line aren't the sheet's
 SEARCH = 18
 #: An armor sheet's cells are the base at this scale, which makes its 1024 x 1536 canvas exactly 640 x 960.
 ARMOR_SCALE = 0.625
+#: A cape or weapon sheet's cells are the base a little smaller, 573 x 860, so a cloak sweeping out
+#: behind the back or a staff taller than the figure fits in the cell: a cell is the canvas from
+#: x 100 to 786, the whole figure with room behind it, and 40 pixels over the head.
+GEAR_SCALE = 0.56
+GEAR_ORIGIN = (56, -40)
+#: On a cape or weapon sheet, how different from the template a pixel has to be to be the part's;
+#: everything else is the base's own, so the part comes back as clean as a single edit.
+GEAR_CHANGED = 36
 
 #: Each kind of sheet: its grid, its cells' crop of the base, what to match a cell on, and where its parts go.
 #:   origin: where a cell's top left is on the base's canvas at the sheet's scale (x, y; y can be negative: padding)
@@ -91,6 +110,25 @@ KINDS = {
                   "base-female": (int(135 * ARMOR_SCALE) + 32, int(325 * ARMOR_SCALE) + 32, int(425 * ARMOR_SCALE) - 128, int(625 * ARMOR_SCALE) - 128)},
         "poor": 9.0,
     },
+    "helm": {
+        "cols": 4, "rows": 1, "scale": 1.0, "folder": "helms", "section": "§6.0",
+        # From the top of the canvas, so a tall crown or a plume has room over the head.
+        "origin": {"base-male": (330, 0), "base-female": (330, 0)},
+        # The waist and the arms, canvas rows 500 to 800, which no helm reaches (a hood's drape and a
+        # mail coif stop at the shoulders).
+        "match": {"base-male": (500, 800, SEARCH + 4, 384 - SEARCH - 4),
+                  "base-female": (500, 800, SEARCH + 4, 384 - SEARCH - 4)},
+        "poor": 9.0,
+    },
+    # Their windows are filled in below, from the armor's head and fists.
+    "cape": {
+        "cols": 4, "rows": 1, "scale": GEAR_SCALE, "folder": "capes", "section": "§6.0",
+        "origin": {"base-male": GEAR_ORIGIN, "base-female": GEAR_ORIGIN}, "poor": 9.0,
+    },
+    "weapon": {
+        "cols": 4, "rows": 1, "scale": GEAR_SCALE, "folder": "weapons", "section": "§6.0",
+        "origin": {"base-male": GEAR_ORIGIN, "base-female": GEAR_ORIGIN}, "poor": 9.0,
+    },
 }
 
 #: An armor cell is also matched on its two fists, which every outfit keeps in place (gloves or bare),
@@ -100,6 +138,46 @@ FISTS = {"base-male": ((513, 570, 40, 129), (507, 570, 272, 347)), "base-female"
 HEAD_MIDDLE = {"base-male": (215.75, 157.0), "base-female": (206.0, 179.0)}
 SCALES = [round(0.96 + 0.005 * i, 3) for i in range(17)]
 NUDGE = 4
+
+#: The kinds painted on the blank-faced bases: what's on and of the head.
+ON_BLANK = ("face", "hair", "helm")
+
+#: The chest, on the canvas (rows, then columns): what a weapon sheet's figure is matched on besides
+#: its head, since a hand holds the weapon and a shield or a second blade can cover the far fist.
+CHEST = {"base-male": (400, 560, 480, 640), "base-female": (430, 590, 470, 620)}
+
+
+def to_cell(kind, base_name, r0, r1, c0, c1):
+    """A window of the base's canvas (rows r0 to r1, columns c0 to c1) in a kind's cell."""
+    s = KINDS[kind]["scale"]
+    ox, oy = KINDS[kind]["origin"][base_name]
+    return int(r0 * s - oy), int(r1 * s - oy), int(c0 * s - ox), int(c1 * s - ox)
+
+
+def from_armor(window, base_name):
+    """An armor cell's window (rows, then columns) on the base's canvas."""
+    r0, r1, c0, c1 = window
+    ox, oy = KINDS["armor"]["origin"][base_name]
+    return (r0 + oy) / ARMOR_SCALE, (r1 + oy) / ARMOR_SCALE, (c0 + ox) / ARMOR_SCALE, (c1 + ox) / ARMOR_SCALE
+
+
+#: What a scaled cell is matched on, the head's window first (the score reported is the head's): an
+#: armor's head and fists; a cape leaves the head and both fists alone as well; a weapon the head and
+#: the chest. And the head's middle, which ChatGPT's resizing is searched about.
+WINDOWS = {"armor": {b: [KINDS["armor"]["match"][b]] + list(FISTS[b]) for b in BASES}}
+MIDDLE = {"armor": HEAD_MIDDLE}
+for _kind in ("cape", "weapon"):
+    WINDOWS[_kind], MIDDLE[_kind] = {}, {}
+    for _b in BASES:
+        _head = to_cell(_kind, _b, *from_armor(KINDS["armor"]["match"][_b], _b))
+        _more = ([to_cell(_kind, _b, *from_armor(f, _b)) for f in FISTS[_b]] if _kind == "cape"
+                 else [to_cell(_kind, _b, *CHEST[_b])])
+        WINDOWS[_kind][_b] = [_head] + _more
+        _ax, _ay = HEAD_MIDDLE[_b]
+        _aox, _aoy = KINDS["armor"]["origin"][_b]
+        _ox, _oy = KINDS[_kind]["origin"][_b]
+        MIDDLE[_kind][_b] = ((_ax + _aox) / ARMOR_SCALE * GEAR_SCALE - _ox, (_ay + _aoy) / ARMOR_SCALE * GEAR_SCALE - _oy)
+    KINDS[_kind]["match"] = {b: WINDOWS[_kind][b][0] for b in BASES}
 
 A_BEGIN = "<!-- part sheets: written by tools/part_sheet.py; don't edit between these two lines -->"
 A_END = "<!-- end part sheets -->"
@@ -112,7 +190,7 @@ def kind_of(sheet_id):
     for kind in KINDS:
         if sheet_id.startswith(kind + "-sheet-"):
             return kind
-    sys.exit("part_sheet: %s isn't a face-sheet-*, hair-sheet-* or armor-sheet-* id" % sheet_id)
+    sys.exit("part_sheet: %s isn't a sheet id (%s)" % (sheet_id, ", ".join(k + "-sheet-*" for k in KINDS)))
 
 
 def cell_size(kind):
@@ -148,9 +226,9 @@ def resample_rgb(rgb, box, size, weight=None):
 
 
 def base(name, kind=None):
-    """A base as RGB; for a face or a hair, the blank base (its features taken off) if it's there."""
+    """A base as RGB; for a face, a hair or a helm, the blank base (its features taken off) if it's there."""
     blank = os.path.join(CHARS, name + "-blank.png")
-    if kind in ("face", "hair") and os.path.exists(blank):
+    if kind in ON_BLANK and os.path.exists(blank):
         return load(blank)
     return load(os.path.join(CHARS, name + ".png"))
 
@@ -158,7 +236,7 @@ def base(name, kind=None):
 def base_file(name, kind):
     """The base picture a kind's sheets are made from, as tools/source/characters/<this>.png."""
     blank = name + "-blank"
-    return blank if kind in ("face", "hair") and os.path.exists(os.path.join(CHARS, blank + ".png")) else name
+    return blank if kind in ON_BLANK and os.path.exists(os.path.join(CHARS, blank + ".png")) else name
 
 
 def cell_box(kind, k):
@@ -216,13 +294,13 @@ def edges(rgb):
 
 
 def sheets_table():
-    """{sheet id: (base, priority, [part ids in cell order])} from Story/13 §4.0, §4.9 and §5.0."""
+    """{sheet id: (base, priority, [part ids in cell order])} from Story/13 §4.0, §4.9, §5.0 and §6.0."""
     text = open(STORY, encoding="utf-8").read()
     out = {}
-    for m in re.finditer(r"^\| `((?:face|hair|armor)-sheet-[a-z0-9-]+)` \| `(base-[a-z]+)` \| (P\d) \| ([^|]+) \|", text, re.M):
-        out[m.group(1)] = (m.group(2), m.group(3), re.findall(r"`((?:face|hair|armor)-[a-z0-9.-]+)`", m.group(4)))
+    for m in re.finditer(r"^\| `((?:face|hair|armor|helm|cape|weapon)-sheet-[a-z0-9-]+)` \| `(base-[a-z]+)` \| (P\d) \| ([^|]+) \|", text, re.M):
+        out[m.group(1)] = (m.group(2), m.group(3), re.findall(r"`((?:face|hair|armor|helm|cape|weapon|offhand)-[a-z0-9.-]+)`", m.group(4)))
     if not out:
-        sys.exit("part_sheet: no sheets in Story/13-art-prompts.md §4.0 or §5.0")
+        sys.exit("part_sheet: no sheets in Story/13-art-prompts.md §4.0, §4.9, §5.0 or §6.0")
     return out
 
 
@@ -265,8 +343,8 @@ def cut(png, sheet_id, force=False):
                     best = (score, dx, dy)
         score, dx, dy = best
         grow = 1.0
-        if kind == "armor":
-            score, grow, dx, dy = rescale(e_got, e_tpl, x, y, base_name, dx, dy)
+        if s != 1.0:
+            score, grow, dx, dy = rescale(kind, e_got, e_tpl, x, y, base_name, dx, dy)
         # What of the sheet counts: inside this cell, clear of the grey lines.
         mine = np.zeros((SHEET_H, SHEET_W), bool)
         mine[y:y + ch, x:x + cw] = True
@@ -281,9 +359,11 @@ def cut(png, sheet_id, force=False):
         else:
             # The whole canvas, from the cell it was scaled into: canvas (X, Y) is the template cell's
             # t = (X * s - ox, Y * s - oy), which ChatGPT drew at (x, y) + a + (t - a) * grow + (dx, dy).
-            ax, ay = HEAD_MIDDLE[base_name]
+            ax, ay = MIDDLE[kind][base_name]
             box = (x + ax + (-ox - ax) * grow + dx, y + ay + (-oy - ay) * grow + dy, b.shape[1] * s * grow, b.shape[0] * s * grow)
             out = resample_rgb(got, box, (b.shape[1], b.shape[0]), weight=mine.astype(np.float64))
+            if kind in ("cape", "weapon"):
+                out = only_changed(out, b, tpl, x, y, ox, oy, s, near)
         notes = spills(kind, got, tpl, mine, x, y, dx, dy)
         dest = os.path.join(folder, part + ".png")
         if os.path.exists(dest) and not force:
@@ -313,14 +393,32 @@ def through_filter(edge, box, size):
     return ic.resample(picture, box, size)[:, :, 0] * 120.0
 
 
-def rescale(e_got, e_tpl, x, y, base_name, dx0, dy0):
-    """(score, grow, dx, dy) for an armor cell: how much bigger ChatGPT drew the figure than the
-    template (about the head's middle) and the shift, matching the head and both fists. The sheet's
-    edges are resampled into the template's geometry at each scale and matched within NUDGE of the
-    shift found at full size. The score is the head's match at the best of them."""
-    cw, ch = cell_size("armor")
-    ax, ay = HEAD_MIDDLE[base_name]
-    windows = [KINDS["armor"]["match"][base_name]] + list(FISTS[base_name])
+def only_changed(out, b, tpl, x, y, ox, oy, s, near):
+    """A cape's or a weapon's cell, put back at full size (out), kept only where it differs from its
+    template cell put back the same way: everywhere else it's the base's own pixel. Scaling the cell
+    down and up again softens the whole figure, so without this every outline would read as changed.
+    Specks are opened away and what's kept is grown a little, to keep the part's own soft edge."""
+    h, w = b.shape[:2]
+    cell_w, cell_h = cell_size("cape")
+    mine = np.zeros((SHEET_H, SHEET_W), bool)
+    mine[y:y + cell_h, x:x + cell_w] = True
+    mine &= ~near
+    ref = resample_rgb(tpl, (x - ox, y - oy, w * s, h * s), (w, h), weight=mine.astype(np.float64))
+    changed = np.abs(out.astype(np.int16) - ref.astype(np.int16)).max(axis=2) > GEAR_CHANGED
+    changed = ic.grow(~ic.grow(~changed, 1), 1)
+    changed = ic.grow(changed, 2)
+    return np.where(changed[:, :, None], out, b)
+
+
+def rescale(kind, e_got, e_tpl, x, y, base_name, dx0, dy0):
+    """(score, grow, dx, dy) for a scaled cell (an armor's, a cape's or a weapon's): how much bigger
+    ChatGPT drew the figure than the template (about the head's middle) and the shift, matching the
+    kind's WINDOWS. The sheet's edges are resampled into the template's geometry at each scale and
+    matched within NUDGE of the shift found at full size. The score is the head's match at the best
+    of them."""
+    cw, ch = cell_size(kind)
+    ax, ay = MIDDLE[kind][base_name]
+    windows = WINDOWS[kind][base_name]
     pad = NUDGE + 1
     # Mitchell's filter softens a little even at full size, so the template goes through it too.
     soft = through_filter(e_tpl, (x - pad, y - pad, cw + 2 * pad, ch + 2 * pad), (cw + 2 * pad, ch + 2 * pad))
@@ -360,9 +458,11 @@ def spills(kind, got, tpl, mine, x, y, dx, dy):
     notes = []
     band = KEEP_OFF_LINES + 2
     sides = {"bottom": (slice(y + ch - band - 2, y + ch - KEEP_OFF_LINES - 1), slice(x, x + cw))}
-    if kind == "armor":
+    if kind in ("armor", "cape", "weapon", "helm"):
         sides["left"] = (slice(y, y + ch), slice(x + KEEP_OFF_LINES + 1, x + band + 2))
         sides["right"] = (slice(y, y + ch), slice(x + cw - band - 2, x + cw - KEEP_OFF_LINES - 1))
+    if kind in ("cape", "weapon", "helm"):
+        sides["top"] = (slice(y + KEEP_OFF_LINES + 1, y + band + 2), slice(x, x + cw))
     for side, (rs, cs) in sides.items():
         # The template where this part of the cell came from, before ChatGPT shifted it.
         ys = np.clip(np.arange(rs.start, rs.stop) - dy, 0, SHEET_H - 1)
@@ -370,22 +470,25 @@ def spills(kind, got, tpl, mine, x, y, dx, dy):
         empty = tpl[ys][:, xs].max(axis=2) < 30
         painted = got[rs, cs].max(axis=2) > 60
         if (empty & painted).mean() > 0.02:
-            notes.append({"face": "the face", "hair": "the hair"}.get(kind, "the outfit") + " runs off the %s of the cell and is cut there" % side)
+            notes.append({"face": "the face", "hair": "the hair", "helm": "the helm", "cape": "the cape",
+                          "weapon": "the weapon"}.get(kind, "the outfit") + " runs off the %s of the cell and is cut there" % side)
     return notes
 
 
 def write_assets(table):
     lines = [A_BEGIN, "## Part sheets", "",
-             "Several parts at a time: ChatGPT paints one face, hairstyle or outfit into each cell of a sheet made from a base "
-             "(Story/13-art-prompts.md §4.0, §4.9 and §5.0), and `tools/part_sheet.py` puts each cell back on its base's canvas.", "",
-             "tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair and armor sheets "
-             "from the bases and cuts a painted sheet back into one picture per part, lined up with its base", ""]
+             "Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape or weapon into each cell of a "
+             "sheet made from a base (Story/13-art-prompts.md §4.0, §4.9, §5.0 and §6.0), and `tools/part_sheet.py` puts each "
+             "cell back on its base's canvas.", "",
+             "tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair, armor, helm, cape "
+             "and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base", ""]
     for kind in KINDS:
         for base_name in BASES:
             tid = template_id(kind, base_name)
             what = {"face": "eight copies of its head and shoulders at full size, four across and two down",
-                    "hair": "four copies of it from the head to the hips at full size, side by side"}.get(
-                kind, "four copies of the whole figure at %g scale, side by side" % ARMOR_SCALE)
+                    "hair": "four copies of it from the head to the hips at full size, side by side",
+                    "helm": "four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side"}.get(
+                kind, "four copies of the whole figure at %g scale, side by side" % KINDS[kind]["scale"])
             lines += ["tools/source/characters/%s.png - the blank %s sheet: %s, from tools/source/characters/%s.png, with grey "
                       "lines between them; built by tools/part_sheet.py" % (tid, kind, what, base_file(base_name, kind)), ""]
     for sid in sorted(table):

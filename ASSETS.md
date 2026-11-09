@@ -466,9 +466,9 @@ Content/Characters/Parts/helm-0.png - an atlas page of 78 parts (hair-anselle, h
 <!-- part sheets: written by tools/part_sheet.py; don't edit between these two lines -->
 ## Part sheets
 
-Several parts at a time: ChatGPT paints one face, hairstyle or outfit into each cell of a sheet made from a base (Story/13-art-prompts.md §4.0, §4.9 and §5.0), and `tools/part_sheet.py` puts each cell back on its base's canvas.
+Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape or weapon into each cell of a sheet made from a base (Story/13-art-prompts.md §4.0, §4.9, §5.0 and §6.0), and `tools/part_sheet.py` puts each cell back on its base's canvas.
 
-tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair and armor sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base
+tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair, armor, helm, cape and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base
 
 tools/source/characters/face-sheet-female.png - the blank face sheet: eight copies of its head and shoulders at full size, four across and two down, from tools/source/characters/base-female-blank.png, with grey lines between them; built by tools/part_sheet.py
 
@@ -481,6 +481,18 @@ tools/source/characters/hair-sheet-male.png - the blank hair sheet: four copies 
 tools/source/characters/armor-sheet-female.png - the blank armor sheet: four copies of the whole figure at 0.625 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
 tools/source/characters/armor-sheet-male.png - the blank armor sheet: four copies of the whole figure at 0.625 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/helm-sheet-female.png - the blank helm sheet: four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side, from tools/source/characters/base-female-blank.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/helm-sheet-male.png - the blank helm sheet: four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side, from tools/source/characters/base-male-blank.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/cape-sheet-female.png - the blank cape sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/cape-sheet-male.png - the blank cape sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/weapon-sheet-female.png - the blank weapon sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/weapon-sheet-male.png - the blank weapon sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
 tools/source/characters/sheets/armor-sheet-f01.png - armor sheet armor-sheet-f01 (armor-traveller-f, armor-sb-traveller, armor-sera, armor-mira), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
