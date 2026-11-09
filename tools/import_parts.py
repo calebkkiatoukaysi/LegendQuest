@@ -72,6 +72,7 @@ import json
 import os
 import re
 import sys
+import warnings
 
 import numpy as np
 
@@ -753,6 +754,10 @@ FINGERS = (0.34, 0.52, 0.70)
 FINGER_LENGTH = 28
 #: The shades are kept in the mask's colour as a share of this, so a highlight brighter than the hand fits.
 FIST_UNIT = 200.0
+#: Drawing it (RigComposer.cs's PlainFist): the hand's own outline is kept FIST_EDGE pixels in from
+#: its edge, and inside that every colour is the median of those FIST_MEDIAN round it.
+FIST_EDGE = 2
+FIST_MEDIAN = 2
 
 
 def simple_fist(base, box):
@@ -1252,16 +1257,28 @@ def compose(layers, morph, sockets, skin, fits=None, dyes=None, fists=None):
             continue
         body = pieces["body"][top:top + nh, left:left + nw]
         held = pieces[hand][top:top + nh, left:left + nw]
-        # The plain fist, coloured as the hand it covers: the brighter half of what's under it.
-        there = (a[:, :, 0] > 0.5) & (body[:, :, 3] > 0.5)
-        if not there.any():
+        # The fist made plain (RigComposer.cs's PlainFist): its own outline kept, and inside it the
+        # median of the colours round each pixel, so its lines go and its skin and glove stay, shaded
+        # with the plain fist's grey.
+        fist = (a[:, :, 0] > 0) & (body[:, :, 3] >= 0.5)
+        if not fist.any():
             continue
-        under = body[there][:, :3] / body[there][:, 3:]
-        luma = under @ np.array([0.299, 0.587, 0.114])
-        colour = under[luma >= luma.mean()].mean(axis=0)
-        lifted = np.concatenate([np.clip(colour[None, None, :] * grey, 0.0, 1.0) * a, a], axis=2)
+        straight = np.where(fist[:, :, None], body[:, :, :3] / np.maximum(body[:, :, 3:], 1e-6), 0.0)
+        padded = np.pad(fist, FIST_EDGE, constant_values=False)
+        edge = fist & ~np.all([padded[FIST_EDGE + dy:FIST_EDGE + dy + nh, FIST_EDGE + dx:FIST_EDGE + dx + nw]
+                               for dy in range(-FIST_EDGE, FIST_EDGE + 1) for dx in range(-FIST_EDGE, FIST_EDGE + 1)], axis=0)
+        inner = fist & ~edge
+        r = FIST_MEDIAN
+        values = np.pad(np.where(inner[:, :, None], straight, np.nan), ((r, r), (r, r), (0, 0)), constant_values=np.nan)
+        window = np.stack([values[r + dy:r + dy + nh, r + dx:r + dx + nw] for dy in range(-r, r + 1) for dx in range(-r, r + 1)])
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)  # the windows outside the fist are empty
+            smooth = np.nan_to_num(np.nanmedian(window, axis=0))
+        shown = np.where(inner[:, :, None], np.clip(smooth * grey, 0.0, 1.0), straight)
+        alpha = body[:, :, 3:] * a * fist[:, :, None]
+        lifted = np.concatenate([shown * alpha, alpha], axis=2)
         body *= 1.0 - a
-        held[:] = lifted + held * (1.0 - a)
+        held[:] = lifted + held * (1.0 - lifted[:, :, 3:])
     canvas = np.zeros((y1 - y0, x1 - x0, 4))
     for bone in BONES:
         if bone in pieces:

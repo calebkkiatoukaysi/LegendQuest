@@ -185,14 +185,13 @@ public static class RigComposer
     /// <summary>How bright a colour is, 0 to 1, as the dyes shade by it.</summary>
     public static float Luma(Vector3 colour) => 0.299f * colour.X + 0.587f * colour.Y + 0.114f * colour.Z;
 
-    /// <summary>Lays a premultiplied picture over a premultiplied canvas: what's under shows through by what the picture leaves.</summary>
     /// <summary>
-    /// Holds what a hand holds the way a 2D game character does, under the fist: the painted fist
-    /// comes off the body's piece, and the base's plain fist (fewer lines, so the hand reads as closed
-    /// round a grip) goes over the hand's piece, on top of what it holds, coloured as the hand it
-    /// covers (HandColour: the skin, or a glove). It's put where the body is, and fades into the arm
-    /// at the wrist. Returns the wrist, the top of the fist across its middle, which the hand's piece
-    /// turns about so a swing keeps the hand on the arm; null if the fist's off the canvas.
+    /// Holds what a hand holds the way a 2D game character does, under the fist: the fist comes off the
+    /// body's piece and goes over the hand's, on top of what it holds, plainer than it's painted, so the
+    /// hand reads as closed round a grip rather than clenched shut (PlainFist). It's put where the body
+    /// is, and fades into the arm at the wrist. Returns the wrist, the top of the fist across its
+    /// middle, which the hand's piece turns about so a swing keeps the hand on the arm; null if the
+    /// fist's off the canvas.
     /// </summary>
     private static Vector2? LiftFist(Color[] body, Color[] held, int canvasWidth, int canvasHeight, PartImage fist,
         IReadOnlyDictionary<string, Vector2> sockets, Vector2 root, Morph morph, int x0, int y0)
@@ -205,20 +204,19 @@ public static class RigComposer
         int top = (int)MathF.Round(at.Y - fist.Pivot.Y * height / fist.Height) - y0;
         if (left < 0 || top < 0 || left + width > canvasWidth || top + height > canvasHeight) return null;
         Color[] mask = width == fist.Width && height == fist.Height ? fist.Pixels : ImportedFigure.Scaled(fist.Pixels, fist.Width, fist.Height, width, height);
-        Vector3 hand = HandColour(body, canvasWidth, mask, width, height, left, top);
 
-        var lifted = new Color[width * height];
+        var under = new Color[width * height];
+        for (int y = 0; y < height; y++)
+            Array.Copy(body, (top + y) * canvasWidth + left, under, y * width, width);
+        Color[] lifted = PlainFist(under, mask, width, height);
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                Color m = mask[y * width + x];
-                if (m.A == 0) continue;
+                int a = mask[y * width + x].A;
+                if (a == 0) continue;
                 int i = (top + y) * canvasWidth + left + x;
-                // The plain fist's shade, a share of FistUnit, times the hand's colour, at its alpha.
-                Vector3 shade = Vector3.Clamp(hand * (m.R * 255f / m.A / FistUnit), Vector3.Zero, new Vector3(255f)) * (m.A / 255f);
-                lifted[y * width + x] = new Color((int)MathF.Round(shade.X), (int)MathF.Round(shade.Y), (int)MathF.Round(shade.Z), (int)m.A);
-                body[i] = Scaled(body[i], 255 - m.A);
+                body[i] = Scaled(body[i], 255 - a);
             }
         }
         Over(held, canvasWidth, lifted, width, height, left, top);
@@ -228,35 +226,103 @@ public static class RigComposer
     /// <summary>The shade the base's plain fist is kept at in its picture's colour, as a share of this: tools/import_parts.py's FIST_UNIT.</summary>
     private const float FistUnit = 200f;
 
+    /// <summary>How far in from the fist's edge its own outline is kept, and how far round each pixel inside it the plain fist looks to smooth its lines away.</summary>
+    private const int FistEdge = 2;
+    private const int FistSmooth = 2;
+
     /// <summary>
-    /// The colour of the hand a plain fist covers, skin or glove, 0 to 255: the brighter half of what
-    /// the body and the armor draw under the fist, so its outline and creases don't darken it, and a
-    /// fist in shadow stays in shadow.
+    /// The fist the body and the armor draw (premultiplied, under the mask), made plain: its own
+    /// outline and silhouette kept, and inside it every colour the median of those round it, which
+    /// takes away its thin lines (the knuckles, the creases) and keeps its materials as they are (the
+    /// skin, a glove), then shaded with the base's plain fist (the mask's grey, a share of FistUnit: a
+    /// hard shadow, a thin light, the fingers parted by lines). Faded in by the mask's alpha.
     /// </summary>
-    private static Vector3 HandColour(Color[] body, int canvasWidth, Color[] mask, int width, int height, int left, int top)
+    private static Color[] PlainFist(Color[] under, Color[] mask, int width, int height)
     {
-        var under = new List<(Vector3 Colour, float Luma)>();
+        int n = width * height;
+        var inFist = new bool[n];
+        var colour = new Vector3[n];
+        for (int k = 0; k < n; k++)
+        {
+            Color c = under[k];
+            if (mask[k].A == 0 || c.A < 128) continue;
+            inFist[k] = true;
+            colour[k] = new Vector3(c.R, c.G, c.B) * (255f / c.A);
+        }
+
+        // Its outline: what's within FistEdge of where the fist ends.
+        var edge = new bool[n];
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+                edge[y * width + x] = inFist[y * width + x] && Near(inFist, width, height, x, y, FistEdge, inside: false);
+
+        var plain = new Color[n];
+        var reds = new List<float>();
+        var greens = new List<float>();
+        var blues = new List<float>();
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                if (mask[y * width + x].A < 128) continue;
-                Color c = body[(top + y) * canvasWidth + left + x];
-                if (c.A < 128) continue;
-                var straight = new Vector3(c.R, c.G, c.B) * (255f / c.A);
-                under.Add((straight, straight.X * 0.299f + straight.Y * 0.587f + straight.Z * 0.114f));
+                int k = y * width + x;
+                if (!inFist[k]) continue;
+                Color m = mask[k];
+                Vector3 shown = colour[k];
+                if (!edge[k])
+                {
+                    reds.Clear();
+                    greens.Clear();
+                    blues.Clear();
+                    for (int ny = Math.Max(0, y - FistSmooth); ny <= Math.Min(height - 1, y + FistSmooth); ny++)
+                    {
+                        for (int nx = Math.Max(0, x - FistSmooth); nx <= Math.Min(width - 1, x + FistSmooth); nx++)
+                        {
+                            int j = ny * width + nx;
+                            if (!inFist[j] || edge[j]) continue;
+                            reds.Add(colour[j].X);
+                            greens.Add(colour[j].Y);
+                            blues.Add(colour[j].Z);
+                        }
+                    }
+                    var smooth = new Vector3(Median(reds), Median(greens), Median(blues));
+                    float share = m.R * 255f / m.A / FistUnit;
+                    shown = Vector3.Clamp(smooth * share, Vector3.Zero, new Vector3(255f));
+                }
+                float alpha = under[k].A / 255f * (m.A / 255f);
+                Vector3 premultiplied = shown * alpha;
+                plain[k] = new Color((int)MathF.Round(premultiplied.X), (int)MathF.Round(premultiplied.Y), (int)MathF.Round(premultiplied.Z), (int)MathF.Round(alpha * 255f));
             }
         }
-        if (under.Count == 0) return new Vector3(128f);
-        float mean = under.Average(u => u.Luma);
-        var bright = under.Where(u => u.Luma >= mean).Select(u => u.Colour).ToList();
-        return bright.Aggregate(Vector3.Zero, (sum, c) => sum + c) / bright.Count;
+        return plain;
+    }
+
+    /// <summary>Whether a pixel has, within reach, one that's in the set (inside) or one that isn't (or the picture's edge).</summary>
+    private static bool Near(bool[] set, int width, int height, int x, int y, int reach, bool inside)
+    {
+        for (int dy = -reach; dy <= reach; dy++)
+        {
+            for (int dx = -reach; dx <= reach; dx++)
+            {
+                int ny = y + dy, nx = x + dx;
+                bool there = ny >= 0 && nx >= 0 && ny < height && nx < width && set[ny * width + nx];
+                if (there == inside) return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>The middle of some values (sorting them).</summary>
+    private static float Median(List<float> values)
+    {
+        values.Sort();
+        return values.Count == 0 ? 0f : values[values.Count / 2];
     }
 
     /// <summary>A premultiplied colour at a share of itself, 0 to 255.</summary>
     private static Color Scaled(Color c, int share) =>
         new((c.R * share + 127) / 255, (c.G * share + 127) / 255, (c.B * share + 127) / 255, (c.A * share + 127) / 255);
 
+    /// <summary>Lays a premultiplied picture over a premultiplied canvas: what's under shows through by what the picture leaves.</summary>
     private static void Over(Color[] canvas, int canvasWidth, Color[] pixels, int width, int height, int left, int top)
     {
         for (int y = 0; y < height; y++)
