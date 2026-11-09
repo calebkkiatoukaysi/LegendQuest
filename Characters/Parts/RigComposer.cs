@@ -75,7 +75,9 @@ public static class RigComposer
     /// <param name="morph">How much taller and broader than the base.</param>
     /// <param name="paint">How each part's coloured.</param>
     /// <param name="fit">How much more to scale a part painted on the other base, so it fits this one (PartCatalog's Fit); null for none.</param>
-    public static Result Compose(IReadOnlyDictionary<string, Vector2> sockets, float[] head, IEnumerable<PartImage> parts, Morph morph, Func<PartImage, Paint> paint, Func<PartImage, Vector2> fit = null)
+    /// <param name="fists">The base's fists, the near hand's piece's and the far's, as masks on the body's canvas: what a hand holds is drawn under its fist (LiftFist). Null to draw it over.</param>
+    public static Result Compose(IReadOnlyDictionary<string, Vector2> sockets, float[] head, IEnumerable<PartImage> parts, Morph morph, Func<PartImage, Paint> paint, Func<PartImage, Vector2> fit = null,
+        IReadOnlyDictionary<FigureBone, PartImage> fists = null)
     {
         Vector2 root = sockets[Sockets.Root];
         var placed = new List<(Color[] Pixels, int Width, int Height, int Left, int Top, FigureBone Bone)>();
@@ -96,21 +98,31 @@ public static class RigComposer
         int x0 = placed.Min(p => p.Left), y0 = placed.Min(p => p.Top);
         int x1 = placed.Max(p => p.Left + p.Width), y1 = placed.Max(p => p.Top + p.Height);
         int canvasWidth = x1 - x0, canvasHeight = y1 - y0;
-        var canvas = new Color[canvasWidth * canvasHeight];
-        foreach ((Color[] pixels, int width, int height, int left, int top, _) in placed)
-            Over(canvas, canvasWidth, pixels, width, height, left - x0, top - y0);
+
+        // Each piece's own picture, its parts put together in slot order, and where it turns.
+        var pieces = new Dictionary<FigureBone, Color[]>();
+        foreach ((Color[] pixels, int width, int height, int left, int top, FigureBone bone) in placed)
+        {
+            if (!pieces.TryGetValue(bone, out Color[] layer)) pieces[bone] = layer = new Color[canvasWidth * canvasHeight];
+            Over(layer, canvasWidth, pixels, width, height, left - x0, top - y0);
+        }
+        var pivots = Enum.GetValues<FigureBone>().ToDictionary(bone => bone, bone => morph.Move(sockets[Sockets.OfBone(bone)], root) - new Vector2(x0, y0));
+        if (fists is not null && pieces.TryGetValue(FigureBone.Body, out Color[] body))
+        {
+            foreach ((FigureBone bone, PartImage fist) in fists)
+            {
+                if (pieces.TryGetValue(bone, out Color[] held) && LiftFist(body, held, canvasWidth, canvasHeight, fist, sockets, root, morph, x0, y0) is Vector2 wrist)
+                    pivots[bone] = wrist;
+            }
+        }
 
         var layers = new List<Layer>();
+        var canvas = new Color[canvasWidth * canvasHeight];
         foreach (FigureBone bone in Enum.GetValues<FigureBone>())
         {
-            Color[] layer = null;
-            foreach ((Color[] pixels, int width, int height, int left, int top, FigureBone of) in placed)
-            {
-                if (of != bone) continue;
-                layer ??= new Color[canvasWidth * canvasHeight];
-                Over(layer, canvasWidth, pixels, width, height, left - x0, top - y0);
-            }
-            if (layer is not null) layers.Add(new Layer(bone, layer, morph.Move(sockets[Sockets.OfBone(bone)], root) - new Vector2(x0, y0)));
+            if (!pieces.TryGetValue(bone, out Color[] layer)) continue;
+            layers.Add(new Layer(bone, layer, pivots[bone]));
+            Over(canvas, canvasWidth, layer, canvasWidth, canvasHeight, 0, 0);
         }
 
         // The head box goes where the head did: on the neck where the morph moved it, at the head's size.
@@ -174,6 +186,77 @@ public static class RigComposer
     public static float Luma(Vector3 colour) => 0.299f * colour.X + 0.587f * colour.Y + 0.114f * colour.Z;
 
     /// <summary>Lays a premultiplied picture over a premultiplied canvas: what's under shows through by what the picture leaves.</summary>
+    /// <summary>
+    /// Holds what a hand holds the way a 2D game character does, under the fist: the painted fist
+    /// comes off the body's piece, and the base's plain fist (fewer lines, so the hand reads as closed
+    /// round a grip) goes over the hand's piece, on top of what it holds, coloured as the hand it
+    /// covers (HandColour: the skin, or a glove). It's put where the body is, and fades into the arm
+    /// at the wrist. Returns the wrist, the top of the fist across its middle, which the hand's piece
+    /// turns about so a swing keeps the hand on the arm; null if the fist's off the canvas.
+    /// </summary>
+    private static Vector2? LiftFist(Color[] body, Color[] held, int canvasWidth, int canvasHeight, PartImage fist,
+        IReadOnlyDictionary<string, Vector2> sockets, Vector2 root, Morph morph, int x0, int y0)
+    {
+        Vector2 at = morph.Move(sockets[Sockets.Root], root);
+        Vector2 scale = morph.ScaleOf(PartSlot.Body);
+        int width = Math.Max(1, (int)MathF.Round(fist.Width * scale.X));
+        int height = Math.Max(1, (int)MathF.Round(fist.Height * scale.Y));
+        int left = (int)MathF.Round(at.X - fist.Pivot.X * width / fist.Width) - x0;
+        int top = (int)MathF.Round(at.Y - fist.Pivot.Y * height / fist.Height) - y0;
+        if (left < 0 || top < 0 || left + width > canvasWidth || top + height > canvasHeight) return null;
+        Color[] mask = width == fist.Width && height == fist.Height ? fist.Pixels : ImportedFigure.Scaled(fist.Pixels, fist.Width, fist.Height, width, height);
+        Vector3 hand = HandColour(body, canvasWidth, mask, width, height, left, top);
+
+        var lifted = new Color[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Color m = mask[y * width + x];
+                if (m.A == 0) continue;
+                int i = (top + y) * canvasWidth + left + x;
+                // The plain fist's shade, a share of FistUnit, times the hand's colour, at its alpha.
+                Vector3 shade = Vector3.Clamp(hand * (m.R * 255f / m.A / FistUnit), Vector3.Zero, new Vector3(255f)) * (m.A / 255f);
+                lifted[y * width + x] = new Color((int)MathF.Round(shade.X), (int)MathF.Round(shade.Y), (int)MathF.Round(shade.Z), (int)m.A);
+                body[i] = Scaled(body[i], 255 - m.A);
+            }
+        }
+        Over(held, canvasWidth, lifted, width, height, left, top);
+        return new Vector2(left + width / 2f, top);
+    }
+
+    /// <summary>The shade the base's plain fist is kept at in its picture's colour, as a share of this: tools/import_parts.py's FIST_UNIT.</summary>
+    private const float FistUnit = 200f;
+
+    /// <summary>
+    /// The colour of the hand a plain fist covers, skin or glove, 0 to 255: the brighter half of what
+    /// the body and the armor draw under the fist, so its outline and creases don't darken it, and a
+    /// fist in shadow stays in shadow.
+    /// </summary>
+    private static Vector3 HandColour(Color[] body, int canvasWidth, Color[] mask, int width, int height, int left, int top)
+    {
+        var under = new List<(Vector3 Colour, float Luma)>();
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if (mask[y * width + x].A < 128) continue;
+                Color c = body[(top + y) * canvasWidth + left + x];
+                if (c.A < 128) continue;
+                var straight = new Vector3(c.R, c.G, c.B) * (255f / c.A);
+                under.Add((straight, straight.X * 0.299f + straight.Y * 0.587f + straight.Z * 0.114f));
+            }
+        }
+        if (under.Count == 0) return new Vector3(128f);
+        float mean = under.Average(u => u.Luma);
+        var bright = under.Where(u => u.Luma >= mean).Select(u => u.Colour).ToList();
+        return bright.Aggregate(Vector3.Zero, (sum, c) => sum + c) / bright.Count;
+    }
+
+    /// <summary>A premultiplied colour at a share of itself, 0 to 255.</summary>
+    private static Color Scaled(Color c, int share) =>
+        new((c.R * share + 127) / 255, (c.G * share + 127) / 255, (c.B * share + 127) / 255, (c.A * share + 127) / 255);
+
     private static void Over(Color[] canvas, int canvasWidth, Color[] pixels, int width, int height, int left, int top)
     {
         for (int y = 0; y < height; y++)

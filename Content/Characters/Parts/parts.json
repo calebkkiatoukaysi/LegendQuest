@@ -1,5 +1,5 @@
 {
- "version": 4,
+ "version": 5,
  "scale": 0.5,
  "standardHeight": 675.5,
  "canvas": [
@@ -61,7 +61,7 @@
    1820
   ],
   "base-0": [
-   1264,
+   1482,
    620
   ],
   "face-0": [
@@ -117,7 +117,11 @@
     215.0,
     157.0,
     107.0
-   ]
+   ],
+   "hands": {
+    "near": "base-male.hand.near",
+    "far": "base-male.hand.far"
+   }
   },
   "base-female": {
    "sockets": {
@@ -162,7 +166,11 @@
     216.0,
     158.0,
     108.0
-   ]
+   ],
+   "hands": {
+    "near": "base-female.hand.near",
+    "far": "base-female.hand.far"
+   }
   }
  },
  "parts": {
@@ -2384,6 +2392,38 @@
     605
    ]
   },
+  "base-female.hand.far": {
+   "slot": "body",
+   "base": "base-female",
+   "socket": "root",
+   "page": "base-0",
+   "rect": [
+    1439,
+    2,
+    41,
+    51
+   ],
+   "pivot": [
+    -70.75,
+    354.0
+   ]
+  },
+  "base-female.hand.near": {
+   "slot": "body",
+   "base": "base-female",
+   "socket": "root",
+   "page": "base-0",
+   "rect": [
+    1334,
+    2,
+    52,
+    53
+   ],
+   "pivot": [
+    107.25,
+    354.0
+   ]
+  },
   "base-female.head": {
    "slot": "head",
    "base": "base-female",
@@ -2426,6 +2466,38 @@
     2,
     238,
     616
+   ]
+  },
+  "base-male.hand.far": {
+   "slot": "body",
+   "base": "base-male",
+   "socket": "root",
+   "page": "base-0",
+   "rect": [
+    1390,
+    2,
+    45,
+    52
+   ],
+   "pivot": [
+    -71.38,
+    354.5
+   ]
+  },
+  "base-male.hand.near": {
+   "slot": "body",
+   "base": "base-male",
+   "socket": "root",
+   "page": "base-0",
+   "rect": [
+    1266,
+    2,
+    64,
+    54
+   ],
+   "pivot": [
+    121.62,
+    354.5
    ]
   },
   "base-male.head": {
@@ -9721,6 +9793,11 @@
     "slot": "body",
     "item": "leather-armour",
     "part": "armor-sb-traveller"
+   },
+   {
+    "slot": "cloak",
+    "item": "travelling-cloak",
+    "part": "cape-sb"
    }
   ],
   "sera": [
@@ -9733,6 +9810,11 @@
     "slot": "body",
     "item": "leather-armour",
     "part": "armor-sera"
+   },
+   {
+    "slot": "cloak",
+    "item": "travelling-cloak",
+    "part": "cape-sera"
    }
   ],
   "kael": [
@@ -9750,6 +9832,11 @@
     "slot": "body",
     "item": "leather-armour",
     "part": "armor-kael"
+   },
+   {
+    "slot": "cloak",
+    "item": "travelling-cloak",
+    "part": "cape-tail-ember"
    }
   ],
   "mira": [

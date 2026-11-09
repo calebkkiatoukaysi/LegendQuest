@@ -279,6 +279,24 @@ What marks a people goes on the face: Sylvan pointed ears, Emberkin horns, Wildk
 
 ---
 
+### 3.3 The holding hands
+
+The owner's call (2026-11-09): what a figure holds is drawn under its fist, the way a 2D game character holds a weapon, so the fist that closes over the grip is a plainer one than the base's, with fewer lines, so it reads as closed round a handle rather than clenched shut. These two edits paint it. `tools/import_parts.py` takes each base's two fists from its picture (`tools/source/characters/hands/`), keeps their shading and lines as a share of the hand's own colour, and the game draws them over whatever that hand holds in the colour of the hand they cover, skin or glove, fading into the arm at the wrist. Until they're painted, the importer draws a plain fist of its own.
+
+#### `hand-male` · The holding hands, man · P0
+
+**Basis:** Edits `base-male`. The fist that closes over what the hand holds.
+
+Edit the attached base image: change ONLY the two fists, the near one (lit, on the LEFT of the picture) and the far one (in shadow, on the right). Repaint each as a simple 2D game hand closed round a weapon's grip: a clean, chunky fist in plain cel shading, with only its outline, one line where the thumb closes over the fingers, and two or three short lines parting the fingers; no knuckle wrinkles, no veins, no nails, no creases. The fingers curl as if round a round handle passing straight through the fist, but draw no handle and no hole: the fist is solid. Keep each fist in exactly the same place, facing the same way, at the same size or a touch bigger, never smaller, with the wrist where it is; keep the skin the same warm tan and the light from the upper left, the near fist lit and the far one in shadow as they are now. Change nothing else: keep the pose, the arms, the body, the head, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hand-male.png.
+
+#### `hand-female` · The holding hands, woman · P0
+
+**Basis:** Edits `base-female`. The fist that closes over what the hand holds.
+
+Edit the attached base image: change ONLY the two fists, the near one (lit, on the LEFT of the picture) and the far one (in shadow, on the right). Repaint each as a simple 2D game hand closed round a weapon's grip: a clean, chunky fist in plain cel shading, with only its outline, one line where the thumb closes over the fingers, and two or three short lines parting the fingers; no knuckle wrinkles, no veins, no nails, no creases. The fingers curl as if round a round handle passing straight through the fist, but draw no handle and no hole: the fist is solid. Keep each fist in exactly the same place, facing the same way, at the same size or a touch bigger, never smaller, with the wrist where it is; keep the skin the same warm tan and the light from the upper left, the near fist lit and the far one in shadow as they are now. Change nothing else: keep the pose, the arms, the body, the head, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hand-female.png.
+
+---
+
 ## 4. Faces
 
 One per character in the cast and the party, the player's selectable faces, the townsfolk pool's faces, and the heads of the humanoid foes. Each paints only the features onto the blank head of the base whose sex matches (§3); the head itself never changes, and the hair is a part of its own (§4.8). A child's face is drawn on the full-size base and the morph makes it small. The faces painted before 2026-11-08 were head and hair together; the importer splits each into its face and its hair till it's painted again.

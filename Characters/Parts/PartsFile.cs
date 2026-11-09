@@ -35,13 +35,14 @@ public sealed record PartsFile(
     PartsFile.GearEntry[] Gear,
     Dictionary<string, PartsFile.OwnEntry[]> Own)
 {
-    /// <summary>A base: its sockets and head box in the parts' pixels on the scaled canvas, and the ids of its body and its bald head.</summary>
+    /// <summary>A base: its sockets and head box in the parts' pixels on the scaled canvas, and the ids of its body, its bald head and its fists.</summary>
     /// <param name="Sockets">Every socket, across and down.</param>
     /// <param name="Head">The box round the head, crown to chin: left, top, width, height. The portraits crop round it.</param>
     /// <param name="Body">The id of its body from the jaw down.</param>
     /// <param name="Bald">The id of its bald head.</param>
     /// <param name="Skin">The colour of its skin on the cheeks, 0 to 255: what a skin picked for a painted figure is against.</param>
-    public sealed record BaseEntry(Dictionary<string, float[]> Sockets, float[] Head, string Body, string Bald, float[] Skin);
+    /// <param name="Hands">The ids of its two fists, "near" and "far": masks on the body's canvas, each fist exactly. What a figure holds is drawn under the fist that holds it.</param>
+    public sealed record BaseEntry(Dictionary<string, float[]> Sockets, float[] Head, string Body, string Bald, float[] Skin, Dictionary<string, string> Hands);
 
     /// <summary>An item and what it draws in one equipment slot: a part on each base, or null for nothing there.</summary>
     /// <param name="Item">The item's id in ItemCatalog.</param>

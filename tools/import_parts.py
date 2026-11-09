@@ -41,6 +41,10 @@ for pixel, on the base's 1024 x 1536 canvas on solid black. This:
     figure, grown a few pixels in under the body's edge, with its Base and Trim to dye; and each
     weapon and off-hand item (weapons/weapon-<x>.png, weapons/offhand-<x>.png) into the changed
     pieces that reach a hand, leaving out the base's fingers where ChatGPT redrew them;
+  - makes each base's two holding hands, the fists drawn over whatever a hand holds so the fingers
+    close over the grip: the ones painted for it (hands/hand-<man or woman>.png, Story/13 §3.3), or
+    till they come a plain fist of its own (simple_fist); kept as shade, the game colours them as
+    the skin or the glove they cover (Characters/Parts/RigComposer.cs's LiftFist);
   - shrinks every layer to PART_SCALE on the canvas's own grid, so a part drawn at its socket lands
     on the pixel it was painted on, records each one's pivot (its socket in its own pixels), and
     packs them into atlas pages, one set per slot;
@@ -93,6 +97,12 @@ BASES = ("base-male", "base-female")
 #: The jaw seam (§2.3): from under the ear to the chin. Above it is the face's (or the helm's), below it the body's.
 SEAM = {"base-male": ((510, 250), (595, 293)), "base-female": ((490, 272), (578, 325))}
 #: Where to look for each hand (the near one is the lit one on the left), and the shoulder line.
+#: Each base's fists themselves (left, right, top, bottom on the canvas), the near one first: clear of
+#: the thigh and the shorts beside them, the wrist at the top. What a hand holds is drawn under its
+#: fist (fist_mask; Characters/Parts/RigComposer.cs's LiftFist). tools/part_sheet.py's FIST_BOXES are
+#: the same boxes, for the weapon sheets' fists.
+FISTS = {"base-male": ((276, 398, 760, 862), (663, 762, 760, 860)),
+         "base-female": ((296, 398, 760, 862), (657, 738, 760, 860))}
 NEAR_HAND = {"base-male": (270, 770, 410, 860), "base-female": (295, 770, 425, 860)}
 FAR_HAND = {"base-male": (640, 760, 760, 860), "base-female": (640, 760, 745, 860)}
 SHOULDERS = {"base-male": 330, "base-female": 365}
@@ -709,6 +719,114 @@ def armor_layer(base, rgb):
     return colour, alpha, np.stack([skin, base_mask, trim_mask], axis=2), tones
 
 
+def fist_mask(base, box):
+    """A base's fist in its box (FISTS), as alpha: the biggest piece of the figure there, opened so
+    the hair-thin edge of an outline running on beside it goes."""
+    c0, c1, r0, r1 = box
+    inside = np.zeros(base.alpha.shape, bool)
+    inside[r0:r1, c0:c1] = True
+    labels, count = ic.components((base.alpha > 0.5) & inside)
+    if not count:
+        fail("%s has no fist in %s" % (base.name, (box,)))
+    sizes = np.bincount(labels.ravel())
+    sizes[0] = 0
+    keep = labels == int(np.argmax(sizes))
+    keep &= ic.grow(erode(keep, 2), 2)
+    return base.alpha * keep
+
+
+#: The simple fist drawn over what a hand holds: how much its finger creases are closed and its
+#: outline smoothed, how far it reaches past the painted fist (so none of that shows round it), how
+#: thick its outline is, and the width of its shadow along the lower right and its light along the
+#: upper left. Its shades, as a share of the hand's own colour: lit, shadow, highlight, outline.
+FIST_CLOSE = 5
+FIST_SMOOTH = 7
+FIST_COVER = 2
+FIST_LINE = 3
+FIST_SHADOW = 16
+FIST_LIGHT = 6
+FIST_SHADES = (1.0, 0.76, 1.12, 0.22)
+#: Its top, the wrist, has no outline and fades over FIST_FADE rows into the arm it covers; and
+#: FINGERS short lines (FINGER_LENGTH long) part the fingers along its bottom, at these shares of its width.
+FIST_FADE = 10
+FINGERS = (0.34, 0.52, 0.70)
+FINGER_LENGTH = 28
+#: The shades are kept in the mask's colour as a share of this, so a highlight brighter than the hand fits.
+FIST_UNIT = 200.0
+
+
+def simple_fist(base, box):
+    """The fist drawn over what a hand holds, as plain as the game's other art is detailed: the
+    painted fist's shape with its creases closed, smoothed round and grown a little to cover it, in
+    one flat shade with a hard shadow along the lower right, a thin light along the upper left and a
+    clean outline, all lit from the upper left. Its colour is grey, the shade as a share of
+    FIST_UNIT; the game multiplies it by the colour of the hand it covers, skin or glove. Returns
+    (colour, alpha) on the canvas."""
+    painted = fist_mask(base, box) > 0.5
+    shape = erode(ic.grow(painted, FIST_CLOSE), FIST_CLOSE)
+    soft = ic.box_sum(shape.astype(np.float64), FIST_SMOOTH) / float((2 * FIST_SMOOTH + 1) ** 2)
+    shape = ic.grow(soft > 0.5, FIST_COVER) | painted
+
+    def inside_after(dx, dy):
+        moved = np.zeros_like(shape)
+        h, w = shape.shape
+        moved[max(0, -dy):h - max(0, dy), max(0, -dx):w - max(0, dx)] = shape[max(0, dy):h - max(0, -dy), max(0, dx):w - max(0, -dx)]
+        return moved
+
+    lit, dark, light, ink = FIST_SHADES
+    ys, xs = np.nonzero(shape)
+    top, left, right = ys.min(), xs.min(), xs.max()
+    shade = np.where(shape, lit, 0.0)
+    shade[shape & ~inside_after(FIST_SHADOW, FIST_SHADOW)] = dark
+    shade[shape & ~inside_after(-FIST_LIGHT, -FIST_LIGHT) & (shade == lit)] = light
+    outline = shape & ~erode(shape, FIST_LINE)
+    outline[:top + FIST_LINE + 1] = False
+    shade[outline] = ink
+    # The fingers, parted by short lines up from the bottom edge.
+    for share in FINGERS:
+        x = int(round(left + share * (right - left)))
+        column = np.nonzero(shape[:, x])[0]
+        bottom = column.max()
+        shade[bottom - FINGER_LENGTH:bottom + 1, x:x + FIST_LINE - 1][shape[bottom - FINGER_LENGTH:bottom + 1, x:x + FIST_LINE - 1]] = ink
+    grey = np.clip(shade / (255.0 / FIST_UNIT), 0.0, 1.0) * 255.0
+    colour = np.repeat(grey[:, :, None], 3, axis=2)
+    alpha = shape.astype(np.float64)
+    fade = np.clip((np.arange(shape.shape[0]) - top) / float(FIST_FADE), 0.0, 1.0)
+    return colour, alpha * fade[:, None]
+
+
+#: The holding hands painted in ChatGPT (Story/13 §3.3), one picture per base: hand-male.png and
+#: hand-female.png, each an edit of its base with plainer fists. Till one's there, simple_fist stands in.
+HANDS = os.path.join(SOURCE, "hands")
+
+
+def painted_fist(base, box, rgb):
+    """A base's holding hand as ChatGPT painted it (§3.3): the fist in its box on the painted
+    picture, the biggest piece of the figure there, opened; its shading and lines kept as a share of
+    the hand's own colour (the brighter half of the fist, which is how the game measures the hand it
+    covers), in FIST_UNITs, so the game can colour it as skin or glove; fading into the arm at the
+    wrist. Returns (colour, alpha) as simple_fist does, and how much of the base's own fist it covers."""
+    colour, alpha = key_black(rgb)
+    c0, c1, r0, r1 = box
+    inside = np.zeros(alpha.shape, bool)
+    inside[r0:r1, c0:c1] = True
+    labels, count = ic.components((alpha > 0.5) & inside)
+    if not count:
+        fail("%s has no fist in %s" % (os.path.join(HANDS, "hand-" + base.name.split("-", 1)[1] + ".png"), (box,)))
+    sizes = np.bincount(labels.ravel())
+    sizes[0] = 0
+    keep = labels == int(np.argmax(sizes))
+    keep &= ic.grow(erode(keep, 2), 2)
+    luma = colour @ np.array([0.299, 0.587, 0.114])
+    lit = luma[keep]
+    reference = max(1.0, float(lit[lit >= lit.mean()].mean()))
+    grey = np.clip(luma / reference * FIST_UNIT, 0.0, 255.0) * keep
+    top = np.nonzero(keep.any(axis=1))[0].min()
+    fade = np.clip((np.arange(alpha.shape[0]) - top) / float(FIST_FADE), 0.0, 1.0)
+    own = fist_mask(base, box) > 0.5
+    return np.repeat(grey[:, :, None], 3, axis=2), alpha * keep * fade[:, None], float((own & keep).sum()) / max(1, own.sum())
+
+
 def changed_pieces(base, rgb, where):
     """What a part painted, within `where`: the pixels on the figure that differ from the base,
     opened so the base's outlines ChatGPT moved a pixel or two stay out, then grown back along
@@ -1066,11 +1184,18 @@ def dye(rgb, painted, colour):
     return np.clip(np.where((y <= ref)[..., None], dark, light), 0.0, 1.0)
 
 
-def compose(layers, morph, sockets, skin, fits=None, dyes=None):
+#: The piece each slot moves with, back to front: Characters/Parts/Sockets.cs's BoneOf.
+BONES = ("back", "body", "head", "near", "far")
+BONE_OF = {"cape": "back", "body": "body", "armor": "body", "head": "head", "face": "head", "helm": "head",
+           "weapon": "near", "offhand": "far"}
+
+
+def compose(layers, morph, sockets, skin, fits=None, dyes=None, fists=None):
     """A recipe's layers ({slot: (Layer, pivot)}) put together at their sockets: (premultiplied
     float RGBA, where the root is on it). `fits` scales a slot's part further ({slot: (fx, fy)}): one
     painted on the other base, fitted to this one (fit). `dyes` recolours a slot's two dye channels
-    ({slot: [(swatch, painted tone) or None, ...]}, both 0 to 255)."""
+    ({slot: [(swatch, painted tone) or None, ...]}, both 0 to 255). `fists` ({"near": (Layer, pivot),
+    "far": ...}, the base's fist masks) draws what a hand holds under its fist, as the game does."""
     placed = []
     for slot in ORDER:
         if slot not in layers:
@@ -1098,15 +1223,49 @@ def compose(layers, morph, sockets, skin, fits=None, dyes=None):
             premultiplied[:, :, :3] = (straight + m * (dyed - straight)) * premultiplied[:, :, 3:]
         if (nw, nh) != (w, h):
             premultiplied = ic.resample(premultiplied, (0, 0, w, h), (nw, nh))
-        placed.append((premultiplied, left, top))
-    x0 = min(l for _, l, _ in placed)
-    y0 = min(t for _, _, t in placed)
-    x1 = max(l + p.shape[1] for p, l, _ in placed)
-    y1 = max(t + p.shape[0] for p, _, t in placed)
-    canvas = np.zeros((y1 - y0, x1 - x0, 4))
-    for p, l, t in placed:
-        region = canvas[t - y0:t - y0 + p.shape[0], l - x0:l - x0 + p.shape[1]]
+        placed.append((premultiplied, left, top, BONE_OF[slot]))
+    x0 = min(l for _, l, _, _ in placed)
+    y0 = min(t for _, _, t, _ in placed)
+    x1 = max(l + p.shape[1] for p, l, _, _ in placed)
+    y1 = max(t + p.shape[0] for p, _, t, _ in placed)
+    pieces = {}
+    for p, l, t, bone in placed:
+        piece = pieces.setdefault(bone, np.zeros((y1 - y0, x1 - x0, 4)))
+        region = piece[t - y0:t - y0 + p.shape[0], l - x0:l - x0 + p.shape[1]]
         region[:] = p + region * (1.0 - p[:, :, 3:])
+    # What a hand holds goes under its fist: the fist, as the body and armor draw it, is lifted off
+    # the body onto the hand's piece (RigComposer.cs's LiftFist).
+    for hand, (layer, pivot) in (fists or {}).items():
+        if hand not in pieces or "body" not in pieces:
+            continue
+        at, (sx, sy) = transform("body", morph, sockets)
+        w, h = layer.size
+        nw, nh = max(1, int(round(w * sx))), max(1, int(round(h * sy)))
+        left, top = int(round(at[0] - pivot[0] * nw / w)) - x0, int(round(at[1] - pivot[1] * nh / h)) - y0
+        a = layer.rgba[:, :, 3:].astype(np.float64) / 255.0
+        grey = layer.rgba[:, :, :1].astype(np.float64) / FIST_UNIT
+        if (nw, nh) != (w, h):
+            both = ic.resample(np.concatenate([grey * a, grey * a, grey * a, a], axis=2), (0, 0, w, h), (nw, nh))
+            a = both[:, :, 3:]
+            grey = both[:, :, :1] / np.maximum(a, 1e-6)
+        if left < 0 or top < 0 or left + nw > x1 - x0 or top + nh > y1 - y0:
+            continue
+        body = pieces["body"][top:top + nh, left:left + nw]
+        held = pieces[hand][top:top + nh, left:left + nw]
+        # The plain fist, coloured as the hand it covers: the brighter half of what's under it.
+        there = (a[:, :, 0] > 0.5) & (body[:, :, 3] > 0.5)
+        if not there.any():
+            continue
+        under = body[there][:, :3] / body[there][:, 3:]
+        luma = under @ np.array([0.299, 0.587, 0.114])
+        colour = under[luma >= luma.mean()].mean(axis=0)
+        lifted = np.concatenate([np.clip(colour[None, None, :] * grey, 0.0, 1.0) * a, a], axis=2)
+        body *= 1.0 - a
+        held[:] = lifted + held * (1.0 - a)
+    canvas = np.zeros((y1 - y0, x1 - x0, 4))
+    for bone in BONES:
+        if bone in pieces:
+            canvas = pieces[bone] + canvas * (1.0 - pieces[bone][:, :, 3:])
     root = sockets["root"]
     return canvas, (root[0] - x0, root[1] - y0)
 
@@ -1208,6 +1367,19 @@ def build(check, vector=VECTOR):
         if k is not b:
             colour, alpha = drawn(name + "-blank", k.colour, k.alpha)
         layers[name + ".head"] = ("head", name, shrink(colour, alpha * k.above, k.skin * k.above), {})
+        # Its holding hands: what a hand holds is drawn under the fist that holds it, the one painted
+        # for it (painted_fist) or, till there is one, a plain one of the importer's (simple_fist).
+        painted = os.path.join(HANDS, "hand-%s.png" % name.split("-", 1)[1])
+        hands = load(painted) if os.path.exists(painted) else None
+        for hand, box in zip(("near", "far"), FISTS[name]):
+            if hands is None:
+                colour, alpha = simple_fist(b, box)
+            else:
+                colour, alpha, covers = painted_fist(b, box, hands)
+                if covers < 0.97:
+                    print("import_parts: the painted %s fist on %s covers only %d%% of the base's own, which shows round it: "
+                          "ask ChatGPT for it a touch bigger" % (hand, name, round(covers * 100)))
+            layers["%s.hand.%s" % (name, hand)] = ("body", name, shrink(colour, alpha), {})
 
     report, previews = [], {name: ([], []) for name in BASES}
     # The faces: the new ones, features on the blank base, and the old head-and-hair ones (split)
@@ -1284,14 +1456,15 @@ def build(check, vector=VECTOR):
         for pid, (k, x, y, w, h) in places.items():
             where[pid] = ("%s-%d" % (group, k), [x, y, w, h])
 
-    manifest = {"version": 4, "scale": PART_SCALE, "standardHeight": STANDARD * PART_SCALE,
+    manifest = {"version": 5, "scale": PART_SCALE, "standardHeight": STANDARD * PART_SCALE,
                 "canvas": [int(round(CANVAS[0] * PART_SCALE)), int(round(CANVAS[1] * PART_SCALE))],
                 "sockets": list(SOCKETS), "slotSockets": SLOT_SOCKET, "order": list(ORDER),
                 "pages": page_sizes, "bases": {}, "parts": {}, "recipes": book, "gear": items, "own": own}
     for name, b in bases.items():
         manifest["bases"][name] = {"sockets": {k: scaled(v) for k, v in b.sockets.items()},
                                    "head": [round(v * PART_SCALE, 2) for v in b.head],
-                                   "body": name + ".body", "bald": name + ".head", "skin": b.skin_tone}
+                                   "body": name + ".body", "bald": name + ".head", "skin": b.skin_tone,
+                                   "hands": {"near": name + ".hand.near", "far": name + ".hand.far"}}
     for pid in sorted(layers):
         slot, base, layer, extra = layers[pid]
         socket = SLOT_SOCKET[slot]
@@ -1366,6 +1539,10 @@ def write_previews(bases, layers, manifest, book):
         slot, base, layer, _ = layers[pid]
         return layer, manifest["parts"][pid]["pivot"]
 
+    def geometry(name):
+        """A base's sockets and head box at PART_SCALE, as fit takes them."""
+        return {"sockets": {k: scaled(v) for k, v in bases[name].sockets.items()}, "head": [v * PART_SCALE for v in bases[name].head]}
+
     faces = {name: ([], []) for name in bases}
     for pid in sorted(p for p in layers if layers[p][0] == "face"):
         slot, base, layer, extra = layers[pid]
@@ -1413,8 +1590,17 @@ def write_previews(bases, layers, manifest, book):
         head = r.get("helm") if r.get("helm") in layers else ("hair-" + face[len("face-"):]) if face else None
         if head in layers:
             parts["helm"] = parts_of(head)
+        # The cape and the weapon, if they're painted, fitted when they're on the other base; and
+        # what's held, under the fist.
+        fits = {}
+        for slot in ("cape", "weapon"):
+            if r.get(slot) in layers:
+                parts[slot] = parts_of(r[slot])
+                if layers[r[slot]][1] != base:
+                    fits[slot] = fit(slot, geometry(layers[r[slot]][1]), geometry(base))
+        fists = {"near": parts_of(base + ".hand.near"), "far": parts_of(base + ".hand.far")}
         skin = layers[face][3]["skin"] if face else None
-        canvas, root = compose(parts, r["morph"], {k: scaled(v) for k, v in bases[base].sockets.items()}, skin)
+        canvas, root = compose(parts, r["morph"], {k: scaled(v) for k, v in bases[base].sockets.items()}, skin, fits=fits, fists=fists)
         img = flat(canvas, (70, 76, 92))
         figures.append(img[::2, ::2])
     if figures:

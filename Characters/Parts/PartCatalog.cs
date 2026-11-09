@@ -42,7 +42,10 @@ public static class PartCatalog
     public const string Folder = "Characters/Parts";
 
     /// <summary>The layout of parts.json the game reads.</summary>
-    public const int FileVersion = 4;
+    public const int FileVersion = 5;
+
+    /// <summary>A base's fists in parts.json's hands: what's held in the near hand and the far one is drawn under them.</summary>
+    private const string NearHand = "near", FarHand = "far";
 
     /// <summary>The recipes the player's figure is put together on, whichever face they pick: the one on that face's base.</summary>
     private static readonly string[] PlayerTemplates = { "you-male", "you-female" };
@@ -359,7 +362,8 @@ public static class PartCatalog
             if (worn is not null && (worn.Base == baseId || worn.Slot != PartSlot.Armor)) parts.Add(worn);
 
         var sockets = b.Sockets.ToDictionary(s => s.Key, s => new Vector2(s.Value[0], s.Value[1]), StringComparer.Ordinal);
-        RigComposer.Result result = RigComposer.Compose(sockets, b.Head, parts, outfit.Morph, PaintFor(outfit.Tints, face, b), part => Fit(part, baseId));
+        var fists = new Dictionary<FigureBone, PartImage> { [FigureBone.Near] = Images[b.Hands[NearHand]], [FigureBone.Far] = Images[b.Hands[FarHand]] };
+        RigComposer.Result result = RigComposer.Compose(sockets, b.Head, parts, outfit.Morph, PaintFor(outfit.Tints, face, b), part => Fit(part, baseId), fists);
         return (result, armor is not null && armor.Base == baseId);
     }
 
@@ -502,6 +506,8 @@ public static class PartCatalog
                 throw new InvalidOperationException($"{where} has no skin tone on {id}.{fix}");
             if (!IsPart(f, b.Body, PartSlot.Body, id) || !IsPart(f, b.Bald, PartSlot.Head, id))
                 throw new InvalidOperationException($"{where} gives {id} a body ({b.Body}) or a bald head ({b.Bald}) that isn't its own.{fix}");
+            if (b.Hands is null || !IsPart(f, b.Hands.GetValueOrDefault(NearHand), PartSlot.Body, id) || !IsPart(f, b.Hands.GetValueOrDefault(FarHand), PartSlot.Body, id))
+                throw new InvalidOperationException($"{where} gives {id} no near and far fist of its own, which what it holds is drawn under.{fix}");
         }
 
         foreach ((string id, PartsFile.PartEntry p) in f.Parts)
