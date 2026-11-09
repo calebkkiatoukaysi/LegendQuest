@@ -432,6 +432,404 @@ Content/Creatures/hollowed-sapper.png - created by Caleb Kiatoukaysi for Legend 
 
 Content/Creatures/vault-construct.png - created by Caleb Kiatoukaysi for Legend Quest, a vault construct, a guardian of dressed stone banded with gold, the Old Crown's points on its helm and a gold sun in its chest; standing, four steps and the five fighting frames each way, 48x64 frames, drawn procedurally by tools/generate_creatures.py, released under public domain
 
+<!-- character parts: written by tools/import_parts.py; don't edit between these two lines -->
+## Characters (parts)
+
+The characters' parts made in ChatGPT from Story/13-art-prompts.md, each an edit of one of the two bases (tools/source/characters/base-male.png and base-female.png), cut by `tools/import_parts.py` from the pictures it keeps in tools/source/characters: keyed off the black, a base split at the jaw seam into its body and its bald head, a face cut to its head and the hair below its jaw, shrunk to half size and packed into atlas pages. The game puts each character together from their recipe at the base's sockets (Characters/Parts).
+
+tools/import_parts.py - written by Caleb Kiatoukaysi for Legend Quest, cuts the parts into layers at the bases' sockets, packs them into atlas pages and writes parts.json
+
+tools/vectorize.py - written by Caleb Kiatoukaysi for Legend Quest, redraws a picture as vector art (flat cel colours, smooth lines, Bezier outlines) and draws it back at any size; the importer runs the parts through it when VECTOR is on
+
+Content/Characters/Parts/parts.json - the sockets of each base, where every part is on its page and which socket it hangs from, and every recipe from Story/13-art-prompts.md §7; written by tools/import_parts.py
+
+Content/Characters/Parts/armor-0.png - an atlas page of 11 parts (armor-champion, armor-courier, armor-elder-coat, armor-leather, armor-leon, armor-noble, armor-road, armor-scale, armor-smith, armor-studded, armor-villager-man) and 11 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-1.png - an atlas page of 12 parts (armor-busker, armor-chain-mail, armor-chain-shirt, armor-crane, armor-hide, armor-mage-robes, armor-merchant, armor-padded, armor-porter, armor-refugee-man, armor-watch, armor-watch-captain) and 11 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-2.png - an atlas page of 12 parts (armor-brannock, armor-child-cove, armor-clerk, armor-fisher, armor-grell, armor-kael, armor-plate, armor-red-gull, armor-royal-guard, armor-royal-livery, armor-sera, armor-urchin) and 12 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-3.png - an atlas page of 12 parts (armor-elara, armor-elara-disguise, armor-elder-woman, armor-glassblower, armor-mira, armor-odelle, armor-sailor, armor-sb-traveller, armor-temple, armor-traveller, armor-traveller-f, armor-villager-woman) and 12 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-4.png - an atlas page of 12 parts (armor-chain-mail-f, armor-chain-shirt-f, armor-corra, armor-hide-f, armor-maid, armor-padded-f, armor-pilgrim, armor-plate-f, armor-refugee-child, armor-refugee-woman, armor-studded-f, armor-tavern) and 13 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-5.png - an atlas page of 9 parts (armor-baker, armor-champion-f, armor-fencer, armor-leather-f, armor-lodge-ranger, armor-mage-robes-f, armor-noble-gown, armor-scale-f, armor-trader) and 9 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/base-0.png - an atlas page of 4 parts (base-female.body, base-female.head, base-male.body, base-male.head) and 4 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/face-0.png - an atlas page of 78 parts (face-anselle, face-anvil-barkeep, face-brannock, face-brenna, face-brisk, face-corra, face-crane, face-elara, face-fennick, face-gannet, face-grell, face-guild-apprentice, face-hale, face-hedda, face-hesper, face-hester, face-hollowmere-farmer, face-ide, face-ilsa, face-imra-vell, face-isadora, face-kael, face-lark, face-leon, face-lookout, face-mags, face-maren-elder, face-maud, face-mc-child, face-mira, face-mira-young, face-netty, face-odelle, face-orla, face-osric, face-oswin, face-pip, face-player-1, face-player-2, face-player-3, face-player-4, face-player-5, face-player-6, face-player-7, face-player-8, face-red-gull, face-red-gull-2, face-red-gull-3, face-refugee-1, face-refugee-2, face-refugee-3, face-refugee-child, face-sb-child, face-sera, face-tamsin, face-thessaly, face-tomas, face-town-1, face-town-10, face-town-11, face-town-12, face-town-13, face-town-14, face-town-15, face-town-16, face-town-18, face-town-2, face-town-3, face-town-4, face-town-5, face-town-6, face-town-7, face-town-8, face-town-9, face-valencia, face-valencia-child, face-vreya, face-wren) and 78 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/helm-0.png - an atlas page of 77 parts (hair-anselle, hair-anvil-barkeep, hair-brannock, hair-brenna, hair-brisk, hair-corra, hair-crane, hair-elara, hair-fennick, hair-gannet, hair-grell, hair-guild-apprentice, hair-hale, hair-hedda, hair-hesper, hair-hester, hair-hollowmere-farmer, hair-ide, hair-ilsa, hair-imra-vell, hair-isadora, hair-kael, hair-lark, hair-leon, hair-lookout, hair-mags, hair-maren-elder, hair-maud, hair-mc-child, hair-mira, hair-mira-young, hair-netty, hair-odelle, hair-orla, hair-osric, hair-oswin, hair-pip, hair-player-1, hair-player-2, hair-player-3, hair-player-4, hair-player-5, hair-player-6, hair-player-7, hair-player-8, hair-red-gull-2, hair-red-gull-3, hair-refugee-1, hair-refugee-2, hair-refugee-3, hair-refugee-child, hair-sb-child, hair-sera, hair-tamsin, hair-thessaly, hair-tomas, hair-town-1, hair-town-10, hair-town-11, hair-town-12, hair-town-13, hair-town-14, hair-town-15, hair-town-16, hair-town-18, hair-town-2, hair-town-3, hair-town-4, hair-town-5, hair-town-6, hair-town-7, hair-town-8, hair-town-9, hair-valencia, hair-valencia-child, hair-vreya, hair-wren) and 77 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+<!-- end character parts -->
+
+<!-- part sheets: written by tools/part_sheet.py; don't edit between these two lines -->
+## Part sheets
+
+Several parts at a time: ChatGPT paints one face, hairstyle or outfit into each cell of a sheet made from a base (Story/13-art-prompts.md §4.0, §4.9 and §5.0), and `tools/part_sheet.py` puts each cell back on its base's canvas.
+
+tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair and armor sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base
+
+tools/source/characters/face-sheet-female.png - the blank face sheet: eight copies of its head and shoulders at full size, four across and two down, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/face-sheet-male.png - the blank face sheet: eight copies of its head and shoulders at full size, four across and two down, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/hair-sheet-female.png - the blank hair sheet: four copies of it from the head to the hips at full size, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/hair-sheet-male.png - the blank hair sheet: four copies of it from the head to the hips at full size, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/armor-sheet-female.png - the blank armor sheet: four copies of the whole figure at 0.625 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/armor-sheet-male.png - the blank armor sheet: four copies of the whole figure at 0.625 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+
+tools/source/characters/sheets/armor-sheet-f01.png - armor sheet armor-sheet-f01 (armor-traveller-f, armor-sb-traveller, armor-sera, armor-mira), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f02.png - armor sheet armor-sheet-f02 (armor-corra, armor-odelle, armor-refugee-woman, armor-refugee-child), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f03.png - armor sheet armor-sheet-f03 (armor-glassblower, armor-elara, armor-elara-disguise, armor-tavern), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f04.png - armor sheet armor-sheet-f04 (armor-villager-woman, armor-elder-woman, armor-temple, armor-fencer), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f05.png - armor sheet armor-sheet-f05 (armor-lodge-ranger, armor-noble-gown, armor-trader, armor-baker), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f06.png - armor sheet armor-sheet-f06 (armor-pilgrim, armor-maid, armor-padded-f, armor-leather-f), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f07.png - armor sheet armor-sheet-f07 (armor-studded-f, armor-hide-f, armor-chain-shirt-f, armor-chain-mail-f), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-f08.png - armor sheet armor-sheet-f08 (armor-scale-f, armor-plate-f, armor-mage-robes-f, armor-champion-f), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m01.png - armor sheet armor-sheet-m01 (armor-traveller, armor-child-cove, armor-kael, armor-brannock), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m02.png - armor sheet armor-sheet-m02 (armor-sailor, armor-fisher, armor-red-gull, armor-grell), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m03.png - armor sheet armor-sheet-m03 (armor-watch, armor-watch-captain, armor-clerk, armor-refugee-man), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m04.png - armor sheet armor-sheet-m04 (armor-leon, armor-crane, armor-royal-livery, armor-royal-guard), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m05.png - armor sheet armor-sheet-m05 (armor-villager-man, armor-merchant, armor-busker, armor-urchin), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m06.png - armor sheet armor-sheet-m06 (armor-noble, armor-elder-coat, armor-smith, armor-road), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m07.png - armor sheet armor-sheet-m07 (armor-courier, armor-porter, armor-padded, armor-leather), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m08.png - armor sheet armor-sheet-m08 (armor-studded, armor-hide, armor-chain-shirt, armor-chain-mail), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/armor-sheet-m09.png - armor sheet armor-sheet-m09 (armor-scale, armor-plate, armor-mage-robes, armor-champion), painted on tools/source/characters/armor-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-traveller-f.png - armor-traveller-f on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-sb-traveller.png - armor-sb-traveller on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-sera.png - armor-sera on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-mira.png - armor-mira on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-corra.png - armor-corra on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-odelle.png - armor-odelle on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-refugee-woman.png - armor-refugee-woman on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-refugee-child.png - armor-refugee-child on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-glassblower.png - armor-glassblower on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-elara.png - armor-elara on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-elara-disguise.png - armor-elara-disguise on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-tavern.png - armor-tavern on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-villager-woman.png - armor-villager-woman on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-elder-woman.png - armor-elder-woman on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-temple.png - armor-temple on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-fencer.png - armor-fencer on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-lodge-ranger.png - armor-lodge-ranger on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-noble-gown.png - armor-noble-gown on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-trader.png - armor-trader on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-baker.png - armor-baker on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-pilgrim.png - armor-pilgrim on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-maid.png - armor-maid on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-padded-f.png - armor-padded-f on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-leather-f.png - armor-leather-f on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-studded-f.png - armor-studded-f on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-hide-f.png - armor-hide-f on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-chain-shirt-f.png - armor-chain-shirt-f on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-chain-mail-f.png - armor-chain-mail-f on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-scale-f.png - armor-scale-f on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-f08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-plate-f.png - armor-plate-f on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-f08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-mage-robes-f.png - armor-mage-robes-f on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-f08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-champion-f.png - armor-champion-f on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-f08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-traveller.png - armor-traveller on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-child-cove.png - armor-child-cove on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-kael.png - armor-kael on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-brannock.png - armor-brannock on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-sailor.png - armor-sailor on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-fisher.png - armor-fisher on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-red-gull.png - armor-red-gull on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-grell.png - armor-grell on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-watch.png - armor-watch on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-watch-captain.png - armor-watch-captain on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-clerk.png - armor-clerk on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-refugee-man.png - armor-refugee-man on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-leon.png - armor-leon on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-crane.png - armor-crane on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-royal-livery.png - armor-royal-livery on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-royal-guard.png - armor-royal-guard on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-villager-man.png - armor-villager-man on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-merchant.png - armor-merchant on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-busker.png - armor-busker on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-urchin.png - armor-urchin on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-noble.png - armor-noble on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-elder-coat.png - armor-elder-coat on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-smith.png - armor-smith on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-road.png - armor-road on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-courier.png - armor-courier on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-porter.png - armor-porter on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-padded.png - armor-padded on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-leather.png - armor-leather on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-studded.png - armor-studded on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-hide.png - armor-hide on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-chain-shirt.png - armor-chain-shirt on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-chain-mail.png - armor-chain-mail on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-scale.png - armor-scale on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/armor-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-plate.png - armor-plate on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/armor-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-mage-robes.png - armor-mage-robes on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/armor-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/armors/armor-champion.png - armor-champion on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/armor-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-f01.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-f02.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-f03.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-f04.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-f05.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-f06.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-m01.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-m02.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-m03.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/head-and-hair/face-sheet-m04.png - a face sheet painted the old way, eight heads with their hair on the face sheet as it was then; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-anselle.png - face-anselle's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-anvil-barkeep.png - face-anvil-barkeep's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-brannock.png - face-brannock's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-brenna.png - face-brenna's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-brisk.png - face-brisk's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-corra.png - face-corra's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-crane.png - face-crane's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-elara.png - face-elara's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-fennick.png - face-fennick's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-gannet.png - face-gannet's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-grell.png - face-grell's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-guild-apprentice.png - face-guild-apprentice's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-hale.png - face-hale's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-hedda.png - face-hedda's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-hesper.png - face-hesper's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-hester.png - face-hester's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-hollowmere-farmer.png - face-hollowmere-farmer's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-ide.png - face-ide's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-ilsa.png - face-ilsa's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-imra-vell.png - face-imra-vell's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-isadora.png - face-isadora's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-kael.png - face-kael's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-lark.png - face-lark's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-leon.png - face-leon's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-lookout.png - face-lookout's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-mags.png - face-mags's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-maren-elder.png - face-maren-elder's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-maud.png - face-maud's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-mc-child.png - face-mc-child's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-mira-young.png - face-mira-young's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-mira.png - face-mira's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-netty.png - face-netty's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-odelle.png - face-odelle's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-orla.png - face-orla's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-osric.png - face-osric's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-oswin.png - face-oswin's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-pip.png - face-pip's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-1.png - face-player-1's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-2.png - face-player-2's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-3.png - face-player-3's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-4.png - face-player-4's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-5.png - face-player-5's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-6.png - face-player-6's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-7.png - face-player-7's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-player-8.png - face-player-8's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-red-gull-2.png - face-red-gull-2's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-red-gull-3.png - face-red-gull-3's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-red-gull.png - face-red-gull's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-refugee-1.png - face-refugee-1's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-refugee-2.png - face-refugee-2's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-refugee-3.png - face-refugee-3's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-refugee-child.png - face-refugee-child's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-sb-child.png - face-sb-child's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-sera.png - face-sera's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-tamsin.png - face-tamsin's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-thessaly.png - face-thessaly's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-tomas.png - face-tomas's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-1.png - face-town-1's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-10.png - face-town-10's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-11.png - face-town-11's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-12.png - face-town-12's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-13.png - face-town-13's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-14.png - face-town-14's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-15.png - face-town-15's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-16.png - face-town-16's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-18.png - face-town-18's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-2.png - face-town-2's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-3.png - face-town-3's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-4.png - face-town-4's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-5.png - face-town-5's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-6.png - face-town-6's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-7.png - face-town-7's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-8.png - face-town-8's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-town-9.png - face-town-9's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-valencia-child.png - face-valencia-child's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-valencia.png - face-valencia's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-vreya.png - face-vreya's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/faces/head-and-hair/face-wren.png - face-wren's head and hair on its base's canvas, painted the old way and cut by tools/part_sheet.py from a sheet in tools/source/characters/sheets/head-and-hair; tools/import_parts.py splits it into its face and its hair; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+<!-- end part sheets -->
+
 ## Tiles and props
 
 Content/Tiles/questeria.png - created by Caleb Kiatoukaysi for Legend Quest, Questeria's and the harbour's floor tiles (plaza, terrace, cobble, grass, sand, water, planks) for the room's tile strip, 64 texels a tile in the illustrated style, lit from the top left, painted procedurally by tools/rooms/paint_tiles.py with tools/rooms/paint.py, released under public domain
@@ -1002,6 +1400,7 @@ tools/cut_supplied.py - written by Caleb Kiatoukaysi for Legend Quest, cuts the 
 
 tools/check_assets.py - written by Caleb Kiatoukaysi for Legend Quest, checks this file, Content/Content.mgcb and the files on disk against each other
 
+tools/import_character.py - written by Caleb Kiatoukaysi for Legend Quest, puts a character's picture made in ChatGPT into the game in one go: keys its background off with a soft matte, trims it to the figure, finds the feet and the head, scales it by its build, writes it and its .json to Content/Characters/Art, copies the picture to tools/source/characters, writes its lines here and in Content/Content.mgcb (see Characters (imported art)), and saves a preview to shots/art/import. It needs nothing but CPython and numpy, and nothing in it is random, so a rerun gives the same files
 
 tools/generate_keep.py - written by Caleb Kiatoukaysi for Legend Quest, draws Sunspire Keep: its tileset, its furniture, the sunlight from its windows, and the stair down to the Old Crown Vault in Questeria's terrace. It needs nothing but CPython, and every bit of noise in it is seeded, so a rerun gives the same files
 
@@ -1422,6 +1821,8 @@ Content/People/child.png - built by tools/cut_supplied.py from tools/source/npc-
 Content/People/youth.png - built by tools/cut_supplied.py from tools/source/npc-townsperson.png: a youth, standing and four steps each way, sampled to 32x48 frames with the feet on the same row (the first five columns of the 10x4 layout); the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 tools/source/art-guide.png - the 2D art style and generation guide the characters and creatures are drawn to (proportions, line, cel shading, light, palette, modular parts, the creatures), supplied by Caleb Kiatoukaysi; nothing's cut from it, but tools/rig/theme.py samples its palette
+tools/source/characters/base-male.png - the base man every male armor, cape, helm, weapon and face is painted onto as an edit: a bald, cel-shaded figure in a three-quarter stance facing right, fists clenched, in dark shorts, on solid black, 1024x1536; cut from the owner's pair picture (scaled 1.345x with Lanczos3, centred, feet at y 1466); supplied by Caleb Kiatoukaysi for Legend Quest, made in ChatGPT
+tools/source/characters/base-female.png - the base woman every female armor, cape, helm, weapon and face is painted onto as an edit: a bald, cel-shaded figure in a three-quarter stance facing right, fists clenched, in dark underwear, on solid black, 1024x1536; cut from the owner's pair picture (scaled 1.345x with Lanczos3, centred, feet at y 1466); supplied by Caleb Kiatoukaysi for Legend Quest, made in ChatGPT
 tools/source/style-sheet.png - the palette and a mock-up of Questeria's plaza, the look the rest were made to match, supplied by Caleb Kiatoukaysi for Legend Quest; nothing's cut from it, but the sizes in tools/cut_supplied.py come from it
 
 tools/source/questeria-ground.png - Questeria's ground: paving, flagstones, cobbles, grass, sand and water, a cell each, supplied by Caleb Kiatoukaysi for Legend Quest; tools/cut_supplied.py cuts the tileset and the title's petal from it

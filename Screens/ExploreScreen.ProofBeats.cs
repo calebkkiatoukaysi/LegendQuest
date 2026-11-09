@@ -472,7 +472,7 @@ public partial class ExploreScreen
     /// <summary>Where the pretend mouse goes to point at something in this room, by id: someone's chest, a door's middle, a way out's chevrons, or the middle of a thing's picture.</summary>
     private Vector2 PointOf(string id)
     {
-        if (_npcs.Find(npc => npc.Definition.Id == id) is Npc npc) return npc.Walker.Position - new Vector2(0f, npc.Walker.Shape.Figure.Y / 2f);
+        if (_npcs.Find(npc => npc.Definition.Id == id) is Npc npc) return npc.Walker.Position - new Vector2(0f, npc.Walker.Size.Y / 2f);
         if (FindDoor(id) is RoomDoor door) return new Vector2(door.Foot.X, door.Area.Y + door.Area.Height / 2f);
         if (FindThing(id) is MapInteractable thing) return thing.Foot - new Vector2(0f, ProofThingHeight);
 

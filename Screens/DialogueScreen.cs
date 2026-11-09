@@ -107,7 +107,7 @@ public class DialogueScreen : GameScreen
 
     private readonly DialogueRunner _runner;
     private readonly SaveData _game;
-    private readonly Func<string, (string Name, Texture2D Sheet)> _speaker;
+    private readonly Func<string, (string Name, Texture2D Sheet, ImportedFigure Art)> _speaker;
     private readonly ICutsceneStage _stage;
     private readonly FormPanel _panel = new();
     private readonly PaintingSprite _paintings = new();
@@ -149,10 +149,10 @@ public class DialogueScreen : GameScreen
     /// <summary>Gets a conversation ready to play against a game.</summary>
     /// <param name="script">What gets said.</param>
     /// <param name="game">The game it changes.</param>
-    /// <param name="speaker">Who a speaker id is: their name and the sheet their face comes off.</param>
+    /// <param name="speaker">Who a speaker id is: their name, the sheet their face comes off, and the imported picture whose head is their face instead, or null.</param>
     /// <param name="random">Where the dice come from.</param>
     /// <param name="stage">Where its stage cues play: the map it's over, or null for none (the creation screen's), where only the fades, the waits and the sounds do anything.</param>
-    public DialogueScreen(DialogueScript script, SaveData game, Func<string, (string Name, Texture2D Sheet)> speaker, Random random, ICutsceneStage stage = null)
+    public DialogueScreen(DialogueScript script, SaveData game, Func<string, (string Name, Texture2D Sheet, ImportedFigure Art)> speaker, Random random, ICutsceneStage stage = null)
     {
         _game = game;
         _speaker = speaker;
@@ -599,17 +599,18 @@ public class DialogueScreen : GameScreen
         return new Rectangle(PanelLeft, PanelBottom - height, PanelWidth, height);
     }
 
-    /// <summary>The speaker's face, in its frame, on the left of the panel. A voice's is tinted.</summary>
+    /// <summary>The speaker's face, in its frame, on the left of the panel: the bust off their sheet, or an imported picture's portrait at the frame's size. A voice's is tinted.</summary>
     private void DrawPortrait(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
         if (node.Speaker == Speakers.Narrator) return;
 
-        (_, Texture2D sheet) = _speaker(node.Speaker);
+        (_, Texture2D sheet, ImportedFigure art) = _speaker(node.Speaker);
         int size = (int)(Bust.Width * PortraitScale);
         var face = new Rectangle(panel.Left + Inset, panel.Top + Inset, size, size);
         _panel.Draw(spriteBatch, new Rectangle(face.X - PortraitFrame, face.Y - PortraitFrame, size + PortraitFrame * 2, size + PortraitFrame * 2), alpha);
         Color tint = Speakers.VoiceOf(node.Speaker) is null ? Color.White : VoiceTint;
-        if (sheet is not null) spriteBatch.Draw(sheet, face, Bust, tint * alpha);
+        if (art is not null) spriteBatch.Draw(art.Portrait(face.Size), face, tint * alpha);
+        else if (sheet is not null) spriteBatch.Draw(sheet, face, Bust, tint * alpha);
     }
 
     /// <summary>The icon beside each option that has one: a die for a check, a heart for a flirt, the voice for a voice's, a lock for the rest that need something.</summary>

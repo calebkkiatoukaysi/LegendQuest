@@ -15,7 +15,8 @@ namespace LegendQuest.Components;
 /// <remarks>
 /// The face is cut off their own sheet (the head and shoulders of the frame where they stand facing
 /// you) and blown up, so it always matches how they look walking about, recolouring and all, and the
-/// paperdoll will be on it for free. Conditions go under the bar once there are any.
+/// paperdoll will be on it for free. Someone drawn as an imported picture has its portrait instead,
+/// at the same size. Conditions go under the bar once there are any.
 /// </remarks>
 public class PartyStrip
 {
@@ -73,10 +74,10 @@ public class PartyStrip
     /// <summary>Draws the cards, the faces and the bars. Goes in a point sampled batch.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in screen space, point-sampled, back to front.</param>
     /// <param name="party">Everyone in the party, in order.</param>
-    /// <param name="sheets">Each one's recoloured sheet, in the same order.</param>
+    /// <param name="figures">Each one's figure, in the same order: their face comes off its recoloured sheet, or its imported picture.</param>
     /// <param name="leader">Which one you're controlling.</param>
     /// <param name="alpha">How far the screen it's on has faded in, 0 to 1.</param>
-    public void DrawCards(SpriteBatch spriteBatch, IReadOnlyList<PartyMember> party, IReadOnlyList<Texture2D> sheets, int leader, float alpha)
+    public void DrawCards(SpriteBatch spriteBatch, IReadOnlyList<PartyMember> party, IReadOnlyList<WalkerSprite> figures, int leader, float alpha)
     {
         for (int i = 0; i < party.Count; i++)
         {
@@ -94,7 +95,10 @@ public class PartyStrip
             }
 
             var face = new Vector2(card.Center.X - Bust.Width * PortraitScale / 2f, card.Top + PortraitTop);
-            spriteBatch.Draw(sheets[i], face, Bust, Color.White * alpha, 0f, Vector2.Zero, PortraitScale, SpriteEffects.None, Layers.Portrait);
+            if (figures[i].Art is ImportedFigure art)
+                spriteBatch.Draw(art.Portrait(new Point((int)(Bust.Width * PortraitScale), (int)(Bust.Height * PortraitScale))), face, null, Color.White * alpha, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.Portrait);
+            else
+                spriteBatch.Draw(figures[i].Sheet, face, Bust, Color.White * alpha, 0f, Vector2.Zero, PortraitScale, SpriteEffects.None, Layers.Portrait);
 
             PartyMember member = party[i];
             var bar = new Rectangle(card.Left + BarInset, card.Bottom - BarBottom - BarHeight, card.Width - BarInset * 2, BarHeight);

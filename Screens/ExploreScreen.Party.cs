@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using LegendQuest.Characters;
 using LegendQuest.Collisions;
@@ -359,12 +358,4 @@ public partial class ExploreScreen
 
     /// <summary>Which way is in front, for a facing: along the room, since everyone faces left or right.</summary>
     private static Vector2 Ahead(Direction facing) => facing == Direction.Left ? -Vector2.UnitX : Vector2.UnitX;
-
-    /// <summary>Everyone's sheet, in party order, for the strip's faces.</summary>
-    private List<Texture2D> PartySheets()
-    {
-        var sheets = new List<Texture2D>(_walkers.Count);
-        foreach (WalkerSprite walker in _walkers) sheets.Add(walker.Sheet);
-        return sheets;
-    }
 }

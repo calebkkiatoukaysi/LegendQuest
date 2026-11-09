@@ -444,32 +444,37 @@ public partial class ExploreScreen
         }
     }
 
-    /// <summary>Who a speaker id in a conversation is: their name and the sheet their face comes off.</summary>
+    /// <summary>Who a speaker id in a conversation is: their name, the sheet their face comes off, and the imported picture whose head is their face instead, if they've one.</summary>
     /// <remarks>
     /// The party first, then whoever's in the room (whoever's waiting at camp too), then the story's
-    /// cast wherever they are. A creature has no face to give: its sheet isn't a person's, so the
-    /// portrait's crop would come off the wrong part of it, and its frame is left empty. A voice is
+    /// cast wherever they are. A creature off a sheet has no face to give: its sheet isn't a person's,
+    /// so the portrait's crop would come off the wrong part of it, and its frame is left empty. One
+    /// drawn as an imported picture has, since the picture knows where its head is. A voice is
     /// whoever it's the voice of, found the same way, with no name: it's heard, not said by anyone
     /// there.
     /// </remarks>
-    private (string Name, Texture2D Sheet) Speaker(string id)
+    private (string Name, Texture2D Sheet, ImportedFigure Art) Speaker(string id)
     {
-        if (Speakers.VoiceOf(id) is string whose) return (string.Empty, Speaker(whose).Sheet);
+        if (Speakers.VoiceOf(id) is string whose)
+        {
+            (_, Texture2D sheet, ImportedFigure art) = Speaker(whose);
+            return (string.Empty, sheet, art);
+        }
 
         for (int i = 0; i < _game.Party.Count; i++)
-            if (_game.Party[i].Id == id) return (_game.Party[i].Name, _walkers[i].Sheet);
+            if (_game.Party[i].Id == id) return (_game.Party[i].Name, _walkers[i].Sheet, _walkers[i].Art);
         foreach (Npc npc in _everyNpc)
         {
             if (npc.Definition.Id == id || npc.Definition.Cast == id)
-                return (npc.Definition.Name, npc.Definition.Creature is null ? npc.Walker.Sheet : null);
+                return (npc.Definition.Name, npc.Definition.Creature is null ? npc.Walker.Sheet : null, npc.Walker.Art);
         }
         if (Cast.Get(id) is CastMember cast)
         {
             Texture2D sheet = cast.Look is not null ? SheetFor(cast.Look)
                 : cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : null;
-            return (cast.Name, sheet);
+            return (cast.Name, sheet, ImportedArt.Get(id));
         }
-        return (id, null);
+        return (id, null, null);
     }
 
     /// <summary>Walks every townsperson who's strolling somewhere a step nearer it. They stop and rest if they get there, or if anything's in the way.</summary>

@@ -363,3 +363,6 @@ FodyWeavers.xsd
 
 # The proof run's pictures, audio log and scratch saves (dotnet run -- --proof shots)
 shots/
+
+# Shapes tools/vectorize.py traced for the parts, kept between imports (made from tools/source)
+tools/.cache/

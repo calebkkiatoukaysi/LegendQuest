@@ -8,8 +8,9 @@ using LegendQuest.Combat;
 // difficulty's named, and Tactician's verdicts are only for information). --proof <dir> plays
 // through the screens, saves a picture of each one into <dir>, and quits;
 // --proof <dir> <part> stops after that part of the run (a ProofStage, like Docks). Anything else
-// starts the game. --validate reads every zone and checks every conversation, shop and loot table, the
-// way the game does as it starts, and quits: it prints what's wrong and exits 1, or exits 0.
+// starts the game. --validate reads every zone and checks every conversation, shop and loot table and
+// every imported character's picture, the way the game does as it starts, and quits: it prints what's
+// wrong and exits 1, or exits 0.
 if (args.Length > 1 && args[0] == "--simulate")
 {
     int runs = CombatSimulator.DefaultRuns;
@@ -41,7 +42,7 @@ if (args.Length > 0 && args[0] == "--validate")
         Console.Error.WriteLine(fault.Message);
         Environment.Exit(1);
     }
-    Console.WriteLine("validate: every zone, conversation, shop and loot table checks out.");
+    Console.WriteLine("validate: every zone, conversation, shop, loot table, imported picture and character part checks out.");
     return;
 }
 

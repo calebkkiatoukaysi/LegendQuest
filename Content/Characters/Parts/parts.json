@@ -1,0 +1,9750 @@
+{
+ "version": 4,
+ "scale": 0.5,
+ "standardHeight": 675.5,
+ "canvas": [
+  512,
+  768
+ ],
+ "sockets": [
+  "root",
+  "neck",
+  "crown",
+  "chest",
+  "back",
+  "hand.near",
+  "hand.far"
+ ],
+ "slotSockets": {
+  "body": "root",
+  "head": "neck",
+  "face": "neck",
+  "armor": "root",
+  "cape": "back",
+  "helm": "neck",
+  "weapon": "hand.near",
+  "offhand": "hand.far"
+ },
+ "order": [
+  "cape",
+  "body",
+  "armor",
+  "head",
+  "face",
+  "helm",
+  "weapon",
+  "offhand"
+ ],
+ "pages": {
+  "armor-0": [
+   1984,
+   1894
+  ],
+  "armor-1": [
+   2032,
+   1878
+  ],
+  "armor-2": [
+   2009,
+   1868
+  ],
+  "armor-3": [
+   1971,
+   1855
+  ],
+  "armor-4": [
+   2034,
+   1848
+  ],
+  "armor-5": [
+   1922,
+   1820
+  ],
+  "base-0": [
+   1280,
+   620
+  ],
+  "face-0": [
+   2044,
+   1420
+  ],
+  "helm-0": [
+   2046,
+   1404
+  ]
+ },
+ "bases": {
+  "base-male": {
+   "sockets": {
+    "root": [
+     258.62,
+     733.5
+    ],
+    "neck": [
+     276.25,
+     135.75
+    ],
+    "crown": [
+     270.6,
+     57.0
+    ],
+    "chest": [
+     252.5,
+     205.0
+    ],
+    "back": [
+     189.5,
+     165.0
+    ],
+    "hand.near": [
+     170.6,
+     406.66
+    ],
+    "hand.far": [
+     344.15,
+     403.38
+    ]
+   },
+   "head": [
+    234.5,
+    57.0,
+    77.0,
+    89.5
+   ],
+   "body": "base-male.body",
+   "bald": "base-male.head",
+   "skin": [
+    215.0,
+    157.0,
+    107.0
+   ]
+  },
+  "base-female": {
+   "sockets": {
+    "root": [
+     256.25,
+     733.0
+    ],
+    "neck": [
+     267.0,
+     149.25
+    ],
+    "crown": [
+     265.33,
+     75.0
+    ],
+    "chest": [
+     257.5,
+     222.5
+    ],
+    "back": [
+     205.5,
+     182.5
+    ],
+    "hand.near": [
+     182.64,
+     406.65
+    ],
+    "hand.far": [
+     340.8,
+     403.84
+    ]
+   },
+   "head": [
+    229.5,
+    75.0,
+    78.5,
+    87.5
+   ],
+   "body": "base-female.body",
+   "bald": "base-female.head",
+   "skin": [
+    216.0,
+    158.0,
+    108.0
+   ]
+  }
+ },
+ "parts": {
+  "armor-baker": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    532,
+    617,
+    245,
+    604
+   ],
+   "pivot": [
+    130.25,
+    603.0
+   ],
+   "maskRect": [
+    781,
+    617,
+    245,
+    604
+   ],
+   "tones": [
+    [
+     183.0,
+     136.2,
+     107.2
+    ],
+    [
+     106.3,
+     56.9,
+     46.3
+    ]
+   ]
+  },
+  "armor-brannock": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    740,
+    1250,
+    240,
+    616
+   ],
+   "pivot": [
+    119.62,
+    614.5
+   ],
+   "maskRect": [
+    984,
+    1250,
+    240,
+    616
+   ],
+   "tones": [
+    [
+     85.3,
+     65.3,
+     54.7
+    ],
+    [
+     124.2,
+     82.5,
+     55.2
+    ]
+   ]
+  },
+  "armor-busker": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    1662,
+    2,
+    257,
+    622
+   ],
+   "pivot": [
+    138.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    628,
+    257,
+    622
+   ],
+   "tones": [
+    [
+     127.6,
+     79.7,
+     67.1
+    ],
+    null
+   ]
+  },
+  "armor-chain-mail": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    1731,
+    1254,
+    247,
+    621
+   ],
+   "pivot": [
+    123.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    2,
+    247,
+    621
+   ],
+   "tones": [
+    [
+     100.2,
+     78.3,
+     66.9
+    ],
+    null
+   ]
+  },
+  "armor-chain-mail-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    1638,
+    619,
+    224,
+    611
+   ],
+   "pivot": [
+    107.25,
+    603.0
+   ],
+   "maskRect": [
+    2,
+    1235,
+    224,
+    611
+   ],
+   "tones": [
+    [
+     99.0,
+     75.0,
+     59.4
+    ],
+    null
+   ]
+  },
+  "armor-chain-shirt": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    249,
+    1254,
+    241,
+    622
+   ],
+   "pivot": [
+    118.62,
+    614.5
+   ],
+   "maskRect": [
+    494,
+    1254,
+    241,
+    622
+   ],
+   "tones": [
+    [
+     90.4,
+     67.4,
+     56.5
+    ],
+    [
+     148.5,
+     99.0,
+     68.9
+    ]
+   ]
+  },
+  "armor-chain-shirt-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    230,
+    1235,
+    223,
+    611
+   ],
+   "pivot": [
+    106.25,
+    603.0
+   ],
+   "maskRect": [
+    457,
+    1235,
+    223,
+    611
+   ],
+   "tones": [
+    [
+     86.4,
+     60.4,
+     46.3
+    ],
+    [
+     167.0,
+     116.8,
+     80.2
+    ]
+   ]
+  },
+  "armor-champion": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    1496,
+    1269,
+    241,
+    623
+   ],
+   "pivot": [
+    119.62,
+    614.5
+   ],
+   "maskRect": [
+    1741,
+    1269,
+    241,
+    623
+   ],
+   "tones": [
+    [
+     79.7,
+     50.4,
+     36.9
+    ],
+    [
+     154.7,
+     113.9,
+     82.4
+    ]
+   ]
+  },
+  "armor-champion-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    900,
+    2,
+    222,
+    605
+   ],
+   "pivot": [
+    108.25,
+    603.0
+   ],
+   "maskRect": [
+    1126,
+    2,
+    222,
+    605
+   ],
+   "tones": [
+    [
+     87.7,
+     55.9,
+     40.7
+    ],
+    [
+     63.3,
+     53.0,
+     57.0
+    ]
+   ]
+  },
+  "armor-child-cove": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    1728,
+    627,
+    242,
+    616
+   ],
+   "pivot": [
+    122.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    1250,
+    242,
+    616
+   ],
+   "tones": [
+    [
+     82.9,
+     84.9,
+     83.2
+    ],
+    [
+     98.7,
+     69.1,
+     48.7
+    ]
+   ]
+  },
+  "armor-clerk": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    253,
+    2,
+    241,
+    621
+   ],
+   "pivot": [
+    123.62,
+    614.5
+   ],
+   "maskRect": [
+    498,
+    2,
+    241,
+    621
+   ],
+   "tones": [
+    [
+     155.1,
+     121.7,
+     94.9
+    ],
+    [
+     132.2,
+     86.8,
+     41.3
+    ]
+   ]
+  },
+  "armor-corra": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    1172,
+    2,
+    230,
+    612
+   ],
+   "pivot": [
+    117.25,
+    603.0
+   ],
+   "maskRect": [
+    1406,
+    2,
+    230,
+    612
+   ],
+   "tones": [
+    [
+     100.4,
+     63.9,
+     44.5
+    ],
+    [
+     93.9,
+     92.1,
+     91.4
+    ]
+   ]
+  },
+  "armor-courier": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    514,
+    2,
+    251,
+    631
+   ],
+   "pivot": [
+    126.62,
+    614.5
+   ],
+   "maskRect": [
+    769,
+    2,
+    251,
+    631
+   ],
+   "tones": [
+    [
+     69.1,
+     48.1,
+     40.6
+    ],
+    [
+     161.5,
+     123.3,
+     96.9
+    ]
+   ]
+  },
+  "armor-crane": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    2,
+    2,
+    282,
+    622
+   ],
+   "pivot": [
+    147.62,
+    614.5
+   ],
+   "maskRect": [
+    288,
+    2,
+    282,
+    622
+   ],
+   "tones": [
+    [
+     85.1,
+     59.1,
+     62.0
+    ],
+    null
+   ]
+  },
+  "armor-elara": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    741,
+    1240,
+    240,
+    613
+   ],
+   "pivot": [
+    119.25,
+    603.0
+   ],
+   "maskRect": [
+    985,
+    1240,
+    240,
+    613
+   ],
+   "tones": [
+    [
+     52.2,
+     47.9,
+     70.9
+    ],
+    [
+     98.0,
+     66.7,
+     50.0
+    ]
+   ]
+  },
+  "armor-elara-disguise": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    1697,
+    1240,
+    216,
+    613
+   ],
+   "pivot": [
+    101.25,
+    603.0
+   ],
+   "maskRect": [
+    2,
+    2,
+    216,
+    613
+   ],
+   "tones": [
+    [
+     67.9,
+     46.8,
+     38.0
+    ],
+    [
+     162.5,
+     129.8,
+     105.7
+    ]
+   ]
+  },
+  "armor-elder-coat": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    756,
+    637,
+    262,
+    625
+   ],
+   "pivot": [
+    140.62,
+    614.5
+   ],
+   "maskRect": [
+    1022,
+    637,
+    262,
+    625
+   ],
+   "tones": [
+    [
+     100.9,
+     82.5,
+     75.7
+    ],
+    [
+     153.9,
+     117.5,
+     92.7
+    ]
+   ]
+  },
+  "armor-elder-woman": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    249,
+    1240,
+    242,
+    613
+   ],
+   "pivot": [
+    124.25,
+    603.0
+   ],
+   "maskRect": [
+    495,
+    1240,
+    242,
+    613
+   ],
+   "tones": [
+    [
+     119.0,
+     85.5,
+     67.5
+    ],
+    null
+   ]
+  },
+  "armor-fencer": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    446,
+    2,
+    223,
+    610
+   ],
+   "pivot": [
+    106.25,
+    603.0
+   ],
+   "maskRect": [
+    673,
+    2,
+    223,
+    610
+   ],
+   "tones": [
+    [
+     51.7,
+     44.8,
+     55.2
+    ],
+    [
+     81.7,
+     51.9,
+     38.6
+    ]
+   ]
+  },
+  "armor-fisher": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    248,
+    1250,
+    242,
+    616
+   ],
+   "pivot": [
+    124.62,
+    614.5
+   ],
+   "maskRect": [
+    494,
+    1250,
+    242,
+    616
+   ],
+   "tones": [
+    [
+     159.9,
+     99.4,
+     36.2
+    ],
+    [
+     96.2,
+     72.1,
+     57.3
+    ]
+   ]
+  },
+  "armor-glassblower": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    1229,
+    1240,
+    230,
+    613
+   ],
+   "pivot": [
+    116.25,
+    603.0
+   ],
+   "maskRect": [
+    1463,
+    1240,
+    230,
+    613
+   ],
+   "tones": [
+    [
+     106.7,
+     71.1,
+     51.2
+    ],
+    null
+   ]
+  },
+  "armor-grell": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    1204,
+    627,
+    258,
+    616
+   ],
+   "pivot": [
+    129.62,
+    614.5
+   ],
+   "maskRect": [
+    1466,
+    627,
+    258,
+    616
+   ],
+   "tones": [
+    [
+     116.7,
+     48.2,
+     41.1
+    ],
+    [
+     69.5,
+     48.8,
+     39.0
+    ]
+   ]
+  },
+  "armor-hide": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    775,
+    628,
+    251,
+    622
+   ],
+   "pivot": [
+    126.62,
+    614.5
+   ],
+   "maskRect": [
+    1030,
+    628,
+    251,
+    622
+   ],
+   "tones": [
+    [
+     109.5,
+     77.7,
+     59.8
+    ],
+    null
+   ]
+  },
+  "armor-hide-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    1174,
+    619,
+    228,
+    611
+   ],
+   "pivot": [
+    111.25,
+    603.0
+   ],
+   "maskRect": [
+    1406,
+    619,
+    228,
+    611
+   ],
+   "tones": [
+    [
+     102.0,
+     67.3,
+     46.0
+    ],
+    null
+   ]
+  },
+  "armor-kael": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    1228,
+    1250,
+    240,
+    616
+   ],
+   "pivot": [
+    119.62,
+    614.5
+   ],
+   "maskRect": [
+    1472,
+    1250,
+    240,
+    616
+   ],
+   "tones": [
+    [
+     74.3,
+     55.4,
+     47.6
+    ],
+    [
+     106.8,
+     45.0,
+     40.8
+    ]
+   ]
+  },
+  "armor-leather": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    1546,
+    2,
+    252,
+    628
+   ],
+   "pivot": [
+    125.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    637,
+    252,
+    628
+   ],
+   "tones": [
+    [
+     81.5,
+     51.6,
+     38.6
+    ],
+    null
+   ]
+  },
+  "armor-leather-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    2,
+    2,
+    218,
+    611
+   ],
+   "pivot": [
+    103.25,
+    603.0
+   ],
+   "maskRect": [
+    224,
+    2,
+    218,
+    611
+   ],
+   "tones": [
+    [
+     88.0,
+     54.7,
+     39.0
+    ],
+    null
+   ]
+  },
+  "armor-leon": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    1288,
+    637,
+    286,
+    624
+   ],
+   "pivot": [
+    157.62,
+    614.5
+   ],
+   "maskRect": [
+    1578,
+    637,
+    286,
+    624
+   ],
+   "tones": [
+    [
+     187.3,
+     154.5,
+     127.8
+    ],
+    [
+     83.5,
+     62.1,
+     51.4
+    ]
+   ]
+  },
+  "armor-lodge-ranger": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    1482,
+    617,
+    217,
+    596
+   ],
+   "pivot": [
+    104.25,
+    603.0
+   ],
+   "maskRect": [
+    1703,
+    617,
+    217,
+    596
+   ],
+   "tones": [
+    [
+     80.1,
+     63.8,
+     42.6
+    ],
+    null
+   ]
+  },
+  "armor-mage-robes": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    574,
+    2,
+    275,
+    622
+   ],
+   "pivot": [
+    147.62,
+    614.5
+   ],
+   "maskRect": [
+    853,
+    2,
+    275,
+    622
+   ],
+   "tones": [
+    [
+     63.5,
+     74.7,
+     71.0
+    ],
+    [
+     124.6,
+     92.5,
+     61.8
+    ]
+   ]
+  },
+  "armor-mage-robes-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    2,
+    617,
+    261,
+    604
+   ],
+   "pivot": [
+    138.25,
+    603.0
+   ],
+   "maskRect": [
+    267,
+    617,
+    261,
+    604
+   ],
+   "tones": [
+    [
+     57.8,
+     70.7,
+     65.7
+    ],
+    [
+     161.0,
+     122.2,
+     87.4
+    ]
+   ]
+  },
+  "armor-maid": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    660,
+    2,
+    252,
+    612
+   ],
+   "pivot": [
+    132.25,
+    603.0
+   ],
+   "maskRect": [
+    916,
+    2,
+    252,
+    612
+   ],
+   "tones": [
+    [
+     194.1,
+     157.4,
+     127.6
+    ],
+    [
+     94.6,
+     89.8,
+     91.8
+    ]
+   ]
+  },
+  "armor-merchant": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    263,
+    628,
+    252,
+    622
+   ],
+   "pivot": [
+    132.62,
+    614.5
+   ],
+   "maskRect": [
+    519,
+    628,
+    252,
+    622
+   ],
+   "tones": [
+    [
+     64.3,
+     36.8,
+     33.7
+    ],
+    [
+     152.5,
+     116.4,
+     102.6
+    ]
+   ]
+  },
+  "armor-mira": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    1227,
+    2,
+    248,
+    614
+   ],
+   "pivot": [
+    134.25,
+    603.0
+   ],
+   "maskRect": [
+    1479,
+    2,
+    248,
+    614
+   ],
+   "tones": [
+    [
+     190.3,
+     145.7,
+     107.3
+    ],
+    [
+     91.2,
+     64.7,
+     48.9
+    ]
+   ]
+  },
+  "armor-noble": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    2,
+    2,
+    252,
+    631
+   ],
+   "pivot": [
+    130.62,
+    614.5
+   ],
+   "maskRect": [
+    258,
+    2,
+    252,
+    631
+   ],
+   "tones": [
+    [
+     134.3,
+     107.9,
+     87.9
+    ],
+    null
+   ]
+  },
+  "armor-noble-gown": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    2,
+    1225,
+    285,
+    593
+   ],
+   "pivot": [
+    144.25,
+    603.0
+   ],
+   "maskRect": [
+    291,
+    1225,
+    285,
+    593
+   ],
+   "tones": [
+    [
+     134.1,
+     79.2,
+     68.2
+    ],
+    null
+   ]
+  },
+  "armor-odelle": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    731,
+    2,
+    244,
+    615
+   ],
+   "pivot": [
+    121.25,
+    603.0
+   ],
+   "maskRect": [
+    979,
+    2,
+    244,
+    615
+   ],
+   "tones": [
+    [
+     87.7,
+     58.1,
+     47.7
+    ],
+    [
+     153.8,
+     111.8,
+     81.1
+    ]
+   ]
+  },
+  "armor-padded": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    1225,
+    1254,
+    249,
+    621
+   ],
+   "pivot": [
+    126.62,
+    614.5
+   ],
+   "maskRect": [
+    1478,
+    1254,
+    249,
+    621
+   ],
+   "tones": [
+    [
+     157.4,
+     118.3,
+     89.5
+    ],
+    [
+     78.1,
+     51.6,
+     39.0
+    ]
+   ]
+  },
+  "armor-padded-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    1590,
+    1235,
+    219,
+    611
+   ],
+   "pivot": [
+    104.25,
+    603.0
+   ],
+   "maskRect": [
+    1813,
+    1235,
+    219,
+    611
+   ],
+   "tones": [
+    [
+     127.9,
+     90.0,
+     64.7
+    ],
+    null
+   ]
+  },
+  "armor-pilgrim": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    234,
+    619,
+    233,
+    611
+   ],
+   "pivot": [
+    119.25,
+    603.0
+   ],
+   "maskRect": [
+    471,
+    619,
+    233,
+    611
+   ],
+   "tones": [
+    [
+     98.4,
+     61.0,
+     52.7
+    ],
+    null
+   ]
+  },
+  "armor-plate": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    743,
+    2,
+    255,
+    620
+   ],
+   "pivot": [
+    130.62,
+    614.5
+   ],
+   "maskRect": [
+    1002,
+    2,
+    255,
+    620
+   ],
+   "tones": [
+    [
+     127.6,
+     104.5,
+     96.0
+    ],
+    null
+   ]
+  },
+  "armor-plate-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    1640,
+    2,
+    228,
+    612
+   ],
+   "pivot": [
+    111.25,
+    603.0
+   ],
+   "maskRect": [
+    2,
+    619,
+    228,
+    612
+   ],
+   "tones": [
+    [
+     126.3,
+     101.3,
+     89.8
+    ],
+    null
+   ]
+  },
+  "armor-porter": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    1285,
+    628,
+    247,
+    622
+   ],
+   "pivot": [
+    122.62,
+    614.5
+   ],
+   "maskRect": [
+    1536,
+    628,
+    247,
+    622
+   ],
+   "tones": [
+    [
+     82.3,
+     53.0,
+     38.2
+    ],
+    [
+     159.7,
+     119.8,
+     92.0
+    ]
+   ]
+  },
+  "armor-red-gull": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    1716,
+    1250,
+    239,
+    616
+   ],
+   "pivot": [
+    121.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    2,
+    239,
+    616
+   ],
+   "tones": [
+    [
+     92.2,
+     58.8,
+     40.1
+    ],
+    [
+     138.1,
+     64.4,
+     52.3
+    ]
+   ]
+  },
+  "armor-refugee-child": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    684,
+    1235,
+    223,
+    611
+   ],
+   "pivot": [
+    111.25,
+    603.0
+   ],
+   "maskRect": [
+    911,
+    1235,
+    223,
+    611
+   ],
+   "tones": [
+    [
+     116.8,
+     84.4,
+     64.3
+    ],
+    null
+   ]
+  },
+  "armor-refugee-man": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    1132,
+    2,
+    261,
+    622
+   ],
+   "pivot": [
+    134.62,
+    614.5
+   ],
+   "maskRect": [
+    1397,
+    2,
+    261,
+    622
+   ],
+   "tones": [
+    [
+     92.0,
+     72.5,
+     63.7
+    ],
+    null
+   ]
+  },
+  "armor-refugee-woman": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    708,
+    619,
+    229,
+    611
+   ],
+   "pivot": [
+    116.25,
+    603.0
+   ],
+   "maskRect": [
+    941,
+    619,
+    229,
+    611
+   ],
+   "tones": [
+    [
+     98.5,
+     62.8,
+     45.0
+    ],
+    null
+   ]
+  },
+  "armor-road": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    1024,
+    2,
+    257,
+    628
+   ],
+   "pivot": [
+    134.62,
+    614.5
+   ],
+   "maskRect": [
+    1285,
+    2,
+    257,
+    628
+   ],
+   "tones": [
+    [
+     82.0,
+     58.7,
+     46.3
+    ],
+    null
+   ]
+  },
+  "armor-royal-guard": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    1759,
+    2,
+    248,
+    619
+   ],
+   "pivot": [
+    122.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    627,
+    248,
+    619
+   ],
+   "tones": [
+    [
+     106.8,
+     88.0,
+     80.2
+    ],
+    [
+     50.2,
+     45.1,
+     58.7
+    ]
+   ]
+  },
+  "armor-royal-livery": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    254,
+    627,
+    241,
+    619
+   ],
+   "pivot": [
+    121.62,
+    614.5
+   ],
+   "maskRect": [
+    499,
+    627,
+    241,
+    619
+   ],
+   "tones": [
+    [
+     51.2,
+     44.3,
+     54.8
+    ],
+    [
+     147.6,
+     124.7,
+     114.2
+    ]
+   ]
+  },
+  "armor-sailor": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    245,
+    2,
+    239,
+    616
+   ],
+   "pivot": [
+    121.62,
+    614.5
+   ],
+   "maskRect": [
+    488,
+    2,
+    239,
+    616
+   ],
+   "tones": [
+    [
+     124.5,
+     84.6,
+     55.5
+    ],
+    null
+   ]
+  },
+  "armor-sb-traveller": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    244,
+    622,
+    224,
+    614
+   ],
+   "pivot": [
+    112.25,
+    603.0
+   ],
+   "maskRect": [
+    472,
+    622,
+    224,
+    614
+   ],
+   "tones": [
+    [
+     105.6,
+     43.9,
+     34.4
+    ],
+    [
+     73.6,
+     49.8,
+     38.9
+    ]
+   ]
+  },
+  "armor-scale": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    1000,
+    1269,
+    244,
+    623
+   ],
+   "pivot": [
+    123.62,
+    614.5
+   ],
+   "maskRect": [
+    1248,
+    1269,
+    244,
+    623
+   ],
+   "tones": [
+    [
+     101.4,
+     75.9,
+     64.3
+    ],
+    null
+   ]
+  },
+  "armor-scale-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    1030,
+    617,
+    222,
+    604
+   ],
+   "pivot": [
+    108.25,
+    603.0
+   ],
+   "maskRect": [
+    1256,
+    617,
+    222,
+    604
+   ],
+   "tones": [
+    [
+     108.3,
+     78.9,
+     62.5
+    ],
+    null
+   ]
+  },
+  "armor-sera": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    744,
+    627,
+    226,
+    617
+   ],
+   "pivot": [
+    113.25,
+    603.0
+   ],
+   "maskRect": [
+    974,
+    627,
+    226,
+    617
+   ],
+   "tones": [
+    [
+     88.1,
+     66.2,
+     44.2
+    ],
+    null
+   ]
+  },
+  "armor-smith": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    258,
+    637,
+    245,
+    628
+   ],
+   "pivot": [
+    121.62,
+    614.5
+   ],
+   "maskRect": [
+    507,
+    637,
+    245,
+    628
+   ],
+   "tones": [
+    [
+     78.8,
+     51.9,
+     38.4
+    ],
+    [
+     171.5,
+     132.3,
+     102.6
+    ]
+   ]
+  },
+  "armor-studded": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    2,
+    1269,
+    246,
+    623
+   ],
+   "pivot": [
+    122.62,
+    614.5
+   ],
+   "maskRect": [
+    252,
+    1269,
+    246,
+    623
+   ],
+   "tones": [
+    [
+     83.0,
+     52.7,
+     39.3
+    ],
+    null
+   ]
+  },
+  "armor-studded-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    1138,
+    1235,
+    222,
+    611
+   ],
+   "pivot": [
+    106.25,
+    603.0
+   ],
+   "maskRect": [
+    1364,
+    1235,
+    222,
+    611
+   ],
+   "tones": [
+    [
+     83.2,
+     50.5,
+     34.4
+    ],
+    null
+   ]
+  },
+  "armor-tavern": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-4",
+   "rect": [
+    222,
+    2,
+    215,
+    613
+   ],
+   "pivot": [
+    99.25,
+    603.0
+   ],
+   "maskRect": [
+    441,
+    2,
+    215,
+    613
+   ],
+   "tones": [
+    [
+     91.8,
+     59.0,
+     42.4
+    ],
+    [
+     173.5,
+     129.5,
+     95.0
+    ]
+   ]
+  },
+  "armor-temple": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    1154,
+    622,
+    252,
+    613
+   ],
+   "pivot": [
+    135.25,
+    603.0
+   ],
+   "maskRect": [
+    1410,
+    622,
+    252,
+    613
+   ],
+   "tones": [
+    [
+     178.0,
+     125.3,
+     78.7
+    ],
+    [
+     100.1,
+     64.1,
+     41.8
+    ]
+   ]
+  },
+  "armor-trader": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-5",
+   "rect": [
+    1352,
+    2,
+    220,
+    605
+   ],
+   "pivot": [
+    106.25,
+    603.0
+   ],
+   "maskRect": [
+    1576,
+    2,
+    220,
+    605
+   ],
+   "tones": [
+    [
+     99.5,
+     69.4,
+     51.6
+    ],
+    null
+   ]
+  },
+  "armor-traveller": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    1731,
+    2,
+    238,
+    614
+   ],
+   "pivot": [
+    118.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    622,
+    238,
+    614
+   ],
+   "tones": [
+    [
+     90.1,
+     63.2,
+     47.9
+    ],
+    [
+     187.1,
+     156.3,
+     128.2
+    ]
+   ]
+  },
+  "armor-traveller-f": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    700,
+    622,
+    223,
+    614
+   ],
+   "pivot": [
+    112.25,
+    603.0
+   ],
+   "maskRect": [
+    927,
+    622,
+    223,
+    614
+   ],
+   "tones": [
+    [
+     90.9,
+     62.4,
+     45.9
+    ],
+    [
+     196.9,
+     161.8,
+     126.3
+    ]
+   ]
+  },
+  "armor-urchin": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-2",
+   "rect": [
+    1261,
+    2,
+    245,
+    620
+   ],
+   "pivot": [
+    124.62,
+    614.5
+   ],
+   "maskRect": [
+    1510,
+    2,
+    245,
+    620
+   ],
+   "tones": [
+    [
+     87.5,
+     60.8,
+     46.4
+    ],
+    [
+     173.3,
+     134.0,
+     103.0
+    ]
+   ]
+  },
+  "armor-villager-man": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-0",
+   "rect": [
+    502,
+    1269,
+    245,
+    623
+   ],
+   "pivot": [
+    125.62,
+    614.5
+   ],
+   "maskRect": [
+    751,
+    1269,
+    245,
+    623
+   ],
+   "tones": [
+    [
+     89.6,
+     61.9,
+     46.6
+    ],
+    null
+   ]
+  },
+  "armor-villager-woman": {
+   "slot": "armor",
+   "base": "base-female",
+   "socket": "root",
+   "page": "armor-3",
+   "rect": [
+    1666,
+    622,
+    243,
+    613
+   ],
+   "pivot": [
+    122.25,
+    603.0
+   ],
+   "maskRect": [
+    2,
+    1240,
+    243,
+    613
+   ],
+   "tones": [
+    [
+     179.4,
+     130.3,
+     89.8
+    ],
+    [
+     160.3,
+     136.2,
+     112.4
+    ]
+   ]
+  },
+  "armor-watch": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    739,
+    1254,
+    239,
+    622
+   ],
+   "pivot": [
+    122.62,
+    614.5
+   ],
+   "maskRect": [
+    982,
+    1254,
+    239,
+    622
+   ],
+   "tones": [
+    [
+     49.2,
+     46.0,
+     58.2
+    ],
+    [
+     92.8,
+     69.2,
+     57.7
+    ]
+   ]
+  },
+  "armor-watch-captain": {
+   "slot": "armor",
+   "base": "base-male",
+   "socket": "root",
+   "page": "armor-1",
+   "rect": [
+    1787,
+    628,
+    243,
+    622
+   ],
+   "pivot": [
+    125.62,
+    614.5
+   ],
+   "maskRect": [
+    2,
+    1254,
+    243,
+    622
+   ],
+   "tones": [
+    [
+     55.2,
+     50.6,
+     61.7
+    ],
+    [
+     96.9,
+     74.9,
+     63.5
+    ]
+   ]
+  },
+  "base-female.body": {
+   "slot": "body",
+   "base": "base-female",
+   "socket": "root",
+   "page": "base-0",
+   "rect": [
+    486,
+    2,
+    225,
+    605
+   ],
+   "pivot": [
+    113.25,
+    603.0
+   ],
+   "maskRect": [
+    715,
+    2,
+    225,
+    605
+   ]
+  },
+  "base-female.head": {
+   "slot": "head",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "base-0",
+   "rect": [
+    1110,
+    2,
+    82,
+    90
+   ],
+   "pivot": [
+    39.0,
+    76.25
+   ],
+   "maskRect": [
+    1196,
+    2,
+    82,
+    90
+   ]
+  },
+  "base-male.body": {
+   "slot": "body",
+   "base": "base-male",
+   "socket": "root",
+   "page": "base-0",
+   "rect": [
+    2,
+    2,
+    238,
+    616
+   ],
+   "pivot": [
+    121.62,
+    614.5
+   ],
+   "maskRect": [
+    244,
+    2,
+    238,
+    616
+   ]
+  },
+  "base-male.head": {
+   "slot": "head",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "base-0",
+   "rect": [
+    944,
+    2,
+    79,
+    92
+   ],
+   "pivot": [
+    43.25,
+    80.75
+   ],
+   "maskRect": [
+    1027,
+    2,
+    79,
+    92
+   ]
+  },
+  "face-anselle": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1524,
+    724,
+    121,
+    124
+   ],
+   "pivot": [
+    77.0,
+    91.25
+   ],
+   "maskRect": [
+    1649,
+    724,
+    121,
+    124
+   ],
+   "skin": [
+    1.023,
+    0.988,
+    1.063
+   ],
+   "tones": [
+    [
+     174.3,
+     146.9,
+     128.8
+    ],
+    null
+   ]
+  },
+  "face-anvil-barkeep": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1092,
+    437,
+    141,
+    136
+   ],
+   "pivot": [
+    91.0,
+    103.25
+   ],
+   "maskRect": [
+    1237,
+    437,
+    141,
+    136
+   ],
+   "skin": [
+    0.927,
+    0.803,
+    0.738
+   ],
+   "tones": [
+    [
+     35.7,
+     25.7,
+     22.4
+    ],
+    [
+     182.7,
+     156.9,
+     136.7
+    ]
+   ]
+  },
+  "face-brannock": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    884,
+    437,
+    100,
+    137
+   ],
+   "pivot": [
+    59.25,
+    98.75
+   ],
+   "maskRect": [
+    988,
+    437,
+    100,
+    137
+   ],
+   "skin": [
+    0.958,
+    0.892,
+    0.824
+   ],
+   "tones": [
+    [
+     122.6,
+     64.7,
+     37.8
+    ],
+    null
+   ]
+  },
+  "face-brenna": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    1213,
+    126,
+    103
+   ],
+   "pivot": [
+    75.0,
+    89.25
+   ],
+   "maskRect": [
+    132,
+    1213,
+    126,
+    103
+   ],
+   "skin": [
+    0.972,
+    0.879,
+    0.843
+   ],
+   "tones": [
+    [
+     62.6,
+     39.4,
+     30.4
+    ],
+    [
+     125.0,
+     102.5,
+     88.5
+    ]
+   ]
+  },
+  "face-brisk": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1130,
+    1213,
+    80,
+    102
+   ],
+   "pivot": [
+    45.25,
+    85.75
+   ],
+   "maskRect": [
+    1214,
+    1213,
+    80,
+    102
+   ],
+   "skin": [
+    0.87,
+    0.79,
+    0.748
+   ],
+   "tones": [
+    null,
+    null
+   ]
+  },
+  "face-corra": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1056,
+    724,
+    126,
+    125
+   ],
+   "pivot": [
+    79.0,
+    95.25
+   ],
+   "maskRect": [
+    1186,
+    724,
+    126,
+    125
+   ],
+   "skin": [
+    0.977,
+    0.881,
+    0.833
+   ],
+   "tones": [
+    [
+     77.7,
+     52.6,
+     41.0
+    ],
+    [
+     118.9,
+     102.6,
+     90.3
+    ]
+   ]
+  },
+  "face-crane": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    148,
+    1320,
+    82,
+    98
+   ],
+   "pivot": [
+    48.25,
+    87.75
+   ],
+   "maskRect": [
+    234,
+    1320,
+    82,
+    98
+   ],
+   "skin": [
+    1.084,
+    1.218,
+    1.35
+   ],
+   "tones": [
+    null,
+    [
+     102.2,
+     92.8,
+     91.2
+    ]
+   ]
+  },
+  "face-elara": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    724,
+    129,
+    126
+   ],
+   "pivot": [
+    76.0,
+    91.25
+   ],
+   "maskRect": [
+    135,
+    724,
+    129,
+    126
+   ],
+   "skin": [
+    1.051,
+    1.044,
+    1.131
+   ],
+   "tones": [
+    [
+     38.4,
+     28.0,
+     25.4
+    ],
+    [
+     121.5,
+     108.8,
+     102.8
+    ]
+   ]
+  },
+  "face-fennick": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    922,
+    1213,
+    100,
+    102
+   ],
+   "pivot": [
+    63.25,
+    84.75
+   ],
+   "maskRect": [
+    1026,
+    1213,
+    100,
+    102
+   ],
+   "skin": [
+    1.06,
+    1.089,
+    1.222
+   ],
+   "tones": [
+    [
+     134.8,
+     116.4,
+     101.9
+    ],
+    null
+   ]
+  },
+  "face-gannet": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1064,
+    585,
+    123,
+    129
+   ],
+   "pivot": [
+    77.0,
+    95.25
+   ],
+   "maskRect": [
+    1191,
+    585,
+    123,
+    129
+   ],
+   "skin": [
+    1.009,
+    0.936,
+    0.936
+   ],
+   "tones": [
+    null,
+    null
+   ]
+  },
+  "face-grell": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1568,
+    980,
+    96,
+    114
+   ],
+   "pivot": [
+    53.25,
+    76.75
+   ],
+   "maskRect": [
+    1668,
+    980,
+    96,
+    114
+   ],
+   "skin": [
+    0.963,
+    0.911,
+    0.897
+   ],
+   "tones": [
+    [
+     138.1,
+     72.5,
+     33.2
+    ],
+    [
+     110.6,
+     96.7,
+     86.6
+    ]
+   ]
+  },
+  "face-guild-apprentice": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    286,
+    980,
+    144,
+    116
+   ],
+   "pivot": [
+    91.0,
+    87.25
+   ],
+   "maskRect": [
+    434,
+    980,
+    144,
+    116
+   ],
+   "skin": [
+    0.995,
+    1.03,
+    1.222
+   ],
+   "tones": [
+    [
+     143.0,
+     101.8,
+     74.5
+    ],
+    [
+     61.6,
+     57.6,
+     36.1
+    ]
+   ]
+  },
+  "face-hale": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1872,
+    1101,
+    83,
+    104
+   ],
+   "pivot": [
+    46.25,
+    87.75
+   ],
+   "maskRect": [
+    1959,
+    1101,
+    83,
+    104
+   ],
+   "skin": [
+    1.028,
+    1.056,
+    1.131
+   ],
+   "tones": [
+    [
+     133.4,
+     116.9,
+     105.9
+    ],
+    null
+   ]
+  },
+  "face-hedda": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    318,
+    437,
+    138,
+    140
+   ],
+   "pivot": [
+    83.0,
+    91.25
+   ],
+   "maskRect": [
+    460,
+    437,
+    138,
+    140
+   ],
+   "skin": [
+    0.953,
+    0.83,
+    0.776
+   ],
+   "tones": [
+    [
+     85.6,
+     52.9,
+     35.9
+    ],
+    null
+   ]
+  },
+  "face-hesper": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1232,
+    2,
+    144,
+    209
+   ],
+   "pivot": [
+    99.0,
+    85.25
+   ],
+   "maskRect": [
+    1380,
+    2,
+    144,
+    209
+   ],
+   "skin": [
+    0.691,
+    0.564,
+    0.518
+   ],
+   "tones": [
+    [
+     151.6,
+     126.8,
+     110.3
+    ],
+    [
+     194.5,
+     163.9,
+     139.5
+    ]
+   ]
+  },
+  "face-hester": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    824,
+    980,
+    116,
+    116
+   ],
+   "pivot": [
+    74.0,
+    88.25
+   ],
+   "maskRect": [
+    944,
+    980,
+    116,
+    116
+   ],
+   "skin": [
+    1.023,
+    1.02,
+    1.111
+   ],
+   "tones": [
+    null,
+    [
+     107.9,
+     101.5,
+     98.7
+    ]
+   ]
+  },
+  "face-hollowmere-farmer": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    582,
+    980,
+    117,
+    116
+   ],
+   "pivot": [
+    69.0,
+    89.25
+   ],
+   "maskRect": [
+    703,
+    980,
+    117,
+    116
+   ],
+   "skin": [
+    0.944,
+    0.938,
+    1.084
+   ],
+   "tones": [
+    [
+     72.5,
+     50.7,
+     41.3
+    ],
+    null
+   ]
+  },
+  "face-ide": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1840,
+    2,
+    151,
+    203
+   ],
+   "pivot": [
+    98.0,
+    93.25
+   ],
+   "maskRect": [
+    2,
+    230,
+    151,
+    203
+   ],
+   "skin": [
+    0.995,
+    1.075,
+    1.35
+   ],
+   "tones": [
+    [
+     36.9,
+     25.5,
+     22.6
+    ],
+    null
+   ]
+  },
+  "face-ilsa": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    536,
+    585,
+    120,
+    131
+   ],
+   "pivot": [
+    72.0,
+    91.25
+   ],
+   "maskRect": [
+    660,
+    585,
+    120,
+    131
+   ],
+   "skin": [
+    1.0,
+    0.887,
+    0.837
+   ],
+   "tones": [
+    null,
+    [
+     111.7,
+     109.3,
+     70.9
+    ]
+   ]
+  },
+  "face-imra-vell": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    470,
+    854,
+    104,
+    121
+   ],
+   "pivot": [
+    65.0,
+    92.25
+   ],
+   "maskRect": [
+    578,
+    854,
+    104,
+    121
+   ],
+   "skin": [
+    0.713,
+    0.584,
+    0.533
+   ],
+   "tones": [
+    null,
+    null
+   ]
+  },
+  "face-isadora": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1318,
+    585,
+    122,
+    128
+   ],
+   "pivot": [
+    75.0,
+    99.25
+   ],
+   "maskRect": [
+    1444,
+    585,
+    122,
+    128
+   ],
+   "skin": [
+    1.028,
+    1.019,
+    1.13
+   ],
+   "tones": [
+    [
+     56.9,
+     36.7,
+     29.7
+    ],
+    null
+   ]
+  },
+  "face-kael": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    184,
+    1101,
+    144,
+    107
+   ],
+   "pivot": [
+    101.25,
+    96.75
+   ],
+   "maskRect": [
+    332,
+    1101,
+    144,
+    107
+   ],
+   "skin": [
+    0.972,
+    0.911,
+    0.85
+   ],
+   "tones": [
+    [
+     60.2,
+     45.8,
+     38.5
+    ],
+    [
+     191.3,
+     128.3,
+     63.0
+    ]
+   ]
+  },
+  "face-lark": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    274,
+    585,
+    127,
+    132
+   ],
+   "pivot": [
+    79.25,
+    92.75
+   ],
+   "maskRect": [
+    405,
+    585,
+    127,
+    132
+   ],
+   "skin": [
+    1.106,
+    1.203,
+    1.35
+   ],
+   "tones": [
+    [
+     159.2,
+     92.4,
+     91.1
+    ],
+    [
+     109.4,
+     75.3,
+     80.0
+    ]
+   ]
+  },
+  "face-leon": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1350,
+    980,
+    105,
+    114
+   ],
+   "pivot": [
+    64.25,
+    91.75
+   ],
+   "maskRect": [
+    1459,
+    980,
+    105,
+    114
+   ],
+   "skin": [
+    0.981,
+    0.936,
+    0.99
+   ],
+   "tones": [
+    [
+     163.6,
+     145.9,
+     135.1
+    ],
+    null
+   ]
+  },
+  "face-lookout": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    262,
+    1213,
+    107,
+    103
+   ],
+   "pivot": [
+    66.25,
+    89.75
+   ],
+   "maskRect": [
+    373,
+    1213,
+    107,
+    103
+   ],
+   "skin": [
+    0.815,
+    0.709,
+    0.607
+   ],
+   "tones": [
+    [
+     61.1,
+     41.1,
+     30.8
+    ],
+    null
+   ]
+  },
+  "face-mags": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1243,
+    230,
+    133,
+    155
+   ],
+   "pivot": [
+    74.0,
+    83.25
+   ],
+   "maskRect": [
+    1380,
+    230,
+    133,
+    155
+   ],
+   "skin": [
+    0.954,
+    0.839,
+    0.798
+   ],
+   "tones": [
+    [
+     87.6,
+     62.5,
+     50.9
+    ],
+    null
+   ]
+  },
+  "face-maren-elder": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1636,
+    854,
+    115,
+    117
+   ],
+   "pivot": [
+    70.0,
+    92.25
+   ],
+   "maskRect": [
+    1755,
+    854,
+    115,
+    117
+   ],
+   "skin": [
+    1.009,
+    1.074,
+    1.324
+   ],
+   "tones": [
+    [
+     168.4,
+     142.9,
+     129.5
+    ],
+    null
+   ]
+  },
+  "face-maud": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    950,
+    854,
+    119,
+    118
+   ],
+   "pivot": [
+    74.0,
+    85.25
+   ],
+   "maskRect": [
+    1073,
+    854,
+    119,
+    118
+   ],
+   "skin": [
+    1.009,
+    0.975,
+    1.01
+   ],
+   "tones": [
+    [
+     147.2,
+     122.3,
+     106.4
+    ],
+    [
+     115.5,
+     102.7,
+     94.7
+    ]
+   ]
+  },
+  "face-mc-child": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1198,
+    1101,
+    102,
+    105
+   ],
+   "pivot": [
+    60.25,
+    91.75
+   ],
+   "maskRect": [
+    1304,
+    1101,
+    102,
+    105
+   ],
+   "skin": [
+    1.01,
+    0.981,
+    0.972
+   ],
+   "tones": [
+    [
+     98.7,
+     57.4,
+     32.1
+    ],
+    [
+     113.4,
+     88.9,
+     71.4
+    ]
+   ]
+  },
+  "face-mira": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1382,
+    437,
+    132,
+    136
+   ],
+   "pivot": [
+    80.0,
+    102.25
+   ],
+   "maskRect": [
+    1518,
+    437,
+    132,
+    136
+   ],
+   "skin": [
+    1.009,
+    0.963,
+    0.982
+   ],
+   "tones": [
+    [
+     108.8,
+     50.4,
+     29.5
+    ],
+    [
+     109.3,
+     91.4,
+     79.6
+    ]
+   ]
+  },
+  "face-mira-young": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    999,
+    230,
+    118,
+    160
+   ],
+   "pivot": [
+    68.0,
+    87.25
+   ],
+   "maskRect": [
+    1121,
+    230,
+    118,
+    160
+   ],
+   "skin": [
+    1.037,
+    0.955,
+    0.944
+   ],
+   "tones": [
+    [
+     126.8,
+     57.7,
+     32.6
+    ],
+    [
+     180.6,
+     148.6,
+     126.8
+    ]
+   ]
+  },
+  "face-netty": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    518,
+    724,
+    119,
+    126
+   ],
+   "pivot": [
+    69.0,
+    94.25
+   ],
+   "maskRect": [
+    641,
+    724,
+    119,
+    126
+   ],
+   "skin": [
+    0.977,
+    0.883,
+    0.85
+   ],
+   "tones": [
+    [
+     144.3,
+     117.3,
+     97.5
+    ],
+    null
+   ]
+  },
+  "face-odelle": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    465,
+    230,
+    147,
+    191
+   ],
+   "pivot": [
+    96.0,
+    92.25
+   ],
+   "maskRect": [
+    616,
+    230,
+    147,
+    191
+   ],
+   "skin": [
+    0.716,
+    0.571,
+    0.514
+   ],
+   "tones": [
+    [
+     30.9,
+     22.5,
+     20.1
+    ],
+    null
+   ]
+  },
+  "face-orla": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    764,
+    724,
+    142,
+    125
+   ],
+   "pivot": [
+    95.0,
+    92.25
+   ],
+   "maskRect": [
+    910,
+    724,
+    142,
+    125
+   ],
+   "skin": [
+    0.977,
+    0.856,
+    0.824
+   ],
+   "tones": [
+    [
+     154.8,
+     115.2,
+     85.8
+    ],
+    [
+     104.5,
+     106.5,
+     107.7
+    ]
+   ]
+  },
+  "face-osric": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    858,
+    1320,
+    86,
+    92
+   ],
+   "pivot": [
+    51.25,
+    81.75
+   ],
+   "maskRect": [
+    948,
+    1320,
+    86,
+    92
+   ],
+   "skin": [
+    1.07,
+    1.116,
+    1.259
+   ],
+   "tones": [
+    null,
+    null
+   ]
+  },
+  "face-oswin": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1298,
+    1213,
+    86,
+    101
+   ],
+   "pivot": [
+    50.25,
+    90.75
+   ],
+   "maskRect": [
+    1388,
+    1213,
+    86,
+    101
+   ],
+   "skin": [
+    1.065,
+    1.082,
+    1.157
+   ],
+   "tones": [
+    null,
+    [
+     93.1,
+     106.4,
+     123.4
+    ]
+   ]
+  },
+  "face-pip": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    748,
+    1101,
+    109,
+    106
+   ],
+   "pivot": [
+    60.25,
+    95.75
+   ],
+   "maskRect": [
+    861,
+    1101,
+    109,
+    106
+   ],
+   "skin": [
+    1.065,
+    1.076,
+    1.204
+   ],
+   "tones": [
+    [
+     118.8,
+     54.4,
+     27.4
+    ],
+    [
+     100.7,
+     46.4,
+     26.4
+    ]
+   ]
+  },
+  "face-player-1": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1646,
+    1101,
+    109,
+    104
+   ],
+   "pivot": [
+    59.25,
+    93.75
+   ],
+   "maskRect": [
+    1759,
+    1101,
+    109,
+    104
+   ],
+   "skin": [
+    0.991,
+    0.962,
+    0.944
+   ],
+   "tones": [
+    [
+     90.4,
+     52.2,
+     31.2
+    ],
+    [
+     107.3,
+     87.9,
+     72.6
+    ]
+   ]
+  },
+  "face-player-2": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    585,
+    132,
+    135
+   ],
+   "pivot": [
+    80.0,
+    89.25
+   ],
+   "maskRect": [
+    138,
+    585,
+    132,
+    135
+   ],
+   "skin": [
+    0.995,
+    0.925,
+    0.908
+   ],
+   "tones": [
+    [
+     63.9,
+     37.1,
+     24.8
+    ],
+    [
+     101.0,
+     79.4,
+     67.8
+    ]
+   ]
+  },
+  "face-player-3": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    157,
+    230,
+    150,
+    193
+   ],
+   "pivot": [
+    97.0,
+    100.25
+   ],
+   "maskRect": [
+    311,
+    230,
+    150,
+    193
+   ],
+   "skin": [
+    0.991,
+    0.918,
+    0.911
+   ],
+   "tones": [
+    [
+     34.8,
+     24.9,
+     22.6
+    ],
+    [
+     98.4,
+     78.9,
+     67.2
+    ]
+   ]
+  },
+  "face-player-4": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    437,
+    154,
+    144
+   ],
+   "pivot": [
+    95.0,
+    84.25
+   ],
+   "maskRect": [
+    160,
+    437,
+    154,
+    144
+   ],
+   "skin": [
+    0.884,
+    0.756,
+    0.75
+   ],
+   "tones": [
+    [
+     43.9,
+     26.7,
+     19.4
+    ],
+    [
+     155.8,
+     132.9,
+     114.7
+    ]
+   ]
+  },
+  "face-player-5": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    312,
+    2,
+    143,
+    221
+   ],
+   "pivot": [
+    98.0,
+    90.25
+   ],
+   "maskRect": [
+    459,
+    2,
+    143,
+    221
+   ],
+   "skin": [
+    1.041,
+    1.07,
+    1.202
+   ],
+   "tones": [
+    [
+     152.4,
+     125.1,
+     104.1
+    ],
+    [
+     82.0,
+     69.5,
+     64.2
+    ]
+   ]
+  },
+  "face-player-6": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    480,
+    1101,
+    130,
+    106
+   ],
+   "pivot": [
+    79.25,
+    95.75
+   ],
+   "maskRect": [
+    614,
+    1101,
+    130,
+    106
+   ],
+   "skin": [
+    0.972,
+    0.918,
+    0.861
+   ],
+   "tones": [
+    null,
+    [
+     175.4,
+     126.3,
+     69.9
+    ]
+   ]
+  },
+  "face-player-7": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    602,
+    437,
+    137,
+    137
+   ],
+   "pivot": [
+    80.0,
+    108.25
+   ],
+   "maskRect": [
+    743,
+    437,
+    137,
+    137
+   ],
+   "skin": [
+    0.912,
+    0.811,
+    0.778
+   ],
+   "tones": [
+    [
+     77.4,
+     56.0,
+     47.0
+    ],
+    [
+     167.9,
+     142.3,
+     86.9
+    ]
+   ]
+  },
+  "face-player-8": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1570,
+    585,
+    93,
+    127
+   ],
+   "pivot": [
+    56.25,
+    91.75
+   ],
+   "maskRect": [
+    1667,
+    585,
+    93,
+    127
+   ],
+   "skin": [
+    0.968,
+    0.905,
+    0.835
+   ],
+   "tones": [
+    [
+     132.7,
+     64.5,
+     31.3
+    ],
+    [
+     111.8,
+     97.4,
+     85.6
+    ]
+   ]
+  },
+  "face-red-gull": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    694,
+    1320,
+    78,
+    93
+   ],
+   "pivot": [
+    42.25,
+    76.75
+   ],
+   "maskRect": [
+    776,
+    1320,
+    78,
+    93
+   ],
+   "skin": [
+    0.791,
+    0.699,
+    0.673
+   ],
+   "tones": [
+    [
+     59.6,
+     40.0,
+     29.1
+    ],
+    [
+     150.1,
+     136.5,
+     128.4
+    ]
+   ]
+  },
+  "face-red-gull-2": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1768,
+    980,
+    98,
+    108
+   ],
+   "pivot": [
+    57.25,
+    87.75
+   ],
+   "maskRect": [
+    1870,
+    980,
+    98,
+    108
+   ],
+   "skin": [
+    1.028,
+    1.02,
+    1.075
+   ],
+   "tones": [
+    [
+     155.4,
+     87.4,
+     40.8
+    ],
+    [
+     105.2,
+     96.7,
+     90.7
+    ]
+   ]
+  },
+  "face-red-gull-3": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    1101,
+    87,
+    108
+   ],
+   "pivot": [
+    52.25,
+    96.75
+   ],
+   "maskRect": [
+    93,
+    1101,
+    87,
+    108
+   ],
+   "skin": [
+    0.944,
+    0.881,
+    0.852
+   ],
+   "tones": [
+    null,
+    [
+     121.7,
+     106.8,
+     95.8
+    ]
+   ]
+  },
+  "face-refugee-1": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1316,
+    724,
+    100,
+    125
+   ],
+   "pivot": [
+    60.25,
+    76.75
+   ],
+   "maskRect": [
+    1420,
+    724,
+    100,
+    125
+   ],
+   "skin": [
+    0.962,
+    0.937,
+    0.936
+   ],
+   "tones": [
+    [
+     177.0,
+     154.8,
+     134.5
+    ],
+    [
+     120.4,
+     110.0,
+     102.3
+    ]
+   ]
+  },
+  "face-refugee-2": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    484,
+    1213,
+    106,
+    103
+   ],
+   "pivot": [
+    58.25,
+    92.75
+   ],
+   "maskRect": [
+    594,
+    1213,
+    106,
+    103
+   ],
+   "skin": [
+    0.912,
+    0.851,
+    0.858
+   ],
+   "tones": [
+    [
+     27.9,
+     19.9,
+     17.8
+    ],
+    null
+   ]
+  },
+  "face-refugee-3": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    606,
+    2,
+    153,
+    220
+   ],
+   "pivot": [
+    97.0,
+    90.25
+   ],
+   "maskRect": [
+    763,
+    2,
+    153,
+    220
+   ],
+   "skin": [
+    0.912,
+    0.779,
+    0.712
+   ],
+   "tones": [
+    [
+     100.1,
+     45.0,
+     27.2
+    ],
+    [
+     204.1,
+     169.8,
+     145.2
+    ]
+   ]
+  },
+  "face-refugee-child": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1517,
+    230,
+    114,
+    151
+   ],
+   "pivot": [
+    64.0,
+    79.25
+   ],
+   "maskRect": [
+    1635,
+    230,
+    114,
+    151
+   ],
+   "skin": [
+    0.94,
+    0.815,
+    0.766
+   ],
+   "tones": [
+    [
+     75.2,
+     41.3,
+     27.3
+    ],
+    [
+     127.1,
+     99.9,
+     83.7
+    ]
+   ]
+  },
+  "face-sb-child": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1064,
+    980,
+    139,
+    115
+   ],
+   "pivot": [
+    85.0,
+    86.25
+   ],
+   "maskRect": [
+    1207,
+    980,
+    139,
+    115
+   ],
+   "skin": [
+    0.986,
+    0.911,
+    0.936
+   ],
+   "tones": [
+    [
+     42.7,
+     29.6,
+     24.7
+    ],
+    [
+     100.5,
+     82.4,
+     72.2
+    ]
+   ]
+  },
+  "face-sera": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1753,
+    230,
+    123,
+    150
+   ],
+   "pivot": [
+    73.0,
+    92.25
+   ],
+   "maskRect": [
+    1880,
+    230,
+    123,
+    150
+   ],
+   "skin": [
+    1.023,
+    1.019,
+    1.103
+   ],
+   "tones": [
+    [
+     168.4,
+     116.9,
+     69.6
+    ],
+    [
+     105.4,
+     103.1,
+     67.8
+    ]
+   ]
+  },
+  "face-tamsin": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1654,
+    437,
+    145,
+    135
+   ],
+   "pivot": [
+    97.0,
+    105.25
+   ],
+   "maskRect": [
+    1803,
+    437,
+    145,
+    135
+   ],
+   "skin": [
+    0.981,
+    0.863,
+    0.815
+   ],
+   "tones": [
+    [
+     87.3,
+     41.5,
+     24.7
+    ],
+    [
+     202.0,
+     162.7,
+     120.3
+    ]
+   ]
+  },
+  "face-thessaly": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    854,
+    102,
+    122
+   ],
+   "pivot": [
+    61.0,
+    90.25
+   ],
+   "maskRect": [
+    108,
+    854,
+    102,
+    122
+   ],
+   "skin": [
+    1.023,
+    0.993,
+    1.064
+   ],
+   "tones": [
+    null,
+    [
+     98.8,
+     81.9,
+     75.3
+    ]
+   ]
+  },
+  "face-tomas": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    492,
+    1320,
+    97,
+    97
+   ],
+   "pivot": [
+    59.25,
+    82.75
+   ],
+   "maskRect": [
+    593,
+    1320,
+    97,
+    97
+   ],
+   "skin": [
+    0.902,
+    0.843,
+    0.827
+   ],
+   "tones": [
+    [
+     173.5,
+     148.7,
+     126.4
+    ],
+    null
+   ]
+  },
+  "face-town-1": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1410,
+    1101,
+    114,
+    104
+   ],
+   "pivot": [
+    63.25,
+    93.75
+   ],
+   "maskRect": [
+    1528,
+    1101,
+    114,
+    104
+   ],
+   "skin": [
+    1.042,
+    1.038,
+    1.102
+   ],
+   "tones": [
+    [
+     172.0,
+     125.5,
+     75.2
+    ],
+    [
+     114.0,
+     112.4,
+     117.5
+    ]
+   ]
+  },
+  "face-town-10": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    920,
+    2,
+    152,
+    219
+   ],
+   "pivot": [
+    99.0,
+    88.25
+   ],
+   "maskRect": [
+    1076,
+    2,
+    152,
+    219
+   ],
+   "skin": [
+    1.032,
+    0.945,
+    0.938
+   ],
+   "tones": [
+    [
+     116.0,
+     49.9,
+     31.0
+    ],
+    [
+     102.3,
+     98.6,
+     99.1
+    ]
+   ]
+  },
+  "face-town-11": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1874,
+    854,
+    92,
+    117
+   ],
+   "pivot": [
+    55.25,
+    92.75
+   ],
+   "maskRect": [
+    2,
+    980,
+    92,
+    117
+   ],
+   "skin": [
+    0.991,
+    0.949,
+    0.935
+   ],
+   "tones": [
+    [
+     46.0,
+     39.2,
+     36.4
+    ],
+    null
+   ]
+  },
+  "face-town-12": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    98,
+    980,
+    90,
+    117
+   ],
+   "pivot": [
+    57.25,
+    91.75
+   ],
+   "maskRect": [
+    192,
+    980,
+    90,
+    117
+   ],
+   "skin": [
+    0.949,
+    0.838,
+    0.785
+   ],
+   "tones": [
+    [
+     75.6,
+     63.2,
+     56.5
+    ],
+    [
+     112.3,
+     95.8,
+     84.2
+    ]
+   ]
+  },
+  "face-town-13": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1384,
+    854,
+    122,
+    117
+   ],
+   "pivot": [
+    76.0,
+    88.25
+   ],
+   "maskRect": [
+    1510,
+    854,
+    122,
+    117
+   ],
+   "skin": [
+    0.817,
+    0.698,
+    0.664
+   ],
+   "tones": [
+    [
+     51.3,
+     38.1,
+     33.9
+    ],
+    null
+   ]
+  },
+  "face-town-14": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1196,
+    854,
+    90,
+    118
+   ],
+   "pivot": [
+    55.25,
+    93.75
+   ],
+   "maskRect": [
+    1290,
+    854,
+    90,
+    118
+   ],
+   "skin": [
+    1.019,
+    0.975,
+    1.0
+   ],
+   "tones": [
+    [
+     81.9,
+     51.5,
+     36.8
+    ],
+    null
+   ]
+  },
+  "face-town-15": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    784,
+    585,
+    136,
+    129
+   ],
+   "pivot": [
+    77.0,
+    102.25
+   ],
+   "maskRect": [
+    924,
+    585,
+    136,
+    129
+   ],
+   "skin": [
+    1.0,
+    0.933,
+    0.946
+   ],
+   "tones": [
+    [
+     114.4,
+     72.6,
+     48.7
+    ],
+    [
+     183.2,
+     155.3,
+     130.6
+    ]
+   ]
+  },
+  "face-town-16": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1774,
+    724,
+    110,
+    122
+   ],
+   "pivot": [
+    68.25,
+    91.75
+   ],
+   "maskRect": [
+    1888,
+    724,
+    110,
+    122
+   ],
+   "skin": [
+    1.074,
+    1.134,
+    1.299
+   ],
+   "tones": [
+    [
+     42.6,
+     33.0,
+     30.7
+    ],
+    null
+   ]
+  },
+  "face-town-18": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    767,
+    230,
+    112,
+    163
+   ],
+   "pivot": [
+    63.0,
+    88.25
+   ],
+   "maskRect": [
+    883,
+    230,
+    112,
+    163
+   ],
+   "skin": [
+    1.005,
+    1.069,
+    1.28
+   ],
+   "tones": [
+    [
+     38.2,
+     26.3,
+     23.9
+    ],
+    null
+   ]
+  },
+  "face-town-2": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    686,
+    854,
+    128,
+    119
+   ],
+   "pivot": [
+    79.0,
+    89.25
+   ],
+   "maskRect": [
+    818,
+    854,
+    128,
+    119
+   ],
+   "skin": [
+    0.981,
+    0.867,
+    0.82
+   ],
+   "tones": [
+    [
+     48.7,
+     32.6,
+     26.6
+    ],
+    [
+     101.3,
+     97.7,
+     64.5
+    ]
+   ]
+  },
+  "face-town-3": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    320,
+    1320,
+    82,
+    98
+   ],
+   "pivot": [
+    48.25,
+    87.75
+   ],
+   "maskRect": [
+    406,
+    1320,
+    82,
+    98
+   ],
+   "skin": [
+    0.75,
+    0.613,
+    0.549
+   ],
+   "tones": [
+    null,
+    [
+     161.3,
+     143.0,
+     130.4
+    ]
+   ]
+  },
+  "face-town-4": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1764,
+    585,
+    130,
+    126
+   ],
+   "pivot": [
+    78.0,
+    96.25
+   ],
+   "maskRect": [
+    1898,
+    585,
+    130,
+    126
+   ],
+   "skin": [
+    1.0,
+    0.917,
+    0.917
+   ],
+   "tones": [
+    [
+     78.9,
+     44.5,
+     27.8
+    ],
+    null
+   ]
+  },
+  "face-town-5": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    974,
+    1101,
+    108,
+    106
+   ],
+   "pivot": [
+    68.25,
+    81.75
+   ],
+   "maskRect": [
+    1086,
+    1101,
+    108,
+    106
+   ],
+   "skin": [
+    1.037,
+    0.981,
+    1.064
+   ],
+   "tones": [
+    [
+     153.9,
+     133.6,
+     120.5
+    ],
+    [
+     92.1,
+     81.2,
+     72.6
+    ]
+   ]
+  },
+  "face-town-6": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    214,
+    854,
+    124,
+    121
+   ],
+   "pivot": [
+    75.0,
+    92.25
+   ],
+   "maskRect": [
+    342,
+    854,
+    124,
+    121
+   ],
+   "skin": [
+    1.019,
+    0.975,
+    1.028
+   ],
+   "tones": [
+    [
+     163.5,
+     137.9,
+     123.1
+    ],
+    null
+   ]
+  },
+  "face-town-7": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1038,
+    1320,
+    91,
+    88
+   ],
+   "pivot": [
+    57.25,
+    80.75
+   ],
+   "maskRect": [
+    1133,
+    1320,
+    91,
+    88
+   ],
+   "skin": [
+    0.995,
+    0.936,
+    0.918
+   ],
+   "tones": [
+    null,
+    [
+     99.4,
+     71.9,
+     60.1
+    ]
+   ]
+  },
+  "face-town-8": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1760,
+    1213,
+    142,
+    98
+   ],
+   "pivot": [
+    85.0,
+    74.25
+   ],
+   "maskRect": [
+    2,
+    1320,
+    142,
+    98
+   ],
+   "skin": [
+    1.019,
+    0.987,
+    1.038
+   ],
+   "tones": [
+    [
+     155.7,
+     106.2,
+     63.3
+    ],
+    [
+     92.7,
+     101.9,
+     108.7
+    ]
+   ]
+  },
+  "face-town-9": {
+   "slot": "face",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    704,
+    1213,
+    105,
+    103
+   ],
+   "pivot": [
+    60.25,
+    94.75
+   ],
+   "maskRect": [
+    813,
+    1213,
+    105,
+    103
+   ],
+   "skin": [
+    1.056,
+    1.057,
+    1.144
+   ],
+   "tones": [
+    [
+     83.5,
+     50.8,
+     34.4
+    ],
+    [
+     95.8,
+     99.3,
+     71.0
+    ]
+   ]
+  },
+  "face-valencia": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    2,
+    2,
+    151,
+    224
+   ],
+   "pivot": [
+    99.0,
+    89.25
+   ],
+   "maskRect": [
+    157,
+    2,
+    151,
+    224
+   ],
+   "skin": [
+    1.023,
+    1.069,
+    1.233
+   ],
+   "tones": [
+    [
+     165.1,
+     136.8,
+     122.5
+    ],
+    [
+     87.3,
+     37.6,
+     31.4
+    ]
+   ]
+  },
+  "face-valencia-child": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    268,
+    724,
+    121,
+    126
+   ],
+   "pivot": [
+    71.0,
+    83.25
+   ],
+   "maskRect": [
+    393,
+    724,
+    121,
+    126
+   ],
+   "skin": [
+    1.019,
+    1.119,
+    1.35
+   ],
+   "tones": [
+    [
+     146.7,
+     122.2,
+     110.7
+    ],
+    [
+     45.2,
+     30.8,
+     26.0
+    ]
+   ]
+  },
+  "face-vreya": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1528,
+    2,
+    152,
+    204
+   ],
+   "pivot": [
+    98.0,
+    94.25
+   ],
+   "maskRect": [
+    1684,
+    2,
+    152,
+    204
+   ],
+   "skin": [
+    1.005,
+    1.113,
+    1.35
+   ],
+   "tones": [
+    [
+     167.9,
+     138.4,
+     120.3
+    ],
+    [
+     110.0,
+     46.2,
+     41.7
+    ]
+   ]
+  },
+  "face-wren": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    1478,
+    1213,
+    137,
+    99
+   ],
+   "pivot": [
+    84.0,
+    74.25
+   ],
+   "maskRect": [
+    1619,
+    1213,
+    137,
+    99
+   ],
+   "skin": [
+    0.853,
+    0.684,
+    0.627
+   ],
+   "tones": [
+    [
+     35.6,
+     23.5,
+     19.9
+    ],
+    [
+     199.3,
+     165.2,
+     140.0
+    ]
+   ]
+  },
+  "hair-anselle": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    2,
+    865,
+    122,
+    120
+   ],
+   "pivot": [
+    79.0,
+    92.25
+   ],
+   "maskRect": [
+    128,
+    865,
+    122,
+    120
+   ],
+   "tones": [
+    [
+     174.3,
+     146.9,
+     128.8
+    ],
+    null
+   ]
+  },
+  "hair-anvil-barkeep": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    794,
+    592,
+    140,
+    132
+   ],
+   "pivot": [
+    93.0,
+    104.25
+   ],
+   "maskRect": [
+    938,
+    592,
+    140,
+    132
+   ],
+   "tones": [
+    [
+     35.7,
+     25.7,
+     22.4
+    ],
+    null
+   ]
+  },
+  "hair-brannock": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1702,
+    865,
+    100,
+    116
+   ],
+   "pivot": [
+    60.25,
+    99.75
+   ],
+   "maskRect": [
+    1806,
+    865,
+    100,
+    116
+   ],
+   "tones": [
+    [
+     122.6,
+     64.7,
+     37.8
+    ],
+    null
+   ]
+  },
+  "hair-brenna": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    2,
+    1107,
+    126,
+    104
+   ],
+   "pivot": [
+    77.0,
+    90.25
+   ],
+   "maskRect": [
+    132,
+    1107,
+    126,
+    104
+   ],
+   "tones": [
+    [
+     62.6,
+     39.4,
+     30.4
+    ],
+    null
+   ]
+  },
+  "hair-brisk": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1108,
+    1107,
+    81,
+    100
+   ],
+   "pivot": [
+    47.25,
+    86.75
+   ],
+   "maskRect": [
+    1193,
+    1107,
+    81,
+    100
+   ],
+   "tones": [
+    [
+     45.7,
+     35.6,
+     32.9
+    ],
+    null
+   ]
+  },
+  "hair-corra": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    954,
+    733,
+    126,
+    123
+   ],
+   "pivot": [
+    81.0,
+    97.25
+   ],
+   "maskRect": [
+    1084,
+    733,
+    126,
+    123
+   ],
+   "tones": [
+    [
+     77.7,
+     52.6,
+     41.0
+    ],
+    null
+   ]
+  },
+  "hair-crane": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1590,
+    1215,
+    84,
+    88
+   ],
+   "pivot": [
+    51.25,
+    89.75
+   ],
+   "maskRect": [
+    1678,
+    1215,
+    84,
+    88
+   ],
+   "tones": [
+    null,
+    null
+   ]
+  },
+  "hair-elara": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1868,
+    592,
+    132,
+    128
+   ],
+   "pivot": [
+    77.0,
+    93.25
+   ],
+   "maskRect": [
+    2,
+    733,
+    132,
+    128
+   ],
+   "tones": [
+    [
+     38.4,
+     28.0,
+     25.4
+    ],
+    null
+   ]
+  },
+  "hair-fennick": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    902,
+    1107,
+    99,
+    100
+   ],
+   "pivot": [
+    64.25,
+    85.75
+   ],
+   "maskRect": [
+    1005,
+    1107,
+    99,
+    100
+   ],
+   "tones": [
+    [
+     134.8,
+     116.4,
+     101.9
+    ],
+    null
+   ]
+  },
+  "hair-gannet": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    138,
+    733,
+    124,
+    127
+   ],
+   "pivot": [
+    79.0,
+    97.25
+   ],
+   "maskRect": [
+    266,
+    733,
+    124,
+    127
+   ],
+   "tones": [
+    [
+     98.7,
+     71.8,
+     59.7
+    ],
+    null
+   ]
+  },
+  "hair-grell": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1572,
+    1107,
+    90,
+    99
+   ],
+   "pivot": [
+    53.25,
+    77.75
+   ],
+   "maskRect": [
+    1666,
+    1107,
+    90,
+    99
+   ],
+   "tones": [
+    [
+     138.1,
+     72.5,
+     33.2
+    ],
+    null
+   ]
+  },
+  "hair-guild-apprentice": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    696,
+    865,
+    143,
+    117
+   ],
+   "pivot": [
+    91.0,
+    88.25
+   ],
+   "maskRect": [
+    843,
+    865,
+    143,
+    117
+   ],
+   "tones": [
+    [
+     143.0,
+     101.8,
+     74.5
+    ],
+    null
+   ]
+  },
+  "hair-hale": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    726,
+    1107,
+    84,
+    101
+   ],
+   "pivot": [
+    48.25,
+    88.75
+   ],
+   "maskRect": [
+    814,
+    1107,
+    84,
+    101
+   ],
+   "tones": [
+    [
+     133.4,
+     116.9,
+     105.9
+    ],
+    null
+   ]
+  },
+  "hair-hedda": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    681,
+    437,
+    138,
+    141
+   ],
+   "pivot": [
+    83.0,
+    92.25
+   ],
+   "maskRect": [
+    823,
+    437,
+    138,
+    141
+   ],
+   "tones": [
+    [
+     85.6,
+     52.9,
+     35.9
+    ],
+    null
+   ]
+  },
+  "hair-hesper": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1598,
+    2,
+    144,
+    209
+   ],
+   "pivot": [
+    99.0,
+    86.25
+   ],
+   "maskRect": [
+    1746,
+    2,
+    144,
+    209
+   ],
+   "tones": [
+    [
+     151.6,
+     126.8,
+     110.3
+    ],
+    null
+   ]
+  },
+  "hair-hester": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    659,
+    989,
+    114,
+    113
+   ],
+   "pivot": [
+    75.0,
+    89.25
+   ],
+   "maskRect": [
+    777,
+    989,
+    114,
+    113
+   ],
+   "tones": [
+    [
+     178.8,
+     152.1,
+     134.3
+    ],
+    null
+   ]
+  },
+  "hair-hollowmere-farmer": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    965,
+    437,
+    175,
+    140
+   ],
+   "pivot": [
+    94.0,
+    112.25
+   ],
+   "maskRect": [
+    1144,
+    437,
+    175,
+    140
+   ],
+   "tones": [
+    [
+     72.5,
+     50.7,
+     41.3
+    ],
+    null
+   ]
+  },
+  "hair-ide": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    2,
+    2,
+    182,
+    223
+   ],
+   "pivot": [
+    98.0,
+    113.25
+   ],
+   "maskRect": [
+    188,
+    2,
+    182,
+    223
+   ],
+   "tones": [
+    [
+     36.9,
+     25.5,
+     22.6
+    ],
+    null
+   ]
+  },
+  "hair-ilsa": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1366,
+    592,
+    119,
+    130
+   ],
+   "pivot": [
+    74.0,
+    93.25
+   ],
+   "maskRect": [
+    1489,
+    592,
+    119,
+    130
+   ],
+   "tones": [
+    [
+     181.2,
+     121.8,
+     65.4
+    ],
+    null
+   ]
+  },
+  "hair-imra-vell": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1458,
+    733,
+    106,
+    122
+   ],
+   "pivot": [
+    66.0,
+    93.25
+   ],
+   "maskRect": [
+    1568,
+    733,
+    106,
+    122
+   ],
+   "tones": [
+    [
+     46.8,
+     33.8,
+     29.1
+    ],
+    null
+   ]
+  },
+  "hair-isadora": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1612,
+    592,
+    124,
+    129
+   ],
+   "pivot": [
+    76.0,
+    100.25
+   ],
+   "maskRect": [
+    1740,
+    592,
+    124,
+    129
+   ],
+   "tones": [
+    [
+     56.9,
+     36.7,
+     29.7
+    ],
+    null
+   ]
+  },
+  "hair-kael": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    2,
+    1215,
+    151,
+    96
+   ],
+   "pivot": [
+    103.25,
+    97.75
+   ],
+   "maskRect": [
+    157,
+    1215,
+    151,
+    96
+   ],
+   "tones": [
+    [
+     60.2,
+     45.8,
+     38.5
+    ],
+    null
+   ]
+  },
+  "hair-lark": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1678,
+    733,
+    122,
+    121
+   ],
+   "pivot": [
+    78.25,
+    93.75
+   ],
+   "maskRect": [
+    1804,
+    733,
+    122,
+    121
+   ],
+   "tones": [
+    [
+     159.2,
+     92.4,
+     91.1
+    ],
+    null
+   ]
+  },
+  "hair-leon": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1481,
+    989,
+    107,
+    107
+   ],
+   "pivot": [
+    65.25,
+    92.75
+   ],
+   "maskRect": [
+    1592,
+    989,
+    107,
+    107
+   ],
+   "tones": [
+    [
+     163.6,
+     145.9,
+     135.1
+    ],
+    null
+   ]
+  },
+  "hair-lookout": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1198,
+    1215,
+    108,
+    89
+   ],
+   "pivot": [
+    67.25,
+    90.75
+   ],
+   "maskRect": [
+    1310,
+    1215,
+    108,
+    89
+   ],
+   "tones": [
+    [
+     61.1,
+     41.1,
+     30.8
+    ],
+    null
+   ]
+  },
+  "hair-mags": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1006,
+    229,
+    135,
+    162
+   ],
+   "pivot": [
+    75.0,
+    84.25
+   ],
+   "maskRect": [
+    1145,
+    229,
+    135,
+    162
+   ],
+   "tones": [
+    [
+     87.6,
+     62.5,
+     50.9
+    ],
+    null
+   ]
+  },
+  "hair-maren-elder": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    136,
+    592,
+    177,
+    133
+   ],
+   "pivot": [
+    94.0,
+    112.25
+   ],
+   "maskRect": [
+    317,
+    592,
+    177,
+    133
+   ],
+   "tones": [
+    [
+     168.4,
+     142.9,
+     129.5
+    ],
+    null
+   ]
+  },
+  "hair-maud": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    415,
+    989,
+    118,
+    113
+   ],
+   "pivot": [
+    75.0,
+    87.25
+   ],
+   "maskRect": [
+    537,
+    989,
+    118,
+    113
+   ],
+   "tones": [
+    [
+     147.2,
+     122.3,
+     106.4
+    ],
+    null
+   ]
+  },
+  "hair-mc-child": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    772,
+    1215,
+    105,
+    91
+   ],
+   "pivot": [
+    62.25,
+    93.75
+   ],
+   "maskRect": [
+    881,
+    1215,
+    105,
+    91
+   ],
+   "tones": [
+    [
+     98.7,
+     57.4,
+     32.1
+    ],
+    null
+   ]
+  },
+  "hair-mira": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1323,
+    437,
+    133,
+    137
+   ],
+   "pivot": [
+    81.0,
+    103.25
+   ],
+   "maskRect": [
+    1460,
+    437,
+    133,
+    137
+   ],
+   "tones": [
+    [
+     108.8,
+     50.4,
+     29.5
+    ],
+    null
+   ]
+  },
+  "hair-mira-young": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1284,
+    229,
+    119,
+    161
+   ],
+   "pivot": [
+    69.0,
+    88.25
+   ],
+   "maskRect": [
+    1407,
+    229,
+    119,
+    161
+   ],
+   "tones": [
+    [
+     126.8,
+     57.7,
+     32.6
+    ],
+    null
+   ]
+  },
+  "hair-netty": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1214,
+    733,
+    118,
+    122
+   ],
+   "pivot": [
+    70.0,
+    95.25
+   ],
+   "maskRect": [
+    1336,
+    733,
+    118,
+    122
+   ],
+   "tones": [
+    [
+     144.3,
+     117.3,
+     97.5
+    ],
+    null
+   ]
+  },
+  "hair-odelle": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    466,
+    229,
+    143,
+    192
+   ],
+   "pivot": [
+    96.0,
+    92.25
+   ],
+   "maskRect": [
+    613,
+    229,
+    143,
+    192
+   ],
+   "tones": [
+    [
+     30.9,
+     22.5,
+     20.1
+    ],
+    null
+   ]
+  },
+  "hair-orla": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    662,
+    733,
+    142,
+    123
+   ],
+   "pivot": [
+    96.0,
+    93.25
+   ],
+   "maskRect": [
+    808,
+    733,
+    142,
+    123
+   ],
+   "tones": [
+    [
+     154.8,
+     115.2,
+     85.8
+    ],
+    null
+   ]
+  },
+  "hair-osric": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    224,
+    1315,
+    91,
+    85
+   ],
+   "pivot": [
+    53.25,
+    90.75
+   ],
+   "maskRect": [
+    319,
+    1315,
+    91,
+    85
+   ],
+   "tones": [
+    [
+     26.7,
+     24.9,
+     29.5
+    ],
+    null
+   ]
+  },
+  "hair-oswin": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    414,
+    1315,
+    88,
+    85
+   ],
+   "pivot": [
+    52.25,
+    91.75
+   ],
+   "maskRect": [
+    506,
+    1315,
+    88,
+    85
+   ],
+   "tones": [
+    [
+     177.3,
+     127.5,
+     76.0
+    ],
+    null
+   ]
+  },
+  "hair-pip": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    312,
+    1215,
+    110,
+    96
+   ],
+   "pivot": [
+    61.25,
+    96.75
+   ],
+   "maskRect": [
+    426,
+    1215,
+    110,
+    96
+   ],
+   "tones": [
+    [
+     118.8,
+     54.4,
+     27.4
+    ],
+    null
+   ]
+  },
+  "hair-player-1": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1760,
+    1107,
+    113,
+    97
+   ],
+   "pivot": [
+    61.25,
+    95.75
+   ],
+   "maskRect": [
+    1877,
+    1107,
+    113,
+    97
+   ],
+   "tones": [
+    [
+     90.4,
+     52.2,
+     31.2
+    ],
+    null
+   ]
+  },
+  "hair-player-2": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1597,
+    437,
+    132,
+    137
+   ],
+   "pivot": [
+    80.0,
+    91.25
+   ],
+   "maskRect": [
+    1733,
+    437,
+    132,
+    137
+   ],
+   "tones": [
+    [
+     63.9,
+     37.1,
+     24.8
+    ],
+    null
+   ]
+  },
+  "hair-player-3": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    156,
+    229,
+    151,
+    195
+   ],
+   "pivot": [
+    98.0,
+    101.25
+   ],
+   "maskRect": [
+    311,
+    229,
+    151,
+    195
+   ],
+   "tones": [
+    [
+     34.8,
+     24.9,
+     22.6
+    ],
+    null
+   ]
+  },
+  "hair-player-4": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    115,
+    437,
+    152,
+    147
+   ],
+   "pivot": [
+    95.0,
+    85.25
+   ],
+   "maskRect": [
+    271,
+    437,
+    152,
+    147
+   ],
+   "tones": [
+    [
+     43.9,
+     26.7,
+     19.4
+    ],
+    null
+   ]
+  },
+  "hair-player-5": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    990,
+    2,
+    144,
+    222
+   ],
+   "pivot": [
+    99.0,
+    91.25
+   ],
+   "maskRect": [
+    1138,
+    2,
+    144,
+    222
+   ],
+   "tones": [
+    [
+     152.4,
+     125.1,
+     104.1
+    ],
+    null
+   ]
+  },
+  "hair-player-6": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1766,
+    1215,
+    131,
+    87
+   ],
+   "pivot": [
+    80.25,
+    96.75
+   ],
+   "maskRect": [
+    1901,
+    1215,
+    131,
+    87
+   ],
+   "tones": [
+    [
+     52.6,
+     38.4,
+     32.7
+    ],
+    null
+   ]
+  },
+  "hair-player-7": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1869,
+    437,
+    130,
+    137
+   ],
+   "pivot": [
+    80.0,
+    108.25
+   ],
+   "maskRect": [
+    2,
+    592,
+    130,
+    137
+   ],
+   "tones": [
+    [
+     77.4,
+     56.0,
+     47.0
+    ],
+    null
+   ]
+  },
+  "hair-player-8": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1289,
+    989,
+    92,
+    109
+   ],
+   "pivot": [
+    57.25,
+    92.75
+   ],
+   "maskRect": [
+    1385,
+    989,
+    92,
+    109
+   ],
+   "tones": [
+    [
+     132.7,
+     64.5,
+     31.3
+    ],
+    null
+   ]
+  },
+  "hair-red-gull-2": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    990,
+    1215,
+    100,
+    91
+   ],
+   "pivot": [
+    59.25,
+    88.75
+   ],
+   "maskRect": [
+    1094,
+    1215,
+    100,
+    91
+   ],
+   "tones": [
+    [
+     155.4,
+     87.4,
+     40.8
+    ],
+    null
+   ]
+  },
+  "hair-red-gull-3": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    598,
+    1315,
+    86,
+    84
+   ],
+   "pivot": [
+    54.25,
+    97.75
+   ],
+   "maskRect": [
+    688,
+    1315,
+    86,
+    84
+   ],
+   "tones": [
+    [
+     42.0,
+     31.3,
+     28.5
+    ],
+    null
+   ]
+  },
+  "hair-refugee-1": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1174,
+    1315,
+    99,
+    72
+   ],
+   "pivot": [
+    61.25,
+    78.75
+   ],
+   "maskRect": [
+    1277,
+    1315,
+    99,
+    72
+   ],
+   "tones": [
+    [
+     177.0,
+     154.8,
+     134.5
+    ],
+    null
+   ]
+  },
+  "hair-refugee-2": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    540,
+    1215,
+    112,
+    94
+   ],
+   "pivot": [
+    61.25,
+    93.75
+   ],
+   "maskRect": [
+    656,
+    1215,
+    112,
+    94
+   ],
+   "tones": [
+    [
+     27.9,
+     19.9,
+     17.8
+    ],
+    null
+   ]
+  },
+  "hair-refugee-3": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    678,
+    2,
+    152,
+    222
+   ],
+   "pivot": [
+    97.0,
+    92.25
+   ],
+   "maskRect": [
+    834,
+    2,
+    152,
+    222
+   ],
+   "tones": [
+    [
+     100.1,
+     45.0,
+     27.2
+    ],
+    null
+   ]
+  },
+  "hair-refugee-child": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1880,
+    229,
+    109,
+    151
+   ],
+   "pivot": [
+    65.0,
+    80.25
+   ],
+   "maskRect": [
+    2,
+    437,
+    109,
+    151
+   ],
+   "tones": [
+    [
+     75.2,
+     41.3,
+     27.3
+    ],
+    null
+   ]
+  },
+  "hair-sb-child": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    125,
+    989,
+    141,
+    113
+   ],
+   "pivot": [
+    88.0,
+    87.25
+   ],
+   "maskRect": [
+    270,
+    989,
+    141,
+    113
+   ],
+   "tones": [
+    [
+     42.7,
+     29.6,
+     24.7
+    ],
+    null
+   ]
+  },
+  "hair-sera": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    427,
+    437,
+    123,
+    145
+   ],
+   "pivot": [
+    73.0,
+    93.25
+   ],
+   "maskRect": [
+    554,
+    437,
+    123,
+    145
+   ],
+   "tones": [
+    [
+     168.4,
+     116.9,
+     69.6
+    ],
+    null
+   ]
+  },
+  "hair-tamsin": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    498,
+    592,
+    144,
+    133
+   ],
+   "pivot": [
+    98.0,
+    107.25
+   ],
+   "maskRect": [
+    646,
+    592,
+    144,
+    133
+   ],
+   "tones": [
+    [
+     87.3,
+     41.5,
+     24.7
+    ],
+    null
+   ]
+  },
+  "hair-thessaly": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    480,
+    865,
+    104,
+    119
+   ],
+   "pivot": [
+    62.0,
+    91.25
+   ],
+   "maskRect": [
+    588,
+    865,
+    104,
+    119
+   ],
+   "tones": [
+    [
+     149.3,
+     123.7,
+     111.3
+    ],
+    null
+   ]
+  },
+  "hair-tomas": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    778,
+    1315,
+    98,
+    83
+   ],
+   "pivot": [
+    60.25,
+    83.75
+   ],
+   "maskRect": [
+    880,
+    1315,
+    98,
+    83
+   ],
+   "tones": [
+    [
+     173.5,
+     148.7,
+     126.4
+    ],
+    null
+   ]
+  },
+  "hair-town-1": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    488,
+    1107,
+    115,
+    102
+   ],
+   "pivot": [
+    64.25,
+    94.75
+   ],
+   "maskRect": [
+    607,
+    1107,
+    115,
+    102
+   ],
+   "tones": [
+    [
+     172.0,
+     125.5,
+     75.2
+    ],
+    null
+   ]
+  },
+  "hair-town-10": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1286,
+    2,
+    152,
+    221
+   ],
+   "pivot": [
+    99.0,
+    90.25
+   ],
+   "maskRect": [
+    1442,
+    2,
+    152,
+    221
+   ],
+   "tones": [
+    [
+     116.0,
+     49.9,
+     31.0
+    ],
+    null
+   ]
+  },
+  "hair-town-11": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    895,
+    989,
+    96,
+    113
+   ],
+   "pivot": [
+    57.25,
+    93.75
+   ],
+   "maskRect": [
+    995,
+    989,
+    96,
+    113
+   ],
+   "tones": [
+    [
+     46.0,
+     39.2,
+     36.4
+    ],
+    null
+   ]
+  },
+  "hair-town-12": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1514,
+    865,
+    90,
+    117
+   ],
+   "pivot": [
+    57.25,
+    93.75
+   ],
+   "maskRect": [
+    1608,
+    865,
+    90,
+    117
+   ],
+   "tones": [
+    [
+     75.6,
+     63.2,
+     56.5
+    ],
+    null
+   ]
+  },
+  "hair-town-13": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1910,
+    865,
+    119,
+    114
+   ],
+   "pivot": [
+    76.0,
+    89.25
+   ],
+   "maskRect": [
+    2,
+    989,
+    119,
+    114
+   ],
+   "tones": [
+    [
+     51.3,
+     38.1,
+     33.9
+    ],
+    null
+   ]
+  },
+  "hair-town-14": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1095,
+    989,
+    93,
+    113
+   ],
+   "pivot": [
+    56.25,
+    93.75
+   ],
+   "maskRect": [
+    1192,
+    989,
+    93,
+    113
+   ],
+   "tones": [
+    [
+     81.9,
+     51.5,
+     36.8
+    ],
+    null
+   ]
+  },
+  "hair-town-15": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1082,
+    592,
+    138,
+    131
+   ],
+   "pivot": [
+    79.0,
+    104.25
+   ],
+   "maskRect": [
+    1224,
+    592,
+    138,
+    131
+   ],
+   "tones": [
+    [
+     114.4,
+     72.6,
+     48.7
+    ],
+    null
+   ]
+  },
+  "hair-town-16": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    254,
+    865,
+    109,
+    119
+   ],
+   "pivot": [
+    69.25,
+    92.75
+   ],
+   "maskRect": [
+    367,
+    865,
+    109,
+    119
+   ],
+   "tones": [
+    [
+     42.6,
+     33.0,
+     30.7
+    ],
+    null
+   ]
+  },
+  "hair-town-18": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    760,
+    229,
+    119,
+    163
+   ],
+   "pivot": [
+    64.0,
+    89.25
+   ],
+   "maskRect": [
+    883,
+    229,
+    119,
+    163
+   ],
+   "tones": [
+    [
+     38.2,
+     26.3,
+     23.9
+    ],
+    null
+   ]
+  },
+  "hair-town-2": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    990,
+    865,
+    128,
+    117
+   ],
+   "pivot": [
+    81.0,
+    91.25
+   ],
+   "maskRect": [
+    1122,
+    865,
+    128,
+    117
+   ],
+   "tones": [
+    [
+     48.7,
+     32.6,
+     26.6
+    ],
+    null
+   ]
+  },
+  "hair-town-3": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1422,
+    1215,
+    80,
+    89
+   ],
+   "pivot": [
+    48.25,
+    88.75
+   ],
+   "maskRect": [
+    1506,
+    1215,
+    80,
+    89
+   ],
+   "tones": [
+    [
+     36.0,
+     28.9,
+     27.1
+    ],
+    null
+   ]
+  },
+  "hair-town-4": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    394,
+    733,
+    130,
+    124
+   ],
+   "pivot": [
+    79.0,
+    97.25
+   ],
+   "maskRect": [
+    528,
+    733,
+    130,
+    124
+   ],
+   "tones": [
+    [
+     78.9,
+     44.5,
+     27.8
+    ],
+    null
+   ]
+  },
+  "hair-town-5": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    262,
+    1107,
+    109,
+    103
+   ],
+   "pivot": [
+    69.25,
+    83.75
+   ],
+   "maskRect": [
+    375,
+    1107,
+    109,
+    103
+   ],
+   "tones": [
+    [
+     153.9,
+     133.6,
+     120.5
+    ],
+    null
+   ]
+  },
+  "hair-town-6": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1254,
+    865,
+    126,
+    117
+   ],
+   "pivot": [
+    77.0,
+    93.25
+   ],
+   "maskRect": [
+    1384,
+    865,
+    126,
+    117
+   ],
+   "tones": [
+    [
+     163.5,
+     137.9,
+     123.1
+    ],
+    null
+   ]
+  },
+  "hair-town-7": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    982,
+    1315,
+    92,
+    83
+   ],
+   "pivot": [
+    58.25,
+    81.75
+   ],
+   "maskRect": [
+    1078,
+    1315,
+    92,
+    83
+   ],
+   "tones": [
+    null,
+    null
+   ]
+  },
+  "hair-town-8": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1278,
+    1107,
+    143,
+    99
+   ],
+   "pivot": [
+    86.0,
+    75.25
+   ],
+   "maskRect": [
+    1425,
+    1107,
+    143,
+    99
+   ],
+   "tones": [
+    [
+     155.7,
+     106.2,
+     63.3
+    ],
+    null
+   ]
+  },
+  "hair-town-9": {
+   "slot": "helm",
+   "base": "base-male",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    2,
+    1315,
+    107,
+    87
+   ],
+   "pivot": [
+    61.25,
+    96.75
+   ],
+   "maskRect": [
+    113,
+    1315,
+    107,
+    87
+   ],
+   "tones": [
+    [
+     83.5,
+     50.8,
+     34.4
+    ],
+    null
+   ]
+  },
+  "hair-valencia": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    374,
+    2,
+    148,
+    223
+   ],
+   "pivot": [
+    99.0,
+    90.25
+   ],
+   "maskRect": [
+    526,
+    2,
+    148,
+    223
+   ],
+   "tones": [
+    [
+     165.1,
+     136.8,
+     122.5
+    ],
+    null
+   ]
+  },
+  "hair-valencia-child": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1530,
+    229,
+    171,
+    153
+   ],
+   "pivot": [
+    94.0,
+    112.25
+   ],
+   "maskRect": [
+    1705,
+    229,
+    171,
+    153
+   ],
+   "tones": [
+    [
+     146.7,
+     122.2,
+     110.7
+    ],
+    null
+   ]
+  },
+  "hair-vreya": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1894,
+    2,
+    150,
+    204
+   ],
+   "pivot": [
+    98.0,
+    95.25
+   ],
+   "maskRect": [
+    2,
+    229,
+    150,
+    204
+   ],
+   "tones": [
+    [
+     167.9,
+     138.4,
+     120.3
+    ],
+    null
+   ]
+  },
+  "hair-wren": {
+   "slot": "helm",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "helm-0",
+   "rect": [
+    1703,
+    989,
+    134,
+    104
+   ],
+   "pivot": [
+    84.0,
+    76.25
+   ],
+   "maskRect": [
+    1841,
+    989,
+    134,
+    104
+   ],
+   "tones": [
+    [
+     35.6,
+     23.5,
+     19.9
+    ],
+    null
+   ]
+  }
+ },
+ "recipes": {
+  "you-male": {
+   "face": "face-player-1",
+   "armor": "armor-traveller",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "you-female": {
+   "face": "face-player-2",
+   "armor": "armor-traveller-f",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "soulbound": {
+   "face": "face-player-3",
+   "armor": "armor-sb-traveller",
+   "cape": "cape-sb",
+   "helm": null,
+   "weapon": "weapon-sb-blades",
+   "morph": [
+    1.02,
+    1.0
+   ]
+  },
+  "you-male.champion": {
+   "face": "face-player-1",
+   "armor": "armor-champion",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "you-female.champion": {
+   "face": "face-player-2",
+   "armor": "armor-champion-f",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "soulbound.champion": {
+   "face": "face-player-3",
+   "armor": "armor-champion-f",
+   "cape": "cape-sb",
+   "helm": null,
+   "weapon": "weapon-sb-blades",
+   "morph": [
+    1.02,
+    1.0
+   ]
+  },
+  "soulbound.lord-protector": {
+   "face": "face-player-3",
+   "armor": "armor-lord-protector",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.02,
+    1.0
+   ]
+  },
+  "mc-child": {
+   "face": "face-mc-child",
+   "armor": "armor-child-cove",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "sb-child": {
+   "face": "face-sb-child",
+   "armor": "armor-child-cove-f",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "sera": {
+   "face": "face-sera",
+   "armor": "armor-sera",
+   "cape": "cape-sera",
+   "helm": null,
+   "weapon": "weapon-sera-longbow",
+   "morph": [
+    1.04,
+    0.9
+   ]
+  },
+  "mira": {
+   "face": "face-mira",
+   "armor": "armor-mira",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-quarterstaff",
+   "morph": [
+    1.01,
+    0.9
+   ]
+  },
+  "mira-young": {
+   "face": "face-mira-young",
+   "armor": "armor-mira-apprentice",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-sketchbook",
+   "morph": [
+    0.8,
+    0.8
+   ]
+  },
+  "kael": {
+   "face": "face-kael",
+   "armor": "armor-kael",
+   "cape": "cape-tail-ember",
+   "helm": "helm-kael-hood",
+   "weapon": "weapon-kael-knives",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "brannock": {
+   "face": "face-brannock",
+   "armor": "armor-brannock",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-brannock",
+   "morph": [
+    0.85,
+    1.36
+   ]
+  },
+  "brannock.clasps-gone": {
+   "face": "face-brannock-bare",
+   "armor": "armor-brannock",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-brannock-42",
+   "morph": [
+    0.85,
+    1.36
+   ]
+  },
+  "valencia": {
+   "face": "face-valencia",
+   "armor": "armor-valencia",
+   "cape": "cape-valencia",
+   "helm": "helm-circlet-silver",
+   "weapon": "weapon-dagger",
+   "morph": [
+    1.09,
+    0.9
+   ]
+  },
+  "valencia.sister-vale": {
+   "face": "face-valencia",
+   "armor": "armor-abbey-habit",
+   "cape": null,
+   "helm": "helm-abbey-hood",
+   "weapon": null,
+   "morph": [
+    1.09,
+    0.9
+   ]
+  },
+  "corra": {
+   "face": "face-corra",
+   "armor": "armor-corra",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-netting-needle",
+   "morph": [
+    0.95,
+    1.0
+   ]
+  },
+  "corra.flashback": {
+   "face": "face-corra-flashback",
+   "armor": "armor-corra",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-netting-needle",
+   "morph": [
+    0.95,
+    1.0
+   ]
+  },
+  "lookout": {
+   "face": "face-lookout",
+   "armor": "armor-sailor",
+   "cape": null,
+   "helm": "helm-knit-cap",
+   "weapon": "weapon-telescope",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "odelle": {
+   "face": "face-odelle",
+   "armor": "armor-odelle",
+   "cape": null,
+   "helm": "helm-tricorn",
+   "weapon": "weapon-cutlass",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "tomas": {
+   "face": "face-tomas",
+   "armor": "armor-fisher",
+   "cape": null,
+   "helm": "helm-knit-cap",
+   "weapon": "weapon-gaff",
+   "morph": [
+    0.95,
+    1.0
+   ]
+  },
+  "red-gull": {
+   "face": "face-red-gull",
+   "armor": "armor-red-gull",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.08,
+    1.15
+   ]
+  },
+  "red-gull.b": {
+   "face": "face-red-gull-2",
+   "armor": "armor-red-gull",
+   "cape": null,
+   "helm": "helm-bandana-red",
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.08,
+    1.15
+   ]
+  },
+  "red-gull.c": {
+   "face": "face-red-gull-3",
+   "armor": "armor-red-gull",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.06,
+    1.12
+   ]
+  },
+  "grell": {
+   "face": "face-grell",
+   "armor": "armor-grell",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cutlass",
+   "morph": [
+    0.85,
+    1.55
+   ]
+  },
+  "hale": {
+   "face": "face-hale",
+   "armor": "armor-watch-captain",
+   "cape": "cape-watch-captain",
+   "helm": "helm-watch-crest",
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.03,
+    1.14
+   ]
+  },
+  "watch": {
+   "face": "face-town-14",
+   "armor": "armor-watch",
+   "cape": "cape-watch",
+   "helm": "helm-watch",
+   "weapon": "weapon-watch-kit",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "fennick": {
+   "face": "face-fennick",
+   "armor": "armor-clerk",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-tack-hammer",
+   "morph": [
+    1.0,
+    1.08
+   ]
+  },
+  "hedda": {
+   "face": "face-hedda",
+   "armor": "armor-refugee-woman",
+   "cape": "cape-blanket",
+   "helm": null,
+   "weapon": "weapon-loaf",
+   "morph": [
+    0.99,
+    0.95
+   ]
+  },
+  "refugee-child": {
+   "face": "face-refugee-child",
+   "armor": "armor-refugee-child",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-rag-doll",
+   "morph": [
+    0.75,
+    0.75
+   ]
+  },
+  "brisk": {
+   "face": "face-brisk",
+   "armor": "armor-watch",
+   "cape": "cape-watch",
+   "helm": "helm-watch",
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.0,
+    1.06
+   ]
+  },
+  "refugee-1": {
+   "face": "face-refugee-1",
+   "armor": "armor-refugee-man",
+   "cape": "cape-blanket",
+   "helm": null,
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    0.93,
+    0.95
+   ]
+  },
+  "refugee-2": {
+   "face": "face-refugee-2",
+   "armor": "armor-refugee-man",
+   "cape": "cape-blanket",
+   "helm": null,
+   "weapon": "weapon-tin-cup",
+   "morph": [
+    0.95,
+    0.9
+   ]
+  },
+  "refugee-3": {
+   "face": "face-refugee-3",
+   "armor": "armor-glassblower",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.82,
+    1.25
+   ]
+  },
+  "elara": {
+   "face": "face-elara",
+   "armor": "armor-elara",
+   "cape": null,
+   "helm": "helm-circlet",
+   "weapon": null,
+   "morph": [
+    1.08,
+    0.88
+   ]
+  },
+  "elara-hooded": {
+   "face": "face-elara",
+   "armor": "armor-elara-disguise",
+   "cape": "cape-elara-hooded",
+   "helm": "helm-hood-charcoal",
+   "weapon": null,
+   "morph": [
+    1.08,
+    0.88
+   ]
+  },
+  "leon": {
+   "face": "face-leon",
+   "armor": "armor-leon",
+   "cape": "cape-leon",
+   "helm": "helm-crown",
+   "weapon": null,
+   "morph": [
+    0.97,
+    1.16
+   ]
+  },
+  "crane": {
+   "face": "face-crane",
+   "armor": "armor-crane",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-quill-letter",
+   "morph": [
+    1.1,
+    0.85
+   ]
+  },
+  "royal-messenger": {
+   "face": "face-town-9",
+   "armor": "armor-royal-livery",
+   "cape": "cape-royal",
+   "helm": "helm-beret",
+   "weapon": "weapon-letter",
+   "morph": [
+    0.99,
+    0.95
+   ]
+  },
+  "royal-guard": {
+   "face": "face-town-3",
+   "armor": "armor-royal-guard",
+   "cape": "cape-royal",
+   "helm": "helm-royal-guard",
+   "weapon": "weapon-halberd",
+   "morph": [
+    1.04,
+    1.08
+   ]
+  },
+  "anvil-barkeep": {
+   "face": "face-anvil-barkeep",
+   "armor": "armor-tavern",
+   "cape": "cape-tail-bear",
+   "helm": null,
+   "weapon": "weapon-tankard",
+   "morph": [
+    1.08,
+    1.2
+   ]
+  },
+  "netty": {
+   "face": "face-netty",
+   "armor": "armor-villager-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-netting-needle",
+   "morph": [
+    0.98,
+    1.0
+   ]
+  },
+  "maud": {
+   "face": "face-maud",
+   "armor": "armor-elder-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-flat-cap-held",
+   "morph": [
+    0.93,
+    0.95
+   ]
+  },
+  "pip": {
+   "face": "face-pip",
+   "armor": "armor-tavern-m",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-stew-pot",
+   "morph": [
+    0.72,
+    0.8
+   ]
+  },
+  "osric": {
+   "face": "face-osric",
+   "armor": "armor-merchant",
+   "cape": "cape-short-lavender",
+   "helm": null,
+   "weapon": "weapon-silk-bolt",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "lark": {
+   "face": "face-lark",
+   "armor": "armor-busker",
+   "cape": "cape-short-lavender",
+   "helm": "helm-beret",
+   "weapon": "weapon-lute",
+   "morph": [
+    1.04,
+    0.9
+   ]
+  },
+  "ilsa": {
+   "face": "face-ilsa",
+   "armor": "armor-villager-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-scrolls",
+   "morph": [
+    0.99,
+    0.95
+   ]
+  },
+  "oswin": {
+   "face": "face-oswin",
+   "armor": "armor-royal-guard",
+   "cape": "cape-royal",
+   "helm": "helm-royal-guard",
+   "weapon": "weapon-halberd",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "hesper": {
+   "face": "face-hesper",
+   "armor": "armor-temple",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-broom",
+   "morph": [
+    0.99,
+    1.0
+   ]
+  },
+  "wren": {
+   "face": "face-wren",
+   "armor": "armor-urchin-f",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-coin",
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "imra-vell": {
+   "face": "face-imra-vell",
+   "armor": "armor-fencer",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-practice-sword",
+   "morph": [
+    0.99,
+    1.0
+   ]
+  },
+  "tamsin": {
+   "face": "face-tamsin",
+   "armor": "armor-lodge-ranger",
+   "cape": "cape-tamsin",
+   "helm": null,
+   "weapon": "weapon-shortbow",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "garrick": {
+   "face": "face-garrick",
+   "armor": "armor-caravan",
+   "cape": null,
+   "helm": "helm-wide-brim",
+   "weapon": "weapon-light-crossbow",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "aldric": {
+   "face": "face-aldric",
+   "armor": "armor-aldric",
+   "cape": "cape-campaign",
+   "helm": null,
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.0,
+    1.05
+   ]
+  },
+  "recruit": {
+   "face": "face-recruit",
+   "armor": "armor-recruit",
+   "cape": null,
+   "helm": "helm-kettle",
+   "weapon": "weapon-spear",
+   "morph": [
+    0.96,
+    0.92
+   ]
+  },
+  "thessaly": {
+   "face": "face-thessaly",
+   "armor": "armor-thessaly",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-staff-ring",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "thessaly.thessaly-crystal": {
+   "face": "face-thessaly",
+   "armor": "armor-thessaly",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-staff-ring",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "brenna": {
+   "face": "face-brenna",
+   "armor": "armor-brenna",
+   "cape": "cape-ash",
+   "helm": null,
+   "weapon": "weapon-battleaxe",
+   "morph": [
+    1.01,
+    1.0
+   ]
+  },
+  "brenna.protectorate": {
+   "face": "face-brenna",
+   "armor": "armor-brenna-protectorate",
+   "cape": "cape-ash",
+   "helm": null,
+   "weapon": "weapon-battleaxe",
+   "morph": [
+    1.01,
+    1.0
+   ]
+  },
+  "gannet": {
+   "face": "face-gannet",
+   "armor": "armor-gannet",
+   "cape": null,
+   "helm": "helm-lace-cap",
+   "weapon": "weapon-ledger-pen",
+   "morph": [
+    0.99,
+    1.2
+   ]
+  },
+  "hester": {
+   "face": "face-hester",
+   "armor": "armor-elder-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-folded-shawl",
+   "morph": [
+    0.9,
+    0.9
+   ]
+  },
+  "tobin": {
+   "face": "face-tobin",
+   "armor": "armor-cider-presser",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-mallet",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "tobin.levy": {
+   "face": "face-tobin",
+   "armor": "armor-levy",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-spade",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "harrow": {
+   "face": "face-harrow",
+   "armor": "armor-harrow",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-heron-cane",
+   "morph": [
+    1.0,
+    1.05
+   ]
+  },
+  "hobb": {
+   "face": "face-hobb",
+   "armor": "armor-woodcutter",
+   "cape": null,
+   "helm": "helm-knit-cap",
+   "weapon": "weapon-felling-axe",
+   "morph": [
+    1.08,
+    1.15
+   ]
+  },
+  "maleficio": {
+   "face": "face-maleficio",
+   "armor": "armor-maleficio",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-black-box",
+   "morph": [
+    1.01,
+    0.95
+   ]
+  },
+  "maleficio-young": {
+   "face": "face-maleficio-young",
+   "armor": "armor-scholar",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-oil-lamp",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "relief-column-echo": {
+   "face": "face-town-14",
+   "armor": "armor-old-pattern",
+   "cape": null,
+   "helm": "helm-nasal",
+   "weapon": "weapon-relief-kit",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "lost-boy": {
+   "face": "face-lost-boy",
+   "armor": "armor-urchin",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-flat-cap-held",
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "mags": {
+   "face": "face-mags",
+   "armor": "armor-pedlar",
+   "cape": "cape-pedlar-pack",
+   "helm": "helm-straw-hat",
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    0.82,
+    1.25
+   ]
+  },
+  "leon.ill": {
+   "face": "face-leon-ill",
+   "armor": "armor-leon-furs",
+   "cape": "cape-leon",
+   "helm": "helm-crown",
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    0.95,
+    1.1
+   ]
+  },
+  "elara.act3": {
+   "face": "face-elara",
+   "armor": "armor-elara-field",
+   "cape": "cape-travelling",
+   "helm": null,
+   "weapon": "weapon-map",
+   "morph": [
+    1.08,
+    0.88
+   ]
+  },
+  "elara.crowned": {
+   "face": "face-elara",
+   "armor": "armor-elara-queen",
+   "cape": null,
+   "helm": "helm-crown",
+   "weapon": null,
+   "morph": [
+    1.08,
+    0.88
+   ]
+  },
+  "hale.protectorate": {
+   "face": "face-hale",
+   "armor": "armor-protectorate",
+   "cape": "cape-watch-captain",
+   "helm": "helm-watch-crest",
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.03,
+    1.14
+   ]
+  },
+  "refugee-child.aged": {
+   "face": "face-refugee-child-aged",
+   "armor": "armor-refugee-child",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.98,
+    0.95
+   ]
+  },
+  "anselle": {
+   "face": "face-anselle",
+   "armor": "armor-anselle",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-lantern",
+   "morph": [
+    0.98,
+    1.05
+   ]
+  },
+  "orla": {
+   "face": "face-orla",
+   "armor": "armor-beekeeper",
+   "cape": null,
+   "helm": "helm-bee-veil",
+   "weapon": "weapon-smoker",
+   "morph": [
+    0.98,
+    1.1
+   ]
+  },
+  "corwin": {
+   "face": "face-corwin",
+   "armor": "armor-corwin",
+   "cape": "cape-corwin",
+   "helm": "helm-corwin",
+   "weapon": "weapon-corwin-kit",
+   "morph": [
+    1.04,
+    1.05
+   ]
+  },
+  "severin": {
+   "face": "face-severin",
+   "armor": "armor-severin",
+   "cape": "cape-severin",
+   "helm": "helm-crown-thorns",
+   "weapon": null,
+   "morph": [
+    1.1,
+    0.9
+   ]
+  },
+  "severin.severin-cell": {
+   "face": "face-severin-cell",
+   "armor": "armor-prisoner",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.1,
+    0.85
+   ]
+  },
+  "isadora": {
+   "face": "face-isadora",
+   "armor": "armor-isadora",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-night-flowers",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "valencia-child": {
+   "face": "face-valencia-child",
+   "armor": "armor-child-dress",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "pell": {
+   "face": "face-pell",
+   "armor": "armor-morvaine-man",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-flat-cap-held",
+   "morph": [
+    0.95,
+    0.9
+   ]
+  },
+  "ide": {
+   "face": "face-ide",
+   "armor": "armor-shift",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.97,
+    0.88
+   ]
+  },
+  "maren-elder": {
+   "face": "face-maren-elder",
+   "armor": "armor-morvaine-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    0.98,
+    0.92
+   ]
+  },
+  "blood-house-steward": {
+   "face": "face-blood-house-steward",
+   "armor": "armor-morvaine-livery",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-ledger-pen",
+   "morph": [
+    1.0,
+    0.92
+   ]
+  },
+  "hollowmere-child": {
+   "face": "face-hollowmere-child",
+   "armor": "armor-morvaine-man",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-toy-sword",
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "hollowmere-farmer": {
+   "face": "face-hollowmere-farmer",
+   "armor": "armor-morvaine-woman",
+   "cape": null,
+   "helm": "helm-kerchief",
+   "weapon": "weapon-basket",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "ruck": {
+   "face": "face-ruck",
+   "armor": "armor-sailor",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cutlass",
+   "morph": [
+    0.95,
+    1.1
+   ]
+  },
+  "davin": {
+   "face": "face-davin",
+   "armor": "armor-davin",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-corwin-sword",
+   "morph": [
+    0.98,
+    0.92
+   ]
+  },
+  "vorlaith": {
+   "face": "face-vorlaith",
+   "armor": "armor-vorlaith",
+   "cape": null,
+   "helm": "helm-vorlaith",
+   "weapon": null,
+   "morph": [
+    1.2,
+    0.95
+   ]
+  },
+  "guild-apprentice": {
+   "face": "face-guild-apprentice",
+   "armor": "armor-guild-apprentice",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-glass-lamp",
+   "morph": [
+    0.94,
+    0.88
+   ]
+  },
+  "mason": {
+   "face": "face-town-12",
+   "armor": "armor-smith",
+   "cape": null,
+   "helm": "helm-flat-cap",
+   "weapon": "weapon-mallet",
+   "morph": [
+    1.0,
+    1.05
+   ]
+  },
+  "elder": {
+   "face": "face-town-5",
+   "armor": "armor-elder-coat",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    0.97,
+    0.95
+   ]
+  },
+  "trader": {
+   "face": "face-town-2",
+   "armor": "armor-trader",
+   "cape": null,
+   "helm": "helm-wide-brim",
+   "weapon": "weapon-coin-purse",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "baker": {
+   "face": "face-town-4",
+   "armor": "armor-baker",
+   "cape": null,
+   "helm": "helm-kerchief",
+   "weapon": "weapon-peel",
+   "morph": [
+    0.98,
+    1.1
+   ]
+  },
+  "smith": {
+   "face": "face-town-3",
+   "armor": "armor-smith",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-hammer-tongs",
+   "morph": [
+    1.0,
+    1.1
+   ]
+  },
+  "flower-seller": {
+   "face": "face-town-2",
+   "armor": "armor-villager-woman",
+   "cape": null,
+   "helm": "helm-kerchief",
+   "weapon": "weapon-flower-basket",
+   "morph": [
+    0.98,
+    0.92
+   ]
+  },
+  "traveller": {
+   "face": "face-town-14",
+   "armor": "armor-road",
+   "cape": "cape-travelling",
+   "helm": null,
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "seamstress": {
+   "face": "face-town-10",
+   "armor": "armor-villager-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.98,
+    0.92
+   ]
+  },
+  "courier": {
+   "face": "face-town-9",
+   "armor": "armor-courier",
+   "cape": null,
+   "helm": "helm-flat-cap",
+   "weapon": "weapon-letters",
+   "morph": [
+    0.96,
+    0.9
+   ]
+  },
+  "pilgrim": {
+   "face": "face-town-13",
+   "armor": "armor-pilgrim",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-pilgrim-staff",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "weaver": {
+   "face": "face-town-4",
+   "armor": "armor-villager-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-spindle",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "farmhand": {
+   "face": "face-town-1",
+   "armor": "armor-villager-man",
+   "cape": null,
+   "helm": "helm-straw-hat",
+   "weapon": "weapon-pitchfork",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "old-man": {
+   "face": "face-town-5",
+   "armor": "armor-elder-coat",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    0.94,
+    1.0
+   ]
+  },
+  "maid": {
+   "face": "face-town-10",
+   "armor": "armor-maid",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-feather-duster",
+   "morph": [
+    0.97,
+    0.92
+   ]
+  },
+  "porter": {
+   "face": "face-town-11",
+   "armor": "armor-porter",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-crate",
+   "morph": [
+    1.0,
+    1.08
+   ]
+  },
+  "old-woman": {
+   "face": "face-town-6",
+   "armor": "armor-elder-woman",
+   "cape": "cape-old-woman",
+   "helm": null,
+   "weapon": "weapon-basket",
+   "morph": [
+    0.9,
+    0.95
+   ]
+  },
+  "child": {
+   "face": "face-town-7",
+   "armor": "armor-urchin",
+   "cape": null,
+   "helm": "helm-flat-cap",
+   "weapon": "weapon-toy-sword",
+   "morph": [
+    0.62,
+    0.66
+   ]
+  },
+  "youth": {
+   "face": "face-town-9",
+   "armor": "armor-villager-man",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.9,
+    0.88
+   ]
+  },
+  "pool-questeria": {
+   "face": "face-town-4",
+   "armor": "armor-villager-woman",
+   "cape": null,
+   "helm": "helm-kerchief",
+   "weapon": "weapon-basket",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "pool-court": {
+   "face": "face-town-16",
+   "armor": "armor-noble",
+   "cape": null,
+   "helm": "helm-beret",
+   "weapon": null,
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "pool-court-lady": {
+   "face": "face-town-10",
+   "armor": "armor-noble-gown",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.98,
+    0.92
+   ]
+  },
+  "pool-saltwind": {
+   "face": "face-town-12",
+   "armor": "armor-fisher",
+   "cape": null,
+   "helm": "helm-knit-cap",
+   "weapon": null,
+   "morph": [
+    1.0,
+    1.05
+   ]
+  },
+  "pool-doomward": {
+   "face": "face-town-14",
+   "armor": "armor-refugee-man",
+   "cape": "cape-blanket",
+   "helm": null,
+   "weapon": "weapon-walking-stick",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "pool-morvaine": {
+   "face": "face-town-18",
+   "armor": "armor-morvaine-woman",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-lantern",
+   "morph": [
+    1.0,
+    0.92
+   ]
+  },
+  "pool-abbey": {
+   "face": "face-town-15",
+   "armor": "armor-abbey-lay",
+   "cape": null,
+   "helm": "helm-straw-hat",
+   "weapon": "weapon-basket",
+   "morph": [
+    0.72,
+    0.8
+   ]
+  },
+  "red-gull-thug": {
+   "face": "face-red-gull",
+   "armor": "armor-red-gull",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.08,
+    1.15
+   ]
+  },
+  "bosun-grell": {
+   "face": "face-grell",
+   "armor": "armor-grell",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cutlass",
+   "morph": [
+    0.85,
+    1.55
+   ]
+  },
+  "hollowed-footman": {
+   "face": "face-hollowed",
+   "armor": "armor-hollowed-footman",
+   "cape": null,
+   "helm": "helm-hollowed-kettle",
+   "weapon": "weapon-hollowed-sword",
+   "morph": [
+    0.97,
+    1.0
+   ]
+  },
+  "hollowed-hexer": {
+   "face": "face-hollowed",
+   "armor": "armor-hollowed-hexer",
+   "cape": null,
+   "helm": "helm-hollowed-hood",
+   "weapon": "weapon-hexer-staff",
+   "morph": [
+    1.01,
+    0.9
+   ]
+  },
+  "hollowed-sapper": {
+   "face": "face-hollowed",
+   "armor": "armor-hollowed-sapper",
+   "cape": null,
+   "helm": "helm-sapper-goggles",
+   "weapon": "weapon-sapper-pick",
+   "morph": [
+    0.95,
+    1.05
+   ]
+  },
+  "sapper-chief": {
+   "face": "face-hollowed",
+   "armor": "armor-hollowed-chief",
+   "cape": null,
+   "helm": "helm-sapper-faceplate",
+   "weapon": "weapon-chief-pick-lantern",
+   "morph": [
+    1.06,
+    1.2
+   ]
+  },
+  "vault-construct": {
+   "face": "face-construct-vault",
+   "armor": "armor-construct-stone",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.2,
+    1.35
+   ]
+  },
+  "kael-duel": {
+   "face": "face-kael",
+   "armor": "armor-kael",
+   "cape": "cape-tail-ember",
+   "helm": "helm-kael-hood",
+   "weapon": "weapon-kael-rapier",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "hollowed-climber": {
+   "face": "face-hollowed",
+   "armor": "armor-hollowed-climber",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-climber-hook",
+   "morph": [
+    1.02,
+    0.88
+   ]
+  },
+  "varkhul": {
+   "face": "face-varkhul",
+   "armor": "armor-varkhul",
+   "cape": "cape-varkhul",
+   "helm": "helm-varkhul",
+   "weapon": "weapon-varkhul-greatsword",
+   "morph": [
+    1.2,
+    1.25
+   ]
+  },
+  "varkhul.varkhul-unmasked": {
+   "face": "face-varkhul",
+   "armor": "armor-varkhul-split",
+   "cape": "cape-varkhul",
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.2,
+    1.25
+   ]
+  },
+  "maleficio-boss": {
+   "face": "face-maleficio",
+   "armor": "armor-maleficio-ascendant",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-black-box",
+   "morph": [
+    1.01,
+    0.95
+   ]
+  },
+  "cube-cultist": {
+   "face": "face-cube-cultist",
+   "armor": "armor-cultist",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-cultist-dagger",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "bandit": {
+   "face": "face-town-11",
+   "armor": "armor-bandit",
+   "cape": null,
+   "helm": "helm-bandit-hood",
+   "weapon": "weapon-shortsword",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "thrall": {
+   "face": "face-thrall",
+   "armor": "armor-thrall",
+   "cape": null,
+   "helm": null,
+   "weapon": "weapon-spear-lantern",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "vesk": {
+   "face": "face-thrall",
+   "armor": "armor-thrall-knight",
+   "cape": "cape-thrall-knight",
+   "helm": "helm-vesk-wolf",
+   "weapon": "weapon-vesk-sword",
+   "morph": [
+    1.08,
+    1.15
+   ]
+  },
+  "vreya": {
+   "face": "face-vreya",
+   "armor": "armor-thrall-knight-f",
+   "cape": "cape-thrall-knight",
+   "helm": "helm-vreya-crown",
+   "weapon": "weapon-vreya-blade",
+   "morph": [
+    1.06,
+    1.0
+   ]
+  },
+  "mordain": {
+   "face": "face-thrall",
+   "armor": "armor-thrall-knight",
+   "cape": "cape-thrall-knight",
+   "helm": "helm-mordain-beak",
+   "weapon": "weapon-mordain-glaive",
+   "morph": [
+    1.08,
+    0.9
+   ]
+  },
+  "gilded-knight": {
+   "face": "face-town-14",
+   "armor": "armor-gilded-knight",
+   "cape": "cape-gilded",
+   "helm": "helm-gilded",
+   "weapon": "weapon-gilded-kit",
+   "morph": [
+    1.02,
+    1.05
+   ]
+  },
+  "gilded-sergeant": {
+   "face": "face-town-12",
+   "armor": "armor-gilded-knight",
+   "cape": "cape-gilded",
+   "helm": null,
+   "weapon": "weapon-mace-shield",
+   "morph": [
+    1.0,
+    1.12
+   ]
+  },
+  "drowned": {
+   "face": "face-drowned",
+   "armor": "armor-drowned",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.97,
+    1.05
+   ]
+  },
+  "blood-wight": {
+   "face": "face-blood-wight",
+   "armor": "armor-blood-wight",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.1,
+    0.85
+   ]
+  },
+  "sun-scorched": {
+   "face": "face-sun-scorched",
+   "armor": "armor-sun-scorched",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "thornling": {
+   "face": "face-thornling",
+   "armor": "armor-thornling",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    0.68,
+    0.7
+   ]
+  },
+  "priest-construct": {
+   "face": "face-construct-priest",
+   "armor": "armor-construct-priest",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.2,
+    1.3
+   ]
+  },
+  "severin-boss": {
+   "face": "face-severin",
+   "armor": "armor-severin",
+   "cape": "cape-severin-wings",
+   "helm": "helm-crown-thorns",
+   "weapon": null,
+   "morph": [
+    1.1,
+    0.9
+   ]
+  },
+  "smuggler": {
+   "face": "face-town-10",
+   "armor": "armor-smuggler",
+   "cape": null,
+   "helm": "helm-bandana",
+   "weapon": "weapon-cutlass",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "protectorate-watchman": {
+   "face": "face-town-11",
+   "armor": "armor-protectorate",
+   "cape": "cape-watch",
+   "helm": "helm-watch",
+   "weapon": "weapon-protectorate-kit",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "protectorate-warden": {
+   "face": "face-town-3",
+   "armor": "armor-protectorate-warden",
+   "cape": null,
+   "helm": "helm-warden",
+   "weapon": "weapon-warden-kit",
+   "morph": [
+    1.08,
+    1.18
+   ]
+  },
+  "crown-hollowed": {
+   "face": "face-crown-hollowed",
+   "armor": "armor-crown-hollowed",
+   "cape": null,
+   "helm": "helm-hollowed-kettle",
+   "weapon": "weapon-spear",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "crown-construct": {
+   "face": "face-construct-crown",
+   "armor": "armor-construct-crown",
+   "cape": null,
+   "helm": null,
+   "weapon": null,
+   "morph": [
+    1.25,
+    1.2
+   ]
+  },
+  "kael-shadow": {
+   "face": "face-kael",
+   "armor": "armor-kael-shadow",
+   "cape": "cape-tail-ember",
+   "helm": null,
+   "weapon": "weapon-kael-knives",
+   "morph": [
+    1.0,
+    0.95
+   ]
+  },
+  "sb-sovereign": {
+   "face": "face-player-3",
+   "armor": "armor-sovereign",
+   "cape": null,
+   "helm": "helm-crown-dusk-dawn",
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.02,
+    1.0
+   ]
+  },
+  "unmade": {
+   "face": "face-unmade",
+   "armor": "armor-unmade-bronze",
+   "cape": null,
+   "helm": "helm-bronze-crest",
+   "weapon": "weapon-unmade-spear-shield",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "unmade.b": {
+   "face": "face-unmade",
+   "armor": "armor-old-pattern",
+   "cape": null,
+   "helm": "helm-nasal",
+   "weapon": "weapon-longsword",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "unmade.c": {
+   "face": "face-unmade",
+   "armor": "armor-pikeman",
+   "cape": null,
+   "helm": "helm-morion",
+   "weapon": "weapon-pike",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "unmade.d": {
+   "face": "face-unmade",
+   "armor": "armor-watch",
+   "cape": "cape-watch",
+   "helm": "helm-watch",
+   "weapon": "weapon-cudgel",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  },
+  "ashfall-raider": {
+   "face": "face-town-12",
+   "armor": "armor-ashfall-raider",
+   "cape": "cape-ash",
+   "helm": null,
+   "weapon": "weapon-raider-kit",
+   "morph": [
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "gear": [
+  {
+   "item": "padded-armour",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-padded",
+    "base-female": "armor-padded-f"
+   }
+  },
+  {
+   "item": "leather-armour",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-leather",
+    "base-female": "armor-leather-f"
+   }
+  },
+  {
+   "item": "studded-leather",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-studded",
+    "base-female": "armor-studded-f"
+   }
+  },
+  {
+   "item": "hide-armour",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-hide",
+    "base-female": "armor-hide-f"
+   }
+  },
+  {
+   "item": "chain-shirt",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-chain-shirt",
+    "base-female": "armor-chain-shirt-f"
+   }
+  },
+  {
+   "item": "scale-mail",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-scale",
+    "base-female": "armor-scale-f"
+   }
+  },
+  {
+   "item": "chain-mail",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-chain-mail",
+    "base-female": "armor-chain-mail-f"
+   }
+  },
+  {
+   "item": "plate-armour",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-plate",
+    "base-female": "armor-plate-f"
+   }
+  },
+  {
+   "item": "mage-robes",
+   "slot": "body",
+   "parts": {
+    "base-male": "armor-mage-robes",
+    "base-female": "armor-mage-robes-f"
+   }
+  },
+  {
+   "item": "travelling-cloak",
+   "slot": "cloak",
+   "parts": {
+    "base-male": "cape-travelling",
+    "base-female": "cape-travelling"
+   }
+  },
+  {
+   "item": "cloak-of-protection",
+   "slot": "cloak",
+   "parts": {
+    "base-male": "cape-protection",
+    "base-female": "cape-protection"
+   }
+  },
+  {
+   "item": "leather-cap",
+   "slot": "head",
+   "parts": {
+    "base-male": "helm-leather-cap",
+    "base-female": "helm-leather-cap"
+   }
+  },
+  {
+   "item": "iron-helm",
+   "slot": "head",
+   "parts": {
+    "base-male": "helm-iron-helm",
+    "base-female": "helm-iron-helm"
+   }
+  },
+  {
+   "item": "circlet-of-focus",
+   "slot": "head",
+   "parts": {
+    "base-male": "helm-circlet-of-focus",
+    "base-female": "helm-circlet-of-focus"
+   }
+  },
+  {
+   "item": "dagger",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-dagger",
+    "base-female": "weapon-dagger"
+   }
+  },
+  {
+   "item": "shortsword",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-shortsword",
+    "base-female": "weapon-shortsword"
+   }
+  },
+  {
+   "item": "longsword",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-longsword",
+    "base-female": "weapon-longsword"
+   }
+  },
+  {
+   "item": "rapier",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-rapier",
+    "base-female": "weapon-rapier"
+   }
+  },
+  {
+   "item": "scimitar",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-scimitar",
+    "base-female": "weapon-scimitar"
+   }
+  },
+  {
+   "item": "handaxe",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-handaxe",
+    "base-female": "weapon-handaxe"
+   }
+  },
+  {
+   "item": "battleaxe",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-battleaxe",
+    "base-female": "weapon-battleaxe"
+   }
+  },
+  {
+   "item": "greatsword",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-greatsword",
+    "base-female": "weapon-greatsword"
+   }
+  },
+  {
+   "item": "warhammer",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-warhammer",
+    "base-female": "weapon-warhammer"
+   }
+  },
+  {
+   "item": "mace",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-mace",
+    "base-female": "weapon-mace"
+   }
+  },
+  {
+   "item": "quarterstaff",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-quarterstaff",
+    "base-female": "weapon-quarterstaff"
+   }
+  },
+  {
+   "item": "spear",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-spear",
+    "base-female": "weapon-spear"
+   }
+  },
+  {
+   "item": "shortbow",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-shortbow",
+    "base-female": "weapon-shortbow"
+   }
+  },
+  {
+   "item": "longbow",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-longbow",
+    "base-female": "weapon-longbow"
+   }
+  },
+  {
+   "item": "light-crossbow",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-light-crossbow",
+    "base-female": "weapon-light-crossbow"
+   }
+  },
+  {
+   "item": "ember-dagger",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-ember-dagger",
+    "base-female": "weapon-ember-dagger"
+   }
+  },
+  {
+   "item": "thornwood-bow",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-thornwood-bow",
+    "base-female": "weapon-thornwood-bow"
+   }
+  },
+  {
+   "item": "sunsteel-blade",
+   "slot": "mainhand",
+   "parts": {
+    "base-male": "weapon-sunsteel-blade",
+    "base-female": "weapon-sunsteel-blade"
+   }
+  },
+  {
+   "item": "dagger",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-dagger",
+    "base-female": "offhand-dagger"
+   }
+  },
+  {
+   "item": "shortsword",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-shortsword",
+    "base-female": "offhand-shortsword"
+   }
+  },
+  {
+   "item": "scimitar",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-scimitar",
+    "base-female": "offhand-scimitar"
+   }
+  },
+  {
+   "item": "handaxe",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-handaxe",
+    "base-female": "offhand-handaxe"
+   }
+  },
+  {
+   "item": "ember-dagger",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-ember-dagger",
+    "base-female": "offhand-ember-dagger"
+   }
+  },
+  {
+   "item": "wooden-shield",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-wooden-shield",
+    "base-female": "offhand-wooden-shield"
+   }
+  },
+  {
+   "item": "steel-shield",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-steel-shield",
+    "base-female": "offhand-steel-shield"
+   }
+  },
+  {
+   "item": "warden-shield",
+   "slot": "offhand",
+   "parts": {
+    "base-male": "offhand-warden-shield",
+    "base-female": "offhand-warden-shield"
+   }
+  }
+ ],
+ "own": {
+  "soulbound": [
+   {
+    "slot": "mainhand",
+    "item": "shortsword",
+    "part": "weapon-sb-blades"
+   },
+   {
+    "slot": "offhand",
+    "item": "dagger",
+    "part": null
+   },
+   {
+    "slot": "body",
+    "item": "leather-armour",
+    "part": "armor-sb-traveller"
+   }
+  ],
+  "sera": [
+   {
+    "slot": "mainhand",
+    "item": "shortbow",
+    "part": "weapon-sera-longbow"
+   },
+   {
+    "slot": "body",
+    "item": "leather-armour",
+    "part": "armor-sera"
+   }
+  ],
+  "kael": [
+   {
+    "slot": "mainhand",
+    "item": "dagger",
+    "part": "weapon-kael-knives"
+   },
+   {
+    "slot": "offhand",
+    "item": "dagger",
+    "part": null
+   },
+   {
+    "slot": "body",
+    "item": "leather-armour",
+    "part": "armor-kael"
+   }
+  ],
+  "mira": [
+   {
+    "slot": "body",
+    "item": "scale-mail",
+    "part": "armor-mira"
+   }
+  ],
+  "brannock": [
+   {
+    "slot": "mainhand",
+    "item": "longsword",
+    "part": "weapon-brannock"
+   },
+   {
+    "slot": "offhand",
+    "item": "wooden-shield",
+    "part": null
+   },
+   {
+    "slot": "body",
+    "item": "chain-mail",
+    "part": "armor-brannock"
+   }
+  ]
+ }
+}

@@ -711,7 +711,7 @@ public partial class ExploreScreen
         : who.Side == Side.Foes ? "FOE" : "ALLY";
 
     /// <summary>Where someone's chest is: where blows land and motes rise from.</summary>
-    private static Vector2 ChestOf(WalkerSprite walker) => walker.Position - new Vector2(0f, walker.Shape.Figure.Y * ChestShare);
+    private static Vector2 ChestOf(WalkerSprite walker) => walker.Position - new Vector2(0f, walker.Size.Y * ChestShare);
 
     /// <summary>The way from one figure to another, as a unit, or nothing if they're on the same spot.</summary>
     private static Vector2 Toward(WalkerSprite from, WalkerSprite to)

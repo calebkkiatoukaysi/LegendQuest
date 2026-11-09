@@ -288,27 +288,27 @@ public partial class ExploreScreen
         return walker;
     }
 
-    /// <summary>A figure for a foe from its stat block: its creature's sheet, or its cast member's.</summary>
+    /// <summary>A figure for a foe from its stat block: its creature's sheet, or its cast member's, and its imported picture if it has one.</summary>
     private WalkerSprite EnemyWalker(EnemyDefinition enemy)
     {
         if (enemy.Creature is not null)
         {
             Creature creature = Creatures.Get(enemy.Creature);
-            return new WalkerSprite { Shape = creature.Shape, Sheet = CreatureSheet(creature) };
+            return new WalkerSprite { Shape = creature.Shape, Sheet = CreatureSheet(creature), Art = ImportedArt.Get(enemy.Id) };
         }
 
         CastMember cast = Cast.Get(enemy.Cast);
         Texture2D sheet = cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : SheetFor(cast.Look);
-        return new WalkerSprite { Sheet = sheet };
+        return new WalkerSprite { Sheet = sheet, Art = ImportedArt.Get(enemy.Id) };
     }
 
-    /// <summary>A figure for a guest who isn't standing in the room: a companion as their origin dresses them, or a stat block's.</summary>
+    /// <summary>A figure for a guest who isn't standing in the room: a companion as their origin dresses them, or a stat block's, and their imported picture if they've one.</summary>
     private WalkerSprite GuestWalker(string guest)
     {
         if (!Origins.Exists(guest)) return EnemyWalker(EnemyCatalog.Get(guest));
 
         PartyMember member = Origins.Create(guest);
-        return new WalkerSprite { Sheet = SheetFor(member.Look, Paperdoll.GearOf(member)) };
+        return new WalkerSprite { Sheet = SheetFor(member.Look, Paperdoll.GearOf(member)), Art = ImportedArt.For(member) };
     }
 
     /// <summary>Everyone to the slot the engine put them in: those in the room walk there at walking pace, those turning up fade in on it. Those who join later wait.</summary>
@@ -326,7 +326,7 @@ public partial class ExploreScreen
                 walker.Position = feet;
                 walker.Facing = facing;
                 FadeTo(walker, 1f, ArriveSeconds);
-                _effects.Motes(walker.Position - new Vector2(0f, walker.Shape.Figure.Y / 2f), new Point((int)walker.Shape.Figure.X, (int)walker.Shape.Figure.Y), CombatStyle.Blessing, false);
+                _effects.Motes(walker.Position - new Vector2(0f, walker.Size.Y / 2f), new Point((int)walker.Size.X, (int)walker.Size.Y), CombatStyle.Blessing, false);
                 continue;
             }
             longest = MathF.Max(longest, WalkTo(walker, feet, facing, TakePlacesLeast, TakePlacesMost));

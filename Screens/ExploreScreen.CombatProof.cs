@@ -38,7 +38,7 @@ public partial class ExploreScreen
     /// <param name="id">Their id in the fight: an origin id, a room npc's id, or a spawned foe's ("sea-wraith-1").</param>
     internal void ProofAimAtFighter(string id)
     {
-        if (FighterWalker(id) is { } walker) ProofAimAt(walker.Position - new Vector2(0f, walker.Shape.Figure.Y / 2f));
+        if (FighterWalker(id) is { } walker) ProofAimAt(walker.Position - new Vector2(0f, walker.Size.Y / 2f));
     }
 
     /// <summary>Puts the pretend mouse over a slot's plate.</summary>

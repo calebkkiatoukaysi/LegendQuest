@@ -400,9 +400,11 @@ public partial class ExploreScreen
     private Vector2 TalkSpot(Npc npc) =>
         npc.Definition.Aboard is null ? npc.Walker.Position : new Vector2(npc.Walker.Position.X, _room.BackEdgeAt(npc.Walker.Position.X));
 
-    /// <summary>Where the top of someone's head is, in world pixels: HeadHeight up from a person's feet, and as much higher again as a creature's frame stands taller than a person's.</summary>
+    /// <summary>Where the top of someone's head is, in world pixels: HeadHeight up from a person's feet, and as much higher again as a creature's frame stands taller than a person's. An imported picture's is as far over its own height as HeadHeight is over a person's figure.</summary>
     private static Vector2 HeadOf(WalkerSprite walker) =>
-        walker.Position - new Vector2(0f, HeadHeight + walker.Shape.Feet.Y - WalkerShape.Person.Feet.Y);
+        walker.Position - new Vector2(0f, !walker.DrawsArt
+            ? HeadHeight + walker.Shape.Feet.Y - WalkerShape.Person.Feet.Y
+            : walker.Size.Y + HeadHeight - WalkerShape.Person.Figure.Y);
 
     /// <summary>Uses something: turns you to it, cues what happened, and opens the zone map to travel if it was a waypoint.</summary>
     /// <param name="thing">What to use.</param>

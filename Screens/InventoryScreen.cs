@@ -87,6 +87,12 @@ public class InventoryScreen : GameScreen
 
     /// <summary>When something changes on them: how long the swing a new weapon gets lasts (wind-up for the first half, strike for the second), and the gold glow behind them.</summary>
     private const float SwingSeconds = 0.5f;
+
+    /// <summary>How tall a standard adult's painted figure stands, how much it breathes and over how long, and how far it leans back and through a swing (radians).</summary>
+    private const int PaintedHeight = 330;
+    private const float PaintedBreath = 0.008f;
+    private const float PaintedBreathSeconds = 3.4f;
+    private const float PaintedSwingLean = 0.08f;
     private const float GlowSeconds = 0.8f;
     private static readonly Point GlowSize = new(300, 380);
     private static readonly Color GlowColour = new Color(240, 200, 104) * 0.4f;
@@ -857,9 +863,21 @@ public class InventoryScreen : GameScreen
         }
     }
 
-    /// <summary>Them, full length: turning on the spot and walking, or facing you and swinging a weapon they've just taken up.</summary>
+    /// <summary>
+    /// Them, full length, in what they're wearing: their painted figure if they've a painted body,
+    /// breathing and leaning into a swing of a weapon they've just taken up; otherwise the paperdoll,
+    /// turning on the spot and walking, or facing you and swinging.
+    /// </summary>
     private void DrawFigure(SpriteBatch spriteBatch, float alpha)
     {
+        if (PartCatalog.Picture(PartCatalog.OutfitOf(Member), PaintedHeight) is { HasBody: true } standing)
+        {
+            float breath = 1f + PaintedBreath * MathF.Sin(_turnClock / PaintedBreathSeconds * MathHelper.TwoPi);
+            float lean = _swingClock <= 0f ? 0f : _swingClock > SwingSeconds / 2f ? -PaintedSwingLean : PaintedSwingLean;
+            spriteBatch.Draw(standing.Picture, FigureFeet, null, Color.White * alpha, lean, standing.Feet, new Vector2(1f, breath), SpriteEffects.None, 0f);
+            return;
+        }
+
         Direction facing = Turning[(int)(_turnClock / TurnSeconds) % Turning.Length];
         int column = FirstStep + (int)(_turnClock / StepSeconds) % Steps;
         if (_swingClock > 0f)

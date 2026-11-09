@@ -58,7 +58,10 @@ public partial class ExploreScreen
     private void Redress()
     {
         for (int i = 0; i < _walkers.Count; i++)
+        {
             _walkers[i].Sheet = SheetFor(_members[i].Look, Paperdoll.GearOf(_members[i]));
+            _walkers[i].Art = ImportedArt.For(_members[i]);
+        }
     }
 
     /// <summary>Opens the shop the conversation that's just ended asked for, if it asked for one. Buying anything there is the moment for the tip about the bag.</summary>

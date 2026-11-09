@@ -73,17 +73,16 @@ public class CombatArt
         spriteBatch.Draw(Conditions, at, CombatIcons.Condition(condition), Color.White * alpha, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
     /// <summary>Draws someone's face into a portrait's well, greyed if they're down and darker still if they've fallen.</summary>
-    /// <remarks>A person's is the bust off their standing frame, a pixel for a pixel. A creature's is the top of its figure, as wide as it is, squeezed into the well.</remarks>
+    /// <remarks>A person's is the bust off their standing frame, a pixel for a pixel. A creature's is the top of its figure, as wide as it is, squeezed into the well. Someone drawn as an imported picture has its portrait, made at the well's size.</remarks>
     /// <param name="spriteBatch">The SpriteBatch to render with, point-sampled, deferred.</param>
     /// <param name="fighter">Who.</param>
     /// <param name="well">The well, in screen pixels.</param>
     /// <param name="alpha">How faded in it is.</param>
     public static void Face(SpriteBatch spriteBatch, FighterView fighter, Rectangle well, float alpha)
     {
-        if (fighter.Sheet is null) return;
-
         Color tint = (fighter.Fallen ? FallenTint : fighter.Down ? DownTint : Color.White) * alpha;
-        spriteBatch.Draw(fighter.Sheet, well, FaceOf(fighter.Shape), tint);
+        if (fighter.Art is not null) spriteBatch.Draw(fighter.Art.Portrait(well.Size), well, tint);
+        else if (fighter.Sheet is not null) spriteBatch.Draw(fighter.Sheet, well, FaceOf(fighter.Shape), tint);
     }
 
     /// <summary>Where someone's face is on their sheet.</summary>

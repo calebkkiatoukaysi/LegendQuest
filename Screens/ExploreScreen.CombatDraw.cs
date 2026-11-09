@@ -209,7 +209,7 @@ public partial class ExploreScreen
     {
         WalkerSprite walker = FighterWalker(who.Id);
         (int successes, int failures) = _shown.DeathSaves(who);
-        return new FighterView(who.Id, who.Name, walker?.Sheet, walker?.Shape ?? WalkerShape.Person, who.Side == Side.Foes,
+        return new FighterView(who.Id, who.Name, walker?.Sheet, walker?.Shape ?? WalkerShape.Person, walker?.Art, who.Side == Side.Foes,
             _shown.Hp(who), who.MaxHp, who.ArmourClass, _shown.Focus(who), _shown.Conditions(who), _shown.IsDown(who), _shown.HasDied(who), successes, failures);
     }
 
@@ -340,7 +340,7 @@ public partial class ExploreScreen
         if (FighterWalker(who.Id) is not WalkerSprite walker || walker.Opacity <= 0f) return;
 
         Rectangle source = CombatIcons.Piece(foe ? "target-foe" : "target-ally", frame);
-        int scale = Math.Max(1, (int)MathF.Round(walker.Shape.Shadow.X / RingWidth));
+        int scale = Math.Max(1, (int)MathF.Round(walker.ShadowSize.X / RingWidth));
         Vector2 at = walker.Position - new Vector2(source.Width * scale / 2f, source.Height * scale / 2f);
         spriteBatch.Draw(_combatArt.Hud, new Vector2(MathF.Round(at.X), MathF.Round(at.Y)), source, colour, 0f, Vector2.Zero, scale, SpriteEffects.None, GroundRing);
     }

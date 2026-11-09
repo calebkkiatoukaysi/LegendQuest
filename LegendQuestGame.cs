@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendQuest.Audio;
+using LegendQuest.Characters;
 using LegendQuest.Combat;
 using LegendQuest.Components;
 using LegendQuest.Dialogue;
@@ -77,7 +78,7 @@ public partial class LegendQuestGame : Game
         base.Initialize();
     }
 
-    /// <summary>Reads every map and every zone, and checks every table that's read from them: the conversations, the shops and the loot.</summary>
+    /// <summary>Reads every map and every zone, and checks every table that's read from them: the conversations, the shops and the loot, and the imported characters' pictures.</summary>
     /// <remarks>
     /// Throws on the first fault, with what and where. The game does it as it starts, and --validate
     /// does it alone, with no window, so the data can be checked in a second instead of a proof run.
@@ -86,7 +87,8 @@ public partial class LegendQuestGame : Game
     /// before the conversations, which check their travels against them, and the rest of the zones'
     /// checks (talks, barks, every fight's foes together) wait for the conversations. Then who's drawn
     /// for each fight's supports, which is often someone standing in a zone, and that every room a
-    /// fight's fought in has room on its floor for the fight's slots.
+    /// fight's fought in has room on its floor for the fight's slots. Last, every imported picture's
+    /// .json, which has to be for someone the tables know, and the character parts' parts.json.
     /// </remarks>
     public static void LoadAndCheckData()
     {
@@ -96,9 +98,11 @@ public partial class LegendQuestGame : Game
         EncounterCatalog.ValidateAfterZones();
         foreach (RoomDefinition room in EncounterCatalog.FightRooms()) FightStage.Check(room);
         _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
+        ImportedArt.LoadAll();
+        PartCatalog.LoadAll();
     }
 
-    /// <summary>Reads every map, loads all the sounds, then opens the gate and the title.</summary>
+    /// <summary>Reads every map, makes the imported characters' pictures ready, loads all the sounds, then opens the gate and the title.</summary>
     /// <remarks>
     /// The first screens get added here instead of the constructor because the gate starts the title
     /// music when it opens. The maps are read first, because reading a save checks its map exists,
@@ -110,6 +114,8 @@ public partial class LegendQuestGame : Game
 
         if (ProofDirectory is not null) BeginProof();
 
+        ImportedArt.LoadContent(Services, GraphicsDevice);
+        PartCatalog.LoadContent(Services, GraphicsDevice);
         _audio.LoadContent(Content);
         _cursor.LoadContent(Content);
         _canvas.LoadContent(GraphicsDevice);

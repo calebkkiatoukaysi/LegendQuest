@@ -71,4 +71,8 @@ public static class Meters
     /// <summary>One meter.</summary>
     /// <param name="id">Its id. It has to exist.</param>
     public static MeterDefinition Get(string id) => ById[id];
+
+    /// <summary>Whether someone's approval is kept, by their origin id: every companion, Valencia among them before Origins has her.</summary>
+    /// <param name="id">Who.</param>
+    public static bool IsCompanion(string id) => id is not null && Array.Exists(Table, meter => meter.Companion == id);
 }

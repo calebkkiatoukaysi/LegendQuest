@@ -320,6 +320,7 @@ public partial class ExploreScreen : ICutsceneStage
             string castId = npc?.Definition.Cast ?? key;
             if (Cast.Get(castId)?.LookCalled(look) is not CharacterLook changed) return false;
             walker.Sheet = SheetFor(changed);
+            walker.Art = ImportedArt.Get(look);
         }
         return figures.Count > 0;
     }
@@ -643,7 +644,7 @@ public partial class ExploreScreen : ICutsceneStage
         foreach ((WalkerSprite walker, Color colour) in _glows)
         {
             if (_hiddenWalkers.Contains(walker)) continue;
-            Vector2 figure = walker.Shape.Figure;
+            Vector2 figure = walker.Size;
             var size = new Vector2(figure.X * GlowWidth, figure.Y * GlowHeight);
             Vector2 middle = walker.Position - new Vector2(0f, figure.Y / 2f);
             var area = new Rectangle((int)(middle.X - size.X / 2f), (int)(middle.Y - size.Y / 2f), (int)size.X, (int)size.Y);

@@ -25,11 +25,18 @@ namespace LegendQuest.Screens;
 /// what drives you, which is your voice. The second time it's the Soul-Bound, remembered: the pier
 /// you met on is behind everything, their name starts empty and has to be typed, and their pronouns
 /// are on it. Once they're made the narrator remembers them, the game is written to its slot, and
-/// it sets sail. The rows are on three tabs (who, face, dress), since there are too many to fit in
-/// one column; left and right change one, Q and E change the tab. The paperdoll bakes them again
-/// every time a row changes (it's small, so that's instant), and the face is blown up in the frame
-/// over them, since it's only a few pixels on the figure. The scores are the class's recommended
-/// spread for now; point buy comes with the character sheet.
+/// it sets sail. The rows are on three tabs: WHO (name, people, class), CHARACTER (the painted face
+/// and its skin, hair and eyes, height and build) and ARMOR (the Base and Trim whatever they wear is
+/// dyed, and whether the helm and cape show). Left and right change a row and Q and E the tab; the
+/// row that's picked shows everything it can be under the rows, face thumbnails, swatches or a
+/// slider, to click on.
+/// <para>
+/// They stand on the left as the rooms will draw them, in what their class starts wearing: a walker
+/// with their painted figure, put together big (PartCatalog.Large), that breathes, walks, attacks
+/// and casts (F), turns round (R), and shows its colours as painted while V's held. Without a
+/// painted face the paperdoll stands there instead, turning, with its own rows on the tabs. The
+/// scores are the class's recommended spread for now; point buy comes with the character sheet.
+/// </para>
 /// </remarks>
 public class CharacterCreationScreen : MenuScreen
 {
@@ -42,7 +49,7 @@ public class CharacterCreationScreen : MenuScreen
     private const string DefaultName = "Wanderer";
 
     /// <summary>The tabs, in order.</summary>
-    private static readonly string[] Tabs = { "WHO", "FACE", "DRESS" };
+    private static readonly string[] Tabs = { "WHO", "CHARACTER", "ARMOR" };
 
     /// <summary>The longest a name can be. Long enough for most, short enough to fit on a party card.</summary>
     private const int NameLength = 12;
@@ -55,8 +62,8 @@ public class CharacterCreationScreen : MenuScreen
     private static readonly Point TabSize = new(220, 54);
     private const float TabGap = 16f;
     private const float TabsY = 150f;
-    private static readonly Point RowSize = new(720, 56);
-    private const float RowGap = 10f;
+    private static readonly Point RowSize = new(720, 50);
+    private const float RowGap = 8f;
     private const float RowsTop = 210f;
     private static readonly Point ButtonSize = new(210, 56);
     private const float ButtonGap = 20f;
@@ -76,6 +83,29 @@ public class CharacterCreationScreen : MenuScreen
 
     /// <summary>The shadow under their feet.</summary>
     private static readonly Point ShadowSize = new(150, 34);
+
+    /// <summary>How tall a standard adult's painted figure stands in the preview, in screen pixels.</summary>
+    private const int PaintedHeight = 400;
+
+    /// <summary>What the preview's doing, F stepping through them: its name under it, and how long an attack and a cast take before they go round again.</summary>
+    private enum PreviewAction { Standing, Walking, Attacking, Casting }
+    private const float AttackSeconds = 1.6f, WindUpSeconds = 0.4f, StrikeSeconds = 0.75f;
+    private const float CastSeconds = 2.2f, CastHeldSeconds = 1.4f;
+
+    /// <summary>The grid under the rows: how far below the last row, the gap between its items, the most across it, and its items' frames.</summary>
+    private const float DetailTop = 22f;
+    private const int DetailGap = 6;
+    private const int MostAcross = 14;
+    private const int PickedFrame = 3, HoverFrame = 2;
+    private static readonly Point ChipCell = new(44, 44), FaceCell = new(64, 64), NotchCell = new(56, 22);
+
+    /// <summary>Where the keys for the preview are written, up from the bottom of its panel.</summary>
+    private const float PreviewKeysUp = 66f;
+
+    /// <summary>A colour row's swatch: its size, how far in from the row's right end, and its frame.</summary>
+    private static readonly Point ChipSize = new(30, 30);
+    private const float ChipInset = 70f;
+    private const int ChipFrame = 2;
     private static readonly Color ShadowColor = Color.Black * 0.45f;
 
     /// <summary>How long they face each way before turning, and how long a step takes.</summary>
@@ -104,6 +134,40 @@ public class CharacterCreationScreen : MenuScreen
     private readonly StringBuilder _name = new();
     private readonly List<(MenuEntry Row, Func<string> Value)> _rows = new();
     private readonly List<List<MenuEntry>> _pages = new() { new(), new(), new() };
+
+    /// <summary>Rows shown only sometimes, and when: the painted figure's with a painted face, the paperdoll's without.</summary>
+    private readonly Dictionary<MenuEntry, Func<bool>> _shownWhen = new();
+
+    /// <summary>The swatch each colour row has picked, drawn beside its value: null for as painted.</summary>
+    private readonly Dictionary<MenuEntry, Func<Color?>> _chips = new();
+
+    /// <summary>The grid each row shows under the rows while it's picked.</summary>
+    private readonly Dictionary<MenuEntry, Detail> _details = new();
+
+    /// <summary>The painted figure on the left, a walker like the rooms', with its feet on FigureFeet.</summary>
+    private readonly WalkerSprite _preview = new() { Facing = Direction.Right };
+
+    /// <summary>F: the preview's next action. R: turning it round.</summary>
+    private readonly InputAction _nextAction = new(new[] { Buttons.Y }, new[] { Keys.F }, true);
+    private readonly InputAction _turnRound = new(new[] { Buttons.X }, new[] { Keys.R }, true);
+
+    private PreviewAction _action;
+    private float _actionClock;
+    private bool _comparing;
+
+    /// <summary>The row whose grid is showing (the last one picked on this tab that has one), and the item the mouse is on in it, or -1.</summary>
+    private MenuEntry _detailRow;
+    private int _hovered = -1;
+
+    /// <summary>Where the last row on the tab ends, which the grid goes under.</summary>
+    private float _rowsBottom;
+
+    /// <summary>
+    /// What a row shows under the rows while it's picked: a grid of the Count things it can be, each
+    /// Size and drawn by DrawItem (its box, its number, the alpha), Current framed, and any clicked
+    /// picked (Pick); Name is an item's name, for the note while the mouse is on it.
+    /// </summary>
+    private sealed record Detail(int Count, Func<int> Current, Action<int> Pick, Point Size, Action<SpriteBatch, Rectangle, int, float> DrawItem, Func<int, string> Name);
     private readonly List<MenuEntry> _tabs = new();
     private readonly List<MenuEntry> _buttons = new();
     private readonly MenuEntry _peopleRow;
@@ -167,19 +231,47 @@ public class CharacterCreationScreen : MenuScreen
         _classRow = AddRow(0, "CLASS", () => ClassCatalog.Get(_member.Class).Name.ToUpperInvariant());
         _classRow.Adjusted += step => SetClass(Step(_member.Class, step));
 
-        Adjustable(1, "SKIN", () => _member.Look.Skin, v => _member.Look.Skin = v, LookOptions.Skins);
-        Adjustable(1, "FACE", () => _member.Look.Face, v => _member.Look.Face = v, Names(LookOptions.Faces));
-        Adjustable(1, "EYES", () => _member.Look.Eyes, v => _member.Look.Eyes = v, LookOptions.Eyes);
-        Adjustable(1, "HAIR", () => _member.Look.Hair, v => _member.Look.Hair = v, Names(LookOptions.Hair));
-        Adjustable(1, "HAIR COLOUR", () => _member.Look.HairColour, v => _member.Look.HairColour = v, LookOptions.HairColours);
-        Adjustable(1, "BEARD", () => _member.Look.Beard, v => _member.Look.Beard = v, Names(LookOptions.Beards));
+        // CHARACTER: the face, and its skin, hair and eyes. ARMOR: the Base and Trim whatever they wear
+        // is dyed, and whether the helm and the cape show. With a painted face they're the painted
+        // figure's swatches; with the drawn one, the paperdoll's own rows.
+        Func<bool> painted = () => Painted, drawn = () => !Painted;
+        if (PartCatalog.PlayerFaces.Count > 0)
+        {
+            MenuEntry portrait = Adjustable(1, "PORTRAIT", () => PortraitIndex(), v => _member.Look.Portrait = v == 0 ? null : PartCatalog.PlayerFaces[v - 1], PortraitNames());
+            portrait.Adjusted += _ => ShowPage(_page, keep: portrait);
+            IReadOnlyList<string> portraits = PortraitNames();
+            _details[portrait] = new Detail(portraits.Count, PortraitIndex, v =>
+            {
+                _member.Look.Portrait = v == 0 ? null : PartCatalog.PlayerFaces[v - 1];
+                Refresh();
+                ShowPage(_page, keep: portrait);
+            }, FaceCell, DrawFace, v => portraits[v]);
+        }
+        HairRow(painted);
+        Swatch(1, "SKIN", () => _member.Look.SkinTint, v => _member.Look.SkinTint = v, Swatches.Skin, painted);
+        Swatch(1, "HAIR DYE", () => _member.Look.HairTint, v => _member.Look.HairTint = v, Swatches.Hair, painted);
+        Swatch(1, "EYES", () => _member.Look.EyeTint, v => _member.Look.EyeTint = v, Swatches.Eyes, painted);
+        Slider(1, "HEIGHT", () => _member.Look.HeightStep, v => _member.Look.HeightStep = v,
+            CharacterLook.ShortestStep, CharacterLook.TallestStep, CharacterLook.HeightPerStep, painted);
+        Slider(1, "BUILD", () => _member.Look.BuildStep, v => _member.Look.BuildStep = v,
+            CharacterLook.SlightestStep, CharacterLook.BroadestStep, CharacterLook.BuildPerStep, painted);
+        Adjustable(1, "SKIN", () => _member.Look.Skin, v => _member.Look.Skin = v, LookOptions.Skins, drawn);
+        Adjustable(1, "FACE", () => _member.Look.Face, v => _member.Look.Face = v, Names(LookOptions.Faces), drawn);
+        Adjustable(1, "EYES", () => _member.Look.Eyes, v => _member.Look.Eyes = v, LookOptions.Eyes, drawn);
+        Adjustable(1, "HAIR", () => _member.Look.Hair, v => _member.Look.Hair = v, Names(LookOptions.Hair), drawn);
+        Adjustable(1, "HAIR COLOUR", () => _member.Look.HairColour, v => _member.Look.HairColour = v, LookOptions.HairColours, drawn);
+        Adjustable(1, "BEARD", () => _member.Look.Beard, v => _member.Look.Beard = v, Names(LookOptions.Beards), drawn);
 
-        Adjustable(2, "HAT", () => _member.Look.Hat, v => _member.Look.Hat = v, Names(LookOptions.Hats));
-        Adjustable(2, "SHIRT", () => _member.Look.Shirt, v => _member.Look.Shirt = v, LookOptions.Shirts);
-        Adjustable(2, "VEST", () => _member.Look.Vest, v => _member.Look.Vest = v, LookOptions.Vests);
-        Adjustable(2, "LEGS", () => _member.Look.Legs, v => _member.Look.Legs = v, Names(LookOptions.Legs));
-        Adjustable(2, "LEGS COLOUR", () => _member.Look.LegsColour, v => _member.Look.LegsColour = v, LookOptions.LegsColours);
-        Adjustable(2, "CLOAK", () => _member.Look.Cloak, v => _member.Look.Cloak = v, LookOptions.Cloaks);
+        Swatch(2, "BASE", () => _member.Look.BaseTint, v => _member.Look.BaseTint = v, Swatches.Cloth, painted);
+        Swatch(2, "TRIM", () => _member.Look.TrimTint, v => _member.Look.TrimTint = v, Swatches.Cloth, painted);
+        Adjustable(2, "HELM", () => _member.Look.HideHelm ? 1 : 0, v => _member.Look.HideHelm = v == 1, new[] { "SHOWN", "HIDDEN" }, painted);
+        Adjustable(2, "CAPE", () => _member.Look.HideCape ? 1 : 0, v => _member.Look.HideCape = v == 1, new[] { "SHOWN", "HIDDEN" }, painted);
+        Adjustable(2, "HAT", () => _member.Look.Hat, v => _member.Look.Hat = v, Names(LookOptions.Hats), drawn);
+        Adjustable(2, "SHIRT", () => _member.Look.Shirt, v => _member.Look.Shirt = v, LookOptions.Shirts, drawn);
+        Adjustable(2, "VEST", () => _member.Look.Vest, v => _member.Look.Vest = v, LookOptions.Vests, drawn);
+        Adjustable(2, "LEGS", () => _member.Look.Legs, v => _member.Look.Legs = v, Names(LookOptions.Legs), drawn);
+        Adjustable(2, "LEGS COLOUR", () => _member.Look.LegsColour, v => _member.Look.LegsColour = v, LookOptions.LegsColours, drawn);
+        Adjustable(2, "CLOAK", () => _member.Look.Cloak, v => _member.Look.Cloak = v, LookOptions.Cloaks, drawn);
 
         for (int i = 0; i < Tabs.Length; i++)
         {
@@ -212,6 +304,7 @@ public class CharacterCreationScreen : MenuScreen
         _font = Content.Load<SpriteFont>("spectral-ui");
         _detailFont = Content.Load<SpriteFont>("spectral-detail");
         _glow = Content.Load<Texture2D>("glow");
+        _preview.LoadContent(Content);
 
         LayOut();
         ShowPage(0);
@@ -243,7 +336,64 @@ public class CharacterCreationScreen : MenuScreen
 
         if (_previousTab.Occurred(input)) ShowPage(LookOptions.Wrap(_page - 1, Tabs.Length));
         else if (_nextTab.Occurred(input)) ShowPage(LookOptions.Wrap(_page + 1, Tabs.Length));
+        if (_nextAction.Occurred(input) || input.IsNewLeftClick && FigureBox().Contains(input.MousePosition)) NextAction();
+        if (_turnRound.Occurred(input)) _preview.Facing = _preview.Facing == Direction.Right ? Direction.Left : Direction.Right;
+        _comparing = input.IsKeyPressed(Keys.V);
+
+        // The grid under the rows: the mouse on an item lights it, and a click picks it.
+        _hovered = -1;
+        if (ShownDetail() is Detail detail)
+        {
+            Rectangle[] boxes = DetailBoxes(detail);
+            for (int i = 0; i < boxes.Length; i++)
+                if (boxes[i].Contains(input.MousePosition)) _hovered = i;
+            if (_hovered >= 0 && input.IsNewLeftClick && _hovered != detail.Current())
+            {
+                detail.Pick(_hovered);
+                Refresh();
+                Audio?.Play(Sfx.MenuMove);
+            }
+        }
+
         base.HandleInput(gameTime, input);
+        if (SelectedEntry < MenuEntries.Count && _details.ContainsKey(MenuEntries[SelectedEntry])) _detailRow = MenuEntries[SelectedEntry];
+    }
+
+    /// <summary>F, or a click on them: the preview walks, then attacks, then casts, then stands again.</summary>
+    private void NextAction()
+    {
+        _action = (PreviewAction)(((int)_action + 1) % Enum.GetValues<PreviewAction>().Length);
+        _actionClock = 0f;
+        Audio?.Play(Sfx.MenuMove);
+    }
+
+    /// <summary>Where the preview stands, to click on.</summary>
+    private static Rectangle FigureBox() =>
+        new((int)FigureFeet.X - PaintedHeight / 3, (int)FigureFeet.Y - PaintedHeight, PaintedHeight * 2 / 3, PaintedHeight);
+
+    /// <summary>The grid showing under the rows, or null: the one for the row last picked on this tab, if it's there.</summary>
+    private Detail ShownDetail() =>
+        _detailRow is not null && MenuEntries.Contains(_detailRow) && _details.TryGetValue(_detailRow, out Detail detail) ? detail : null;
+
+    /// <summary>
+    /// Where each of a grid's items goes: as few lines as fit MostAcross on each, as even as they'll
+    /// go, centred under the rows.
+    /// </summary>
+    private Rectangle[] DetailBoxes(Detail detail)
+    {
+        int lines = (detail.Count + MostAcross - 1) / MostAcross;
+        int across = (detail.Count + lines - 1) / lines;
+        var boxes = new Rectangle[detail.Count];
+        float top = _rowsBottom + DetailTop;
+        for (int i = 0; i < detail.Count; i++)
+        {
+            int line = i / across, column = i % across;
+            int here = Math.Min(across, detail.Count - line * across);
+            float width = here * detail.Size.X + (here - 1) * DetailGap;
+            float left = OptionsPanel.Center.X - width / 2f;
+            boxes[i] = new Rectangle((int)(left + column * (detail.Size.X + DetailGap)), (int)(top + line * (detail.Size.Y + DetailGap)), detail.Size.X, detail.Size.Y);
+        }
+        return boxes;
     }
 
     /// <summary>Runs the clock they walk and turn by, and the pier's sway behind the Soul-Bound.</summary>
@@ -253,8 +403,29 @@ public class CharacterCreationScreen : MenuScreen
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
     {
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-        _clock += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        float seconds = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        _clock += seconds;
         if (_soulBound) _memory.Update(gameTime);
+
+        _actionClock += seconds;
+        _preview.IsWalking = _action == PreviewAction.Walking;
+        WalkerPose pose = _action switch
+        {
+            PreviewAction.Attacking => (_actionClock % AttackSeconds) switch
+            {
+                < WindUpSeconds => WalkerPose.WindUp,
+                < StrikeSeconds => WalkerPose.Strike,
+                _ => WalkerPose.None,
+            },
+            PreviewAction.Casting => _actionClock % CastSeconds < CastHeldSeconds ? WalkerPose.Cast : WalkerPose.None,
+            _ => WalkerPose.None,
+        };
+        if (pose != _preview.Pose)
+        {
+            if (pose == WalkerPose.None) _preview.Release();
+            else _preview.Play(pose);
+        }
+        _preview.Update(gameTime);
     }
 
     /// <summary>Draws the memory behind the Soul-Bound, both panels, them, their face, the headings and the note, then the rows.</summary>
@@ -278,14 +449,20 @@ public class CharacterCreationScreen : MenuScreen
         _panel.Draw(spriteBatch, OptionsPanel, alpha);
         spriteBatch.End();
 
-        // The shadow's the glow squashed flat, so it wants smoothing.
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        spriteBatch.Draw(_glow, new Rectangle((int)FigureFeet.X - ShadowSize.X / 2, (int)FigureFeet.Y - ShadowSize.Y / 2,
-            ShadowSize.X, ShadowSize.Y), ShadowColor * alpha);
-        spriteBatch.End();
+        if (!DrawPreview(spriteBatch, alpha))
+        {
+            // The shadow's the glow squashed flat, so it wants smoothing.
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
+            spriteBatch.Draw(_glow, new Rectangle((int)FigureFeet.X - ShadowSize.X / 2, (int)FigureFeet.Y - ShadowSize.Y / 2,
+                ShadowSize.X, ShadowSize.Y), ShadowColor * alpha);
+            spriteBatch.End();
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+            DrawFigure(spriteBatch, alpha);
+            spriteBatch.End();
+        }
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
-        DrawFigure(spriteBatch, alpha);
         DrawBust(spriteBatch, alpha);
         spriteBatch.End();
 
@@ -304,15 +481,147 @@ public class CharacterCreationScreen : MenuScreen
                 Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true);
         Text.Draw(spriteBatch, _detailFont, Scores(), PreviewPanel.Center.X, FigureFeet.Y + 40f,
             Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
+        if (_preview.DrawsArt)
+            Text.Draw(spriteBatch, _detailFont, PreviewKeys(), PreviewPanel.Center.X, PreviewPanel.Bottom - PreviewKeysUp,
+                Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
         Text.Draw(spriteBatch, _detailFont, About(), OptionsPanel.Center.X, ButtonsY - ButtonSize.Y / 2f - 18f - _detailFont.LineSpacing,
             Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true);
 
-        string note = _status ?? (_typing ? TypingNote : Note);
+        string note = _status ?? (_typing ? TypingNote : HoveredName() ?? Note);
         Text.Draw(spriteBatch, _detailFont, note, OptionsPanel.Center.X, _noteY,
             (_status is null ? Palette.Note : Palette.Ember) * alpha, Palette.FormShadow * alpha, centred: true);
         spriteBatch.End();
 
         base.Draw(gameTime);
+
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
+        DrawChips(spriteBatch, alpha);
+        DrawDetail(spriteBatch, alpha);
+        spriteBatch.End();
+    }
+
+    /// <summary>
+    /// Their painted figure, if they've a painted body: the walker on the left, put together big in
+    /// what they're wearing and dyed as they are (as painted while V's held), drawn at a room's scale
+    /// so it moves as it will there. False if there's no painted body, for the paperdoll instead.
+    /// </summary>
+    private bool DrawPreview(SpriteBatch spriteBatch, float alpha)
+    {
+        Outfit outfit = PartCatalog.OutfitOf(_member);
+        if (_comparing && outfit is not null) outfit = outfit with { Tints = default };
+        if (PartCatalog.Large(outfit, PaintedHeight) is not { HasBody: true } figure)
+        {
+            _preview.Art = null;
+            return false;
+        }
+
+        float scale = ZoneCatalog.RoomScale;
+        _preview.Art = figure;
+        _preview.Position = FigureFeet / scale;
+        _preview.Opacity = alpha;
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, transformMatrix: Matrix.CreateScale(scale, scale, 1f));
+        _preview.Draw(spriteBatch, 0.5f, 1f / scale, Color.White);
+        spriteBatch.End();
+        return true;
+    }
+
+    /// <summary>The preview's keys under it: what F does next, turning, and comparing.</summary>
+    private string PreviewKeys() =>
+        "F  " + _action.ToString().ToUpperInvariant() + "   ·   R  TURN   ·   V  " + (_comparing ? "AS PAINTED" : "COMPARE");
+
+    /// <summary>The name of the item the mouse is on in the grid, for the note; null if it's on none.</summary>
+    private string HoveredName() => _hovered >= 0 && ShownDetail() is Detail detail ? "CLICK  ·  " + detail.Name(_hovered) : null;
+
+    /// <summary>The grid under the rows: each item, the one picked framed bright and the one the mouse is on framed pale.</summary>
+    private void DrawDetail(SpriteBatch spriteBatch, float alpha)
+    {
+        if (ShownDetail() is not Detail detail) return;
+        Rectangle[] boxes = DetailBoxes(detail);
+        int current = detail.Current();
+        for (int i = 0; i < boxes.Length; i++)
+        {
+            Rectangle box = boxes[i];
+            spriteBatch.Draw(ScreenManager.BlankTexture, box, Palette.FormShadow * alpha);
+            detail.DrawItem(spriteBatch, new Rectangle(box.X + ChipFrame, box.Y + ChipFrame, box.Width - ChipFrame * 2, box.Height - ChipFrame * 2), i, alpha);
+            if (i == current) Frame(spriteBatch, box, PickedFrame, Palette.Torch * alpha);
+            else if (i == _hovered) Frame(spriteBatch, box, HoverFrame, Palette.Bone * alpha);
+        }
+    }
+
+    /// <summary>A frame round a box, drawn inside it.</summary>
+    private void Frame(SpriteBatch spriteBatch, Rectangle box, int thickness, Color colour)
+    {
+        Texture2D blank = ScreenManager.BlankTexture;
+        spriteBatch.Draw(blank, new Rectangle(box.X, box.Y, box.Width, thickness), colour);
+        spriteBatch.Draw(blank, new Rectangle(box.X, box.Bottom - thickness, box.Width, thickness), colour);
+        spriteBatch.Draw(blank, new Rectangle(box.X, box.Y, thickness, box.Height), colour);
+        spriteBatch.Draw(blank, new Rectangle(box.Right - thickness, box.Y, thickness, box.Height), colour);
+    }
+
+    /// <summary>A face in the PORTRAIT grid: the paperdoll's for DRAWN, then each painted face as it is.</summary>
+    /// <summary>
+    /// The HAIR row: what's on their head when nothing's worn there, hair and helm being one slot.
+    /// Their face's own hair (the one painted with it), none, or any of the painted player hairs;
+    /// its grid shows them wearing each.
+    /// </summary>
+    private void HairRow(Func<bool> painted)
+    {
+        IReadOnlyList<string> hairs = PartCatalog.PlayerHairs;
+        var names = new List<string> { "OWN HAIR", "BALD" };
+        foreach (string hair in hairs) names.Add("HAIR " + hair["hair-player-".Length..].ToUpperInvariant());
+        int Get() => _member.Look.HairPart switch { null => 0, "" => 1, string hair => 2 + Math.Max(0, IndexOf(hairs, hair)) };
+        void Set(int v) => _member.Look.HairPart = v == 0 ? null : v == 1 ? string.Empty : hairs[v - 2];
+        MenuEntry row = Adjustable(1, "HAIR", Get, Set, names, painted);
+        _details[row] = new Detail(names.Count, Get, Set, FaceCell, (batch, box, index, alpha) =>
+        {
+            CharacterLook look = _member.Look;
+            string kept = look.HairPart;
+            look.HairPart = index == 0 ? null : index == 1 ? string.Empty : hairs[index - 2];
+            bool hidden = look.HideHelm;
+            look.HideHelm = true;
+            ImportedFigure figure = PartCatalog.Of(PartCatalog.OutfitOf(_member));
+            look.HairPart = kept;
+            look.HideHelm = hidden;
+            if (figure is not null) batch.Draw(figure.Portrait(box.Size), box, Color.White * alpha);
+        }, index => names[index]);
+    }
+
+    private void DrawFace(SpriteBatch spriteBatch, Rectangle box, int index, float alpha)
+    {
+        if (index == 0)
+        {
+            if (_sheet is not null) spriteBatch.Draw(_sheet, box, Bust, Color.White * alpha);
+            return;
+        }
+        if (PartCatalog.ForMember(_member.Id, PartCatalog.PlayerFaces[index - 1]) is ImportedFigure face)
+            spriteBatch.Draw(face.Portrait(box.Size), box, Color.White * alpha);
+    }
+
+    /// <summary>A swatch in a colour grid: its colour, or for AS PAINTED an empty one struck through.</summary>
+    private void DrawSwatch(SpriteBatch spriteBatch, Rectangle box, Color? colour, float alpha)
+    {
+        if (colour is Color c)
+        {
+            spriteBatch.Draw(ScreenManager.BlankTexture, box, c * alpha);
+            return;
+        }
+        spriteBatch.Draw(ScreenManager.BlankTexture, box, Palette.Note * (0.25f * alpha));
+        float across = MathF.Sqrt(box.Width * box.Width + box.Height * box.Height);
+        spriteBatch.Draw(ScreenManager.BlankTexture, box.Center.ToVector2(), null, Palette.Ember * alpha, -MathF.Atan2(box.Height, box.Width),
+            new Vector2(0.5f, 0.5f), new Vector2(across - 6f, 3f), SpriteEffects.None, 0f);
+    }
+
+    /// <summary>Each colour row's swatch at its right end, framed: the colour picked, or an empty frame for as painted.</summary>
+    private void DrawChips(SpriteBatch spriteBatch, float alpha)
+    {
+        foreach (MenuEntry row in MenuEntries)
+        {
+            if (!_chips.TryGetValue(row, out Func<Color?> chip)) continue;
+            var box = new Rectangle((int)(row.Plate.Center.X + RowSize.X / 2f - ChipInset), (int)(row.Plate.Center.Y - ChipSize.Y / 2f), ChipSize.X, ChipSize.Y);
+            spriteBatch.Draw(ScreenManager.BlankTexture, box, Palette.FormShadow * alpha);
+            var inside = new Rectangle(box.X + ChipFrame, box.Y + ChipFrame, box.Width - ChipFrame * 2, box.Height - ChipFrame * 2);
+            spriteBatch.Draw(ScreenManager.BlankTexture, inside, (chip() is Color colour ? colour : Palette.Note * 0.35f) * alpha);
+        }
     }
 
     /// <summary>Escape is the same as BACK.</summary>
@@ -333,6 +642,7 @@ public class CharacterCreationScreen : MenuScreen
     {
         _member.Look = look;
         SetClass(classId);
+        ShowPage(_page);
     }
 
     /// <summary>For the proof run: the Soul-Bound's pronouns, as if they'd been picked on their row.</summary>
@@ -344,6 +654,26 @@ public class CharacterCreationScreen : MenuScreen
 
     /// <summary>For the proof run: one of the tabs.</summary>
     internal void ProofPage(int page) => ShowPage(page);
+
+    /// <summary>For the proof run: a height and a build, as if stepped to on their rows, and the tab's row picked whose grid shows.</summary>
+    /// <param name="height">The height's step.</param>
+    /// <param name="build">The build's step.</param>
+    /// <param name="row">Which row of the tab, from the top.</param>
+    internal void ProofShape(int height, int build, int row)
+    {
+        _member.Look.HeightStep = height;
+        _member.Look.BuildStep = build;
+        Refresh();
+        SelectedEntry = _tabs.Count + row;
+        if (_details.ContainsKey(MenuEntries[SelectedEntry])) _detailRow = MenuEntries[SelectedEntry];
+    }
+
+    /// <summary>For the proof run: the preview walking (1), attacking (2) or casting (3), as if F had been pressed till it was.</summary>
+    internal void ProofPreview(int action)
+    {
+        _action = (PreviewAction)action;
+        _actionClock = 0f;
+    }
 
     /// <summary>For the proof run: BEGIN.</summary>
     internal void ProofBegin() => Confirm();
@@ -357,8 +687,8 @@ public class CharacterCreationScreen : MenuScreen
         return row;
     }
 
-    /// <summary>A row that steps through a list, wrapping round.</summary>
-    private void Adjustable(int page, string label, Func<int> get, Action<int> set, IReadOnlyList<string> names)
+    /// <summary>A row that steps through a list, wrapping round, shown always or only when `shown` says.</summary>
+    private MenuEntry Adjustable(int page, string label, Func<int> get, Action<int> set, IReadOnlyList<string> names, Func<bool> shown = null)
     {
         MenuEntry row = AddRow(page, label, () => names[LookOptions.Wrap(get(), names.Count)]);
         row.Adjusted += step =>
@@ -366,6 +696,43 @@ public class CharacterCreationScreen : MenuScreen
             set(LookOptions.Wrap(get() + step, names.Count));
             Refresh();
         };
+        if (shown is not null) _shownWhen[row] = shown;
+        return row;
+    }
+
+    /// <summary>A row of swatches: AS PAINTED, then each in the list, with the one picked drawn beside its name.</summary>
+    private void Swatch(int page, string label, Func<int> get, Action<int> set, IReadOnlyList<Swatches.Swatch> list, Func<bool> shown)
+    {
+        var names = new string[list.Count + 1];
+        for (int i = 0; i < names.Length; i++) names[i] = Swatches.NameOf(list, i);
+        MenuEntry row = Adjustable(page, label, get, set, names, shown);
+        _chips[row] = () => Swatches.Pick(list, get());
+        _details[row] = new Detail(names.Length, get, set, ChipCell,
+            (batch, box, index, alpha) => DrawSwatch(batch, box, Swatches.Pick(list, index), alpha), index => names[index]);
+    }
+
+    /// <summary>
+    /// A row that steps a number between two ends, not wrapping round, written as a share of the
+    /// recipe's (100% in the middle); its grid is a notch for each step, lit up to the one it's on.
+    /// </summary>
+    private void Slider(int page, string label, Func<int> get, Action<int> set, int least, int most, float perStep, Func<bool> shown)
+    {
+        string Name(int step) => ((int)MathF.Round((1f + perStep * step) * 100f)).ToString(System.Globalization.CultureInfo.InvariantCulture) + "%";
+        MenuEntry row = AddRow(page, label, () => Name(Math.Clamp(get(), least, most)));
+        row.Adjusted += step =>
+        {
+            set(Math.Clamp(get() + step, least, most));
+            Refresh();
+        };
+        _shownWhen[row] = shown;
+        _details[row] = new Detail(most - least + 1, () => Math.Clamp(get(), least, most) - least, v => set(least + v), NotchCell,
+            (batch, box, index, alpha) =>
+            {
+                int on = Math.Clamp(get(), least, most) - least, middle = -least;
+                bool lit = index >= Math.Min(on, middle) && index <= Math.Max(on, middle);
+                batch.Draw(ScreenManager.BlankTexture, box, (lit ? Palette.Torch * 0.75f : Palette.Note * 0.2f) * alpha);
+                if (index == middle) batch.Draw(ScreenManager.BlankTexture, new Rectangle(box.Center.X - 1, box.Y, 2, box.Height), Palette.Bone * alpha);
+            }, index => Name(least + index));
     }
 
     /// <summary>One of the buttons along the bottom.</summary>
@@ -376,18 +743,43 @@ public class CharacterCreationScreen : MenuScreen
         _buttons.Add(button);
     }
 
-    /// <summary>Shows one tab's rows, with the tabs above them and the buttons below. The other tabs' rows are left out.</summary>
-    private void ShowPage(int page)
+    /// <summary>
+    /// Shows one tab's rows that are shown now, laid down the panel, with the tabs above them and the
+    /// buttons below. The other tabs' rows, and this one's that aren't shown, are left out.
+    /// </summary>
+    /// <param name="page">The tab.</param>
+    /// <param name="keep">A row to keep selected, when its change shows or hides others; otherwise the first row is.</param>
+    private void ShowPage(int page, MenuEntry keep = null)
     {
         _page = page;
         MenuEntries.Clear();
         foreach (MenuEntry tab in _tabs) MenuEntries.Add(tab);
-        foreach (MenuEntry row in _pages[page]) MenuEntries.Add(row);
+        float y = RowsTop;
+        foreach (MenuEntry row in _pages[page])
+        {
+            if (_shownWhen.TryGetValue(row, out Func<bool> shown) && !shown()) continue;
+            MenuEntries.Add(row);
+            row.Plate.Center = new Vector2(OptionsPanel.Center.X, y + RowSize.Y / 2f);
+            y += RowSize.Y + RowGap;
+        }
+        _rowsBottom = y - RowGap;
         foreach (MenuEntry button in _buttons) MenuEntries.Add(button);
 
         for (int i = 0; i < _tabs.Count; i++) _tabs[i].Plate.Accent = i == page ? Palette.Torch : Palette.Bone;
-        SelectedEntry = _tabs.Count;
+        int kept = keep is null ? -1 : MenuEntries.IndexOf(keep);
+        SelectedEntry = kept >= 0 ? kept : _tabs.Count;
+
+        // The grid under the rows starts as the picked row's, or the tab's first that has one.
+        _detailRow = null;
+        foreach (MenuEntry entry in MenuEntries)
+        {
+            if (!_details.ContainsKey(entry)) continue;
+            if (_detailRow is null || entry == keep) _detailRow = entry;
+        }
     }
+
+    /// <summary>Whether they've a painted face, so the painted figure's rows are the ones shown.</summary>
+    private bool Painted => _member.Look.Portrait is string face && PartCatalog.Has(face);
 
     /// <summary>The names off a list of options.</summary>
     private static IReadOnlyList<string> Names(IReadOnlyList<LookOptions.Option> options)
@@ -417,11 +809,44 @@ public class CharacterCreationScreen : MenuScreen
         Refresh();
     }
 
-    /// <summary>RANDOM: a whole new look. The name and class stay.</summary>
+    /// <summary>RANDOM: a whole new look, a painted face among it if there are any, about half its colours as painted and the rest from the swatches. The name and class stay.</summary>
     private void Randomise()
     {
-        _member.Look = LookOptions.Random(_random);
+        CharacterLook look = LookOptions.Random(_random);
+        IReadOnlyList<string> faces = PartCatalog.PlayerFaces;
+        if (faces.Count > 0) look.Portrait = faces[_random.Next(faces.Count)];
+        int Maybe(int count) => _random.Next(2) == 0 ? 0 : _random.Next(1, count + 1);
+        look.HairTint = Maybe(Swatches.Hair.Count);
+        look.EyeTint = Maybe(Swatches.Eyes.Count);
+        look.BaseTint = Maybe(Swatches.Cloth.Count);
+        look.TrimTint = Maybe(Swatches.Cloth.Count);
+        look.HeightStep = _random.Next(CharacterLook.ShortestStep, CharacterLook.TallestStep + 1);
+        look.BuildStep = _random.Next(CharacterLook.SlightestStep, CharacterLook.BroadestStep / 2 + 1);
+        _member.Look = look;
         Refresh();
+        ShowPage(_page, keep: MenuEntries.Count > 0 ? MenuEntries[Math.Min(SelectedEntry, MenuEntries.Count - 1)] : null);
+    }
+
+    /// <summary>Where their painted face is on the PORTRAIT row: 0 for the paperdoll's, then each of PartCatalog.PlayerFaces.</summary>
+    private int PortraitIndex()
+    {
+        int index = _member.Look.Portrait is string face ? IndexOf(PartCatalog.PlayerFaces, face) : -1;
+        return index + 1;
+    }
+
+    /// <summary>The PORTRAIT row's names: the paperdoll's face, then each painted one by its number.</summary>
+    private static IReadOnlyList<string> PortraitNames()
+    {
+        var names = new List<string> { "DRAWN" };
+        foreach (string face in PartCatalog.PlayerFaces) names.Add("PAINTED " + face["face-player-".Length..].ToUpperInvariant());
+        return names;
+    }
+
+    private static int IndexOf(IReadOnlyList<string> list, string value)
+    {
+        for (int i = 0; i < list.Count; i++)
+            if (list[i] == value) return i;
+        return -1;
     }
 
     /// <summary>Starts typing the name.</summary>
@@ -510,7 +935,7 @@ public class CharacterCreationScreen : MenuScreen
     }
 
     /// <summary>Who speaks before the ship: the narrator, with no face, and the cast by name alone (Corra on the pier), since there's no walker to take a face off yet.</summary>
-    private static (string Name, Texture2D Sheet) NoFace(string id) => (Cast.Get(id)?.Name ?? string.Empty, null);
+    private static (string Name, Texture2D Sheet, ImportedFigure Art) NoFace(string id) => (Cast.Get(id)?.Name ?? string.Empty, null, null);
 
     /// <summary>Bakes them again and writes every row's value onto its plate.</summary>
     private void Refresh()
@@ -533,16 +958,6 @@ public class CharacterCreationScreen : MenuScreen
             left += TabSize.X + TabGap;
         }
 
-        foreach (List<MenuEntry> page in _pages)
-        {
-            float y = RowsTop;
-            foreach (MenuEntry row in page)
-            {
-                row.Plate.Center = new Vector2(OptionsPanel.Center.X, y + RowSize.Y / 2f);
-                y += RowSize.Y + RowGap;
-            }
-        }
-
         width = _buttons.Count * ButtonSize.X + (_buttons.Count - 1) * ButtonGap;
         left = OptionsPanel.Center.X - width / 2f;
         foreach (MenuEntry button in _buttons)
@@ -553,7 +968,7 @@ public class CharacterCreationScreen : MenuScreen
         _noteY = ButtonsY + ButtonSize.Y / 2f + 14f;
     }
 
-    /// <summary>Them, full length, walking on the spot and turning round.</summary>
+    /// <summary>The paperdoll, full length, walking on the spot and turning round: for someone with no painted body (DrawPreview draws one who has).</summary>
     private void DrawFigure(SpriteBatch spriteBatch, float alpha)
     {
         if (_sheet is null) return;
@@ -564,14 +979,18 @@ public class CharacterCreationScreen : MenuScreen
         spriteBatch.Draw(_sheet, FigureFeet, source, Color.White * alpha, 0f, new Vector2(16f, 46f), FigureScale, SpriteEffects.None, 0f);
     }
 
-    /// <summary>Their face, blown up, on a panel of its own.</summary>
+    /// <summary>Their face on a panel of its own: the painted one they picked, at the frame's size, or the paperdoll's blown up.</summary>
     private void DrawBust(SpriteBatch spriteBatch, float alpha)
     {
         if (_sheet is null) return;
 
-        var frame = new Rectangle(BustAt.X - 16, BustAt.Y - 16, (int)(Bust.Width * BustScale) + 32, (int)(Bust.Height * BustScale) + 32);
+        var well = new Point((int)(Bust.Width * BustScale), (int)(Bust.Height * BustScale));
+        var frame = new Rectangle(BustAt.X - 16, BustAt.Y - 16, well.X + 32, well.Y + 32);
         _panel.Draw(spriteBatch, frame, alpha);
-        spriteBatch.Draw(_sheet, BustAt.ToVector2(), Bust, Color.White * alpha, 0f, Vector2.Zero, BustScale, SpriteEffects.None, 0f);
+        if (PartCatalog.Dress(_member) is ImportedFigure painted)
+            spriteBatch.Draw(painted.Portrait(well), BustAt.ToVector2(), Color.White * alpha);
+        else
+            spriteBatch.Draw(_sheet, BustAt.ToVector2(), Bust, Color.White * alpha, 0f, Vector2.Zero, BustScale, SpriteEffects.None, 0f);
     }
 
     /// <summary>Their people, class and hit points, under their name.</summary>

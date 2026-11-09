@@ -348,7 +348,7 @@ public partial class LegendQuestGame
 
             case 91:
                 creation?.ProofType("Caleb");
-                creation?.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2 }, ClassId.Rogue);
+                creation?.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2, Portrait = "face-player-1", BaseTint = 12, TrimTint = 5 }, ClassId.Rogue);
                 return null;
 
             case 110:
@@ -356,13 +356,32 @@ public partial class LegendQuestGame
 
             case 111:
                 creation?.ProofPage(1);
+                creation?.ProofPreview(1);
                 return null;
 
             case 130:
                 return "create-face.png";
 
+            // The HAIR row's grid: him in each hair. Then taller and broader, with HEIGHT's slider
+            // under the rows, then back as he was.
             case 131:
+                creation?.ProofShape(0, 0, row: 1);
+                return null;
+
+            case 135:
+                return "create-hair.png";
+
+            case 136:
+                creation?.ProofShape(3, 2, row: 5);
+                return null;
+
+            case 140:
+                return "create-height.png";
+
+            case 141:
+                creation?.ProofShape(0, 0, row: 0);
                 creation?.ProofPage(2);
+                creation?.ProofPreview(3);
                 return null;
 
             case 150:
@@ -395,7 +414,7 @@ public partial class LegendQuestGame
             case 291:
                 creation?.ProofType("Wren");
                 creation?.ProofPronouns(Pronouns.She);
-                creation?.ProofLook(new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 2, Eyes = 4, Hair = 4, HairColour = 4, Shirt = 2, Vest = 1, LegsColour = 2, Cloak = 3 }, ClassId.Druid);
+                creation?.ProofLook(new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 2, Eyes = 4, Hair = 4, HairColour = 4, Shirt = 2, Vest = 1, LegsColour = 2, Cloak = 3, Portrait = "face-player-5", HairTint = 12, EyeTint = 8, BaseTint = 7, TrimTint = 17 }, ClassId.Druid);
                 return null;
 
             case 320:

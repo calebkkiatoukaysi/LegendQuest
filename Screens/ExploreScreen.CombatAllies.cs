@@ -91,21 +91,21 @@ public partial class ExploreScreen
         return MadeFigure(figure) is WalkerSprite made ? Spawn(made) : null;
     }
 
-    /// <summary>A figure made for a support who isn't anyone in the room: an origin as they'd be dressed, one of the cast, an enemy, a creature, a townsfolk sheet, or someone a zone puts down elsewhere.</summary>
+    /// <summary>A figure made for a support who isn't anyone in the room: an origin as they'd be dressed, one of the cast, an enemy, a creature, a townsfolk sheet, or someone a zone puts down elsewhere, each with their imported picture if they've one.</summary>
     private WalkerSprite MadeFigure(string figure)
     {
         if (Origins.Exists(figure)) return GuestWalker(figure);
         if (Cast.Get(figure) is CastMember cast && (cast.Look is not null || cast.Sheet is not null))
-            return new WalkerSprite { Sheet = cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : SheetFor(cast.Look) };
+            return new WalkerSprite { Sheet = cast.Sheet is not null ? _content.Load<Texture2D>(Townsfolk.Texture(cast.Sheet)) : SheetFor(cast.Look), Art = ImportedArt.Get(figure) };
         if (EnemyCatalog.Exists(figure)) return EnemyWalker(EnemyCatalog.Get(figure));
-        if (Creatures.Get(figure) is Creature creature) return new WalkerSprite { Shape = creature.Shape, Sheet = CreatureSheet(creature) };
-        if (Townsfolk.Contains(figure)) return new WalkerSprite { Sheet = _content.Load<Texture2D>(Townsfolk.Texture(figure)) };
+        if (Creatures.Get(figure) is Creature creature) return new WalkerSprite { Shape = creature.Shape, Sheet = CreatureSheet(creature), Art = ImportedArt.Get(figure) };
+        if (Townsfolk.Contains(figure)) return new WalkerSprite { Sheet = _content.Load<Texture2D>(Townsfolk.Texture(figure)), Art = ImportedArt.Get(figure) };
 
         foreach (ZoneDefinition zone in ZoneCatalog.All)
             foreach (RoomDefinition room in zone.Rooms)
                 foreach (MapNpc npc in room.Npcs)
                     if (npc.Id == figure || npc.Cast == figure)
-                        return new WalkerSprite { Shape = npc.Creature is null ? WalkerShape.Person : Creatures.Get(npc.Creature).Shape, Sheet = NpcSheet(npc) };
+                        return new WalkerSprite { Shape = npc.Creature is null ? WalkerShape.Person : Creatures.Get(npc.Creature).Shape, Sheet = NpcSheet(npc), Art = ArtFor(npc) };
         return null;
     }
 

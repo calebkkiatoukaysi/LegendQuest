@@ -16,6 +16,7 @@ namespace LegendQuest.Components;
 /// <param name="Name">What they're called.</param>
 /// <param name="Sheet">The sheet their face is cut from.</param>
 /// <param name="Shape">The shape of that sheet's frames.</param>
+/// <param name="Art">The imported picture they're drawn as, whose portrait is their face instead, or null.</param>
 /// <param name="Foe">Whether they're on the other side.</param>
 /// <param name="Hp">Their hit points as shown.</param>
 /// <param name="MaxHp">The most they can have.</param>
@@ -26,5 +27,5 @@ namespace LegendQuest.Components;
 /// <param name="Fallen">Whether they've died, or for one of the party, fallen and out of the fight.</param>
 /// <param name="DeathSuccesses">Death saves made while Downed.</param>
 /// <param name="DeathFailures">Death saves failed while Downed.</param>
-public sealed record FighterView(string Id, string Name, Texture2D Sheet, WalkerShape Shape, bool Foe, int Hp, int MaxHp, int ArmourClass, int Focus,
+public sealed record FighterView(string Id, string Name, Texture2D Sheet, WalkerShape Shape, ImportedFigure Art, bool Foe, int Hp, int MaxHp, int ArmourClass, int Focus,
     IReadOnlyList<ConditionId> Conditions, bool Down, bool Fallen, int DeathSuccesses, int DeathFailures);

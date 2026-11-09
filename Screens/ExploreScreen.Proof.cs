@@ -81,9 +81,29 @@ public partial class ExploreScreen
     /// <summary>The deck at night, with the red "!" at the bow: a walk up to it along the deck, then the Prologue's voyage read through (answering MAYBE THIS ONE'S DIFFERENT, then I'LL BE RIGHT THERE), the sea-wraiths, the fight, and Questeria at dawn, until the voyage ends at the harbour.</summary>
     private IEnumerable<ProofBeat> VoyageBeats() => Seq(
         Shot("voyage.png"),
+        // The party struck in each fighting pose, held, for the pieces' own motion on the deck.
+        Do(() => ProofPose(WalkerPose.WindUp)), Wait(ProofPoseFrames), Shot("rig-windup.png"),
+        Do(() => ProofPose(WalkerPose.Strike)), Wait(ProofPoseFrames), Shot("rig-strike.png"),
+        Do(() => ProofPose(WalkerPose.Cast)), Wait(ProofPoseFrames), Shot("rig-cast.png"),
+        Do(() => ProofPose(WalkerPose.Hurt)), Wait(ProofPoseFrames), Shot("rig-hurt.png"),
+        Do(() => ProofPose(WalkerPose.None)), Wait(ProofPoseFrames),
+        Over(() => new InventoryScreen(_game, InventoryPage.Bag), "voyage-inventory.png"),
         Answer(1, 0),
         Walk(-ProofToTheBow),
         ReadUntil(() => false, (Asked, "voyage-choice.png"), ("lookout", "voyage-wraiths.png"), ("odelle", "voyage-dawn.png")));
+
+    /// <summary>How long a held pose settles before its shot, in frames.</summary>
+    private const int ProofPoseFrames = 24;
+
+    /// <summary>Strikes a pose with everyone in the party and holds it; None lets it go.</summary>
+    private void ProofPose(WalkerPose pose)
+    {
+        foreach (WalkerSprite walker in _walkers)
+        {
+            if (pose == WalkerPose.None) walker.Release();
+            else walker.Play(pose);
+        }
+    }
 
     /// <summary>How far along the deck from the start the bow's "!" is, at most, in art pixels: the walk stops when the voyage starts.</summary>
     private const float ProofToTheBow = 160f;

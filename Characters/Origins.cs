@@ -33,8 +33,8 @@ public static class Origins
     private static readonly Origin[] Table =
     {
         // You and the Soul-Bound, before the creation screen's been at them.
-        new() { Id = You, Name = "Wanderer", Class = ClassId.Fighter, Look = new CharacterLook() },
-        new() { Id = SoulBound, Name = string.Empty, Class = ClassId.Rogue, Look = new CharacterLook { Hair = 2, HairColour = 1, Vest = 3 } },
+        new() { Id = You, Name = "Wanderer", Class = ClassId.Fighter, Look = new CharacterLook { Portrait = "face-player-1" } },
+        new() { Id = SoulBound, Name = string.Empty, Class = ClassId.Rogue, Look = new CharacterLook { Hair = 2, HairColour = 1, Vest = 3, Portrait = "face-player-3" } },
 
         // A Sylvan Wildcaller, the Mirewood's warden: a braid, green and brown leathers, a short cape.
         new()

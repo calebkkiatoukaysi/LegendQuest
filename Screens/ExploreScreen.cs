@@ -364,7 +364,7 @@ public partial class ExploreScreen : GameScreen
         // 8. The party's cards and the sigil on their corner if a scene's put it up (point sampled),
         //    then all the writing.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp);
-        if (!playing) _strip.DrawCards(spriteBatch, _game.Party, PartySheets(), _game.Leader, alpha);
+        if (!playing) _strip.DrawCards(spriteBatch, _game.Party, _walkers, _game.Leader, alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
@@ -548,23 +548,29 @@ public partial class ExploreScreen : GameScreen
         return band;
     }
 
-    /// <summary>Gets a party member's walker ready to walk: its shadow, their sheet baked with what they're wearing, and their footsteps.</summary>
+    /// <summary>Gets a party member's walker ready to walk: its shadow, their sheet baked with what they're wearing, their imported picture if they've one, and their footsteps.</summary>
     private void DressWalker(WalkerSprite walker, PartyMember member)
     {
         walker.LoadContent(_content);
         walker.Sheet = SheetFor(member.Look, Paperdoll.GearOf(member));
+        walker.Art = ImportedArt.For(member);
         walker.Stepped += () => Footstep(walker);
     }
 
-    /// <summary>Someone in the room with their shadow loaded and their sheet on.</summary>
+    /// <summary>Someone in the room with their shadow loaded, their sheet on, and their imported picture if they've one.</summary>
     /// <param name="npc">Who.</param>
     /// <returns>The same npc.</returns>
     private Npc Dressed(Npc npc)
     {
         npc.Walker.LoadContent(_content);
         npc.Walker.Sheet = NpcSheet(npc.Definition);
+        npc.Walker.Art = ArtFor(npc.Definition);
         return npc;
     }
+
+    /// <summary>The imported picture someone in the room is drawn as, or null: their creature's, their cast member's, their own for someone baked from a look (a party member waiting at camp), or their townsfolk sheet's.</summary>
+    private static ImportedFigure ArtFor(MapNpc npc) =>
+        ImportedArt.Get(npc.Creature ?? npc.Cast ?? (npc.Look is not null ? npc.Id : npc.Sheet));
 
     /// <summary>Someone in the room's sheet: a creature's own, the one baked for their look if they're one of a crowd (or waiting at camp), their townsfolk sheet, or their cast member's, baked if they're a look.</summary>
     private Texture2D NpcSheet(MapNpc npc)
