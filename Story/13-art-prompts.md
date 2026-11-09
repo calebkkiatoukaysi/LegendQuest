@@ -106,7 +106,7 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 >
 > ARMOR SHEETS. Sometimes I'll attach an armor sheet: four copies of the base standing full length, side by side in columns divided by thin grey lines. Then dress each figure in the outfit I list for its column, and keep every figure, its bald head and its pose exactly where they are, as in a single edit. Clothes stay inside their own column.
 >
-> HELM, CAPE AND WEAPON SHEETS. Sometimes I'll attach a helm sheet (four blank figures from the top of the head to the hips) or a cape or weapon sheet (four full figures, a little smaller, side by side). Then give each figure the helm, the cape or the held item I list for its column, keep every figure exactly where it is, as in a single edit, and keep each part inside its own column.
+> HELM, CAPE AND WEAPON SHEETS. Sometimes I'll attach a helm sheet (four blank figures from the top of the head to the hips), a cape sheet (four full figures, a little smaller, side by side) or a weapon sheet (four columns of two floating fists, the rest of the figure left out). Then give each column the helm, the cape or the held item I list for it, keep every figure and fist exactly where it is, as in a single edit, and keep each part inside its own column. A held item is gripped in the closed fist as it is, with no pose.
 >
 > The game layers them back to front: cape, armor, face, hair or helm, weapon.
 >
@@ -170,7 +170,7 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 **Weapon sheet**
 
-> This is a WEAPON SHEET: four copies of the same base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Give each figure a different weapon or held item, following the numbered list below; the figures are numbered 1 to 4 from left to right. An item goes in the NEAR hand, the lit fist on the LEFT of each figure, unless the list says otherwise: the grip passes through the curled fingers, the fingers stay exactly as they are and close over it, and the item shows above and below the fist. The far hand, on the right of each figure, holds something only when the list says so. Keep every figure exactly where it is, at the same size and in the same pose, with the same bald head, face and body; keep each item whole and inside its own column, never across a grey line; and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
+> This is a WEAPON SHEET: four columns divided by thin grey lines, on a solid black background. Each column shows the same two clenched fists, each with a short stub of forearm, floating where a character's hands are; the rest of the figure is left out on purpose. The lit fist on the LEFT of each column is the near hand; the shadowed fist on the RIGHT is the far hand. Give each column a different weapon or held item, following the numbered list below; the columns are numbered 1 to 4 from left to right. Hold every item the way a 2D game character holds one, with no pose at all: the closed fist grips it as it is, the grip passing straight through the curled fingers, which stay exactly as they are, and the item shows above and below the fist. A weapon is held low with its point or head forward, toward the right, unless the list says otherwise. A carried thing (a basket, a pot, a lantern) hangs straight down from the fist by its handle. A shield is worn on the far forearm, its middle just above the far fist. The far fist holds something only when the list says so. Don't draw arms, a body or a head, and don't move, turn, open or redraw the fists. Keep each item whole and inside its own column, never across a grey line, and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
 
 **Creature**
 
@@ -217,7 +217,8 @@ The owner's call (2026-11-08): the parts are drawn in ChatGPT as clean vector-st
 > - HAIR SHEET: four blank figures from the head to the hips, side by side. One hairstyle per column, numbered 1-4 from the left.
 > - ARMOR SHEET: four full figures side by side, 1536 x 1024. One outfit per column, numbered 1-4 from the left.
 > - HELM SHEET: four blank figures from the top of the head to the hips, side by side. One helm per column, numbered 1-4 from the left.
-> - CAPE SHEET or WEAPON SHEET: four full figures side by side, 1536 x 1024. One cape, or one held item, per column, numbered 1-4 from the left.
+> - CAPE SHEET: four full figures side by side, 1536 x 1024. One cape per column, numbered 1-4 from the left.
+> - WEAPON SHEET: four columns of two floating fists, the rest of the figure left out, 1536 x 1024. One held item per column, numbered 1-4 from the left, gripped straight through the closed fist with no pose; never draw arms or a body.
 > Keep every figure exactly where it is in its cell, keep each part inside its own cell, and keep the grey lines and the black.
 >
 > THE RULES FOR EVERY IMAGE
@@ -3560,8 +3561,8 @@ I'll save it as weapon-sheet-m01.png.
 
 1. Scimitar: In the near hand, a curved steel scimitar with a brass guard, held low.
 2. Hand axe: In the near hand, a short hand axe with a steel head and a wooden haft, held low.
-3. Battleaxe: In the near hand, a long-hafted bearded battleaxe with a heavy steel head, held across the body.
-4. Greatsword: A two-handed steel greatsword held in both hands in front of the body, point down near the ground.
+3. Battleaxe: In the near hand, a long-hafted bearded battleaxe with a heavy steel head, held low, its head forward.
+4. Greatsword: A two-handed steel greatsword held low in the near hand alone, point forward.
 I'll save it as weapon-sheet-m02.png.
 
 #### `weapon-sheet-m03` · Weapon sheet: 4 weapons (Warhammer, Mace, Quarterstaff, Spear) · P0
@@ -3609,7 +3610,7 @@ I'll save it as weapon-sheet-m06.png.
 **Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-kael-knives`, 2 `weapon-kael-rapier`, 3 `weapon-brannock`, 4 `weapon-cutlass`.
 
 1. Kael's twin knives: A pair of long knives with red cord wound round their grips, one in each hand, the near one held reversed.
-2. Kael's rapier and parrying dagger: A slim rapier with a swept hilt in the near hand, extended forward in a fencer's guard, and a parrying dagger held reversed in the far hand.
+2. Kael's rapier and parrying dagger: A slim rapier with a swept hilt in the near hand, held low, point forward, and a parrying dagger held reversed in the far hand.
 3. Brannock's sword and shield: A plain, heavy longsword in the near hand, held low, and a battered round wooden shield with an iron rim strapped to the far forearm, its rim still bare.
 4. Cutlass: In the near hand, a notched cutlass with a brass basket guard, held casually, point down.
 I'll save it as weapon-sheet-m07.png.
@@ -3630,7 +3631,7 @@ I'll save it as weapon-sheet-m08.png.
 
 1. A brass telescope: In the near hand, a brass telescope, half extended.
 2. A tack hammer and a notice: A small tack hammer in the near hand, and a fresh notice on a clipboard in the far hand, its writing only scribbled lines.
-3. A walking stick: In the near hand, a crooked wooden walking stick, its foot on the ground, taking the weight.
+3. A walking stick: In the near hand, a crooked wooden walking stick, held upright, its foot near the ground.
 4. A tin cup: In the near hand, a dented tin cup of water.
 I'll save it as weapon-sheet-m09.png.
 
@@ -3641,15 +3642,15 @@ I'll save it as weapon-sheet-m09.png.
 1. A quill and a sealed letter: A quill pen in the near hand, and a folded letter with a dark wax seal in the far hand.
 2. A sealed letter: In the near hand, a rolled letter with a gold wax seal and a ribbon.
 3. A bundle of letters: In the near hand, a bundle of sealed letters tied with string.
-4. A stew pot: A steaming iron stew pot carried in front with both hands, a cloth wrapped round the handle.
+4. A stew pot: A steaming iron stew pot hanging by its handle from the near hand, a cloth wrapped round the handle.
 I'll save it as weapon-sheet-m10.png.
 
 #### `weapon-sheet-m11` · Weapon sheet: 4 weapons (A bolt of silk, A lute, A rusted longsword, A hexer's crystal staff) · P0
 
 **Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-silk-bolt`, 2 `weapon-lute`, 3 `weapon-hollowed-sword`, 4 `weapon-hexer-staff`.
 
-1. A bolt of silk: A bolt of rose-coloured silk draped over the far forearm, the near hand raised, patting a pocket.
-2. A lute: A small round-backed lute held across the body, mid-strum.
+1. A bolt of silk: A bolt of rose-coloured silk hanging from the far hand.
+2. A lute: A small round-backed lute held by its neck in the near hand, hanging.
 3. A rusted longsword: In the near hand, a long, rusted, notched longsword held low, its point dragging.
 4. A hexer's crystal staff: In the near hand, a crooked staff of blackened wood topped with a jagged cluster of black crystal wrapped in a soft violet glow.
 I'll save it as weapon-sheet-m11.png.
@@ -3661,14 +3662,14 @@ I'll save it as weapon-sheet-m11.png.
 1. A pick and a lit charge: A heavy iron pick in the near hand, and a round clay blasting charge with its fuse sparking in the far hand.
 2. A pick and a burning lantern: A big two-handed pick held in the near hand, and in the far hand a large iron lantern with its door open and fire roaring inside.
 3. A wooden toy sword: In the near hand, a small wooden toy sword.
-4. A pitchfork: In the near hand, a wooden pitchfork resting on the near shoulder.
+4. A pitchfork: In the near hand, a wooden pitchfork held upright.
 I'll save it as weapon-sheet-m12.png.
 
-#### `weapon-sheet-m13` · Weapon sheet: 2 weapons (A crate on the shoulder, A forging hammer and tongs) · P0
+#### `weapon-sheet-m13` · Weapon sheet: 2 weapons (A crate, carried, A forging hammer and tongs) · P0
 
 **Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-crate`, 2 `weapon-hammer-tongs`.
 
-1. A crate on the shoulder: A wooden crate carried on the far shoulder and steadied with the far hand, the near hand free.
+1. A crate, carried: A wooden crate held by a rope handle in the far hand, hanging.
 2. A forging hammer and tongs: A forging hammer in the near hand, and a pair of tongs in the far hand.
 Leave figures 3 and 4 exactly as they are, with nothing added.
 I'll save it as weapon-sheet-m13.png.
@@ -3680,7 +3681,7 @@ I'll save it as weapon-sheet-m13.png.
 1. Thornwood bow: In the near hand, a strung bow of dark, twisted living wood with thorns along its back and small green leaves at the tips, held upright.
 2. Sunsteel blade: In the near hand, a longsword of bright, pale-gold steel with a sunburst on the guard and a faint warm glow, held low.
 3. A mallet: In the near hand, a wooden mallet.
-4. A spade: In the near hand, a spade resting over the near shoulder.
+4. A spade: In the near hand, a spade held upright.
 I'll save it as weapon-sheet-m14.png.
 
 #### `weapon-sheet-m15` · Weapon sheet: 4 weapons (A heron-headed cane, A felling axe, An oil lamp, Varkhul's greatsword) · P1
@@ -3688,9 +3689,9 @@ I'll save it as weapon-sheet-m14.png.
 **Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-heron-cane`, 2 `weapon-felling-axe`, 3 `weapon-oil-lamp`, 4 `weapon-varkhul-greatsword`.
 
 1. A heron-headed cane: In the near hand, a slim cane with a silver heron's-head handle.
-2. A felling axe: In the near hand, a long felling axe resting over the near shoulder.
+2. A felling axe: In the near hand, a long felling axe held low, its head forward.
 3. An oil lamp: In the near hand, a small brass oil lamp, lit.
-4. Varkhul's greatsword: A huge two-handed greatsword of black iron held in both hands with the point down, a jagged black splinter of crystal set in its hilt pulsing with violet light.
+4. Varkhul's greatsword: A huge two-handed greatsword of black iron held low in the near hand alone, point forward, a jagged black splinter of crystal set in its hilt pulsing with violet light.
 I'll save it as weapon-sheet-m15.png.
 
 #### `weapon-sheet-m16` · Weapon sheet: 3 weapons (A cube-pommelled dagger, A hooked blade, An old-pattern spear and kite shield) · P1
@@ -3708,7 +3709,7 @@ I'll save it as weapon-sheet-m16.png.
 **Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-corwin-kit`, 2 `weapon-corwin-sword`, 3 `weapon-gilded-kit`, 4 `weapon-mace-shield`.
 
 1. Sir Corwin's sword and sun shield: A longsword with a gold hilt and a sun-shaped pommel held upright in the near hand, and a round steel shield with a gold sun boss on the far forearm.
-2. Sir Corwin's sword, too big: A longsword with a gold hilt and a sun-shaped pommel, too long for the bearer, held upright in front of the body in both hands.
+2. Sir Corwin's sword, too big: A longsword with a gold hilt and a sun-shaped pommel, too long for the bearer, held upright in the near hand alone.
 3. A Gilded knight's sword and shield: A plain longsword in the near hand, and a white kite shield with a gold sun on the far forearm.
 4. A mace and a small shield: A flanged mace in the near hand, and a small round steel shield on the far forearm.
 I'll save it as weapon-sheet-m17.png.
@@ -3749,27 +3750,27 @@ I'll save it as weapon-sheet-f01.png.
 
 1. A rag doll: In the near hand, a battered cloth doll held by one arm.
 2. A tankard: In the near hand, a pewter tankard.
-3. An armful of scrolls: An armful of rolled scrolls tied with ribbon and closed with wax seals, held against the chest.
+3. An armful of scrolls: An armful of rolled scrolls tied with ribbon and closed with wax seals, held in the near hand.
 4. A broom: In the near hand, a straw broom held upright.
 I'll save it as weapon-sheet-f02.png.
 
-#### `weapon-sheet-f03` · Weapon sheet: 4 weapons (A coin on the knuckles, A wooden practice sword, A cap held in both hands, A covered basket) · P0
+#### `weapon-sheet-f03` · Weapon sheet: 4 weapons (A coin on the knuckles, A wooden practice sword, A flat cap, held, A covered basket) · P0
 
 **Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-coin`, 2 `weapon-practice-sword`, 3 `weapon-flat-cap-held`, 4 `weapon-basket`.
 
 1. A coin on the knuckles: In the near hand, a copper coin balanced on the knuckles of the near hand.
-2. A wooden practice sword: In the near hand, a wooden practice sword resting on the near shoulder.
-3. A cap held in both hands: An old flat cap held against the chest in both hands.
-4. A covered basket: In the near hand, a wicker basket with a cloth over it, hung over the near forearm.
+2. A wooden practice sword: In the near hand, a wooden practice sword held low, point forward.
+3. A flat cap, held: An old flat cap held by its brim in the near hand.
+4. A covered basket: In the near hand, a wicker basket with a cloth over it, hanging from the near hand by its handle.
 I'll save it as weapon-sheet-f03.png.
 
 #### `weapon-sheet-f04` · Weapon sheet: 4 weapons (A flower basket, A pilgrim's staff, A baker's peel and a loaf, A drop spindle) · P0
 
 **Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-flower-basket`, 2 `weapon-pilgrim-staff`, 3 `weapon-peel`, 4 `weapon-spindle`.
 
-1. A flower basket: A wide wicker basket of pink roses, white lilies and daisies over the far arm, and a single rose held out in the near hand.
+1. A flower basket: A wide wicker basket of pink roses, white lilies and daisies hanging from the far hand by its handle, and a single rose in the near hand.
 2. A pilgrim's staff: In the near hand, a tall pilgrim's staff with a small brass bell tied at the top.
-3. A baker's peel and a loaf: A long wooden baker's peel in the near hand, and a round loaf tucked in the crook of the far arm.
+3. A baker's peel and a loaf: A long wooden baker's peel in the near hand, and a round loaf held in the far hand.
 4. A drop spindle: In the near hand, a drop spindle with a length of navy-and-gold thread.
 I'll save it as weapon-sheet-f04.png.
 
@@ -3787,9 +3788,9 @@ I'll save it as weapon-sheet-f05.png.
 **Basis:** Edits `weapon-sheet-female`. Cells: 1 `weapon-staff-ring`, 2 `weapon-ledger-pen`, 3 `weapon-folded-shawl`, 4 `weapon-sketchbook`.
 
 1. Thessaly's ringed staff: In the near hand, a tall staff of dark wood topped with a plain open ring of silver metal, held upright.
-2. A ledger and a pen: A thick leather-bound ledger tucked under the far arm, and a pen in the near hand.
+2. A ledger and a pen: A thick leather-bound ledger held in the far hand, and a pen in the near hand.
 3. A folded shawl: In the near hand, a folded knitted shawl, held out as if offering it.
-4. A sketchbook: A sketchbook held open against the chest in the far hand, and a stick of charcoal in the near hand.
+4. A sketchbook: A sketchbook held closed in the far hand, and a stick of charcoal in the near hand.
 I'll save it as weapon-sheet-f06.png.
 
 #### `weapon-sheet-f07` · Weapon sheet: 4 weapons (A lit lantern, A beekeeper's smoker, A sprig of night-flowers, Vreya's wavy blade) · P2
@@ -3799,7 +3800,7 @@ I'll save it as weapon-sheet-f06.png.
 1. A lit lantern: In the near hand, a brass lantern, lit, its warm light on the near side of the face.
 2. A beekeeper's smoker: In the near hand, a tin beekeeper's smoker with bellows, a wisp of pale smoke curling from its spout, two or three bees nearby.
 3. A sprig of night-flowers: In the near hand, a sprig of pale, star-shaped night-flowers.
-4. Vreya's wavy blade: In the near hand, a long, wavy-bladed black sword held over the near shoulder.
+4. Vreya's wavy blade: In the near hand, a long, wavy-bladed black sword held low, point forward.
 I'll save it as weapon-sheet-f07.png.
 
 #### `weapon-sheet-f08` · Weapon sheet: 2 weapons (A glowing glass lamp, A rolled map) · P2
@@ -4273,13 +4274,13 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`battleaxe`).
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a long-hafted bearded battleaxe with a heavy steel head, held across the body. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-battleaxe.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a long-hafted bearded battleaxe with a heavy steel head, held low, its head forward. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-battleaxe.png.
 
 #### `weapon-greatsword` · Greatsword · P0
 
 **Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`greatsword`).
 
-Edit the attached base image: change ONLY the hands, giving them a two-handed steel greatsword held in both hands in front of the body, point down near the ground. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-greatsword.png.
+Edit the attached base image: change ONLY the hands, giving them a two-handed steel greatsword held low in the near hand alone, point forward. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-greatsword.png.
 
 #### `weapon-warhammer` · Warhammer · P0
 
@@ -4411,7 +4412,7 @@ Edit the attached base image: change ONLY the hands, giving them a pair of long 
 
 **Basis:** Edits `base-male`. From `EnemyCatalog.cs` (`kael-duel`: a rapier and an off-hand dagger).
 
-Edit the attached base image: change ONLY the hands, giving them a slim rapier with a swept hilt in the near hand, extended forward in a fencer's guard, and a parrying dagger held reversed in the far hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-kael-rapier.png.
+Edit the attached base image: change ONLY the hands, giving them a slim rapier with a swept hilt in the near hand, held low, point forward, and a parrying dagger held reversed in the far hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-kael-rapier.png.
 
 #### `weapon-brannock` · Brannock's sword and shield · P0
 
@@ -4483,7 +4484,7 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-male`. **(derived)** From the old and the travellers.
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a crooked wooden walking stick, its foot on the ground, taking the weight. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-walking-stick.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a crooked wooden walking stick, held upright, its foot near the ground. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-walking-stick.png.
 
 #### `weapon-tin-cup` · A tin cup · P0
 
@@ -4519,25 +4520,25 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-male`. **(derived)** From Pip.
 
-Edit the attached base image: change ONLY the hands, giving them a steaming iron stew pot carried in front with both hands, a cloth wrapped round the handle. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-stew-pot.png.
+Edit the attached base image: change ONLY the hands, giving them a steaming iron stew pot hanging by its handle from the near hand, a cloth wrapped round the handle. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-stew-pot.png.
 
 #### `weapon-silk-bolt` · A bolt of silk · P0
 
 **Basis:** Edits `base-male`. **(derived)** From Osric.
 
-Edit the attached base image: change ONLY the hands, giving them a bolt of rose-coloured silk draped over the far forearm, the near hand raised, patting a pocket. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-silk-bolt.png.
+Edit the attached base image: change ONLY the hands, giving them a bolt of rose-coloured silk hanging from the far hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-silk-bolt.png.
 
 #### `weapon-lute` · A lute · P0
 
 **Basis:** Edits `base-male`. **(derived)** From Lark.
 
-Edit the attached base image: change ONLY the hands, giving them a small round-backed lute held across the body, mid-strum. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-lute.png.
+Edit the attached base image: change ONLY the hands, giving them a small round-backed lute held by its neck in the near hand, hanging. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-lute.png.
 
 #### `weapon-scrolls` · An armful of scrolls · P0
 
 **Basis:** Edits `base-female`. **(derived)** From Ilsa.
 
-Edit the attached base image: change ONLY the hands, giving them an armful of rolled scrolls tied with ribbon and closed with wax seals, held against the chest. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-scrolls.png.
+Edit the attached base image: change ONLY the hands, giving them an armful of rolled scrolls tied with ribbon and closed with wax seals, held in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-scrolls.png.
 
 #### `weapon-broom` · A broom · P0
 
@@ -4555,13 +4556,13 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-female`. From `10-classes.md` §5.1 (`train-imra`: a practice sword).
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a wooden practice sword resting on the near shoulder. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-practice-sword.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a wooden practice sword held low, point forward. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-practice-sword.png.
 
-#### `weapon-flat-cap-held` · A cap held in both hands · P0
+#### `weapon-flat-cap-held` · A flat cap, held · P0
 
 **Basis:** Edits `base-female`. **(derived)** From Maud, Pell, the lost boy.
 
-Edit the attached base image: change ONLY the hands, giving them an old flat cap held against the chest in both hands. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-flat-cap-held.png.
+Edit the attached base image: change ONLY the hands, giving them an old flat cap held by its brim in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-flat-cap-held.png.
 
 #### `weapon-staff-ring` · Thessaly's ringed staff · P1
 
@@ -4573,7 +4574,7 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (Gannet: a ledger always under the arm).
 
-Edit the attached base image: change ONLY the hands, giving them a thick leather-bound ledger tucked under the far arm, and a pen in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-ledger-pen.png.
+Edit the attached base image: change ONLY the hands, giving them a thick leather-bound ledger held in the far hand, and a pen in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-ledger-pen.png.
 
 #### `weapon-folded-shawl` · A folded shawl · P1
 
@@ -4591,7 +4592,7 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-male`. **(derived)** From the levy, `mira-tobin`.
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a spade resting over the near shoulder. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-spade.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a spade held upright. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-spade.png.
 
 #### `weapon-heron-cane` · A heron-headed cane · P1
 
@@ -4603,7 +4604,7 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-male`. **(derived)** From Hobb.
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a long felling axe resting over the near shoulder. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-felling-axe.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a long felling axe held low, its head forward. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-felling-axe.png.
 
 #### `weapon-black-box` · The Black Box · P1
 
@@ -4621,13 +4622,13 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-female`. **(derived)** From `mira-young`.
 
-Edit the attached base image: change ONLY the hands, giving them a sketchbook held open against the chest in the far hand, and a stick of charcoal in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-sketchbook.png.
+Edit the attached base image: change ONLY the hands, giving them a sketchbook held closed in the far hand, and a stick of charcoal in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-sketchbook.png.
 
 #### `weapon-varkhul-greatsword` · Varkhul's greatsword · P1
 
 **Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a greatsword with the shard in the hilt).
 
-Edit the attached base image: change ONLY the hands, giving them a huge two-handed greatsword of black iron held in both hands with the point down, a jagged black splinter of crystal set in its hilt pulsing with violet light. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-varkhul-greatsword.png.
+Edit the attached base image: change ONLY the hands, giving them a huge two-handed greatsword of black iron held low in the near hand alone, point forward, a jagged black splinter of crystal set in its hilt pulsing with violet light. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-varkhul-greatsword.png.
 
 #### `weapon-cultist-dagger` · A cube-pommelled dagger · P1
 
@@ -4693,7 +4694,7 @@ Edit the attached base image: change ONLY the hands, giving them a longsword wit
 
 **Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Davin carries `corwin-sword`).
 
-Edit the attached base image: change ONLY the hands, giving them a longsword with a gold hilt and a sun-shaped pommel, too long for the bearer, held upright in front of the body in both hands. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-corwin-sword.png.
+Edit the attached base image: change ONLY the hands, giving them a longsword with a gold hilt and a sun-shaped pommel, too long for the bearer, held upright in the near hand alone. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-corwin-sword.png.
 
 #### `weapon-gilded-kit` · A Gilded knight's sword and shield · P2
 
@@ -4723,13 +4724,13 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-female`. **(derived)** From the old women and farm wives.
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a wicker basket with a cloth over it, hung over the near forearm. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-basket.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a wicker basket with a cloth over it, hanging from the near hand by its handle. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-basket.png.
 
 #### `weapon-flower-basket` · A flower basket · P0
 
 **Basis:** Edits `base-female`. **(derived)** From the `flower-seller` sheet.
 
-Edit the attached base image: change ONLY the hands, giving them a wide wicker basket of pink roses, white lilies and daisies over the far arm, and a single rose held out in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-flower-basket.png.
+Edit the attached base image: change ONLY the hands, giving them a wide wicker basket of pink roses, white lilies and daisies hanging from the far hand by its handle, and a single rose in the near hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-flower-basket.png.
 
 #### `weapon-spear-lantern` · A spear and a lantern · P2
 
@@ -4747,7 +4748,7 @@ Edit the attached base image: change ONLY the hands, giving them a long black sw
 
 **Basis:** Edits `base-female`. **(derived)** From Vreya.
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a long, wavy-bladed black sword held over the near shoulder. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-vreya-blade.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a long, wavy-bladed black sword held low, point forward. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-vreya-blade.png.
 
 #### `weapon-mordain-glaive` · Mordain's glaive · P2
 
@@ -4807,19 +4808,19 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 **Basis:** Edits `base-male`. **(derived)** From the `farmhand` sheet.
 
-Edit the attached base image: change ONLY the near hand: close its fingers naturally round a wooden pitchfork resting on the near shoulder. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-pitchfork.png.
+Edit the attached base image: change ONLY the near hand: close its fingers naturally round a wooden pitchfork held upright. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-pitchfork.png.
 
-#### `weapon-crate` · A crate on the shoulder · P0
+#### `weapon-crate` · A crate, carried · P0
 
 **Basis:** Edits `base-male`. **(derived)** From the `porter` sheet.
 
-Edit the attached base image: change ONLY the hands, giving them a wooden crate carried on the far shoulder and steadied with the far hand, the near hand free. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-crate.png.
+Edit the attached base image: change ONLY the hands, giving them a wooden crate held by a rope handle in the far hand, hanging. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-crate.png.
 
 #### `weapon-peel` · A baker's peel and a loaf · P0
 
 **Basis:** Edits `base-female`. **(derived)** From the `baker` sheet.
 
-Edit the attached base image: change ONLY the hands, giving them a long wooden baker's peel in the near hand, and a round loaf tucked in the crook of the far arm. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-peel.png.
+Edit the attached base image: change ONLY the hands, giving them a long wooden baker's peel in the near hand, and a round loaf held in the far hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-peel.png.
 
 #### `weapon-hammer-tongs` · A forging hammer and tongs · P0
 
@@ -5704,7 +5705,7 @@ Every part and creature in this file, in order. The characters are in §7.
 | `weapon-broom` | A broom | weapon | §6.3 | P0 |
 | `weapon-coin` | A coin on the knuckles | weapon | §6.3 | P0 |
 | `weapon-practice-sword` | A wooden practice sword | weapon | §6.3 | P0 |
-| `weapon-flat-cap-held` | A cap held in both hands | weapon | §6.3 | P0 |
+| `weapon-flat-cap-held` | A flat cap, held | weapon | §6.3 | P0 |
 | `weapon-staff-ring` | Thessaly's ringed staff | weapon | §6.3 | P1 |
 | `weapon-ledger-pen` | A ledger and a pen | weapon | §6.3 | P1 |
 | `weapon-folded-shawl` | A folded shawl | weapon | §6.3 | P1 |
@@ -5746,7 +5747,7 @@ Every part and creature in this file, in order. The characters are in §7.
 | `weapon-raider-kit` | An axe and a grey shield | weapon | §6.3 | P2 |
 | `weapon-pilgrim-staff` | A pilgrim's staff | weapon | §6.3 | P0 |
 | `weapon-pitchfork` | A pitchfork | weapon | §6.3 | P0 |
-| `weapon-crate` | A crate on the shoulder | weapon | §6.3 | P0 |
+| `weapon-crate` | A crate, carried | weapon | §6.3 | P0 |
 | `weapon-peel` | A baker's peel and a loaf | weapon | §6.3 | P0 |
 | `weapon-hammer-tongs` | A forging hammer and tongs | weapon | §6.3 | P0 |
 | `weapon-spindle` | A drop spindle | weapon | §6.3 | P0 |

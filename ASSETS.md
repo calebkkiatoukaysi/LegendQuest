@@ -490,9 +490,9 @@ tools/source/characters/cape-sheet-female.png - the blank cape sheet: four copie
 
 tools/source/characters/cape-sheet-male.png - the blank cape sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/weapon-sheet-female.png - the blank weapon sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/weapon-sheet-female.png - the blank weapon sheet: four copies of its two fists, each with a stub of forearm, where they are on the figure, at 0.56 scale, side by side, the rest of the figure left out, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/weapon-sheet-male.png - the blank weapon sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/weapon-sheet-male.png - the blank weapon sheet: four copies of its two fists, each with a stub of forearm, where they are on the figure, at 0.56 scale, side by side, the rest of the figure left out, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
 tools/source/characters/sheets/armor-sheet-f01.png - armor sheet armor-sheet-f01 (armor-traveller-f, armor-sb-traveller, armor-sera, armor-mira), painted on tools/source/characters/armor-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
