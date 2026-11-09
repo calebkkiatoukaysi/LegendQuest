@@ -12,14 +12,14 @@ This file is the spec for characters, items, faces and backdrops. The world itse
 | --- | --- | --- |
 | Characters | 32x48 sheets, ten columns, four facing rows, paperdoll layers baked per look | A 2D cut-out rig: about thirty parts on a skeleton, animated by keyframed clips, facing right and mirrored for left |
 | Facings | Down, left, right, up | Right and left only. Walking up or down keeps the last horizontal facing |
-| Resolution | 1 texel per world unit, point sampled | Characters authored 200 px tall for the 1600×900 screen and drawn 1:1, linear sampled. The world becomes painted rooms (`12-rooms.md`) |
+| Resolution | 1 texel per world unit, point sampled | Characters authored at 2x (a standard figure is 392 texels tall) and drawn at 0.5 in rooms, 196 px on the 1600×900 screen, linear sampled. The world becomes painted rooms (`12-rooms.md`) |
 | Poses | Five puppet-posed fighting columns | As many clips as the story needs (§4), shared by everyone |
 | Items | Weapons and shields drawn into each build's frames | Any item can be put in a socket on the body (§6), so what someone carries in the story is what you see them carry |
 | Faces | The standing frame's head, blown up | Twelve expressions from swappable eyes, brows and mouths (§5); portraits are the rig's bust, rendered live |
-| Variety | One body, palette swaps | One base body in four builds, part kits per character, and four tiers of distinctness (§7) |
+| Variety | One body, palette swaps | One base body in five builds, part kits per character, and four tiers of distinctness (§7) |
 | Detail | Pixel shading, one tone of shadow | Painted parts with two shadow tones, a highlight and a rim light, and costume detail (trims, buckles, stitching, wear) to sit against detailed painted rooms |
 
-**The author's direction (2026-11-04).** The artwork stays the game's current artwork, drawn in more detail, not a new style: the rig's parts are drawn from today's characters' designs, palettes and proportions, with this file's detail rules raised on top. Characters and enemies face only right or left; there's no front or back view to draw. NPCs keep walking. Where this file's style rules disagree with that, the direction wins.
+**The author's direction (2026-11-04).** The characters get new, customisable and more detailed art, anime-leaning, in the same bright fantasy theme: proportions of 5.3 heads (§2.2) in place of today's chibi, with the party and the NPCs sharing one body in five builds. The parts keep today's palettes and costume themes. They're authored at 2x (density 2) and drawn at 0.5 in rooms. The procedural kits are the art that ships; painted sheets are optional overrides, part by part (§12.1). Characters and enemies face only right or left; there's no front or back view to draw. NPCs keep walking. The art plan's style guide ("Twilight Cel") has the detail; where this file's style rules disagree with the direction, the direction wins.
 
 Everything sits behind a switch, `ArtSettings.Characters = Legacy | Rig` and `ArtSettings.World = Legacy | Rooms`, read at start-up from `settings.json` and toggled in the options screen's debug page. Until M14 is done, both paths work, and the proof run (`--proof`) runs once in each.
 
@@ -41,33 +41,33 @@ What the angle means, measured on the standard build (§3.5):
 
 | | Standard build |
 | --- | --- |
-| Height, feet to crown | 200 px on the 1600×900 screen (about 22% of its height, close to the reference's proportion) |
-| Heads tall | 5.5 |
+| Height, feet to crown | 196 px on the 1600×900 screen (about 22% of its height, close to the reference's proportion); 392 texels as authored |
+| Heads tall | 5.3 |
 | Shoulder width (as drawn, at the angle) | 1.6 heads |
-| Hand length | 0.8 of a head. Hands and feet are drawn large, the way the reference does: they carry most of the acting |
+| Hand length | 0.75 of a head. Hands and feet are drawn large, the way the reference does: they carry most of the acting |
 | Foot length | 1.1 heads |
-| Eye height | Half way down the head |
+| Eye line | 0.55 of the way down the head from the crown |
 
-The other builds are bone scales of this one (§3.5), not separate drawings.
+There are five builds (§3.5): bone scales of this one, not separate drawings.
 
 ### 2.3 Rendering rules
 
-1. **Outline.** Every part has a 4 px outer line in the part's darkest shade (never pure black), and a 2 px inner line where forms overlap inside the part.
-2. **Shading.** Cel shading with hard edges: base, two shadow tones (a form shadow and a deeper occlusion shadow in creases and under overlaps), one highlight tone, and a thin rim light along the top-back edge of each part so characters separate from detailed backgrounds. No gradients on bodies or clothes. Glows, magic and light sources may use soft gradients.
+1. **Outline.** The outer line is 2.5 px, thinning to 1.5 px on lit top edges and thickening to 3 px on undersides and soles; where forms overlap inside the figure (an arm over the torso, hair over the face) it's 1.5 px; detail lines (folds, seams, strands, lashes) are 1 px, tapering to nothing. A line is its material's deep tone mixed halfway to ink #2a1f3d (skin's is a warm #7a3e3a), never darker than OKLab L 0.18 and never black. Each part's fill carries its own 1.5 px edge line and its `#line` silhouette adds the rest underneath, drawn before any fill, so joints show no seam.
+2. **Shading.** Cel shading with hard edges: base, two shadow tones (a form shadow and a deeper occlusion shadow in creases and under overlaps), one highlight tone, and a thin rim light along the top-back edge of each part so characters separate from detailed backgrounds. No gradients on bodies or clothes, except the iris, blush, and the sky band on metal (navy to pink to cream). Glows, magic and light sources may use soft gradients. Where skin's form shadow meets its base there's a thin terminator, pink #e8749b at 35%.
 3. **Light.** From above and slightly in front of the character, toward the camera. Never from the left or right. Shadow falls on the undersides of forms (under the chin, under the hat brim, the bottom of each sleeve), and highlight sits on the tops. This is what lets a right-facing drawing be mirrored for left without the light jumping sides. Note that it's a change from the current rule ("lit from the top left"), and that tiles keep their own rule (§11).
-4. **Colour.** Each character's palette is no more than six hues plus skin and hair. Saturation tops out at the reserved hues (§7.3). Shadows shift toward violet-blue, highlights toward warm yellow, by the same amounts everywhere.
-5. **Detail density.** The face and hands are the most detailed things on a character. Then the costume: every outfit has trims, seams, buckles or clasps, a pouch, charm or strap, and wear (scuffed leather, frayed hems, dents in plate). Cloth folds are few but drawn with both shadow tones. Armour gets a line per plate edge, a highlight per plate, rivets, and one engraved or etched detail on notable characters. Detail stays inside the silhouette: it never breaks the outline's read.
+4. **Colour.** Each character's palette is no more than six hues plus skin and hair. Saturation tops out at the reserved hues (§7.3). Shadows shift toward violet-blue, highlights toward warm yellow, by the same amounts everywhere: every tone is worked out in OKLab by the art plan's §1.3 formulas (deep, shadow, base, light, highlight), and every ramp is cut from the style sheet's swatches and npc-customization.png's skin and hair rows (`tools/rig/theme.py`).
+5. **Detail density.** The face and hands are the most detailed things on a character. Then the costume: every outfit has trims, seams, buckles or clasps, a pouch, charm or strap, and wear (scuffed leather, frayed hems, dents in plate). Cloth folds are few but drawn with both shadow tones. Armour gets a line per plate edge, a highlight per plate, rivets, and one engraved or etched detail on notable characters. Detail stays inside the silhouette: it never breaks the outline's read. Wear goes by the item's rarity: a Common one has three scuffs, a patch and a frayed hem; an Uncommon one a contrasting trim, brass fittings, one motif and one scuff; a Rare one gold or sunsteel filigree on its edges, a gem, and no wear.
 6. **Ground contact.** Every character casts the existing squashed-glow shadow under the feet, scaled with the build.
 
 ### 2.4 How it sits in the world
 
-Characters stand on a room's floor band (`12-rooms.md` §1) at 200 px tall, with no scaling for depth. Each has a footprint ellipse (60×18 px for the standard build, scaled by build) used for sorting, click-picking and the shadow. In Legacy mode, on the old tile maps, the rig is drawn at 138 px so it stands three tiles tall as the sheets did; `WalkerShape` gets `RigScale` for that.
+Characters stand on a room's floor band (`12-rooms.md` §1) at 196 px tall (the standard build), with no scaling for depth. Each has a footprint ellipse (60×18 px for the standard build, scaled by build) used for sorting, click-picking and the shadow.
 
 ## 3. The rig
 
 ### 3.1 Space
 
-- Rig space is in screen pixels at 1:1 on the 1600×900 canvas (the standard build is 200 px tall), origin at the point between the feet, x to the right, y down (the same as the screen).
+- Rig space is in screen pixels at 1:1 on the 1600×900 canvas (the standard build is 196 px tall; parts are stored at density 2), origin at the point between the feet, x to the right, y down (the same as the screen).
 - A character facing left is drawn with the root's x scale at −1.
 - Every part is a rectangle from an atlas, drawn with `SpriteBatch.Draw` at its bone's world transform, with the part's pivot as the origin. Nothing is deformed or meshed: parts rotate, move and scale, and that's all.
 
@@ -156,16 +156,17 @@ Props have sockets too, defined in the prop's catalog entry: `top` on a pedestal
 
 ### 3.5 Builds
 
-A build is a set of bone length and part scales over the standard drawing, so every kit fits every build without being redrawn.
+A build is a set of bone scales over the standard drawing, so every kit fits every build without being redrawn. Height and heads are what each comes to; the scales are what's applied.
 
-| Build | Who | Legs | Torso | Arms | Head | Width |
-| --- | --- | --- | --- | --- | --- | --- |
-| `standard` | Humans, Sylvans, Emberkin, Wildkin | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
-| `stout` | Stoneborn | 0.78 | 0.92 | 0.90 | 1.00 | 1.25 |
-| `small` | Hearthlings, children | 0.70 | 0.78 | 0.75 | 0.92 | 0.90 |
-| `tall` | Severin, Crane, Varkhul, Vorlaith, constructs | 1.14 | 1.08 | 1.10 | 0.96 | 0.94 |
+| Build | Height | Heads | Legs | Torso | Arms | Head | Width | Hands | Who |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `small` | 140 | 4.1 | 0.62 | 0.74 | 0.72 | 0.95 | 0.90 | 0.85 | Hearthlings, children, thornlings |
+| `lean` | 204 | 6.0 | 1.07 | 1.03 | 1.05 | 0.95 | 0.85 | 0.95 | Sylvans, Mira, Valencia, Crane and Severin (height ×1.06), Vorlaith (×1.15) |
+| `standard` | 196 | 5.3 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | Humans, Emberkin, Wildkin; the default hero |
+| `stout` | 160 | 4.5 | 0.70 | 0.92 | 0.88 | 1.00 | 1.28 | 1.10 | Stoneborn: Brannock, Grell |
+| `big` | 212 | 5.7 | 1.06 | 1.12 | 1.12 | 1.03 | 1.32 | 1.18 | Hale, Gannet, Varkhul, thrall-knights, constructs (×1.1), the sapper chief |
 
-Width scales each part's x. A part may have a build-specific override (`torso@stout`) where scaling looks wrong; the kit loader prefers an override when one exists.
+Width scales each part's x. `tools/rig/rig_spec.py` works every build out bone by bone into `base.rig.json` (each bone's rest pivot and its parts' scale, the feet planted), so nothing else does the arithmetic. The torso, hips and head have build-specific overrides (`chest@stout`) on small, stout and big, drawn at that build's size; the kit loader prefers an override when one exists. A look's own height step (×0.94 to ×1.06 in seven steps) scales the whole figure, and its width (×0.9 to ×1.25, the cast only) multiplies the width scale.
 
 ### 3.6 Peoples
 
@@ -193,7 +194,7 @@ Painted parts can't be palette-swapped key by key the way the pixel sheets were:
 - `<part>.png`, the full-colour part, with every tintable area painted in a neutral grey ramp.
 - `<part>.mask.png`, the same size, where the red channel says which tint group a texel belongs to (skin 1, hair 2, eyes 3, shirt 4, vest 5, legs 6, cloak 7, metal 8, leather 9; 0 means keep the painted colour) and alpha is the coverage.
 
-`RigTint` bakes a look's parts once per change: for each texel in a tint group, its grey's brightness looks up the chosen ramp in `character-palettes.png` or `gear-palettes.png`, as the gradient-map does in `generate_paintings.py`. The ramps are widened from five to nine steps for the softer shading. The result is cached by (kit, part, ramps), so two people dressed alike share textures, as `Paperdoll.Key` does now.
+`RigTint` bakes a look's parts once per change: for each texel in a tint group, its grey's brightness looks up the chosen ramp in `character-palettes.png` or `gear-palettes.png`, as the gradient-map does in `generate_paintings.py`. The ramps are widened from five to nine steps for the softer shading, with the line colour before them: `Content/Rig/ramps.png` has a row of ten per ramp (line, then deep to highlight), and a mask's green is the index into it, round(index × 255 / 9), fractional where tones meet. The result is cached by (kit, part, ramps), so two people dressed alike share textures, as `Paperdoll.Key` does now.
 
 ## 4. Animation
 
@@ -406,7 +407,7 @@ Some items change: `light <item> <state>` sets a state, which picks a picture an
 
 ### 6.4 The catalog
 
-Every item a script holds. Sizes are in px at character scale (a standard-build character is 200 px tall).
+Every item a script holds. Sizes are in px at character scale (a standard-build character is 196 px tall).
 
 | Item | Home socket | Size | States | Look | Scenes |
 | --- | --- | --- | --- | --- | --- |
@@ -612,7 +613,7 @@ Where a backdrop includes you or {sb}, the painting has a hole and the rig is dr
 
 The world is painted rooms now, not tiles: `12-rooms.md` is their spec, with their layers, detail rules, indicators, templates and placeholders. Props from `03b-world-art.md` §3 are recut from their source pictures at room scale by `cut_supplied.py --scale 3` (the source pictures are larger than the current cuts, so nothing is upscaled) and placed in rooms' mid and foreground layers by the placeholder generator, until the painted rooms replace them. Rooms are lit from the top left and never mirrored, so they keep that rule; characters keep theirs (§2.3).
 
-Until M13, Rig characters in placeholder rooms is the supported combination, and Rig characters on Legacy tiles still works at 138 px (§2.4).
+Until M13, Rig characters in placeholder rooms is the supported combination.
 
 ## 12. Tools
 
@@ -624,7 +625,7 @@ All CPython, seeded, writing the same bytes on every run, like the rest of `tool
 | `tools/rig/vector.py` | (library) | Anti-aliased polygons, ellipses, strokes and fills, by 4x supersampling into `pixels.py` images |
 | `tools/rig/make_rig_template.py` | `tools/source/rig/templates/<build>.png` | The A-pose template, 2048x2048: a labelled box for every part, the pivot as a crosshair, the outline weights, and a grey figure showing proportions. This is what a painted kit is drawn over |
 | `tools/rig/cut_rig.py` | `Content/Rig/Kits/<kit>.png`, `<kit>.mask.png`, `<kit>.kit.json` | Reads a filled template from `tools/source/rig/<kit>.png`, keys out the backdrop by flooding from each box's edge (as `cut_supplied.py` does), trims each part, reads the pivot from the template, and packs the parts into one atlas with its mask |
-| `tools/rig/generate_rig_placeholders.py` | the same files | Draws every kit procedurally with `vector.py`: flat-shaded shapes in the right colours and silhouettes. Everything works with these before a single painted kit exists |
+| `tools/rig/generate_rig_kits.py` | the same files | Runs every kit generator in order (bodies, faces, hair, costumes, armour, gear, creatures, clips, looks), each drawing its kit procedurally with `vector.py` and `style.py`. These kits are the art that ships |
 | `tools/rig/clips.py` | `Content/Rig/clips.json` | Every clip in §4 |
 | `tools/rig/generate_pool_npcs.py` | `Content/Rig/npcs.json` | §7.5 |
 | `tools/rig/check_clips.py` | — | Fails if a script's `anim` name has no clip or alias |
@@ -633,19 +634,9 @@ All CPython, seeded, writing the same bytes on every run, like the rest of `tool
 
 ### 12.1 Painting a kit
 
-The author makes kits the way the current supplied art was made: with an image generator, then cut. The template is the brief. A prompt that works, given the template image as a reference:
+The procedural kits ship. A painted kit is optional: hand-painted on the template (`make_rig_template.py` writes one per build to `tools/source/rig/templates/`), then cut with `cut_rig.py`, it overrides the procedural kit part by part. The template is the brief: a labelled box per part with its pivot, the grey mannequin's part as a guide to proportion, and the line weights. Paint every part whole and separate, in three-quarter view facing right, lit from above and in front. Painted kits are hand-painted only, never generated.
 
-```text
-A character part sheet for a 2D game. Paint over the reference sheet exactly: one part in each
-labelled box, nothing outside the boxes, flat dark grey background. Three-quarter view facing right.
-Cartoon fantasy style, thick dark outlines, flat cel shading with one shadow and one highlight,
-lit from above. Character: [description from §7.4]. Every part separate and complete, including
-the parts hidden behind others when assembled.
-```
-
-Don't name another game or artist in the prompt and don't give it another game's art as reference. Describe the angle and style in words, as above.
-
-A painted kit doesn't need tint masks if it's for one character in one look (most notable characters). Hero and pool kits need them; `cut_rig.py --mask` builds a first mask from the template's colour-keyed regions, which is then touched up.
+A painted kit doesn't need tint masks if it's for one character in one look (most notable characters). Hero and pool kits need them: paint each tintable area in its group's key hue from the template's legend, and `cut_rig.py --mask` builds a first mask from it, which is then touched up.
 
 ### 12.2 ASSETS.md
 

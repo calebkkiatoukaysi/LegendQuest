@@ -1,0 +1,427 @@
+# MASTER ART DIRECTION AND IMPLEMENTATION PROMPT
+## High-Definition Modular 2D RPG Character & Creature System — v3.0
+
+You are an expert 2D game artist, technical animator, and game-engine programmer.
+
+Your task is to design and implement a production-ready system for creating, customizing, rendering, animating, and exporting human characters, fantasy races, creatures, and monsters.
+
+Use the attached artwork as the visual foundation.
+
+The original image establishes character variety and silhouette readability. The redesigned reference establishes our target illustration quality, rendering treatment, and expanded creature support.
+
+## 1. Visual identity
+
+Create a distinctive, high-resolution, hand-illustrated 2D RPG art style.
+
+Take broad inspiration from the accessibility and silhouette clarity of classic 2D fantasy MMORPGs, including AdventureQuest Worlds, without reproducing their characters, interface, distinctive proportions, or exact artistic treatment.
+
+Our visual identity should be more mature and grounded.
+
+**Required characteristics:**
+- Crisp, smooth outlines.
+- Expressive but anatomically believable faces.
+- Naturalistic body proportions with deliberate stylization.
+- Sophisticated costume construction.
+- Controlled cel shading with selective soft transitions.
+- A consistent, directional light source.
+- Detailed hair with readable groupings of strands.
+- Strong silhouettes at gameplay scale.
+- Visually diverse character ages, builds, and facial structures.
+- Original character and creature designs.
+
+**Avoid:**
+- Pixel art.
+- Chibi proportions.
+- Oversized cartoon heads.
+- Excessively glossy 3D-style shading.
+- Generic AI-generated fantasy designs.
+- Unnecessary decorative clutter.
+- Inconsistent line thickness.
+- Blurry silhouettes.
+- Direct copies of existing game assets.
+
+The final aesthetic should resemble professionally illustrated 2D game artwork, not low-resolution sprites enlarged with smoothing.
+
+## 2. Rendering and resolution
+
+Use vector paths or sufficiently high-resolution raster artwork.
+
+Recommended character source canvas:
+- 1024 × 1536 pixels, transparent background.
+- Standard gameplay render target: approximately 256 × 384 pixels, adjustable by camera and display scale.
+- Higher resolution can be used for large creatures, bosses, and portraits.
+
+Do not force all characters into the same pixel dimensions.
+
+Maintain a consistent world-unit scale:
+- Standard adult human: approximately 1.75 world units tall.
+- Other humanoid and creature sizes are defined relative to that baseline.
+
+Use anti-aliased rendering and alpha transparency.
+
+Preserve source artwork at high resolution and derive smaller gameplay textures from it.
+
+Use texture atlases and resolution-appropriate filtering to maintain smooth edges.
+
+## 3. Modular humanoid anatomy
+
+Build a shared humanoid rig with:
+
+ROOT
+- Pelvis
+- Spine
+- Chest
+- Neck
+- Head
+- Left/right shoulders
+- Left/right upper arms
+- Left/right forearms
+- Left/right hands
+- Left/right thighs
+- Left/right shins
+- Left/right feet
+
+Include optional bones for:
+- Hair
+- Capes
+- Skirts
+- Coat tails
+- Ears
+- Tails
+- Wings
+- Accessories
+
+Provide humanoid presets:
+- Standard
+- Tall
+- Short
+- Slim
+- Muscular
+- Stocky
+- Elderly
+- Child, with age-appropriate proportions
+
+These presets must use distinct anatomical adjustments rather than simple uniform scaling.
+
+Keep consistent attachment points for compatible clothing and accessories.
+
+## 4. Face and character customization
+
+Implement interchangeable character features:
+
+HEAD
+- Face shape
+- Jaw shape
+- Chin
+- Cheeks
+- Ears
+- Nose
+- Mouth
+
+EYES
+- Shape
+- Size
+- Iris color
+- Eyebrows
+- Eyelids
+- Optional expression and gaze controls
+
+HAIR
+- Short and long
+- Straight, wavy, curly
+- Braids
+- Ponytails
+- Buns
+- Shaved and bald
+- Receding and thinning
+- Different hairlines
+
+BODY
+- Height
+- Build
+- Shoulder width
+- Torso length
+- Limb proportions
+- Skin tone
+
+CLOTHING
+- Shirts
+- Tunics
+- Dresses
+- Coats
+- Robes
+- Pants
+- Skirts
+- Armor
+- Gloves
+- Boots
+- Capes
+
+Every component must include attachment metadata, compatibility rules, and correct front-to-back rendering order.
+
+Do not rely solely on recoloring the same face or body to create variation.
+
+## 5. Creature generation system
+
+The creature system must support original organisms that share the humanoid characters' linework, shading, lighting, color treatment, and level of detail.
+
+Do NOT use the human skeleton for all creatures.
+
+Create multiple reusable rig templates:
+
+**Quadruped**
+- Wolves
+- Hounds
+- Feline predators
+- Deer-like creatures
+- Large beasts
+
+**Bipedal nonhuman**
+- Goblin-like creatures
+- Reptilian creatures
+- Anthropomorphic beasts
+- Humanoid monsters
+
+**Avian and winged**
+- Birds
+- Bat-like creatures
+- Winged monsters
+- Fantasy aerial creatures
+
+**Serpentine**
+- Snakes
+- Worms
+- Tentacled creatures
+
+**Arthropod**
+- Insects
+- Spiders
+- Multi-legged monsters
+
+**Amorphous**
+- Slimes
+- Living shadows
+- Spectral entities
+- Shapeshifting creatures
+
+**Unique boss rigs**
+- Custom anatomy
+- Multiple heads
+- Unusual limb arrangements
+- Multi-stage animation systems
+
+Each creature must have an anatomy profile, joint hierarchy, attachment points, collision shape, movement type, and supported animations.
+
+Support hybrid anatomies where necessary, such as winged quadrupeds and multi-armed bipeds.
+
+## 6. Creature design rules
+
+Creature designs should feel like they exist in the same illustrated world as the humanoid characters.
+
+Use:
+- Believable weight distribution.
+- Coherent anatomy, even when fantastical.
+- Clearly defined body mass.
+- Readable joints.
+- Consistent material rendering.
+- Distinctive silhouettes.
+- Restrained visual effects.
+- Varied scale and threat level.
+
+Create visual categories:
+- Harmless wildlife
+- Domestic animals
+- Hostile wildlife
+- Intelligent nonhuman races
+- Supernatural entities
+- Elite monsters
+- Boss creatures
+
+Creatures should not automatically be cute, heroic, or grotesque.
+
+Support worn, elderly, injured, clean, and unusual variants when appropriate to the game's world.
+
+## 7. Animation architecture
+
+Prefer a hybrid animation pipeline:
+
+1. Skeletal animation for repeatable character movement.
+2. Mesh deformation for flexible clothing, tails, and soft bodies.
+3. Frame-by-frame illustrated replacement sprites for complex actions or facial expressions.
+4. Secondary animation for hair, fabric, wings, and accessories.
+
+Humanoid animation states:
+- Idle
+- Walk
+- Run
+- Jump
+- Turn
+- Interact
+- Attack
+- Defend
+- Hurt
+- Death
+- Sit
+
+Creature animations vary by anatomy.
+
+Quadrupeds require proper walk, trot, and gallop cycles.
+
+Winged creatures require wing extension, flapping, gliding, and landing.
+
+Serpentine creatures require procedural spine deformation.
+
+Amorphous creatures require squash, stretch, and shape deformation.
+
+Do not require every creature to implement an animation that is anatomically inappropriate.
+
+Maintain grounded foot contact and sensible body movement.
+
+Provide animation blending and state transitions.
+
+## 8. Directions and viewpoint
+
+Support:
+- Front
+- Back
+- Left
+- Right
+- Three-quarter front
+- Three-quarter back
+
+Where practical, use mirrored assets only when asymmetry does not matter.
+
+For asymmetric clothing, weapons, hair, or anatomy, create dedicated directional artwork.
+
+Rigging alone cannot create convincing views of artwork that was only drawn from one angle.
+
+## 9. Procedural generation
+
+Build data-driven character and creature factories.
+
+Generation must support:
+- Deterministic seeds
+- Weighted feature selection
+- Compatibility constraints
+- Body variation
+- Color variation
+- Material variation
+- Species-specific anatomy
+- Creature archetypes
+- Custom user-authored definitions
+
+The generator must produce compatible combinations rather than randomly attaching unrelated body parts.
+
+A quadruped must use quadruped-compatible legs, skeletal structure, and movement.
+
+A winged creature must use a rig and animations that support wings.
+
+Support handcrafted creatures that bypass procedural part selection while retaining the same renderer and animation architecture.
+
+## 10. Technical implementation
+
+Adapt the implementation to the actual existing game engine and language.
+
+If no engine has been selected, provide a modular TypeScript architecture and a browser-based preview using Canvas or WebGL.
+
+Core systems:
+- AssetRegistry
+- MaterialPalette
+- RigDefinition
+- SkeletonInstance
+- BodyPartDefinition
+- LayerComposer
+- CharacterFactory
+- CreatureFactory
+- AnimationController
+- AnimationStateMachine
+- CustomizationEditor
+- AssetValidator
+- SpriteExporter
+
+Use explicit type definitions.
+
+Separate rendering, asset authoring, animation, procedural generation, and character metadata.
+
+If implementing this with a skeletal animation library, use the library's real supported features rather than inventing API calls.
+
+## 11. Asset pipeline
+
+For every new humanoid or creature:
+
+1. Establish the anatomy and silhouette.
+2. Produce the concept artwork.
+3. Create the necessary directional views.
+4. Separate the art into logical layers.
+5. Identify joints and attachment anchors.
+6. Build or assign the correct rig.
+7. Create and validate animations.
+8. Integrate with the renderer.
+9. Test against other characters at gameplay scale.
+10. Export with metadata.
+
+If the environment has no image-generation or illustration capability, do not pretend high-quality art can be produced solely from character metadata.
+
+Instead, provide exact asset specifications, generation prompts, and import tooling for art created externally.
+
+Generated concept images are not automatically production-ready rigged assets.
+
+## 12. Validation
+
+Create automated checks for:
+- Missing assets
+- Invalid rig references
+- Duplicate part identifiers
+- Unsupported attachment combinations
+- Incorrect pivots
+- Missing animation states
+- Inconsistent source resolutions
+- Texture atlas bounds
+- Invalid transparency or alpha
+- Incompatible body and outfit variants
+
+Add visual tests for:
+- Hair and head alignment
+- Clothing overlap
+- Foot sliding
+- Direction changes
+- Scale consistency
+- Creature joint bending
+- Animation looping
+
+## 13. Deliverables
+
+Build a working vertical slice demonstrating:
+
+1. One fully rigged and customizable humanoid.
+2. Three distinct humanoid silhouettes.
+3. One quadruped creature with a correct movement cycle.
+4. One nonstandard creature using a different rig.
+5. A viewer that can switch animations and directions.
+6. A part-selection customization panel.
+7. JSON definitions for the characters and creatures.
+8. Exportable transparent assets.
+
+Do not begin by generating hundreds of characters.
+
+Build the shared rendering, rigging, attachment, and animation systems first.
+
+Then create a small asset library and verify that customization works correctly.
+
+Finally, expand the library using reusable art and validated rigs.
+
+## Final requirement
+
+Every character and creature must belong to the same coherent 2D art universe.
+
+Maintain consistent:
+- Outline treatment
+- Light direction
+- Shadow softness
+- Material rendering
+- Color harmony
+- Visual detail density
+- World scale
+- Overall art quality
+
+Use the provided reference images as a visual direction, not as assets to replicate pixel for pixel.
