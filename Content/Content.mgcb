@@ -11980,6 +11980,8 @@
 /processorParam:Version=3.8.5.1
 /build:Rooms/Life/sparkle.png
 
+#------------ Characters/Parts: written by tools/import_parts.py ------------#
+
 #begin Characters/Parts/armor-0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -12099,3 +12101,5 @@
 
 #begin Characters/Parts/parts.json
 /copy:Characters/Parts/parts.json
+
+#---------------------------- end Characters/Parts ----------------------------#
