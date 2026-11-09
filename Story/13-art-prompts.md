@@ -162,6 +162,60 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 > Use the attached image ONLY as a reference for the art style (line weight, cel shading, colouring, light) and for scale (a standard adult is that tall). Draw a new creature, full body, facing right, on a solid black background, in exactly that style. The creature:
 
+### 2.4 The vector look
+
+The owner's call (2026-11-08): the parts are drawn in ChatGPT as clean vector-style art, flat colours, one clean outline and hard-edged shading, so each one is right in one go and traces cleanly in `tools/vectorize.py`. The Art Prompts page's **Vector look** switch (on by default) wraps every part's prompt in the two blocks below, so each picture is one message: attach the picture the card names and paste. ChatGPT makes PNGs, not vector files; the vector shapes are `tools/vectorize.py`'s, which also brings the parts painted before this into the same look.
+
+**Before every card**
+
+> VECTOR LOOK. Draw what you add as clean vector-style 2D game art, as if it were made in a vector illustration program: every shape a closed area of flat colour with crisp, smooth edges; one clean outline round every shape, deep brown, almost black, never pure black, heavier on the outer silhouette (about 3 px) and lighter inside (about 1.5 px), in smooth, confident curves with no sketchy or doubled lines; cel shading in flat shapes only, each material with its base colour, one or two hard-edged shadow shapes and at most one small flat highlight, lit from the upper left; three or four flat tones per material, in bright, rich, harmonious colours; details such as belts, buckles, seams and trims as clear flat pieces that still read when small. No gradients, no airbrushing, no soft or blurred shadows, no texture, no noise, no brush strokes. Wherever the instructions below say to keep the base's art style, keep its line positions, proportions, light and colours, and draw in this vector look. Everything else in the instructions below holds exactly.
+
+**After every card**
+
+> Before you send it, check: nothing outside the part moved or changed size, every new edge is crisp, there are no gradients or textures, and the background is still flat black. Fix anything that fails before you send it.
+
+**The vector setup brief.** Optional, since every wrapped card is complete on its own: paste it into a ChatGPT Project's instructions, with the four bases uploaded, to keep a run of parts consistent.
+
+> I'm making the characters for an original 2D fantasy game. Every image you make in this chat is one part of a character, painted as an EDIT of a base image I attach, in a clean VECTOR art style. Read this whole brief first and follow it for every image in this chat. Reply "Ready" and wait for my first request.
+>
+> THE LOOK: VECTOR GAME ART
+> Draw everything as if it were made in a vector illustration program for a 2D game:
+> - Every shape is a closed area of FLAT colour with crisp, smooth edges. No gradients, no airbrushing, no soft or blurred shadows, no texture, no noise, no paper grain, no painterly brush strokes.
+> - One clean outline round every shape, the same colour everywhere: deep brown, almost black, never pure black. Heavier on the outer silhouette (about 3 px at this canvas size), lighter inside (about 1.5 px). Smooth, confident curves; no sketchy, doubled or broken lines.
+> - Shading is cel shading in flat shapes: each material gets its base colour, one or two hard-edged shadow shapes, and at most one small flat highlight shape. Light comes from the upper left; shadows fall to the lower right.
+> - Few colours: three or four flat tones per material. Colours are bright and rich but harmonious, for a sunny, magical fantasy world (blue and pink skies, navy and gold, warm stone). Keep the strongest colours for magic, gold and gems.
+> - Faces are clean, semi-realistic anime: expressive eyes that aren't oversized, drawn as flat shapes with one white highlight each, a simple defined nose, a small mouth.
+> - Details stay readable when small: belts, buckles, seams and trims are clear flat pieces, not fine scribbles.
+>
+> THE BASES
+> I'll attach one of four base images: base-male.png, base-female.png, or their blank versions base-male-blank.png and base-female-blank.png (the same figures with the facial features taken off). Each is 1024 x 1536: a bald, tan-skinned anime figure in a three-quarter view facing right, fists clenched at its sides, in plain dark underwear, on a solid black background. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel.
+>
+> THE SLOTS (each image is exactly one part)
+> 1. ARMOR is the body from the jawline down: neck, shoulders, chest, arms, hands, waist, legs and feet. It replaces the skin and underwear below the jaw with the outfit: collar at the neck, gloves or bare fists, boots or shoes. Where the outfit leaves skin showing, keep the base's skin. It never touches the head.
+> 2. HAIR or HELM is what sits on the head, one slot for both, painted on the blank head. A helm replaces the hair entirely; if a helm should show hair, paint that hair in as part of the helm. Either may hang over the neck and shoulders. Wherever it leaves the face open, keep the blank face exactly as it is.
+> 3. CAPE is the back: cloaks, capes, packs, quivers, tails. Paint it only in the black space behind and around the figure, never over the body, arms or head. The figure's back faces the LEFT of the picture, so a cape shows past the left edge of the shoulders, back and legs, and between and below the legs.
+> 4. WEAPON is what the near hand holds: the lit fist on the LEFT of the picture. The grip passes through the curled fingers, which stay exactly as they are; the weapon shows above and below the fist and stays inside the canvas.
+> 5. FACE is only the features painted on the blank head: eyes, brows, nose, mouth, marks and scars, and any beard or moustache. The head never changes shape, and no hair goes on it (hair is its own part). Pointed ears or horns only when I describe them.
+>
+> SHEETS
+> Sometimes I'll attach a sheet instead of a base, its cells divided by thin grey lines:
+> - FACE SHEET: eight blank heads, 4 across and 2 down. Paint one face per cell in the order I list them (1-4 along the top row, 5-8 along the bottom).
+> - HAIR SHEET: four blank figures from the head to the hips, side by side. One hairstyle per column, numbered 1-4 from the left.
+> - ARMOR SHEET: four full figures side by side, 1536 x 1024. One outfit per column, numbered 1-4 from the left.
+> Keep every figure exactly where it is in its cell, keep each part inside its own cell, and keep the grey lines and the black.
+>
+> THE RULES FOR EVERY IMAGE
+> - EDIT the attached image; never redraw it from scratch. Change only the slot I ask for and keep every other pixel as it is.
+> - Same canvas size, same flat pure-black background, same pose, same proportions, same position and size in the frame. Don't crop, zoom, shift, rotate or flip anything.
+> - Where a request says "the same art style as the base", read it as: the base's line positions, proportions, light and colours, drawn in the vector look above.
+> - No text, letters, numbers, labels, signature or watermark. No ground, floor shadow, frame or border. No extra objects or figures. No glow spilling onto the background unless I ask for it.
+> - Original designs only: nothing copied from an existing game, film, comic or brand.
+> - Give me one PNG at the same size as the image I attached.
+>
+> Before you send each image, check it: the figure hasn't moved or changed size, only the requested slot changed, every edge is crisp, there are no gradients or textures, and the background is still flat black. If any check fails, fix it before sending.
+>
+> Each request will name the slot and describe the part. If a request seems to break these rules, follow these rules.
+
 ## 3. Base
 
 ### 3.1 The mannequin
