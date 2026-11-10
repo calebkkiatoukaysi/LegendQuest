@@ -14,9 +14,10 @@ The parts follow the Art Guide (§1 visual identity, §2 resolution, §11 prompt
 | --- | --- | --- |
 | **armor** | The whole outfit, which is the visible body below the neck: clothes, boots, gloves, belts, bags. For the people who aren't flesh (the Hollowed, the constructs, the drowned, Vorlaith) it's the body itself | `armor-…` |
 | **cape** | What hangs behind the body: cloaks, capes, a pedlar's pack, and the Emberkin's and Wildkin's tails | `cape-…` |
-| **helm** | What sits over the head: helms, hats, hoods, crowns, circlets | `helm-…` |
+| **helm** | What sits over the head: helms, hats, hoods, crowns, circlets; or a hairstyle from the shared library (§4.8), in the same slot | `helm-…`, `hair-…` |
+| **extras** | Beards, jewellery, scars and a people's ears and horns, any number, shown with any hair or helm (§4.10) | `beard-…`, `jewel-…`, `skin-…`, `ears-…`, `horns-…` |
 | **weapon** | What the hands hold: one weapon or prop, or a pair drawn as one piece (a sword and shield, two knives) | `weapon-…` |
-| **face** | The head: the face, the hair, the beard, and the peoples' ears and horns. The only thing unique to a person | `face-…` |
+| **face** | The features on the bald head: one of ten men's or ten women's faces that everyone shares, recoloured for each character (§4) | `face-…` |
 | **morph** | A height and a width factor on the whole figure. It's how the builds and every NPC's size are made | numbers in §7 |
 
 Bare skin on an armor keeps the base's warm tan tone, and the game tints it to match the face. Boots, gloves, rings and amulets in the item catalog change a character's numbers, not their picture; the armor already shows boots and gloves. The game draws back to front: cape, armor, face, helm, weapon (Emberkin horns and Wildkin ears draw over a hood, `03-art-overhaul.md` §3.6).
@@ -66,21 +67,21 @@ Paste this second.
 
 ### 2.3 How ChatGPT uses the bases
 
-The bases are the owner's own pair (2026-11-06): a cel-shaded anime man and woman with tan skin and blue eyes. Both are bald and stand in a three-quarter view facing right with fists clenched, in dark underwear, on a solid black background. They are cut into `tools/source/characters/base-male.png` and `base-female.png` (1024 by 1536). Every part is an edit of one of them, so the base image itself sets the style, and these rules replace the style block for parts.
+The bases are the owner's own pair of jointed mannequins (2026-11-09; the first pair, of 2026-11-06, is in the archive): a cel-shaded man and woman with tan skin and featureless faces, bald, in dark underwear, on a solid black background. Each is built like an artist's jointed mannequin, with a round ball and a thin seam at every joint (the shoulders, elbows, wrists, knees and ankles, and the pelvis's curved line across the top of each thigh), so the game can turn each piece about its joint and animate them (`tools/rig/skeleton.py` and `clips.py`). They stand in a three-quarter view facing right, the arms held a little away from the body with the fists closed, the legs apart in an easy stride, the far arm in deep shadow. `tools/split_bases.py` stood them, from one picture of the two side by side, on their own 1024 by 1536 canvases as `tools/source/characters/base-male.png` and `base-female.png`. Every part is an edit of one of them, so the base image itself sets the style, and these rules replace the style block for parts.
 
 The owner's slot map (2026-11-06, the head fixed 2026-11-08): **armor is the body all the way up to the neck, the head is the mannequin's own and never changes shape, and the cape is the back.** The face is only the features painted on that head (eyes, brows, nose, mouth, marks, facial hair). **Hair and helm are one slot**, what's on the head: a hairstyle is a piece in it just as a helm is, and a helm that wants hair showing has it painted in. The weapon is what the near hand holds. The game stacks the parts in this order, back to front: cape, armor, head, face, hair or helm, weapon.
 
-Faces, hairs and helms are painted on the **blank bases** (`base-male-blank` and `base-female-blank`, §3): the same figures with the facial features taken off, so every face lands on the same head and every hair and helm fits it.
+Faces, hairs and helms are painted on the **blank bases** (`base-male-blank` and `base-female-blank`, §3), so every face lands on the same head and every hair and helm fits it. The jointed mannequins are featureless already, so each blank base is the same picture as its base (`tools/split_bases.py` writes both).
 
 **Where the regions fall on the bases.** The values are approximate pixels, measured on the 1024 by 1536 canvas. The importer uses them; ChatGPT gets the same regions in words.
 
 | Landmark | `base-male` | `base-female` |
 |---|---|---|
-| Crown of the head | y 116 | y 151 |
-| Jawline, where the head meets the neck (the seam between head and armor): a diagonal from under the ear to the chin | x 510, y 250 to x 595, y 293 | x 490, y 272 to x 578, y 325 |
-| Neck meets the shoulders | y 330 | y 365 |
-| Near fist (lit, on the left of the picture) | x 280–400, y 760–860 | x 305–420, y 760–860 |
-| Far fist (in shadow, on the right) | x 650–745, y 760–850 | x 640–730, y 760–850 |
+| Crown of the head | y 112 | y 145 |
+| Jawline, where the head meets the neck (the seam between head and armor): a diagonal from under the ear to the chin | x 490, y 262 to x 566, y 304 | x 482, y 292 to x 553, y 330 |
+| Neck meets the shoulders | y 335 | y 370 |
+| Near fist (lit, on the left of the picture) | x 256–373, y 752–869 | x 270–368, y 756–872 |
+| Far fist (in shadow, on the right) | x 676–769, y 748–863 | x 669–753, y 766–869 |
 | Soles of the feet | y 1466 | y 1466 |
 
 The back of the figure faces the left of the picture. A cape therefore shows past the figure's left edge, above the shoulders behind the neck, and between and below the legs.
@@ -91,24 +92,27 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 > I'm making the characters for a 2D fantasy game, and I need you to paint their parts as edits of a base character. Please read this whole brief before the first image, and follow it for every image in this chat.
 >
-> THE BASES. I'll attach one of two base characters, base-male.png or base-female.png, or their blank versions, base-male-blank.png and base-female-blank.png, the same figures with the facial features taken off. Each is 1024 × 1536 pixels: a bald, tan-skinned, cel-shaded anime-style figure with blue eyes. It stands in a three-quarter view facing right with both fists clenched at its sides, wears plain dark underwear, and is on a solid black background. Every character in the game is built on these exact two figures. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel. Anything that shifts, even a little, shows up as a seam.
+> THE BASES. I'll attach one of two base characters, base-male.png or base-female.png, or their blank versions, base-male-blank.png and base-female-blank.png, the same featureless figures. Each is 1024 × 1536 pixels: a bald, tan-skinned, cel-shaded jointed mannequin with a featureless face, a round ball and a thin seam at each joint (shoulders, elbows, wrists, knees, ankles, and the curved line across the top of each thigh). It stands in a three-quarter view facing right, its arms held a little away from its body with the fists closed, its legs apart in an easy stride, wears plain dark underwear, and is on a solid black background. The game animates it by turning each piece about its joint, so keep the gap of black between each arm and the body, and between the legs, as it is. Every character in the game is built on these exact two figures. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel. Anything that shifts, even a little, shows up as a seam.
 >
 > THE SLOTS. Each image you make is exactly one part, in one slot:
 > 1. ARMOR is the body, everything from the jawline down: the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet. An armor replaces all the skin and the underwear below the jaw with the outfit. Its collar sits at the neck, the fists get gloves or stay bare, and the feet get boots or shoes. It never touches the head.
-> 2. HAIR OR HELM is what's on the head: one slot for both, painted on the blank head. A HAIR is a hairstyle; a HELM is any helmet, hood, hat, crown, circlet or mask. Either may hang down over the neck and shoulders (long hair, a hood's drape, a mail coif, a plume, a veil), because the game draws it on top of the armor. A helm replaces the hair entirely, so if a helm should show hair (under a hat, round a circlet), paint that hair in as part of the helm. Where either leaves the face open, keep the blank face exactly as it is, because the game puts each character's own face there.
+> 2. HAIR OR HELM is what's on the head: one slot for both, painted on the blank head. A HAIR is a hairstyle, painted a plain mid brown (the game recolours it), shared by many characters, men and women alike; a HELM is any helmet, hood, hat, crown, circlet or mask. Either may hang down over the neck and shoulders (long hair, a hood's drape, a mail coif, a plume, a veil), because the game draws it on top of the armor. A helm replaces the hair entirely, so if a helm should show hair (under a hat, round a circlet), paint that hair in as part of the helm. Where either leaves the face open, keep the blank face exactly as it is, because the game puts each character's own face there. Beards, jewellery, scars, pointed ears, horns and beast ears are never part of a hair or a helm: they're EXTRAS (6).
 > 3. CAPE is the back: anything that hangs behind the body from the shoulders or the waist, such as a cape, a cloak, wings, a tail, a pack or a quiver. The game draws it behind the body. So paint it only in the black space behind and around the figure, and never over the body, the arms or the head. In this pose the figure's back is toward the LEFT of the picture. A cape therefore shows past the left edge of the shoulders, back and legs, above the shoulders behind the neck, and between and below the legs.
 > 4. WEAPON is what the near hand holds. The near hand is the lit fist on the LEFT of the picture; the fist on the right, in shadow, is the far hand. The grip passes through the near fist, and the curled fingers stay exactly as they are, closed over it. The weapon shows above and below the fist. A shield or a second item goes on the far arm only when I ask for it.
-> 5. FACE is only the features, painted on the blank head: eyes, eyebrows, nose, mouth, marks and scars, and any beard or moustache. The head itself never changes: keep its outline, size, angle and position, the skull and the ears, and paint no hair on it (the hair is a part of its own). Only pointed ears or horns, when I describe them, may change the ears or rise from the head. The neck belongs to the armor, so leave the neck and everything below it exactly as they are, except a beard falling past the jaw.
+> 5. FACE is only the features, painted on the blank head: eyes, eyebrows, nose and mouth, clean-shaven. The faces are shared, ten men's and ten women's, each worn by many characters, so paint the skin in the base's own warm tan and the eyes and eyebrows a mid brown: the game recolours the skin, the eyes and the hair for each character. The head itself never changes: keep its outline, size, angle and position, the skull and the ears, and paint no hair on it (the hair is a part of its own). Pointed ears, horns and beast ears go with the hair or the helm, never the face. The neck belongs to the armor, so leave the neck and everything below it exactly as they are.
+> 6. EXTRA is one thing on the head that isn't the face or the hair, painted on the blank head on its own: a beard or moustache (plain mid brown), a piece of jewellery (an earring, a nose ring, spectacles, an eyepatch), a skin mark (freckles, a scar, a tattoo) or a people's ears or horns. Paint only that thing, exactly where it sits on the head, and change nothing else. The game layers it over the face (or, ears and horns, over the hair).
 >
-> FACE SHEETS. Sometimes I'll attach a face sheet instead of a base: eight copies of the blank head and shoulders in a grid of four columns and two rows, divided by thin grey lines. Then paint one face per cell, in the order I list them: the features only, no hair, every head exactly where it is in its cell, as in a single edit.
+> FACE SHEETS. Sometimes I'll attach a face sheet instead of a base: ten copies of the blank head and shoulders in a grid of five columns and two rows, divided by thin grey lines. Then paint one face per cell, in the order I list them: the features only, no hair, every head exactly where it is in its cell, as in a single edit.
 >
-> HAIR SHEETS. Sometimes I'll attach a hair sheet: four copies of the blank figure from the head to the hips, side by side in columns divided by thin grey lines. Then give each head the hairstyle I list for its column, keep every head and face exactly where they are, as in a single edit, and keep each hairstyle inside its own column.
+> HAIR SHEETS. Sometimes I'll attach a hair sheet: eight columns divided by thin grey lines, the blank man from the head to the hips at the top of each and the blank woman at the bottom. Then give both heads in each column the hairstyle I list for it, the same style on each, painted a plain mid brown; keep every head and face exactly where they are, as in a single edit, and keep each hairstyle inside its own cell.
+>
+> EXTRA SHEETS. Sometimes I'll attach an extra sheet: six columns divided by thin grey lines, each the blank man's head and chest above and the blank woman's below (or, for beards, twelve cells all of the man). Then paint the one extra I list for each column (or cell) on both heads, and nothing else.
 >
 > ARMOR SHEETS. Sometimes I'll attach an armor sheet: four copies of the base standing full length, side by side in columns divided by thin grey lines. Then dress each figure in the outfit I list for its column, and keep every figure, its bald head and its pose exactly where they are, as in a single edit. Clothes stay inside their own column.
 >
 > HELM, CAPE AND WEAPON SHEETS. Sometimes I'll attach a helm sheet (four blank figures from the top of the head to the hips), a cape sheet (four full figures, a little smaller, side by side) or a weapon sheet (four columns of two floating fists, the rest of the figure left out). Then give each column the helm, the cape or the held item I list for it, keep every figure and fist exactly where it is, as in a single edit, and keep each part inside its own column. A held item is gripped in the closed fist as it is, with no pose.
 >
-> The game layers them back to front: cape, armor, face, hair or helm, weapon.
+> The game layers them back to front: cape, armor, face, extras (beards, jewellery, scars), hair or helm, ears and horns, weapon.
 >
 > THE RULES FOR EVERY IMAGE:
 > - Edit the attached image; never redraw it from scratch. Change only the slot I ask for, and keep every other pixel exactly as it is in the base.
@@ -122,11 +126,11 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 **Every edit**
 
-> Edit the attached image. It is a base character for a 2D game. The game stacks parts painted on it like transparent sheets, so your edit has to line up with it pixel for pixel. Keep the same 1024 × 1536 canvas, the same solid black background, the same pose with clenched fists, the same body proportions, the same position and size in the frame, and the same three-quarter view facing right. Keep exactly the same art style: crisp dark outlines, flat cel shading, the same light from the upper left, the same colouring. Change only the slot named below, and keep every other pixel exactly as it is. Don't crop, zoom, shift, rotate or flip anything. No text, no ground, no shadow on the floor, no extra objects or people.
+> Edit the attached image. It is a base character for a 2D game. The game stacks parts painted on it like transparent sheets, so your edit has to line up with it pixel for pixel. Keep the same 1024 × 1536 canvas, the same solid black background, the same pose with the arms a little away from the body and the fists closed, the same body proportions, the same position and size in the frame, and the same three-quarter view facing right. Keep exactly the same art style: crisp dark outlines, flat cel shading, the same light from the upper left, the same colouring. Change only the slot named below, and keep every other pixel exactly as it is. Don't crop, zoom, shift, rotate or flip anything. No text, no ground, no shadow on the floor, no extra objects or people.
 
 **Armor**
 
-> This is an ARMOR, which is the body from the jawline down. Replace all the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit described below. Fit it to this exact body and pose: its collar at the neck, gloves or bare hands on the same clenched fists, boots or shoes on the same feet. Where the outfit leaves skin showing, keep the base's tan skin there. The outline can grow where the clothes are loose (sleeves, skirts, coat tails, pauldrons), but the arms, legs, hands and feet stay exactly where they are. Don't touch the head above the jawline: keep the same bald head and the same face. The outfit:
+> This is an ARMOR, which is the body from the jawline down. Replace all the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit described below. Fit it to this exact body and pose: its collar at the neck, gloves or bare hands on the same closed fists, boots or shoes on the same feet. The game animates the figure by turning each limb at its joint, so keep the gap of black between each arm and the body, and between the legs, as it is: a sleeve, a glove and a boot stay on their own limb. Where the outfit leaves skin showing, keep the base's tan skin there. The outline can grow where the clothes are loose (sleeves, skirts, coat tails, pauldrons), but the arms, legs, hands and feet stay exactly where they are. Don't touch the head above the jawline: keep the same bald head and the same face. The outfit:
 
 **Helm**
 
@@ -138,11 +142,19 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 **Hair**
 
-> This is a HAIR, which goes in the head's one slot with the helms. Give the blank bald head the hairstyle described below, fitted to its exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Don't change the body or the underwear. The hair:
+> This is a HAIR, which goes in the head's one slot with the helms. Give the blank bald head the hairstyle described below, fitted to its exact size, angle and position, and paint it a plain mid brown (the game recolours it for each character who wears it). Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Don't change the body or the underwear. The hair:
 
 **Hair sheet**
 
-> This is a HAIR SHEET: four copies of the same blank base character from the head to the hips, side by side in four equal columns divided by thin grey lines, on a solid black background. Give each head a different hairstyle, following the numbered list below; the figures are numbered 1 to 4 from left to right. Fit each to its head's exact size, angle and position, and keep every head, face and body exactly where it is, as in a single edit. Long hair may fall over the shoulders and down the back, but keep each hairstyle inside its own column, and keep the grey lines and the black exactly as they are.
+> This is a HAIR SHEET: eight equal columns divided by thin grey lines, on a solid black background, each column the same blank man from the head to the hips in its top cell and the same blank woman in its bottom cell. Give both heads in each column the hairstyle listed for it, the same style on the man and on the woman, following the numbered list below; the columns are numbered 1 to 8 from left to right. Paint every style a plain mid brown. Fit each to its head's exact size, angle and position, and keep every head, face and body exactly where it is, as in a single edit. Long hair may fall over the shoulders and down the back, but keep each hairstyle inside its own cell, and keep the grey lines and the black exactly as they are.
+
+**Extra**
+
+> This is an EXTRA: one thing on the head that isn't the face or the hair. Paint only the thing described below on the blank head, exactly where it sits (a beard on the jaw, an earring at the ear, spectacles on the nose, a scar on the skin, ears or horns rising from the head), fitted to the head's exact size, angle and position. Change nothing else: keep the blank face, the head's outline, the neck and the body exactly as they are. The extra:
+
+**Extra sheet**
+
+> This is an EXTRA SHEET: six equal columns divided by thin grey lines, on a solid black background, each column the same blank man's head, neck and chest in its top cell and the same blank woman's in its bottom cell (a beard sheet is twelve cells, all of the man). Paint the one extra listed for each column on both heads (on a beard sheet, the one listed for each cell, numbered 1 to 6 along the top row and 7 to 12 along the bottom), exactly where it sits, and nothing else. Keep every head, face and body exactly where it is, as in a single edit, keep each extra inside its own cell, and keep the grey lines and the black exactly as they are.
 
 **Weapon**
 
@@ -150,15 +162,15 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 **Face**
 
-> This is a FACE, which is only the features. Paint the features described below onto the blank head: the eyes, eyebrows, nose and mouth, any marks or scars, and any beard or moustache. The head never changes: keep its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head; the hair is a part of its own. Paint the skin in the tone the description gives; the game tints the neck and body to match. The neck belongs to the armor, so leave the neck, the body and the underwear exactly as they are, except a beard falling past the jaw. The face:
+> This is a FACE, which is only the features. Paint the features described below onto the blank head: the eyes, eyebrows, nose and mouth, clean-shaven (a beard is an extra). The head never changes: keep its outline, size, angle and position, the skull and the ears. Paint no hair on the head; the hair is a part of its own. This face is shared by many characters, so paint the skin in the base's own warm tan, the eyes and eyebrows a mid brown; the game recolours them for each. The neck belongs to the armor, so leave the neck, the body and the underwear exactly as they are. The face:
 
 **Face sheet**
 
-> This is a FACE SHEET: eight copies of the same blank base character's head and shoulders, in a grid of four columns and two rows of equal cells divided by thin grey lines, on a solid black background. Paint a different face onto the blank head in each cell, following the numbered list below. The cells are numbered left to right, 1 to 4 along the top row and 5 to 8 along the bottom row. In every cell, keep the head exactly where it is, at the same size, angle and position, with the same head outline, skull and ears, in a three-quarter view facing right. Paint only the features (eyes, eyebrows, nose, mouth, marks, and any beard or moustache), and no hair: the hair is a part of its own. Keep the grey lines, the black and the shoulders exactly as they are.
+> This is a FACE SHEET: ten copies of the same blank base character's head and shoulders, in a grid of five columns and two rows of equal cells divided by thin grey lines, on a solid black background. Paint a different face onto the blank head in each cell, following the numbered list below. The cells are numbered left to right, 1 to 5 along the top row and 6 to 10 along the bottom row. In every cell, keep the head exactly where it is, at the same size, angle and position, with the same head outline, skull and ears, in a three-quarter view facing right. Paint only the features (eyes, eyebrows, nose and mouth), clean-shaven, and no hair: the hair and any beard are parts of their own. Make the ten faces clearly different people: different shapes, ages and characters. Paint every one with the skin in the base's own warm tan and the eyes and brows a mid brown, since the game recolours them. Keep the grey lines, the black and the shoulders exactly as they are.
 
 **Armor sheet**
 
-> This is an ARMOR SHEET: four copies of the same bald base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Dress each figure in a different outfit, following the numbered list below; the figures are numbered 1 to 4 from left to right. Each outfit is the body from the jawline down: replace the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit, fitted to that exact body and pose, its collar at the neck, gloves or bare hands on the same clenched fists, boots or shoes on the same feet. Where an outfit leaves skin showing, keep the base's tan skin there. In every column keep the figure exactly where it is, at the same size and in the same pose, with the same bald head and the same face, untouched above the jawline. Loose clothes (sleeves, skirts, coat tails, pauldrons) may widen the outline, but they must stay inside their own column and never cross a grey line; the arms, legs, hands and feet stay exactly where they are. Make each outfit its own: don't let colours or pieces of one leak into another. Use exactly the base's art style: crisp dark outlines, flat cel shading, light from the upper left. Don't move, resize, crop or flip any figure; keep the grey lines and the black background; no text, numbers or labels anywhere. Give it back as one PNG, 1536 × 1024. The outfits:
+> This is an ARMOR SHEET: four copies of the same bald base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Dress each figure in a different outfit, following the numbered list below; the figures are numbered 1 to 4 from left to right. Each outfit is the body from the jawline down: replace the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit, fitted to that exact body and pose, its collar at the neck, gloves or bare hands on the same closed fists, boots or shoes on the same feet. The game animates the figures by turning each limb at its joint, so keep the gap of black between each arm and the body, and between the legs, as it is. Where an outfit leaves skin showing, keep the base's tan skin there. In every column keep the figure exactly where it is, at the same size and in the same pose, with the same bald head and the same face, untouched above the jawline. Loose clothes (sleeves, skirts, coat tails, pauldrons) may widen the outline, but they must stay inside their own column and never cross a grey line; the arms, legs, hands and feet stay exactly where they are. Make each outfit its own: don't let colours or pieces of one leak into another. Use exactly the base's art style: crisp dark outlines, flat cel shading, light from the upper left. Don't move, resize, crop or flip any figure; keep the grey lines and the black background; no text, numbers or labels anywhere. Give it back as one PNG, 1536 × 1024. The outfits:
 
 **Helm sheet**
 
@@ -170,7 +182,7 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 **Weapon sheet**
 
-> This is a WEAPON SHEET: four columns divided by thin grey lines, on a solid black background. Each column shows the same two clenched fists, each with a short stub of forearm, floating where a character's hands are; the rest of the figure is left out on purpose. The lit fist on the LEFT of each column is the near hand; the shadowed fist on the RIGHT is the far hand. Give each column a different weapon or held item, following the numbered list below; the columns are numbered 1 to 4 from left to right. Hold every item the way a 2D game character holds one, with no pose at all: the closed fist grips it as it is, the grip passing straight through the curled fingers, which stay exactly as they are, and the item shows above and below the fist. A weapon is held low with its point or head forward, toward the right, unless the list says otherwise. A carried thing (a basket, a pot, a lantern) hangs straight down from the fist by its handle. A shield is worn on the far forearm, its middle just above the far fist. The far fist holds something only when the list says so. Don't draw arms, a body or a head, and don't move, turn, open or redraw the fists. Keep each item whole and inside its own column, never across a grey line, and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
+> This is a WEAPON SHEET: four columns divided by thin grey lines, on a solid black background. Each column shows the same two closed fists, each with a short stub of forearm, floating where a character's hands are; the rest of the figure is left out on purpose. The lit fist on the LEFT of each column is the near hand; the shadowed fist on the RIGHT is the far hand. Give each column a different weapon or held item, following the numbered list below; the columns are numbered 1 to 4 from left to right. Hold every item the way a 2D game character holds one, with no pose at all: the closed fist grips it as it is, the grip passing straight through the curled fingers, which stay exactly as they are, and the item shows above and below the fist. A weapon is held low with its point or head forward, toward the right, unless the list says otherwise. A carried thing (a basket, a pot, a lantern) hangs straight down from the fist by its handle. A shield is worn on the far forearm, its middle just above the far fist. The far fist holds something only when the list says so. Don't draw arms, a body or a head, and don't move, turn, open or redraw the fists. Keep each item whole and inside its own column, never across a grey line, and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
 
 **Creature**
 
@@ -202,19 +214,21 @@ The owner's call (2026-11-08): the parts are drawn in ChatGPT as clean vector-st
 > - Details stay readable when small: belts, buckles, seams and trims are clear flat pieces, not fine scribbles.
 >
 > THE BASES
-> I'll attach one of four base images: base-male.png, base-female.png, or their blank versions base-male-blank.png and base-female-blank.png (the same figures with the facial features taken off). Each is 1024 x 1536: a bald, tan-skinned anime figure in a three-quarter view facing right, fists clenched at its sides, in plain dark underwear, on a solid black background. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel.
+> I'll attach one of four base images: base-male.png, base-female.png, or their blank versions base-male-blank.png and base-female-blank.png (the same featureless figures). Each is 1024 x 1536: a bald, tan-skinned jointed mannequin with a featureless face and a ball and thin seam at each joint, in a three-quarter view facing right, its arms a little away from its body with the fists closed, its legs apart, in plain dark underwear, on a solid black background. The game turns each piece about its joint, so keep the gaps between the arms and the body and between the legs clear. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel.
 >
 > THE SLOTS (each image is exactly one part)
 > 1. ARMOR is the body from the jawline down: neck, shoulders, chest, arms, hands, waist, legs and feet. It replaces the skin and underwear below the jaw with the outfit: collar at the neck, gloves or bare fists, boots or shoes. Where the outfit leaves skin showing, keep the base's skin. It never touches the head.
-> 2. HAIR or HELM is what sits on the head, one slot for both, painted on the blank head. A helm replaces the hair entirely; if a helm should show hair, paint that hair in as part of the helm. Either may hang over the neck and shoulders. Wherever it leaves the face open, keep the blank face exactly as it is.
+> 2. HAIR or HELM is what sits on the head, one slot for both, painted on the blank head. A helm replaces the hair entirely; if a helm should show hair, paint that hair in as part of the helm. Either may hang over the neck and shoulders. Wherever it leaves the face open, keep the blank face exactly as it is. A hair is painted plain mid brown, for everyone. Beards, jewellery, scars, ears and horns are EXTRAS, never part of a hair or a helm.
 > 3. CAPE is the back: cloaks, capes, packs, quivers, tails. Paint it only in the black space behind and around the figure, never over the body, arms or head. The figure's back faces the LEFT of the picture, so a cape shows past the left edge of the shoulders, back and legs, and between and below the legs.
 > 4. WEAPON is what the near hand holds: the lit fist on the LEFT of the picture. The grip passes through the curled fingers, which stay exactly as they are; the weapon shows above and below the fist and stays inside the canvas.
-> 5. FACE is only the features painted on the blank head: eyes, brows, nose, mouth, marks and scars, and any beard or moustache. The head never changes shape, and no hair goes on it (hair is its own part). Pointed ears or horns only when I describe them.
+> 5. FACE is only the features painted on the blank head: eyes, brows, nose and mouth, clean-shaven. The faces are shared, ten men's and ten women's, so paint the skin in the base's own tan and the eyes and brows a mid brown; the game recolours them per character. The head never changes shape, and no hair, beard, ears or horns go on it.
+> 6. EXTRA is one thing on the head on its own: a beard or moustache (plain mid brown), a piece of jewellery, a skin mark, or a people's ears or horns. Paint only that thing, where it sits.
 >
 > SHEETS
 > Sometimes I'll attach a sheet instead of a base, its cells divided by thin grey lines:
-> - FACE SHEET: eight blank heads, 4 across and 2 down. Paint one face per cell in the order I list them (1-4 along the top row, 5-8 along the bottom).
-> - HAIR SHEET: four blank figures from the head to the hips, side by side. One hairstyle per column, numbered 1-4 from the left.
+> - FACE SHEET: ten blank heads, 5 across and 2 down. Paint one face per cell in the order I list them (1-5 along the top row, 6-10 along the bottom).
+> - HAIR SHEET: eight columns, each the blank man (top) and woman (bottom) from the head to the hips. One hairstyle per column, the same on both heads, numbered 1-8 from the left, plain mid brown.
+> - EXTRA SHEET: six columns, each the blank man's head and chest (top) and the woman's (bottom); or twelve cells of the man for beards. One extra per column (or cell), on both heads.
 > - ARMOR SHEET: four full figures side by side, 1536 x 1024. One outfit per column, numbered 1-4 from the left.
 > - HELM SHEET: four blank figures from the top of the head to the hips, side by side. One helm per column, numbered 1-4 from the left.
 > - CAPE SHEET: four full figures side by side, 1536 x 1024. One cape per column, numbered 1-4 from the left.
@@ -241,27 +255,27 @@ Two figures, the alignment reference for everything else. Make them first and ke
 
 #### `base-male` · The base mannequin, man · P0
 
-**Basis:** From the owner's slot model (2026-11-06); the Art Guide §3 (one shared rig); `03-art-overhaul.md` §2.1 and §2.2 (the angle and proportions).
+**Basis:** The owner's jointed mannequins (2026-11-09), made both at once in one picture and stood on their own canvases by `tools/split_bases.py`; the owner's slot model (2026-11-06); `03-art-overhaul.md` §2.1 and §2.2 (the angle and proportions).
 
-The base mannequin for a 2D game's character system. Every face, outfit, cape, helm and weapon will be painted onto this exact image by editing it, so it must be plain and exact. A man's mannequin: natural, athletic shoulders, chest, waist and hips, not bulky, the standard build, about five and a quarter heads tall, smooth like a shop-window mannequin with no anatomical detail, and hands with clearly drawn, relaxed, slightly open fingers. The whole body is one even, light, neutral grey, drawn with the style block's outlines, cel shading and light. The head is bald, with a calm, simple face (blue eyes, light brows, a small mouth) that every face edit repaints. Stand it exactly in the standard pose: three-quarter view facing right, the body turned about 45 degrees and the head a little more toward us, the near leg slightly forward, the feet a head's width apart, the weight on the back foot, the near arm hanging just in front of the body and a little away from it, the far arm mostly behind it with its hand showing past the hip. Output: PNG, 1024×1536, on a solid black background. One figure, the full body centred with the feet near the bottom, nothing cropped. No text, no frame, no ground shadow. Scale: a standard adult man, about 85% of the canvas height. An original design. I'll save it as base-male.png.
+The base mannequin for a 2D game's character system, built from separate pieces that turn on ball joints, like an artist's wooden mannequin or a jointed doll, so each piece can be rotated on its own in cut-out animation. Every face, outfit, cape, helm and weapon will be painted onto this exact image by editing it, so it must be plain and exact. A man's mannequin: natural, athletic shoulders, chest, waist and hips, not bulky, the standard build, about five and a quarter heads tall. The head is bald with a smooth, featureless face, and the body is smooth between the joints, warm tan, in plain dark underwear, drawn in clean cel shading with crisp dark outlines and the light from the upper left. THE JOINTS: each is a clean round ball with a thin outline seam where one piece meets the next. The top of each upper arm is a full round ball set into the shoulder, the chest's outline curving round it; at the elbows and knees both pieces end round, centred on the joint, the lower one's round end tucked under the upper one; a thin seam ring where the hand meets the forearm and the foot meets the shin; and the pelvis ends in a smooth curved line across the top of each thigh, each thigh's top round under it. THE POSE: three-quarter view facing right, both arms held slightly away from the body with a clear gap of black between each arm and the torso from the armpit to the fist, the far arm just clear of the far side of the body and in deep shadow, the fists closed as if round a grip, the legs a little apart in an easy stride, the near leg slightly forward. Output: PNG, 1024×1536, on a solid black background. One figure, the full body centred with the feet near the bottom, nothing cropped. No text, no frame, no ground shadow. Scale: a standard adult man, about 85% of the canvas height. An original design. I'll save it as base-male.png.
 
 #### `base-female` · The base mannequin, woman · P0
 
-**Basis:** From the owner's slot model (2026-11-06); the Art Guide §3 (one shared rig); `03-art-overhaul.md` §2.1 and §2.2 (the angle and proportions).
+**Basis:** The owner's jointed mannequins (2026-11-09), made both at once in one picture and stood on their own canvases by `tools/split_bases.py`; the owner's slot model (2026-11-06); `03-art-overhaul.md` §2.1 and §2.2 (the angle and proportions).
 
-The base mannequin for a 2D game's character system. Every face, outfit, cape, helm and weapon will be painted onto this exact image by editing it, so it must be plain and exact. A woman's mannequin: narrower shoulders, a defined waist, wider hips and a modest bust, the standard build, about five and a quarter heads tall, smooth like a shop-window mannequin with no anatomical detail, and hands with clearly drawn, relaxed, slightly open fingers. The whole body is one even, light, neutral grey, drawn with the style block's outlines, cel shading and light. The head is bald, with a calm, simple face (blue eyes, light brows, a small mouth) that every face edit repaints. Stand it exactly in the standard pose: three-quarter view facing right, the body turned about 45 degrees and the head a little more toward us, the near leg slightly forward, the feet a head's width apart, the weight on the back foot, the near arm hanging just in front of the body and a little away from it, the far arm mostly behind it with its hand showing past the hip. Output: PNG, 1024×1536, on a solid black background. One figure, the full body centred with the feet near the bottom, nothing cropped. No text, no frame, no ground shadow. Scale: a standard adult woman, about 84% of the canvas height. An original design. I'll save it as base-female.png.
+The base mannequin for a 2D game's character system, built from separate pieces that turn on ball joints, like an artist's wooden mannequin or a jointed doll, so each piece can be rotated on its own in cut-out animation. Every face, outfit, cape, helm and weapon will be painted onto this exact image by editing it, so it must be plain and exact. A woman's mannequin: narrower shoulders, a defined waist, wider hips and a modest bust, the standard build, about five and a quarter heads tall. The head is bald with a smooth, featureless face, and the body is smooth between the joints, warm tan, in plain dark underwear, drawn in clean cel shading with crisp dark outlines and the light from the upper left. THE JOINTS: each is a clean round ball with a thin outline seam where one piece meets the next. The top of each upper arm is a full round ball set into the shoulder, the chest's outline curving round it; at the elbows and knees both pieces end round, centred on the joint, the lower one's round end tucked under the upper one; a thin seam ring where the hand meets the forearm and the foot meets the shin; and the pelvis ends in a smooth curved line across the top of each thigh, each thigh's top round under it. THE POSE: three-quarter view facing right, both arms held slightly away from the body with a clear gap of black between each arm and the torso from the armpit to the fist, the far arm just clear of the far side of the body and in deep shadow, the fists closed as if round a grip, the legs a little apart in an easy stride, the near leg slightly forward. Output: PNG, 1024×1536, on a solid black background. One figure, the full body centred with the feet near the bottom, nothing cropped. No text, no frame, no ground shadow. Scale: a standard adult woman, a little shorter than the man, about 85% of the canvas height. An original design. I'll save it as base-female.png.
 
 #### `base-male-blank` · The blank mannequin, man · P0
 
 **Basis:** Edits `base-male`. The head everyone's drawn with: every face, hair and helm is painted on it.
 
-Edit the attached base image: change ONLY the face: take the facial features off, so the head is a blank mannequin's. No eyes, no eyebrows, no mouth, and only the faintest suggestion of the nose's shape; the face is smooth, even skin in the same warm tan, with the same soft cel shading, as if the features had been gently sanded away. Keep the bald head's exact outline, size, angle and position, the ears, the neck and the whole body exactly the same, not a single pixel moved. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as base-male-blank.png.
+Nothing to paint: the jointed mannequin's face is featureless already, so `base-male-blank.png` is the same picture as `base-male.png`, and `tools/split_bases.py` writes both. (For a base with a face, the edit would take the features off and keep the bald head's outline, size, angle and position exactly.)
 
 #### `base-female-blank` · The blank mannequin, woman · P0
 
 **Basis:** Edits `base-female`. The head everyone's drawn with: every face, hair and helm is painted on it.
 
-Edit the attached base image: change ONLY the face: take the facial features off, so the head is a blank mannequin's. No eyes, no eyebrows, no mouth, and only the faintest suggestion of the nose's shape; the face is smooth, even skin in the same warm tan, with the same soft cel shading, as if the features had been gently sanded away. Keep the bald head's exact outline, size, angle and position, the ears, the neck and the whole body exactly the same, not a single pixel moved. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as base-female-blank.png.
+Nothing to paint: the jointed mannequin's face is featureless already, so `base-female-blank.png` is the same picture as `base-female.png`, and `tools/split_bases.py` writes both. (For a base with a face, the edit would take the features off and keep the bald head's outline, size, angle and position exactly.)
 
 ### 3.2 Builds and peoples
 
@@ -275,939 +289,206 @@ There's no separate base for any build or people: a build is a morph (`03-art-ov
 | `stout` | 0.85 × 1.30 | Stoneborn (Brannock 1.36 wide, Grell 1.55) |
 | `big` | 1.08 × 1.15 | Thugs, knights, heavy guards; the constructs 1.20 × 1.30 |
 
-What marks a people goes on the face: Sylvan pointed ears, Emberkin horns, Wildkin beast ears, and a Stoneborn's or a Hearthling's own face. The Emberkin's and Wildkin's tails go in the cape slot (`cape-tail-…`), so a character with a tail and a cloak needs a cape that shows both (`cape-tamsin`).
+What marks a people goes with the hair, or with the hood or helm worn in its place: Sylvan pointed ears, Emberkin horns, Wildkin beast ears or feathers. The faces are shared (§4), so a Stoneborn or a Hearthling wears one of the set, made stout or small by the morph and coloured by §7. The Emberkin's and Wildkin's tails go in the cape slot (`cape-tail-…`), so a character with a tail and a cloak needs a cape that shows both (`cape-tamsin`).
 
 ---
 
-### 3.3 The holding hands
+### 3.3 The holding hands (retired)
 
-The owner's call (2026-11-09): what a figure holds is drawn under its fist, the way a 2D game character holds a weapon, so the fist that closes over the grip is a plainer one than the base's, with fewer lines, so it reads as closed round a handle rather than clenched shut. These two edits paint it. `tools/import_parts.py` takes each base's two fists from its picture (`tools/source/characters/hands/`), keeps their shading and lines as a share of the hand's own colour, and the game draws them over whatever that hand holds in the colour of the hand they cover, skin or glove, fading into the arm at the wrist. Until they're painted, the importer draws a plain fist of its own.
-
-#### `hand-male` · The holding hands, man · P0
-
-**Basis:** Edits `base-male`. The fist that closes over what the hand holds.
-
-Edit the attached base image: change ONLY the two fists, the near one (lit, on the LEFT of the picture) and the far one (in shadow, on the right). Repaint each as a simple 2D game hand closed round a weapon's grip: a clean, chunky fist in plain cel shading, with only its outline, one line where the thumb closes over the fingers, and two or three short lines parting the fingers; no knuckle wrinkles, no veins, no nails, no creases. The fingers curl as if round a round handle passing straight through the fist, but draw no handle and no hole: the fist is solid. Keep each fist in exactly the same place, facing the same way, at the same size or a touch bigger, never smaller, with the wrist where it is; keep the skin the same warm tan and the light from the upper left, the near fist lit and the far one in shadow as they are now. Change nothing else: keep the pose, the arms, the body, the head, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hand-male.png.
-
-#### `hand-female` · The holding hands, woman · P0
-
-**Basis:** Edits `base-female`. The fist that closes over what the hand holds.
-
-Edit the attached base image: change ONLY the two fists, the near one (lit, on the LEFT of the picture) and the far one (in shadow, on the right). Repaint each as a simple 2D game hand closed round a weapon's grip: a clean, chunky fist in plain cel shading, with only its outline, one line where the thumb closes over the fingers, and two or three short lines parting the fingers; no knuckle wrinkles, no veins, no nails, no creases. The fingers curl as if round a round handle passing straight through the fist, but draw no handle and no hole: the fist is solid. Keep each fist in exactly the same place, facing the same way, at the same size or a touch bigger, never smaller, with the wrist where it is; keep the skin the same warm tan and the light from the upper left, the near fist lit and the far one in shadow as they are now. Change nothing else: keep the pose, the arms, the body, the head, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hand-female.png.
+Retired with the jointed mannequins (2026-11-09). The figures are animated now (`tools/rig/skeleton.py`): each body and armor is cut into its bones' pieces, and what a hand holds is drawn just under that hand's own piece, so the fist, skin or glove as it's painted, closes over the grip and turns with it. There's nothing to paint here.
 
 ---
 
 ## 4. Faces
 
-One per character in the cast and the party, the player's selectable faces, the townsfolk pool's faces, and the heads of the humanoid foes. Each paints only the features onto the blank head of the base whose sex matches (§3); the head itself never changes, and the hair is a part of its own (§4.8). A child's face is drawn on the full-size base and the morph makes it small. The faces painted before 2026-11-08 were head and hair together; the importer splits each into its face and its hair till it's painted again.
+The owner's call (2026-11-09): **ten men's faces and ten women's faces, shared by everyone.** A face is only the features painted on the blank head of the base whose sex matches (§3): eyes, brows, nose and mouth. Beards, earrings, scars and freckles are extras (§4.10), so every face is clean-shaven and any of them goes with any face. The head itself never changes, and the hair is a part of its own (§4.8). Each face is painted in the base's own warm tan with mid-brown eyes and brows, and every character who wears it gets their own skin, hair and eye colours from §7's Colours column (the player picks theirs on the creation screen), so the same face reads as many people. The ten run from a child to the old, so a child, a youth, a soldier, a schemer and an elder each have one that fits; a child's face is drawn at the base's size and the morph makes it small. The faces painted before 2026-11-09, one per character, are retired: §7 gives everyone a face from the set.
 
-### 4.0 Face sheets (eight at a time)
+What marks a people isn't on the face any more: Sylvan pointed ears, Emberkin horns and Wildkin beast ears or feathers are painted with the character's hair, or with the hood or helm they wear instead (§3.2). The heads that aren't faces at all (the constructs, the walking dead, the glass king) keep a head of their own (§4.3).
 
-The owner's call (2026-11-06): make the faces eight at a time. Every face painted on a base is in one sheet here, and each sheet is one ChatGPT picture. The attached template (`tools/source/characters/face-sheet-male.png` or `face-sheet-female.png`, made by `python tools/part_sheet.py templates`) is eight copies of the blank base's head and shoulders at full size, four across and two down, so each face lines up with the base just as a single edit would. `python tools/part_sheet.py cut <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/faces/<face-id>.png`. The single face cards in §4.1 onward stay for redoing one face, and for the variants that edit another face.
+### 4.0 Face sheets (ten at a time)
 
-The cells are numbered left to right, 1 to 4 along the top row and 5 to 8 along the bottom. The sheets are filled in priority order, so the early ones hold the faces the game needs first.
+Two sheets make the whole set, one for each base. The attached template (`tools/source/characters/face-sheet-male.png` or `face-sheet-female.png`, made by `python tools/part_sheet.py templates`) is ten copies of the blank base's head and shoulders at full size, five across and two down, so each face lines up with the base just as a single edit would. `python tools/part_sheet.py cut <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/faces/<face-id>.png`. The single cards in §4.1 and §4.2 are for redoing one face.
+
+The cells are numbered left to right, 1 to 5 along the top row and 6 to 10 along the bottom.
 
 | Sheet | Base | Priority | Cells, in order |
 |---|---|---|---|
-| `face-sheet-m01` | `base-male` | P0 | `face-player-1`, `face-player-6`, `face-player-8`, `face-kael`, `face-brannock`, `face-mc-child`, `face-lookout`, `face-tomas` |
-| `face-sheet-m02` | `base-male` | P0 | `face-red-gull`, `face-red-gull-2`, `face-red-gull-3`, `face-grell`, `face-hale`, `face-fennick`, `face-brisk`, `face-refugee-1` |
-| `face-sheet-m03` | `base-male` | P0 | `face-refugee-2`, `face-leon`, `face-crane`, `face-pip`, `face-osric`, `face-lark`, `face-oswin`, `face-town-1` |
-| `face-sheet-m04` | `base-male` | P0 | `face-town-3`, `face-town-5`, `face-town-7`, `face-town-9`, `face-town-11`, `face-town-12`, `face-town-14`, `face-town-16` |
-| `face-sheet-m05` | `base-male` | P0 | `face-town-17`, `face-hollowed`, `face-construct-vault`, `face-garrick`, `face-aldric`, `face-recruit`, `face-tobin`, `face-harrow` |
-| `face-sheet-m06` | `base-male` | P1 | `face-hobb`, `face-maleficio`, `face-lost-boy`, `face-varkhul`, `face-cube-cultist`, `face-corwin`, `face-severin`, `face-pell` |
-| `face-sheet-m07` | `base-male` | P2 | `face-blood-house-steward`, `face-hollowmere-child`, `face-ruck`, `face-davin`, `face-vorlaith`, `face-thrall`, `face-drowned`, `face-blood-wight` |
-| `face-sheet-m08` | `base-male` | P2 | `face-sun-scorched`, `face-thornling`, `face-construct-priest`, `face-construct-crown`, `face-unmade` |
-| `face-sheet-f01` | `base-female` | P0 | `face-player-2`, `face-player-3`, `face-player-4`, `face-player-5`, `face-player-7`, `face-sera`, `face-mira`, `face-sb-child` |
-| `face-sheet-f02` | `base-female` | P0 | `face-corra`, `face-odelle`, `face-hedda`, `face-refugee-child`, `face-refugee-3`, `face-elara`, `face-anvil-barkeep`, `face-netty` |
-| `face-sheet-f03` | `base-female` | P0 | `face-maud`, `face-ilsa`, `face-hesper`, `face-wren`, `face-imra-vell`, `face-tamsin`, `face-town-2`, `face-town-4` |
-| `face-sheet-f04` | `base-female` | P0 | `face-town-6`, `face-town-8`, `face-town-10`, `face-town-13`, `face-town-15`, `face-town-18`, `face-mira-young`, `face-thessaly` |
-| `face-sheet-f05` | `base-female` | P1 | `face-brenna`, `face-gannet`, `face-hester`, `face-mags`, `face-valencia`, `face-anselle`, `face-orla`, `face-isadora` |
-| `face-sheet-f06` | `base-female` | P2 | `face-valencia-child`, `face-ide`, `face-maren-elder`, `face-hollowmere-farmer`, `face-guild-apprentice`, `face-vreya` |
+| `face-sheet-m01` | `base-male` | P0 | `face-m01`, `face-m02`, `face-m03`, `face-m04`, `face-m05`, `face-m06`, `face-m07`, `face-m08`, `face-m09`, `face-m10` |
+| `face-sheet-f01` | `base-female` | P0 | `face-f01`, `face-f02`, `face-f03`, `face-f04`, `face-f05`, `face-f06`, `face-f07`, `face-f08`, `face-f09`, `face-f10` |
 
-#### `face-sheet-m01` · Face sheet: 8 men (You, face 1, You, face 6, You, face 8, Kael Duskmantle, Brannock Ironvein, You, aged eight, The lookout, Old Tomas) · P0
+#### `face-sheet-m01` · Face sheet: the ten men's faces (Man 1, the boy, Man 2, the lad, Man 3, the hero, Man 4, the rogue, Man 5, the soldier, Man 6, the bruiser, Man 7, the kindly man, Man 8, the noble, Man 9, the veteran, Man 10, the elder) · P0
 
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-player-1`, 2 `face-player-6`, 3 `face-player-8`, 4 `face-kael`, 5 `face-brannock`, 6 `face-mc-child`, 7 `face-lookout`, 8 `face-tomas`.
+**Basis:** Edits `face-sheet-male`. Cells: 1 `face-m01`, 2 `face-m02`, 3 `face-m03`, 4 `face-m04`, 5 `face-m05`, 6 `face-m06`, 7 `face-m07`, 8 `face-m08`, 9 `face-m09`, 10 `face-m10`.
 
-1. You, face 1: a young human man of about twenty-four from a poor fishing cove. An open, likeable oval face, a straight nose, warm brown eyes under straight, expressive brows, clean-shaven, fair skin lightly browned by the sea.
-2. You, face 6: an Emberkin man of about twenty-two. A sharp, handsome face, amber eyes, a small fang showing at the corner of the mouth, tan skin. Two dark, ridged horns curl round from the temples like a ram's, old bone going ivory at the tips.
-3. You, face 8: a Stoneborn man who looks about forty-five (the game's morph makes him short and broad, so draw the face at the base's size). A broad, heavy face, deep-set grey eyes, a wide nose, weathered golden skin.
-4. Kael Duskmantle: Kael, an Emberkin thief of twenty-three. A sharp, handsome face, amber eyes, straight brows, a small fang just showing, tan skin. Two dark, ridged horns sweep straight back from the temples in a long curve, going pale like old ivory at the tips.
-5. Brannock Ironvein: Brannock, a Stoneborn old soldier nearly two hundred years old, which on a Stoneborn looks like a hard-weathered sixty. A square, heavy face, a nose broken more than once, deep-set brown eyes under thick, fierce brows, old scars, golden-tan skin.
-6. You, aged eight: the player as a boy of eight in a fishing cove (the game's morph makes him child-sized). A round, freckled child's face, sunburn across the nose, big honest brown eyes, a gap in his front teeth, fair skin.
-7. The lookout: a wiry human sailor of about thirty. A narrow face, sun-dark brown skin, sharp pale-grey eyes used to squinting at the horizon, a short scruffy beard.
-8. Old Tomas: Old Tomas, a human fisherman of about seventy. A weathered, deeply lined face, brown-tan skin, bushy white eyebrows over squinting blue-grey eyes, a short white stubble beard, a big nose reddened by the wind.
+1. Man 1, the boy: a boy of about ten (the game's morph makes a child small, so draw the face at the base's size): a round child's face, big bright eyes, a small snub nose, full cheeks, a light dusting of freckles, an open, curious look.
+2. Man 2, the lad: a lad of about seventeen: a smooth, eager face, wide-open eyes, a soft jaw not yet filled out, a straight nose a little big for the face, clean-shaven.
+3. Man 3, the hero: a young man of about twenty-four: an open, likeable oval face, a straight nose, steady eyes under straight, expressive brows, a firm, friendly mouth, clean-shaven.
+4. Man 4, the rogue: a young man of about twenty-five: a narrow, sharp-featured face, high cheekbones, keen, narrowed eyes under angled brows, a thin nose, one corner of the mouth lifted in a knowing half-smile, clean-shaven.
+5. Man 5, the soldier: a man of about thirty-eight: a square-jawed, steady face, level eyes under a strong, straight brow, a broad straight nose, a firm mouth, clean-shaven.
+6. Man 6, the bruiser: a heavy-set man of about thirty-five: a broad, blunt face, a thick brow ridge over small, hard eyes, a flattened nose broken more than once, a heavy, square jaw.
+7. Man 7, the kindly man: a man of about forty-five: a round, pleasant face, soft cheeks, kind eyes with laugh lines at the corners, a short nose, a small, contented smile.
+8. Man 8, the noble: a man of about fifty: a long, narrow, refined face, high cheekbones, cool, heavy-lidded eyes under finely arched brows, a long straight nose, thin lips held in a polite, guarded line, clean-shaven.
+9. Man 9, the veteran: a weathered man of about fifty-five: a craggy, lined face, deep-set eyes with crow's feet under thick, fierce brows, a crooked nose, an old nick through one brow, a firm, weathered mouth.
+10. Man 10, the elder: an old man of about seventy: a deeply lined, gentle face, drooping lids over kind eyes, bushy brows, a big nose, hollowed cheeks, a thin, gentle mouth.
+Paint every face clean-shaven, with the skin in the base's own warm tan and the eyes and eyebrows a mid brown: the game recolours each for the character wearing it.
 I'll save it as face-sheet-m01.png.
 
-#### `face-sheet-m02` · Face sheet: 8 men (Red Gull Thug, face 1, Red Gull Thug, face 2, Red Gull Thug, face 3, Bosun Grell, Captain Roderic Hale, Questmaster Fennick, Sergeant Brisk, Old Aurek) · P0
+#### `face-sheet-f01` · Face sheet: the ten women's faces (Woman 1, the girl, Woman 2, the maiden, Woman 3, the heroine, Woman 4, the quick wit, Woman 5, the lady, Woman 6, the gentle soul, Woman 7, the fighter, Woman 8, the matron, Woman 9, the matriarch, Woman 10, the grandmother) · P0
 
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-red-gull`, 2 `face-red-gull-2`, 3 `face-red-gull-3`, 4 `face-grell`, 5 `face-hale`, 6 `face-fennick`, 7 `face-brisk`, 8 `face-refugee-1`.
+**Basis:** Edits `face-sheet-female`. Cells: 1 `face-f01`, 2 `face-f02`, 3 `face-f03`, 4 `face-f04`, 5 `face-f05`, 6 `face-f06`, 7 `face-f07`, 8 `face-f08`, 9 `face-f09`, 10 `face-f10`.
 
-1. Red Gull Thug, face 1: a harbour gang thug of about thirty. A brutal, smug face, a heavy jaw with dark stubble, small hard eyes under a thick brow, a flattened nose, deep brown skin.
-2. Red Gull Thug, face 2: another harbour gang thug, about thirty. A broken nose, a scraggly ginger beard, pale eyes, light, freckled skin.
-3. Red Gull Thug, face 3: a third harbour gang thug, about twenty-five. A narrow, sneering face, a gold tooth, dark eyes, tan skin.
-4. Bosun Grell: Bosun Grell, a Stoneborn gang boss of middle age. A broad, mean face, small fierce eyes under heavy brows, a puckered scar across one cheek, tan skin.
-5. Captain Roderic Hale: Captain Hale of the City Watch, a human man of about fifty-two. A square, tired face, grey eyes with heavy bags under them, a short grey stubble beard, a crooked nose, fair skin.
-6. Questmaster Fennick: Questmaster Fennick, a human clerk of about fifty-eight. A round, pleasant face, pale skin, grey eyes behind small round spectacles, a neat grey moustache, a satisfied little smile.
-7. Sergeant Brisk: Sergeant Brisk of the City Watch, a human man of about forty. A worried, harried face, brown eyes, a thick black moustache, a five-o'clock shadow, brown skin.
-8. Old Aurek: Old Aurek, a sick refugee farmer of about seventy-five. A gaunt, feverish face, kind grey eyes, a long silver beard, tan skin with deep lines.
-I'll save it as face-sheet-m02.png.
-
-#### `face-sheet-m03` · Face sheet: 8 men (Teodor, King Leon, Lord Chancellor Vesper Crane, Pip the Potboy, Osric Penhallow, Lark the Busker, Guardsman Oswin, Townsfolk face 1) · P0
-
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-refugee-2`, 2 `face-leon`, 3 `face-crane`, 4 `face-pip`, 5 `face-osric`, 6 `face-lark`, 7 `face-oswin`, 8 `face-town-1`.
-
-1. Teodor: Teodor, a refugee lad of about sixteen with a fever. A face flushed with fever, sweat on the brow, tired brown eyes, the first fuzz of a moustache, brown skin.
-2. King Leon: King Leon, a human man of about sixty-eight, kind and tired. A broad, gentle face, grey eyes with deep laugh lines, thick grey brows, a full, neatly trimmed silver beard, fair skin with the flush of age.
-3. Lord Chancellor Vesper Crane: Lord Chancellor Crane, a human man of about fifty-five. A long, narrow face, high cheekbones, pale porcelain skin, sharp grey eyes, finely arched brows, a thin black moustache, a polite smile that doesn't reach his eyes.
-4. Pip the Potboy: Pip, a Hearthling potboy of about seventeen (an adult face, not a child's). A freckled, nervous face, wide brown eyes, fair skin.
-5. Osric Penhallow: Osric, a human silk merchant of about forty-five. A neat, anxious face, brown eyes glancing sideways, a carefully trimmed black moustache, porcelain-pale skin.
-6. Lark the Busker: Lark, a young-looking Sylvan street singer. A bright, cheeky face, pale lilac-grey eyes, a performer's half-smile, porcelain skin, long pointed ears.
-7. Guardsman Oswin: Oswin, a young human palace guard of about twenty-two. A very straight-faced, serious face, blue eyes, clean-shaven, fair skin.
-8. Townsfolk face 1: a young human farmhand of about twenty. An open, wide-eyed face, blue eyes, sunburnt cheeks, a peeling nose, fair skin.
-I'll save it as face-sheet-m03.png.
-
-#### `face-sheet-m04` · Face sheet: 8 men (Townsfolk face 3, Townsfolk face 5, Townsfolk face 7, Townsfolk face 9, Townsfolk face 11, Townsfolk face 12, Townsfolk face 14, Townsfolk face 16) · P0
-
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-town-3`, 2 `face-town-5`, 3 `face-town-7`, 4 `face-town-9`, 5 `face-town-11`, 6 `face-town-12`, 7 `face-town-14`, 8 `face-town-16`.
-
-1. Townsfolk face 3: a strong human man of about forty. A strong, calm face, dark eyes, a short black beard, deep brown skin.
-2. Townsfolk face 5: an old human man of about seventy-five. A grumpy, twinkly face, small grey eyes, a big nose, white mutton-chop whiskers, fair, ruddy skin.
-3. Townsfolk face 7: a human boy of about eight. A cheeky child's face, brown eyes, a missing front tooth, a scraped nose, light-brown skin.
-4. Townsfolk face 9: a human boy of about fifteen. An eager, conspiratorial face, green eyes, a few freckles, fair skin.
-5. Townsfolk face 11: a human man of about thirty. A tired, good-natured face, dark eyes, stubble, olive skin.
-6. Townsfolk face 12: a weathered human man of about fifty. A loud, cheerful face, bright brown eyes, a big grey-shot black beard, weathered olive skin.
-7. Townsfolk face 14: a human man of about thirty-five. A tired, friendly face, grey eyes, a few days of brown stubble, weathered fair skin.
-8. Townsfolk face 16: a Sylvan man who looks about thirty. A narrow, calm face, long pointed ears, grey-green eyes, porcelain skin.
-I'll save it as face-sheet-m04.png.
-
-#### `face-sheet-m05` · Face sheet: 8 men (Townsfolk face 17, The Hollowed, Vault construct's head, Garrick the caravan master, Commander Aldric Voss, The recruit, Tobin Ashgrove, Lord Harrow of Heronsgate) · P0
-
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-town-17`, 2 `face-hollowed`, 3 `face-construct-vault`, 4 `face-garrick`, 5 `face-aldric`, 6 `face-recruit`, 7 `face-tobin`, 8 `face-harrow`.
-
-1. Townsfolk face 17: a Stoneborn man who looks about fifty. A broad face, deep-set brown eyes, ruddy tan skin.
-2. The Hollowed: a Hollowed, a dead soldier raised as an empty husk. A gaunt, lipless head with skin like ash-grey burnt paper, cracked all over in fine lines that glow ember orange from inside; empty, dark eye sockets with a single ember-orange point of light in each; a few wisps of scorched hair.
-3. Vault construct's head: an ancient stone guardian: the head is not a face at all. In place of the head, a flat, round disc of polished sun-gold metal with a simple sunburst engraved on it and no other features, set on a short neck of pale dressed stone with thin gold inlay.
-4. Garrick the caravan master: Garrick, a human caravan master of about fifty. A lean, leathery face, tan skin with squint lines, brown eyes, a grey-shot black moustache, an old scar through one eyebrow.
-5. Commander Aldric Voss: Commander Aldric Voss, an old human soldier of about sixty-five. A craggy, humorous face, pale-blue eyes with deep crow's feet, a grey stubble beard, an old notch missing from one ear, weathered fair skin.
-6. The recruit: a brand-new human soldier of about seventeen. An eager, open face, red-cheeked from the cold, blue eyes, a few spots, fair skin.
-7. Tobin Ashgrove: Tobin, a human cider-presser of about fifty-five. A gentle, round face, kind brown eyes, freckles, a short greying copper-red beard, fair skin reddened by the sun.
-8. Lord Harrow of Heronsgate: Lord Harrow, a bored human lord of about fifty-five. A bland, pale face, heavy-lidded eyes looking off to one side at nothing, grey side-whiskers, a small, polite, empty smile.
-I'll save it as face-sheet-m05.png.
-
-#### `face-sheet-m06` · Face sheet: 8 men (Hobb the woodcutter, Maleficio, The woodcutter's boy, Varkhul, Cube Cultist, Sir Corwin Halbeck, Lord Severin Morvaine, Pell) · P1
-
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-hobb`, 2 `face-maleficio`, 3 `face-lost-boy`, 4 `face-varkhul`, 5 `face-cube-cultist`, 6 `face-corwin`, 7 `face-severin`, 8 `face-pell`.
-
-1. Hobb the woodcutter: Hobb, a human woodcutters' foreman of about forty-five. A broad, ruddy face, worried blue eyes, a big bushy red beard, freckled fair skin.
-2. Maleficio: Maleficio, a gentle old human scholar of about sixty-five. A kind, lined face, tired dark eyes, a close-trimmed grey beard, a high forehead, pale skin that hasn't seen the sun in years.
-3. The woodcutter's boy: a lost human boy of about eight. A freckled, tear-streaked child's face, wide blue eyes, fair skin.
-4. Varkhul: Varkhul, a dying old human knight of about sixty. A gaunt, noble face, grey eyes with the last faint ember glow fading from them, hollow cheeks, a grey beard, fair skin gone ashen.
-5. Cube Cultist: a calm human cultist of about thirty. A calm, courteous face, pale eyes, light skin, grey ash smeared in a square pattern on the brow.
-6. Sir Corwin Halbeck: Sir Corwin, a knight-commander of about forty-five. A square-jawed, certain face, clear blue eyes, clean-shaven, a small scar on the chin, fair skin.
-7. Lord Severin Morvaine: Lord Severin, a vampire lord who looks about forty-five. A long, beautiful, very tired face, pale grey-white skin, dark-red eyes, high cheekbones, a straight nose, a mouth set in old sorrow, the tips of fangs barely showing.
-8. Pell: Pell, a village lad of about seventeen from a cold, dark valley. A pale, anxious face, big dark eyes, chapped lips, freckles, very pale skin.
-I'll save it as face-sheet-m06.png.
-
-#### `face-sheet-m07` · Face sheet: 8 men (The blood-house steward, A Hollowmere child, Ruck, the bosun, Davin, Vorlaith, the Unmade King, Thrall, Drowned, Blood-wight) · P2
-
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-blood-house-steward`, 2 `face-hollowmere-child`, 3 `face-ruck`, 4 `face-davin`, 5 `face-vorlaith`, 6 `face-thrall`, 7 `face-drowned`, 8 `face-blood-wight`.
-
-1. The blood-house steward: the steward of a vampire's manor, about fifty. A long, colourless face, pale watery eyes, thin lips pressed together, very pale skin.
-2. A Hollowmere child: a village boy of about eight. A pale, suspicious child's face, narrowed grey eyes, a smudged nose.
-3. Ruck, the bosun: Ruck, a ship's bosun of about fifty. A battered, good-natured face, small grey eyes, a nose broken twice, a grey chin beard, weathered dark skin.
-4. Davin: Davin, a squire of about eighteen. An earnest, grieving face, steady brown eyes, a boyish jaw, light-brown skin.
-5. Vorlaith, the Unmade King: Vorlaith, an ancient being of living glass. A head of clear, colourless glass cracked with fine branching fractures, a cold white light drifting inside it like smoke, smooth, calm, faintly amused features, and two points of white light for eyes.
-6. Thrall: a living human soldier enslaved to a vampire lord. A pale, blank face, glassy dark-red eyes, two small healed bite marks on the side of the neck, very pale skin.
-7. Drowned: a drowned corpse that walks out of the sea. A puffy, slack, grey-green waterlogged face, milky white eyes, the mouth hanging open, barnacles crusted on the jaw.
-8. Blood-wight: an undead thing that walks under a darkened sun. A skull-like head of taut, papery ash-grey skin, sunken red eyes, long fangs, thin grey hair.
-I'll save it as face-sheet-m07.png.
-
-#### `face-sheet-m08` · Face sheet: 5 men (Sun-scorched, Thornling, Priest-construct's head, Crown-construct's head, The Unmade) · P2
-
-**Basis:** Edits `face-sheet-male`. Cells: 1 `face-sun-scorched`, 2 `face-thornling`, 3 `face-construct-priest`, 4 `face-construct-crown`, 5 `face-unmade`.
-
-1. Sun-scorched: one of the burned dead of a desert massacre. A blackened face cracked like dried mud, the cracks glowing a faint hot gold, the features half gone, two pale, blazing eyes, the mouth open.
-2. Thornling: a small, spiteful forest sprite. A knot of rough dark bark for a head, with a hollow, sly face, two glowing yellow-green eyes and a mouth like a split in a branch, and a crown of small twigs and new leaves.
-3. Priest-construct's head: a stone guardian of a ruined sun temple. In place of a face, a round, polished bronze mirror, glinting, set inside a hood of sun-bleached sandstone carved like a priest's.
-4. Crown-construct's head: a war machine shaped like a knight. No face: in its place, a stylised gold crown shape, with a violet light glowing behind the gaps between its points, on a neck of polished dark violet metal.
-5. The Unmade: a soldier pulled out of time. Where the face should be, a smooth, featureless oval of dark, glossy glass reflecting a faint white light; the rest of the head and neck faded and slightly greyed, as if not quite here.
-Leave cells 6 to 8 exactly as they are: bald, unchanged.
-I'll save it as face-sheet-m08.png.
-
-#### `face-sheet-f01` · Face sheet: 8 women (You, face 2, You, face 3, You, face 4, You, face 5, You, face 7, Sera Vantis, Mira Ashgrove, {sb}, aged eight) · P0
-
-**Basis:** Edits `face-sheet-female`. Cells: 1 `face-player-2`, 2 `face-player-3`, 3 `face-player-4`, 4 `face-player-5`, 5 `face-player-7`, 6 `face-sera`, 7 `face-mira`, 8 `face-sb-child`.
-
-1. You, face 2: a young human woman of about twenty-four from a poor fishing cove. An open, likeable oval face, a straight nose, warm brown eyes with defined lashes, straight brows, a dusting of freckles over the nose, fair skin lightly browned by the sea.
-2. You, face 3: a young human woman of about twenty-four, warm, quick and ambitious. A heart-shaped face, sharp dark-brown eyes under arched brows, the corner of the mouth lifted as if about to tease, fair skin with a little sea-sun on it.
-3. You, face 4: a Hearthling woman of about thirty: a small people, but this is an adult's face, not a child's (the game's morph makes her small). A round, cheerful face, wide hazel eyes, a snub nose, rosy brown skin.
-4. You, face 5: a Sylvan woman, ageless, who looks about thirty. A narrow face with high cheekbones, long, elegant pointed ears swept back from the sides of the head, pale silver-grey eyes, porcelain skin.
-5. You, face 7: a Wildkin woman of the wolf line, about twenty-eight. A strong jaw, bright yellow-green eyes, a small scar on the chin, deep brown skin. Two tall, pointed wolf's ears stand on top of the head, furred grey-brown.
-6. Sera Vantis: Sera, a Sylvan forest warden, about a hundred and forty but young for her people, so she looks a weathered thirty. A narrow, still, unsmiling face, high cheekbones, long pointed ears swept back, sharp green eyes, soft straight brows, porcelain skin with a little weather on it.
-7. Mira Ashgrove: Mira, a gentle human archivist of twenty-six. A soft, round face, gentle brown eyes, soft brows a little worried, freckles across the nose and cheeks, fair skin, an ink smudge on one cheek.
-8. {sb}, aged eight: the Soul-Bound as a girl of eight in a fishing cove. A sharp, grinning child's face, mischievous dark-brown eyes, a scab on the chin, fair skin pink from the wind.
+1. Woman 1, the girl: a girl of about ten (the game's morph makes a child small, so draw the face at the base's size): a round child's face, big bright eyes, a small snub nose, full cheeks, a dusting of freckles, a quick, cheeky look.
+2. Woman 2, the maiden: a girl of about seventeen: a soft, youthful face, wide eyes with long lashes, gentle brows, a small nose, a shy, uncertain mouth.
+3. Woman 3, the heroine: a young woman of about twenty-four: an open, likeable oval face, a straight nose, warm eyes with defined lashes, straight brows, a friendly mouth.
+4. Woman 4, the quick wit: a young woman of about twenty-four: a heart-shaped face, sharp, bright eyes under arched brows, a small pointed chin, one corner of the mouth lifted as if about to tease.
+5. Woman 5, the lady: a woman of about twenty-eight: a fine oval face with high cheekbones, clear, cool eyes under straight, elegant brows, a narrow nose, a composed, unsmiling mouth.
+6. Woman 6, the gentle soul: a woman of about thirty-five: a soft, round face, gentle eyes under softly worried brows, rounded cheeks, a small, kind mouth.
+7. Woman 7, the fighter: a woman of about forty: a lean, strong face, a firm jaw, level, steady eyes under straight brows, a straight nose, a set mouth, a small old scar on the chin.
+8. Woman 8, the matron: a woman of about fifty-five: a broad, weathered face, crinkled eyes with deep laugh lines, apple cheeks, a broad nose, a wide, good-humoured mouth.
+9. Woman 9, the matriarch: a woman of about sixty: a lean, sharp face, deep lines round the mouth, steady, piercing eyes under thin brows, a long nose, thin lips pressed together.
+10. Woman 10, the grandmother: an old woman of about seventy-five: a soft, round, kindly face, many fine wrinkles, gentle eyes in deep creases, a small nose, a sweet, tired smile.
+Paint every face clean-shaven, with the skin in the base's own warm tan and the eyes and eyebrows a mid brown: the game recolours each for the character wearing it.
 I'll save it as face-sheet-f01.png.
 
-#### `face-sheet-f02` · Face sheet: 8 women (Corra, Captain Odelle Marsh, Hedda, Lise, Yselle the Glassblower, Princess Elara Aurelian, Hessa the Barkeep, Netty the Net-Mender) · P0
+### 4.1 The men's faces
 
-**Basis:** Edits `face-sheet-female`. Cells: 1 `face-corra`, 2 `face-odelle`, 3 `face-hedda`, 4 `face-refugee-child`, 5 `face-refugee-3`, 6 `face-elara`, 7 `face-anvil-barkeep`, 8 `face-netty`.
+#### `face-m01` · Man 1, the boy · P0
 
-1. Corra: Corra, a human net-mender of about fifty, the Soul-Bound's mother. A weathered, kind face, a strong nose, steady grey eyes with deep lines at the corners, a mouth used to keeping quiet, tan skin.
-2. Captain Odelle Marsh: Captain Odelle Marsh, a ship's captain of about forty-five. A long, stern face with laugh lines, brown eyes, a small gold ring in one ear, deep brown skin.
-3. Hedda: Hedda, a human refugee mother of about thirty-five. A hollow-cheeked, fierce face, brown eyes ringed with tiredness, a set jaw, tan skin smudged with road dirt.
-4. Lise: Lise, a refugee girl of twelve. A pale, serious child's face, big brown eyes, her mother's set jaw, a smudge of dirt on one cheek, tan skin.
-5. Yselle the Glassblower: Yselle, a Stoneborn glassblower of about forty. A round, freckled face, amber eyes, a determined mouth, golden-tan skin with a little soot.
-6. Princess Elara Aurelian: Princess Elara, a human woman of twenty-four, impatient and clever. An oval face, clear grey eyes with defined lashes, straight dark brows, a firm mouth that's about to interrupt someone, fair skin.
-7. Hessa the Barkeep: Hessa, a Wildkin barkeep of the bear line, about forty. A broad, unimpressed face, small brown eyes, a heavy jaw, an old scar through the near eyebrow and down the cheek, golden-tan skin. Two small, round, furry black bear's ears on top of the head.
-8. Netty the Net-Mender: Netty, a harbour net-mender of about fifty-five. A freckled, cheerful face, green eyes, laugh lines, tan skin.
-I'll save it as face-sheet-f02.png.
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-#### `face-sheet-f03` · Face sheet: 8 women (Maud Tolley, Ilsa Fenwright, Sister Hesper, Wren, Master Imra Vell, Ranger Tamsin, Townsfolk face 2, Townsfolk face 4) · P0
+Edit the attached blank base image: change ONLY the face. Paint the face of a boy of about ten (the game's morph makes a child small, so draw the face at the base's size) onto the blank head: a round child's face, big bright eyes, a small snub nose, full cheeks, a light dusting of freckles, an open, curious look. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m01.png.
 
-**Basis:** Edits `face-sheet-female`. Cells: 1 `face-maud`, 2 `face-ilsa`, 3 `face-hesper`, 4 `face-wren`, 5 `face-imra-vell`, 6 `face-tamsin`, 7 `face-town-2`, 8 `face-town-4`.
+#### `face-m02` · Man 2, the lad · P0
 
-1. Maud Tolley: Maud Tolley, a harbour widow of about seventy. A soft, sad face, pale grey eyes, a gentle mouth, fair skin with fine lines.
-2. Ilsa Fenwright: Ilsa, a human scroll clerk of about twenty-five. An earnest, slightly harried face, green eyes, a determined mouth, golden-tan skin.
-3. Sister Hesper: Sister Hesper, a temple sister of about sixty. A calm, kind face, warm brown eyes, laugh lines, deep brown skin.
-4. Wren: Wren, a Hearthling street pickpocket of about ten. A sly, freckled child's face, bright amber eyes, the hint of a gap-toothed grin, brown skin.
-5. Master Imra Vell: Master Imra Vell, a human weapons-master of about fifty. A square, dry-humoured face, dark eyes with a glint, an old scar across the bridge of the nose, deep brown skin.
-6. Ranger Tamsin: Ranger Tamsin, a Wildkin woman of the hawk line, about forty. A hawkish, level face, sharp amber eyes, a thin scar from cheekbone to jaw, tan skin. In place of ears, two swept-back tufts of barred brown-and-cream feathers grow from the top of the head.
-7. Townsfolk face 2: a young human woman of about twenty-five. A sweet, dimpled face, green eyes, tan skin.
-8. Townsfolk face 4: a human woman of about forty. A rosy, good-humoured face, warm brown eyes, fair skin.
-I'll save it as face-sheet-f03.png.
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-#### `face-sheet-f04` · Face sheet: 8 women (Townsfolk face 6, Townsfolk face 8, Townsfolk face 10, Townsfolk face 13, Townsfolk face 15, Townsfolk face 18, Mira, aged thirteen, Archmage Thessaly Varn) · P0
+Edit the attached blank base image: change ONLY the face. Paint the face of a lad of about seventeen onto the blank head: a smooth, eager face, wide-open eyes, a soft jaw not yet filled out, a straight nose a little big for the face, clean-shaven. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m02.png.
 
-**Basis:** Edits `face-sheet-female`. Cells: 1 `face-town-6`, 2 `face-town-8`, 3 `face-town-10`, 4 `face-town-13`, 5 `face-town-15`, 6 `face-town-18`, 7 `face-mira-young`, 8 `face-thessaly`.
+#### `face-m03` · Man 3, the hero · P0
 
-1. Townsfolk face 6: an old human woman of about seventy-five. A round, kindly face, sharp black eyes, many wrinkles, rosy fair skin.
-2. Townsfolk face 8: a human girl of about eight. A bright child's face, big blue eyes, freckles, fair skin.
-3. Townsfolk face 10: a human woman of about thirty. A neat, freckled face, blue eyes, fair skin.
-4. Townsfolk face 13: a human woman of about forty-five. A serene, weathered face, dark eyes, a gentle smile, brown skin.
-5. Townsfolk face 15: a Hearthling woman of about thirty (an adult's face). A round, busy face, bright hazel eyes, rosy fair skin.
-6. Townsfolk face 18: a human woman of about thirty from a cold, shadowed valley. A pale, guarded face, dark eyes, a straight mouth, very pale skin.
-7. Mira, aged thirteen: Mira as a girl of thirteen, new apprentice in a great archive. A rounder, younger face with the same freckles and gentle brown eyes, serious and proud, fair skin.
-8. Archmage Thessaly Varn: Archmage Thessaly, a human woman of about sixty. A lean, sharp face, deep lines round the mouth, steady grey eyes that miss nothing, thin lips, fair skin.
-I'll save it as face-sheet-f04.png.
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-#### `face-sheet-f05` · Face sheet: 8 women (Brenna of Ashfall, Mother Gannet, Hester Hollis, Pedlar Mags, Valencia Morvaine, Mother Superior Anselle, Sister Orla, Lady Isadora) · P1
+Edit the attached blank base image: change ONLY the face. Paint the face of a young man of about twenty-four onto the blank head: an open, likeable oval face, a straight nose, steady eyes under straight, expressive brows, a firm, friendly mouth, clean-shaven. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m03.png.
 
-**Basis:** Edits `face-sheet-female`. Cells: 1 `face-brenna`, 2 `face-gannet`, 3 `face-hester`, 4 `face-mags`, 5 `face-valencia`, 6 `face-anselle`, 7 `face-orla`, 8 `face-isadora`.
+#### `face-m04` · Man 4, the rogue · P0
 
-1. Brenna of Ashfall: Brenna, a hard human fighter of about thirty-five from a burned country. A lean, hard face, grey eyes, a burn scar along the jaw, ash smudged on the cheeks and brow, fair skin weathered tan.
-2. Mother Gannet: Mother Gannet, a human landlady of about sixty. A broad, shrewd face, heavy-lidded eyes, a small, tight smile, a double chin, ruddy fair skin.
-3. Hester Hollis: Hester Hollis, a human woman of about eighty. A thin, kind face, deeply lined, sharp pale-blue eyes, a pointed chin, pale skin with age spots.
-4. Pedlar Mags: Pedlar Mags, a Stoneborn woman of about sixty. A weathered, merry face, crinkled brown eyes, a broad nose, apple cheeks, ruddy tan skin.
-5. Valencia Morvaine: Valencia, a vampire noblewoman who looks about twenty-five. A heart-shaped, elegant face, cool porcelain skin, grey eyes with a faint red ring round the iris, long lashes, arched brows, a dry, amused mouth with the tips of two small fangs just showing.
-6. Mother Superior Anselle: Mother Anselle, the head of an abbey, about sixty-five. A round, shrewd face, bright hazel eyes, a small knowing smile, rosy fair skin with laugh lines.
-7. Sister Orla: Sister Orla, an abbey beekeeper of about sixty. A broad, ruddy face, small cheerful blue eyes, a wide, frank mouth, sun-browned fair skin with freckles.
-8. Lady Isadora: Lady Isadora, a noblewoman who looks about forty, remembered in an echo. A warm, practical face, gentle dark eyes, a straight nose, an amused mouth, pale skin.
-I'll save it as face-sheet-f05.png.
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-#### `face-sheet-f06` · Face sheet: 6 women (Valencia as a child, Ide, Maren, Hollowmere's elder, A Hollowmere farmer, A Guild apprentice, Vreya) · P2
+Edit the attached blank base image: change ONLY the face. Paint the face of a young man of about twenty-five onto the blank head: a narrow, sharp-featured face, high cheekbones, keen, narrowed eyes under angled brows, a thin nose, one corner of the mouth lifted in a knowing half-smile, clean-shaven. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m04.png.
 
-**Basis:** Edits `face-sheet-female`. Cells: 1 `face-valencia-child`, 2 `face-ide`, 3 `face-maren-elder`, 4 `face-hollowmere-farmer`, 5 `face-guild-apprentice`, 6 `face-vreya`.
+#### `face-m05` · Man 5, the soldier · P0
 
-1. Valencia as a child: Valencia as a little girl of about eight. A small heart-shaped face, solemn, pale skin, grey eyes.
-2. Ide: Ide, a young woman of about nineteen, rescued from a cellar. A sharp, pale face, dark shadows under sharp dark eyes, a tart, sideways mouth, very pale skin.
-3. Maren, Hollowmere's elder: Maren, a village elder of about sixty-five. A stern, proud face, pale grey eyes, a thin mouth, deep lines, very pale skin.
-4. A Hollowmere farmer: a village farm woman of about forty. A tired, stubborn face, dark eyes, weathered pale skin, a set mouth.
-5. A Guild apprentice: a Mages Guild apprentice of about seventeen. A pale, frightened face, wide green eyes, freckles, light skin.
-6. Vreya: Vreya, a vampire knight. A pale, gleeful face, red eyes, a mocking smirk, the tips of fangs showing, very pale skin.
-Leave cells 7 and 8 exactly as they are: bald, unchanged.
-I'll save it as face-sheet-f06.png.
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-### 4.1 The player and the Soul-Bound
+Edit the attached blank base image: change ONLY the face. Paint the face of a man of about thirty-eight onto the blank head: a square-jawed, steady face, level eyes under a strong, straight brow, a broad straight nose, a firm mouth, clean-shaven. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m05.png.
 
-#### `face-player-1` · You, face 1 (the default man) · P0
+#### `face-m06` · Man 6, the bruiser · P0
 
-**Basis:** Edits `base-male-blank`. From the guide figure PLAYER (BASE); `Origins.cs` (`you`).
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a young human man of about twenty-four from a poor fishing cove onto the blank head: an open, likeable oval face, a straight nose, warm brown eyes under straight, expressive brows, clean-shaven, fair skin lightly browned by the sea. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-1.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a heavy-set man of about thirty-five onto the blank head: a broad, blunt face, a thick brow ridge over small, hard eyes, a flattened nose broken more than once, a heavy, square jaw. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m06.png.
 
-#### `face-player-2` · You, face 2 (the default woman) · P0
+#### `face-m07` · Man 7, the kindly man · P0
 
-**Basis:** Edits `base-female-blank`. **(derived)** From the guide's PLAYER (BASE) as a woman.
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a young human woman of about twenty-four from a poor fishing cove onto the blank head: an open, likeable oval face, a straight nose, warm brown eyes with defined lashes, straight brows, a dusting of freckles over the nose, fair skin lightly browned by the sea. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-2.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a man of about forty-five onto the blank head: a round, pleasant face, soft cheeks, kind eyes with laugh lines at the corners, a short nose, a small, contented smile. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m07.png.
 
-#### `face-player-3` · You, face 3 (the Soul-Bound's default) · P0
+#### `face-m08` · Man 8, the noble · P0
 
-**Basis:** Edits `base-female-blank`. From the guide figure SERA (the dark ponytail); `Origins.cs` (`soulbound`: long black hair).
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a young human woman of about twenty-four, warm, quick and ambitious onto the blank head: a heart-shaped face, sharp dark-brown eyes under arched brows, the corner of the mouth lifted as if about to tease, fair skin with a little sea-sun on it. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-3.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a man of about fifty onto the blank head: a long, narrow, refined face, high cheekbones, cool, heavy-lidded eyes under finely arched brows, a long straight nose, thin lips held in a polite, guarded line, clean-shaven. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m08.png.
 
-#### `face-player-4` · You, face 4 (a Hearthling) · P0
+#### `face-m09` · Man 9, the veteran · P0
 
-**Basis:** Edits `base-female-blank`. **(derived)** From `Characters/LookOptions.cs` (the Hearthlings).
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a Hearthling woman of about thirty: a small people, but this is an adult's face, not a child's (the game's morph makes her small) onto the blank head: a round, cheerful face, wide hazel eyes, a snub nose, rosy brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-4.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a weathered man of about fifty-five onto the blank head: a craggy, lined face, deep-set eyes with crow's feet under thick, fierce brows, a crooked nose, an old nick through one brow, a firm, weathered mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m09.png.
 
-#### `face-player-5` · You, face 5 (a Sylvan) · P0
+#### `face-m10` · Man 10, the elder · P0
 
-**Basis:** Edits `base-female-blank`. **(derived)** From `Enums/Ancestry.cs` (Sylvans: long-lived, pointed ears).
+**Basis:** Edits `base-male-blank`. One of the ten men's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a Sylvan woman, ageless, who looks about thirty onto the blank head: a narrow face with high cheekbones, long, elegant pointed ears swept back from the sides of the head, pale silver-grey eyes, porcelain skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-5.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of an old man of about seventy onto the blank head: a deeply lined, gentle face, drooping lids over kind eyes, bushy brows, a big nose, hollowed cheeks, a thin, gentle mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-m10.png.
 
-#### `face-player-6` · You, face 6 (an Emberkin) · P0
+### 4.2 The women's faces
 
-**Basis:** Edits `base-male-blank`. **(derived)** From `03-art-overhaul.md` §3.6 (`horns-emberkin-curled`).
+#### `face-f01` · Woman 1, the girl · P0
 
-Edit the attached blank base image: change ONLY the face. Paint the face of an Emberkin man of about twenty-two onto the blank head: a sharp, handsome face, amber eyes, a small fang showing at the corner of the mouth, tan skin. Two dark, ridged horns curl round from the temples like a ram's, old bone going ivory at the tips. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-6.png.
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-#### `face-player-7` · You, face 7 (a Wildkin) · P0
+Edit the attached blank base image: change ONLY the face. Paint the face of a girl of about ten (the game's morph makes a child small, so draw the face at the base's size) onto the blank head: a round child's face, big bright eyes, a small snub nose, full cheeks, a dusting of freckles, a quick, cheeky look. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f01.png.
 
-**Basis:** Edits `base-female-blank`. **(derived)** From `03-art-overhaul.md` §3.6 (`ears-wildkin-wolf`).
+#### `face-f02` · Woman 2, the maiden · P0
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a Wildkin woman of the wolf line, about twenty-eight onto the blank head: a strong jaw, bright yellow-green eyes, a small scar on the chin, deep brown skin. Two tall, pointed wolf's ears stand on top of the head, furred grey-brown. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-7.png.
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-#### `face-player-8` · You, face 8 (a Stoneborn) · P0
+Edit the attached blank base image: change ONLY the face. Paint the face of a girl of about seventeen onto the blank head: a soft, youthful face, wide eyes with long lashes, gentle brows, a small nose, a shy, uncertain mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f02.png.
 
-**Basis:** Edits `base-male-blank`. **(derived)** From `Enums/Ancestry.cs` (Stoneborn: mountain clans, short and broad).
+#### `face-f03` · Woman 3, the heroine · P0
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a Stoneborn man who looks about forty-five (the game's morph makes him short and broad, so draw the face at the base's size) onto the blank head: a broad, heavy face, deep-set grey eyes, a wide nose, weathered golden skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-player-8.png.
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-### 4.2 The party
+Edit the attached blank base image: change ONLY the face. Paint the face of a young woman of about twenty-four onto the blank head: an open, likeable oval face, a straight nose, warm eyes with defined lashes, straight brows, a friendly mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f03.png.
 
-#### `face-sera` · Sera Vantis · P0
+#### `face-f04` · Woman 4, the quick wit · P0
 
-**Basis:** Edits `base-female-blank`. From the guide figure KIAN; `03-art-overhaul.md` §7.4 (one braid to the waist); `COMPANIONS.md`.
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Sera, a Sylvan forest warden, about a hundred and forty but young for her people, so she looks a weathered thirty onto the blank head: a narrow, still, unsmiling face, high cheekbones, long pointed ears swept back, sharp green eyes, soft straight brows, porcelain skin with a little weather on it. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-sera.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a young woman of about twenty-four onto the blank head: a heart-shaped face, sharp, bright eyes under arched brows, a small pointed chin, one corner of the mouth lifted as if about to tease. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f04.png.
 
-#### `face-mira` · Mira Ashgrove · P0
+#### `face-f05` · Woman 5, the lady · P0
 
-**Basis:** Edits `base-female-blank`. From the guide figure NOREL; `03-art-overhaul.md` §7.4 (hair tied up with a pen through it); `COMPANIONS.md` (twenty-six).
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Mira, a gentle human archivist of twenty-six onto the blank head: a soft, round face, gentle brown eyes, soft brows a little worried, freckles across the nose and cheeks, fair skin, an ink smudge on one cheek. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-mira.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a woman of about twenty-eight onto the blank head: a fine oval face with high cheekbones, clear, cool eyes under straight, elegant brows, a narrow nose, a composed, unsmiling mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f05.png.
 
-#### `face-mira-young` · Mira, aged thirteen · P1
+#### `face-f06` · Woman 6, the gentle soul · P0
 
-**Basis:** Edits `base-female-blank`. **(derived)** From `04-script-prologue-act1.md` A1-C8-01 (`echo mira-young`).
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Mira as a girl of thirteen, new apprentice in a great archive onto the blank head: a rounder, younger face with the same freckles and gentle brown eyes, serious and proud, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-mira-young.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a woman of about thirty-five onto the blank head: a soft, round face, gentle eyes under softly worried brows, rounded cheeks, a small, kind mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f06.png.
 
-#### `face-kael` · Kael Duskmantle · P0
+#### `face-f07` · Woman 7, the fighter · P0
 
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (swept horns); `Origins.cs` (Emberkin, swept horns, amber eyes); `COMPANIONS.md` (twenty-three).
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Kael, an Emberkin thief of twenty-three onto the blank head: a sharp, handsome face, amber eyes, straight brows, a small fang just showing, tan skin. Two dark, ridged horns sweep straight back from the temples in a long curve, going pale like old ivory at the tips. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-kael.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a woman of about forty onto the blank head: a lean, strong face, a firm jaw, level, steady eyes under straight brows, a straight nose, a set mouth, a small old scar on the chin. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f07.png.
 
-#### `face-brannock` · Brannock Ironvein · P0
+#### `face-f08` · Woman 8, the matron · P0
 
-**Basis:** Edits `base-male-blank`. From the guide figure CERRO; `03-art-overhaul.md` §7.4 (a braided beard to the belt with two gold clasps); `COMPANIONS.md` (nearly two hundred).
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Brannock, a Stoneborn old soldier nearly two hundred years old, which on a Stoneborn looks like a hard-weathered sixty onto the blank head: a square, heavy face, a nose broken more than once, deep-set brown eyes under thick, fierce brows, old scars, golden-tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-brannock.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a woman of about fifty-five onto the blank head: a broad, weathered face, crinkled eyes with deep laugh lines, apple cheeks, a broad nose, a wide, good-humoured mouth. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f08.png.
 
-#### `face-valencia` · Valencia Morvaine · P2
+#### `face-f09` · Woman 9, the matriarch · P0
 
-**Basis:** Edits `base-female-blank`. From the guide figure VALENCIA (silver hair); `COMPANIONS.md` (a Dawnborn vampire who looks twenty-five).
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Valencia, a vampire noblewoman who looks about twenty-five onto the blank head: a heart-shaped, elegant face, cool porcelain skin, grey eyes with a faint red ring round the iris, long lashes, arched brows, a dry, amused mouth with the tips of two small fangs just showing. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-valencia.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a woman of about sixty onto the blank head: a lean, sharp face, deep lines round the mouth, steady, piercing eyes under thin brows, a long nose, thin lips pressed together. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f09.png.
 
-#### `face-mc-child` · You, aged eight · P0
+#### `face-f10` · Woman 10, the grandmother · P0
 
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (the children on the pier: the player's look at eight); the default `face-player-1`.
+**Basis:** Edits `base-female-blank`. One of the ten women's faces anyone can wear (§4.0).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of the player as a boy of eight in a fishing cove (the game's morph makes him child-sized) onto the blank head: a round, freckled child's face, sunburn across the nose, big honest brown eyes, a gap in his front teeth, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-mc-child.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of an old woman of about seventy-five onto the blank head: a soft, round, kindly face, many fine wrinkles, gentle eyes in deep creases, a small nose, a sweet, tired smile. The expression is neutral and relaxed, eyes open, looking ahead. Paint the skin in the base's own warm tan, the eyes a mid brown and the eyebrows a mid brown: many characters wear this face, and the game recolours the skin, the eyes and the hair for each. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-f10.png.
 
-#### `face-sb-child` · {sb}, aged eight · P0
+### 4.3 Heads that aren't faces
 
-**Basis:** Edits `base-female-blank`. From `03-art-overhaul.md` §7.4; the default `face-player-3`.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of the Soul-Bound as a girl of eight in a fishing cove onto the blank head: a sharp, grinning child's face, mischievous dark-brown eyes, a scab on the chin, fair skin pink from the wind. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-sb-child.png.
-
-#### `face-brannock-bare` · Brannock, the clasps gone · P2
-
-**Basis:** Edits `face-brannock`. From `03-art-overhaul.md` §7.4 (none after A3-C2-05).
-
-Edit the attached image (face-brannock.png, the face on the base): change ONLY the beard's clasps: the two gold clasps are gone from the braid, which is tied with plain cord instead. Keep everything else, the rest of the face and hair, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-brannock-bare.png.
-
-### 4.3 Act 1
-
-#### `face-corra` · Corra · P0
-
-**Basis:** Edits `base-female-blank`. From `03-art-overhaul.md` §7.4; `Cast.cs` (tan skin, grey eyes, chestnut hair).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Corra, a human net-mender of about fifty, the Soul-Bound's mother onto the blank head: a weathered, kind face, a strong nose, steady grey eyes with deep lines at the corners, a mouth used to keeping quiet, tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-corra.png.
-
-#### `face-lookout` · The lookout · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `04-script-prologue-act1.md` P-04.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a wiry human sailor of about thirty onto the blank head: a narrow face, sun-dark brown skin, sharp pale-grey eyes used to squinting at the horizon, a short scruffy beard. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-lookout.png.
-
-#### `face-odelle` · Captain Odelle Marsh · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (brown skin, a stern face, long black hair); the voice sheet ("salt and cheek").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Captain Odelle Marsh, a ship's captain of about forty-five onto the blank head: a long, stern face with laugh lines, brown eyes, a small gold ring in one ear, deep brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-odelle.png.
-
-#### `face-tomas` · Old Tomas · P0
-
-**Basis:** Edits `base-male-blank`. From (derived in part) the voice sheet ("fifty years a fisherman").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Old Tomas, a human fisherman of about seventy onto the blank head: a weathered, deeply lined face, brown-tan skin, bushy white eyebrows over squinting blue-grey eyes, a short white stubble beard, a big nose reddened by the wind. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-tomas.png.
-
-#### `face-red-gull` · Red Gull Thug, face 1 · P0
-
-**Basis:** Edits `base-male-blank`. From the guide figure KELL; the art plan (three seeded heads).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a harbour gang thug of about thirty onto the blank head: a brutal, smug face, a heavy jaw with dark stubble, small hard eyes under a thick brow, a flattened nose, deep brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-red-gull.png.
-
-#### `face-red-gull-2` · Red Gull Thug, face 2 · P0
-
-**Basis:** Edits `base-male-blank`. From the art plan (the second of three heads).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of another harbour gang thug, about thirty onto the blank head: a broken nose, a scraggly ginger beard, pale eyes, light, freckled skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-red-gull-2.png.
-
-#### `face-red-gull-3` · Red Gull Thug, face 3 · P0
-
-**Basis:** Edits `base-male-blank`. From the art plan (the third of three heads).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a third harbour gang thug, about twenty-five onto the blank head: a narrow, sneering face, a gold tooth, dark eyes, tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-red-gull-3.png.
-
-#### `face-grell` · Bosun Grell · P0
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (bald); `Cast.cs` (Stoneborn, a full beard).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Bosun Grell, a Stoneborn gang boss of middle age onto the blank head: a broad, mean face, small fierce eyes under heavy brows, a puckered scar across one cheek, tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-grell.png.
-
-#### `face-hale` · Captain Roderic Hale · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (fair skin, grey eyes, grey hair, stubble); the voice sheet.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Captain Hale of the City Watch, a human man of about fifty-two onto the blank head: a square, tired face, grey eyes with heavy bags under them, a short grey stubble beard, a crooked nose, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hale.png.
-
-#### `face-fennick` · Questmaster Fennick · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs`; the voice sheet ("pedantic, kind"); the spectacles are (derived).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Questmaster Fennick, a human clerk of about fifty-eight onto the blank head: a round, pleasant face, pale skin, grey eyes behind small round spectacles, a neat grey moustache, a satisfied little smile. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-fennick.png.
-
-#### `face-hedda` · Hedda · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (tan skin, brown eyes, chestnut hair tied back); the map's `refugee-mother` uses it.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Hedda, a human refugee mother of about thirty-five onto the blank head: a hollow-cheeked, fierce face, brown eyes ringed with tiredness, a set jaw, tan skin smudged with road dirt. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hedda.png.
-
-#### `face-refugee-child` · Lise · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From `Cast.cs` (Lise, Hedda's daughter).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Lise, a refugee girl of twelve onto the blank head: a pale, serious child's face, big brown eyes, her mother's set jaw, a smudge of dirt on one cheek, tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-refugee-child.png.
-
-#### `face-brisk` · Sergeant Brisk · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (brown skin, brown eyes, black hair, a moustache).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Sergeant Brisk of the City Watch, a human man of about forty onto the blank head: a worried, harried face, brown eyes, a thick black moustache, a five-o'clock shadow, brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-brisk.png.
-
-#### `face-refugee-1` · Old Aurek · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (an old orchard farmer; bald, a beard).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Old Aurek, a sick refugee farmer of about seventy-five onto the blank head: a gaunt, feverish face, kind grey eyes, a long silver beard, tan skin with deep lines. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-refugee-1.png.
-
-#### `face-refugee-2` · Teodor · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `Cast.cs` (brown skin, tousled black hair, stubble).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Teodor, a refugee lad of about sixteen with a fever onto the blank head: a face flushed with fever, sweat on the brow, tired brown eyes, the first fuzz of a moustache, brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-refugee-2.png.
-
-#### `face-refugee-3` · Yselle the Glassblower · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (Stoneborn; golden skin, amber eyes, freckles, a copper braid).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Yselle, a Stoneborn glassblower of about forty onto the blank head: a round, freckled face, amber eyes, a determined mouth, golden-tan skin with a little soot. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-refugee-3.png.
-
-#### `face-elara` · Princess Elara Aurelian · P0
-
-**Basis:** Edits `base-female-blank`. From the guide figure ELARA (short dark hair); `Cast.cs` (grey eyes); `COMPANIONS.md` (twenty-four).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Princess Elara, a human woman of twenty-four, impatient and clever onto the blank head: an oval face, clear grey eyes with defined lashes, straight dark brows, a firm mouth that's about to interrupt someone, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-elara.png.
-
-#### `face-leon` · King Leon · P0
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4; `Cast.cs` (silver hair and beard); the voice sheet.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of King Leon, a human man of about sixty-eight, kind and tired onto the blank head: a broad, gentle face, grey eyes with deep laugh lines, thick grey brows, a full, neatly trimmed silver beard, fair skin with the flush of age. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-leon.png.
-
-#### `face-crane` · Lord Chancellor Vesper Crane · P0
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (slicked hair); `Cast.cs` (porcelain skin, grey eyes, a moustache).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Lord Chancellor Crane, a human man of about fifty-five onto the blank head: a long, narrow face, high cheekbones, pale porcelain skin, sharp grey eyes, finely arched brows, a thin black moustache, a polite smile that doesn't reach his eyes. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-crane.png.
-
-#### `face-anvil-barkeep` · Hessa the Barkeep · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (a Wildkin of the bear line; golden skin, a scarred face, black hair tied back).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Hessa, a Wildkin barkeep of the bear line, about forty onto the blank head: a broad, unimpressed face, small brown eyes, a heavy jaw, an old scar through the near eyebrow and down the cheek, golden-tan skin. Two small, round, furry black bear's ears on top of the head. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-anvil-barkeep.png.
-
-#### `face-netty` · Netty the Net-Mender · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (tan skin, freckles, green eyes, a silver braid).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Netty, a harbour net-mender of about fifty-five onto the blank head: a freckled, cheerful face, green eyes, laugh lines, tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-netty.png.
-
-#### `face-maud` · Maud Tolley · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (fair skin, grey eyes, silver hair in a bun).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Maud Tolley, a harbour widow of about seventy onto the blank head: a soft, sad face, pale grey eyes, a gentle mouth, fair skin with fine lines. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-maud.png.
-
-#### `face-pip` · Pip the Potboy · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (a Hearthling; fair, freckled, copper hair).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Pip, a Hearthling potboy of about seventeen (an adult face, not a child's) onto the blank head: a freckled, nervous face, wide brown eyes, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-pip.png.
-
-#### `face-osric` · Osric Penhallow · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (porcelain skin, brown eyes, black hair, a moustache).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Osric, a human silk merchant of about forty-five onto the blank head: a neat, anxious face, brown eyes glancing sideways, a carefully trimmed black moustache, porcelain-pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-osric.png.
-
-#### `face-lark` · Lark the Busker · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (a Sylvan; rose hair, lilac eyes).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Lark, a young-looking Sylvan street singer onto the blank head: a bright, cheeky face, pale lilac-grey eyes, a performer's half-smile, porcelain skin, long pointed ears. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-lark.png.
-
-#### `face-ilsa` · Ilsa Fenwright · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (golden skin, green eyes, a gold braid).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Ilsa, a human scroll clerk of about twenty-five onto the blank head: an earnest, slightly harried face, green eyes, a determined mouth, golden-tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-ilsa.png.
-
-#### `face-oswin` · Guardsman Oswin · P0
-
-**Basis:** Edits `base-male-blank`. From `Cast.cs` (fair skin, blue eyes, gold hair).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Oswin, a young human palace guard of about twenty-two onto the blank head: a very straight-faced, serious face, blue eyes, clean-shaven, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-oswin.png.
-
-#### `face-hesper` · Sister Hesper · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (deep skin, brown eyes, long silver hair).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Sister Hesper, a temple sister of about sixty onto the blank head: a calm, kind face, warm brown eyes, laugh lines, deep brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hesper.png.
-
-#### `face-wren` · Wren · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (a Hearthling; brown skin, freckles, amber eyes, black hair).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Wren, a Hearthling street pickpocket of about ten onto the blank head: a sly, freckled child's face, bright amber eyes, the hint of a gap-toothed grin, brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-wren.png.
-
-#### `face-imra-vell` · Master Imra Vell · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From `10-classes.md` §5.1.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Master Imra Vell, a human weapons-master of about fifty onto the blank head: a square, dry-humoured face, dark eyes with a glint, an old scar across the bridge of the nose, deep brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-imra-vell.png.
-
-#### `face-tamsin` · Ranger Tamsin · P0
-
-**Basis:** Edits `base-female-blank`. From `Cast.cs` (a Wildkin of the hawk line; tan skin, a scarred face, amber eyes, chestnut hair tied back).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Ranger Tamsin, a Wildkin woman of the hawk line, about forty onto the blank head: a hawkish, level face, sharp amber eyes, a thin scar from cheekbone to jaw, tan skin. In place of ears, two swept-back tufts of barred brown-and-cream feathers grow from the top of the head. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-tamsin.png.
-
-#### `face-garrick` · Garrick the caravan master · P1
-
-**Basis:** Edits `base-male-blank`. **(derived)** From A1-C5-01.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Garrick, a human caravan master of about fifty onto the blank head: a lean, leathery face, tan skin with squint lines, brown eyes, a grey-shot black moustache, an old scar through one eyebrow. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-garrick.png.
-
-#### `face-aldric` · Commander Aldric Voss · P1
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (grey stubble); the voice sheet.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Commander Aldric Voss, an old human soldier of about sixty-five onto the blank head: a craggy, humorous face, pale-blue eyes with deep crow's feet, a grey stubble beard, an old notch missing from one ear, weathered fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-aldric.png.
-
-#### `face-recruit` · The recruit · P1
-
-**Basis:** Edits `base-male-blank`. **(derived)** From A1-C7-01.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a brand-new human soldier of about seventeen onto the blank head: an eager, open face, red-cheeked from the cold, blue eyes, a few spots, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-recruit.png.
-
-#### `face-thessaly` · Archmage Thessaly Varn · P1
-
-**Basis:** Edits `base-female-blank`. From `03-art-overhaul.md` §7.4 (cropped grey hair); the voice sheet.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Archmage Thessaly, a human woman of about sixty onto the blank head: a lean, sharp face, deep lines round the mouth, steady grey eyes that miss nothing, thin lips, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-thessaly.png.
-
-#### `face-brenna` · Brenna of Ashfall · P1
-
-**Basis:** Edits `base-female-blank`. From (derived in part) the voice sheet; A1-C7-05 (Varkhul's daughter).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Brenna, a hard human fighter of about thirty-five from a burned country onto the blank head: a lean, hard face, grey eyes, a burn scar along the jaw, ash smudged on the cheeks and brow, fair skin weathered tan. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-brenna.png.
-
-#### `face-gannet` · Mother Gannet · P1
-
-**Basis:** Edits `base-female-blank`. **(derived)** From `03-art-overhaul.md` §7.4.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Mother Gannet, a human landlady of about sixty onto the blank head: a broad, shrewd face, heavy-lidded eyes, a small, tight smile, a double chin, ruddy fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-gannet.png.
-
-#### `face-hester` · Hester Hollis · P1
-
-**Basis:** Edits `base-female-blank`. From `03-art-overhaul.md` §7.4 (a grey bun).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Hester Hollis, a human woman of about eighty onto the blank head: a thin, kind face, deeply lined, sharp pale-blue eyes, a pointed chin, pale skin with age spots. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hester.png.
-
-#### `face-tobin` · Tobin Ashgrove · P1
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `COMPANIONS.md` (Mira's father).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Tobin, a human cider-presser of about fifty-five onto the blank head: a gentle, round face, kind brown eyes, freckles, a short greying copper-red beard, fair skin reddened by the sun. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-tobin.png.
-
-#### `face-harrow` · Lord Harrow of Heronsgate · P1
-
-**Basis:** Edits `base-male-blank`. **(derived)** From the voice sheet ("never looks at the person he's ruining").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Lord Harrow, a bored human lord of about fifty-five onto the blank head: a bland, pale face, heavy-lidded eyes looking off to one side at nothing, grey side-whiskers, a small, polite, empty smile. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-harrow.png.
-
-#### `face-hobb` · Hobb the woodcutter · P1
-
-**Basis:** Edits `base-male-blank`. From `08-random-encounters.md` ("He's big. He's got a red beard.").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Hobb, a human woodcutters' foreman of about forty-five onto the blank head: a broad, ruddy face, worried blue eyes, a big bushy red beard, freckled fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hobb.png.
-
-#### `face-maleficio` · Maleficio · P1
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `03-art-overhaul.md` §7.4; the voice sheet ("a teacher").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Maleficio, a gentle old human scholar of about sixty-five onto the blank head: a kind, lined face, tired dark eyes, a close-trimmed grey beard, a high forehead, pale skin that hasn't seen the sun in years. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-maleficio.png.
-
-#### `face-lost-boy` · The woodcutter's boy · P1
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `08-random-encounters.md` (`enc-woodcutters-boy`: Hobb's son).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a lost human boy of about eight onto the blank head: a freckled, tear-streaked child's face, wide blue eyes, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-lost-boy.png.
-
-#### `face-mags` · Pedlar Mags · P1
-
-**Basis:** Edits `base-female-blank`. **(derived)** From `08-random-encounters.md` (`enc-mags`: a Stoneborn woman).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Pedlar Mags, a Stoneborn woman of about sixty onto the blank head: a weathered, merry face, crinkled brown eyes, a broad nose, apple cheeks, ruddy tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-mags.png.
-
-#### `face-corra-flashback` · Corra, sixteen years younger · P0
-
-**Basis:** Edits `face-corra`. From `03-art-overhaul.md` §7.4 (a flashback version, sixteen years younger); P-03.
-
-Edit the attached image (face-corra.png, the face on the base): change ONLY her age: make her sixteen years younger, about thirty-four, with no grey in the chestnut hair, fewer lines, and the hair damp and coming loose from the rain. Keep everything else, the rest of the face and hair, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-corra-flashback.png.
-
-#### `face-maleficio-young` · Maleficio, remembered · P1
-
-**Basis:** Edits `face-maleficio`. From `03-art-overhaul.md` §7.4 (`maleficio-young`, an echo); A1-C8-01.
-
-Edit the attached image (face-maleficio.png, the face on the base): change ONLY his age: make him twenty years younger, about forty-five, the face fuller and warmer, the beard short and dark with grey only at the chin, the hair dark with grey at the temples. Keep everything else, the rest of the face and hair, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-maleficio-young.png.
-
-### 4.4 Act 2
-
-#### `face-anselle` · Mother Superior Anselle · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From the voice sheet ("knows more than she says").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Mother Anselle, the head of an abbey, about sixty-five onto the blank head: a round, shrewd face, bright hazel eyes, a small knowing smile, rosy fair skin with laugh lines. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-anselle.png.
-
-#### `face-orla` · Sister Orla · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From the voice sheet ("practical, unembarrassed").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Sister Orla, an abbey beekeeper of about sixty onto the blank head: a broad, ruddy face, small cheerful blue eyes, a wide, frank mouth, sun-browned fair skin with freckles. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-orla.png.
-
-#### `face-corwin` · Sir Corwin Halbeck · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From the voice sheet ("liturgy and certainty").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Sir Corwin, a knight-commander of about forty-five onto the blank head: a square-jawed, certain face, clear blue eyes, clean-shaven, a small scar on the chin, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-corwin.png.
-
-#### `face-severin` · Lord Severin Morvaine · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (silver hair to the shoulders); the voice sheet ("grieving").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Lord Severin, a vampire lord who looks about forty-five onto the blank head: a long, beautiful, very tired face, pale grey-white skin, dark-red eyes, high cheekbones, a straight nose, a mouth set in old sorrow, the tips of fangs barely showing. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-severin.png.
-
-#### `face-isadora` · Lady Isadora · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From the voice sheet ("warm, practical").
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Lady Isadora, a noblewoman who looks about forty, remembered in an echo onto the blank head: a warm, practical face, gentle dark eyes, a straight nose, an amused mouth, pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-isadora.png.
-
-#### `face-valencia-child` · Valencia as a child · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From A2-C3-03 (`echo valencia-child`).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Valencia as a little girl of about eight onto the blank head: a small heart-shaped face, solemn, pale skin, grey eyes. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-valencia-child.png.
-
-#### `face-pell` · Pell · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From A2-C3-02; the Morvaine pool (pale skin).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Pell, a village lad of about seventeen from a cold, dark valley onto the blank head: a pale, anxious face, big dark eyes, chapped lips, freckles, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-pell.png.
-
-#### `face-ide` · Ide · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From `08-random-encounters.md` §5.1.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Ide, a young woman of about nineteen, rescued from a cellar onto the blank head: a sharp, pale face, dark shadows under sharp dark eyes, a tart, sideways mouth, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-ide.png.
-
-#### `face-maren-elder` · Maren, Hollowmere's elder · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From A2-C3-02.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Maren, a village elder of about sixty-five onto the blank head: a stern, proud face, pale grey eyes, a thin mouth, deep lines, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-maren-elder.png.
-
-#### `face-blood-house-steward` · The blood-house steward · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `08-random-encounters.md` §5.1.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of the steward of a vampire's manor, about fifty onto the blank head: a long, colourless face, pale watery eyes, thin lips pressed together, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-blood-house-steward.png.
-
-#### `face-hollowmere-child` · A Hollowmere child · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `enc-hollowmere-child`.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a village boy of about eight onto the blank head: a pale, suspicious child's face, narrowed grey eyes, a smudged nose. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hollowmere-child.png.
-
-#### `face-hollowmere-farmer` · A Hollowmere farmer · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From `enc-tithe-riders` (a goodwife).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a village farm woman of about forty onto the blank head: a tired, stubborn face, dark eyes, weathered pale skin, a set mouth. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hollowmere-farmer.png.
-
-#### `face-ruck` · Ruck, the bosun · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `10-classes.md` (`train-odelle`).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Ruck, a ship's bosun of about fifty onto the blank head: a battered, good-natured face, small grey eyes, a nose broken twice, a grey chin beard, weathered dark skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-ruck.png.
-
-### 4.5 Act 3
-
-#### `face-davin` · Davin · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `03-art-overhaul.md` §7.4 (young).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Davin, a squire of about eighteen onto the blank head: an earnest, grieving face, steady brown eyes, a boyish jaw, light-brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-davin.png.
+The humanoid foes whose heads aren't a person's: each is its own part, painted with its own colours, and nobody else wears it.
 
 #### `face-vorlaith` · Vorlaith, the Unmade King · P2
 
 **Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (cracked glass with light inside).
 
-Edit the attached blank base image: change ONLY the face. Paint the face of Vorlaith, an ancient being of living glass onto the blank head: a head of clear, colourless glass cracked with fine branching fractures, a cold white light drifting inside it like smoke, smooth, calm, faintly amused features, and two points of white light for eyes. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-vorlaith.png.
-
-#### `face-guild-apprentice` · A Guild apprentice · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From A3-C2-01.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a Mages Guild apprentice of about seventeen onto the blank head: a pale, frightened face, wide green eyes, freckles, light skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-guild-apprentice.png.
-
-#### `face-refugee-child-aged` · Lise, aged by the tear · P2
-
-**Basis:** Edits `face-refugee-child`. From `08-random-encounters.md` §6 ("I'm forty-six").
-
-Edit the attached image (face-refugee-child.png, the face on the base): change ONLY her age: make her a woman of forty-six, as if decades passed in an instant: the same face grown up and lined, grey threads in the two chestnut plaits. Keep everything else, the rest of the face and hair, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-refugee-child-aged.png.
-
-#### `face-leon-ill` · King Leon, ill · P2
-
-**Basis:** Edits `face-leon`. From `03-art-overhaul.md` §7.4 (Leon, ill, Act 3).
-
-Edit the attached image (face-leon.png, the face on the base): change ONLY his health: he's ill now, thinner, his face grey and drawn, the beard less tidy, his eyes still kind. Keep everything else, the rest of the face and hair, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-leon-ill.png.
-
-#### `face-severin-cell` · Severin, a prisoner · P2
-
-**Basis:** Edits `face-severin`. From `03-art-overhaul.md` §7.4 (`severin-cell`: thin, grey).
-
-Edit the attached image (face-severin.png, the face on the base): change ONLY his condition: much thinner, the skin gone grey, the silver hair lank and dull, the eyes dimmed. Keep everything else, the rest of the face and hair, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-severin-cell.png.
-
-### 4.6 Townsfolk
-
-#### `face-town-1` · Townsfolk face 1 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `03-art-overhaul.md` §7.5 (the generic pools).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a young human farmhand of about twenty onto the blank head: an open, wide-eyed face, blue eyes, sunburnt cheeks, a peeling nose, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-1.png.
-
-#### `face-town-2` · Townsfolk face 2 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a young human woman of about twenty-five onto the blank head: a sweet, dimpled face, green eyes, tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-2.png.
-
-#### `face-town-3` · Townsfolk face 3 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a strong human man of about forty onto the blank head: a strong, calm face, dark eyes, a short black beard, deep brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-3.png.
-
-#### `face-town-4` · Townsfolk face 4 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human woman of about forty onto the blank head: a rosy, good-humoured face, warm brown eyes, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-4.png.
-
-#### `face-town-5` · Townsfolk face 5 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of an old human man of about seventy-five onto the blank head: a grumpy, twinkly face, small grey eyes, a big nose, white mutton-chop whiskers, fair, ruddy skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-5.png.
-
-#### `face-town-6` · Townsfolk face 6 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of an old human woman of about seventy-five onto the blank head: a round, kindly face, sharp black eyes, many wrinkles, rosy fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-6.png.
-
-#### `face-town-7` · Townsfolk face 7 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human boy of about eight onto the blank head: a cheeky child's face, brown eyes, a missing front tooth, a scraped nose, light-brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-7.png.
-
-#### `face-town-8` · Townsfolk face 8 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human girl of about eight onto the blank head: a bright child's face, big blue eyes, freckles, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-8.png.
-
-#### `face-town-9` · Townsfolk face 9 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human boy of about fifteen onto the blank head: an eager, conspiratorial face, green eyes, a few freckles, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-9.png.
-
-#### `face-town-10` · Townsfolk face 10 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human woman of about thirty onto the blank head: a neat, freckled face, blue eyes, fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-10.png.
-
-#### `face-town-11` · Townsfolk face 11 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human man of about thirty onto the blank head: a tired, good-natured face, dark eyes, stubble, olive skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-11.png.
-
-#### `face-town-12` · Townsfolk face 12 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a weathered human man of about fifty onto the blank head: a loud, cheerful face, bright brown eyes, a big grey-shot black beard, weathered olive skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-12.png.
-
-#### `face-town-13` · Townsfolk face 13 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human woman of about forty-five onto the blank head: a serene, weathered face, dark eyes, a gentle smile, brown skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-13.png.
-
-#### `face-town-14` · Townsfolk face 14 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human man of about thirty-five onto the blank head: a tired, friendly face, grey eyes, a few days of brown stubble, weathered fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-14.png.
-
-#### `face-town-15` · Townsfolk face 15 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5; the Hearthlings.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a Hearthling woman of about thirty (an adult's face) onto the blank head: a round, busy face, bright hazel eyes, rosy fair skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-15.png.
-
-#### `face-town-16` · Townsfolk face 16 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5; the Sylvans.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a Sylvan man who looks about thirty onto the blank head: a narrow, calm face, long pointed ears, grey-green eyes, porcelain skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-16.png.
-
-#### `face-town-17` · Townsfolk face 17 · P0
-
-**Basis:** Edits `base-male-blank`. **(derived)** From §7.5; the Stoneborn.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a Stoneborn man who looks about fifty onto the blank head: a broad face, deep-set brown eyes, ruddy tan skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-17.png.
-
-#### `face-town-18` · Townsfolk face 18 · P0
-
-**Basis:** Edits `base-female-blank`. **(derived)** From §7.5; the Morvaine pool (pale skin).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a human woman of about thirty from a cold, shadowed valley onto the blank head: a pale, guarded face, dark eyes, a straight mouth, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-town-18.png.
-
-### 4.7 Humanoid foes
-
-#### `face-varkhul` · Varkhul · P1
-
-**Basis:** Edits `base-male-blank`. From `04-script-prologue-act1.md` A1-C6 ("Inside is a grey-haired man"); Brenna's father.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Varkhul, a dying old human knight of about sixty onto the blank head: a gaunt, noble face, grey eyes with the last faint ember glow fading from them, hollow cheeks, a grey beard, fair skin gone ashen. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-varkhul.png.
-
-#### `face-cube-cultist` · Cube Cultist · P1
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (ash on the face).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a calm human cultist of about thirty onto the blank head: a calm, courteous face, pale eyes, light skin, grey ash smeared in a square pattern on the brow. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-cube-cultist.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of Vorlaith, an ancient being of living glass onto the blank head: a head of clear, colourless glass cracked with fine branching fractures, a cold white light drifting inside it like smoke, smooth, calm, faintly amused features, and two points of white light for eyes. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-vorlaith.png.
 
 #### `face-hollowed` · The Hollowed · P0
 
 **Basis:** Edits `base-male-blank`. From the art plan (ash skin, cracks lit ember, empty sockets with ember points); `03-art-overhaul.md` §7.3.
 
-Edit the attached blank base image: change ONLY the face. Paint the face of a Hollowed, a dead soldier raised as an empty husk onto the blank head: a gaunt, lipless head with skin like ash-grey burnt paper, cracked all over in fine lines that glow ember orange from inside; empty, dark eye sockets with a single ember-orange point of light in each; a few wisps of scorched hair. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hollowed.png.
-
-#### `face-construct-vault` · Vault construct's head · P0
-
-**Basis:** Edits `base-male-blank`. From the art plan (a sun-disc face).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of an ancient stone guardian: the head is not a face at all onto the blank head: in place of the head, a flat, round disc of polished sun-gold metal with a simple sunburst engraved on it and no other features, set on a short neck of pale dressed stone with thin gold inlay. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-construct-vault.png.
-
-#### `face-vreya` · Vreya · P2
-
-**Basis:** Edits `base-female-blank`. **(derived)** From the voice sheet (sing-song, mocking).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of Vreya, a vampire knight onto the blank head: a pale, gleeful face, red eyes, a mocking smirk, the tips of fangs showing, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-vreya.png.
-
-#### `face-thrall` · Thrall · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `03-art-overhaul.md` §7.3; `enc-thrall-patrol`.
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a living human soldier enslaved to a vampire lord onto the blank head: a pale, blank face, glassy dark-red eyes, two small healed bite marks on the side of the neck, very pale skin. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-thrall.png.
-
-#### `face-drowned` · Drowned · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (grey-green, kelp hair).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a drowned corpse that walks out of the sea onto the blank head: a puffy, slack, grey-green waterlogged face, milky white eyes, the mouth hanging open, barnacles crusted on the jaw. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-drowned.png.
-
-#### `face-blood-wight` · Blood-wight · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (thin, grey).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of an undead thing that walks under a darkened sun onto the blank head: a skull-like head of taut, papery ash-grey skin, sunken red eyes, long fangs, thin grey hair. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-blood-wight.png.
-
-#### `face-sun-scorched` · Sun-scorched · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (burned to the skin).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of one of the burned dead of a desert massacre onto the blank head: a blackened face cracked like dried mud, the cracks glowing a faint hot gold, the features half gone, two pale, blazing eyes, the mouth open. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-sun-scorched.png.
-
-#### `face-thornling` · Thornling · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (a bark-skinned sprite).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a small, spiteful forest sprite onto the blank head: a knot of rough dark bark for a head, with a hollow, sly face, two glowing yellow-green eyes and a mouth like a split in a branch, and a crown of small twigs and new leaves. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-thornling.png.
-
-#### `face-construct-priest` · Priest-construct's head · P2
-
-**Basis:** Edits `base-male-blank`. **(derived)** From `03b-world-art.md` (`priest-construct`).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a stone guardian of a ruined sun temple onto the blank head: in place of a face, a round, polished bronze mirror, glinting, set inside a hood of sun-bleached sandstone carved like a priest's. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-construct-priest.png.
-
-#### `face-construct-crown` · Crown-construct's head · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (a crown motif for a face).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a war machine shaped like a knight onto the blank head: no face: in its place, a stylised gold crown shape, with a violet light glowing behind the gaps between its points, on a neck of polished dark violet metal. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-construct-crown.png.
-
-#### `face-unmade` · The Unmade · P2
-
-**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (no face: smooth dark glass where it would be).
-
-Edit the attached blank base image: change ONLY the face. Paint the face of a soldier pulled out of time onto the blank head: where the face should be, a smooth, featureless oval of dark, glossy glass reflecting a faint white light; the rest of the head and neck faded and slightly greyed, as if not quite here. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head: only the eyebrows, and any beard or moustache described, which may fall past the jaw; the hair is a part of its own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-unmade.png.
+Edit the attached blank base image: change ONLY the face. Paint the face of a Hollowed, a dead soldier raised as an empty husk onto the blank head: a gaunt, lipless head with skin like ash-grey burnt paper, cracked all over in fine lines that glow ember orange from inside; empty, dark eye sockets with a single ember-orange point of light in each; a few wisps of scorched hair. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-hollowed.png.
 
 #### `face-crown-hollowed` · Crown-raised Hollowed · P2
 
@@ -1217,878 +498,800 @@ Edit the attached image (face-hollowed.png, the face on the base): change ONLY t
 
 ---
 
+#### `face-construct-vault` · Vault construct's head · P0
+
+**Basis:** Edits `base-male-blank`. From the art plan (a sun-disc face).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of an ancient stone guardian: the head is not a face at all onto the blank head: in place of the head, a flat, round disc of polished sun-gold metal with a simple sunburst engraved on it and no other features, set on a short neck of pale dressed stone with thin gold inlay. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-construct-vault.png.
+
+#### `face-construct-priest` · Priest-construct's head · P2
+
+**Basis:** Edits `base-male-blank`. **(derived)** From `03b-world-art.md` (`priest-construct`).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of a stone guardian of a ruined sun temple onto the blank head: in place of a face, a round, polished bronze mirror, glinting, set inside a hood of sun-bleached sandstone carved like a priest's. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-construct-priest.png.
+
+#### `face-construct-crown` · Crown-construct's head · P2
+
+**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (a crown motif for a face).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of a war machine shaped like a knight onto the blank head: no face: in its place, a stylised gold crown shape, with a violet light glowing behind the gaps between its points, on a neck of polished dark violet metal. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-construct-crown.png.
+
+#### `face-drowned` · Drowned · P2
+
+**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (grey-green, kelp hair).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of a drowned corpse that walks out of the sea onto the blank head: a puffy, slack, grey-green waterlogged face, milky white eyes, the mouth hanging open, barnacles crusted on the jaw. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-drowned.png.
+
+#### `face-blood-wight` · Blood-wight · P2
+
+**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (thin, grey).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of an undead thing that walks under a darkened sun onto the blank head: a skull-like head of taut, papery ash-grey skin, sunken red eyes, long fangs, thin grey hair. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-blood-wight.png.
+
+#### `face-sun-scorched` · Sun-scorched · P2
+
+**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (burned to the skin).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of one of the burned dead of a desert massacre onto the blank head: a blackened face cracked like dried mud, the cracks glowing a faint hot gold, the features half gone, two pale, blazing eyes, the mouth open. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-sun-scorched.png.
+
+#### `face-thornling` · Thornling · P2
+
+**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (a bark-skinned sprite).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of a small, spiteful forest sprite onto the blank head: a knot of rough dark bark for a head, with a hollow, sly face, two glowing yellow-green eyes and a mouth like a split in a branch, and a crown of small twigs and new leaves. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-thornling.png.
+
+#### `face-unmade` · The Unmade · P2
+
+**Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §9 (no face: smooth dark glass where it would be).
+
+Edit the attached blank base image: change ONLY the face. Paint the face of a soldier pulled out of time onto the blank head: where the face should be, a smooth, featureless oval of dark, glossy glass reflecting a faint white light; the rest of the head and neck faded and slightly greyed, as if not quite here. The expression is neutral and relaxed, eyes open, looking ahead. Keep the bald head exactly as it is, its outline, size, angle and position, the skull and the ears, except where the description gives pointed ears or horns. Paint no hair on the head and no beard: only the eyebrows. The hair and any beard are parts of their own. Nothing else below the jaw changes: the neck belongs to the armor. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as face-unmade.png.
+
 ### 4.8 Hair
 
-Every character's hair, lifted out of their face's old prompt: hair and helm are one slot, what's on the head, and a hair fits every head because the head never changes. Each is painted on the blank base whose sex matches. The player's creation screen offers the `hair-player-*` ones. `tools/import_parts.py` cuts them from `tools/source/characters/hairs/`.
+The owner's call (2026-11-09): **a shared hair library, painted in bulk, every style fitting both the man and the woman.** Like the faces, the hairs are worn by everyone: §7 gives each character a style and colours it to them (the Colours column's hair). Each style is painted on both blank bases at once (§4.9), the man's copy `hair-NN` and the woman's `hair-NN-f`, and the game puts on the copy for the figure's own base. Every style is painted a plain mid brown, for the game to recolour. Hair and helm are still one slot: a helm replaces the hair. The player's creation screen offers the whole library. What used to be painted with a character's hair (a beard, a people's ears or horns) is an extra now (§4.10), so it shows with any hair or helm. The per-character hairs of before 2026-11-09 are retired. `tools/import_parts.py` cuts them from `tools/source/characters/hairs/`.
 
-#### `hair-player-1` · You, face 1's hair · P0
+#### `hair-01` · Hair 1, the buzz · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-player-1` (§4), on its own: what's on You, face 1's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-01-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: chestnut brown, short and messy, tousled locks falling over the forehead and round the ears. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-1.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: cropped very close all over, a shadow of hair on the scalp. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-01.png.
 
-#### `hair-player-2` · You, face 2's hair · P0
+#### `hair-02` · Hair 2, the crop · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-player-2` (§4), on its own: what's on You, face 2's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-02-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: chestnut brown, shoulder length, tied back in a low, loose ponytail with messy strands round the face. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-2.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: short and neat, cropped close at the back and sides, a little longer on top. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-02.png.
 
-#### `hair-player-3` · You, face 3's hair · P0
+#### `hair-03` · Hair 3, short and messy · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-player-3` (§4), on its own: what's on You, face 3's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-03-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, long and straight, in a high ponytail that falls past the shoulder blades, a few loose strands framing the face. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-3.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: short and messy, tousled locks falling over the forehead and round the ears. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-03.png.
 
-#### `hair-player-4` · You, face 4's hair · P0
+#### `hair-04` · Hair 4, short curls · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-player-4` (§4), on its own: what's on You, face 4's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-04-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: thick, curly dark brown to the shoulders, held back with a cloth band. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-4.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: short, tight curls close to the head. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-04.png.
 
-#### `hair-player-5` · You, face 5's hair · P0
+#### `hair-05` · Hair 5, the side parting · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-player-5` (§4), on its own: what's on You, face 5's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-05-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, straight silver-blonde, past the shoulders, with one thin braid at the temple. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-5.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: short and neatly combed, with a side parting. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-05.png.
 
-#### `hair-player-6` · You, face 6's hair · P0
+#### `hair-06` · Hair 6, slicked back · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-player-6` (§4), on its own: what's on You, face 6's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-06-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, an undercut, the top swept back between the horns. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-6.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: slicked straight back from the forehead, close to the head, to the nape. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-06.png.
 
-#### `hair-player-7` · You, face 7's hair · P0
+#### `hair-07` · Hair 7, the undercut · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-player-7` (§4), on its own: what's on You, face 7's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-07-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: shaggy grey-brown, to the jaw. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-7.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: an undercut: the sides shaved short, the longer top swept back. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-07.png.
 
-#### `hair-player-8` · You, face 8's hair · P0
+#### `hair-08` · Hair 8, spiky · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-player-8` (§4), on its own: what's on You, face 8's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-08-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: copper red, cut short. A thick copper beard, braided into one short braid. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-player-8.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: short and spiky, sticking up untidily. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-08.png.
 
-#### `hair-sera` · Sera Vantis's hair · P0
+#### `hair-09` · Hair 9, the short topknot · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-sera` (§4), on its own: what's on Sera Vantis's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-09-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: honey blonde, in one long, thick braid over the near shoulder to the waist, tied with a leather thong and a single grey kestrel feather. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-sera.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: the sides shaved, the top tied in a short topknot at the crown. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-09.png.
 
-#### `hair-mira` · Mira Ashgrove's hair · P0
+#### `hair-10` · Hair 10, receding · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-mira` (§4), on its own: what's on Mira Ashgrove's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-10-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: copper red, pinned up in a loose, messy bun with a writing pen pushed through it, strands escaping round the face and neck. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-mira.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: receding and thinning, combed back, short at the sides. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-10.png.
 
-#### `hair-mira-young` · Mira, aged thirteen's hair · P1
+#### `hair-11` · Hair 11, the bald crown · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-mira-young` (§4), on its own: what's on Mira, aged thirteen's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-11-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: copper red, in two long plaits. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-mira-young.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bald on top, with a short fringe of hair round the sides and the back. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-11.png.
 
-#### `hair-kael` · Kael Duskmantle's hair · P0
+#### `hair-12` · Hair 12, bald with wisps · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-kael` (§4), on its own: what's on Kael Duskmantle's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-12-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, cropped short and untidy. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-kael.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bald, with a few thin wisps over the crown. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-12.png.
 
-#### `hair-brannock` · Brannock Ironvein's hair · P0
+#### `hair-13` · Hair 13, the pixie cut · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-brannock` (§4), on its own: what's on Brannock Ironvein's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-13-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: copper red going grey, short and curly. A full copper beard, grey at the chin, braided into one thick braid that falls to the belt, held by two small gold clasps. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-brannock.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a short pixie cut, feathered, with a side-swept fringe. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-13.png.
 
-#### `hair-valencia` · Valencia Morvaine's hair · P2
+#### `hair-14` · Hair 14, the mop · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-valencia` (§4), on its own: what's on Valencia Morvaine's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-14-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, straight, silver-white, to the middle of the back, parted to one side. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-valencia.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a thick, untidy mop falling over the forehead and the ears. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-14.png.
 
-#### `hair-mc-child` · You, aged eight's hair · P0
+#### `hair-15` · Hair 15, the fringed bob · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-mc-child` (§4), on its own: what's on You, aged eight's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-15-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: an untidy chestnut mop. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-mc-child.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a straight, chin-length bob with a blunt fringe. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-15.png.
 
-#### `hair-sb-child` · {sb}, aged eight's hair · P0
+#### `hair-16` · Hair 16, the choppy cut · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-sb-child` (§4), on its own: what's on {sb}, aged eight's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-16-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, in a short, stubby ponytail coming loose. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-sb-child.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: jaw-length, choppy and layered, with no fringe, as if cut with a knife. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-16.png.
 
-#### `hair-corra` · Corra's hair · P0
+#### `hair-17` · Hair 17, shaggy · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-corra` (§4), on its own: what's on Corra's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-17-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: chestnut going grey, pinned up in a practical bun with loose wisps. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-corra.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: shaggy and layered, to the jaw, falling into the eyes. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-17.png.
 
-#### `hair-lookout` · The lookout's hair · P0
+#### `hair-18` · Hair 18, wavy to the jaw · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-lookout` (§4), on its own: what's on The lookout's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-18-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark, tied back short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-lookout.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: wavy, to the jaw, parted to one side. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-18.png.
 
-#### `hair-odelle` · Captain Odelle Marsh's hair · P0
+#### `hair-19` · Hair 19, shoulder curls · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-odelle` (§4), on its own: what's on Captain Odelle Marsh's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-19-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long and black with a few grey strands, in a loose tail down the back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-odelle.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a thick mass of curls to the shoulders. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-19.png.
 
-#### `hair-tomas` · Old Tomas's hair · P0
+#### `hair-20` · Hair 20, the afro · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-tomas` (§4), on its own: what's on Old Tomas's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-20-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bald on top, a fringe of white at the sides. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-tomas.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a full, rounded afro. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-20.png.
 
-#### `hair-red-gull` · Red Gull Thug, face 1's hair · P0
+#### `hair-21` · Hair 21, straight to the shoulders · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-red-gull` (§4), on its own: what's on Red Gull Thug, face 1's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-21-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a shaved, bald head with a small tattoo of a gull in flight on the side of the scalp. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-red-gull.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: straight, to the shoulders, parted in the middle and tucked behind the ear. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-21.png.
 
-#### `hair-red-gull-2` · Red Gull Thug, face 2's hair · P0
+#### `hair-22` · Hair 22, the short tail · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-red-gull-2` (§4), on its own: what's on Red Gull Thug, face 2's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-22-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: lank ginger, short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-red-gull-2.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: to the shoulders, tied back in a short, low ponytail, loose strands round the face. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-22.png.
 
-#### `hair-red-gull-3` · Red Gull Thug, face 3's hair · P0
+#### `hair-23` · Hair 23, windswept · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-red-gull-3` (§4), on its own: what's on Red Gull Thug, face 3's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-23-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: the sides shaved, a short black topknot. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-red-gull-3.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: wild and windswept, to the shoulders. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-23.png.
 
-#### `hair-grell` · Bosun Grell's hair · P0
+#### `hair-24` · Hair 24, swept back · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-grell` (§4), on its own: what's on Bosun Grell's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-24-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: completely bald, the scalp shiny. A full, bushy copper beard. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-grell.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: swept back from the forehead, to the collar. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-24.png.
 
-#### `hair-hale` · Captain Roderic Hale's hair · P0
+#### `hair-25` · Hair 25, the half-up knot · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-hale` (§4), on its own: what's on Captain Roderic Hale's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-25-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, cropped short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hale.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: to the shoulders, the top half tied back in a small knot. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-25.png.
 
-#### `hair-fennick` · Questmaster Fennick's hair · P0
+#### `hair-26` · Hair 26, pulled back tight · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-fennick` (§4), on its own: what's on Questmaster Fennick's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-26-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, neatly combed and parted, a quill pen tucked behind one ear. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-fennick.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: pulled back tightly from the face into a short tail at the nape. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-26.png.
 
-#### `hair-hedda` · Hedda's hair · P0
+#### `hair-27` · Hair 27, long and straight · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-hedda` (§4), on its own: what's on Hedda's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-27-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: chestnut, tied back roughly with a strip of cloth, strands coming loose. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hedda.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long and straight, loose to the middle of the back, parted in the middle. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-27.png.
 
-#### `hair-refugee-child` · Lise's hair · P0
+#### `hair-28` · Hair 28, long, over one shoulder · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-refugee-child` (§4), on its own: what's on Lise's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-28-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: chestnut, in two uneven plaits tied with string. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-refugee-child.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long and straight, to the middle of the back, parted to one side and swept over the near shoulder. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-28.png.
 
-#### `hair-brisk` · Sergeant Brisk's hair · P0
+#### `hair-29` · Hair 29, long and wavy · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-brisk` (§4), on its own: what's on Sergeant Brisk's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-29-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, cropped short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-brisk.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long and wavy, loose past the shoulders. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-29.png.
 
-#### `hair-refugee-1` · Old Aurek's hair · P0
+#### `hair-30` · Hair 30, long curls · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-refugee-1` (§4), on its own: what's on Old Aurek's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-30-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bald, with a few white wisps. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-refugee-1.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, loose curls past the shoulders. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-30.png.
 
-#### `hair-refugee-2` · Teodor's hair · P0
+#### `hair-31` · Hair 31, the high ponytail · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-refugee-2` (§4), on its own: what's on Teodor's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-31-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, tousled and damp. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-refugee-2.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, in a high ponytail that falls past the shoulder blades, a few loose strands framing the face. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-31.png.
 
-#### `hair-refugee-3` · Yselle the Glassblower's hair · P0
+#### `hair-32` · Hair 32, the low tail · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-refugee-3` (§4), on its own: what's on Yselle the Glassblower's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-32-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: copper red, in one thick braid down the back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-refugee-3.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, tied at the nape in a loose tail down the back. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-32.png.
 
-#### `hair-elara` · Princess Elara Aurelian's hair · P0
+#### `hair-33` · Hair 33, the shoulder braid · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-elara` (§4), on its own: what's on Princess Elara Aurelian's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-33-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, shoulder length and choppy, cut in layers she clearly does herself. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-elara.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: one long, thick braid over the near shoulder to the waist. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-33.png.
 
-#### `hair-leon` · King Leon's hair · P0
+#### `hair-34` · Hair 34, the back braid · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-leon` (§4), on its own: what's on King Leon's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-34-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: silver, swept back to the collar. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-leon.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: one thick braid down the back. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-34.png.
 
-#### `hair-crane` · Lord Chancellor Vesper Crane's hair · P0
+#### `hair-35` · Hair 35, two plaits · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-crane` (§4), on its own: what's on Lord Chancellor Vesper Crane's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-35-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, slicked straight back from a high forehead. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-crane.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: two long plaits, one over each shoulder. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-35.png.
 
-#### `hair-anvil-barkeep` · Hessa the Barkeep's hair · P0
+#### `hair-36` · Hair 36, two bunches · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-anvil-barkeep` (§4), on its own: what's on Hessa the Barkeep's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-36-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black and thick, tied back in a short bundle. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-anvil-barkeep.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: two short bunches tied high at the sides of the head. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-36.png.
 
-#### `hair-netty` · Netty the Net-Mender's hair · P0
+#### `hair-37` · Hair 37, the low bun · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-netty` (§4), on its own: what's on Netty the Net-Mender's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-37-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: silver, in a braid pinned round the head like a crown. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-netty.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: pinned up in a neat, low bun at the nape. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-37.png.
 
-#### `hair-maud` · Maud Tolley's hair · P0
+#### `hair-38` · Hair 38, the messy bun · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-maud` (§4), on its own: what's on Maud Tolley's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-38-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: silver, in a low bun. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-maud.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: pinned up in a loose, messy bun, strands escaping round the face and neck. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-38.png.
 
-#### `hair-pip` · Pip the Potboy's hair · P0
+#### `hair-39` · Hair 39, the high bun · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-pip` (§4), on its own: what's on Pip the Potboy's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-39-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: copper, tousled. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-pip.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: pulled up into a tight, high bun on the crown. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-39.png.
 
-#### `hair-osric` · Osric Penhallow's hair · P0
+#### `hair-40` · Hair 40, the crown braid · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-osric` (§4), on its own: what's on Osric Penhallow's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-40-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black with a blue sheen, short and combed. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-osric.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: braided and pinned round the head like a crown. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-40.png.
 
-#### `hair-lark` · Lark the Busker's hair · P0
+#### `hair-41` · Hair 41, the braided updo · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-lark` (§4), on its own: what's on Lark the Busker's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-41-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: rose pink, long and loose to the shoulders. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-lark.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: braided and pinned up at the back, a few strands loose. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-41.png.
 
-#### `hair-ilsa` · Ilsa Fenwright's hair · P0
+#### `hair-42` · Hair 42, the warrior's topknot · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-ilsa` (§4), on its own: what's on Ilsa Fenwright's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-42-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: gold, in one neat braid. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-ilsa.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: the sides shaved short, the long top tied back in a warrior's topknot. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-42.png.
 
-#### `hair-oswin` · Guardsman Oswin's hair · P0
+#### `hair-43` · Hair 43, the mohawk · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-oswin` (§4), on its own: what's on Guardsman Oswin's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-43-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: gold, cropped. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-oswin.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a mohawk: the sides shaved, a short spiked crest along the top. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-43.png.
 
-#### `hair-hesper` · Sister Hesper's hair · P0
+#### `hair-44` · Hair 44, locs · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-hesper` (§4), on its own: what's on Sister Hesper's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-44-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long and silver, loose down the back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hesper.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: thick locs to the shoulders, tied back loosely. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-44.png.
 
-#### `hair-wren` · Wren's hair · P0
+#### `hair-45` · Hair 45, many braids · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-wren` (§4), on its own: what's on Wren's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-45-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, scraped back into a scruffy tail. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-wren.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: many long, thin braids, tied back at the nape. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-45.png.
 
-#### `hair-imra-vell` · Master Imra Vell's hair · P0
+#### `hair-46` · Hair 46, to the waist · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-imra-vell` (§4), on its own: what's on Master Imra Vell's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-46-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black flecked with grey, cut short and practical. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-imra-vell.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: very long and straight, to the waist. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-46.png.
 
-#### `hair-tamsin` · Ranger Tamsin's hair · P0
+#### `hair-47` · Hair 47, long and wild · P0
 
-**Basis:** Edits `base-female-blank`. The hair painted with `face-tamsin` (§4), on its own: what's on Ranger Tamsin's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-47-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: chestnut, tied back tightly. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-tamsin.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, wild and tangled, past the shoulders. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-47.png.
 
-#### `hair-garrick` · Garrick the caravan master's hair · P1
+#### `hair-48` · Hair 48, long and wispy · P0
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-garrick` (§4), on its own: what's on Garrick the caravan master's head when there's no helm.
+**Basis:** Edits `base-male-blank`. One of the hair library's styles (§4.8); the woman's copy is `hair-48-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black going grey. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-garrick.png.
+Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, thin and wispy, to the shoulders, receding at the brow. Paint it a plain mid brown, since the game recolours it for each character. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-48.png.
 
-#### `hair-aldric` · Commander Aldric Voss's hair · P1
+### 4.9 Hair sheets (eight styles at a time, on both bases)
 
-**Basis:** Edits `base-male-blank`. The hair painted with `face-aldric` (§4), on its own: what's on Commander Aldric Voss's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, cropped close. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-aldric.png.
-
-#### `hair-recruit` · The recruit's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-recruit` (§4), on its own: what's on The recruit's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: straw blond, sticking out untidily. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-recruit.png.
-
-#### `hair-thessaly` · Archmage Thessaly Varn's hair · P1
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-thessaly` (§4), on its own: what's on Archmage Thessaly Varn's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: iron grey, cropped very short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-thessaly.png.
-
-#### `hair-brenna` · Brenna of Ashfall's hair · P1
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-brenna` (§4), on its own: what's on Brenna of Ashfall's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark brown, cropped short at the sides, the top tied back in a short tail. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-brenna.png.
-
-#### `hair-gannet` · Mother Gannet's hair · P1
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-gannet` (§4), on its own: what's on Mother Gannet's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: iron grey, scraped into a tight bun. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-gannet.png.
-
-#### `hair-hester` · Hester Hollis's hair · P1
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-hester` (§4), on its own: what's on Hester Hollis's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: white-grey, in a neat bun. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hester.png.
-
-#### `hair-tobin` · Tobin Ashgrove's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-tobin` (§4), on its own: what's on Tobin Ashgrove's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: thinning copper with grey, a bald crown. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-tobin.png.
-
-#### `hair-harrow` · Lord Harrow of Heronsgate's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-harrow` (§4), on its own: what's on Lord Harrow of Heronsgate's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey and receding, combed back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-harrow.png.
-
-#### `hair-hobb` · Hobb the woodcutter's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-hobb` (§4), on its own: what's on Hobb the woodcutter's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: red and thick. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hobb.png.
-
-#### `hair-maleficio` · Maleficio's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-maleficio` (§4), on its own: what's on Maleficio's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey and receding, swept back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-maleficio.png.
-
-#### `hair-lost-boy` · The woodcutter's boy's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-lost-boy` (§4), on its own: what's on The woodcutter's boy's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bright red, sticking up. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-lost-boy.png.
-
-#### `hair-mags` · Pedlar Mags's hair · P1
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-mags` (§4), on its own: what's on Pedlar Mags's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey-streaked brown, in two thick braids. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-mags.png.
-
-#### `hair-anselle` · Mother Superior Anselle's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-anselle` (§4), on its own: what's on Mother Superior Anselle's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: short and grey, mostly under a close white linen coif. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-anselle.png.
-
-#### `hair-orla` · Sister Orla's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-orla` (§4), on its own: what's on Sister Orla's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey-blonde, tucked up out of the way. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-orla.png.
-
-#### `hair-corwin` · Sir Corwin Halbeck's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-corwin` (§4), on its own: what's on Sir Corwin Halbeck's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: fair going grey, cut short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-corwin.png.
-
-#### `hair-severin` · Lord Severin Morvaine's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-severin` (§4), on its own: what's on Lord Severin Morvaine's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: silver, straight, to the shoulders. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-severin.png.
-
-#### `hair-isadora` · Lady Isadora's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-isadora` (§4), on its own: what's on Lady Isadora's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark brown, braided and pinned up, a few strands loose. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-isadora.png.
-
-#### `hair-valencia-child` · Valencia as a child's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-valencia-child` (§4), on its own: what's on Valencia as a child's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: silver-white, loose to the shoulders, with a small dark ribbon. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-valencia-child.png.
-
-#### `hair-pell` · Pell's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-pell` (§4), on its own: what's on Pell's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark and shaggy, falling into his eyes. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-pell.png.
-
-#### `hair-ide` · Ide's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-ide` (§4), on its own: what's on Ide's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark, long and tangled. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-ide.png.
-
-#### `hair-maren-elder` · Maren, Hollowmere's elder's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-maren-elder` (§4), on its own: what's on Maren, Hollowmere's elder's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: white, in a tight braid round the head. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-maren-elder.png.
-
-#### `hair-blood-house-steward` · The blood-house steward's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-blood-house-steward` (§4), on its own: what's on The blood-house steward's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, oiled flat. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-blood-house-steward.png.
-
-#### `hair-hollowmere-child` · A Hollowmere child's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-hollowmere-child` (§4), on its own: what's on A Hollowmere child's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark, cut short and uneven. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hollowmere-child.png.
-
-#### `hair-hollowmere-farmer` · A Hollowmere farmer's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-hollowmere-farmer` (§4), on its own: what's on A Hollowmere farmer's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: brown with grey, pulled back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-hollowmere-farmer.png.
-
-#### `hair-ruck` · Ruck, the bosun's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-ruck` (§4), on its own: what's on Ruck, the bosun's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bald on top, with a short grey tarred pigtail at the back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-ruck.png.
-
-#### `hair-davin` · Davin's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-davin` (§4), on its own: what's on Davin's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: brown, short and untidy. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-davin.png.
-
-#### `hair-guild-apprentice` · A Guild apprentice's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-guild-apprentice` (§4), on its own: what's on A Guild apprentice's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: sandy, in a messy short ponytail. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-guild-apprentice.png.
-
-#### `hair-town-1` · Townsfolk face 1's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-1` (§4), on its own: what's on Townsfolk face 1's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: straw coloured and shaggy. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-1.png.
-
-#### `hair-town-2` · Townsfolk face 2's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-2` (§4), on its own: what's on Townsfolk face 2's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark brown, pinned up at the back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-2.png.
-
-#### `hair-town-3` · Townsfolk face 3's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-3` (§4), on its own: what's on Townsfolk face 3's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, short and tightly curled. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-3.png.
-
-#### `hair-town-4` · Townsfolk face 4's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-4` (§4), on its own: what's on Townsfolk face 4's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: brown, pinned up with strands escaping. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-4.png.
-
-#### `hair-town-5` · Townsfolk face 5's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-5` (§4), on its own: what's on Townsfolk face 5's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, sticking out round a bald crown. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-5.png.
-
-#### `hair-town-6` · Townsfolk face 6's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-6` (§4), on its own: what's on Townsfolk face 6's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: silver-white, pinned up. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-6.png.
-
-#### `hair-town-7` · Townsfolk face 7's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-7` (§4), on its own: what's on Townsfolk face 7's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: brown and short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-7.png.
-
-#### `hair-town-8` · Townsfolk face 8's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-8` (§4), on its own: what's on Townsfolk face 8's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: blonde, in two bunches. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-8.png.
-
-#### `hair-town-9` · Townsfolk face 9's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-9` (§4), on its own: what's on Townsfolk face 9's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: brown and tousled. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-9.png.
-
-#### `hair-town-10` · Townsfolk face 10's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-10` (§4), on its own: what's on Townsfolk face 10's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: bright copper red, long and wavy. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-10.png.
-
-#### `hair-town-11` · Townsfolk face 11's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-11` (§4), on its own: what's on Townsfolk face 11's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, short and messy. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-11.png.
-
-#### `hair-town-12` · Townsfolk face 12's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-12` (§4), on its own: what's on Townsfolk face 12's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black going grey, short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-12.png.
-
-#### `hair-town-13` · Townsfolk face 13's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-13` (§4), on its own: what's on Townsfolk face 13's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black with grey, pulled back. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-13.png.
-
-#### `hair-town-14` · Townsfolk face 14's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-14` (§4), on its own: what's on Townsfolk face 14's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: brown, short. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-14.png.
-
-#### `hair-town-15` · Townsfolk face 15's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-15` (§4), on its own: what's on Townsfolk face 15's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: curly, light brown, in a bun. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-15.png.
-
-#### `hair-town-16` · Townsfolk face 16's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-16` (§4), on its own: what's on Townsfolk face 16's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark, straight, to the shoulders. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-16.png.
-
-#### `hair-town-17` · Townsfolk face 17's hair · P0
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-town-17` (§4), on its own: what's on Townsfolk face 17's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, short; a grey beard braided into two short braids. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-17.png.
-
-#### `hair-town-18` · Townsfolk face 18's hair · P0
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-town-18` (§4), on its own: what's on Townsfolk face 18's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: black, in a long plait over one shoulder. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-town-18.png.
-
-#### `hair-varkhul` · Varkhul's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-varkhul` (§4), on its own: what's on Varkhul's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: grey, matted. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-varkhul.png.
-
-#### `hair-cube-cultist` · Cube Cultist's hair · P1
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-cube-cultist` (§4), on its own: what's on Cube Cultist's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: a shaved head. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-cube-cultist.png.
-
-#### `hair-vreya` · Vreya's hair · P2
-
-**Basis:** Edits `base-female-blank`. The hair painted with `face-vreya` (§4), on its own: what's on Vreya's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: white-blonde, mostly to be hidden under a helm, one lock escaping. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-vreya.png.
-
-#### `hair-thrall` · Thrall's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-thrall` (§4), on its own: what's on Thrall's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: dark, cropped. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-thrall.png.
-
-#### `hair-drowned` · Drowned's hair · P2
-
-**Basis:** Edits `base-male-blank`. The hair painted with `face-drowned` (§4), on its own: what's on Drowned's head when there's no helm.
-
-Edit the attached blank base image: change ONLY the hair. Give the bald head this hair: long, matted strands of dark kelp. Fit it to the head's exact size, angle and position. Keep the blank face, the ears and the head's outline exactly as they are wherever the hair doesn't cover them. Long hair may fall over the shoulders and down the back, but nothing else below the jaw changes. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as hair-drowned.png.
-
-### 4.9 Hair sheets (four at a time)
-
-The hairs four at a time, each sheet one ChatGPT picture. The attached template (`tools/source/characters/hair-sheet-male.png` or `hair-sheet-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the blank base from the head to the hips at full size, side by side, so a long braid has room. `python tools/part_sheet.py cut <png> <sheet-id>` puts each back on its base as `tools/source/characters/hairs/<hair-id>.png`. The single hair cards in §4.8 stay for redoing one.
+The library eight styles at a time, each sheet one ChatGPT picture. The attached template (`tools/source/characters/hair-sheet.png`, made by `python tools/part_sheet.py templates`) is the blank man eight times along the top and the blank woman eight times along the bottom, each from the top of the head to the hips at half size (the size the game keeps its parts, so nothing's lost), so a long braid has room. Each column is one style: ChatGPT paints it on the man above and the woman below. `python tools/part_sheet.py cut <png> <sheet-id>` puts each back on its base as `tools/source/characters/hairs/<id>.png` (the man's) and `<id>-f.png` (the woman's).
 
 | Sheet | Base | Priority | Cells, in order |
 |---|---|---|---|
-| `hair-sheet-m01` | `base-male` | P0 | `hair-player-1`, `hair-player-6`, `hair-player-8`, `hair-kael` |
-| `hair-sheet-m02` | `base-male` | P0 | `hair-brannock`, `hair-mc-child`, `hair-lookout`, `hair-tomas` |
-| `hair-sheet-m03` | `base-male` | P0 | `hair-red-gull`, `hair-red-gull-2`, `hair-red-gull-3`, `hair-grell` |
-| `hair-sheet-m04` | `base-male` | P0 | `hair-hale`, `hair-fennick`, `hair-brisk`, `hair-refugee-1` |
-| `hair-sheet-m05` | `base-male` | P0 | `hair-refugee-2`, `hair-leon`, `hair-crane`, `hair-pip` |
-| `hair-sheet-m06` | `base-male` | P0 | `hair-osric`, `hair-lark`, `hair-oswin`, `hair-town-1` |
-| `hair-sheet-m07` | `base-male` | P0 | `hair-town-3`, `hair-town-5`, `hair-town-7`, `hair-town-9` |
-| `hair-sheet-m08` | `base-male` | P0 | `hair-town-11`, `hair-town-12`, `hair-town-14`, `hair-town-16` |
-| `hair-sheet-m09` | `base-male` | P0 | `hair-town-17`, `hair-garrick`, `hair-aldric`, `hair-recruit` |
-| `hair-sheet-m10` | `base-male` | P1 | `hair-tobin`, `hair-harrow`, `hair-hobb`, `hair-maleficio` |
-| `hair-sheet-m11` | `base-male` | P1 | `hair-lost-boy`, `hair-varkhul`, `hair-cube-cultist`, `hair-corwin` |
-| `hair-sheet-m12` | `base-male` | P2 | `hair-severin`, `hair-pell`, `hair-blood-house-steward`, `hair-hollowmere-child` |
-| `hair-sheet-m13` | `base-male` | P2 | `hair-ruck`, `hair-davin`, `hair-thrall`, `hair-drowned` |
-| `hair-sheet-f01` | `base-female` | P0 | `hair-player-2`, `hair-player-3`, `hair-player-4`, `hair-player-5` |
-| `hair-sheet-f02` | `base-female` | P0 | `hair-player-7`, `hair-sera`, `hair-mira`, `hair-sb-child` |
-| `hair-sheet-f03` | `base-female` | P0 | `hair-corra`, `hair-odelle`, `hair-hedda`, `hair-refugee-child` |
-| `hair-sheet-f04` | `base-female` | P0 | `hair-refugee-3`, `hair-elara`, `hair-anvil-barkeep`, `hair-netty` |
-| `hair-sheet-f05` | `base-female` | P0 | `hair-maud`, `hair-ilsa`, `hair-hesper`, `hair-wren` |
-| `hair-sheet-f06` | `base-female` | P0 | `hair-imra-vell`, `hair-tamsin`, `hair-town-2`, `hair-town-4` |
-| `hair-sheet-f07` | `base-female` | P0 | `hair-town-6`, `hair-town-8`, `hair-town-10`, `hair-town-13` |
-| `hair-sheet-f08` | `base-female` | P0 | `hair-town-15`, `hair-town-18`, `hair-mira-young`, `hair-thessaly` |
-| `hair-sheet-f09` | `base-female` | P1 | `hair-brenna`, `hair-gannet`, `hair-hester`, `hair-mags` |
-| `hair-sheet-f10` | `base-female` | P2 | `hair-valencia`, `hair-anselle`, `hair-orla`, `hair-isadora` |
-| `hair-sheet-f11` | `base-female` | P2 | `hair-valencia-child`, `hair-ide`, `hair-maren-elder`, `hair-hollowmere-farmer` |
-| `hair-sheet-f12` | `base-female` | P2 | `hair-guild-apprentice`, `hair-vreya` |
-
-#### `hair-sheet-m01` · Hair sheet: 4 hairstyles (You, face 1, You, face 6, You, face 8, Kael Duskmantle) · P0
-
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-player-1`, 2 `hair-player-6`, 3 `hair-player-8`, 4 `hair-kael`.
-
-1. You, face 1: chestnut brown, short and messy, tousled locks falling over the forehead and round the ears.
-2. You, face 6: black, an undercut, the top swept back between the horns.
-3. You, face 8: copper red, cut short. A thick copper beard, braided into one short braid.
-4. Kael Duskmantle: black, cropped short and untidy.
-I'll save it as hair-sheet-m01.png.
-
-#### `hair-sheet-m02` · Hair sheet: 4 hairstyles (Brannock Ironvein, You, aged eight, The lookout, Old Tomas) · P0
-
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-brannock`, 2 `hair-mc-child`, 3 `hair-lookout`, 4 `hair-tomas`.
+| `hair-sheet-01` | `both` | P0 | `hair-01`, `hair-02`, `hair-03`, `hair-04`, `hair-05`, `hair-06`, `hair-07`, `hair-08` |
+| `hair-sheet-02` | `both` | P0 | `hair-09`, `hair-10`, `hair-11`, `hair-12`, `hair-13`, `hair-14`, `hair-15`, `hair-16` |
+| `hair-sheet-03` | `both` | P0 | `hair-17`, `hair-18`, `hair-19`, `hair-20`, `hair-21`, `hair-22`, `hair-23`, `hair-24` |
+| `hair-sheet-04` | `both` | P0 | `hair-25`, `hair-26`, `hair-27`, `hair-28`, `hair-29`, `hair-30`, `hair-31`, `hair-32` |
+| `hair-sheet-05` | `both` | P0 | `hair-33`, `hair-34`, `hair-35`, `hair-36`, `hair-37`, `hair-38`, `hair-39`, `hair-40` |
+| `hair-sheet-06` | `both` | P0 | `hair-41`, `hair-42`, `hair-43`, `hair-44`, `hair-45`, `hair-46`, `hair-47`, `hair-48` |
+
+#### `hair-sheet-01` · Hair sheet 1: hair 1, hair 2, hair 3, hair 4, hair 5, hair 6, hair 7, hair 8 · P0
+
+**Basis:** Edits `hair-sheet`. Columns: 1 `hair-01`, 2 `hair-02`, 3 `hair-03`, 4 `hair-04`, 5 `hair-05`, 6 `hair-06`, 7 `hair-07`, 8 `hair-08`.
+
+1. Cropped very close all over, a shadow of hair on the scalp.
+2. Short and neat, cropped close at the back and sides, a little longer on top.
+3. Short and messy, tousled locks falling over the forehead and round the ears.
+4. Short, tight curls close to the head.
+5. Short and neatly combed, with a side parting.
+6. Slicked straight back from the forehead, close to the head, to the nape.
+7. An undercut: the sides shaved short, the longer top swept back.
+8. Short and spiky, sticking up untidily.
+Paint every style a plain mid brown, the same style on the man above and the woman below.
+I'll save it as hair-sheet-01.png.
+
+#### `hair-sheet-02` · Hair sheet 2: hair 9, hair 10, hair 11, hair 12, hair 13, hair 14, hair 15, hair 16 · P0
+
+**Basis:** Edits `hair-sheet`. Columns: 1 `hair-09`, 2 `hair-10`, 3 `hair-11`, 4 `hair-12`, 5 `hair-13`, 6 `hair-14`, 7 `hair-15`, 8 `hair-16`.
+
+1. The sides shaved, the top tied in a short topknot at the crown.
+2. Receding and thinning, combed back, short at the sides.
+3. Bald on top, with a short fringe of hair round the sides and the back.
+4. Bald, with a few thin wisps over the crown.
+5. A short pixie cut, feathered, with a side-swept fringe.
+6. A thick, untidy mop falling over the forehead and the ears.
+7. A straight, chin-length bob with a blunt fringe.
+8. Jaw-length, choppy and layered, with no fringe, as if cut with a knife.
+Paint every style a plain mid brown, the same style on the man above and the woman below.
+I'll save it as hair-sheet-02.png.
+
+#### `hair-sheet-03` · Hair sheet 3: hair 17, hair 18, hair 19, hair 20, hair 21, hair 22, hair 23, hair 24 · P0
+
+**Basis:** Edits `hair-sheet`. Columns: 1 `hair-17`, 2 `hair-18`, 3 `hair-19`, 4 `hair-20`, 5 `hair-21`, 6 `hair-22`, 7 `hair-23`, 8 `hair-24`.
+
+1. Shaggy and layered, to the jaw, falling into the eyes.
+2. Wavy, to the jaw, parted to one side.
+3. A thick mass of curls to the shoulders.
+4. A full, rounded afro.
+5. Straight, to the shoulders, parted in the middle and tucked behind the ear.
+6. To the shoulders, tied back in a short, low ponytail, loose strands round the face.
+7. Wild and windswept, to the shoulders.
+8. Swept back from the forehead, to the collar.
+Paint every style a plain mid brown, the same style on the man above and the woman below.
+I'll save it as hair-sheet-03.png.
+
+#### `hair-sheet-04` · Hair sheet 4: hair 25, hair 26, hair 27, hair 28, hair 29, hair 30, hair 31, hair 32 · P0
+
+**Basis:** Edits `hair-sheet`. Columns: 1 `hair-25`, 2 `hair-26`, 3 `hair-27`, 4 `hair-28`, 5 `hair-29`, 6 `hair-30`, 7 `hair-31`, 8 `hair-32`.
+
+1. To the shoulders, the top half tied back in a small knot.
+2. Pulled back tightly from the face into a short tail at the nape.
+3. Long and straight, loose to the middle of the back, parted in the middle.
+4. Long and straight, to the middle of the back, parted to one side and swept over the near shoulder.
+5. Long and wavy, loose past the shoulders.
+6. Long, loose curls past the shoulders.
+7. Long, in a high ponytail that falls past the shoulder blades, a few loose strands framing the face.
+8. Long, tied at the nape in a loose tail down the back.
+Paint every style a plain mid brown, the same style on the man above and the woman below.
+I'll save it as hair-sheet-04.png.
+
+#### `hair-sheet-05` · Hair sheet 5: hair 33, hair 34, hair 35, hair 36, hair 37, hair 38, hair 39, hair 40 · P0
+
+**Basis:** Edits `hair-sheet`. Columns: 1 `hair-33`, 2 `hair-34`, 3 `hair-35`, 4 `hair-36`, 5 `hair-37`, 6 `hair-38`, 7 `hair-39`, 8 `hair-40`.
+
+1. One long, thick braid over the near shoulder to the waist.
+2. One thick braid down the back.
+3. Two long plaits, one over each shoulder.
+4. Two short bunches tied high at the sides of the head.
+5. Pinned up in a neat, low bun at the nape.
+6. Pinned up in a loose, messy bun, strands escaping round the face and neck.
+7. Pulled up into a tight, high bun on the crown.
+8. Braided and pinned round the head like a crown.
+Paint every style a plain mid brown, the same style on the man above and the woman below.
+I'll save it as hair-sheet-05.png.
+
+#### `hair-sheet-06` · Hair sheet 6: hair 41, hair 42, hair 43, hair 44, hair 45, hair 46, hair 47, hair 48 · P0
+
+**Basis:** Edits `hair-sheet`. Columns: 1 `hair-41`, 2 `hair-42`, 3 `hair-43`, 4 `hair-44`, 5 `hair-45`, 6 `hair-46`, 7 `hair-47`, 8 `hair-48`.
+
+1. Braided and pinned up at the back, a few strands loose.
+2. The sides shaved short, the long top tied back in a warrior's topknot.
+3. A mohawk: the sides shaved, a short spiked crest along the top.
+4. Thick locs to the shoulders, tied back loosely.
+5. Many long, thin braids, tied back at the nape.
+6. Very long and straight, to the waist.
+7. Long, wild and tangled, past the shoulders.
+8. Long, thin and wispy, to the shoulders, receding at the brow.
+Paint every style a plain mid brown, the same style on the man above and the woman below.
+I'll save it as hair-sheet-06.png.
+
+### 4.10 Extras
+
+What goes on the head that isn't the face or the hair, so it shows whatever hair or helm is worn: **beards and moustaches** (`beard-*`, the man's), **jewellery and the like** (`jewel-*`: earrings, a nose ring, spectacles, an eyepatch, a monocle, a quill behind the ear), **skin marks** (`skin-*`: freckles, scars, a tattoo, ash) and **a people's ears and horns** (`ears-*`, `horns-*`: a Sylvan's pointed ears, a Wildkin's beast ears or feathers, an Emberkin's horns). Beards, jewellery and skin marks are drawn over the face and under the hair; ears and horns over the hair or the helm (a hood included). A character can wear any number of them (§7's Extras column). All but the beards are painted on both bases (the woman's copy `-f`). A beard is recoloured to the character's hair, a skin mark and pointed ears to their skin, fur to their hair; jewellery and horns keep their own colours. `tools/import_parts.py` cuts them from `tools/source/characters/extras/`.
+
+The extra sheets (`tools/source/characters/extra-sheet.png` for both bases, the man's six above and the woman's six below, one item a column; `extra-sheet-male.png` for the beards, twelve on the man) hold each head, neck and chest at three-quarter size. `python tools/part_sheet.py cut <png> <sheet-id>` cuts them into `tools/source/characters/extras/`.
+
+| Sheet | Base | Priority | Cells, in order |
+|---|---|---|---|
+| `extra-sheet-01` | `base-male` | P0 | `beard-01`, `beard-02`, `beard-03`, `beard-04`, `beard-05`, `beard-06`, `beard-07`, `beard-08`, `beard-09`, `beard-10`, `beard-11`, `beard-12` |
+| `extra-sheet-02` | `both` | P0 | `jewel-01`, `jewel-02`, `jewel-03`, `jewel-04`, `jewel-05`, `jewel-06` |
+| `extra-sheet-03` | `both` | P0 | `jewel-07`, `jewel-08`, `jewel-09`, `jewel-10`, `jewel-11`, `jewel-12` |
+| `extra-sheet-04` | `both` | P0 | `skin-01`, `skin-02`, `skin-03`, `skin-04`, `skin-05`, `skin-06` |
+| `extra-sheet-05` | `both` | P0 | `ears-01`, `ears-02`, `ears-03`, `ears-04`, `ears-05`, `ears-06` |
+| `extra-sheet-06` | `both` | P0 | `horns-01`, `horns-02`, `horns-03`, `horns-04`, `horns-05`, `horns-06` |
 
-1. Brannock Ironvein: copper red going grey, short and curly. A full copper beard, grey at the chin, braided into one thick braid that falls to the belt, held by two small gold clasps.
-2. You, aged eight: an untidy chestnut mop.
-3. The lookout: dark, tied back short.
-4. Old Tomas: bald on top, a fringe of white at the sides.
-I'll save it as hair-sheet-m02.png.
-
-#### `hair-sheet-m03` · Hair sheet: 4 hairstyles (Red Gull Thug, face 1, Red Gull Thug, face 2, Red Gull Thug, face 3, Bosun Grell) · P0
+#### `extra-sheet-01` · Extra sheet: the twelve beards and moustaches · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-red-gull`, 2 `hair-red-gull-2`, 3 `hair-red-gull-3`, 4 `hair-grell`.
+**Basis:** Edits `extra-sheet-male`. Cells: 1 `beard-01`, 2 `beard-02`, 3 `beard-03`, 4 `beard-04`, 5 `beard-05`, 6 `beard-06`, 7 `beard-07`, 8 `beard-08`, 9 `beard-09`, 10 `beard-10`, 11 `beard-11`, 12 `beard-12`.
 
-1. Red Gull Thug, face 1: a shaved, bald head with a small tattoo of a gull in flight on the side of the scalp.
-2. Red Gull Thug, face 2: lank ginger, short.
-3. Red Gull Thug, face 3: the sides shaved, a short black topknot.
-4. Bosun Grell: completely bald, the scalp shiny. A full, bushy copper beard.
-I'll save it as hair-sheet-m03.png.
+1. A few days' stubble along the jaw, the chin and the upper lip.
+2. A thin, neatly trimmed moustache.
+3. A neat, full moustache.
+4. A thick moustache drooping past the corners of the mouth.
+5. A goatee: a short chin beard joined to a moustache.
+6. A narrow beard along the jawline, with no moustache.
+7. A short, neatly trimmed full beard and moustache.
+8. A full, bushy beard and moustache.
+9. A long, full beard falling to the chest, with a moustache.
+10. A full beard braided into one thick braid that falls to the chest, with a moustache.
+11. Mutton-chop side-whiskers down the cheeks, the chin shaved.
+12. A scruffy, uneven beard, a few weeks' growth.
+Each cell is one item, numbered 1 to 6 along the top row and 7 to 12 along the bottom, all on the man.
+I'll save it as extra-sheet-01.png.
 
-#### `hair-sheet-m04` · Hair sheet: 4 hairstyles (Captain Roderic Hale, Questmaster Fennick, Sergeant Brisk, Old Aurek) · P0
+#### `extra-sheet-02` · Extra sheet: earrings and piercings · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-hale`, 2 `hair-fennick`, 3 `hair-brisk`, 4 `hair-refugee-1`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-01`, 2 `jewel-02`, 3 `jewel-03`, 4 `jewel-04`, 5 `jewel-05`, 6 `jewel-06`.
 
-1. Captain Roderic Hale: grey, cropped short.
-2. Questmaster Fennick: grey, neatly combed and parted, a quill pen tucked behind one ear.
-3. Sergeant Brisk: black, cropped short.
-4. Old Aurek: bald, with a few white wisps.
-I'll save it as hair-sheet-m04.png.
+1. A small gold hoop in the ear.
+2. A large gold hoop earring.
+3. A small silver stud in the ear lobe.
+4. A dangling gold earring with a small blue gem at the end.
+5. Three small silver rings up the edge of the ear.
+6. A feather earring hanging to the jaw.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-02.png.
 
-#### `hair-sheet-m05` · Hair sheet: 4 hairstyles (Teodor, King Leon, Lord Chancellor Vesper Crane, Pip the Potboy) · P0
+#### `extra-sheet-03` · Extra sheet: spectacles, an eyepatch and more · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-refugee-2`, 2 `hair-leon`, 3 `hair-crane`, 4 `hair-pip`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-07`, 2 `jewel-08`, 3 `jewel-09`, 4 `jewel-10`, 5 `jewel-11`, 6 `jewel-12`.
 
-1. Teodor: black, tousled and damp.
-2. King Leon: silver, swept back to the collar.
-3. Lord Chancellor Vesper Crane: black, slicked straight back from a high forehead.
-4. Pip the Potboy: copper, tousled.
-I'll save it as hair-sheet-m05.png.
+1. A small gold ring through the side of the nose.
+2. Small round wire-rimmed spectacles.
+3. A black leather eyepatch over the near eye, its strap running round the head.
+4. A gold-rimmed monocle over the near eye, on a thin gold chain.
+5. A quill pen tucked behind the ear.
+6. A single pearl earring.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-03.png.
 
-#### `hair-sheet-m06` · Hair sheet: 4 hairstyles (Osric Penhallow, Lark the Busker, Guardsman Oswin, Townsfolk face 1) · P0
+#### `extra-sheet-04` · Extra sheet: freckles, scars and marks · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-osric`, 2 `hair-lark`, 3 `hair-oswin`, 4 `hair-town-1`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `skin-01`, 2 `skin-02`, 3 `skin-03`, 4 `skin-04`, 5 `skin-05`, 6 `skin-06`.
 
-1. Osric Penhallow: black with a blue sheen, short and combed.
-2. Lark the Busker: rose pink, long and loose to the shoulders.
-3. Guardsman Oswin: gold, cropped.
-4. Townsfolk face 1: straw coloured and shaggy.
-I'll save it as hair-sheet-m06.png.
+1. A dusting of freckles over the nose and cheeks.
+2. A thin, pale scar through one eyebrow and down the cheek.
+3. An old scar across the bridge of the nose.
+4. A burn scar along the jaw.
+5. A small dark tattoo of a bird in flight on the side of the scalp.
+6. A smudge of grey ash or soot across the cheek and the brow.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-04.png.
 
-#### `hair-sheet-m07` · Hair sheet: 4 hairstyles (Townsfolk face 3, Townsfolk face 5, Townsfolk face 7, Townsfolk face 9) · P0
+#### `extra-sheet-05` · Extra sheet: a people's ears · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-town-3`, 2 `hair-town-5`, 3 `hair-town-7`, 4 `hair-town-9`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `ears-01`, 2 `ears-02`, 3 `ears-03`, 4 `ears-04`, 5 `ears-05`, 6 `ears-06`.
 
-1. Townsfolk face 3: black, short and tightly curled.
-2. Townsfolk face 5: grey, sticking out round a bald crown.
-3. Townsfolk face 7: brown and short.
-4. Townsfolk face 9: brown and tousled.
-I'll save it as hair-sheet-m07.png.
+1. Long, elegant pointed ears swept back from the sides of the head, in the head's own skin.
+2. Two tall, pointed wolf's ears standing on top of the head, furred.
+3. Two small, round, furry bear's ears on top of the head.
+4. Two pointed fox's ears on top of the head, furred, with pale fur inside.
+5. In place of ears, two swept-back tufts of barred brown-and-cream feathers growing from the top of the head.
+6. Ears a little longer than a person's, ending in short points, in the head's own skin.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-05.png.
 
-#### `hair-sheet-m08` · Hair sheet: 4 hairstyles (Townsfolk face 11, Townsfolk face 12, Townsfolk face 14, Townsfolk face 16) · P0
+#### `extra-sheet-06` · Extra sheet: horns · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-town-11`, 2 `hair-town-12`, 3 `hair-town-14`, 4 `hair-town-16`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `horns-01`, 2 `horns-02`, 3 `horns-03`, 4 `horns-04`, 5 `horns-05`, 6 `horns-06`.
 
-1. Townsfolk face 11: black, short and messy.
-2. Townsfolk face 12: black going grey, short.
-3. Townsfolk face 14: brown, short.
-4. Townsfolk face 16: dark, straight, to the shoulders.
-I'll save it as hair-sheet-m08.png.
+1. Two dark, ridged horns curling round from the temples like a ram's, old bone going ivory at the tips.
+2. Two dark, ridged horns sweeping straight back from the temples in a long curve, going pale like old ivory at the tips.
+3. Two short, straight dark horns rising from the brow.
+4. Two horns curving out and up from the temples like a bull's, pale with dark tips.
+5. Small branching antlers, the colour of old wood, rising from the top of the head.
+6. Two small dark horns curling back behind the ears.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-06.png.
 
-#### `hair-sheet-m09` · Hair sheet: 4 hairstyles (Townsfolk face 17, Garrick the caravan master, Commander Aldric Voss, The recruit) · P0
+#### `beard-01` · Stubble · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-town-17`, 2 `hair-garrick`, 3 `hair-aldric`, 4 `hair-recruit`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Townsfolk face 17: grey, short; a grey beard braided into two short braids.
-2. Garrick the caravan master: black going grey.
-3. Commander Aldric Voss: grey, cropped close.
-4. The recruit: straw blond, sticking out untidily.
-I'll save it as hair-sheet-m09.png.
+Edit the attached blank base image: change ONLY this: a few days' stubble along the jaw, the chin and the upper lip. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-01.png.
 
-#### `hair-sheet-m10` · Hair sheet: 4 hairstyles (Tobin Ashgrove, Lord Harrow of Heronsgate, Hobb the woodcutter, Maleficio) · P1
+#### `beard-02` · The thin moustache · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-tobin`, 2 `hair-harrow`, 3 `hair-hobb`, 4 `hair-maleficio`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Tobin Ashgrove: thinning copper with grey, a bald crown.
-2. Lord Harrow of Heronsgate: grey and receding, combed back.
-3. Hobb the woodcutter: red and thick.
-4. Maleficio: grey and receding, swept back.
-I'll save it as hair-sheet-m10.png.
+Edit the attached blank base image: change ONLY this: a thin, neatly trimmed moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-02.png.
 
-#### `hair-sheet-m11` · Hair sheet: 4 hairstyles (The woodcutter's boy, Varkhul, Cube Cultist, Sir Corwin Halbeck) · P1
+#### `beard-03` · The moustache · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-lost-boy`, 2 `hair-varkhul`, 3 `hair-cube-cultist`, 4 `hair-corwin`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. The woodcutter's boy: bright red, sticking up.
-2. Varkhul: grey, matted.
-3. Cube Cultist: a shaved head.
-4. Sir Corwin Halbeck: fair going grey, cut short.
-I'll save it as hair-sheet-m11.png.
+Edit the attached blank base image: change ONLY this: a neat, full moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-03.png.
 
-#### `hair-sheet-m12` · Hair sheet: 4 hairstyles (Lord Severin Morvaine, Pell, The blood-house steward, A Hollowmere child) · P2
+#### `beard-04` · The drooping moustache · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-severin`, 2 `hair-pell`, 3 `hair-blood-house-steward`, 4 `hair-hollowmere-child`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Lord Severin Morvaine: silver, straight, to the shoulders.
-2. Pell: dark and shaggy, falling into his eyes.
-3. The blood-house steward: grey, oiled flat.
-4. A Hollowmere child: dark, cut short and uneven.
-I'll save it as hair-sheet-m12.png.
+Edit the attached blank base image: change ONLY this: a thick moustache drooping past the corners of the mouth. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-04.png.
 
-#### `hair-sheet-m13` · Hair sheet: 4 hairstyles (Ruck, the bosun, Davin, Thrall, Drowned) · P2
+#### `beard-05` · The goatee · P0
 
-**Basis:** Edits `hair-sheet-male`. Cells: 1 `hair-ruck`, 2 `hair-davin`, 3 `hair-thrall`, 4 `hair-drowned`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Ruck, the bosun: bald on top, with a short grey tarred pigtail at the back.
-2. Davin: brown, short and untidy.
-3. Thrall: dark, cropped.
-4. Drowned: long, matted strands of dark kelp.
-I'll save it as hair-sheet-m13.png.
+Edit the attached blank base image: change ONLY this: a goatee: a short chin beard joined to a moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-05.png.
 
-#### `hair-sheet-f01` · Hair sheet: 4 hairstyles (You, face 2, You, face 3, You, face 4, You, face 5) · P0
+#### `beard-06` · The chin strap · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-player-2`, 2 `hair-player-3`, 3 `hair-player-4`, 4 `hair-player-5`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. You, face 2: chestnut brown, shoulder length, tied back in a low, loose ponytail with messy strands round the face.
-2. You, face 3: black, long and straight, in a high ponytail that falls past the shoulder blades, a few loose strands framing the face.
-3. You, face 4: thick, curly dark brown to the shoulders, held back with a cloth band.
-4. You, face 5: long, straight silver-blonde, past the shoulders, with one thin braid at the temple.
-I'll save it as hair-sheet-f01.png.
+Edit the attached blank base image: change ONLY this: a narrow beard along the jawline, with no moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-06.png.
 
-#### `hair-sheet-f02` · Hair sheet: 4 hairstyles (You, face 7, Sera Vantis, Mira Ashgrove, {sb}, aged eight) · P0
+#### `beard-07` · The short beard · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-player-7`, 2 `hair-sera`, 3 `hair-mira`, 4 `hair-sb-child`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. You, face 7: shaggy grey-brown, to the jaw.
-2. Sera Vantis: honey blonde, in one long, thick braid over the near shoulder to the waist, tied with a leather thong and a single grey kestrel feather.
-3. Mira Ashgrove: copper red, pinned up in a loose, messy bun with a writing pen pushed through it, strands escaping round the face and neck.
-4. {sb}, aged eight: black, in a short, stubby ponytail coming loose.
-I'll save it as hair-sheet-f02.png.
+Edit the attached blank base image: change ONLY this: a short, neatly trimmed full beard and moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-07.png.
 
-#### `hair-sheet-f03` · Hair sheet: 4 hairstyles (Corra, Captain Odelle Marsh, Hedda, Lise) · P0
+#### `beard-08` · The full beard · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-corra`, 2 `hair-odelle`, 3 `hair-hedda`, 4 `hair-refugee-child`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Corra: chestnut going grey, pinned up in a practical bun with loose wisps.
-2. Captain Odelle Marsh: long and black with a few grey strands, in a loose tail down the back.
-3. Hedda: chestnut, tied back roughly with a strip of cloth, strands coming loose.
-4. Lise: chestnut, in two uneven plaits tied with string.
-I'll save it as hair-sheet-f03.png.
+Edit the attached blank base image: change ONLY this: a full, bushy beard and moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-08.png.
 
-#### `hair-sheet-f04` · Hair sheet: 4 hairstyles (Yselle the Glassblower, Princess Elara Aurelian, Hessa the Barkeep, Netty the Net-Mender) · P0
+#### `beard-09` · The long beard · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-refugee-3`, 2 `hair-elara`, 3 `hair-anvil-barkeep`, 4 `hair-netty`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Yselle the Glassblower: copper red, in one thick braid down the back.
-2. Princess Elara Aurelian: black, shoulder length and choppy, cut in layers she clearly does herself.
-3. Hessa the Barkeep: black and thick, tied back in a short bundle.
-4. Netty the Net-Mender: silver, in a braid pinned round the head like a crown.
-I'll save it as hair-sheet-f04.png.
+Edit the attached blank base image: change ONLY this: a long, full beard falling to the chest, with a moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-09.png.
 
-#### `hair-sheet-f05` · Hair sheet: 4 hairstyles (Maud Tolley, Ilsa Fenwright, Sister Hesper, Wren) · P0
+#### `beard-10` · The braided beard · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-maud`, 2 `hair-ilsa`, 3 `hair-hesper`, 4 `hair-wren`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Maud Tolley: silver, in a low bun.
-2. Ilsa Fenwright: gold, in one neat braid.
-3. Sister Hesper: long and silver, loose down the back.
-4. Wren: black, scraped back into a scruffy tail.
-I'll save it as hair-sheet-f05.png.
+Edit the attached blank base image: change ONLY this: a full beard braided into one thick braid that falls to the chest, with a moustache. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-10.png.
 
-#### `hair-sheet-f06` · Hair sheet: 4 hairstyles (Master Imra Vell, Ranger Tamsin, Townsfolk face 2, Townsfolk face 4) · P0
+#### `beard-11` · The side-whiskers · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-imra-vell`, 2 `hair-tamsin`, 3 `hair-town-2`, 4 `hair-town-4`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Master Imra Vell: black flecked with grey, cut short and practical.
-2. Ranger Tamsin: chestnut, tied back tightly.
-3. Townsfolk face 2: dark brown, pinned up at the back.
-4. Townsfolk face 4: brown, pinned up with strands escaping.
-I'll save it as hair-sheet-f06.png.
+Edit the attached blank base image: change ONLY this: mutton-chop side-whiskers down the cheeks, the chin shaved. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-11.png.
 
-#### `hair-sheet-f07` · Hair sheet: 4 hairstyles (Townsfolk face 6, Townsfolk face 8, Townsfolk face 10, Townsfolk face 13) · P0
+#### `beard-12` · The scruffy beard · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-town-6`, 2 `hair-town-8`, 3 `hair-town-10`, 4 `hair-town-13`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10).
 
-1. Townsfolk face 6: silver-white, pinned up.
-2. Townsfolk face 8: blonde, in two bunches.
-3. Townsfolk face 10: bright copper red, long and wavy.
-4. Townsfolk face 13: black with grey, pulled back.
-I'll save it as hair-sheet-f07.png.
+Edit the attached blank base image: change ONLY this: a scruffy, uneven beard, a few weeks' growth. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as beard-12.png.
 
-#### `hair-sheet-f08` · Hair sheet: 4 hairstyles (Townsfolk face 15, Townsfolk face 18, Mira, aged thirteen, Archmage Thessaly Varn) · P0
+#### `jewel-01` · The small hoop · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-town-15`, 2 `hair-town-18`, 3 `hair-mira-young`, 4 `hair-thessaly`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-01-f`, on `base-female-blank`.
 
-1. Townsfolk face 15: curly, light brown, in a bun.
-2. Townsfolk face 18: black, in a long plait over one shoulder.
-3. Mira, aged thirteen: copper red, in two long plaits.
-4. Archmage Thessaly Varn: iron grey, cropped very short.
-I'll save it as hair-sheet-f08.png.
+Edit the attached blank base image: change ONLY this: a small gold hoop in the ear. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-01.png.
 
-#### `hair-sheet-f09` · Hair sheet: 4 hairstyles (Brenna of Ashfall, Mother Gannet, Hester Hollis, Pedlar Mags) · P1
+#### `jewel-02` · The big hoop · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-brenna`, 2 `hair-gannet`, 3 `hair-hester`, 4 `hair-mags`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-02-f`, on `base-female-blank`.
 
-1. Brenna of Ashfall: dark brown, cropped short at the sides, the top tied back in a short tail.
-2. Mother Gannet: iron grey, scraped into a tight bun.
-3. Hester Hollis: white-grey, in a neat bun.
-4. Pedlar Mags: grey-streaked brown, in two thick braids.
-I'll save it as hair-sheet-f09.png.
+Edit the attached blank base image: change ONLY this: a large gold hoop earring. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-02.png.
 
-#### `hair-sheet-f10` · Hair sheet: 4 hairstyles (Valencia Morvaine, Mother Superior Anselle, Sister Orla, Lady Isadora) · P2
+#### `jewel-03` · The stud · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-valencia`, 2 `hair-anselle`, 3 `hair-orla`, 4 `hair-isadora`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-03-f`, on `base-female-blank`.
 
-1. Valencia Morvaine: long, straight, silver-white, to the middle of the back, parted to one side.
-2. Mother Superior Anselle: short and grey, mostly under a close white linen coif.
-3. Sister Orla: grey-blonde, tucked up out of the way.
-4. Lady Isadora: dark brown, braided and pinned up, a few strands loose.
-I'll save it as hair-sheet-f10.png.
+Edit the attached blank base image: change ONLY this: a small silver stud in the ear lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-03.png.
 
-#### `hair-sheet-f11` · Hair sheet: 4 hairstyles (Valencia as a child, Ide, Maren, Hollowmere's elder, A Hollowmere farmer) · P2
+#### `jewel-04` · The drop · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-valencia-child`, 2 `hair-ide`, 3 `hair-maren-elder`, 4 `hair-hollowmere-farmer`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-04-f`, on `base-female-blank`.
 
-1. Valencia as a child: silver-white, loose to the shoulders, with a small dark ribbon.
-2. Ide: dark, long and tangled.
-3. Maren, Hollowmere's elder: white, in a tight braid round the head.
-4. A Hollowmere farmer: brown with grey, pulled back.
-I'll save it as hair-sheet-f11.png.
+Edit the attached blank base image: change ONLY this: a dangling gold earring with a small blue gem at the end. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-04.png.
 
-#### `hair-sheet-f12` · Hair sheet: 2 hairstyles (A Guild apprentice, Vreya) · P2
+#### `jewel-05` · The ear rings · P0
 
-**Basis:** Edits `hair-sheet-female`. Cells: 1 `hair-guild-apprentice`, 2 `hair-vreya`.
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-05-f`, on `base-female-blank`.
 
-1. A Guild apprentice: sandy, in a messy short ponytail.
-2. Vreya: white-blonde, mostly to be hidden under a helm, one lock escaping.
-Leave figures 3 and 4 exactly as they are: bald, unchanged.
-I'll save it as hair-sheet-f12.png.
+Edit the attached blank base image: change ONLY this: three small silver rings up the edge of the ear. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-05.png.
+
+#### `jewel-06` · The feather · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-06-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a feather earring hanging to the jaw. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-06.png.
+
+#### `jewel-07` · The nose ring · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-07-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a small gold ring through the side of the nose. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-07.png.
+
+#### `jewel-08` · The spectacles · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-08-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: small round wire-rimmed spectacles. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-08.png.
+
+#### `jewel-09` · The eyepatch · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-09-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a black leather eyepatch over the near eye, its strap running round the head. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-09.png.
+
+#### `jewel-10` · The monocle · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-10-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a gold-rimmed monocle over the near eye, on a thin gold chain. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-10.png.
+
+#### `jewel-11` · The quill · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-11-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a quill pen tucked behind the ear. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-11.png.
+
+#### `jewel-12` · The pearl · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-12-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a single pearl earring. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-12.png.
+
+#### `skin-01` · Freckles · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-01-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a dusting of freckles over the nose and cheeks. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in the base's own warm tan skin tones (and any ink or soot in its own colour), since the game tints it to each character's skin. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as skin-01.png.
+
+#### `skin-02` · The brow scar · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-02-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a thin, pale scar through one eyebrow and down the cheek. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in the base's own warm tan skin tones (and any ink or soot in its own colour), since the game tints it to each character's skin. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as skin-02.png.
+
+#### `skin-03` · The nose scar · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-03-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: an old scar across the bridge of the nose. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in the base's own warm tan skin tones (and any ink or soot in its own colour), since the game tints it to each character's skin. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as skin-03.png.
+
+#### `skin-04` · The burn · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-04-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a burn scar along the jaw. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in the base's own warm tan skin tones (and any ink or soot in its own colour), since the game tints it to each character's skin. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as skin-04.png.
+
+#### `skin-05` · The tattoo · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-05-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a small dark tattoo of a bird in flight on the side of the scalp. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in the base's own warm tan skin tones (and any ink or soot in its own colour), since the game tints it to each character's skin. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as skin-05.png.
+
+#### `skin-06` · The ash · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-06-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a smudge of grey ash or soot across the cheek and the brow. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in the base's own warm tan skin tones (and any ink or soot in its own colour), since the game tints it to each character's skin. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as skin-06.png.
+
+#### `ears-01` · Pointed ears · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `ears-01-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: long, elegant pointed ears swept back from the sides of the head, in the head's own skin. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Pointed ears are the head's own skin, which the game tints; paint fur a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as ears-01.png.
+
+#### `ears-02` · Wolf's ears · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `ears-02-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two tall, pointed wolf's ears standing on top of the head, furred. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Pointed ears are the head's own skin, which the game tints; paint fur a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as ears-02.png.
+
+#### `ears-03` · Bear's ears · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `ears-03-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two small, round, furry bear's ears on top of the head. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Pointed ears are the head's own skin, which the game tints; paint fur a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as ears-03.png.
+
+#### `ears-04` · Fox's ears · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `ears-04-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two pointed fox's ears on top of the head, furred, with pale fur inside. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Pointed ears are the head's own skin, which the game tints; paint fur a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as ears-04.png.
+
+#### `ears-05` · Feather tufts · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `ears-05-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: in place of ears, two swept-back tufts of barred brown-and-cream feathers growing from the top of the head. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Pointed ears are the head's own skin, which the game tints; paint fur a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as ears-05.png.
+
+#### `ears-06` · Short points · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `ears-06-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: ears a little longer than a person's, ending in short points, in the head's own skin. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Pointed ears are the head's own skin, which the game tints; paint fur a plain mid brown, since the game recolours it to each character's hair. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as ears-06.png.
+
+#### `horns-01` · Ram's horns · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `horns-01-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two dark, ridged horns curling round from the temples like a ram's, old bone going ivory at the tips. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Paint them in their own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as horns-01.png.
+
+#### `horns-02` · Swept horns · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `horns-02-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two dark, ridged horns sweeping straight back from the temples in a long curve, going pale like old ivory at the tips. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Paint them in their own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as horns-02.png.
+
+#### `horns-03` · Short horns · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `horns-03-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two short, straight dark horns rising from the brow. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Paint them in their own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as horns-03.png.
+
+#### `horns-04` · Bull's horns · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `horns-04-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two horns curving out and up from the temples like a bull's, pale with dark tips. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Paint them in their own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as horns-04.png.
+
+#### `horns-05` · Antlers · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `horns-05-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: small branching antlers, the colour of old wood, rising from the top of the head. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Paint them in their own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as horns-05.png.
+
+#### `horns-06` · Curled horns · P0
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `horns-06-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two small dark horns curling back behind the ears. It goes over the hair or the helm, so paint it rising from the head as if nothing were there. Paint them in their own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as horns-06.png.
+
 
 ## 5. Armors
 
@@ -4044,7 +3247,7 @@ Edit the attached blank base image: change ONLY the head: put a deep charcoal wo
 
 **Basis:** Edits `base-male-blank`. From `03-art-overhaul.md` §7.4 (horns through a pointed hood) and §3.6 (horns are drawn over any hood).
 
-Edit the attached blank base image: change ONLY the head: put a charcoal hood worn up, ending in a soft point at the back, the edge of the face in shadow (the game draws the horns over it) on the bald head. It replaces the hair (hair and helm are one slot), so paint in any hair that should show under it. Where it doesn't cover them, the blank head and face stay exactly as they are. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as helm-kael-hood.png.
+Edit the attached blank base image: change ONLY the head: put a charcoal hood worn up, ending in a soft point at the back, the edge of the face in shadow on the bald head. It replaces the hair (hair and helm are one slot), so paint in any hair that should show under it. Where it doesn't cover them, the blank head and face stay exactly as they are. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as helm-kael-hood.png.
 
 #### `helm-beret` · A beret · P0
 
@@ -4886,166 +4089,166 @@ Edit the attached image (weapon-brannock.png): change ONLY the shield's rim: for
 
 ## 7. Characters as recipes
 
-Every person and humanoid foe, as the parts they wear and their morph. The Helm / hair column is what's on the head, one slot: their hair, or a helm in its place. `—` is an empty slot. A variant id (`elara.act3`) is the same character at another point in the story; `swap` cues in the scripts switch between them. Names with ids in backticks in the notes are other entries.
+Every person and humanoid foe, as the parts they wear, their morph and their colours. The faces are the shared set (§4): many people wear the same one, and the Colours column recolours each (the skin, the eyebrows, beard and hair, the eyes) with the game's swatches (`Characters/Parts/Swatches.cs`), so no two who share a face look alike. A head that isn't a face (§4.3) keeps its own colours. The Helm / hair column is what's on the head, one slot: a style from the hair library (§4.8), or a helm in its place. The Extras column is what they wear on the head besides (§4.10): a beard, jewellery, scars, a people's ears or horns, any number. `—` is an empty slot. A variant id (`elara.act3`) is the same character at another point in the story; `swap` cues in the scripts switch between them. Names with ids in backticks in the notes are other entries.
 
-| Id | Name | Face | Armor | Cape | Helm / hair | Weapon | Morph (h × w) | Priority | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `you-male` | You, the male default | `face-player-1` | `armor-traveller` | — | `hair-player-1` | `weapon-longsword` | 1.00 × 1.00 | P0 | the player swaps any slot on the creation screen |
-| `you-female` | You, the female default | `face-player-2` | `armor-traveller-f` | — | `hair-player-2` | `weapon-longsword` | 1.00 × 1.00 | P0 |  |
-| `soulbound` | {sb}, the default | `face-player-3` | `armor-sb-traveller` | `cape-sb` | `hair-player-3` | `weapon-sb-blades` | 1.02 × 1.00 | P0 | the player can change every slot |
-| `you-male.champion` | You, Champion of Fable | `face-player-1` | `armor-champion` | — | `hair-player-1` | `weapon-longsword` | 1.00 × 1.00 | P1 | Act 1's end |
-| `you-female.champion` | You, Champion of Fable | `face-player-2` | `armor-champion-f` | — | `hair-player-2` | `weapon-longsword` | 1.00 × 1.00 | P1 |  |
-| `soulbound.champion` | {sb}, Champion of Fable | `face-player-3` | `armor-champion-f` | `cape-sb` | `hair-player-3` | `weapon-sb-blades` | 1.02 × 1.00 | P1 |  |
-| `soulbound.lord-protector` | {sb}, Lord Protector | `face-player-3` | `armor-lord-protector` | — | `hair-player-3` | `weapon-longsword` | 1.02 × 1.00 | P2 | Act 2's end |
-| `mc-child` | You, aged eight | `face-mc-child` | `armor-child-cove` | — | `hair-mc-child` | — | 0.62 × 0.66 | P0 |  |
-| `sb-child` | {sb}, aged eight | `face-sb-child` | `armor-child-cove-f` | — | `hair-sb-child` | — | 0.62 × 0.66 | P0 |  |
-| `sera` | Sera Vantis | `face-sera` | `armor-sera` | `cape-sera` | `hair-sera` | `weapon-sera-longbow` | 1.04 × 0.90 | P0 |  |
-| `mira` | Mira Ashgrove | `face-mira` | `armor-mira` | — | `hair-mira` | `weapon-quarterstaff` | 1.01 × 0.90 | P0 | her healing glow is an effect |
-| `mira-young` | Mira, aged thirteen | `face-mira-young` | `armor-mira-apprentice` | — | `hair-mira-young` | `weapon-sketchbook` | 0.80 × 0.80 | P1 | drawn as an echo |
-| `kael` | Kael Duskmantle | `face-kael` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `weapon-kael-knives` | 1.00 × 0.95 | P0 | the horns draw over the hood |
-| `brannock` | Brannock Ironvein | `face-brannock` | `armor-brannock` | — | `hair-brannock` | `weapon-brannock` | 0.85 × 1.36 | P0 | shield `weapon-brannock-1`, `-41`, `-42` as the names come |
-| `brannock.clasps-gone` | Brannock, the clasps gone | `face-brannock-bare` | `armor-brannock` | — | — | `weapon-brannock-42` | 0.85 × 1.36 | P2 | from A3-C2-05 |
-| `valencia` | Valencia Morvaine | `face-valencia` | `armor-valencia` | `cape-valencia` | `helm-circlet-silver` | `weapon-dagger` | 1.09 × 0.90 | P2 |  |
-| `valencia.sister-vale` | Sister Vale | `face-valencia` | `armor-abbey-habit` | — | `helm-abbey-hood` | — | 1.09 × 0.90 | P2 | `valencia-unhooded`: the same without the helm, eyes red (an expression) |
-| `corra` | Corra | `face-corra` | `armor-corra` | — | `hair-corra` | `weapon-netting-needle` | 0.95 × 1.00 | P0 |  |
-| `corra.flashback` | Corra, sixteen years younger | `face-corra-flashback` | `armor-corra` | — | — | `weapon-netting-needle` | 0.95 × 1.00 | P0 | soaked by rain (an effect) |
-| `lookout` | The lookout | `face-lookout` | `armor-sailor` | — | `helm-knit-cap` | `weapon-telescope` | 1.00 × 0.95 | P0 |  |
-| `odelle` | Captain Odelle Marsh | `face-odelle` | `armor-odelle` | — | `helm-tricorn` | `weapon-cutlass` | 1.00 × 1.00 | P0 |  |
-| `tomas` | Old Tomas | `face-tomas` | `armor-fisher` | — | `helm-knit-cap` | `weapon-gaff` | 0.95 × 1.00 | P0 |  |
-| `red-gull` | Red Gull Thug | `face-red-gull` | `armor-red-gull` | — | `hair-red-gull` | `weapon-cudgel` | 1.08 × 1.15 | P0 | also the enemy `red-gull-thug` |
-| `red-gull.b` | Red Gull Thug, second head | `face-red-gull-2` | `armor-red-gull` | — | `helm-bandana-red` | `weapon-cudgel` | 1.08 × 1.15 | P0 |  |
-| `red-gull.c` | Red Gull Thug, third head | `face-red-gull-3` | `armor-red-gull` | — | `hair-red-gull-3` | `weapon-cudgel` | 1.06 × 1.12 | P0 |  |
-| `grell` | Bosun Grell | `face-grell` | `armor-grell` | — | `hair-grell` | `weapon-cutlass` | 0.85 × 1.55 | P0 | also the enemy `bosun-grell` |
-| `hale` | Captain Roderic Hale | `face-hale` | `armor-watch-captain` | `cape-watch-captain` | `helm-watch-crest` | `weapon-cudgel` | 1.03 × 1.14 | P0 |  |
-| `watch` | City Watch | `face-town-14` | `armor-watch` | `cape-watch` | `helm-watch` | `weapon-watch-kit` | 1.00 × 1.00 | P0 | other watchmen: `face-town-3`, `face-town-11` |
-| `fennick` | Questmaster Fennick | `face-fennick` | `armor-clerk` | — | `hair-fennick` | `weapon-tack-hammer` | 1.00 × 1.08 | P0 |  |
-| `hedda` | Hedda (also `refugee-mother`) | `face-hedda` | `armor-refugee-woman` | `cape-blanket` | `hair-hedda` | `weapon-loaf` | 0.99 × 0.95 | P0 |  |
-| `refugee-child` | Lise | `face-refugee-child` | `armor-refugee-child` | — | `hair-refugee-child` | `weapon-rag-doll` | 0.75 × 0.75 | P0 |  |
-| `brisk` | Sergeant Brisk | `face-brisk` | `armor-watch` | `cape-watch` | `helm-watch` | `weapon-cudgel` | 1.00 × 1.06 | P0 |  |
-| `refugee-1` | Old Aurek | `face-refugee-1` | `armor-refugee-man` | `cape-blanket` | `hair-refugee-1` | `weapon-walking-stick` | 0.93 × 0.95 | P0 |  |
-| `refugee-2` | Teodor | `face-refugee-2` | `armor-refugee-man` | `cape-blanket` | `hair-refugee-2` | `weapon-tin-cup` | 0.95 × 0.90 | P0 |  |
-| `refugee-3` | Yselle the Glassblower | `face-refugee-3` | `armor-glassblower` | — | `hair-refugee-3` | — | 0.82 × 1.25 | P0 |  |
-| `elara` | Princess Elara | `face-elara` | `armor-elara` | — | `helm-circlet` | — | 1.08 × 0.88 | P0 | the slim sword is part of the armor |
-| `elara-hooded` | Princess Elara, hooded | `face-elara` | `armor-elara-disguise` | `cape-elara-hooded` | `helm-hood-charcoal` | — | 1.08 × 0.88 | P0 |  |
-| `leon` | King Leon | `face-leon` | `armor-leon` | `cape-leon` | `helm-crown` | — | 0.97 × 1.16 | P0 | his sword is part of the armor |
-| `crane` | Lord Chancellor Crane | `face-crane` | `armor-crane` | — | `hair-crane` | `weapon-quill-letter` | 1.10 × 0.85 | P0 |  |
-| `royal-messenger` | Royal Messenger | `face-town-9` | `armor-royal-livery` | `cape-royal` | `helm-beret` | `weapon-letter` | 0.99 × 0.95 | P0 |  |
-| `royal-guard` | Royal Guard | `face-town-3` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | `weapon-halberd` | 1.04 × 1.08 | P0 | the captain and lieutenant too |
-| `anvil-barkeep` | Hessa the Barkeep | `face-anvil-barkeep` | `armor-tavern` | `cape-tail-bear` | `hair-anvil-barkeep` | `weapon-tankard` | 1.08 × 1.20 | P0 |  |
-| `netty` | Netty the Net-Mender | `face-netty` | `armor-villager-woman` | — | `hair-netty` | `weapon-netting-needle` | 0.98 × 1.00 | P0 |  |
-| `maud` | Maud Tolley | `face-maud` | `armor-elder-woman` | — | `hair-maud` | `weapon-flat-cap-held` | 0.93 × 0.95 | P0 |  |
-| `pip` | Pip the Potboy | `face-pip` | `armor-tavern-m` | — | `hair-pip` | `weapon-stew-pot` | 0.72 × 0.80 | P0 |  |
-| `osric` | Osric Penhallow | `face-osric` | `armor-merchant` | `cape-short-lavender` | `hair-osric` | `weapon-silk-bolt` | 1.00 × 1.00 | P0 |  |
-| `lark` | Lark the Busker | `face-lark` | `armor-busker` | `cape-short-lavender` | `helm-beret` | `weapon-lute` | 1.04 × 0.90 | P0 |  |
-| `ilsa` | Ilsa Fenwright | `face-ilsa` | `armor-villager-woman` | — | `hair-ilsa` | `weapon-scrolls` | 0.99 × 0.95 | P0 |  |
-| `oswin` | Guardsman Oswin | `face-oswin` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | `weapon-halberd` | 1.00 × 1.00 | P0 |  |
-| `hesper` | Sister Hesper | `face-hesper` | `armor-temple` | — | `hair-hesper` | `weapon-broom` | 0.99 × 1.00 | P0 |  |
-| `wren` | Wren | `face-wren` | `armor-urchin-f` | — | `hair-wren` | `weapon-coin` | 0.62 × 0.66 | P0 |  |
-| `imra-vell` | Master Imra Vell | `face-imra-vell` | `armor-fencer` | — | `hair-imra-vell` | `weapon-practice-sword` | 0.99 × 1.00 | P0 | trainer |
-| `tamsin` | Ranger Tamsin | `face-tamsin` | `armor-lodge-ranger` | `cape-tamsin` | `hair-tamsin` | `weapon-shortbow` | 1.00 × 1.00 | P0 | trainer; her hawk is the creature `lodge-hawk` |
-| `garrick` | Garrick the caravan master | `face-garrick` | `armor-caravan` | — | `helm-wide-brim` | `weapon-light-crossbow` | 1.00 × 1.00 | P1 |  |
-| `aldric` | Commander Aldric Voss | `face-aldric` | `armor-aldric` | `cape-campaign` | `hair-aldric` | `weapon-longsword` | 1.00 × 1.05 | P1 |  |
-| `recruit` | The recruit | `face-recruit` | `armor-recruit` | — | `helm-kettle` | `weapon-spear` | 0.96 × 0.92 | P1 |  |
-| `thessaly` | Archmage Thessaly Varn | `face-thessaly` | `armor-thessaly` | — | `hair-thessaly` | `weapon-staff-ring` | 1.00 × 1.00 | P1 | trainer |
-| `thessaly.thessaly-crystal` | Thessaly, frozen in crystal | `face-thessaly` | `armor-thessaly` | — | `hair-thessaly` | `weapon-staff-ring` | 1.00 × 1.00 | P2 | the crystal round her is a prop, not a part |
-| `brenna` | Brenna of Ashfall | `face-brenna` | `armor-brenna` | `cape-ash` | `hair-brenna` | `weapon-battleaxe` | 1.01 × 1.00 | P1 | trainer |
-| `brenna.protectorate` | Brenna, Act 3 | `face-brenna` | `armor-brenna-protectorate` | `cape-ash` | `hair-brenna` | `weapon-battleaxe` | 1.01 × 1.00 | P2 | also her boss fight |
-| `gannet` | Mother Gannet | `face-gannet` | `armor-gannet` | — | `helm-lace-cap` | `weapon-ledger-pen` | 0.99 × 1.20 | P1 |  |
-| `hester` | Hester Hollis | `face-hester` | `armor-elder-woman` | — | `hair-hester` | `weapon-folded-shawl` | 0.90 × 0.90 | P1 |  |
-| `tobin` | Tobin Ashgrove | `face-tobin` | `armor-cider-presser` | — | `hair-tobin` | `weapon-mallet` | 1.00 × 1.00 | P1 |  |
-| `tobin.levy` | Tobin in the levy | `face-tobin` | `armor-levy` | — | `hair-tobin` | `weapon-spade` | 1.00 × 0.95 | P1 | how he looks when you meet him |
-| `harrow` | Lord Harrow | `face-harrow` | `armor-harrow` | — | `hair-harrow` | `weapon-heron-cane` | 1.00 × 1.05 | P1 |  |
-| `hobb` | Hobb the woodcutter | `face-hobb` | `armor-woodcutter` | — | `helm-knit-cap` | `weapon-felling-axe` | 1.08 × 1.15 | P1 |  |
-| `maleficio` | Maleficio | `face-maleficio` | `armor-maleficio` | — | `hair-maleficio` | `weapon-black-box` | 1.01 × 0.95 | P1 |  |
-| `maleficio-young` | Maleficio, remembered | `face-maleficio-young` | `armor-scholar` | — | — | `weapon-oil-lamp` | 1.00 × 1.00 | P1 | drawn as an echo |
-| `relief-column-echo` | The relief column | `face-town-14` | `armor-old-pattern` | — | `helm-nasal` | `weapon-relief-kit` | 1.00 × 1.00 | P1 | drawn pale |
-| `lost-boy` | The woodcutter's boy | `face-lost-boy` | `armor-urchin` | — | `hair-lost-boy` | `weapon-flat-cap-held` | 0.62 × 0.66 | P1 |  |
-| `mags` | Pedlar Mags | `face-mags` | `armor-pedlar` | `cape-pedlar-pack` | `helm-straw-hat` | `weapon-walking-stick` | 0.82 × 1.25 | P1 | trainer; Duchess is a creature |
-| `leon.ill` | King Leon, ill | `face-leon-ill` | `armor-leon-furs` | `cape-leon` | `helm-crown` | `weapon-walking-stick` | 0.95 × 1.10 | P2 |  |
-| `elara.act3` | Elara, leading the resistance | `face-elara` | `armor-elara-field` | `cape-travelling` | `hair-elara` | `weapon-map` | 1.08 × 0.88 | P2 |  |
-| `elara.crowned` | Elara, crowned | `face-elara` | `armor-elara-queen` | — | `helm-crown` | — | 1.08 × 0.88 | P2 |  |
-| `hale.protectorate` | Captain Hale, Act 3 | `face-hale` | `armor-protectorate` | `cape-watch-captain` | `helm-watch-crest` | `weapon-cudgel` | 1.03 × 1.14 | P2 |  |
-| `refugee-child.aged` | Lise, aged by the tear | `face-refugee-child-aged` | `armor-refugee-child` | — | — | — | 0.98 × 0.95 | P2 | the child's smock, tight on her |
-| `anselle` | Mother Superior Anselle | `face-anselle` | `armor-anselle` | — | `hair-anselle` | `weapon-lantern` | 0.98 × 1.05 | P2 | trainer |
-| `orla` | Sister Orla | `face-orla` | `armor-beekeeper` | — | `helm-bee-veil` | `weapon-smoker` | 0.98 × 1.10 | P2 | trainer |
-| `corwin` | Sir Corwin Halbeck | `face-corwin` | `armor-corwin` | `cape-corwin` | `helm-corwin` | `weapon-corwin-kit` | 1.04 × 1.05 | P2 | trainer |
-| `severin` | Lord Severin Morvaine | `face-severin` | `armor-severin` | `cape-severin` | `helm-crown-thorns` | — | 1.10 × 0.90 | P2 |  |
-| `severin.severin-cell` | Severin, a prisoner | `face-severin-cell` | `armor-prisoner` | — | — | — | 1.10 × 0.85 | P2 |  |
-| `isadora` | Lady Isadora | `face-isadora` | `armor-isadora` | — | `hair-isadora` | `weapon-night-flowers` | 1.00 × 0.95 | P2 | drawn as an echo |
-| `valencia-child` | Valencia as a child | `face-valencia-child` | `armor-child-dress` | — | `hair-valencia-child` | — | 0.62 × 0.66 | P2 | drawn as an echo |
-| `pell` | Pell | `face-pell` | `armor-morvaine-man` | — | `hair-pell` | `weapon-flat-cap-held` | 0.95 × 0.90 | P2 |  |
-| `ide` | Ide | `face-ide` | `armor-shift` | — | `hair-ide` | — | 0.97 × 0.88 | P2 |  |
-| `maren-elder` | Maren, Hollowmere's elder | `face-maren-elder` | `armor-morvaine-woman` | — | `hair-maren-elder` | `weapon-walking-stick` | 0.98 × 0.92 | P2 |  |
-| `blood-house-steward` | The blood-house steward | `face-blood-house-steward` | `armor-morvaine-livery` | — | `hair-blood-house-steward` | `weapon-ledger-pen` | 1.00 × 0.92 | P2 |  |
-| `hollowmere-child` | A Hollowmere child | `face-hollowmere-child` | `armor-morvaine-man` | — | `hair-hollowmere-child` | `weapon-toy-sword` | 0.62 × 0.66 | P2 |  |
-| `hollowmere-farmer` | A Hollowmere farmer | `face-hollowmere-farmer` | `armor-morvaine-woman` | — | `helm-kerchief` | `weapon-basket` | 1.00 × 1.00 | P2 |  |
-| `ruck` | Ruck, the bosun | `face-ruck` | `armor-sailor` | — | `hair-ruck` | `weapon-cutlass` | 0.95 × 1.10 | P2 | trainer |
-| `davin` | Davin | `face-davin` | `armor-davin` | — | `hair-davin` | `weapon-corwin-sword` | 0.98 × 0.92 | P2 | trainer |
-| `vorlaith` | Vorlaith, the Unmade King | `face-vorlaith` | `armor-vorlaith` | — | `helm-vorlaith` | — | 1.20 × 0.95 | P2 | `vorlaith-shape`: the same at 40% opacity |
-| `guild-apprentice` | A Guild apprentice | `face-guild-apprentice` | `armor-guild-apprentice` | — | `hair-guild-apprentice` | `weapon-glass-lamp` | 0.94 × 0.88 | P2 |  |
-| `mason` | A mason | `face-town-12` | `armor-smith` | — | `helm-flat-cap` | `weapon-mallet` | 1.00 × 1.05 | P2 |  |
-| `elder` | The Elder (sheet) | `face-town-5` | `armor-elder-coat` | — | `hair-town-5` | `weapon-walking-stick` | 0.97 × 0.95 | P0 |  |
-| `trader` | The Trader (sheet) | `face-town-2` | `armor-trader` | — | `helm-wide-brim` | `weapon-coin-purse` | 1.00 × 1.00 | P0 | also the Chandler |
-| `baker` | The Baker (sheet) | `face-town-4` | `armor-baker` | — | `helm-kerchief` | `weapon-peel` | 0.98 × 1.10 | P0 | also the Innkeeper |
-| `smith` | The Smith (sheet) | `face-town-3` | `armor-smith` | — | `hair-town-3` | `weapon-hammer-tongs` | 1.00 × 1.10 | P0 |  |
-| `flower-seller` | The Flower Seller (sheet) | `face-town-2` | `armor-villager-woman` | — | `helm-kerchief` | `weapon-flower-basket` | 0.98 × 0.92 | P0 |  |
-| `traveller` | A Traveller (sheet) | `face-town-14` | `armor-road` | `cape-travelling` | `hair-town-14` | `weapon-walking-stick` | 1.00 × 1.00 | P0 | also the Harbourmaster, a Regular |
-| `seamstress` | The Seamstress (sheet) | `face-town-10` | `armor-villager-woman` | — | `hair-town-10` | — | 0.98 × 0.92 | P0 |  |
-| `courier` | A Courier (sheet) | `face-town-9` | `armor-courier` | — | `helm-flat-cap` | `weapon-letters` | 0.96 × 0.90 | P0 | also `COURIER` in Act 3 |
-| `pilgrim` | A Pilgrim (sheet) | `face-town-13` | `armor-pilgrim` | — | `hair-town-13` | `weapon-pilgrim-staff` | 1.00 × 1.00 | P0 | also `PILGRIM` |
-| `weaver` | The Weaver (sheet) | `face-town-4` | `armor-villager-woman` | — | `hair-town-4` | `weapon-spindle` | 1.00 × 1.00 | P0 |  |
-| `farmhand` | A Farmhand (sheet) | `face-town-1` | `armor-villager-man` | — | `helm-straw-hat` | `weapon-pitchfork` | 1.00 × 1.00 | P0 | also a Dock Hand, `FARMER` |
-| `old-man` | An Old Man (sheet) | `face-town-5` | `armor-elder-coat` | — | `hair-town-5` | `weapon-walking-stick` | 0.94 × 1.00 | P0 |  |
-| `maid` | A Maid (sheet) | `face-town-10` | `armor-maid` | — | `hair-town-10` | `weapon-feather-duster` | 0.97 × 0.92 | P0 |  |
-| `porter` | A Porter (sheet) | `face-town-11` | `armor-porter` | — | `hair-town-11` | `weapon-crate` | 1.00 × 1.08 | P0 | also a Carrier, a Warehand |
-| `old-woman` | An Old Woman (sheet) | `face-town-6` | `armor-elder-woman` | `cape-old-woman` | `hair-town-6` | `weapon-basket` | 0.90 × 0.95 | P0 | also a Drinker |
-| `child` | A Child (sheet) | `face-town-7` | `armor-urchin` | — | `helm-flat-cap` | `weapon-toy-sword` | 0.62 × 0.66 | P0 |  |
-| `youth` | A Youth (sheet) | `face-town-9` | `armor-villager-man` | — | `hair-town-9` | — | 0.90 × 0.88 | P0 |  |
-| `pool-questeria` | The city pool (sample) | `face-town-4` | `armor-villager-woman` | — | `helm-kerchief` | `weapon-basket` | 1.00 × 1.00 | P0 | the generator mixes the town faces and armors by seed |
-| `pool-court` | The court (sample: a courtier) | `face-town-16` | `armor-noble` | — | `helm-beret` | — | 1.00 × 0.95 | P0 | the courtiers and the scribe in the throne room |
-| `pool-court-lady` | The court (sample: a lady) | `face-town-10` | `armor-noble-gown` | — | `hair-town-10` | — | 0.98 × 0.92 | P0 |  |
-| `pool-saltwind` | The docks pool (sample) | `face-town-12` | `armor-fisher` | — | `helm-knit-cap` | — | 1.00 × 1.05 | P0 | also `NET-MENDER`, `SAILOR` |
-| `pool-doomward` | The Doomward pool (sample) | `face-town-14` | `armor-refugee-man` | `cape-blanket` | `hair-town-14` | `weapon-walking-stick` | 1.00 × 0.95 | P0 |  |
-| `pool-morvaine` | The Morvaine pool (sample) | `face-town-18` | `armor-morvaine-woman` | — | `hair-town-18` | `weapon-lantern` | 1.00 × 0.92 | P2 |  |
-| `pool-abbey` | The abbey pool (sample) | `face-town-15` | `armor-abbey-lay` | — | `helm-straw-hat` | `weapon-basket` | 0.72 × 0.80 | P2 |  |
-| `red-gull-thug` | Red Gull Thug | `face-red-gull` | `armor-red-gull` | — | `hair-red-gull` | `weapon-cudgel` | 1.08 × 1.15 | P0 | the same as `red-gull`, with its two other heads |
-| `bosun-grell` | Bosun Grell | `face-grell` | `armor-grell` | — | `hair-grell` | `weapon-cutlass` | 0.85 × 1.55 | P0 | the same as `grell` |
-| `hollowed-footman` | Hollowed Footman | `face-hollowed` | `armor-hollowed-footman` | — | `helm-hollowed-kettle` | `weapon-hollowed-sword` | 0.97 × 1.00 | P0 | hunched (a clip) |
-| `hollowed-hexer` | Hollowed Hexer | `face-hollowed` | `armor-hollowed-hexer` | — | `helm-hollowed-hood` | `weapon-hexer-staff` | 1.01 × 0.90 | P0 |  |
-| `hollowed-sapper` | Hollowed Sapper | `face-hollowed` | `armor-hollowed-sapper` | — | `helm-sapper-goggles` | `weapon-sapper-pick` | 0.95 × 1.05 | P0 |  |
-| `sapper-chief` | Sapper Chief | `face-hollowed` | `armor-hollowed-chief` | — | `helm-sapper-faceplate` | `weapon-chief-pick-lantern` | 1.06 × 1.20 | P0 |  |
-| `vault-construct` | Vault Construct | `face-construct-vault` | `armor-construct-stone` | — | — | — | 1.20 × 1.35 | P0 |  |
-| `kael-duel` | Kael, duelling | `face-kael` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `weapon-kael-rapier` | 1.00 × 0.95 | P0 |  |
-| `hollowed-climber` | Hollowed Climber | `face-hollowed` | `armor-hollowed-climber` | — | — | `weapon-climber-hook` | 1.02 × 0.88 | P1 | crouched (a clip) |
-| `varkhul` | Varkhul, the Hollow Knight | `face-varkhul` | `armor-varkhul` | `cape-varkhul` | `helm-varkhul` | `weapon-varkhul-greatsword` | 1.20 × 1.25 | P1 | boss |
-| `varkhul.varkhul-unmasked` | Varkhul, unmasked | `face-varkhul` | `armor-varkhul-split` | `cape-varkhul` | `hair-varkhul` | — | 1.20 × 1.25 | P1 | kneels (a clip) |
-| `maleficio-boss` | Maleficio, the Sovereign | `face-maleficio` | `armor-maleficio-ascendant` | — | `hair-maleficio` | `weapon-black-box` | 1.01 × 0.95 | P1 | floats (the game lifts it); swaps to the creature `hungering` |
-| `cube-cultist` | Cube Cultist | `face-cube-cultist` | `armor-cultist` | — | `hair-cube-cultist` | `weapon-cultist-dagger` | 1.00 × 1.00 | P1 |  |
-| `bandit` | Bandit | `face-town-11` | `armor-bandit` | — | `helm-bandit-hood` | `weapon-shortsword` | 1.00 × 1.00 | P1 | a new id |
-| `thrall` | Thrall | `face-thrall` | `armor-thrall` | — | `hair-thrall` | `weapon-spear-lantern` | 1.00 × 1.00 | P2 |  |
-| `vesk` | Vesk | `face-thrall` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-vesk-wolf` | `weapon-vesk-sword` | 1.08 × 1.15 | P2 |  |
-| `vreya` | Vreya | `face-vreya` | `armor-thrall-knight-f` | `cape-thrall-knight` | `helm-vreya-crown` | `weapon-vreya-blade` | 1.06 × 1.00 | P2 |  |
-| `mordain` | Mordain | `face-thrall` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-mordain-beak` | `weapon-mordain-glaive` | 1.08 × 0.90 | P2 |  |
-| `gilded-knight` | Gilded Knight | `face-town-14` | `armor-gilded-knight` | `cape-gilded` | `helm-gilded` | `weapon-gilded-kit` | 1.02 × 1.05 | P2 | the `order` pool |
-| `gilded-sergeant` | Gilded Sergeant | `face-town-12` | `armor-gilded-knight` | `cape-gilded` | `hair-town-12` | `weapon-mace-shield` | 1.00 × 1.12 | P2 |  |
-| `drowned` | Drowned | `face-drowned` | `armor-drowned` | — | `hair-drowned` | — | 0.97 × 1.05 | P2 |  |
-| `blood-wight` | Blood-wight | `face-blood-wight` | `armor-blood-wight` | — | — | — | 1.10 × 0.85 | P2 |  |
-| `sun-scorched` | Sun-scorched | `face-sun-scorched` | `armor-sun-scorched` | — | — | — | 1.00 × 1.00 | P2 |  |
-| `thornling` | Thornling | `face-thornling` | `armor-thornling` | — | — | — | 0.68 × 0.70 | P2 |  |
-| `priest-construct` | Priest-construct | `face-construct-priest` | `armor-construct-priest` | — | — | — | 1.20 × 1.30 | P2 |  |
-| `severin-boss` | Severin, unbound | `face-severin` | `armor-severin` | `cape-severin-wings` | `helm-crown-thorns` | — | 1.10 × 0.90 | P2 | floats; claws and blood magic are effects |
-| `smuggler` | Smuggler | `face-town-10` | `armor-smuggler` | — | `helm-bandana` | `weapon-cutlass` | 1.00 × 1.00 | P2 | a new id |
-| `protectorate-watchman` | Protectorate watchman | `face-town-11` | `armor-protectorate` | `cape-watch` | `helm-watch` | `weapon-protectorate-kit` | 1.00 × 1.00 | P2 | also `PROTECTORATE GUARD`; the `protectorate` pool |
-| `protectorate-warden` | Protectorate warden | `face-town-3` | `armor-protectorate-warden` | — | `helm-warden` | `weapon-warden-kit` | 1.08 × 1.18 | P2 |  |
-| `crown-hollowed` | Crown-raised Hollowed | `face-crown-hollowed` | `armor-crown-hollowed` | — | `helm-hollowed-kettle` | `weapon-spear` | 1.00 × 1.00 | P2 |  |
-| `crown-construct` | Crown-construct | `face-construct-crown` | `armor-construct-crown` | — | — | — | 1.25 × 1.20 | P2 |  |
-| `kael-shadow` | Kael, the Protectorate Shadow | `face-kael` | `armor-kael-shadow` | `cape-tail-ember` | `hair-kael` | `weapon-kael-knives` | 1.00 × 0.95 | P2 | boss |
-| `sb-sovereign` | {sb}, the Sovereign Protector | `face-player-3` | `armor-sovereign` | — | `helm-crown-dusk-dawn` | `weapon-longsword` | 1.02 × 1.00 | P2 | the final boss; the player's own face and look; floats in phase 2 |
-| `unmade` | The Unmade (ancient) | `face-unmade` | `armor-unmade-bronze` | — | `helm-bronze-crest` | `weapon-unmade-spear-shield` | 1.00 × 1.00 | P2 |  |
-| `unmade.b` | The Unmade (a knight) | `face-unmade` | `armor-old-pattern` | — | `helm-nasal` | `weapon-longsword` | 1.00 × 1.00 | P2 | the game greys it |
-| `unmade.c` | The Unmade (a pikeman) | `face-unmade` | `armor-pikeman` | — | `helm-morion` | `weapon-pike` | 1.00 × 1.00 | P2 |  |
-| `unmade.d` | The Unmade (a watchman) | `face-unmade` | `armor-watch` | `cape-watch` | `helm-watch` | `weapon-cudgel` | 1.00 × 1.00 | P2 | the game greys it |
-| `ashfall-raider` | Ashfall raider | `face-town-12` | `armor-ashfall-raider` | `cape-ash` | `hair-town-12` | `weapon-raider-kit` | 1.00 × 1.00 | P2 |  |
+| Id | Name | Face | Armor | Cape | Helm / hair | Extras | Weapon | Morph (h × w) | Colours (skin, hair, eyes) | Priority | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `you-male` | You, the male default | `face-m03` | `armor-traveller` | — | `hair-03` | — | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 | the player swaps any slot on the creation screen |
+| `you-female` | You, the female default | `face-f03` | `armor-traveller-f` | — | `hair-22` | `skin-01` | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 |  |
+| `soulbound` | {sb}, the default | `face-f04` | `armor-sb-traveller` | `cape-sb` | `hair-31` | — | `weapon-sb-blades` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P0 | the player can change every slot |
+| `you-male.champion` | You, Champion of Fable | `face-m03` | `armor-champion` | — | `hair-03` | — | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P1 | Act 1's end |
+| `you-female.champion` | You, Champion of Fable | `face-f03` | `armor-champion-f` | — | `hair-22` | `skin-01` | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P1 |  |
+| `soulbound.champion` | {sb}, Champion of Fable | `face-f04` | `armor-champion-f` | `cape-sb` | `hair-31` | — | `weapon-sb-blades` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P1 |  |
+| `soulbound.lord-protector` | {sb}, Lord Protector | `face-f04` | `armor-lord-protector` | — | `hair-31` | — | `weapon-longsword` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P2 | Act 2's end |
+| `mc-child` | You, aged eight | `face-m01` | `armor-child-cove` | — | `hair-14` | `skin-01` | — | 0.62 × 0.66 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 |  |
+| `sb-child` | {sb}, aged eight | `face-f01` | `armor-child-cove-f` | — | `hair-22` | — | — | 0.62 × 0.66 | skin PEACH, hair BLACK, eyes BROWN | P0 |  |
+| `sera` | Sera Vantis | `face-f05` | `armor-sera` | `cape-sera` | `hair-33` | `ears-01` | `weapon-sera-longbow` | 1.04 × 0.90 | skin PORCELAIN, hair HONEY, eyes GREEN | P0 |  |
+| `mira` | Mira Ashgrove | `face-f06` | `armor-mira` | — | `hair-38` | `skin-01` | `weapon-quarterstaff` | 1.01 × 0.90 | skin FAIR, hair COPPER, eyes BROWN | P0 | her healing glow is an effect |
+| `mira-young` | Mira, aged thirteen | `face-f01` | `armor-mira-apprentice` | — | `hair-35` | `skin-01` | `weapon-sketchbook` | 0.80 × 0.80 | skin FAIR, hair COPPER, eyes BROWN | P1 | drawn as an echo |
+| `kael` | Kael Duskmantle | `face-m04` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `horns-02` | `weapon-kael-knives` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P0 | the horns come through the hood |
+| `brannock` | Brannock Ironvein | `face-m09` | `armor-brannock` | — | `hair-04` | `beard-10`, `skin-03` | `weapon-brannock` | 0.85 × 1.36 | skin GOLDEN, hair COPPER, eyes BROWN | P0 | shield `weapon-brannock-1`, `-41`, `-42` as the names come |
+| `brannock.clasps-gone` | Brannock, the clasps gone | `face-m09` | `armor-brannock` | — | — | `beard-10`, `skin-03` | `weapon-brannock-42` | 0.85 × 1.36 | skin GOLDEN, hair COPPER, eyes BROWN | P2 | from A3-C2-05 |
+| `valencia` | Valencia Morvaine | `face-f04` | `armor-valencia` | `cape-valencia` | `helm-circlet-silver` | — | `weapon-dagger` | 1.09 × 0.90 | skin PORCELAIN, hair SILVER, eyes GREY | P2 |  |
+| `valencia.sister-vale` | Sister Vale | `face-f04` | `armor-abbey-habit` | — | `helm-abbey-hood` | — | — | 1.09 × 0.90 | skin PORCELAIN, hair SILVER, eyes GREY | P2 | `valencia-unhooded`: the same without the helm, eyes red (an expression) |
+| `corra` | Corra | `face-f08` | `armor-corra` | — | `hair-38` | — | `weapon-netting-needle` | 0.95 × 1.00 | skin TAN, hair CHESTNUT, eyes GREY | P0 |  |
+| `corra.flashback` | Corra, sixteen years younger | `face-f07` | `armor-corra` | — | — | — | `weapon-netting-needle` | 0.95 × 1.00 | skin TAN, hair CHESTNUT, eyes GREY | P0 | soaked by rain (an effect) |
+| `lookout` | The lookout | `face-m06` | `armor-sailor` | — | `helm-knit-cap` | `beard-12` | `weapon-telescope` | 1.00 × 0.95 | skin BROWN, hair COPPER, eyes GREY | P0 |  |
+| `odelle` | Captain Odelle Marsh | `face-f07` | `armor-odelle` | — | `helm-tricorn` | `jewel-01` | `weapon-cutlass` | 1.00 × 1.00 | skin UMBER, hair BLACK, eyes BROWN | P0 |  |
+| `tomas` | Old Tomas | `face-m10` | `armor-fisher` | — | `helm-knit-cap` | `beard-01` | `weapon-gaff` | 0.95 × 1.00 | skin TAN, hair WHITE, eyes SKY | P0 |  |
+| `red-gull` | Red Gull Thug | `face-m06` | `armor-red-gull` | — | — | `beard-01`, `skin-05` | `weapon-cudgel` | 1.08 × 1.15 | skin UMBER, hair COPPER, eyes BROWN | P0 | also the enemy `red-gull-thug` |
+| `red-gull.b` | Red Gull Thug, second head | `face-m06` | `armor-red-gull` | — | `helm-bandana-red` | `beard-01`, `skin-05` | `weapon-cudgel` | 1.08 × 1.15 | skin FAIR, hair COPPER, eyes GREY | P0 |  |
+| `red-gull.c` | Red Gull Thug, third head | `face-m04` | `armor-red-gull` | — | `hair-09` | `beard-01`, `skin-05` | `weapon-cudgel` | 1.06 × 1.12 | skin TAN, hair BLACK, eyes BROWN | P0 |  |
+| `grell` | Bosun Grell | `face-m06` | `armor-grell` | — | — | `beard-08`, `skin-02` | `weapon-cutlass` | 0.85 × 1.55 | skin TAN, hair COPPER, eyes BROWN | P0 | also the enemy `bosun-grell` |
+| `hale` | Captain Roderic Hale | `face-m09` | `armor-watch-captain` | `cape-watch-captain` | `helm-watch-crest` | `beard-01` | `weapon-cudgel` | 1.03 × 1.14 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `watch` | City Watch | `face-m05` | `armor-watch` | `cape-watch` | `helm-watch` | `beard-01` | `weapon-watch-kit` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P0 | other watchmen wear `face-m09` and `face-m05` |
+| `fennick` | Questmaster Fennick | `face-m07` | `armor-clerk` | — | `hair-05` | `beard-03`, `jewel-08`, `jewel-11` | `weapon-tack-hammer` | 1.00 × 1.08 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `hedda` | Hedda (also `refugee-mother`) | `face-f07` | `armor-refugee-woman` | `cape-blanket` | `hair-26` | — | `weapon-loaf` | 0.99 × 0.95 | skin TAN, hair CHESTNUT, eyes BROWN | P0 |  |
+| `refugee-child` | Lise | `face-f01` | `armor-refugee-child` | — | `hair-35` | — | `weapon-rag-doll` | 0.75 × 0.75 | skin TAN, hair CHESTNUT, eyes BROWN | P0 |  |
+| `brisk` | Sergeant Brisk | `face-m07` | `armor-watch` | `cape-watch` | `helm-watch` | `beard-04` | `weapon-cudgel` | 1.00 × 1.06 | skin BROWN, hair BLACK, eyes BROWN | P0 |  |
+| `refugee-1` | Old Aurek | `face-m10` | `armor-refugee-man` | `cape-blanket` | `hair-12` | `beard-09` | `weapon-walking-stick` | 0.93 × 0.95 | skin TAN, hair WHITE, eyes GREY | P0 |  |
+| `refugee-2` | Teodor | `face-m02` | `armor-refugee-man` | `cape-blanket` | `hair-03` | `beard-01` | `weapon-tin-cup` | 0.95 × 0.90 | skin BROWN, hair BLACK, eyes BROWN | P0 |  |
+| `refugee-3` | Yselle the Glassblower | `face-f06` | `armor-glassblower` | — | `hair-34` | `skin-01`, `skin-06` | — | 0.82 × 1.25 | skin GOLDEN, hair COPPER, eyes AMBER | P0 |  |
+| `elara` | Princess Elara | `face-f05` | `armor-elara` | — | `helm-circlet` | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P0 | the slim sword is part of the armor |
+| `elara-hooded` | Princess Elara, hooded | `face-f05` | `armor-elara-disguise` | `cape-elara-hooded` | `helm-hood-charcoal` | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P0 |  |
+| `leon` | King Leon | `face-m10` | `armor-leon` | `cape-leon` | `helm-crown` | `beard-07` | — | 0.97 × 1.16 | skin FAIR, hair SILVER, eyes GREY | P0 | his sword is part of the armor |
+| `crane` | Lord Chancellor Crane | `face-m08` | `armor-crane` | — | `hair-06` | `beard-02` | `weapon-quill-letter` | 1.10 × 0.85 | skin PORCELAIN, hair BLACK, eyes GREY | P0 |  |
+| `royal-messenger` | Royal Messenger | `face-m02` | `armor-royal-livery` | `cape-royal` | `helm-beret` | `skin-01` | `weapon-letter` | 0.99 × 0.95 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 |  |
+| `royal-guard` | Royal Guard | `face-m09` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | `beard-07` | `weapon-halberd` | 1.04 × 1.08 | skin UMBER, hair BLACK, eyes BROWN | P0 | the captain and lieutenant too |
+| `anvil-barkeep` | Hessa the Barkeep | `face-f08` | `armor-tavern` | `cape-tail-bear` | `hair-26` | `skin-02`, `ears-03` | `weapon-tankard` | 1.08 × 1.20 | skin GOLDEN, hair BLACK, eyes BROWN | P0 |  |
+| `netty` | Netty the Net-Mender | `face-f08` | `armor-villager-woman` | — | `hair-40` | `skin-01` | `weapon-netting-needle` | 0.98 × 1.00 | skin TAN, hair SILVER, eyes GREEN | P0 |  |
+| `maud` | Maud Tolley | `face-f10` | `armor-elder-woman` | — | `hair-37` | — | `weapon-flat-cap-held` | 0.93 × 0.95 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `pip` | Pip the Potboy | `face-m02` | `armor-tavern-m` | — | `hair-03` | `skin-01` | `weapon-stew-pot` | 0.72 × 0.80 | skin FAIR, hair COPPER, eyes BROWN | P0 |  |
+| `osric` | Osric Penhallow | `face-m07` | `armor-merchant` | `cape-short-lavender` | `hair-05` | `beard-03` | `weapon-silk-bolt` | 1.00 × 1.00 | skin PORCELAIN, hair BLACK, eyes BROWN | P0 |  |
+| `lark` | Lark the Busker | `face-m04` | `armor-busker` | `cape-short-lavender` | `hair-21` | `ears-01` | `weapon-lute` | 1.04 × 0.90 | skin PORCELAIN, hair COPPER, eyes VIOLET | P0 |  |
+| `ilsa` | Ilsa Fenwright | `face-f03` | `armor-villager-woman` | — | `hair-34` | — | `weapon-scrolls` | 0.99 × 0.95 | skin GOLDEN, hair COPPER, eyes GREEN | P0 |  |
+| `oswin` | Guardsman Oswin | `face-m03` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | — | `weapon-halberd` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `hesper` | Sister Hesper | `face-f10` | `armor-temple` | — | `hair-27` | — | `weapon-broom` | 0.99 × 1.00 | skin UMBER, hair SILVER, eyes BROWN | P0 |  |
+| `wren` | Wren | `face-f01` | `armor-urchin-f` | — | `hair-26` | `skin-01` | `weapon-coin` | 0.62 × 0.66 | skin BROWN, hair BLACK, eyes AMBER | P0 |  |
+| `imra-vell` | Master Imra Vell | `face-f07` | `armor-fencer` | — | `hair-13` | `skin-03` | `weapon-practice-sword` | 0.99 × 1.00 | skin UMBER, hair BLACK, eyes BROWN | P0 | trainer |
+| `tamsin` | Ranger Tamsin | `face-f07` | `armor-lodge-ranger` | `cape-tamsin` | `hair-26` | `skin-02`, `ears-05` | `weapon-shortbow` | 1.00 × 1.00 | skin TAN, hair CHESTNUT, eyes AMBER | P0 | trainer; her hawk is the creature `lodge-hawk` |
+| `garrick` | Garrick the caravan master | `face-m09` | `armor-caravan` | — | `helm-wide-brim` | `beard-03`, `skin-02` | `weapon-light-crossbow` | 1.00 × 1.00 | skin TAN, hair BLACK, eyes BROWN | P1 |  |
+| `aldric` | Commander Aldric Voss | `face-m09` | `armor-aldric` | `cape-campaign` | `hair-01` | `beard-01` | `weapon-longsword` | 1.00 × 1.05 | skin FAIR, hair SILVER, eyes SKY | P1 |  |
+| `recruit` | The recruit | `face-m02` | `armor-recruit` | — | `helm-kettle` | — | `weapon-spear` | 0.96 × 0.92 | skin FAIR, hair GOLD, eyes BLUE | P1 |  |
+| `thessaly` | Archmage Thessaly Varn | `face-f09` | `armor-thessaly` | — | `hair-01` | — | `weapon-staff-ring` | 1.00 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P1 | trainer |
+| `thessaly.thessaly-crystal` | Thessaly, frozen in crystal | `face-f09` | `armor-thessaly` | — | `hair-01` | — | `weapon-staff-ring` | 1.00 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P2 | the crystal round her is a prop, not a part |
+| `brenna` | Brenna of Ashfall | `face-f07` | `armor-brenna` | `cape-ash` | `hair-42` | `skin-04`, `skin-06` | `weapon-battleaxe` | 1.01 × 1.00 | skin PEACH, hair DARK BROWN, eyes GREY | P1 | trainer |
+| `brenna.protectorate` | Brenna, Act 3 | `face-f07` | `armor-brenna-protectorate` | `cape-ash` | `hair-42` | `skin-04`, `skin-06` | `weapon-battleaxe` | 1.01 × 1.00 | skin PEACH, hair DARK BROWN, eyes GREY | P2 | also her boss fight |
+| `gannet` | Mother Gannet | `face-f08` | `armor-gannet` | — | `helm-lace-cap` | — | `weapon-ledger-pen` | 0.99 × 1.20 | skin FAIR, hair SILVER, eyes BROWN | P1 |  |
+| `hester` | Hester Hollis | `face-f10` | `armor-elder-woman` | — | `hair-37` | — | `weapon-folded-shawl` | 0.90 × 0.90 | skin PORCELAIN, hair WHITE, eyes SKY | P1 |  |
+| `tobin` | Tobin Ashgrove | `face-m07` | `armor-cider-presser` | — | `hair-11` | `beard-07`, `skin-01` | `weapon-mallet` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BROWN | P1 |  |
+| `tobin.levy` | Tobin in the levy | `face-m07` | `armor-levy` | — | `hair-11` | `beard-07`, `skin-01` | `weapon-spade` | 1.00 × 0.95 | skin FAIR, hair COPPER, eyes BROWN | P1 | how he looks when you meet him |
+| `harrow` | Lord Harrow | `face-m08` | `armor-harrow` | — | `hair-10` | `beard-11` | `weapon-heron-cane` | 1.00 × 1.05 | skin FAIR, hair SILVER, eyes GREY | P1 |  |
+| `hobb` | Hobb the woodcutter | `face-m09` | `armor-woodcutter` | — | `helm-knit-cap` | `beard-08`, `skin-01` | `weapon-felling-axe` | 1.08 × 1.15 | skin FAIR, hair COPPER, eyes BLUE | P1 |  |
+| `maleficio` | Maleficio | `face-m10` | `armor-maleficio` | — | `hair-10` | `beard-07` | `weapon-black-box` | 1.01 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P1 |  |
+| `maleficio-young` | Maleficio, remembered | `face-m09` | `armor-scholar` | — | — | `beard-07` | `weapon-oil-lamp` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P1 | drawn as an echo |
+| `relief-column-echo` | The relief column | `face-m05` | `armor-old-pattern` | — | `helm-nasal` | `beard-01` | `weapon-relief-kit` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P1 | drawn pale |
+| `lost-boy` | The woodcutter's boy | `face-m01` | `armor-urchin` | — | `hair-08` | `skin-01` | `weapon-flat-cap-held` | 0.62 × 0.66 | skin FAIR, hair COPPER, eyes BLUE | P1 |  |
+| `mags` | Pedlar Mags | `face-f08` | `armor-pedlar` | `cape-pedlar-pack` | `helm-straw-hat` | — | `weapon-walking-stick` | 0.82 × 1.25 | skin TAN, hair SILVER, eyes BROWN | P1 | trainer; Duchess is a creature |
+| `leon.ill` | King Leon, ill | `face-m10` | `armor-leon-furs` | `cape-leon` | `helm-crown` | `beard-07` | `weapon-walking-stick` | 0.95 × 1.10 | skin STONE, hair COPPER, eyes GREY | P2 |  |
+| `elara.act3` | Elara, leading the resistance | `face-f05` | `armor-elara-field` | `cape-travelling` | `hair-16` | — | `weapon-map` | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P2 |  |
+| `elara.crowned` | Elara, crowned | `face-f05` | `armor-elara-queen` | — | `helm-crown` | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P2 |  |
+| `hale.protectorate` | Captain Hale, Act 3 | `face-m09` | `armor-protectorate` | `cape-watch-captain` | `helm-watch-crest` | `beard-01` | `weapon-cudgel` | 1.03 × 1.14 | skin FAIR, hair SILVER, eyes GREY | P2 |  |
+| `refugee-child.aged` | Lise, aged by the tear | `face-f07` | `armor-refugee-child` | — | — | — | — | 0.98 × 0.95 | skin TAN, hair CHESTNUT, eyes BROWN | P2 | the child's smock, tight on her |
+| `anselle` | Mother Superior Anselle | `face-f10` | `armor-anselle` | — | `hair-37` | — | `weapon-lantern` | 0.98 × 1.05 | skin FAIR, hair SILVER, eyes HAZEL | P2 | trainer |
+| `orla` | Sister Orla | `face-f08` | `armor-beekeeper` | — | `helm-bee-veil` | `skin-01` | `weapon-smoker` | 0.98 × 1.10 | skin PEACH, hair SILVER, eyes BLUE | P2 | trainer |
+| `corwin` | Sir Corwin Halbeck | `face-m05` | `armor-corwin` | `cape-corwin` | `helm-corwin` | — | `weapon-corwin-kit` | 1.04 × 1.05 | skin FAIR, hair SILVER, eyes BLUE | P2 | trainer |
+| `severin` | Lord Severin Morvaine | `face-m08` | `armor-severin` | `cape-severin` | `helm-crown-thorns` | — | — | 1.10 × 0.90 | skin PORCELAIN, hair SILVER, eyes RED | P2 |  |
+| `severin.severin-cell` | Severin, a prisoner | `face-m08` | `armor-prisoner` | — | — | — | — | 1.10 × 0.85 | skin STONE, hair SILVER, eyes RED | P2 |  |
+| `isadora` | Lady Isadora | `face-f06` | `armor-isadora` | — | `hair-41` | — | `weapon-night-flowers` | 1.00 × 0.95 | skin FAIR, hair DARK BROWN, eyes BROWN | P2 | drawn as an echo |
+| `valencia-child` | Valencia as a child | `face-f01` | `armor-child-dress` | — | `hair-21` | — | — | 0.62 × 0.66 | skin PORCELAIN, hair SILVER, eyes GREY | P2 | drawn as an echo |
+| `pell` | Pell | `face-m02` | `armor-morvaine-man` | — | `hair-17` | `skin-01` | `weapon-flat-cap-held` | 0.95 × 0.90 | skin PORCELAIN, hair COPPER, eyes BROWN | P2 |  |
+| `ide` | Ide | `face-f04` | `armor-shift` | — | `hair-47` | — | — | 0.97 × 0.88 | skin PORCELAIN, hair COPPER, eyes BROWN | P2 |  |
+| `maren-elder` | Maren, Hollowmere's elder | `face-f09` | `armor-morvaine-woman` | — | `hair-40` | — | `weapon-walking-stick` | 0.98 × 0.92 | skin PORCELAIN, hair WHITE, eyes GREY | P2 |  |
+| `blood-house-steward` | The blood-house steward | `face-m08` | `armor-morvaine-livery` | — | `hair-06` | — | `weapon-ledger-pen` | 1.00 × 0.92 | skin PORCELAIN, hair SILVER, eyes GREY | P2 |  |
+| `hollowmere-child` | A Hollowmere child | `face-m01` | `armor-morvaine-man` | — | `hair-03` | — | `weapon-toy-sword` | 0.62 × 0.66 | skin PORCELAIN, hair COPPER, eyes GREY | P2 |  |
+| `hollowmere-farmer` | A Hollowmere farmer | `face-f07` | `armor-morvaine-woman` | — | `helm-kerchief` | — | `weapon-basket` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P2 |  |
+| `ruck` | Ruck, the bosun | `face-m09` | `armor-sailor` | — | `hair-11` | `beard-05` | `weapon-cutlass` | 0.95 × 1.10 | skin BROWN, hair SILVER, eyes GREY | P2 | trainer |
+| `davin` | Davin | `face-m02` | `armor-davin` | — | `hair-03` | — | `weapon-corwin-sword` | 0.98 × 0.92 | skin TAN, hair DARK BROWN, eyes BROWN | P2 | trainer |
+| `vorlaith` | Vorlaith, the Unmade King | `face-vorlaith` | `armor-vorlaith` | — | `helm-vorlaith` | — | — | 1.20 × 0.95 | — | P2 | `vorlaith-shape`: the same at 40% opacity |
+| `guild-apprentice` | A Guild apprentice | `face-f02` | `armor-guild-apprentice` | — | `hair-22` | `skin-01` | `weapon-glass-lamp` | 0.94 × 0.88 | skin FAIR, hair HONEY, eyes GREEN | P2 |  |
+| `mason` | A mason | `face-m09` | `armor-smith` | — | `helm-flat-cap` | `beard-08` | `weapon-mallet` | 1.00 × 1.05 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
+| `elder` | The Elder (sheet) | `face-m10` | `armor-elder-coat` | — | `hair-11` | `beard-11` | `weapon-walking-stick` | 0.97 × 0.95 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `trader` | The Trader (sheet) | `face-f03` | `armor-trader` | — | `helm-wide-brim` | — | `weapon-coin-purse` | 1.00 × 1.00 | skin TAN, hair DARK BROWN, eyes GREEN | P0 | also the Chandler |
+| `baker` | The Baker (sheet) | `face-f06` | `armor-baker` | — | `helm-kerchief` | — | `weapon-peel` | 0.98 × 1.10 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 | also the Innkeeper |
+| `smith` | The Smith (sheet) | `face-m09` | `armor-smith` | — | `hair-04` | `beard-07` | `weapon-hammer-tongs` | 1.00 × 1.10 | skin UMBER, hair BLACK, eyes BROWN | P0 |  |
+| `flower-seller` | The Flower Seller (sheet) | `face-f03` | `armor-villager-woman` | — | `helm-kerchief` | — | `weapon-flower-basket` | 0.98 × 0.92 | skin TAN, hair DARK BROWN, eyes GREEN | P0 |  |
+| `traveller` | A Traveller (sheet) | `face-m05` | `armor-road` | `cape-travelling` | `hair-02` | `beard-01` | `weapon-walking-stick` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P0 | also the Harbourmaster, a Regular |
+| `seamstress` | The Seamstress (sheet) | `face-f03` | `armor-villager-woman` | — | `hair-29` | `skin-01` | — | 0.98 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `courier` | A Courier (sheet) | `face-m02` | `armor-courier` | — | `helm-flat-cap` | `skin-01` | `weapon-letters` | 0.96 × 0.90 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 | also `COURIER` in Act 3 |
+| `pilgrim` | A Pilgrim (sheet) | `face-f06` | `armor-pilgrim` | — | `hair-26` | — | `weapon-pilgrim-staff` | 1.00 × 1.00 | skin BROWN, hair BLACK, eyes BROWN | P0 | also `PILGRIM` |
+| `weaver` | The Weaver (sheet) | `face-f06` | `armor-villager-woman` | — | `hair-38` | — | `weapon-spindle` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 |  |
+| `farmhand` | A Farmhand (sheet) | `face-m03` | `armor-villager-man` | — | `helm-straw-hat` | — | `weapon-pitchfork` | 1.00 × 1.00 | skin FAIR, hair GOLD, eyes BLUE | P0 | also a Dock Hand, `FARMER` |
+| `old-man` | An Old Man (sheet) | `face-m10` | `armor-elder-coat` | — | `hair-11` | `beard-11` | `weapon-walking-stick` | 0.94 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `maid` | A Maid (sheet) | `face-f03` | `armor-maid` | — | `hair-29` | `skin-01` | `weapon-feather-duster` | 0.97 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `porter` | A Porter (sheet) | `face-m05` | `armor-porter` | — | `hair-03` | `beard-01` | `weapon-crate` | 1.00 × 1.08 | skin OLIVE, hair BLACK, eyes BROWN | P0 | also a Carrier, a Warehand |
+| `old-woman` | An Old Woman (sheet) | `face-f10` | `armor-elder-woman` | `cape-old-woman` | `hair-37` | — | `weapon-basket` | 0.90 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P0 | also a Drinker |
+| `child` | A Child (sheet) | `face-m01` | `armor-urchin` | — | `helm-flat-cap` | — | `weapon-toy-sword` | 0.62 × 0.66 | skin TAN, hair DARK BROWN, eyes BROWN | P0 |  |
+| `youth` | A Youth (sheet) | `face-m02` | `armor-villager-man` | — | `hair-03` | `skin-01` | — | 0.90 × 0.88 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 |  |
+| `pool-questeria` | The city pool (sample) | `face-f06` | `armor-villager-woman` | — | `helm-kerchief` | — | `weapon-basket` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 | the generator mixes the town faces and armors by seed |
+| `pool-court` | The court (sample: a courtier) | `face-m04` | `armor-noble` | — | `hair-21` | `ears-01` | — | 1.00 × 0.95 | skin PORCELAIN, hair COPPER, eyes GREEN | P0 | the courtiers and the scribe in the throne room |
+| `pool-court-lady` | The court (sample: a lady) | `face-f03` | `armor-noble-gown` | — | `hair-29` | `skin-01` | — | 0.98 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `pool-saltwind` | The docks pool (sample) | `face-m09` | `armor-fisher` | — | `helm-knit-cap` | `beard-08` | — | 1.00 × 1.05 | skin OLIVE, hair BLACK, eyes BROWN | P0 | also `NET-MENDER`, `SAILOR` |
+| `pool-doomward` | The Doomward pool (sample) | `face-m05` | `armor-refugee-man` | `cape-blanket` | `hair-02` | `beard-01` | `weapon-walking-stick` | 1.00 × 0.95 | skin FAIR, hair DARK BROWN, eyes GREY | P0 |  |
+| `pool-morvaine` | The Morvaine pool (sample) | `face-f07` | `armor-morvaine-woman` | — | `hair-33` | — | `weapon-lantern` | 1.00 × 0.92 | skin PORCELAIN, hair BLACK, eyes BROWN | P2 |  |
+| `pool-abbey` | The abbey pool (sample) | `face-f06` | `armor-abbey-lay` | — | `helm-straw-hat` | — | `weapon-basket` | 0.72 × 0.80 | skin FAIR, hair DARK BROWN, eyes HAZEL | P2 |  |
+| `red-gull-thug` | Red Gull Thug | `face-m06` | `armor-red-gull` | — | — | `beard-01`, `skin-05` | `weapon-cudgel` | 1.08 × 1.15 | skin UMBER, hair COPPER, eyes BROWN | P0 | the same as `red-gull`, with its two other heads |
+| `bosun-grell` | Bosun Grell | `face-m06` | `armor-grell` | — | — | `beard-08`, `skin-02` | `weapon-cutlass` | 0.85 × 1.55 | skin TAN, hair COPPER, eyes BROWN | P0 | the same as `grell` |
+| `hollowed-footman` | Hollowed Footman | `face-hollowed` | `armor-hollowed-footman` | — | `helm-hollowed-kettle` | — | `weapon-hollowed-sword` | 0.97 × 1.00 | — | P0 | hunched (a clip) |
+| `hollowed-hexer` | Hollowed Hexer | `face-hollowed` | `armor-hollowed-hexer` | — | `helm-hollowed-hood` | — | `weapon-hexer-staff` | 1.01 × 0.90 | — | P0 |  |
+| `hollowed-sapper` | Hollowed Sapper | `face-hollowed` | `armor-hollowed-sapper` | — | `helm-sapper-goggles` | — | `weapon-sapper-pick` | 0.95 × 1.05 | — | P0 |  |
+| `sapper-chief` | Sapper Chief | `face-hollowed` | `armor-hollowed-chief` | — | `helm-sapper-faceplate` | — | `weapon-chief-pick-lantern` | 1.06 × 1.20 | — | P0 |  |
+| `vault-construct` | Vault Construct | `face-construct-vault` | `armor-construct-stone` | — | — | — | — | 1.20 × 1.35 | — | P0 |  |
+| `kael-duel` | Kael, duelling | `face-m04` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `horns-02` | `weapon-kael-rapier` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P0 |  |
+| `hollowed-climber` | Hollowed Climber | `face-hollowed` | `armor-hollowed-climber` | — | — | — | `weapon-climber-hook` | 1.02 × 0.88 | — | P1 | crouched (a clip) |
+| `varkhul` | Varkhul, the Hollow Knight | `face-m10` | `armor-varkhul` | `cape-varkhul` | `helm-varkhul` | `beard-07` | `weapon-varkhul-greatsword` | 1.20 × 1.25 | skin STONE, hair SILVER, eyes AMBER | P1 | boss |
+| `varkhul.varkhul-unmasked` | Varkhul, unmasked | `face-m10` | `armor-varkhul-split` | `cape-varkhul` | `hair-47` | `beard-07` | — | 1.20 × 1.25 | skin STONE, hair SILVER, eyes AMBER | P1 | kneels (a clip) |
+| `maleficio-boss` | Maleficio, the Sovereign | `face-m10` | `armor-maleficio-ascendant` | — | `hair-10` | `beard-07` | `weapon-black-box` | 1.01 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P1 | floats (the game lifts it); swaps to the creature `hungering` |
+| `cube-cultist` | Cube Cultist | `face-m05` | `armor-cultist` | — | `hair-01` | `skin-06` | `weapon-cultist-dagger` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes GREY | P1 |  |
+| `bandit` | Bandit | `face-m05` | `armor-bandit` | — | `helm-bandit-hood` | `beard-01` | `weapon-shortsword` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P1 | a new id |
+| `thrall` | Thrall | `face-m05` | `armor-thrall` | — | `hair-01` | — | `weapon-spear-lantern` | 1.00 × 1.00 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
+| `vesk` | Vesk | `face-m05` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-vesk-wolf` | — | `weapon-vesk-sword` | 1.08 × 1.15 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
+| `vreya` | Vreya | `face-f04` | `armor-thrall-knight-f` | `cape-thrall-knight` | `helm-vreya-crown` | — | `weapon-vreya-blade` | 1.06 × 1.00 | skin PORCELAIN, hair WHITE, eyes RED | P2 |  |
+| `mordain` | Mordain | `face-m05` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-mordain-beak` | — | `weapon-mordain-glaive` | 1.08 × 0.90 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
+| `gilded-knight` | Gilded Knight | `face-m05` | `armor-gilded-knight` | `cape-gilded` | `helm-gilded` | `beard-01` | `weapon-gilded-kit` | 1.02 × 1.05 | skin FAIR, hair DARK BROWN, eyes GREY | P2 | the `order` pool |
+| `gilded-sergeant` | Gilded Sergeant | `face-m09` | `armor-gilded-knight` | `cape-gilded` | `hair-02` | `beard-08` | `weapon-mace-shield` | 1.00 × 1.12 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
+| `drowned` | Drowned | `face-drowned` | `armor-drowned` | — | — | — | — | 0.97 × 1.05 | — | P2 |  |
+| `blood-wight` | Blood-wight | `face-blood-wight` | `armor-blood-wight` | — | — | — | — | 1.10 × 0.85 | — | P2 |  |
+| `sun-scorched` | Sun-scorched | `face-sun-scorched` | `armor-sun-scorched` | — | — | — | — | 1.00 × 1.00 | — | P2 |  |
+| `thornling` | Thornling | `face-thornling` | `armor-thornling` | — | — | — | — | 0.68 × 0.70 | — | P2 |  |
+| `priest-construct` | Priest-construct | `face-construct-priest` | `armor-construct-priest` | — | — | — | — | 1.20 × 1.30 | — | P2 |  |
+| `severin-boss` | Severin, unbound | `face-m08` | `armor-severin` | `cape-severin-wings` | `helm-crown-thorns` | — | — | 1.10 × 0.90 | skin PORCELAIN, hair SILVER, eyes RED | P2 | floats; claws and blood magic are effects |
+| `smuggler` | Smuggler | `face-f03` | `armor-smuggler` | — | `helm-bandana` | `skin-01` | `weapon-cutlass` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BLUE | P2 | a new id |
+| `protectorate-watchman` | Protectorate watchman | `face-m05` | `armor-protectorate` | `cape-watch` | `helm-watch` | `beard-01` | `weapon-protectorate-kit` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P2 | also `PROTECTORATE GUARD`; the `protectorate` pool |
+| `protectorate-warden` | Protectorate warden | `face-m09` | `armor-protectorate-warden` | — | `helm-warden` | `beard-07` | `weapon-warden-kit` | 1.08 × 1.18 | skin UMBER, hair BLACK, eyes BROWN | P2 |  |
+| `crown-hollowed` | Crown-raised Hollowed | `face-crown-hollowed` | `armor-crown-hollowed` | — | `helm-hollowed-kettle` | — | `weapon-spear` | 1.00 × 1.00 | — | P2 |  |
+| `crown-construct` | Crown-construct | `face-construct-crown` | `armor-construct-crown` | — | — | — | — | 1.25 × 1.20 | — | P2 |  |
+| `kael-shadow` | Kael, the Protectorate Shadow | `face-m04` | `armor-kael-shadow` | `cape-tail-ember` | `hair-03` | `horns-02` | `weapon-kael-knives` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P2 | boss |
+| `sb-sovereign` | {sb}, the Sovereign Protector | `face-f04` | `armor-sovereign` | — | `helm-crown-dusk-dawn` | — | `weapon-longsword` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P2 | the final boss; the player's own face and look; floats in phase 2 |
+| `unmade` | The Unmade (ancient) | `face-unmade` | `armor-unmade-bronze` | — | `helm-bronze-crest` | — | `weapon-unmade-spear-shield` | 1.00 × 1.00 | — | P2 |  |
+| `unmade.b` | The Unmade (a knight) | `face-unmade` | `armor-old-pattern` | — | `helm-nasal` | — | `weapon-longsword` | 1.00 × 1.00 | — | P2 | the game greys it |
+| `unmade.c` | The Unmade (a pikeman) | `face-unmade` | `armor-pikeman` | — | `helm-morion` | — | `weapon-pike` | 1.00 × 1.00 | — | P2 |  |
+| `unmade.d` | The Unmade (a watchman) | `face-unmade` | `armor-watch` | `cape-watch` | `helm-watch` | — | `weapon-cudgel` | 1.00 × 1.00 | — | P2 | the game greys it |
+| `ashfall-raider` | Ashfall raider | `face-m09` | `armor-ashfall-raider` | `cape-ash` | `hair-02` | `beard-08` | `weapon-raider-kit` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
 
 ### 7.1 Gear
 
@@ -5254,218 +4457,127 @@ Every part and creature in this file, in order. The characters are in §7.
 | `base-female` | The base mannequin, woman | base | §3 | P0 |
 | `base-male-blank` | The blank mannequin, man | base | §3 | P0 |
 | `base-female-blank` | The blank mannequin, woman | base | §3 | P0 |
-| `face-player-1` | You, face 1 (the default man) | face | §4 | P0 |
-| `face-player-2` | You, face 2 (the default woman) | face | §4 | P0 |
-| `face-player-3` | You, face 3 (the Soul-Bound's default) | face | §4 | P0 |
-| `face-player-4` | You, face 4 (a Hearthling) | face | §4 | P0 |
-| `face-player-5` | You, face 5 (a Sylvan) | face | §4 | P0 |
-| `face-player-6` | You, face 6 (an Emberkin) | face | §4 | P0 |
-| `face-player-7` | You, face 7 (a Wildkin) | face | §4 | P0 |
-| `face-player-8` | You, face 8 (a Stoneborn) | face | §4 | P0 |
-| `face-sera` | Sera Vantis | face | §4 | P0 |
-| `face-mira` | Mira Ashgrove | face | §4 | P0 |
-| `face-mira-young` | Mira, aged thirteen | face | §4 | P1 |
-| `face-kael` | Kael Duskmantle | face | §4 | P0 |
-| `face-brannock` | Brannock Ironvein | face | §4 | P0 |
-| `face-valencia` | Valencia Morvaine | face | §4 | P2 |
-| `face-mc-child` | You, aged eight | face | §4 | P0 |
-| `face-sb-child` | {sb}, aged eight | face | §4 | P0 |
-| `face-brannock-bare` | Brannock, the clasps gone | face | §4 | P2 |
-| `face-corra` | Corra | face | §4 | P0 |
-| `face-lookout` | The lookout | face | §4 | P0 |
-| `face-odelle` | Captain Odelle Marsh | face | §4 | P0 |
-| `face-tomas` | Old Tomas | face | §4 | P0 |
-| `face-red-gull` | Red Gull Thug, face 1 | face | §4 | P0 |
-| `face-red-gull-2` | Red Gull Thug, face 2 | face | §4 | P0 |
-| `face-red-gull-3` | Red Gull Thug, face 3 | face | §4 | P0 |
-| `face-grell` | Bosun Grell | face | §4 | P0 |
-| `face-hale` | Captain Roderic Hale | face | §4 | P0 |
-| `face-fennick` | Questmaster Fennick | face | §4 | P0 |
-| `face-hedda` | Hedda | face | §4 | P0 |
-| `face-refugee-child` | Lise | face | §4 | P0 |
-| `face-brisk` | Sergeant Brisk | face | §4 | P0 |
-| `face-refugee-1` | Old Aurek | face | §4 | P0 |
-| `face-refugee-2` | Teodor | face | §4 | P0 |
-| `face-refugee-3` | Yselle the Glassblower | face | §4 | P0 |
-| `face-elara` | Princess Elara Aurelian | face | §4 | P0 |
-| `face-leon` | King Leon | face | §4 | P0 |
-| `face-crane` | Lord Chancellor Vesper Crane | face | §4 | P0 |
-| `face-anvil-barkeep` | Hessa the Barkeep | face | §4 | P0 |
-| `face-netty` | Netty the Net-Mender | face | §4 | P0 |
-| `face-maud` | Maud Tolley | face | §4 | P0 |
-| `face-pip` | Pip the Potboy | face | §4 | P0 |
-| `face-osric` | Osric Penhallow | face | §4 | P0 |
-| `face-lark` | Lark the Busker | face | §4 | P0 |
-| `face-ilsa` | Ilsa Fenwright | face | §4 | P0 |
-| `face-oswin` | Guardsman Oswin | face | §4 | P0 |
-| `face-hesper` | Sister Hesper | face | §4 | P0 |
-| `face-wren` | Wren | face | §4 | P0 |
-| `face-imra-vell` | Master Imra Vell | face | §4 | P0 |
-| `face-tamsin` | Ranger Tamsin | face | §4 | P0 |
-| `face-garrick` | Garrick the caravan master | face | §4 | P1 |
-| `face-aldric` | Commander Aldric Voss | face | §4 | P1 |
-| `face-recruit` | The recruit | face | §4 | P1 |
-| `face-thessaly` | Archmage Thessaly Varn | face | §4 | P1 |
-| `face-brenna` | Brenna of Ashfall | face | §4 | P1 |
-| `face-gannet` | Mother Gannet | face | §4 | P1 |
-| `face-hester` | Hester Hollis | face | §4 | P1 |
-| `face-tobin` | Tobin Ashgrove | face | §4 | P1 |
-| `face-harrow` | Lord Harrow of Heronsgate | face | §4 | P1 |
-| `face-hobb` | Hobb the woodcutter | face | §4 | P1 |
-| `face-maleficio` | Maleficio | face | §4 | P1 |
-| `face-lost-boy` | The woodcutter's boy | face | §4 | P1 |
-| `face-mags` | Pedlar Mags | face | §4 | P1 |
-| `face-corra-flashback` | Corra, sixteen years younger | face | §4 | P0 |
-| `face-maleficio-young` | Maleficio, remembered | face | §4 | P1 |
-| `face-anselle` | Mother Superior Anselle | face | §4 | P2 |
-| `face-orla` | Sister Orla | face | §4 | P2 |
-| `face-corwin` | Sir Corwin Halbeck | face | §4 | P2 |
-| `face-severin` | Lord Severin Morvaine | face | §4 | P2 |
-| `face-isadora` | Lady Isadora | face | §4 | P2 |
-| `face-valencia-child` | Valencia as a child | face | §4 | P2 |
-| `face-pell` | Pell | face | §4 | P2 |
-| `face-ide` | Ide | face | §4 | P2 |
-| `face-maren-elder` | Maren, Hollowmere's elder | face | §4 | P2 |
-| `face-blood-house-steward` | The blood-house steward | face | §4 | P2 |
-| `face-hollowmere-child` | A Hollowmere child | face | §4 | P2 |
-| `face-hollowmere-farmer` | A Hollowmere farmer | face | §4 | P2 |
-| `face-ruck` | Ruck, the bosun | face | §4 | P2 |
-| `face-davin` | Davin | face | §4 | P2 |
+| `face-m01` | Man 1, the boy | face | §4 | P0 |
+| `face-m02` | Man 2, the lad | face | §4 | P0 |
+| `face-m03` | Man 3, the hero | face | §4 | P0 |
+| `face-m04` | Man 4, the rogue | face | §4 | P0 |
+| `face-m05` | Man 5, the soldier | face | §4 | P0 |
+| `face-m06` | Man 6, the bruiser | face | §4 | P0 |
+| `face-m07` | Man 7, the kindly man | face | §4 | P0 |
+| `face-m08` | Man 8, the noble | face | §4 | P0 |
+| `face-m09` | Man 9, the veteran | face | §4 | P0 |
+| `face-m10` | Man 10, the elder | face | §4 | P0 |
+| `face-f01` | Woman 1, the girl | face | §4 | P0 |
+| `face-f02` | Woman 2, the maiden | face | §4 | P0 |
+| `face-f03` | Woman 3, the heroine | face | §4 | P0 |
+| `face-f04` | Woman 4, the quick wit | face | §4 | P0 |
+| `face-f05` | Woman 5, the lady | face | §4 | P0 |
+| `face-f06` | Woman 6, the gentle soul | face | §4 | P0 |
+| `face-f07` | Woman 7, the fighter | face | §4 | P0 |
+| `face-f08` | Woman 8, the matron | face | §4 | P0 |
+| `face-f09` | Woman 9, the matriarch | face | §4 | P0 |
+| `face-f10` | Woman 10, the grandmother | face | §4 | P0 |
 | `face-vorlaith` | Vorlaith, the Unmade King | face | §4 | P2 |
-| `face-guild-apprentice` | A Guild apprentice | face | §4 | P2 |
-| `face-refugee-child-aged` | Lise, aged by the tear | face | §4 | P2 |
-| `face-leon-ill` | King Leon, ill | face | §4 | P2 |
-| `face-severin-cell` | Severin, a prisoner | face | §4 | P2 |
-| `face-town-1` | Townsfolk face 1 | face | §4 | P0 |
-| `face-town-2` | Townsfolk face 2 | face | §4 | P0 |
-| `face-town-3` | Townsfolk face 3 | face | §4 | P0 |
-| `face-town-4` | Townsfolk face 4 | face | §4 | P0 |
-| `face-town-5` | Townsfolk face 5 | face | §4 | P0 |
-| `face-town-6` | Townsfolk face 6 | face | §4 | P0 |
-| `face-town-7` | Townsfolk face 7 | face | §4 | P0 |
-| `face-town-8` | Townsfolk face 8 | face | §4 | P0 |
-| `face-town-9` | Townsfolk face 9 | face | §4 | P0 |
-| `face-town-10` | Townsfolk face 10 | face | §4 | P0 |
-| `face-town-11` | Townsfolk face 11 | face | §4 | P0 |
-| `face-town-12` | Townsfolk face 12 | face | §4 | P0 |
-| `face-town-13` | Townsfolk face 13 | face | §4 | P0 |
-| `face-town-14` | Townsfolk face 14 | face | §4 | P0 |
-| `face-town-15` | Townsfolk face 15 | face | §4 | P0 |
-| `face-town-16` | Townsfolk face 16 | face | §4 | P0 |
-| `face-town-17` | Townsfolk face 17 | face | §4 | P0 |
-| `face-town-18` | Townsfolk face 18 | face | §4 | P0 |
-| `face-varkhul` | Varkhul | face | §4 | P1 |
-| `face-cube-cultist` | Cube Cultist | face | §4 | P1 |
 | `face-hollowed` | The Hollowed | face | §4 | P0 |
+| `face-crown-hollowed` | Crown-raised Hollowed | face | §4 | P2 |
 | `face-construct-vault` | Vault construct's head | face | §4 | P0 |
-| `face-vreya` | Vreya | face | §4 | P2 |
-| `face-thrall` | Thrall | face | §4 | P2 |
+| `face-construct-priest` | Priest-construct's head | face | §4 | P2 |
+| `face-construct-crown` | Crown-construct's head | face | §4 | P2 |
 | `face-drowned` | Drowned | face | §4 | P2 |
 | `face-blood-wight` | Blood-wight | face | §4 | P2 |
 | `face-sun-scorched` | Sun-scorched | face | §4 | P2 |
 | `face-thornling` | Thornling | face | §4 | P2 |
-| `face-construct-priest` | Priest-construct's head | face | §4 | P2 |
-| `face-construct-crown` | Crown-construct's head | face | §4 | P2 |
 | `face-unmade` | The Unmade | face | §4 | P2 |
-| `face-crown-hollowed` | Crown-raised Hollowed | face | §4 | P2 |
-| `hair-player-1` | You, face 1's hair | hair | §4.8 | P0 |
-| `hair-player-2` | You, face 2's hair | hair | §4.8 | P0 |
-| `hair-player-3` | You, face 3's hair | hair | §4.8 | P0 |
-| `hair-player-4` | You, face 4's hair | hair | §4.8 | P0 |
-| `hair-player-5` | You, face 5's hair | hair | §4.8 | P0 |
-| `hair-player-6` | You, face 6's hair | hair | §4.8 | P0 |
-| `hair-player-7` | You, face 7's hair | hair | §4.8 | P0 |
-| `hair-player-8` | You, face 8's hair | hair | §4.8 | P0 |
-| `hair-sera` | Sera Vantis's hair | hair | §4.8 | P0 |
-| `hair-mira` | Mira Ashgrove's hair | hair | §4.8 | P0 |
-| `hair-mira-young` | Mira, aged thirteen's hair | hair | §4.8 | P1 |
-| `hair-kael` | Kael Duskmantle's hair | hair | §4.8 | P0 |
-| `hair-brannock` | Brannock Ironvein's hair | hair | §4.8 | P0 |
-| `hair-valencia` | Valencia Morvaine's hair | hair | §4.8 | P2 |
-| `hair-mc-child` | You, aged eight's hair | hair | §4.8 | P0 |
-| `hair-sb-child` | {sb}, aged eight's hair | hair | §4.8 | P0 |
-| `hair-corra` | Corra's hair | hair | §4.8 | P0 |
-| `hair-lookout` | The lookout's hair | hair | §4.8 | P0 |
-| `hair-odelle` | Captain Odelle Marsh's hair | hair | §4.8 | P0 |
-| `hair-tomas` | Old Tomas's hair | hair | §4.8 | P0 |
-| `hair-red-gull` | Red Gull Thug, face 1's hair | hair | §4.8 | P0 |
-| `hair-red-gull-2` | Red Gull Thug, face 2's hair | hair | §4.8 | P0 |
-| `hair-red-gull-3` | Red Gull Thug, face 3's hair | hair | §4.8 | P0 |
-| `hair-grell` | Bosun Grell's hair | hair | §4.8 | P0 |
-| `hair-hale` | Captain Roderic Hale's hair | hair | §4.8 | P0 |
-| `hair-fennick` | Questmaster Fennick's hair | hair | §4.8 | P0 |
-| `hair-hedda` | Hedda's hair | hair | §4.8 | P0 |
-| `hair-refugee-child` | Lise's hair | hair | §4.8 | P0 |
-| `hair-brisk` | Sergeant Brisk's hair | hair | §4.8 | P0 |
-| `hair-refugee-1` | Old Aurek's hair | hair | §4.8 | P0 |
-| `hair-refugee-2` | Teodor's hair | hair | §4.8 | P0 |
-| `hair-refugee-3` | Yselle the Glassblower's hair | hair | §4.8 | P0 |
-| `hair-elara` | Princess Elara Aurelian's hair | hair | §4.8 | P0 |
-| `hair-leon` | King Leon's hair | hair | §4.8 | P0 |
-| `hair-crane` | Lord Chancellor Vesper Crane's hair | hair | §4.8 | P0 |
-| `hair-anvil-barkeep` | Hessa the Barkeep's hair | hair | §4.8 | P0 |
-| `hair-netty` | Netty the Net-Mender's hair | hair | §4.8 | P0 |
-| `hair-maud` | Maud Tolley's hair | hair | §4.8 | P0 |
-| `hair-pip` | Pip the Potboy's hair | hair | §4.8 | P0 |
-| `hair-osric` | Osric Penhallow's hair | hair | §4.8 | P0 |
-| `hair-lark` | Lark the Busker's hair | hair | §4.8 | P0 |
-| `hair-ilsa` | Ilsa Fenwright's hair | hair | §4.8 | P0 |
-| `hair-oswin` | Guardsman Oswin's hair | hair | §4.8 | P0 |
-| `hair-hesper` | Sister Hesper's hair | hair | §4.8 | P0 |
-| `hair-wren` | Wren's hair | hair | §4.8 | P0 |
-| `hair-imra-vell` | Master Imra Vell's hair | hair | §4.8 | P0 |
-| `hair-tamsin` | Ranger Tamsin's hair | hair | §4.8 | P0 |
-| `hair-garrick` | Garrick the caravan master's hair | hair | §4.8 | P1 |
-| `hair-aldric` | Commander Aldric Voss's hair | hair | §4.8 | P1 |
-| `hair-recruit` | The recruit's hair | hair | §4.8 | P1 |
-| `hair-thessaly` | Archmage Thessaly Varn's hair | hair | §4.8 | P1 |
-| `hair-brenna` | Brenna of Ashfall's hair | hair | §4.8 | P1 |
-| `hair-gannet` | Mother Gannet's hair | hair | §4.8 | P1 |
-| `hair-hester` | Hester Hollis's hair | hair | §4.8 | P1 |
-| `hair-tobin` | Tobin Ashgrove's hair | hair | §4.8 | P1 |
-| `hair-harrow` | Lord Harrow of Heronsgate's hair | hair | §4.8 | P1 |
-| `hair-hobb` | Hobb the woodcutter's hair | hair | §4.8 | P1 |
-| `hair-maleficio` | Maleficio's hair | hair | §4.8 | P1 |
-| `hair-lost-boy` | The woodcutter's boy's hair | hair | §4.8 | P1 |
-| `hair-mags` | Pedlar Mags's hair | hair | §4.8 | P1 |
-| `hair-anselle` | Mother Superior Anselle's hair | hair | §4.8 | P2 |
-| `hair-orla` | Sister Orla's hair | hair | §4.8 | P2 |
-| `hair-corwin` | Sir Corwin Halbeck's hair | hair | §4.8 | P2 |
-| `hair-severin` | Lord Severin Morvaine's hair | hair | §4.8 | P2 |
-| `hair-isadora` | Lady Isadora's hair | hair | §4.8 | P2 |
-| `hair-valencia-child` | Valencia as a child's hair | hair | §4.8 | P2 |
-| `hair-pell` | Pell's hair | hair | §4.8 | P2 |
-| `hair-ide` | Ide's hair | hair | §4.8 | P2 |
-| `hair-maren-elder` | Maren, Hollowmere's elder's hair | hair | §4.8 | P2 |
-| `hair-blood-house-steward` | The blood-house steward's hair | hair | §4.8 | P2 |
-| `hair-hollowmere-child` | A Hollowmere child's hair | hair | §4.8 | P2 |
-| `hair-hollowmere-farmer` | A Hollowmere farmer's hair | hair | §4.8 | P2 |
-| `hair-ruck` | Ruck, the bosun's hair | hair | §4.8 | P2 |
-| `hair-davin` | Davin's hair | hair | §4.8 | P2 |
-| `hair-guild-apprentice` | A Guild apprentice's hair | hair | §4.8 | P2 |
-| `hair-town-1` | Townsfolk face 1's hair | hair | §4.8 | P0 |
-| `hair-town-2` | Townsfolk face 2's hair | hair | §4.8 | P0 |
-| `hair-town-3` | Townsfolk face 3's hair | hair | §4.8 | P0 |
-| `hair-town-4` | Townsfolk face 4's hair | hair | §4.8 | P0 |
-| `hair-town-5` | Townsfolk face 5's hair | hair | §4.8 | P0 |
-| `hair-town-6` | Townsfolk face 6's hair | hair | §4.8 | P0 |
-| `hair-town-7` | Townsfolk face 7's hair | hair | §4.8 | P0 |
-| `hair-town-8` | Townsfolk face 8's hair | hair | §4.8 | P0 |
-| `hair-town-9` | Townsfolk face 9's hair | hair | §4.8 | P0 |
-| `hair-town-10` | Townsfolk face 10's hair | hair | §4.8 | P0 |
-| `hair-town-11` | Townsfolk face 11's hair | hair | §4.8 | P0 |
-| `hair-town-12` | Townsfolk face 12's hair | hair | §4.8 | P0 |
-| `hair-town-13` | Townsfolk face 13's hair | hair | §4.8 | P0 |
-| `hair-town-14` | Townsfolk face 14's hair | hair | §4.8 | P0 |
-| `hair-town-15` | Townsfolk face 15's hair | hair | §4.8 | P0 |
-| `hair-town-16` | Townsfolk face 16's hair | hair | §4.8 | P0 |
-| `hair-town-17` | Townsfolk face 17's hair | hair | §4.8 | P0 |
-| `hair-town-18` | Townsfolk face 18's hair | hair | §4.8 | P0 |
-| `hair-varkhul` | Varkhul's hair | hair | §4.8 | P1 |
-| `hair-cube-cultist` | Cube Cultist's hair | hair | §4.8 | P1 |
-| `hair-vreya` | Vreya's hair | hair | §4.8 | P2 |
-| `hair-thrall` | Thrall's hair | hair | §4.8 | P2 |
-| `hair-drowned` | Drowned's hair | hair | §4.8 | P2 |
+| `hair-01` | Hair 1, the buzz | hair | §4.8 | P0 |
+| `hair-02` | Hair 2, the crop | hair | §4.8 | P0 |
+| `hair-03` | Hair 3, short and messy | hair | §4.8 | P0 |
+| `hair-04` | Hair 4, short curls | hair | §4.8 | P0 |
+| `hair-05` | Hair 5, the side parting | hair | §4.8 | P0 |
+| `hair-06` | Hair 6, slicked back | hair | §4.8 | P0 |
+| `hair-07` | Hair 7, the undercut | hair | §4.8 | P0 |
+| `hair-08` | Hair 8, spiky | hair | §4.8 | P0 |
+| `hair-09` | Hair 9, the short topknot | hair | §4.8 | P0 |
+| `hair-10` | Hair 10, receding | hair | §4.8 | P0 |
+| `hair-11` | Hair 11, the bald crown | hair | §4.8 | P0 |
+| `hair-12` | Hair 12, bald with wisps | hair | §4.8 | P0 |
+| `hair-13` | Hair 13, the pixie cut | hair | §4.8 | P0 |
+| `hair-14` | Hair 14, the mop | hair | §4.8 | P0 |
+| `hair-15` | Hair 15, the fringed bob | hair | §4.8 | P0 |
+| `hair-16` | Hair 16, the choppy cut | hair | §4.8 | P0 |
+| `hair-17` | Hair 17, shaggy | hair | §4.8 | P0 |
+| `hair-18` | Hair 18, wavy to the jaw | hair | §4.8 | P0 |
+| `hair-19` | Hair 19, shoulder curls | hair | §4.8 | P0 |
+| `hair-20` | Hair 20, the afro | hair | §4.8 | P0 |
+| `hair-21` | Hair 21, straight to the shoulders | hair | §4.8 | P0 |
+| `hair-22` | Hair 22, the short tail | hair | §4.8 | P0 |
+| `hair-23` | Hair 23, windswept | hair | §4.8 | P0 |
+| `hair-24` | Hair 24, swept back | hair | §4.8 | P0 |
+| `hair-25` | Hair 25, the half-up knot | hair | §4.8 | P0 |
+| `hair-26` | Hair 26, pulled back tight | hair | §4.8 | P0 |
+| `hair-27` | Hair 27, long and straight | hair | §4.8 | P0 |
+| `hair-28` | Hair 28, long, over one shoulder | hair | §4.8 | P0 |
+| `hair-29` | Hair 29, long and wavy | hair | §4.8 | P0 |
+| `hair-30` | Hair 30, long curls | hair | §4.8 | P0 |
+| `hair-31` | Hair 31, the high ponytail | hair | §4.8 | P0 |
+| `hair-32` | Hair 32, the low tail | hair | §4.8 | P0 |
+| `hair-33` | Hair 33, the shoulder braid | hair | §4.8 | P0 |
+| `hair-34` | Hair 34, the back braid | hair | §4.8 | P0 |
+| `hair-35` | Hair 35, two plaits | hair | §4.8 | P0 |
+| `hair-36` | Hair 36, two bunches | hair | §4.8 | P0 |
+| `hair-37` | Hair 37, the low bun | hair | §4.8 | P0 |
+| `hair-38` | Hair 38, the messy bun | hair | §4.8 | P0 |
+| `hair-39` | Hair 39, the high bun | hair | §4.8 | P0 |
+| `hair-40` | Hair 40, the crown braid | hair | §4.8 | P0 |
+| `hair-41` | Hair 41, the braided updo | hair | §4.8 | P0 |
+| `hair-42` | Hair 42, the warrior's topknot | hair | §4.8 | P0 |
+| `hair-43` | Hair 43, the mohawk | hair | §4.8 | P0 |
+| `hair-44` | Hair 44, locs | hair | §4.8 | P0 |
+| `hair-45` | Hair 45, many braids | hair | §4.8 | P0 |
+| `hair-46` | Hair 46, to the waist | hair | §4.8 | P0 |
+| `hair-47` | Hair 47, long and wild | hair | §4.8 | P0 |
+| `hair-48` | Hair 48, long and wispy | hair | §4.8 | P0 |
+| `beard-01` | Stubble | extra | §4.10 | P0 |
+| `beard-02` | The thin moustache | extra | §4.10 | P0 |
+| `beard-03` | The moustache | extra | §4.10 | P0 |
+| `beard-04` | The drooping moustache | extra | §4.10 | P0 |
+| `beard-05` | The goatee | extra | §4.10 | P0 |
+| `beard-06` | The chin strap | extra | §4.10 | P0 |
+| `beard-07` | The short beard | extra | §4.10 | P0 |
+| `beard-08` | The full beard | extra | §4.10 | P0 |
+| `beard-09` | The long beard | extra | §4.10 | P0 |
+| `beard-10` | The braided beard | extra | §4.10 | P0 |
+| `beard-11` | The side-whiskers | extra | §4.10 | P0 |
+| `beard-12` | The scruffy beard | extra | §4.10 | P0 |
+| `jewel-01` | The small hoop | extra | §4.10 | P0 |
+| `jewel-02` | The big hoop | extra | §4.10 | P0 |
+| `jewel-03` | The stud | extra | §4.10 | P0 |
+| `jewel-04` | The drop | extra | §4.10 | P0 |
+| `jewel-05` | The ear rings | extra | §4.10 | P0 |
+| `jewel-06` | The feather | extra | §4.10 | P0 |
+| `jewel-07` | The nose ring | extra | §4.10 | P0 |
+| `jewel-08` | The spectacles | extra | §4.10 | P0 |
+| `jewel-09` | The eyepatch | extra | §4.10 | P0 |
+| `jewel-10` | The monocle | extra | §4.10 | P0 |
+| `jewel-11` | The quill | extra | §4.10 | P0 |
+| `jewel-12` | The pearl | extra | §4.10 | P0 |
+| `skin-01` | Freckles | extra | §4.10 | P0 |
+| `skin-02` | The brow scar | extra | §4.10 | P0 |
+| `skin-03` | The nose scar | extra | §4.10 | P0 |
+| `skin-04` | The burn | extra | §4.10 | P0 |
+| `skin-05` | The tattoo | extra | §4.10 | P0 |
+| `skin-06` | The ash | extra | §4.10 | P0 |
+| `ears-01` | Pointed ears | extra | §4.10 | P0 |
+| `ears-02` | Wolf's ears | extra | §4.10 | P0 |
+| `ears-03` | Bear's ears | extra | §4.10 | P0 |
+| `ears-04` | Fox's ears | extra | §4.10 | P0 |
+| `ears-05` | Feather tufts | extra | §4.10 | P0 |
+| `ears-06` | Short points | extra | §4.10 | P0 |
+| `horns-01` | Ram's horns | extra | §4.10 | P0 |
+| `horns-02` | Swept horns | extra | §4.10 | P0 |
+| `horns-03` | Short horns | extra | §4.10 | P0 |
+| `horns-04` | Bull's horns | extra | §4.10 | P0 |
+| `horns-05` | Antlers | extra | §4.10 | P0 |
+| `horns-06` | Curled horns | extra | §4.10 | P0 |
 | `armor-traveller` | The traveller (the player's default) | armor | §5 | P0 |
 | `armor-traveller-f` | The traveller, on the woman's base | armor | §5 | P0 |
 | `armor-sb-traveller` | The Soul-Bound's traveller | armor | §5 | P0 |

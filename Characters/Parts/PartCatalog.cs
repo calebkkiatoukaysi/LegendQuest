@@ -42,10 +42,9 @@ public static class PartCatalog
     public const string Folder = "Characters/Parts";
 
     /// <summary>The layout of parts.json the game reads.</summary>
-    public const int FileVersion = 5;
+    public const int FileVersion = 6;
 
     /// <summary>A base's fists in parts.json's hands: what's held in the near hand and the far one is drawn under them.</summary>
-    private const string NearHand = "near", FarHand = "far";
 
     /// <summary>The recipes the player's figure is put together on, whichever face they pick: the one on that face's base.</summary>
     private static readonly string[] PlayerTemplates = { "you-male", "you-female" };
@@ -58,6 +57,9 @@ public static class PartCatalog
     private static PartsFile _file;
     private static GraphicsDevice _device;
     private static readonly Dictionary<string, PartImage> Images = new(StringComparer.Ordinal);
+
+    /// <summary>A body's or an armor's pieces by its id, one image per bone; Images keeps the first, for its slot and base.</summary>
+    private static readonly Dictionary<string, List<PartImage>> PieceImages = new(StringComparer.Ordinal);
     private static readonly Dictionary<string, ImportedFigure> Built = new(StringComparer.Ordinal);
 
     /// <summary>What each item draws in each slot it can go in, by base: §7.1.</summary>
@@ -66,10 +68,10 @@ public static class PartCatalog
     /// <summary>The party's own pieces for their starting kit, by recipe id, then by slot and item: §7.2. A null part draws nothing.</summary>
     private static readonly Dictionary<string, Dictionary<(EquipmentSlot Slot, string Item), string>> Own = new(StringComparer.Ordinal);
 
-    /// <summary>The faces the creation screen offers you and the Soul-Bound, in order: every face-player-(n) there is.</summary>
+    /// <summary>The faces the creation screen offers you and the Soul-Bound, in order: the shared set's, the ten men's (face-m01 on) then the ten women's (face-f01 on), as many as are painted.</summary>
     public static IReadOnlyList<string> PlayerFaces { get; private set; } = Array.Empty<string>();
 
-    /// <summary>The hairs the creation screen offers, in order: every hair-player-(n) there is, then every other hair-player one.</summary>
+    /// <summary>The hairs the creation screen offers, in order: the hair library's styles (hair-01 on), the man's copy of each (the woman's is chosen on her base).</summary>
     public static IReadOnlyList<string> PlayerHairs { get; private set; } = Array.Empty<string>();
 
     /// <summary>Reads and checks parts.json in the built game. With no parts imported there's no file, and nobody's put together.</summary>
@@ -79,7 +81,10 @@ public static class PartCatalog
         _file = null;
         PlayerFaces = Array.Empty<string>();
         PlayerHairs = Array.Empty<string>();
+        Skeleton.Current = null;
+        ClipLibrary.Load(null, null);
         Images.Clear();
+        PieceImages.Clear();
         Built.Clear();
         foreach ((_, Standing kept) in Pictures) kept.Picture.Dispose();
         Pictures.Clear();
@@ -103,13 +108,36 @@ public static class PartCatalog
         }
         Check(file, folder);
         _file = file;
+        Skeleton.Current = new Skeleton(file.Bones, file.Draw);
+        ClipLibrary.Load(Path.Combine(folder, "clips.json"), Skeleton.Current);
         foreach (PartsFile.GearEntry g in file.Gear)
             Gear[(g.Item, GearSlot(g.Slot).Value)] = g.Parts;
         foreach ((string who, PartsFile.OwnEntry[] rows) in file.Own)
             Own[who] = rows.ToDictionary(r => (GearSlot(r.Slot).Value, r.Item), r => r.Part);
-        PlayerFaces = Numbered(file, "face-player-");
-        PlayerHairs = Numbered(file, "hair-player-");
+        PlayerFaces = Numbered(file, "face-m").Concat(Numbered(file, "face-f")).Where(IsSetFace).ToArray();
+        PlayerHairs = Numbered(file, "hair-").Where(IsLibrary).ToArray();
     }
+
+    /// <summary>Whether a part is the man's copy of one of the hair library's: hair- and two digits.</summary>
+    public static bool IsLibrary(string id) => id is { Length: 7 } && id.StartsWith("hair-", StringComparison.Ordinal) && char.IsDigit(id[5]) && char.IsDigit(id[6]);
+
+    /// <summary>
+    /// The copy of a part made for a base: the part itself if it's on that base, else its pair on it
+    /// (the library's hairs and extras are painted on both, the woman's copy the man's id and -f),
+    /// else the part itself, to be fitted (Fit).
+    /// </summary>
+    /// <param name="id">The part.</param>
+    /// <param name="onBase">The base it's going on.</param>
+    public static string OnBase(string id, string onBase)
+    {
+        if (id is null || _file is null || !_file.Parts.TryGetValue(id, out PartsFile.PartEntry part) || part.Base == onBase) return id;
+        string pair = id.EndsWith("-f", StringComparison.Ordinal) ? id[..^2] : id + "-f";
+        return _file.Parts.TryGetValue(pair, out PartsFile.PartEntry other) && other.Base == onBase ? pair : id;
+    }
+
+    /// <summary>Whether a face is one of the shared set's: face-m or face-f and two digits.</summary>
+    public static bool IsSetFace(string id) =>
+        id is { Length: 8 } && id.StartsWith("face-", StringComparison.Ordinal) && (id[5] == 'm' || id[5] == 'f') && char.IsDigit(id[6]) && char.IsDigit(id[7]);
 
     /// <summary>Every part whose id starts so, in order of the number after it, then the rest by name.</summary>
     private static string[] Numbered(PartsFile file, string prefix) =>
@@ -124,6 +152,7 @@ public static class PartCatalog
     {
         _device = device;
         Images.Clear();
+        PieceImages.Clear();
         Built.Clear();
         foreach ((_, Standing kept) in Pictures) kept.Picture.Dispose();
         Pictures.Clear();
@@ -145,13 +174,25 @@ public static class PartCatalog
 
         foreach ((string id, PartsFile.PartEntry entry) in _file.Parts)
         {
-            (Color[] page, int stride) = pages[entry.Page];
             Sockets.TryParse(entry.Slot, out PartSlot slot);
-            Color[] pixels = Cut(page, stride, entry.Rect);
-            Color[] mask = entry.MaskRect is null ? null : Cut(page, stride, entry.MaskRect);
             Vector3 ratio = entry.Skin is { Length: 3 } s ? new Vector3(s[0], s[1], s[2]) : Vector3.One;
             Vector3?[] tones = entry.Tones?.Select(t => t is null ? (Vector3?)null : new Vector3(t[0], t[1], t[2]) / 255f).ToArray();
-            Images[id] = new PartImage(id, slot, entry.Base, entry.Rect[2], entry.Rect[3], pixels, mask, new Vector2(entry.Pivot[0], entry.Pivot[1]), ratio, tones);
+            PartImage Image(string key, string pageName, int[] rect, int[] maskRect, float[] pivot, string bone)
+            {
+                (Color[] page, int stride) = pages[pageName];
+                Color[] mask = maskRect is null ? null : Cut(page, stride, maskRect);
+                return new PartImage(key, slot, entry.Base, rect[2], rect[3], Cut(page, stride, rect), mask, new Vector2(pivot[0], pivot[1]), ratio, tones, bone);
+            }
+            if (entry.Pieces is null)
+            {
+                Images[id] = Image(id, entry.Page, entry.Rect, entry.MaskRect, entry.Pivot, null);
+                continue;
+            }
+            var pieces = new List<PartImage>();
+            foreach ((string bone, PartsFile.PieceEntry piece) in entry.Pieces)
+                pieces.Add(Image(id + "@" + bone, piece.Page, piece.Rect, piece.MaskRect, piece.Pivot, bone));
+            PieceImages[id] = pieces;
+            Images[id] = pieces[0] with { Id = id, Bone = null };
         }
     }
 
@@ -198,7 +239,7 @@ public static class PartCatalog
     public static Outfit OutfitOf(PartyMember member)
     {
         if (member?.Look?.Portrait is not string face || Pick(member.Id, face) is not (string name, PartsFile.RecipeEntry recipe)) return null;
-        string onBase = _file.Parts[face].Base;
+        string onBase = FaceBase(face);
         Outfit outfit = Outfit.Of(name, recipe, face);
         return outfit with
         {
@@ -207,7 +248,7 @@ public static class PartCatalog
             Helm = HeadOf(member, name, recipe, face, onBase),
             Weapon = Wears(member, name, EquipmentSlot.MainHand, onBase, null),
             Offhand = Wears(member, name, EquipmentSlot.OffHand, onBase, null),
-            Tints = Tints.Of(member.Look),
+            Tints = Tints.Of(member.Look).Over(outfit.Tints),
             Morph = new Morph(outfit.Morph.Height * member.Look.PaintedMorph.Height, outfit.Morph.Width * member.Look.PaintedMorph.Width),
         };
     }
@@ -256,15 +297,24 @@ public static class PartCatalog
     /// <summary>The recipe a party member with a painted face goes on, and its id: their own if it's on that face's base, else the player's on it.</summary>
     private static (string Id, PartsFile.RecipeEntry Recipe)? Pick(string id, string face)
     {
-        if (_file is null || face is null || !_file.Parts.TryGetValue(face, out PartsFile.PartEntry part) || part.Slot != Sockets.Name(PartSlot.Face))
-            return null;
-        if (id is not null && _file.Recipes.TryGetValue(id, out PartsFile.RecipeEntry own) && BaseOf(_file, own) == part.Base)
+        if (FaceBase(face) is not string onBase) return null;
+        if (id is not null && _file.Recipes.TryGetValue(id, out PartsFile.RecipeEntry own) && BaseOf(_file, own) == onBase)
             return (id, own);
         foreach (string template in PlayerTemplates)
         {
-            if (_file.Recipes.TryGetValue(template, out PartsFile.RecipeEntry recipe) && BaseOf(_file, recipe) == part.Base)
+            if (_file.Recipes.TryGetValue(template, out PartsFile.RecipeEntry recipe) && BaseOf(_file, recipe) == onBase)
                 return (template, recipe);
         }
+        return null;
+    }
+
+    /// <summary>The base a face is on: its own if it's painted, else the base of a recipe that has it (they're the bare mannequin till it is); null for neither.</summary>
+    private static string FaceBase(string face)
+    {
+        if (_file is null || face is null) return null;
+        if (_file.Parts.TryGetValue(face, out PartsFile.PartEntry part)) return part.Slot == Sockets.Name(PartSlot.Face) ? part.Base : null;
+        foreach (PartsFile.RecipeEntry recipe in _file.Recipes.Values)
+            if (recipe.Face == face && recipe.Base is not null) return recipe.Base;
         return null;
     }
 
@@ -293,11 +343,11 @@ public static class PartCatalog
         string key = outfit.Key + "@" + height.ToString(System.Globalization.CultureInfo.InvariantCulture);
         foreach ((string k, ImportedFigure kept) in Larges)
             if (k == key) return kept;
-        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody)) return null;
+        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody, float rigPx, string onBase)) return null;
 
         var info = new ImportedArtInfo(outfit.Name, "standard", "person", new[] { result.Width, result.Height },
             new[] { result.Root.X, result.Root.Y }, new[] { result.Head.X, result.Head.Y, result.Head.Width, result.Head.Height }, SourceCanvas);
-        var figure = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight * ImportedArt.RoomHeight / height, hasBody, result.Layers, result.Hand);
+        var figure = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight * ImportedArt.RoomHeight / height, hasBody, result.Layers, result.Hand, result.Joints, rigPx, onBase);
         Larges.Add((key, figure));
         if (Larges.Count > KeptLarges)
         {
@@ -326,7 +376,7 @@ public static class PartCatalog
         string key = outfit.Key + "@" + height.ToString(System.Globalization.CultureInfo.InvariantCulture);
         foreach ((string k, Standing kept) in Pictures)
             if (k == key) return kept;
-        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody)) return null;
+        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody, _, _)) return null;
 
         float scale = height / _file.StandardHeight;
         int width = Math.Max(1, (int)MathF.Round(result.Width * scale)), tall = Math.Max(1, (int)MathF.Round(result.Height * scale));
@@ -347,25 +397,31 @@ public static class PartCatalog
     /// (its armor's painted). Null if its face isn't: a bald stranger in their clothes would stand in
     /// for them in the rooms and the portraits, so they keep the look they had till then.
     /// </summary>
-    private static (RigComposer.Result Result, bool HasBody)? Composed(Outfit outfit)
+    private static (RigComposer.Result Result, bool HasBody, float RigPx, string Base)? Composed(Outfit outfit)
     {
         PartImage face = Part(outfit.Face), armor = Part(outfit.Armor);
-        if (face is null) return null;
-
-        string baseId = face.Base;
-        PartsFile.BaseEntry b = _file.Bases[baseId];
+        // Till their face is painted, someone is the bare mannequin of their base.
+        string baseId = face?.Base ?? armor?.Base ?? outfit.Base;
+        if (baseId is null || Skeleton.Current is null || !_file.Bases.TryGetValue(baseId, out PartsFile.BaseEntry b)) return null;
         // Everyone's head is the mannequin's, the face on it. The face and the armor are the body's own,
         // so they're on its base (Check makes sure). A cape, a hair or helm (one slot) or a weapon can
         // be on either: it hangs from its socket here and is scaled to fit (Fit).
-        var parts = new List<PartImage> { Images[b.Body], Images[b.Bald], face };
-        foreach (PartImage worn in new[] { armor, Part(outfit.Cape), Part(outfit.Helm), Part(outfit.Weapon), Part(outfit.Offhand) })
-            if (worn is not null && (worn.Base == baseId || worn.Slot != PartSlot.Armor)) parts.Add(worn);
+        var parts = new List<PartImage>(Drawn(Images[b.Body])) { Images[b.Bald] };
+        if (face is not null) parts.Add(face);
+        foreach (PartImage worn in new[] { armor, Part(outfit.Cape), Part(OnBase(outfit.Helm, baseId)), Part(outfit.Weapon), Part(outfit.Offhand) })
+            if (worn is not null && (worn.Base == baseId || worn.Slot != PartSlot.Armor)) parts.AddRange(Drawn(worn));
+        // The beard, the earrings, the scars over the face; the ears and horns over the hair.
+        foreach (string extra in outfit.Extras)
+            if (Part(OnBase(extra, baseId)) is PartImage worn && worn.Slot is PartSlot.Facial or PartSlot.Marks) parts.Add(worn);
 
         var sockets = b.Sockets.ToDictionary(s => s.Key, s => new Vector2(s.Value[0], s.Value[1]), StringComparer.Ordinal);
-        var fists = new Dictionary<FigureBone, PartImage> { [FigureBone.Near] = Images[b.Hands[NearHand]], [FigureBone.Far] = Images[b.Hands[FarHand]] };
-        RigComposer.Result result = RigComposer.Compose(sockets, b.Head, parts, outfit.Morph, PaintFor(outfit.Tints, face, b), part => Fit(part, baseId), fists);
-        return (result, armor is not null && armor.Base == baseId);
+        var joints = b.Joints.ToDictionary(j => j.Key, j => new Vector2(j.Value[0], j.Value[1]), StringComparer.Ordinal);
+        RigComposer.Result result = RigComposer.Compose(sockets, b.Head, joints, Skeleton.Current, parts, outfit.Morph, PaintFor(outfit.Tints, face, b), part => Fit(part, baseId));
+        return (result, face is null || armor is not null && armor.Base == baseId, b.RigPx, baseId);
     }
+
+    /// <summary>What a part is drawn as: its bones' pieces for a body or an armor, else itself.</summary>
+    private static IEnumerable<PartImage> Drawn(PartImage part) => PieceImages.TryGetValue(part.Id, out List<PartImage> pieces) ? pieces : new[] { part };
 
     /// <summary>An outfit put together, kept by its Key.</summary>
     private static ImportedFigure Build(Outfit outfit)
@@ -374,7 +430,7 @@ public static class PartCatalog
         string key = outfit.Key;
         if (Built.TryGetValue(key, out ImportedFigure built)) return built;
 
-        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody))
+        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody, float rigPx, string onBase))
         {
             Built[key] = null;
             return null;
@@ -384,7 +440,7 @@ public static class PartCatalog
         if (info.Problem() is string problem)
             throw new InvalidOperationException($"Putting {outfit.Name} together with {outfit.Face} made a picture that {problem}.");
 
-        built = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight, hasBody, result.Layers, result.Hand);
+        built = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight, hasBody, result.Layers, result.Hand, result.Joints, rigPx, onBase);
         Built[key] = built;
         return built;
     }
@@ -398,8 +454,8 @@ public static class PartCatalog
     {
         var baseSkin = new Vector3(b.Skin[0], b.Skin[1], b.Skin[2]) / 255f;
         Vector3 Against(Vector3 own) => tints.Skin is Color skin ? Vector3.Clamp(skin.ToVector3() / own, new Vector3(0.2f), new Vector3(4f)) : Vector3.One;
-        Vector3 body = tints.Skin is null ? face.SkinRatio : Against(baseSkin);
-        Vector3 faceSkin = Against(baseSkin * face.SkinRatio);
+        Vector3 body = tints.Skin is null ? face?.SkinRatio ?? Vector3.One : Against(baseSkin);
+        Vector3 faceSkin = face is null ? Vector3.One : Against(baseSkin * face.SkinRatio);
         return part => part.Slot switch
         {
             PartSlot.Body or PartSlot.Head => new Paint(body),
@@ -407,6 +463,8 @@ public static class PartCatalog
             PartSlot.Armor => new Paint(body, tints.Base, tints.Trim),
             PartSlot.Cape or PartSlot.Helm => new Paint(Vector3.One, tints.Base, tints.Trim),
             PartSlot.Face => new Paint(faceSkin, tints.Hair, tints.Eyes),
+            // A beard and furred ears are the hair's colour; a scar, freckles or a Sylvan's ear the skin's; metal and horn as painted.
+            PartSlot.Facial or PartSlot.Marks => new Paint(faceSkin, tints.Hair),
             _ => Paint.Plain,
         };
     }
@@ -431,7 +489,7 @@ public static class PartCatalog
         float Down(PartsFile.BaseEntry b, string a, string c) => b.Sockets[c][1] - b.Sockets[a][1];
         return part.Slot switch
         {
-            PartSlot.Head or PartSlot.Face or PartSlot.Helm => new Vector2(to.Head[3] / from.Head[3]),
+            PartSlot.Head or PartSlot.Face or PartSlot.Facial or PartSlot.Helm or PartSlot.Marks => new Vector2(to.Head[3] / from.Head[3]),
             PartSlot.Cape => new Vector2(Across(to, Sockets.Back, Sockets.Chest) / Across(from, Sockets.Back, Sockets.Chest),
                 Down(to, Sockets.Back, Sockets.Root) / Down(from, Sockets.Back, Sockets.Root)),
             _ => new Vector2(Down(to, Sockets.Crown, Sockets.Root) / Down(from, Sockets.Crown, Sockets.Root)),
@@ -448,6 +506,7 @@ public static class PartCatalog
     /// <summary>The base a recipe's on: its face's, or its armor's, or null if neither's made yet.</summary>
     private static string BaseOf(PartsFile f, PartsFile.RecipeEntry recipe)
     {
+        if (recipe.Base is not null) return recipe.Base;
         foreach (string id in new[] { recipe.Face, recipe.Armor })
             if (id is not null && f.Parts.TryGetValue(id, out PartsFile.PartEntry part)) return part.Base;
         return null;
@@ -485,6 +544,15 @@ public static class PartCatalog
 
         if (f.Pages is null || f.Bases is null || f.Parts is null || f.Recipes is null)
             throw new InvalidOperationException($"{where} is missing its pages, bases, parts or recipes.{fix}");
+        if (f.Bones is not { Length: > 0 } || f.Bones.Any(b => b is not { Length: 3 } || b[0] is null || b[2] is null) || f.Draw is null)
+            throw new InvalidOperationException($"{where} has no skeleton: its bones and the order they're drawn in.{fix}");
+        var boneNames = new HashSet<string>(StringComparer.Ordinal);
+        foreach (string[] b in f.Bones)
+        {
+            if (b[1] is not null && !boneNames.Contains(b[1])) throw new InvalidOperationException($"{where} has the bone {b[0]} before its parent {b[1]}.{fix}");
+            boneNames.Add(b[0]);
+        }
+        if (f.Draw.Any(b => !boneNames.Contains(b))) throw new InvalidOperationException($"{where} draws a bone it hasn't.{fix}");
         foreach ((string name, int[] size) in f.Pages)
         {
             if (size is not { Length: 2 } || size[0] <= 0 || size[1] <= 0)
@@ -506,8 +574,12 @@ public static class PartCatalog
                 throw new InvalidOperationException($"{where} has no skin tone on {id}.{fix}");
             if (!IsPart(f, b.Body, PartSlot.Body, id) || !IsPart(f, b.Bald, PartSlot.Head, id))
                 throw new InvalidOperationException($"{where} gives {id} a body ({b.Body}) or a bald head ({b.Bald}) that isn't its own.{fix}");
-            if (b.Hands is null || !IsPart(f, b.Hands.GetValueOrDefault(NearHand), PartSlot.Body, id) || !IsPart(f, b.Hands.GetValueOrDefault(FarHand), PartSlot.Body, id))
-                throw new InvalidOperationException($"{where} gives {id} no near and far fist of its own, which what it holds is drawn under.{fix}");
+            foreach (string[] bone in f.Bones)
+            {
+                if (b.Joints is null || !b.Joints.TryGetValue(bone[2], out float[] joint) || joint is not { Length: 2 } || !float.IsFinite(joint[0]) || !float.IsFinite(joint[1]))
+                    throw new InvalidOperationException($"{where} has no {bone[2]} joint on {id}, which its {bone[0]} turns about.{fix}");
+            }
+            if (!(b.RigPx > 0f)) throw new InvalidOperationException($"{where} gives {id} no size for the clips' units.{fix}");
         }
 
         foreach ((string id, PartsFile.PartEntry p) in f.Parts)
@@ -516,16 +588,31 @@ public static class PartCatalog
             if (!Sockets.TryParse(p.Slot, out PartSlot slot)) throw new InvalidOperationException($"{what} is in the slot {p.Slot}, which there isn't.{fix}");
             if (p.Base is null || !f.Bases.ContainsKey(p.Base)) throw new InvalidOperationException($"{what} is on the base {p.Base}, which there isn't.{fix}");
             if (p.Socket != Sockets.Of(slot)) throw new InvalidOperationException($"{what} hangs from {p.Socket}, but a {p.Slot} hangs from {Sockets.Of(slot)}.{fix}");
-            if (p.Page is null || !f.Pages.TryGetValue(p.Page, out int[] page)) throw new InvalidOperationException($"{what} is on the page {p.Page}, which there isn't.{fix}");
-            if (!OnPage(p.Rect, page)) throw new InvalidOperationException($"{what} isn't inside its page {p.Page}.{fix}");
-            if (p.MaskRect is not null && (!OnPage(p.MaskRect, page) || p.MaskRect[2] != p.Rect[2] || p.MaskRect[3] != p.Rect[3]))
-                throw new InvalidOperationException($"{what}'s mask isn't inside its page, or isn't its size.{fix}");
-            bool dyed = slot is PartSlot.Face or PartSlot.Armor or PartSlot.Cape or PartSlot.Helm;
-            if (p.Tones is not null && (!dyed || p.MaskRect is null || p.Tones.Length != 2
+            void Placed(string piece, string pageName, int[] rect, int[] maskRect, float[] pivot)
+            {
+                if (pageName is null || !f.Pages.TryGetValue(pageName, out int[] page)) throw new InvalidOperationException($"{piece} is on the page {pageName}, which there isn't.{fix}");
+                if (!OnPage(rect, page)) throw new InvalidOperationException($"{piece} isn't inside its page {pageName}.{fix}");
+                if (maskRect is not null && (!OnPage(maskRect, page) || maskRect[2] != rect[2] || maskRect[3] != rect[3]))
+                    throw new InvalidOperationException($"{piece}'s mask isn't inside its page, or isn't its size.{fix}");
+                if (pivot is not { Length: 2 } || !float.IsFinite(pivot[0]) || !float.IsFinite(pivot[1]))
+                    throw new InvalidOperationException($"{piece} has no pivot.{fix}");
+            }
+            if (p.Pieces is null) Placed(what, p.Page, p.Rect, p.MaskRect, p.Pivot);
+            else
+            {
+                if (slot is not (PartSlot.Body or PartSlot.Armor) || p.Pieces.Count == 0)
+                    throw new InvalidOperationException($"{what} is in pieces, which only a body or an armor is, and has to have some.{fix}");
+                foreach ((string bone, PartsFile.PieceEntry piece) in p.Pieces)
+                {
+                    if (!boneNames.Contains(bone)) throw new InvalidOperationException($"{what} has a piece for {bone}, which isn't a bone.{fix}");
+                    Placed($"{what}'s {bone}", piece.Page, piece.Rect, piece.MaskRect, piece.Pivot);
+                    if (p.Tones is not null && piece.MaskRect is null) throw new InvalidOperationException($"{what}'s {bone} has no mask for its dyes.{fix}");
+                }
+            }
+            bool dyed = slot is PartSlot.Face or PartSlot.Facial or PartSlot.Armor or PartSlot.Cape or PartSlot.Helm or PartSlot.Marks;
+            if (p.Tones is not null && (!dyed || p.MaskRect is null && p.Pieces is null || p.Tones.Length != 2
                 || p.Tones.Any(t => t is not null && (t.Length != 3 || t.Any(v => !(v >= 0f && v <= 255f))))))
-                throw new InvalidOperationException($"{what} has dye tones it can't have: only a face, armor, cape or helm (a hair among them) with a mask has two, each a colour or none.{fix}");
-            if (p.Pivot is not { Length: 2 } || !float.IsFinite(p.Pivot[0]) || !float.IsFinite(p.Pivot[1]))
-                throw new InvalidOperationException($"{what} has no pivot.{fix}");
+                throw new InvalidOperationException($"{what} has dye tones it can't have: only a face, a facial part, armor, cape, helm (a hair among them) or mark with a mask has two, each a colour or none.{fix}");
             bool face = slot == PartSlot.Face;
             if (face != (p.Skin is not null) || face && (p.Skin.Length != 3 || p.Skin.Any(v => !(v >= 0.2f && v <= 2f))))
                 throw new InvalidOperationException($"{what} {(face ? "has no skin against its base's, or one out of reach" : "has a skin of its own, which only a face has")}.{fix}");
@@ -536,6 +623,17 @@ public static class PartCatalog
             string what = $"{where}'s recipe {id}";
             if (r.Morph is not { Length: 2 } || r.Morph.Any(v => !(v >= Morph.Least && v <= Morph.Most)))
                 throw new InvalidOperationException($"{what} has a morph out of reach: each way it's {Morph.Least} to {Morph.Most}. Fix it in Story/13-art-prompts.md §7.");
+            foreach ((string channel, string name) in r.Tints ?? new Dictionary<string, string>())
+            {
+                IReadOnlyList<Swatches.Swatch> list = channel switch { "skin" => Swatches.Skin, "hair" => Swatches.Hair, "eyes" => Swatches.Eyes, _ => null };
+                if (list is null || Swatches.Named(list, name) is null)
+                    throw new InvalidOperationException($"{what} colours its {channel} {name}, which isn't one of the game's swatches. Fix it in Story/13-art-prompts.md §7.");
+            }
+            foreach (string extra in r.Extras ?? Array.Empty<string>())
+            {
+                if (extra is null || f.Parts.TryGetValue(extra, out PartsFile.PartEntry entry) && entry.Slot != Sockets.Name(PartSlot.Facial) && entry.Slot != Sockets.Name(PartSlot.Marks))
+                    throw new InvalidOperationException($"{what} wears {extra ?? "nothing"} as an extra, but that isn't a facial part or a mark. Fix it in Story/13-art-prompts.md §7.");
+            }
             foreach ((string part, PartSlot slot) in new[] { (r.Face, PartSlot.Face), (r.Armor, PartSlot.Armor), (r.Cape, PartSlot.Cape), (r.Helm, PartSlot.Helm), (r.Weapon, PartSlot.Weapon) })
             {
                 if (part is not null && f.Parts.TryGetValue(part, out PartsFile.PartEntry entry) && entry.Slot != Sockets.Name(slot))

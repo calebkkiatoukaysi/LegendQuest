@@ -1,5 +1,5 @@
 {
- "version": 5,
+ "version": 6,
  "scale": 0.5,
  "standardHeight": 675.5,
  "canvas": [
@@ -19,9 +19,11 @@
   "body": "root",
   "head": "neck",
   "face": "neck",
+  "facial": "neck",
   "armor": "root",
   "cape": "back",
   "helm": "neck",
+  "marks": "neck",
   "weapon": "hand.near",
   "offhand": "hand.far"
  },
@@ -31,2398 +33,653 @@
   "armor",
   "head",
   "face",
+  "facial",
   "helm",
+  "marks",
   "weapon",
   "offhand"
  ],
+ "bones": [
+  [
+   "root",
+   null,
+   "root"
+  ],
+  [
+   "hips",
+   "root",
+   "hips"
+  ],
+  [
+   "spine",
+   "hips",
+   "spine"
+  ],
+  [
+   "chest",
+   "spine",
+   "chest"
+  ],
+  [
+   "head",
+   "chest",
+   "neck"
+  ],
+  [
+   "arm_far_up",
+   "chest",
+   "shoulder_far"
+  ],
+  [
+   "arm_far_low",
+   "arm_far_up",
+   "elbow_far"
+  ],
+  [
+   "hand_far",
+   "arm_far_low",
+   "wrist_far"
+  ],
+  [
+   "arm_near_up",
+   "chest",
+   "shoulder_near"
+  ],
+  [
+   "arm_near_low",
+   "arm_near_up",
+   "elbow_near"
+  ],
+  [
+   "hand_near",
+   "arm_near_low",
+   "wrist_near"
+  ],
+  [
+   "leg_far_up",
+   "hips",
+   "hip_far"
+  ],
+  [
+   "leg_far_low",
+   "leg_far_up",
+   "knee_far"
+  ],
+  [
+   "foot_far",
+   "leg_far_low",
+   "ankle_far"
+  ],
+  [
+   "leg_near_up",
+   "hips",
+   "hip_near"
+  ],
+  [
+   "leg_near_low",
+   "leg_near_up",
+   "knee_near"
+  ],
+  [
+   "foot_near",
+   "leg_near_low",
+   "ankle_near"
+  ]
+ ],
+ "draw": [
+  "arm_far_up",
+  "arm_far_low",
+  "hand_far",
+  "leg_far_up",
+  "leg_far_low",
+  "foot_far",
+  "leg_near_up",
+  "leg_near_low",
+  "foot_near",
+  "hips",
+  "spine",
+  "chest",
+  "head",
+  "arm_near_up",
+  "arm_near_low",
+  "hand_near"
+ ],
  "pages": {
-  "armor-0": [
-   1984,
-   1894
-  ],
-  "armor-1": [
-   2032,
-   1878
-  ],
-  "armor-2": [
-   2009,
-   1868
-  ],
-  "armor-3": [
-   1971,
-   1855
-  ],
-  "armor-4": [
-   2034,
-   1848
-  ],
-  "armor-5": [
-   1922,
-   1820
-  ],
   "base-0": [
-   1482,
-   620
+   2028,
+   644
   ],
   "face-0": [
-   2033,
-   674
-  ],
-  "helm-0": [
-   2046,
-   1421
+   1972,
+   200
   ]
  },
  "bases": {
   "base-male": {
    "sockets": {
     "root": [
-     258.62,
-     733.5
+     256.25,
+     734.5
     ],
     "neck": [
-     276.25,
-     135.75
+     264.0,
+     141.5
     ],
     "crown": [
-     270.6,
-     57.0
+     259.6,
+     56.0
     ],
     "chest": [
-     252.5,
-     205.0
+     246.75,
+     207.5
     ],
     "back": [
-     189.5,
-     165.0
+     204.5,
+     167.5
     ],
     "hand.near": [
-     170.6,
-     406.66
+     155.89,
+     406.87
     ],
     "hand.far": [
-     344.15,
-     403.38
+     359.73,
+     405.12
     ]
    },
    "head": [
-    234.5,
-    57.0,
-    77.0,
-    89.5
+    220.5,
+    56.0,
+    80.5,
+    96.0
    ],
    "body": "base-male.body",
    "bald": "base-male.head",
    "skin": [
-    215.0,
-    157.0,
-    107.0
+    229.0,
+    159.0,
+    104.0
    ],
-   "hands": {
-    "near": "base-male.hand.near",
-    "far": "base-male.hand.far"
-   }
+   "joints": {
+    "root": [
+     241.5,
+     733.0
+    ],
+    "hips": [
+     270.0,
+     350.0
+    ],
+    "spine": [
+     270.0,
+     295.0
+    ],
+    "chest": [
+     272.5,
+     230.0
+    ],
+    "neck": [
+     274.0,
+     162.5
+    ],
+    "shoulder_near": [
+     195.0,
+     201.5
+    ],
+    "elbow_near": [
+     155.5,
+     297.5
+    ],
+    "wrist_near": [
+     146.0,
+     379.0
+    ],
+    "shoulder_far": [
+     312.5,
+     200.0
+    ],
+    "elbow_far": [
+     324.0,
+     295.0
+    ],
+    "wrist_far": [
+     356.0,
+     376.0
+    ],
+    "hip_near": [
+     235.0,
+     372.5
+    ],
+    "knee_near": [
+     206.0,
+     492.5
+    ],
+    "ankle_near": [
+     156.5,
+     669.0
+    ],
+    "hip_far": [
+     298.5,
+     376.0
+    ],
+    "knee_far": [
+     298.5,
+     494.0
+    ],
+    "ankle_far": [
+     295.0,
+     660.0
+    ]
+   },
+   "rigPx": 4.1827
   },
   "base-female": {
    "sockets": {
     "root": [
-     256.25,
-     733.0
+     257.88,
+     733.5
     ],
     "neck": [
-     267.0,
-     149.25
+     258.75,
+     155.5
     ],
     "crown": [
-     265.33,
-     75.0
+     255.47,
+     72.5
     ],
     "chest": [
-     257.5,
-     222.5
+     253.75,
+     225.0
     ],
     "back": [
-     205.5,
-     182.5
+     222.5,
+     185.0
     ],
     "hand.near": [
-     182.64,
-     406.65
+     159.74,
+     409.38
     ],
     "hand.far": [
-     340.8,
-     403.84
+     353.89,
+     409.89
     ]
    },
    "head": [
-    229.5,
-    75.0,
-    78.5,
-    87.5
+    218.0,
+    72.5,
+    77.5,
+    92.5
    ],
    "body": "base-female.body",
    "bald": "base-female.head",
    "skin": [
-    216.0,
-    158.0,
-    108.0
+    230.0,
+    160.0,
+    105.0
    ],
-   "hands": {
-    "near": "base-female.hand.near",
-    "far": "base-female.hand.far"
-   }
+   "joints": {
+    "root": [
+     250.0,
+     733.0
+    ],
+    "hips": [
+     272.5,
+     347.5
+    ],
+    "spine": [
+     270.0,
+     300.0
+    ],
+    "chest": [
+     270.0,
+     235.0
+    ],
+    "neck": [
+     266.0,
+     177.5
+    ],
+    "shoulder_near": [
+     214.0,
+     207.0
+    ],
+    "elbow_near": [
+     181.0,
+     298.0
+    ],
+    "wrist_near": [
+     160.0,
+     381.0
+    ],
+    "shoulder_far": [
+     306.0,
+     207.5
+    ],
+    "elbow_far": [
+     320.0,
+     300.0
+    ],
+    "wrist_far": [
+     345.0,
+     385.0
+    ],
+    "hip_near": [
+     240.0,
+     367.5
+    ],
+    "knee_near": [
+     206.0,
+     511.0
+    ],
+    "ankle_near": [
+     162.5,
+     668.0
+    ],
+    "hip_far": [
+     300.0,
+     369.0
+    ],
+    "knee_far": [
+     295.0,
+     499.0
+    ],
+    "ankle_far": [
+     300.0,
+     664.0
+    ]
+   },
+   "rigPx": 4.0743
   }
  },
  "parts": {
-  "armor-baker": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    532,
-    617,
-    245,
-    604
-   ],
-   "pivot": [
-    130.25,
-    603.0
-   ],
-   "maskRect": [
-    781,
-    617,
-    245,
-    604
-   ],
-   "tones": [
-    [
-     183.0,
-     136.2,
-     107.2
-    ],
-    [
-     106.3,
-     56.9,
-     46.3
-    ]
-   ]
-  },
-  "armor-brannock": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    740,
-    1250,
-    240,
-    616
-   ],
-   "pivot": [
-    119.62,
-    614.5
-   ],
-   "maskRect": [
-    984,
-    1250,
-    240,
-    616
-   ],
-   "tones": [
-    [
-     85.3,
-     65.3,
-     54.7
-    ],
-    [
-     124.2,
-     82.5,
-     55.2
-    ]
-   ]
-  },
-  "armor-busker": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    1662,
-    2,
-    257,
-    622
-   ],
-   "pivot": [
-    138.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    628,
-    257,
-    622
-   ],
-   "tones": [
-    [
-     127.6,
-     79.7,
-     67.1
-    ],
-    null
-   ]
-  },
-  "armor-chain-mail": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    1731,
-    1254,
-    247,
-    621
-   ],
-   "pivot": [
-    123.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    2,
-    247,
-    621
-   ],
-   "tones": [
-    [
-     100.2,
-     78.3,
-     66.9
-    ],
-    null
-   ]
-  },
-  "armor-chain-mail-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    1638,
-    619,
-    224,
-    611
-   ],
-   "pivot": [
-    107.25,
-    603.0
-   ],
-   "maskRect": [
-    2,
-    1235,
-    224,
-    611
-   ],
-   "tones": [
-    [
-     99.0,
-     75.0,
-     59.4
-    ],
-    null
-   ]
-  },
-  "armor-chain-shirt": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    249,
-    1254,
-    241,
-    622
-   ],
-   "pivot": [
-    118.62,
-    614.5
-   ],
-   "maskRect": [
-    494,
-    1254,
-    241,
-    622
-   ],
-   "tones": [
-    [
-     90.4,
-     67.4,
-     56.5
-    ],
-    [
-     148.5,
-     99.0,
-     68.9
-    ]
-   ]
-  },
-  "armor-chain-shirt-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    230,
-    1235,
-    223,
-    611
-   ],
-   "pivot": [
-    106.25,
-    603.0
-   ],
-   "maskRect": [
-    457,
-    1235,
-    223,
-    611
-   ],
-   "tones": [
-    [
-     86.4,
-     60.4,
-     46.3
-    ],
-    [
-     167.0,
-     116.8,
-     80.2
-    ]
-   ]
-  },
-  "armor-champion": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    1496,
-    1269,
-    241,
-    623
-   ],
-   "pivot": [
-    119.62,
-    614.5
-   ],
-   "maskRect": [
-    1741,
-    1269,
-    241,
-    623
-   ],
-   "tones": [
-    [
-     79.7,
-     50.4,
-     36.9
-    ],
-    [
-     154.7,
-     113.9,
-     82.4
-    ]
-   ]
-  },
-  "armor-champion-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    900,
-    2,
-    222,
-    605
-   ],
-   "pivot": [
-    108.25,
-    603.0
-   ],
-   "maskRect": [
-    1126,
-    2,
-    222,
-    605
-   ],
-   "tones": [
-    [
-     87.7,
-     55.9,
-     40.7
-    ],
-    [
-     63.3,
-     53.0,
-     57.0
-    ]
-   ]
-  },
-  "armor-child-cove": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    1728,
-    627,
-    242,
-    616
-   ],
-   "pivot": [
-    122.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    1250,
-    242,
-    616
-   ],
-   "tones": [
-    [
-     82.9,
-     84.9,
-     83.2
-    ],
-    [
-     98.7,
-     69.1,
-     48.7
-    ]
-   ]
-  },
-  "armor-clerk": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    253,
-    2,
-    241,
-    621
-   ],
-   "pivot": [
-    123.62,
-    614.5
-   ],
-   "maskRect": [
-    498,
-    2,
-    241,
-    621
-   ],
-   "tones": [
-    [
-     155.1,
-     121.7,
-     94.9
-    ],
-    [
-     132.2,
-     86.8,
-     41.3
-    ]
-   ]
-  },
-  "armor-corra": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    1172,
-    2,
-    230,
-    612
-   ],
-   "pivot": [
-    117.25,
-    603.0
-   ],
-   "maskRect": [
-    1406,
-    2,
-    230,
-    612
-   ],
-   "tones": [
-    [
-     100.4,
-     63.9,
-     44.5
-    ],
-    [
-     93.9,
-     92.1,
-     91.4
-    ]
-   ]
-  },
-  "armor-courier": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    514,
-    2,
-    251,
-    631
-   ],
-   "pivot": [
-    126.62,
-    614.5
-   ],
-   "maskRect": [
-    769,
-    2,
-    251,
-    631
-   ],
-   "tones": [
-    [
-     69.1,
-     48.1,
-     40.6
-    ],
-    [
-     161.5,
-     123.3,
-     96.9
-    ]
-   ]
-  },
-  "armor-crane": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    2,
-    2,
-    282,
-    622
-   ],
-   "pivot": [
-    147.62,
-    614.5
-   ],
-   "maskRect": [
-    288,
-    2,
-    282,
-    622
-   ],
-   "tones": [
-    [
-     85.1,
-     59.1,
-     62.0
-    ],
-    null
-   ]
-  },
-  "armor-elara": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    741,
-    1240,
-    240,
-    613
-   ],
-   "pivot": [
-    119.25,
-    603.0
-   ],
-   "maskRect": [
-    985,
-    1240,
-    240,
-    613
-   ],
-   "tones": [
-    [
-     52.2,
-     47.9,
-     70.9
-    ],
-    [
-     98.0,
-     66.7,
-     50.0
-    ]
-   ]
-  },
-  "armor-elara-disguise": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    1697,
-    1240,
-    216,
-    613
-   ],
-   "pivot": [
-    101.25,
-    603.0
-   ],
-   "maskRect": [
-    2,
-    2,
-    216,
-    613
-   ],
-   "tones": [
-    [
-     67.9,
-     46.8,
-     38.0
-    ],
-    [
-     162.5,
-     129.8,
-     105.7
-    ]
-   ]
-  },
-  "armor-elder-coat": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    756,
-    637,
-    262,
-    625
-   ],
-   "pivot": [
-    140.62,
-    614.5
-   ],
-   "maskRect": [
-    1022,
-    637,
-    262,
-    625
-   ],
-   "tones": [
-    [
-     100.9,
-     82.5,
-     75.7
-    ],
-    [
-     153.9,
-     117.5,
-     92.7
-    ]
-   ]
-  },
-  "armor-elder-woman": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    249,
-    1240,
-    242,
-    613
-   ],
-   "pivot": [
-    124.25,
-    603.0
-   ],
-   "maskRect": [
-    495,
-    1240,
-    242,
-    613
-   ],
-   "tones": [
-    [
-     119.0,
-     85.5,
-     67.5
-    ],
-    null
-   ]
-  },
-  "armor-fencer": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    446,
-    2,
-    223,
-    610
-   ],
-   "pivot": [
-    106.25,
-    603.0
-   ],
-   "maskRect": [
-    673,
-    2,
-    223,
-    610
-   ],
-   "tones": [
-    [
-     51.7,
-     44.8,
-     55.2
-    ],
-    [
-     81.7,
-     51.9,
-     38.6
-    ]
-   ]
-  },
-  "armor-fisher": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    248,
-    1250,
-    242,
-    616
-   ],
-   "pivot": [
-    124.62,
-    614.5
-   ],
-   "maskRect": [
-    494,
-    1250,
-    242,
-    616
-   ],
-   "tones": [
-    [
-     159.9,
-     99.4,
-     36.2
-    ],
-    [
-     96.2,
-     72.1,
-     57.3
-    ]
-   ]
-  },
-  "armor-glassblower": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    1229,
-    1240,
-    230,
-    613
-   ],
-   "pivot": [
-    116.25,
-    603.0
-   ],
-   "maskRect": [
-    1463,
-    1240,
-    230,
-    613
-   ],
-   "tones": [
-    [
-     106.7,
-     71.1,
-     51.2
-    ],
-    null
-   ]
-  },
-  "armor-grell": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    1204,
-    627,
-    258,
-    616
-   ],
-   "pivot": [
-    129.62,
-    614.5
-   ],
-   "maskRect": [
-    1466,
-    627,
-    258,
-    616
-   ],
-   "tones": [
-    [
-     116.7,
-     48.2,
-     41.1
-    ],
-    [
-     69.5,
-     48.8,
-     39.0
-    ]
-   ]
-  },
-  "armor-hide": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    775,
-    628,
-    251,
-    622
-   ],
-   "pivot": [
-    126.62,
-    614.5
-   ],
-   "maskRect": [
-    1030,
-    628,
-    251,
-    622
-   ],
-   "tones": [
-    [
-     109.5,
-     77.7,
-     59.8
-    ],
-    null
-   ]
-  },
-  "armor-hide-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    1174,
-    619,
-    228,
-    611
-   ],
-   "pivot": [
-    111.25,
-    603.0
-   ],
-   "maskRect": [
-    1406,
-    619,
-    228,
-    611
-   ],
-   "tones": [
-    [
-     102.0,
-     67.3,
-     46.0
-    ],
-    null
-   ]
-  },
-  "armor-kael": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    1228,
-    1250,
-    240,
-    616
-   ],
-   "pivot": [
-    119.62,
-    614.5
-   ],
-   "maskRect": [
-    1472,
-    1250,
-    240,
-    616
-   ],
-   "tones": [
-    [
-     74.3,
-     55.4,
-     47.6
-    ],
-    [
-     106.8,
-     45.0,
-     40.8
-    ]
-   ]
-  },
-  "armor-leather": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    1546,
-    2,
-    252,
-    628
-   ],
-   "pivot": [
-    125.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    637,
-    252,
-    628
-   ],
-   "tones": [
-    [
-     81.5,
-     51.6,
-     38.6
-    ],
-    null
-   ]
-  },
-  "armor-leather-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    2,
-    2,
-    218,
-    611
-   ],
-   "pivot": [
-    103.25,
-    603.0
-   ],
-   "maskRect": [
-    224,
-    2,
-    218,
-    611
-   ],
-   "tones": [
-    [
-     88.0,
-     54.7,
-     39.0
-    ],
-    null
-   ]
-  },
-  "armor-leon": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    1288,
-    637,
-    286,
-    624
-   ],
-   "pivot": [
-    157.62,
-    614.5
-   ],
-   "maskRect": [
-    1578,
-    637,
-    286,
-    624
-   ],
-   "tones": [
-    [
-     187.3,
-     154.5,
-     127.8
-    ],
-    [
-     83.5,
-     62.1,
-     51.4
-    ]
-   ]
-  },
-  "armor-lodge-ranger": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    1482,
-    617,
-    217,
-    596
-   ],
-   "pivot": [
-    104.25,
-    603.0
-   ],
-   "maskRect": [
-    1703,
-    617,
-    217,
-    596
-   ],
-   "tones": [
-    [
-     80.1,
-     63.8,
-     42.6
-    ],
-    null
-   ]
-  },
-  "armor-mage-robes": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    574,
-    2,
-    275,
-    622
-   ],
-   "pivot": [
-    147.62,
-    614.5
-   ],
-   "maskRect": [
-    853,
-    2,
-    275,
-    622
-   ],
-   "tones": [
-    [
-     63.5,
-     74.7,
-     71.0
-    ],
-    [
-     124.6,
-     92.5,
-     61.8
-    ]
-   ]
-  },
-  "armor-mage-robes-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    2,
-    617,
-    261,
-    604
-   ],
-   "pivot": [
-    138.25,
-    603.0
-   ],
-   "maskRect": [
-    267,
-    617,
-    261,
-    604
-   ],
-   "tones": [
-    [
-     57.8,
-     70.7,
-     65.7
-    ],
-    [
-     161.0,
-     122.2,
-     87.4
-    ]
-   ]
-  },
-  "armor-maid": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    660,
-    2,
-    252,
-    612
-   ],
-   "pivot": [
-    132.25,
-    603.0
-   ],
-   "maskRect": [
-    916,
-    2,
-    252,
-    612
-   ],
-   "tones": [
-    [
-     194.1,
-     157.4,
-     127.6
-    ],
-    [
-     94.6,
-     89.8,
-     91.8
-    ]
-   ]
-  },
-  "armor-merchant": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    263,
-    628,
-    252,
-    622
-   ],
-   "pivot": [
-    132.62,
-    614.5
-   ],
-   "maskRect": [
-    519,
-    628,
-    252,
-    622
-   ],
-   "tones": [
-    [
-     64.3,
-     36.8,
-     33.7
-    ],
-    [
-     152.5,
-     116.4,
-     102.6
-    ]
-   ]
-  },
-  "armor-mira": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    1227,
-    2,
-    248,
-    614
-   ],
-   "pivot": [
-    134.25,
-    603.0
-   ],
-   "maskRect": [
-    1479,
-    2,
-    248,
-    614
-   ],
-   "tones": [
-    [
-     190.3,
-     145.7,
-     107.3
-    ],
-    [
-     91.2,
-     64.7,
-     48.9
-    ]
-   ]
-  },
-  "armor-noble": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    2,
-    2,
-    252,
-    631
-   ],
-   "pivot": [
-    130.62,
-    614.5
-   ],
-   "maskRect": [
-    258,
-    2,
-    252,
-    631
-   ],
-   "tones": [
-    [
-     134.3,
-     107.9,
-     87.9
-    ],
-    null
-   ]
-  },
-  "armor-noble-gown": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    2,
-    1225,
-    285,
-    593
-   ],
-   "pivot": [
-    144.25,
-    603.0
-   ],
-   "maskRect": [
-    291,
-    1225,
-    285,
-    593
-   ],
-   "tones": [
-    [
-     134.1,
-     79.2,
-     68.2
-    ],
-    null
-   ]
-  },
-  "armor-odelle": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    731,
-    2,
-    244,
-    615
-   ],
-   "pivot": [
-    121.25,
-    603.0
-   ],
-   "maskRect": [
-    979,
-    2,
-    244,
-    615
-   ],
-   "tones": [
-    [
-     87.7,
-     58.1,
-     47.7
-    ],
-    [
-     153.8,
-     111.8,
-     81.1
-    ]
-   ]
-  },
-  "armor-padded": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    1225,
-    1254,
-    249,
-    621
-   ],
-   "pivot": [
-    126.62,
-    614.5
-   ],
-   "maskRect": [
-    1478,
-    1254,
-    249,
-    621
-   ],
-   "tones": [
-    [
-     157.4,
-     118.3,
-     89.5
-    ],
-    [
-     78.1,
-     51.6,
-     39.0
-    ]
-   ]
-  },
-  "armor-padded-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    1590,
-    1235,
-    219,
-    611
-   ],
-   "pivot": [
-    104.25,
-    603.0
-   ],
-   "maskRect": [
-    1813,
-    1235,
-    219,
-    611
-   ],
-   "tones": [
-    [
-     127.9,
-     90.0,
-     64.7
-    ],
-    null
-   ]
-  },
-  "armor-pilgrim": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    234,
-    619,
-    233,
-    611
-   ],
-   "pivot": [
-    119.25,
-    603.0
-   ],
-   "maskRect": [
-    471,
-    619,
-    233,
-    611
-   ],
-   "tones": [
-    [
-     98.4,
-     61.0,
-     52.7
-    ],
-    null
-   ]
-  },
-  "armor-plate": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    743,
-    2,
-    255,
-    620
-   ],
-   "pivot": [
-    130.62,
-    614.5
-   ],
-   "maskRect": [
-    1002,
-    2,
-    255,
-    620
-   ],
-   "tones": [
-    [
-     127.6,
-     104.5,
-     96.0
-    ],
-    null
-   ]
-  },
-  "armor-plate-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    1640,
-    2,
-    228,
-    612
-   ],
-   "pivot": [
-    111.25,
-    603.0
-   ],
-   "maskRect": [
-    2,
-    619,
-    228,
-    612
-   ],
-   "tones": [
-    [
-     126.3,
-     101.3,
-     89.8
-    ],
-    null
-   ]
-  },
-  "armor-porter": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    1285,
-    628,
-    247,
-    622
-   ],
-   "pivot": [
-    122.62,
-    614.5
-   ],
-   "maskRect": [
-    1536,
-    628,
-    247,
-    622
-   ],
-   "tones": [
-    [
-     82.3,
-     53.0,
-     38.2
-    ],
-    [
-     159.7,
-     119.8,
-     92.0
-    ]
-   ]
-  },
-  "armor-red-gull": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    1716,
-    1250,
-    239,
-    616
-   ],
-   "pivot": [
-    121.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    2,
-    239,
-    616
-   ],
-   "tones": [
-    [
-     92.2,
-     58.8,
-     40.1
-    ],
-    [
-     138.1,
-     64.4,
-     52.3
-    ]
-   ]
-  },
-  "armor-refugee-child": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    684,
-    1235,
-    223,
-    611
-   ],
-   "pivot": [
-    111.25,
-    603.0
-   ],
-   "maskRect": [
-    911,
-    1235,
-    223,
-    611
-   ],
-   "tones": [
-    [
-     116.8,
-     84.4,
-     64.3
-    ],
-    null
-   ]
-  },
-  "armor-refugee-man": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    1132,
-    2,
-    261,
-    622
-   ],
-   "pivot": [
-    134.62,
-    614.5
-   ],
-   "maskRect": [
-    1397,
-    2,
-    261,
-    622
-   ],
-   "tones": [
-    [
-     92.0,
-     72.5,
-     63.7
-    ],
-    null
-   ]
-  },
-  "armor-refugee-woman": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    708,
-    619,
-    229,
-    611
-   ],
-   "pivot": [
-    116.25,
-    603.0
-   ],
-   "maskRect": [
-    941,
-    619,
-    229,
-    611
-   ],
-   "tones": [
-    [
-     98.5,
-     62.8,
-     45.0
-    ],
-    null
-   ]
-  },
-  "armor-road": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    1024,
-    2,
-    257,
-    628
-   ],
-   "pivot": [
-    134.62,
-    614.5
-   ],
-   "maskRect": [
-    1285,
-    2,
-    257,
-    628
-   ],
-   "tones": [
-    [
-     82.0,
-     58.7,
-     46.3
-    ],
-    null
-   ]
-  },
-  "armor-royal-guard": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    1759,
-    2,
-    248,
-    619
-   ],
-   "pivot": [
-    122.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    627,
-    248,
-    619
-   ],
-   "tones": [
-    [
-     106.8,
-     88.0,
-     80.2
-    ],
-    [
-     50.2,
-     45.1,
-     58.7
-    ]
-   ]
-  },
-  "armor-royal-livery": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    254,
-    627,
-    241,
-    619
-   ],
-   "pivot": [
-    121.62,
-    614.5
-   ],
-   "maskRect": [
-    499,
-    627,
-    241,
-    619
-   ],
-   "tones": [
-    [
-     51.2,
-     44.3,
-     54.8
-    ],
-    [
-     147.6,
-     124.7,
-     114.2
-    ]
-   ]
-  },
-  "armor-sailor": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    245,
-    2,
-    239,
-    616
-   ],
-   "pivot": [
-    121.62,
-    614.5
-   ],
-   "maskRect": [
-    488,
-    2,
-    239,
-    616
-   ],
-   "tones": [
-    [
-     124.5,
-     84.6,
-     55.5
-    ],
-    null
-   ]
-  },
-  "armor-sb-traveller": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    244,
-    622,
-    224,
-    614
-   ],
-   "pivot": [
-    112.25,
-    603.0
-   ],
-   "maskRect": [
-    472,
-    622,
-    224,
-    614
-   ],
-   "tones": [
-    [
-     105.6,
-     43.9,
-     34.4
-    ],
-    [
-     73.6,
-     49.8,
-     38.9
-    ]
-   ]
-  },
-  "armor-scale": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    1000,
-    1269,
-    244,
-    623
-   ],
-   "pivot": [
-    123.62,
-    614.5
-   ],
-   "maskRect": [
-    1248,
-    1269,
-    244,
-    623
-   ],
-   "tones": [
-    [
-     101.4,
-     75.9,
-     64.3
-    ],
-    null
-   ]
-  },
-  "armor-scale-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    1030,
-    617,
-    222,
-    604
-   ],
-   "pivot": [
-    108.25,
-    603.0
-   ],
-   "maskRect": [
-    1256,
-    617,
-    222,
-    604
-   ],
-   "tones": [
-    [
-     108.3,
-     78.9,
-     62.5
-    ],
-    null
-   ]
-  },
-  "armor-sera": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    744,
-    627,
-    226,
-    617
-   ],
-   "pivot": [
-    113.25,
-    603.0
-   ],
-   "maskRect": [
-    974,
-    627,
-    226,
-    617
-   ],
-   "tones": [
-    [
-     88.1,
-     66.2,
-     44.2
-    ],
-    null
-   ]
-  },
-  "armor-smith": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    258,
-    637,
-    245,
-    628
-   ],
-   "pivot": [
-    121.62,
-    614.5
-   ],
-   "maskRect": [
-    507,
-    637,
-    245,
-    628
-   ],
-   "tones": [
-    [
-     78.8,
-     51.9,
-     38.4
-    ],
-    [
-     171.5,
-     132.3,
-     102.6
-    ]
-   ]
-  },
-  "armor-studded": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    2,
-    1269,
-    246,
-    623
-   ],
-   "pivot": [
-    122.62,
-    614.5
-   ],
-   "maskRect": [
-    252,
-    1269,
-    246,
-    623
-   ],
-   "tones": [
-    [
-     83.0,
-     52.7,
-     39.3
-    ],
-    null
-   ]
-  },
-  "armor-studded-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    1138,
-    1235,
-    222,
-    611
-   ],
-   "pivot": [
-    106.25,
-    603.0
-   ],
-   "maskRect": [
-    1364,
-    1235,
-    222,
-    611
-   ],
-   "tones": [
-    [
-     83.2,
-     50.5,
-     34.4
-    ],
-    null
-   ]
-  },
-  "armor-tavern": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-4",
-   "rect": [
-    222,
-    2,
-    215,
-    613
-   ],
-   "pivot": [
-    99.25,
-    603.0
-   ],
-   "maskRect": [
-    441,
-    2,
-    215,
-    613
-   ],
-   "tones": [
-    [
-     91.8,
-     59.0,
-     42.4
-    ],
-    [
-     173.5,
-     129.5,
-     95.0
-    ]
-   ]
-  },
-  "armor-temple": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    1154,
-    622,
-    252,
-    613
-   ],
-   "pivot": [
-    135.25,
-    603.0
-   ],
-   "maskRect": [
-    1410,
-    622,
-    252,
-    613
-   ],
-   "tones": [
-    [
-     178.0,
-     125.3,
-     78.7
-    ],
-    [
-     100.1,
-     64.1,
-     41.8
-    ]
-   ]
-  },
-  "armor-trader": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-5",
-   "rect": [
-    1352,
-    2,
-    220,
-    605
-   ],
-   "pivot": [
-    106.25,
-    603.0
-   ],
-   "maskRect": [
-    1576,
-    2,
-    220,
-    605
-   ],
-   "tones": [
-    [
-     99.5,
-     69.4,
-     51.6
-    ],
-    null
-   ]
-  },
-  "armor-traveller": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    1731,
-    2,
-    238,
-    614
-   ],
-   "pivot": [
-    118.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    622,
-    238,
-    614
-   ],
-   "tones": [
-    [
-     90.1,
-     63.2,
-     47.9
-    ],
-    [
-     187.1,
-     156.3,
-     128.2
-    ]
-   ]
-  },
-  "armor-traveller-f": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    700,
-    622,
-    223,
-    614
-   ],
-   "pivot": [
-    112.25,
-    603.0
-   ],
-   "maskRect": [
-    927,
-    622,
-    223,
-    614
-   ],
-   "tones": [
-    [
-     90.9,
-     62.4,
-     45.9
-    ],
-    [
-     196.9,
-     161.8,
-     126.3
-    ]
-   ]
-  },
-  "armor-urchin": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-2",
-   "rect": [
-    1261,
-    2,
-    245,
-    620
-   ],
-   "pivot": [
-    124.62,
-    614.5
-   ],
-   "maskRect": [
-    1510,
-    2,
-    245,
-    620
-   ],
-   "tones": [
-    [
-     87.5,
-     60.8,
-     46.4
-    ],
-    [
-     173.3,
-     134.0,
-     103.0
-    ]
-   ]
-  },
-  "armor-villager-man": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-0",
-   "rect": [
-    502,
-    1269,
-    245,
-    623
-   ],
-   "pivot": [
-    125.62,
-    614.5
-   ],
-   "maskRect": [
-    751,
-    1269,
-    245,
-    623
-   ],
-   "tones": [
-    [
-     89.6,
-     61.9,
-     46.6
-    ],
-    null
-   ]
-  },
-  "armor-villager-woman": {
-   "slot": "armor",
-   "base": "base-female",
-   "socket": "root",
-   "page": "armor-3",
-   "rect": [
-    1666,
-    622,
-    243,
-    613
-   ],
-   "pivot": [
-    122.25,
-    603.0
-   ],
-   "maskRect": [
-    2,
-    1240,
-    243,
-    613
-   ],
-   "tones": [
-    [
-     179.4,
-     130.3,
-     89.8
-    ],
-    [
-     160.3,
-     136.2,
-     112.4
-    ]
-   ]
-  },
-  "armor-watch": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    739,
-    1254,
-    239,
-    622
-   ],
-   "pivot": [
-    122.62,
-    614.5
-   ],
-   "maskRect": [
-    982,
-    1254,
-    239,
-    622
-   ],
-   "tones": [
-    [
-     49.2,
-     46.0,
-     58.2
-    ],
-    [
-     92.8,
-     69.2,
-     57.7
-    ]
-   ]
-  },
-  "armor-watch-captain": {
-   "slot": "armor",
-   "base": "base-male",
-   "socket": "root",
-   "page": "armor-1",
-   "rect": [
-    1787,
-    628,
-    243,
-    622
-   ],
-   "pivot": [
-    125.62,
-    614.5
-   ],
-   "maskRect": [
-    2,
-    1254,
-    243,
-    622
-   ],
-   "tones": [
-    [
-     55.2,
-     50.6,
-     61.7
-    ],
-    [
-     96.9,
-     74.9,
-     63.5
-    ]
-   ]
-  },
   "base-female.body": {
    "slot": "body",
    "base": "base-female",
    "socket": "root",
-   "page": "base-0",
-   "rect": [
-    486,
-    2,
-    225,
-    605
-   ],
-   "pivot": [
-    113.25,
-    603.0
-   ],
-   "maskRect": [
-    715,
-    2,
-    225,
-    605
-   ]
-  },
-  "base-female.hand.far": {
-   "slot": "body",
-   "base": "base-female",
-   "socket": "root",
-   "page": "base-0",
-   "rect": [
-    1439,
-    2,
-    41,
-    51
-   ],
-   "pivot": [
-    -70.75,
-    354.0
-   ]
-  },
-  "base-female.hand.near": {
-   "slot": "body",
-   "base": "base-female",
-   "socket": "root",
-   "page": "base-0",
-   "rect": [
-    1334,
-    2,
-    52,
-    53
-   ],
-   "pivot": [
-    107.25,
-    354.0
-   ]
+   "pieces": {
+    "hand_near": {
+     "page": "base-0",
+     "rect": [
+      974,
+      544,
+      51,
+      69
+     ],
+     "pivot": [
+      123.88,
+      365.5
+     ],
+     "maskRect": [
+      1029,
+      544,
+      51,
+      69
+     ]
+    },
+    "arm_near_low": {
+     "page": "base-0",
+     "rect": [
+      2,
+      544,
+      52,
+      98
+     ],
+     "pivot": [
+      113.88,
+      449.5
+     ],
+     "maskRect": [
+      58,
+      544,
+      52,
+      98
+     ]
+    },
+    "arm_near_up": {
+     "page": "base-0",
+     "rect": [
+      796,
+      402,
+      72,
+      115
+     ],
+     "pivot": [
+      92.88,
+      546.5
+     ],
+     "maskRect": [
+      872,
+      402,
+      72,
+      115
+     ]
+    },
+    "chest": {
+     "page": "base-0",
+     "rect": [
+      444,
+      402,
+      131,
+      126
+     ],
+     "pivot": [
+      65.88,
+      593.5
+     ],
+     "maskRect": [
+      579,
+      402,
+      131,
+      126
+     ]
+    },
+    "spine": {
+     "page": "base-0",
+     "rect": [
+      1614,
+      402,
+      118,
+      99
+     ],
+     "pivot": [
+      52.88,
+      501.5
+     ],
+     "maskRect": [
+      1736,
+      402,
+      118,
+      99
+     ]
+    },
+    "hips": {
+     "page": "base-0",
+     "rect": [
+      2,
+      2,
+      120,
+      396
+     ],
+     "pivot": [
+      46.88,
+      434.5
+     ],
+     "maskRect": [
+      126,
+      2,
+      120,
+      396
+     ]
+    },
+    "foot_near": {
+     "page": "base-0",
+     "rect": [
+      412,
+      544,
+      53,
+      78
+     ],
+     "pivot": [
+      118.88,
+      77.5
+     ],
+     "maskRect": [
+      469,
+      544,
+      53,
+      78
+     ]
+    },
+    "leg_near_low": {
+     "page": "base-0",
+     "rect": [
+      978,
+      2,
+      73,
+      175
+     ],
+     "pivot": [
+      107.88,
+      238.5
+     ],
+     "maskRect": [
+      1055,
+      2,
+      73,
+      175
+     ]
+    },
+    "leg_near_up": {
+     "page": "base-0",
+     "rect": [
+      1132,
+      2,
+      83,
+      171
+     ],
+     "pivot": [
+      72.88,
+      389.5
+     ],
+     "maskRect": [
+      1219,
+      2,
+      83,
+      171
+     ]
+    },
+    "foot_far": {
+     "page": "base-0",
+     "rect": [
+      1084,
+      544,
+      90,
+      63
+     ],
+     "pivot": [
+      -23.12,
+      82.5
+     ],
+     "maskRect": [
+      1178,
+      544,
+      90,
+      63
+     ]
+    },
+    "leg_far_low": {
+     "page": "base-0",
+     "rect": [
+      864,
+      2,
+      53,
+      183
+     ],
+     "pivot": [
+      -6.12,
+      251.5
+     ],
+     "maskRect": [
+      921,
+      2,
+      53,
+      183
+     ]
+    },
+    "leg_far_up": {
+     "page": "base-0",
+     "rect": [
+      1306,
+      2,
+      64,
+      153
+     ],
+     "pivot": [
+      -5.12,
+      386.5
+     ],
+     "maskRect": [
+      1374,
+      2,
+      64,
+      153
+     ]
+    },
+    "hand_far": {
+     "page": "base-0",
+     "rect": [
+      1272,
+      544,
+      43,
+      63
+     ],
+     "pivot": [
+      -76.12,
+      360.5
+     ],
+     "maskRect": [
+      1319,
+      544,
+      43,
+      63
+     ]
+    },
+    "arm_far_low": {
+     "page": "base-0",
+     "rect": [
+      1392,
+      402,
+      54,
+      100
+     ],
+     "pivot": [
+      -49.12,
+      446.5
+     ],
+     "maskRect": [
+      1450,
+      402,
+      54,
+      100
+     ]
+    },
+    "arm_far_up": {
+     "page": "base-0",
+     "rect": [
+      714,
+      402,
+      37,
+      124
+     ],
+     "pivot": [
+      -30.12,
+      541.5
+     ],
+     "maskRect": [
+      755,
+      402,
+      37,
+      124
+     ]
+    }
+   }
   },
   "base-female.head": {
    "slot": "head",
@@ -2430,75 +687,313 @@
    "socket": "neck",
    "page": "base-0",
    "rect": [
-    1106,
-    2,
-    76,
-    88
+    114,
+    544,
+    80,
+    94
    ],
    "pivot": [
-    38.0,
-    75.25
+    41.75,
+    83.5
    ],
    "maskRect": [
-    1186,
-    2,
-    76,
-    88
+    198,
+    544,
+    80,
+    94
    ]
   },
   "base-male.body": {
    "slot": "body",
    "base": "base-male",
    "socket": "root",
-   "page": "base-0",
-   "rect": [
-    2,
-    2,
-    238,
-    616
-   ],
-   "pivot": [
-    121.62,
-    614.5
-   ],
-   "maskRect": [
-    244,
-    2,
-    238,
-    616
-   ]
-  },
-  "base-male.hand.far": {
-   "slot": "body",
-   "base": "base-male",
-   "socket": "root",
-   "page": "base-0",
-   "rect": [
-    1390,
-    2,
-    45,
-    52
-   ],
-   "pivot": [
-    -71.38,
-    354.5
-   ]
-  },
-  "base-male.hand.near": {
-   "slot": "body",
-   "base": "base-male",
-   "socket": "root",
-   "page": "base-0",
-   "rect": [
-    1266,
-    2,
-    64,
-    54
-   ],
-   "pivot": [
-    121.62,
-    354.5
-   ]
+   "pieces": {
+    "hand_near": {
+     "page": "base-0",
+     "rect": [
+      526,
+      544,
+      61,
+      72
+     ],
+     "pivot": [
+      129.25,
+      370.5
+     ],
+     "maskRect": [
+      591,
+      544,
+      61,
+      72
+     ]
+    },
+    "arm_near_low": {
+     "page": "base-0",
+     "rect": [
+      1508,
+      402,
+      49,
+      100
+     ],
+     "pivot": [
+      127.25,
+      455.5
+     ],
+     "maskRect": [
+      1561,
+      402,
+      49,
+      100
+     ]
+    },
+    "arm_near_up": {
+     "page": "base-0",
+     "rect": [
+      162,
+      402,
+      88,
+      138
+     ],
+     "pivot": [
+      120.25,
+      569.5
+     ],
+     "maskRect": [
+      254,
+      402,
+      88,
+      138
+     ]
+    },
+    "chest": {
+     "page": "base-0",
+     "rect": [
+      1764,
+      2,
+      156,
+      138
+     ],
+     "pivot": [
+      80.25,
+      609.5
+     ],
+     "maskRect": [
+      2,
+      402,
+      156,
+      138
+     ]
+    },
+    "spine": {
+     "page": "base-0",
+     "rect": [
+      1076,
+      402,
+      154,
+      100
+     ],
+     "pivot": [
+      79.25,
+      506.5
+     ],
+     "maskRect": [
+      1234,
+      402,
+      154,
+      100
+     ]
+    },
+    "hips": {
+     "page": "base-0",
+     "rect": [
+      250,
+      2,
+      144,
+      383
+     ],
+     "pivot": [
+      55.25,
+      438.5
+     ],
+     "maskRect": [
+      398,
+      2,
+      144,
+      383
+     ]
+    },
+    "foot_near": {
+     "page": "base-0",
+     "rect": [
+      282,
+      544,
+      61,
+      82
+     ],
+     "pivot": [
+      126.25,
+      81.5
+     ],
+     "maskRect": [
+      347,
+      544,
+      61,
+      82
+     ]
+    },
+    "leg_near_low": {
+     "page": "base-0",
+     "rect": [
+      546,
+      2,
+      88,
+      199
+     ],
+     "pivot": [
+      117.25,
+      262.5
+     ],
+     "maskRect": [
+      638,
+      2,
+      88,
+      199
+     ]
+    },
+    "leg_near_up": {
+     "page": "base-0",
+     "rect": [
+      1442,
+      2,
+      81,
+      152
+     ],
+     "pivot": [
+      72.25,
+      388.5
+     ],
+     "maskRect": [
+      1527,
+      2,
+      81,
+      152
+     ]
+    },
+    "foot_far": {
+     "page": "base-0",
+     "rect": [
+      760,
+      544,
+      103,
+      69
+     ],
+     "pivot": [
+      -15.75,
+      89.5
+     ],
+     "maskRect": [
+      867,
+      544,
+      103,
+      69
+     ]
+    },
+    "leg_far_low": {
+     "page": "base-0",
+     "rect": [
+      730,
+      2,
+      63,
+      185
+     ],
+     "pivot": [
+      -2.75,
+      259.5
+     ],
+     "maskRect": [
+      797,
+      2,
+      63,
+      185
+     ]
+    },
+    "leg_far_up": {
+     "page": "base-0",
+     "rect": [
+      1612,
+      2,
+      72,
+      143
+     ],
+     "pivot": [
+      -4.75,
+      383.5
+     ],
+     "maskRect": [
+      1688,
+      2,
+      72,
+      143
+     ]
+    },
+    "hand_far": {
+     "page": "base-0",
+     "rect": [
+      656,
+      544,
+      48,
+      71
+     ],
+     "pivot": [
+      -80.75,
+      373.5
+     ],
+     "maskRect": [
+      708,
+      544,
+      48,
+      71
+     ]
+    },
+    "arm_far_low": {
+     "page": "base-0",
+     "rect": [
+      948,
+      402,
+      60,
+      103
+     ],
+     "pivot": [
+      -51.75,
+      456.5
+     ],
+     "maskRect": [
+      1012,
+      402,
+      60,
+      103
+     ]
+    },
+    "arm_far_up": {
+     "page": "base-0",
+     "rect": [
+      346,
+      402,
+      45,
+      136
+     ],
+     "pivot": [
+      -37.75,
+      556.5
+     ],
+     "maskRect": [
+      395,
+      402,
+      45,
+      136
+     ]
+    }
+   }
   },
   "base-male.head": {
    "slot": "head",
@@ -2506,5372 +1001,1026 @@
    "socket": "neck",
    "page": "base-0",
    "rect": [
-    944,
-    2,
-    77,
-    89
+    1858,
+    402,
+    82,
+    98
    ],
    "pivot": [
-    42.25,
-    78.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    1025,
-    2,
-    77,
-    89
+    1944,
+    402,
+    82,
+    98
    ]
   },
-  "face-anselle": {
+  "face-f01": {
    "slot": "face",
    "base": "base-female",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    983,
-    413,
-    83,
-    87
-   ],
-   "pivot": [
-    39.0,
-    74.25
-   ],
-   "maskRect": [
-    1070,
-    413,
-    83,
-    87
-   ],
-   "skin": [
-    1.023,
-    0.988,
-    1.063
-   ],
-   "tones": [
-    [
-     174.3,
-     146.9,
-     128.8
-    ],
-    null
-   ]
-  },
-  "face-anvil-barkeep": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1934,
-    505,
-    89,
-    78
-   ],
-   "pivot": [
-    39.0,
-    64.25
-   ],
-   "maskRect": [
-    2,
-    594,
-    89,
-    78
-   ],
-   "skin": [
-    0.927,
-    0.803,
-    0.738
-   ],
-   "tones": [
-    [
-     35.7,
-     25.7,
-     22.4
-    ],
-    [
-     182.7,
-     156.9,
-     136.7
-    ]
-   ]
-  },
-  "face-brannock": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    176,
-    2,
-    84,
-    119
-   ],
-   "pivot": [
-    43.25,
-    80.75
-   ],
-   "maskRect": [
-    264,
-    2,
-    84,
-    119
-   ],
-   "skin": [
-    0.958,
-    0.892,
-    0.824
-   ],
-   "tones": [
-    [
-     122.6,
-     64.7,
-     37.8
-    ],
-    null
-   ]
-  },
-  "face-brenna": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1015,
-    594,
-    86,
-    75
-   ],
-   "pivot": [
-    35.0,
-    61.25
-   ],
-   "maskRect": [
-    1105,
-    594,
-    86,
-    75
-   ],
-   "skin": [
-    0.972,
-    0.879,
-    0.843
-   ],
-   "tones": [
-    [
-     62.6,
-     39.4,
-     30.4
-    ],
-    [
-     125.0,
-     102.5,
-     88.5
-    ]
-   ]
-  },
-  "face-brisk": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1580,
-    505,
-    78,
-    80
-   ],
-   "pivot": [
-    43.25,
-    67.75
-   ],
-   "maskRect": [
-    1662,
-    505,
-    78,
-    80
-   ],
-   "skin": [
-    0.87,
-    0.79,
-    0.748
-   ],
-   "tones": [
-    null,
-    null
-   ]
-  },
-  "face-corra": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    623,
-    413,
-    86,
-    87
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    713,
-    413,
-    86,
-    87
-   ],
-   "skin": [
-    0.977,
-    0.881,
-    0.833
-   ],
-   "tones": [
-    [
-     77.7,
-     52.6,
-     41.0
-    ],
-    [
-     118.9,
-     102.6,
-     90.3
-    ]
-   ]
-  },
-  "face-crane": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1869,
-    413,
-    77,
-    86
-   ],
-   "pivot": [
-    43.25,
-    75.75
-   ],
-   "maskRect": [
-    1950,
-    413,
-    77,
-    86
-   ],
-   "skin": [
-    1.084,
-    1.218,
-    1.35
-   ],
-   "tones": [
-    null,
-    [
-     102.2,
-     92.8,
-     91.2
-    ]
-   ]
-  },
-  "face-elara": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    290,
-    320,
-    92,
-    88
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    386,
-    320,
-    92,
-    88
-   ],
-   "skin": [
-    1.051,
-    1.044,
-    1.131
-   ],
-   "tones": [
-    [
-     38.4,
-     28.0,
-     25.4
-    ],
-    [
-     121.5,
-     108.8,
-     102.8
-    ]
-   ]
-  },
-  "face-fennick": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1418,
+    1722,
     2,
     80,
-    96
+    94
    ],
    "pivot": [
-    43.25,
-    80.75
+    41.75,
+    83.5
    ],
    "maskRect": [
-    1502,
+    1806,
     2,
     80,
-    96
+    94
    ],
    "skin": [
-    1.06,
-    1.089,
-    1.222
+    1.0,
+    0.975,
+    0.952
    ],
    "tones": [
     [
-     134.8,
-     116.4,
-     101.9
+     48.0,
+     24.9,
+     11.7
     ],
-    null
+    [
+     82.6,
+     44.4,
+     18.5
+    ]
    ]
   },
-  "face-gannet": {
+  "face-f02": {
    "slot": "face",
    "base": "base-female",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    485,
-    131,
-    85,
-    91
+    1890,
+    2,
+    80,
+    94
    ],
    "pivot": [
-    39.0,
-    76.25
+    41.75,
+    83.5
    ],
    "maskRect": [
-    574,
-    131,
-    85,
-    91
+    2,
+    104,
+    80,
+    94
    ],
    "skin": [
-    1.009,
-    0.936,
-    0.936
+    1.0,
+    0.975,
+    0.952
+   ],
+   "tones": [
+    [
+     47.2,
+     25.8,
+     12.1
+    ],
+    [
+     90.5,
+     48.1,
+     19.3
+    ]
+   ]
+  },
+  "face-f03": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    86,
+    104,
+    80,
+    94
+   ],
+   "pivot": [
+    41.75,
+    83.5
+   ],
+   "maskRect": [
+    170,
+    104,
+    80,
+    94
+   ],
+   "skin": [
+    1.0,
+    0.975,
+    0.952
+   ],
+   "tones": [
+    [
+     54.2,
+     28.8,
+     14.1
+    ],
+    [
+     94.7,
+     51.5,
+     22.0
+    ]
+   ]
+  },
+  "face-f04": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    254,
+    104,
+    80,
+    94
+   ],
+   "pivot": [
+    41.75,
+    83.5
+   ],
+   "maskRect": [
+    338,
+    104,
+    80,
+    94
+   ],
+   "skin": [
+    1.0,
+    0.975,
+    0.952
+   ],
+   "tones": [
+    [
+     47.6,
+     25.2,
+     12.1
+    ],
+    [
+     94.9,
+     52.3,
+     23.6
+    ]
+   ]
+  },
+  "face-f05": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    422,
+    104,
+    80,
+    94
+   ],
+   "pivot": [
+    41.75,
+    83.5
+   ],
+   "maskRect": [
+    506,
+    104,
+    80,
+    94
+   ],
+   "skin": [
+    1.0,
+    0.975,
+    0.943
+   ],
+   "tones": [
+    [
+     53.8,
+     29.0,
+     13.8
+    ],
+    [
+     95.2,
+     53.1,
+     23.9
+    ]
+   ]
+  },
+  "face-f06": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    590,
+    104,
+    80,
+    94
+   ],
+   "pivot": [
+    41.75,
+    83.5
+   ],
+   "maskRect": [
+    674,
+    104,
+    80,
+    94
+   ],
+   "skin": [
+    1.0,
+    0.975,
+    0.952
+   ],
+   "tones": [
+    [
+     50.5,
+     26.9,
+     12.4
+    ],
+    [
+     95.4,
+     52.0,
+     23.0
+    ]
+   ]
+  },
+  "face-f07": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    758,
+    104,
+    80,
+    94
+   ],
+   "pivot": [
+    41.75,
+    83.5
+   ],
+   "maskRect": [
+    842,
+    104,
+    80,
+    94
+   ],
+   "skin": [
+    1.0,
+    0.975,
+    0.952
+   ],
+   "tones": [
+    [
+     54.2,
+     29.1,
+     13.6
+    ],
+    [
+     94.6,
+     52.1,
+     23.5
+    ]
+   ]
+  },
+  "face-f08": {
+   "slot": "face",
+   "base": "base-female",
+   "socket": "neck",
+   "page": "face-0",
+   "rect": [
+    926,
+    104,
+    80,
+    94
+   ],
+   "pivot": [
+    41.75,
+    83.5
+   ],
+   "maskRect": [
+    1010,
+    104,
+    80,
+    94
+   ],
+   "skin": [
+    0.996,
+    0.975,
+    0.952
    ],
    "tones": [
     null,
     null
    ]
   },
-  "face-grell": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    352,
-    2,
-    85,
-    114
-   ],
-   "pivot": [
-    42.25,
-    76.75
-   ],
-   "maskRect": [
-    441,
-    2,
-    85,
-    114
-   ],
-   "skin": [
-    0.963,
-    0.911,
-    0.897
-   ],
-   "tones": [
-    [
-     138.1,
-     72.5,
-     33.2
-    ],
-    [
-     110.6,
-     96.7,
-     86.6
-    ]
-   ]
-  },
-  "face-guild-apprentice": {
+  "face-f09": {
    "slot": "face",
    "base": "base-female",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    1027,
-    131,
-    92,
-    90
+    1094,
+    104,
+    80,
+    94
    ],
    "pivot": [
-    39.0,
-    76.25
+    41.75,
+    83.5
    ],
    "maskRect": [
-    1123,
-    131,
-    92,
-    90
+    1178,
+    104,
+    80,
+    94
    ],
    "skin": [
-    0.995,
-    1.03,
-    1.222
+    0.996,
+    0.975,
+    0.952
    ],
    "tones": [
     [
-     143.0,
-     101.8,
-     74.5
+     66.3,
+     36.2,
+     17.7
     ],
     [
-     61.6,
-     57.6,
+     117.2,
+     68.7,
      36.1
     ]
    ]
   },
-  "face-hale": {
+  "face-f10": {
    "slot": "face",
-   "base": "base-male",
+   "base": "base-female",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    1248,
-    505,
+    1262,
+    104,
     80,
-    81
-   ],
-   "pivot": [
-    43.25,
-    69.75
-   ],
-   "maskRect": [
-    1332,
-    505,
-    80,
-    81
-   ],
-   "skin": [
-    1.028,
-    1.056,
-    1.131
-   ],
-   "tones": [
-    [
-     133.4,
-     116.9,
-     105.9
-    ],
-    null
-   ]
-  },
-  "face-hedda": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    2,
-    505,
-    94,
-    85
-   ],
-   "pivot": [
-    39.0,
-    71.25
-   ],
-   "maskRect": [
-    100,
-    505,
-    94,
-    85
-   ],
-   "skin": [
-    0.953,
-    0.83,
-    0.776
-   ],
-   "tones": [
-    [
-     85.6,
-     52.9,
-     35.9
-    ],
-    null
-   ]
-  },
-  "face-hesper": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1414,
-    320,
-    84,
-    88
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    1502,
-    320,
-    84,
-    88
-   ],
-   "skin": [
-    0.691,
-    0.564,
-    0.518
-   ],
-   "tones": [
-    [
-     151.6,
-     126.8,
-     110.3
-    ],
-    [
-     194.5,
-     163.9,
-     139.5
-    ]
-   ]
-  },
-  "face-hester": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1949,
-    131,
-    81,
-    90
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    2,
-    226,
-    81,
-    90
-   ],
-   "skin": [
-    1.023,
-    1.02,
-    1.111
-   ],
-   "tones": [
-    null,
-    [
-     107.9,
-     101.5,
-     98.7
-    ]
-   ]
-  },
-  "face-hollowmere-farmer": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1050,
-    320,
-    87,
-    88
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    1141,
-    320,
-    87,
-    88
-   ],
-   "skin": [
-    0.944,
-    0.938,
-    1.084
-   ],
-   "tones": [
-    [
-     72.5,
-     50.7,
-     41.3
-    ],
-    null
-   ]
-  },
-  "face-ide": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1317,
-    413,
-    92,
-    86
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    1413,
-    413,
-    92,
-    86
-   ],
-   "skin": [
-    0.995,
-    1.075,
-    1.35
-   ],
-   "tones": [
-    [
-     36.9,
-     25.5,
-     22.6
-    ],
-    null
-   ]
-  },
-  "face-ilsa": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1232,
-    320,
-    87,
-    88
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    1323,
-    320,
-    87,
-    88
-   ],
-   "skin": [
-    1.0,
-    0.887,
-    0.837
-   ],
-   "tones": [
-    null,
-    [
-     111.7,
-     109.3,
-     70.9
-    ]
-   ]
-  },
-  "face-imra-vell": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    83,
-    413,
-    74,
-    88
-   ],
-   "pivot": [
-    38.0,
-    75.25
-   ],
-   "maskRect": [
-    161,
-    413,
-    74,
-    88
-   ],
-   "skin": [
-    0.713,
-    0.584,
-    0.533
-   ],
-   "tones": [
-    null,
-    null
-   ]
-  },
-  "face-isadora": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    803,
-    413,
-    86,
-    87
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    893,
-    413,
-    86,
-    87
-   ],
-   "skin": [
-    1.028,
-    1.019,
-    1.13
-   ],
-   "tones": [
-    [
-     56.9,
-     36.7,
-     29.7
-    ],
-    null
-   ]
-  },
-  "face-kael": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1195,
-    594,
-    86,
-    75
-   ],
-   "pivot": [
-    43.25,
-    64.75
-   ],
-   "maskRect": [
-    1285,
-    594,
-    86,
-    75
-   ],
-   "skin": [
-    0.972,
-    0.911,
-    0.85
-   ],
-   "tones": [
-    [
-     60.2,
-     45.8,
-     38.5
-    ],
-    [
-     191.3,
-     128.3,
-     63.0
-    ]
-   ]
-  },
-  "face-lark": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    698,
-    2,
-    91,
-    105
-   ],
-   "pivot": [
-    43.25,
-    65.75
-   ],
-   "maskRect": [
-    793,
-    2,
-    91,
-    105
-   ],
-   "skin": [
-    1.106,
-    1.203,
-    1.35
-   ],
-   "tones": [
-    [
-     159.2,
-     92.4,
-     91.1
-    ],
-    [
-     109.4,
-     75.3,
-     80.0
-    ]
-   ]
-  },
-  "face-leon": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1242,
-    2,
-    84,
-    96
-   ],
-   "pivot": [
-    43.25,
-    73.75
-   ],
-   "maskRect": [
-    1330,
-    2,
-    84,
-    96
-   ],
-   "skin": [
-    0.981,
-    0.936,
-    0.99
-   ],
-   "tones": [
-    [
-     163.6,
-     145.9,
-     135.1
-    ],
-    null
-   ]
-  },
-  "face-lookout": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1693,
-    413,
-    84,
-    86
-   ],
-   "pivot": [
-    43.25,
-    72.75
-   ],
-   "maskRect": [
-    1781,
-    413,
-    84,
-    86
-   ],
-   "skin": [
-    0.815,
-    0.709,
-    0.607
-   ],
-   "tones": [
-    [
-     61.1,
-     41.1,
-     30.8
-    ],
-    null
-   ]
-  },
-  "face-mags": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1219,
-    131,
-    88,
-    90
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    1311,
-    131,
-    88,
-    90
-   ],
-   "skin": [
-    0.954,
-    0.839,
-    0.798
-   ],
-   "tones": [
-    [
-     87.6,
-     62.5,
-     50.9
-    ],
-    null
-   ]
-  },
-  "face-maren-elder": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1575,
-    226,
-    84,
-    89
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    1663,
-    226,
-    84,
-    89
-   ],
-   "skin": [
-    1.009,
-    1.074,
-    1.324
-   ],
-   "tones": [
-    [
-     168.4,
-     142.9,
-     129.5
-    ],
-    null
-   ]
-  },
-  "face-maud": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1751,
-    226,
-    84,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    1839,
-    226,
-    84,
-    89
-   ],
-   "skin": [
-    1.009,
-    0.975,
-    1.01
-   ],
-   "tones": [
-    [
-     147.2,
-     122.3,
-     106.4
-    ],
-    [
-     115.5,
-     102.7,
-     94.7
-    ]
-   ]
-  },
-  "face-mc-child": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1586,
-    2,
-    85,
     94
    ],
    "pivot": [
-    43.25,
-    80.75
+    41.75,
+    83.5
    ],
    "maskRect": [
-    1675,
-    2,
-    85,
-    94
-   ],
-   "skin": [
-    1.01,
-    0.981,
-    0.972
-   ],
-   "tones": [
-    [
-     98.7,
-     57.4,
-     32.1
-    ],
-    [
-     113.4,
-     88.9,
-     71.4
-    ]
-   ]
-  },
-  "face-mira": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    433,
-    413,
-    91,
-    87
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    528,
-    413,
-    91,
-    87
-   ],
-   "skin": [
-    1.009,
-    0.963,
-    0.982
-   ],
-   "tones": [
-    [
-     108.8,
-     50.4,
-     29.5
-    ],
-    [
-     109.3,
-     91.4,
-     79.6
-    ]
-   ]
-  },
-  "face-mira-young": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1023,
-    226,
-    89,
-    89
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    1116,
-    226,
-    89,
-    89
-   ],
-   "skin": [
-    1.037,
-    0.955,
-    0.944
-   ],
-   "tones": [
-    [
-     126.8,
-     57.7,
-     32.6
-    ],
-    [
-     180.6,
-     148.6,
-     126.8
-    ]
-   ]
-  },
-  "face-netty": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    864,
-    320,
-    89,
-    88
-   ],
-   "pivot": [
-    39.0,
-    74.25
-   ],
-   "maskRect": [
-    957,
-    320,
-    89,
-    88
-   ],
-   "skin": [
-    0.977,
-    0.883,
-    0.85
-   ],
-   "tones": [
-    [
-     144.3,
-     117.3,
-     97.5
-    ],
-    null
-   ]
-  },
-  "face-odelle": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    835,
-    226,
-    90,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    929,
-    226,
-    90,
-    89
-   ],
-   "skin": [
-    0.716,
-    0.571,
-    0.514
-   ],
-   "tones": [
-    [
-     30.9,
-     22.5,
-     20.1
-    ],
-    null
-   ]
-  },
-  "face-orla": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1395,
-    226,
-    86,
-    89
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    1485,
-    226,
-    86,
-    89
-   ],
-   "skin": [
-    0.977,
-    0.856,
-    0.824
-   ],
-   "tones": [
-    [
-     154.8,
-     115.2,
-     85.8
-    ],
-    [
-     104.5,
-     106.5,
-     107.7
-    ]
-   ]
-  },
-  "face-osric": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1416,
-    505,
-    78,
-    81
-   ],
-   "pivot": [
-    43.25,
-    70.75
-   ],
-   "maskRect": [
-    1498,
-    505,
-    78,
-    81
-   ],
-   "skin": [
-    1.07,
-    1.116,
-    1.259
-   ],
-   "tones": [
-    null,
-    null
-   ]
-  },
-  "face-oswin": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    663,
-    131,
-    79,
-    91
-   ],
-   "pivot": [
-    43.25,
-    80.75
-   ],
-   "maskRect": [
-    746,
-    131,
-    79,
-    91
-   ],
-   "skin": [
-    1.065,
-    1.082,
-    1.157
-   ],
-   "tones": [
-    null,
-    [
-     93.1,
-     106.4,
-     123.4
-    ]
-   ]
-  },
-  "face-pip": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1744,
-    505,
-    91,
-    79
-   ],
-   "pivot": [
-    42.25,
-    68.75
-   ],
-   "maskRect": [
-    1839,
-    505,
-    91,
-    79
-   ],
-   "skin": [
-    1.065,
-    1.076,
-    1.204
-   ],
-   "tones": [
-    [
-     118.8,
-     54.4,
-     27.4
-    ],
-    [
-     100.7,
-     46.4,
-     26.4
-    ]
-   ]
-  },
-  "face-player-1": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1058,
-    505,
-    91,
-    81
-   ],
-   "pivot": [
-    43.25,
-    70.75
-   ],
-   "maskRect": [
-    1153,
-    505,
-    91,
-    81
-   ],
-   "skin": [
-    0.991,
-    0.962,
-    0.944
-   ],
-   "tones": [
-    [
-     90.4,
-     52.2,
-     31.2
-    ],
-    [
-     107.3,
-     87.9,
-     72.6
-    ]
-   ]
-  },
-  "face-player-2": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    674,
-    320,
-    91,
-    88
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    769,
-    320,
-    91,
-    88
-   ],
-   "skin": [
-    0.995,
-    0.925,
-    0.908
-   ],
-   "tones": [
-    [
-     63.9,
-     37.1,
-     24.8
-    ],
-    [
-     101.0,
-     79.4,
-     67.8
-    ]
-   ]
-  },
-  "face-player-3": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1375,
-    594,
-    91,
-    74
-   ],
-   "pivot": [
-    38.0,
-    61.25
-   ],
-   "maskRect": [
-    1470,
-    594,
-    91,
-    74
-   ],
-   "skin": [
-    0.991,
-    0.918,
-    0.911
-   ],
-   "tones": [
-    [
-     34.8,
-     24.9,
-     22.6
-    ],
-    [
-     98.4,
-     78.9,
-     67.2
-    ]
-   ]
-  },
-  "face-player-4": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    247,
-    226,
-    98,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    349,
-    226,
-    98,
-    89
-   ],
-   "skin": [
-    0.884,
-    0.756,
-    0.75
-   ],
-   "tones": [
-    [
-     43.9,
-     26.7,
-     19.4
-    ],
-    [
-     155.8,
-     132.9,
-     114.7
-    ]
-   ]
-  },
-  "face-player-5": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1927,
-    226,
-    84,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    2,
-    320,
-    84,
-    89
-   ],
-   "skin": [
-    1.041,
-    1.07,
-    1.202
-   ],
-   "tones": [
-    [
-     152.4,
-     125.1,
-     104.1
-    ],
-    [
-     82.0,
-     69.5,
-     64.2
-    ]
-   ]
-  },
-  "face-player-6": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    95,
-    594,
-    94,
-    77
-   ],
-   "pivot": [
-    43.25,
-    66.75
-   ],
-   "maskRect": [
-    193,
-    594,
-    94,
-    77
-   ],
-   "skin": [
-    0.972,
-    0.918,
-    0.861
-   ],
-   "tones": [
-    null,
-    [
-     175.4,
-     126.3,
-     69.9
-    ]
-   ]
-  },
-  "face-player-7": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    631,
-    594,
-    96,
-    75
-   ],
-   "pivot": [
-    39.0,
-    60.25
-   ],
-   "maskRect": [
-    731,
-    594,
-    96,
-    75
-   ],
-   "skin": [
-    0.912,
-    0.811,
-    0.778
-   ],
-   "tones": [
-    [
-     77.4,
-     56.0,
-     47.0
-    ],
-    [
-     167.9,
-     142.3,
-     86.9
-    ]
-   ]
-  },
-  "face-player-8": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    530,
-    2,
+    1346,
+    104,
     80,
-    113
-   ],
-   "pivot": [
-    43.25,
-    77.75
-   ],
-   "maskRect": [
-    614,
-    2,
-    80,
-    113
-   ],
-   "skin": [
-    0.968,
-    0.905,
-    0.835
-   ],
-   "tones": [
-    [
-     132.7,
-     64.5,
-     31.3
-    ],
-    [
-     111.8,
-     97.4,
-     85.6
-    ]
-   ]
-  },
-  "face-red-gull": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1764,
-    320,
-    79,
-    88
-   ],
-   "pivot": [
-    43.25,
-    76.75
-   ],
-   "maskRect": [
-    1847,
-    320,
-    79,
-    88
-   ],
-   "skin": [
-    0.791,
-    0.699,
-    0.673
-   ],
-   "tones": [
-    [
-     59.6,
-     40.0,
-     29.1
-    ],
-    [
-     150.1,
-     136.5,
-     128.4
-    ]
-   ]
-  },
-  "face-red-gull-2": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    888,
-    2,
-    84,
-    99
-   ],
-   "pivot": [
-    43.25,
-    78.75
-   ],
-   "maskRect": [
-    976,
-    2,
-    84,
-    99
-   ],
-   "skin": [
-    1.028,
-    1.02,
-    1.075
-   ],
-   "tones": [
-    [
-     155.4,
-     87.4,
-     40.8
-    ],
-    [
-     105.2,
-     96.7,
-     90.7
-    ]
-   ]
-  },
-  "face-red-gull-3": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    894,
-    505,
-    78,
-    82
-   ],
-   "pivot": [
-    43.25,
-    70.75
-   ],
-   "maskRect": [
-    976,
-    505,
-    78,
-    82
-   ],
-   "skin": [
-    0.944,
-    0.881,
-    0.852
-   ],
-   "tones": [
-    null,
-    [
-     121.7,
-     106.8,
-     95.8
-    ]
-   ]
-  },
-  "face-refugee-1": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    2,
-    2,
-    83,
-    125
-   ],
-   "pivot": [
-    43.25,
-    76.75
-   ],
-   "maskRect": [
-    89,
-    2,
-    83,
-    125
-   ],
-   "skin": [
-    0.962,
-    0.937,
-    0.936
-   ],
-   "tones": [
-    [
-     177.0,
-     154.8,
-     134.5
-    ],
-    [
-     120.4,
-     110.0,
-     102.3
-    ]
-   ]
-  },
-  "face-refugee-2": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1565,
-    594,
-    87,
-    74
-   ],
-   "pivot": [
-    42.25,
-    63.75
-   ],
-   "maskRect": [
-    1656,
-    594,
-    87,
-    74
-   ],
-   "skin": [
-    0.912,
-    0.851,
-    0.858
-   ],
-   "tones": [
-    [
-     27.9,
-     19.9,
-     17.8
-    ],
-    null
-   ]
-  },
-  "face-refugee-3": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    829,
-    131,
-    95,
-    90
-   ],
-   "pivot": [
-    39.0,
-    75.25
-   ],
-   "maskRect": [
-    928,
-    131,
-    95,
-    90
-   ],
-   "skin": [
-    0.912,
-    0.779,
-    0.712
-   ],
-   "tones": [
-    [
-     100.1,
-     45.0,
-     27.2
-    ],
-    [
-     204.1,
-     169.8,
-     145.2
-    ]
-   ]
-  },
-  "face-refugee-child": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1403,
-    131,
-    88,
-    90
-   ],
-   "pivot": [
-    38.0,
-    76.25
-   ],
-   "maskRect": [
-    1495,
-    131,
-    88,
-    90
-   ],
-   "skin": [
-    0.94,
-    0.815,
-    0.766
-   ],
-   "tones": [
-    [
-     75.2,
-     41.3,
-     27.3
-    ],
-    [
-     127.1,
-     99.9,
-     83.7
-    ]
-   ]
-  },
-  "face-sb-child": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    239,
-    413,
-    93,
-    87
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    336,
-    413,
-    93,
-    87
-   ],
-   "skin": [
-    0.986,
-    0.911,
-    0.936
-   ],
-   "tones": [
-    [
-     42.7,
-     29.6,
-     24.7
-    ],
-    [
-     100.5,
-     82.4,
-     72.2
-    ]
-   ]
-  },
-  "face-sera": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1209,
-    226,
-    89,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    1302,
-    226,
-    89,
-    89
-   ],
-   "skin": [
-    1.023,
-    1.019,
-    1.103
-   ],
-   "tones": [
-    [
-     168.4,
-     116.9,
-     69.6
-    ],
-    [
-     105.4,
-     103.1,
-     67.8
-    ]
-   ]
-  },
-  "face-tamsin": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    388,
-    505,
-    87,
-    84
-   ],
-   "pivot": [
-    39.0,
-    72.25
-   ],
-   "maskRect": [
-    479,
-    505,
-    87,
-    84
-   ],
-   "skin": [
-    0.981,
-    0.863,
-    0.815
-   ],
-   "tones": [
-    [
-     87.3,
-     41.5,
-     24.7
-    ],
-    [
-     202.0,
-     162.7,
-     120.3
-    ]
-   ]
-  },
-  "face-thessaly": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1157,
-    413,
-    76,
-    87
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    1237,
-    413,
-    76,
-    87
-   ],
-   "skin": [
-    1.023,
-    0.993,
-    1.064
-   ],
-   "tones": [
-    null,
-    [
-     98.8,
-     81.9,
-     75.3
-    ]
-   ]
-  },
-  "face-tomas": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1764,
-    2,
-    81,
-    94
-   ],
-   "pivot": [
-    43.25,
-    79.75
-   ],
-   "maskRect": [
-    1849,
-    2,
-    81,
     94
    ],
    "skin": [
-    0.902,
-    0.843,
-    0.827
+    0.996,
+    0.969,
+    0.943
    ],
    "tones": [
     [
-     173.5,
-     148.7,
-     126.4
+     67.5,
+     38.4,
+     20.5
     ],
-    null
+    [
+     94.6,
+     52.3,
+     23.0
+    ]
    ]
   },
-  "face-town-1": {
+  "face-m01": {
    "slot": "face",
    "base": "base-male",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    103,
-    131,
-    94,
-    91
+    2,
+    2,
+    82,
+    98
    ],
    "pivot": [
-    43.25,
-    80.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    201,
-    131,
-    94,
-    91
+    88,
+    2,
+    82,
+    98
    ],
    "skin": [
-    1.042,
-    1.038,
-    1.102
+    1.017,
+    0.969,
+    0.933
    ],
    "tones": [
     [
-     172.0,
-     125.5,
-     75.2
+     34.9,
+     13.0,
+     5.6
     ],
     [
-     114.0,
-     112.4,
-     117.5
+     54.1,
+     19.3,
+     7.5
     ]
    ]
   },
-  "face-town-10": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    482,
-    320,
-    92,
-    88
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    578,
-    320,
-    92,
-    88
-   ],
-   "skin": [
-    1.032,
-    0.945,
-    0.938
-   ],
-   "tones": [
-    [
-     116.0,
-     49.9,
-     31.0
-    ],
-    [
-     102.3,
-     98.6,
-     99.1
-    ]
-   ]
-  },
-  "face-town-11": {
+  "face-m02": {
    "slot": "face",
    "base": "base-male",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    728,
-    505,
-    79,
-    83
+    174,
+    2,
+    82,
+    98
    ],
    "pivot": [
-    42.25,
-    68.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    811,
-    505,
-    79,
-    83
+    260,
+    2,
+    82,
+    98
    ],
    "skin": [
-    0.991,
-    0.949,
-    0.935
+    1.013,
+    0.969,
+    0.932
    ],
    "tones": [
     [
-     46.0,
      39.2,
-     36.4
-    ],
-    null
-   ]
-  },
-  "face-town-12": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    87,
-    226,
-    76,
-    90
-   ],
-   "pivot": [
-    43.25,
-    76.75
-   ],
-   "maskRect": [
-    167,
-    226,
-    76,
-    90
-   ],
-   "skin": [
-    0.949,
-    0.838,
-    0.785
-   ],
-   "tones": [
-    [
-     75.6,
-     63.2,
-     56.5
+     15.3,
+     6.1
     ],
     [
-     112.3,
-     95.8,
-     84.2
+     59.1,
+     23.1,
+     10.2
     ]
    ]
   },
-  "face-town-13": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1771,
-    131,
-    85,
-    90
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    1860,
-    131,
-    85,
-    90
-   ],
-   "skin": [
-    0.817,
-    0.698,
-    0.664
-   ],
-   "tones": [
-    [
-     51.3,
-     38.1,
-     33.9
-    ],
-    null
-   ]
-  },
-  "face-town-14": {
+  "face-m03": {
    "slot": "face",
    "base": "base-male",
    "socket": "neck",
    "page": "face-0",
    "rect": [
-    570,
-    505,
-    75,
-    84
-   ],
-   "pivot": [
-    42.25,
-    71.75
-   ],
-   "maskRect": [
-    649,
-    505,
-    75,
-    84
-   ],
-   "skin": [
-    1.019,
-    0.975,
-    1.0
-   ],
-   "tones": [
-    [
-     81.9,
-     51.5,
-     36.8
-    ],
-    null
-   ]
-  },
-  "face-town-15": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1934,
+    346,
     2,
-    97,
-    91
+    82,
+    98
    ],
    "pivot": [
-    38.0,
-    76.25
+    44.0,
+    86.5
    ],
    "maskRect": [
+    432,
     2,
-    131,
-    97,
-    91
+    82,
+    98
    ],
    "skin": [
-    1.0,
-    0.933,
-    0.946
+    1.013,
+    0.968,
+    0.932
    ],
    "tones": [
     [
-     114.4,
-     72.6,
-     48.7
+     38.9,
+     15.9,
+     6.9
     ],
-    [
-     183.2,
-     155.3,
-     130.6
-    ]
-   ]
-  },
-  "face-town-16": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1064,
-    2,
-    85,
-    97
-   ],
-   "pivot": [
-    43.25,
-    66.75
-   ],
-   "maskRect": [
-    1153,
-    2,
-    85,
-    97
-   ],
-   "skin": [
-    1.074,
-    1.134,
-    1.299
-   ],
-   "tones": [
-    [
-     42.6,
-     33.0,
-     30.7
-    ],
-    null
-   ]
-  },
-  "face-town-18": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1509,
-    413,
-    88,
-    86
-   ],
-   "pivot": [
-    39.0,
-    72.25
-   ],
-   "maskRect": [
-    1601,
-    413,
-    88,
-    86
-   ],
-   "skin": [
-    1.005,
-    1.069,
-    1.28
-   ],
-   "tones": [
-    [
-     38.2,
-     26.3,
-     23.9
-    ],
-    null
-   ]
-  },
-  "face-town-2": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    831,
-    594,
-    88,
-    75
-   ],
-   "pivot": [
-    39.0,
-    62.25
-   ],
-   "maskRect": [
-    923,
-    594,
-    88,
-    75
-   ],
-   "skin": [
-    0.981,
-    0.867,
-    0.82
-   ],
-   "tones": [
-    [
-     48.7,
-     32.6,
-     26.6
-    ],
-    [
-     101.3,
-     97.7,
-     64.5
-    ]
-   ]
-  },
-  "face-town-3": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    469,
-    594,
-    77,
-    77
-   ],
-   "pivot": [
-    43.25,
-    66.75
-   ],
-   "maskRect": [
-    550,
-    594,
-    77,
-    77
-   ],
-   "skin": [
-    0.75,
-    0.613,
-    0.549
-   ],
-   "tones": [
-    null,
-    [
-     161.3,
-     143.0,
-     130.4
-    ]
-   ]
-  },
-  "face-town-4": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    198,
-    505,
-    91,
-    85
-   ],
-   "pivot": [
-    39.0,
-    71.25
-   ],
-   "maskRect": [
-    293,
-    505,
-    91,
-    85
-   ],
-   "skin": [
-    1.0,
-    0.917,
-    0.917
-   ],
-   "tones": [
-    [
-     78.9,
-     44.5,
-     27.8
-    ],
-    null
-   ]
-  },
-  "face-town-5": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1590,
-    320,
-    83,
-    88
-   ],
-   "pivot": [
-    43.25,
-    77.75
-   ],
-   "maskRect": [
-    1677,
-    320,
-    83,
-    88
-   ],
-   "skin": [
-    1.037,
-    0.981,
-    1.064
-   ],
-   "tones": [
-    [
-     153.9,
-     133.6,
-     120.5
-    ],
-    [
-     92.1,
-     81.2,
-     72.6
-    ]
-   ]
-  },
-  "face-town-6": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1587,
-    131,
-    88,
-    90
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    1679,
-    131,
-    88,
-    90
-   ],
-   "skin": [
-    1.019,
-    0.975,
-    1.028
-   ],
-   "tones": [
-    [
-     163.5,
-     137.9,
-     123.1
-    ],
-    null
-   ]
-  },
-  "face-town-7": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1930,
-    320,
-    77,
-    88
-   ],
-   "pivot": [
-    43.25,
-    80.75
-   ],
-   "maskRect": [
-    2,
-    413,
-    77,
-    88
-   ],
-   "skin": [
-    0.995,
-    0.936,
-    0.918
-   ],
-   "tones": [
-    null,
-    [
-     99.4,
-     71.9,
-     60.1
-    ]
-   ]
-  },
-  "face-town-8": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    90,
-    320,
-    96,
-    88
-   ],
-   "pivot": [
-    39.0,
-    73.25
-   ],
-   "maskRect": [
-    190,
-    320,
-    96,
-    88
-   ],
-   "skin": [
-    1.019,
-    0.987,
-    1.038
-   ],
-   "tones": [
-    [
-     155.7,
-     106.2,
-     63.3
-    ],
-    [
-     92.7,
-     101.9,
-     108.7
-    ]
-   ]
-  },
-  "face-town-9": {
-   "slot": "face",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    291,
-    594,
-    85,
-    77
-   ],
-   "pivot": [
-    43.25,
-    68.75
-   ],
-   "maskRect": [
-    380,
-    594,
-    85,
-    77
-   ],
-   "skin": [
-    1.056,
-    1.057,
-    1.144
-   ],
-   "tones": [
-    [
-     83.5,
-     50.8,
-     34.4
-    ],
-    [
-     95.8,
-     99.3,
-     71.0
-    ]
-   ]
-  },
-  "face-valencia": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    645,
-    226,
-    91,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    740,
-    226,
-    91,
-    89
-   ],
-   "skin": [
-    1.023,
-    1.069,
-    1.233
-   ],
-   "tones": [
-    [
-     165.1,
-     136.8,
-     122.5
-    ],
-    [
-     87.3,
-     37.6,
-     31.4
-    ]
-   ]
-  },
-  "face-valencia-child": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    299,
-    131,
-    89,
-    91
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    392,
-    131,
-    89,
-    91
-   ],
-   "skin": [
-    1.019,
-    1.119,
-    1.35
-   ],
-   "tones": [
-    [
-     146.7,
-     122.2,
-     110.7
-    ],
-    [
-     45.2,
-     30.8,
-     26.0
-    ]
-   ]
-  },
-  "face-vreya": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    451,
-    226,
-    93,
-    89
-   ],
-   "pivot": [
-    39.0,
-    76.25
-   ],
-   "maskRect": [
-    548,
-    226,
-    93,
-    89
-   ],
-   "skin": [
-    1.005,
-    1.113,
-    1.35
-   ],
-   "tones": [
-    [
-     167.9,
-     138.4,
-     120.3
-    ],
-    [
-     110.0,
-     46.2,
-     41.7
-    ]
-   ]
-  },
-  "face-wren": {
-   "slot": "face",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "face-0",
-   "rect": [
-    1747,
-    594,
-    92,
-    73
-   ],
-   "pivot": [
-    39.0,
-    58.25
-   ],
-   "maskRect": [
-    1843,
-    594,
-    92,
-    73
-   ],
-   "skin": [
-    0.853,
-    0.684,
-    0.627
-   ],
-   "tones": [
-    [
-     35.6,
-     23.5,
-     19.9
-    ],
-    [
-     199.3,
-     165.2,
-     140.0
-    ]
-   ]
-  },
-  "hair-anselle": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1466,
-    736,
-    122,
-    125
-   ],
-   "pivot": [
-    79.0,
-    92.25
-   ],
-   "maskRect": [
-    1592,
-    736,
-    122,
-    125
-   ],
-   "tones": [
-    [
-     174.3,
-     146.9,
-     128.8
-    ],
-    null
-   ]
-  },
-  "hair-anvil-barkeep": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    2,
-    595,
-    140,
-    137
-   ],
-   "pivot": [
-    93.0,
-    104.25
-   ],
-   "maskRect": [
-    146,
-    595,
-    140,
-    137
-   ],
-   "tones": [
-    [
-     35.7,
-     25.7,
-     22.4
-    ],
-    null
-   ]
-  },
-  "hair-brannock": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1244,
-    869,
-    100,
-    120
-   ],
-   "pivot": [
-    60.25,
-    99.75
-   ],
-   "maskRect": [
-    1348,
-    869,
-    100,
-    120
-   ],
-   "tones": [
-    [
-     122.6,
-     64.7,
-     37.8
-    ],
-    null
-   ]
-  },
-  "hair-brenna": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    454,
-    1117,
-    126,
-    104
-   ],
-   "pivot": [
-    77.0,
-    90.25
-   ],
-   "maskRect": [
-    584,
-    1117,
-    126,
-    104
-   ],
-   "tones": [
     [
      62.6,
-     39.4,
-     30.4
-    ],
-    null
+     27.6,
+     13.5
+    ]
    ]
   },
-  "hair-brisk": {
-   "slot": "helm",
+  "face-m04": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    1108,
-    1117,
-    81,
-    103
-   ],
-   "pivot": [
-    47.25,
-    86.75
-   ],
-   "maskRect": [
-    1193,
-    1117,
-    81,
-    103
-   ],
-   "tones": [
-    [
-     45.7,
-     35.6,
-     32.9
-    ],
-    null
-   ]
-  },
-  "hair-corra": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    670,
-    736,
-    126,
-    127
-   ],
-   "pivot": [
-    81.0,
-    97.25
-   ],
-   "maskRect": [
-    800,
-    736,
-    126,
-    127
-   ],
-   "tones": [
-    [
-     77.7,
-     52.6,
-     41.0
-    ],
-    null
-   ]
-  },
-  "hair-crane": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    186,
-    1329,
-    84,
-    89
-   ],
-   "pivot": [
-    51.25,
-    89.75
-   ],
-   "maskRect": [
-    274,
-    1329,
-    84,
-    89
-   ],
-   "tones": [
-    null,
-    null
-   ]
-  },
-  "hair-elara": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    130,
-    736,
-    132,
-    128
-   ],
-   "pivot": [
-    77.0,
-    93.25
-   ],
-   "maskRect": [
-    266,
-    736,
-    132,
-    128
-   ],
-   "tones": [
-    [
-     38.4,
-     28.0,
-     25.4
-    ],
-    null
-   ]
-  },
-  "hair-fennick": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    902,
-    1117,
-    99,
-    103
-   ],
-   "pivot": [
-    64.25,
-    85.75
-   ],
-   "maskRect": [
-    1005,
-    1117,
-    99,
-    103
-   ],
-   "tones": [
-    [
-     134.8,
-     116.4,
-     101.9
-    ],
-    null
-   ]
-  },
-  "hair-gannet": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1634,
-    595,
-    124,
-    131
-   ],
-   "pivot": [
-    79.0,
-    97.25
-   ],
-   "maskRect": [
-    1762,
-    595,
-    124,
-    131
-   ],
-   "tones": [
-    [
-     98.7,
-     71.8,
-     59.7
-    ],
-    null
-   ]
-  },
-  "hair-grell": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    714,
-    1117,
-    90,
-    104
-   ],
-   "pivot": [
-    53.25,
-    77.75
-   ],
-   "maskRect": [
-    808,
-    1117,
-    90,
-    104
-   ],
-   "tones": [
-    [
-     138.1,
-     72.5,
-     33.2
-    ],
-    null
-   ]
-  },
-  "hair-guild-apprentice": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    519,
-    995,
-    143,
-    117
-   ],
-   "pivot": [
-    91.0,
-    88.25
-   ],
-   "maskRect": [
-    666,
-    995,
-    143,
-    117
-   ],
-   "tones": [
-    [
-     143.0,
-     101.8,
-     74.5
-    ],
-    null
-   ]
-  },
-  "hair-hale": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
+    518,
     2,
-    1117,
-    84,
-    105
+    82,
+    98
    ],
    "pivot": [
-    48.25,
-    88.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    90,
-    1117,
-    84,
-    105
-   ],
-   "tones": [
-    [
-     133.4,
-     116.9,
-     105.9
-    ],
-    null
-   ]
-  },
-  "hair-hedda": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    667,
-    440,
-    138,
-    141
-   ],
-   "pivot": [
-    83.0,
-    92.25
-   ],
-   "maskRect": [
-    809,
-    440,
-    138,
-    141
-   ],
-   "tones": [
-    [
-     85.6,
-     52.9,
-     35.9
-    ],
-    null
-   ]
-  },
-  "hair-hesper": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1598,
+    604,
     2,
-    144,
-    210
+    82,
+    98
    ],
-   "pivot": [
-    99.0,
-    86.25
-   ],
-   "maskRect": [
-    1746,
-    2,
-    144,
-    210
+   "skin": [
+    1.013,
+    0.969,
+    0.933
    ],
    "tones": [
     [
-     151.6,
-     126.8,
-     110.3
+     17.6,
+     9.7,
+     6.1
     ],
-    null
-   ]
-  },
-  "hair-hester": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    813,
-    995,
-    114,
-    117
-   ],
-   "pivot": [
-    75.0,
-    89.25
-   ],
-   "maskRect": [
-    931,
-    995,
-    114,
-    117
-   ],
-   "tones": [
     [
-     178.8,
-     152.1,
-     134.3
-    ],
-    null
-   ]
-  },
-  "hair-hollowmere-farmer": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    951,
-    440,
-    175,
-    140
-   ],
-   "pivot": [
-    94.0,
-    112.25
-   ],
-   "maskRect": [
-    1130,
-    440,
-    175,
-    140
-   ],
-   "tones": [
-    [
-     72.5,
-     50.7,
-     41.3
-    ],
-    null
-   ]
-  },
-  "hair-ide": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    306,
-    2,
-    182,
-    223
-   ],
-   "pivot": [
-    98.0,
-    113.25
-   ],
-   "maskRect": [
-    492,
-    2,
-    182,
-    223
-   ],
-   "tones": [
-    [
-     36.9,
-     25.5,
-     22.6
-    ],
-    null
-   ]
-  },
-  "hair-ilsa": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1104,
-    595,
-    119,
-    133
-   ],
-   "pivot": [
-    74.0,
-    93.25
-   ],
-   "maskRect": [
-    1227,
-    595,
-    119,
-    133
-   ],
-   "tones": [
-    [
-     181.2,
-     121.8,
-     65.4
-    ],
-    null
-   ]
-  },
-  "hair-imra-vell": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    262,
-    869,
-    106,
-    122
-   ],
-   "pivot": [
-    66.0,
-    93.25
-   ],
-   "maskRect": [
-    372,
-    869,
-    106,
-    122
-   ],
-   "tones": [
-    [
-     46.8,
-     33.8,
-     29.1
-    ],
-    null
-   ]
-  },
-  "hair-isadora": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1890,
-    595,
-    124,
-    129
-   ],
-   "pivot": [
-    76.0,
-    100.25
-   ],
-   "maskRect": [
-    2,
-    736,
-    124,
-    129
-   ],
-   "tones": [
-    [
-     56.9,
-     36.7,
-     29.7
-    ],
-    null
-   ]
-  },
-  "hair-kael": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1738,
-    1117,
-    151,
-    100
-   ],
-   "pivot": [
-    103.25,
-    97.75
-   ],
-   "maskRect": [
-    1893,
-    1117,
-    151,
-    100
-   ],
-   "tones": [
-    [
-     60.2,
-     45.8,
-     38.5
-    ],
-    null
-   ]
-  },
-  "hair-lark": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    746,
-    869,
-    123,
-    121
-   ],
-   "pivot": [
-    79.25,
-    93.75
-   ],
-   "maskRect": [
-    873,
-    869,
-    123,
-    121
-   ],
-   "tones": [
-    [
-     159.2,
-     92.4,
-     91.1
-    ],
-    null
-   ]
-  },
-  "hair-leon": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1531,
-    995,
-    107,
-    110
-   ],
-   "pivot": [
-    65.25,
-    92.75
-   ],
-   "maskRect": [
-    1642,
-    995,
-    107,
-    110
-   ],
-   "tones": [
-    [
-     163.6,
-     145.9,
-     135.1
-    ],
-    null
-   ]
-  },
-  "hair-lookout": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1152,
-    1226,
-    108,
-    92
-   ],
-   "pivot": [
-    67.25,
-    90.75
-   ],
-   "maskRect": [
-    1264,
-    1226,
-    108,
-    92
-   ],
-   "tones": [
-    [
-     61.1,
-     41.1,
-     30.8
-    ],
-    null
-   ]
-  },
-  "hair-mags": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1004,
-    231,
-    135,
-    162
-   ],
-   "pivot": [
-    75.0,
-    84.25
-   ],
-   "maskRect": [
-    1143,
-    231,
-    135,
-    162
-   ],
-   "tones": [
-    [
-     87.6,
-     62.5,
-     50.9
-    ],
-    null
-   ]
-  },
-  "hair-maren-elder": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1309,
-    440,
-    177,
-    137
-   ],
-   "pivot": [
-    94.0,
-    112.25
-   ],
-   "maskRect": [
-    1490,
-    440,
-    177,
-    137
-   ],
-   "tones": [
-    [
-     168.4,
-     142.9,
-     129.5
-    ],
-    null
-   ]
-  },
-  "hair-maud": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1000,
-    869,
-    118,
-    120
-   ],
-   "pivot": [
-    75.0,
-    87.25
-   ],
-   "maskRect": [
-    1122,
-    869,
-    118,
-    120
-   ],
-   "tones": [
-    [
-     147.2,
-     122.3,
-     106.4
-    ],
-    null
-   ]
-  },
-  "hair-mc-child": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1376,
-    1226,
-    105,
-    91
-   ],
-   "pivot": [
-    62.25,
-    93.75
-   ],
-   "maskRect": [
-    1485,
-    1226,
-    105,
-    91
-   ],
-   "tones": [
-    [
-     98.7,
-     57.4,
-     32.1
-    ],
-    null
-   ]
-  },
-  "hair-mira": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    290,
-    595,
-    133,
-    137
-   ],
-   "pivot": [
-    81.0,
-    103.25
-   ],
-   "maskRect": [
-    427,
-    595,
-    133,
-    137
-   ],
-   "tones": [
-    [
-     108.8,
-     50.4,
-     29.5
-    ],
-    null
-   ]
-  },
-  "hair-mira-young": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1282,
-    231,
-    119,
-    161
-   ],
-   "pivot": [
-    69.0,
-    88.25
-   ],
-   "maskRect": [
-    1405,
-    231,
-    119,
-    161
-   ],
-   "tones": [
-    [
-     126.8,
-     57.7,
-     32.6
-    ],
-    null
-   ]
-  },
-  "hair-netty": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    930,
-    736,
-    118,
-    127
-   ],
-   "pivot": [
-    70.0,
-    95.25
-   ],
-   "maskRect": [
-    1052,
-    736,
-    118,
-    127
-   ],
-   "tones": [
-    [
-     144.3,
-     117.3,
-     97.5
-    ],
-    null
-   ]
-  },
-  "hair-odelle": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    466,
-    231,
-    142,
-    192
-   ],
-   "pivot": [
-    96.0,
-    92.25
-   ],
-   "maskRect": [
-    612,
-    231,
-    142,
-    192
-   ],
-   "tones": [
-    [
-     30.9,
-     22.5,
-     20.1
-    ],
-    null
-   ]
-  },
-  "hair-orla": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1174,
-    736,
-    142,
-    126
-   ],
-   "pivot": [
-    96.0,
-    93.25
-   ],
-   "maskRect": [
-    1320,
-    736,
-    142,
-    126
-   ],
-   "tones": [
-    [
-     154.8,
-     115.2,
-     85.8
-    ],
-    null
-   ]
-  },
-  "hair-osric": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1802,
-    1226,
-    91,
-    90
-   ],
-   "pivot": [
-    53.25,
-    90.75
-   ],
-   "maskRect": [
-    1897,
-    1226,
-    91,
-    90
-   ],
-   "tones": [
-    [
-     26.7,
-     24.9,
-     29.5
-    ],
-    null
-   ]
-  },
-  "hair-oswin": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    2,
-    1329,
-    88,
-    90
-   ],
-   "pivot": [
-    52.25,
-    91.75
-   ],
-   "maskRect": [
-    94,
-    1329,
-    88,
-    90
-   ],
-   "tones": [
-    [
-     177.3,
-     127.5,
-     76.0
-    ],
-    null
-   ]
-  },
-  "hair-pip": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    530,
-    1226,
-    110,
-    96
-   ],
-   "pivot": [
-    61.25,
-    96.75
-   ],
-   "maskRect": [
-    644,
-    1226,
-    110,
-    96
-   ],
-   "tones": [
-    [
-     118.8,
-     54.4,
-     27.4
-    ],
-    null
-   ]
-  },
-  "hair-player-1": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    296,
-    1226,
-    113,
-    97
-   ],
-   "pivot": [
-    61.25,
-    95.75
-   ],
-   "maskRect": [
-    413,
-    1226,
-    113,
-    97
-   ],
-   "tones": [
-    [
-     90.4,
-     52.2,
-     31.2
-    ],
-    null
-   ]
-  },
-  "hair-player-2": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    564,
-    595,
-    132,
-    137
-   ],
-   "pivot": [
-    80.0,
-    91.25
-   ],
-   "maskRect": [
-    700,
-    595,
-    132,
-    137
-   ],
-   "tones": [
-    [
-     63.9,
-     37.1,
-     24.8
-    ],
-    null
-   ]
-  },
-  "hair-player-3": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    156,
-    231,
-    151,
-    195
-   ],
-   "pivot": [
-    98.0,
-    101.25
-   ],
-   "maskRect": [
-    311,
-    231,
-    151,
-    195
-   ],
-   "tones": [
-    [
-     34.8,
-     24.9,
-     22.6
-    ],
-    null
-   ]
-  },
-  "hair-player-4": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    355,
-    440,
-    152,
-    147
-   ],
-   "pivot": [
-    95.0,
-    85.25
-   ],
-   "maskRect": [
-    511,
-    440,
-    152,
-    147
-   ],
-   "tones": [
-    [
-     43.9,
-     26.7,
-     19.4
-    ],
-    null
-   ]
-  },
-  "hair-player-5": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    990,
-    2,
-    144,
-    222
-   ],
-   "pivot": [
-    99.0,
-    91.25
-   ],
-   "maskRect": [
-    1138,
-    2,
-    144,
-    222
-   ],
-   "tones": [
-    [
-     152.4,
-     125.1,
-     104.1
-    ],
-    null
-   ]
-  },
-  "hair-player-6": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    530,
-    1329,
-    131,
-    87
-   ],
-   "pivot": [
-    80.25,
-    96.75
-   ],
-   "maskRect": [
-    665,
-    1329,
-    131,
-    87
-   ],
-   "tones": [
-    [
-     52.6,
-     38.4,
-     32.7
-    ],
-    null
-   ]
-  },
-  "hair-player-7": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    836,
-    595,
-    130,
-    137
-   ],
-   "pivot": [
-    80.0,
-    108.25
-   ],
-   "maskRect": [
-    970,
-    595,
-    130,
-    137
-   ],
-   "tones": [
-    [
-     77.4,
-     56.0,
-     47.0
-    ],
-    null
-   ]
-  },
-  "hair-player-8": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1339,
-    995,
-    92,
-    113
-   ],
-   "pivot": [
-    57.25,
-    92.75
-   ],
-   "maskRect": [
-    1435,
-    995,
-    92,
-    113
-   ],
-   "tones": [
-    [
-     132.7,
-     64.5,
-     31.3
-    ],
-    null
-   ]
-  },
-  "hair-red-gull": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    990,
-    1226,
-    77,
-    94
-   ],
-   "pivot": [
-    43.25,
-    77.75
-   ],
-   "maskRect": [
-    1071,
-    1226,
-    77,
-    94
-   ],
-   "tones": [
-    [
-     59.6,
-     40.0,
-     29.1
-    ],
-    null
-   ]
-  },
-  "hair-red-gull-2": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1594,
-    1226,
-    100,
-    91
-   ],
-   "pivot": [
-    59.25,
-    88.75
-   ],
-   "maskRect": [
-    1698,
-    1226,
-    100,
-    91
-   ],
-   "tones": [
-    [
-     155.4,
-     87.4,
-     40.8
-    ],
-    null
-   ]
-  },
-  "hair-red-gull-3": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1402,
-    1329,
-    86,
-    52
-   ],
-   "pivot": [
-    54.25,
-    97.75
-   ],
-   "maskRect": [
-    1492,
-    1329,
-    86,
-    52
-   ],
-   "tones": [
-    [
-     42.0,
-     31.3,
-     28.5
-    ],
-    null
-   ]
-  },
-  "hair-refugee-1": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1196,
-    1329,
-    99,
-    72
-   ],
-   "pivot": [
-    61.25,
-    78.75
-   ],
-   "maskRect": [
-    1299,
-    1329,
-    99,
-    72
-   ],
-   "tones": [
-    [
-     177.0,
-     154.8,
-     134.5
-    ],
-    null
-   ]
-  },
-  "hair-refugee-2": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    758,
-    1226,
-    112,
-    94
-   ],
-   "pivot": [
-    61.25,
-    93.75
-   ],
-   "maskRect": [
-    874,
-    1226,
-    112,
-    94
-   ],
-   "tones": [
-    [
-     27.9,
-     19.9,
-     17.8
-    ],
-    null
-   ]
-  },
-  "hair-refugee-3": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    678,
-    2,
-    152,
-    222
-   ],
-   "pivot": [
-    97.0,
-    92.25
-   ],
-   "maskRect": [
-    834,
-    2,
-    152,
-    222
-   ],
-   "tones": [
-    [
-     100.1,
-     45.0,
-     27.2
-    ],
-    null
-   ]
-  },
-  "hair-refugee-child": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    129,
-    440,
-    109,
-    151
-   ],
-   "pivot": [
-    65.0,
-    79.25
-   ],
-   "maskRect": [
-    242,
-    440,
-    109,
-    151
-   ],
-   "tones": [
-    [
-     75.2,
-     41.3,
-     27.3
-    ],
-    null
-   ]
-  },
-  "hair-sb-child": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1049,
-    995,
-    141,
-    116
-   ],
-   "pivot": [
-    88.0,
-    87.25
-   ],
-   "maskRect": [
-    1194,
-    995,
-    141,
-    116
-   ],
-   "tones": [
-    [
-     42.7,
-     29.6,
-     24.7
-    ],
-    null
-   ]
-  },
-  "hair-sera": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1878,
-    231,
-    123,
-    151
-   ],
-   "pivot": [
-    73.0,
-    93.25
-   ],
-   "maskRect": [
-    2,
-    440,
-    123,
-    151
-   ],
-   "tones": [
-    [
-     168.4,
-     116.9,
-     69.6
-    ],
-    null
-   ]
-  },
-  "hair-tamsin": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1671,
-    440,
-    144,
-    137
-   ],
-   "pivot": [
-    98.0,
-    107.25
-   ],
-   "maskRect": [
-    1819,
-    440,
-    144,
-    137
-   ],
-   "tones": [
-    [
-     87.3,
-     41.5,
-     24.7
-    ],
-    null
-   ]
-  },
-  "hair-thessaly": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1718,
-    736,
-    104,
-    123
-   ],
-   "pivot": [
-    62.0,
-    91.25
-   ],
-   "maskRect": [
-    1826,
-    736,
-    104,
-    123
-   ],
-   "tones": [
-    [
-     149.3,
-     123.7,
-     111.3
-    ],
-    null
-   ]
-  },
-  "hair-tomas": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    800,
-    1329,
-    98,
-    86
-   ],
-   "pivot": [
-    60.25,
-    83.75
-   ],
-   "maskRect": [
-    902,
-    1329,
-    98,
-    86
-   ],
-   "tones": [
-    [
-     173.5,
-     148.7,
-     126.4
-    ],
-    null
-   ]
-  },
-  "hair-town-1": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1278,
-    1117,
-    115,
-    102
-   ],
-   "pivot": [
-    64.25,
-    94.75
-   ],
-   "maskRect": [
-    1397,
-    1117,
-    115,
-    102
-   ],
-   "tones": [
-    [
-     172.0,
-     125.5,
-     75.2
-    ],
-    null
-   ]
-  },
-  "hair-town-10": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1286,
-    2,
-    152,
-    221
-   ],
-   "pivot": [
-    99.0,
-    90.25
-   ],
-   "maskRect": [
-    1442,
-    2,
-    152,
-    221
-   ],
-   "tones": [
-    [
-     116.0,
-     49.9,
-     31.0
-    ],
-    null
-   ]
-  },
-  "hair-town-11": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    125,
-    995,
-    96,
-    118
-   ],
-   "pivot": [
-    57.25,
-    93.75
-   ],
-   "maskRect": [
-    225,
-    995,
-    96,
-    118
-   ],
-   "tones": [
-    [
-     46.0,
-     39.2,
-     36.4
-    ],
-    null
-   ]
-  },
-  "hair-town-12": {
-   "slot": "helm",
-   "base": "base-male",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1678,
-    869,
-    90,
-    119
-   ],
-   "pivot": [
-    57.25,
-    93.75
-   ],
-   "maskRect": [
-    1772,
-    869,
-    90,
-    119
-   ],
-   "tones": [
-    [
-     75.6,
      63.2,
-     56.5
-    ],
-    null
+     27.0,
+     11.8
+    ]
    ]
   },
-  "hair-town-13": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1866,
-    869,
-    119,
-    118
-   ],
-   "pivot": [
-    76.0,
-    89.25
-   ],
-   "maskRect": [
-    2,
-    995,
-    119,
-    118
-   ],
-   "tones": [
-    [
-     51.3,
-     38.1,
-     33.9
-    ],
-    null
-   ]
-  },
-  "hair-town-14": {
-   "slot": "helm",
+  "face-m05": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    325,
-    995,
-    93,
-    118
+    690,
+    2,
+    82,
+    98
    ],
    "pivot": [
-    56.25,
-    93.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    422,
-    995,
-    93,
-    118
+    776,
+    2,
+    82,
+    98
+   ],
+   "skin": [
+    1.013,
+    0.969,
+    0.942
    ],
    "tones": [
     [
-     81.9,
-     51.5,
-     36.8
+     40.2,
+     16.4,
+     6.9
     ],
-    null
-   ]
-  },
-  "hair-town-15": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1350,
-    595,
-    138,
-    131
-   ],
-   "pivot": [
-    79.0,
-    104.25
-   ],
-   "maskRect": [
-    1492,
-    595,
-    138,
-    131
-   ],
-   "tones": [
     [
-     114.4,
-     72.6,
-     48.7
-    ],
-    null
+     94.3,
+     50.0,
+     27.6
+    ]
    ]
   },
-  "hair-town-16": {
-   "slot": "helm",
+  "face-m06": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    1452,
-    869,
-    109,
-    119
+    862,
+    2,
+    82,
+    98
    ],
    "pivot": [
-    69.25,
-    92.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    1565,
-    869,
-    109,
-    119
+    948,
+    2,
+    82,
+    98
+   ],
+   "skin": [
+    1.013,
+    0.968,
+    0.932
    ],
    "tones": [
     [
-     42.6,
-     33.0,
-     30.7
+     37.0,
+     14.9,
+     6.0
     ],
-    null
-   ]
-  },
-  "hair-town-18": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    758,
-    231,
-    119,
-    164
-   ],
-   "pivot": [
-    64.0,
-    89.25
-   ],
-   "maskRect": [
-    881,
-    231,
-    119,
-    164
-   ],
-   "tones": [
     [
-     38.2,
-     26.3,
-     23.9
-    ],
-    null
+     89.3,
+     46.8,
+     24.8
+    ]
    ]
   },
-  "hair-town-2": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    482,
-    869,
-    128,
-    121
-   ],
-   "pivot": [
-    81.0,
-    91.25
-   ],
-   "maskRect": [
-    614,
-    869,
-    128,
-    121
-   ],
-   "tones": [
-    [
-     48.7,
-     32.6,
-     26.6
-    ],
-    null
-   ]
-  },
-  "hair-town-3": {
-   "slot": "helm",
+  "face-m07": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    362,
-    1329,
-    80,
-    89
+    1034,
+    2,
+    82,
+    98
    ],
    "pivot": [
-    48.25,
-    87.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    446,
-    1329,
-    80,
-    89
+    1120,
+    2,
+    82,
+    98
+   ],
+   "skin": [
+    1.013,
+    0.969,
+    0.93
    ],
    "tones": [
     [
-     36.0,
-     28.9,
-     27.1
+     32.3,
+     12.6,
+     5.2
     ],
-    null
-   ]
-  },
-  "hair-town-4": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    402,
-    736,
-    130,
-    127
-   ],
-   "pivot": [
-    79.0,
-    97.25
-   ],
-   "maskRect": [
-    536,
-    736,
-    130,
-    127
-   ],
-   "tones": [
     [
-     78.9,
-     44.5,
-     27.8
-    ],
-    null
+     62.7,
+     26.9,
+     11.0
+    ]
    ]
   },
-  "hair-town-5": {
-   "slot": "helm",
+  "face-m08": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    1753,
-    995,
-    109,
-    108
-   ],
-   "pivot": [
-    69.25,
-    83.75
-   ],
-   "maskRect": [
-    1866,
-    995,
-    109,
-    108
-   ],
-   "tones": [
-    [
-     153.9,
-     133.6,
-     120.5
-    ],
-    null
-   ]
-  },
-  "hair-town-6": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
+    1206,
     2,
-    869,
-    126,
-    122
+    82,
+    98
    ],
    "pivot": [
-    77.0,
-    93.25
+    44.0,
+    86.5
    ],
    "maskRect": [
-    132,
-    869,
-    126,
-    122
+    1292,
+    2,
+    82,
+    98
+   ],
+   "skin": [
+    1.013,
+    0.969,
+    0.932
    ],
    "tones": [
     [
-     163.5,
-     137.9,
-     123.1
+     30.8,
+     13.3,
+     6.7
     ],
-    null
+    [
+     65.0,
+     27.5,
+     11.5
+    ]
    ]
   },
-  "hair-town-7": {
-   "slot": "helm",
+  "face-m09": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    1004,
-    1329,
-    92,
-    83
-   ],
-   "pivot": [
-    58.25,
-    81.75
-   ],
-   "maskRect": [
-    1100,
-    1329,
-    92,
-    83
-   ],
-   "tones": [
-    null,
-    null
-   ]
-  },
-  "hair-town-8": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
+    1378,
     2,
-    1226,
-    143,
-    99
+    82,
+    98
    ],
    "pivot": [
-    86.0,
-    75.25
+    44.0,
+    86.5
    ],
    "maskRect": [
-    149,
-    1226,
-    143,
-    99
+    1464,
+    2,
+    82,
+    98
+   ],
+   "skin": [
+    1.013,
+    0.969,
+    0.933
    ],
    "tones": [
     [
-     155.7,
-     106.2,
-     63.3
+     47.9,
+     21.7,
+     10.6
     ],
-    null
+    [
+     59.5,
+     26.5,
+     11.6
+    ]
    ]
   },
-  "hair-town-9": {
-   "slot": "helm",
+  "face-m10": {
+   "slot": "face",
    "base": "base-male",
    "socket": "neck",
-   "page": "helm-0",
+   "page": "face-0",
    "rect": [
-    1516,
-    1117,
-    107,
-    102
+    1550,
+    2,
+    82,
+    98
    ],
    "pivot": [
-    61.25,
-    96.75
+    44.0,
+    86.5
    ],
    "maskRect": [
-    1627,
-    1117,
-    107,
-    102
+    1636,
+    2,
+    82,
+    98
+   ],
+   "skin": [
+    1.013,
+    0.969,
+    0.933
    ],
    "tones": [
     [
-     83.5,
-     50.8,
-     34.4
+     59.3,
+     28.0,
+     13.6
     ],
-    null
-   ]
-  },
-  "hair-valencia": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    2,
-    2,
-    148,
-    225
-   ],
-   "pivot": [
-    99.0,
-    90.25
-   ],
-   "maskRect": [
-    154,
-    2,
-    148,
-    225
-   ],
-   "tones": [
     [
-     165.1,
-     136.8,
-     122.5
-    ],
-    null
-   ]
-  },
-  "hair-valencia-child": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1528,
-    231,
-    171,
-    155
-   ],
-   "pivot": [
-    94.0,
-    112.25
-   ],
-   "maskRect": [
-    1703,
-    231,
-    171,
-    155
-   ],
-   "tones": [
-    [
-     146.7,
-     122.2,
-     110.7
-    ],
-    null
-   ]
-  },
-  "hair-vreya": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    1894,
-    2,
-    150,
-    205
-   ],
-   "pivot": [
-    98.0,
-    95.25
-   ],
-   "maskRect": [
-    2,
-    231,
-    150,
-    205
-   ],
-   "tones": [
-    [
-     167.9,
-     138.4,
-     120.3
-    ],
-    null
-   ]
-  },
-  "hair-wren": {
-   "slot": "helm",
-   "base": "base-female",
-   "socket": "neck",
-   "page": "helm-0",
-   "rect": [
-    178,
-    1117,
-    134,
-    104
-   ],
-   "pivot": [
-    84.0,
-    76.25
-   ],
-   "maskRect": [
-    316,
-    1117,
-    134,
-    104
-   ],
-   "tones": [
-    [
-     35.6,
-     23.5,
-     19.9
-    ],
-    null
+     66.1,
+     28.3,
+     12.0
+    ]
    ]
   }
  },
  "recipes": {
   "you-male": {
-   "face": "face-player-1",
+   "face": "face-m03",
    "armor": "armor-traveller",
    "cape": null,
-   "helm": "hair-player-1",
+   "helm": "hair-03",
    "weapon": "weapon-longsword",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "you-female": {
-   "face": "face-player-2",
+   "face": "face-f03",
    "armor": "armor-traveller-f",
    "cape": null,
-   "helm": "hair-player-2",
+   "helm": "hair-22",
    "weapon": "weapon-longsword",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "soulbound": {
-   "face": "face-player-3",
+   "face": "face-f04",
    "armor": "armor-sb-traveller",
    "cape": "cape-sb",
-   "helm": "hair-player-3",
+   "helm": "hair-31",
    "weapon": "weapon-sb-blades",
    "morph": [
     1.02,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "you-male.champion": {
-   "face": "face-player-1",
+   "face": "face-m03",
    "armor": "armor-champion",
    "cape": null,
-   "helm": "hair-player-1",
+   "helm": "hair-03",
    "weapon": "weapon-longsword",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "you-female.champion": {
-   "face": "face-player-2",
+   "face": "face-f03",
    "armor": "armor-champion-f",
    "cape": null,
-   "helm": "hair-player-2",
+   "helm": "hair-22",
    "weapon": "weapon-longsword",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "soulbound.champion": {
-   "face": "face-player-3",
+   "face": "face-f04",
    "armor": "armor-champion-f",
    "cape": "cape-sb",
-   "helm": "hair-player-3",
+   "helm": "hair-31",
    "weapon": "weapon-sb-blades",
    "morph": [
     1.02,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "soulbound.lord-protector": {
-   "face": "face-player-3",
+   "face": "face-f04",
    "armor": "armor-lord-protector",
    "cape": null,
-   "helm": "hair-player-3",
+   "helm": "hair-31",
    "weapon": "weapon-longsword",
    "morph": [
     1.02,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "mc-child": {
-   "face": "face-mc-child",
+   "face": "face-m01",
    "armor": "armor-child-cove",
    "cape": null,
-   "helm": "hair-mc-child",
+   "helm": "hair-14",
    "weapon": null,
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "sb-child": {
-   "face": "face-sb-child",
+   "face": "face-f01",
    "armor": "armor-child-cove-f",
    "cape": null,
-   "helm": "hair-sb-child",
+   "helm": "hair-22",
    "weapon": null,
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "sera": {
-   "face": "face-sera",
+   "face": "face-f05",
    "armor": "armor-sera",
    "cape": "cape-sera",
-   "helm": "hair-sera",
+   "helm": "hair-33",
    "weapon": "weapon-sera-longbow",
    "morph": [
     1.04,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "HONEY",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "ears-01"
+   ],
+   "base": "base-female"
   },
   "mira": {
-   "face": "face-mira",
+   "face": "face-f06",
    "armor": "armor-mira",
    "cape": null,
-   "helm": "hair-mira",
+   "helm": "hair-38",
    "weapon": "weapon-quarterstaff",
    "morph": [
     1.01,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "mira-young": {
-   "face": "face-mira-young",
+   "face": "face-f01",
    "armor": "armor-mira-apprentice",
    "cape": null,
-   "helm": "hair-mira-young",
+   "helm": "hair-35",
    "weapon": "weapon-sketchbook",
    "morph": [
     0.8,
     0.8
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "kael": {
-   "face": "face-kael",
+   "face": "face-m04",
    "armor": "armor-kael",
    "cape": "cape-tail-ember",
    "helm": "helm-kael-hood",
@@ -7879,21 +2028,40 @@
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "BLACK",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "horns-02"
+   ],
+   "base": "base-male"
   },
   "brannock": {
-   "face": "face-brannock",
+   "face": "face-m09",
    "armor": "armor-brannock",
    "cape": null,
-   "helm": "hair-brannock",
+   "helm": "hair-04",
    "weapon": "weapon-brannock",
    "morph": [
     0.85,
     1.36
-   ]
+   ],
+   "tints": {
+    "skin": "GOLDEN",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-10",
+    "skin-03"
+   ],
+   "base": "base-male"
   },
   "brannock.clasps-gone": {
-   "face": "face-brannock-bare",
+   "face": "face-m09",
    "armor": "armor-brannock",
    "cape": null,
    "helm": null,
@@ -7901,10 +2069,20 @@
    "morph": [
     0.85,
     1.36
-   ]
+   ],
+   "tints": {
+    "skin": "GOLDEN",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-10",
+    "skin-03"
+   ],
+   "base": "base-male"
   },
   "valencia": {
-   "face": "face-valencia",
+   "face": "face-f04",
    "armor": "armor-valencia",
    "cape": "cape-valencia",
    "helm": "helm-circlet-silver",
@@ -7912,10 +2090,17 @@
    "morph": [
     1.09,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "valencia.sister-vale": {
-   "face": "face-valencia",
+   "face": "face-f04",
    "armor": "armor-abbey-habit",
    "cape": null,
    "helm": "helm-abbey-hood",
@@ -7923,21 +2108,35 @@
    "morph": [
     1.09,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "corra": {
-   "face": "face-corra",
+   "face": "face-f08",
    "armor": "armor-corra",
    "cape": null,
-   "helm": "hair-corra",
+   "helm": "hair-38",
    "weapon": "weapon-netting-needle",
    "morph": [
     0.95,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "CHESTNUT",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "corra.flashback": {
-   "face": "face-corra-flashback",
+   "face": "face-f07",
    "armor": "armor-corra",
    "cape": null,
    "helm": null,
@@ -7945,10 +2144,17 @@
    "morph": [
     0.95,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "CHESTNUT",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "lookout": {
-   "face": "face-lookout",
+   "face": "face-m06",
    "armor": "armor-sailor",
    "cape": null,
    "helm": "helm-knit-cap",
@@ -7956,10 +2162,19 @@
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "BROWN",
+    "hair": "COPPER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-12"
+   ],
+   "base": "base-male"
   },
   "odelle": {
-   "face": "face-odelle",
+   "face": "face-f07",
    "armor": "armor-odelle",
    "cape": null,
    "helm": "helm-tricorn",
@@ -7967,10 +2182,19 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "jewel-01"
+   ],
+   "base": "base-female"
   },
   "tomas": {
-   "face": "face-tomas",
+   "face": "face-m10",
    "armor": "armor-fisher",
    "cape": null,
    "helm": "helm-knit-cap",
@@ -7978,21 +2202,40 @@
    "morph": [
     0.95,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "WHITE",
+    "eyes": "SKY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "red-gull": {
-   "face": "face-red-gull",
+   "face": "face-m06",
    "armor": "armor-red-gull",
    "cape": null,
-   "helm": "hair-red-gull",
+   "helm": null,
    "weapon": "weapon-cudgel",
    "morph": [
     1.08,
     1.15
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01",
+    "skin-05"
+   ],
+   "base": "base-male"
   },
   "red-gull.b": {
-   "face": "face-red-gull-2",
+   "face": "face-m06",
    "armor": "armor-red-gull",
    "cape": null,
    "helm": "helm-bandana-red",
@@ -8000,32 +2243,62 @@
    "morph": [
     1.08,
     1.15
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01",
+    "skin-05"
+   ],
+   "base": "base-male"
   },
   "red-gull.c": {
-   "face": "face-red-gull-3",
+   "face": "face-m04",
    "armor": "armor-red-gull",
    "cape": null,
-   "helm": "hair-red-gull-3",
+   "helm": "hair-09",
    "weapon": "weapon-cudgel",
    "morph": [
     1.06,
     1.12
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01",
+    "skin-05"
+   ],
+   "base": "base-male"
   },
   "grell": {
-   "face": "face-grell",
+   "face": "face-m06",
    "armor": "armor-grell",
    "cape": null,
-   "helm": "hair-grell",
+   "helm": null,
    "weapon": "weapon-cutlass",
    "morph": [
     0.85,
     1.55
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-08",
+    "skin-02"
+   ],
+   "base": "base-male"
   },
   "hale": {
-   "face": "face-hale",
+   "face": "face-m09",
    "armor": "armor-watch-captain",
    "cape": "cape-watch-captain",
    "helm": "helm-watch-crest",
@@ -8033,10 +2306,19 @@
    "morph": [
     1.03,
     1.14
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "watch": {
-   "face": "face-town-14",
+   "face": "face-m05",
    "armor": "armor-watch",
    "cape": "cape-watch",
    "helm": "helm-watch",
@@ -8044,43 +2326,77 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "fennick": {
-   "face": "face-fennick",
+   "face": "face-m07",
    "armor": "armor-clerk",
    "cape": null,
-   "helm": "hair-fennick",
+   "helm": "hair-05",
    "weapon": "weapon-tack-hammer",
    "morph": [
     1.0,
     1.08
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-03",
+    "jewel-08",
+    "jewel-11"
+   ],
+   "base": "base-male"
   },
   "hedda": {
-   "face": "face-hedda",
+   "face": "face-f07",
    "armor": "armor-refugee-woman",
    "cape": "cape-blanket",
-   "helm": "hair-hedda",
+   "helm": "hair-26",
    "weapon": "weapon-loaf",
    "morph": [
     0.99,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "refugee-child": {
-   "face": "face-refugee-child",
+   "face": "face-f01",
    "armor": "armor-refugee-child",
    "cape": null,
-   "helm": "hair-refugee-child",
+   "helm": "hair-35",
    "weapon": "weapon-rag-doll",
    "morph": [
     0.75,
     0.75
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "brisk": {
-   "face": "face-brisk",
+   "face": "face-m07",
    "armor": "armor-watch",
    "cape": "cape-watch",
    "helm": "helm-watch",
@@ -8088,43 +2404,80 @@
    "morph": [
     1.0,
     1.06
-   ]
+   ],
+   "tints": {
+    "skin": "BROWN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-04"
+   ],
+   "base": "base-male"
   },
   "refugee-1": {
-   "face": "face-refugee-1",
+   "face": "face-m10",
    "armor": "armor-refugee-man",
    "cape": "cape-blanket",
-   "helm": "hair-refugee-1",
+   "helm": "hair-12",
    "weapon": "weapon-walking-stick",
    "morph": [
     0.93,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "WHITE",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-09"
+   ],
+   "base": "base-male"
   },
   "refugee-2": {
-   "face": "face-refugee-2",
+   "face": "face-m02",
    "armor": "armor-refugee-man",
    "cape": "cape-blanket",
-   "helm": "hair-refugee-2",
+   "helm": "hair-03",
    "weapon": "weapon-tin-cup",
    "morph": [
     0.95,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "BROWN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "refugee-3": {
-   "face": "face-refugee-3",
+   "face": "face-f06",
    "armor": "armor-glassblower",
    "cape": null,
-   "helm": "hair-refugee-3",
+   "helm": "hair-34",
    "weapon": null,
    "morph": [
     0.82,
     1.25
-   ]
+   ],
+   "tints": {
+    "skin": "GOLDEN",
+    "hair": "COPPER",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "skin-01",
+    "skin-06"
+   ],
+   "base": "base-female"
   },
   "elara": {
-   "face": "face-elara",
+   "face": "face-f05",
    "armor": "armor-elara",
    "cape": null,
    "helm": "helm-circlet",
@@ -8132,10 +2485,17 @@
    "morph": [
     1.08,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "BLACK",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "elara-hooded": {
-   "face": "face-elara",
+   "face": "face-f05",
    "armor": "armor-elara-disguise",
    "cape": "cape-elara-hooded",
    "helm": "helm-hood-charcoal",
@@ -8143,10 +2503,17 @@
    "morph": [
     1.08,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "BLACK",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "leon": {
-   "face": "face-leon",
+   "face": "face-m10",
    "armor": "armor-leon",
    "cape": "cape-leon",
    "helm": "helm-crown",
@@ -8154,21 +2521,39 @@
    "morph": [
     0.97,
     1.16
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "crane": {
-   "face": "face-crane",
+   "face": "face-m08",
    "armor": "armor-crane",
    "cape": null,
-   "helm": "hair-crane",
+   "helm": "hair-06",
    "weapon": "weapon-quill-letter",
    "morph": [
     1.1,
     0.85
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "BLACK",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-02"
+   ],
+   "base": "base-male"
   },
   "royal-messenger": {
-   "face": "face-town-9",
+   "face": "face-m02",
    "armor": "armor-royal-livery",
    "cape": "cape-royal",
    "helm": "helm-beret",
@@ -8176,10 +2561,19 @@
    "morph": [
     0.99,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "royal-guard": {
-   "face": "face-town-3",
+   "face": "face-m09",
    "armor": "armor-royal-guard",
    "cape": "cape-royal",
    "helm": "helm-royal-guard",
@@ -8187,87 +2581,156 @@
    "morph": [
     1.04,
     1.08
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "anvil-barkeep": {
-   "face": "face-anvil-barkeep",
+   "face": "face-f08",
    "armor": "armor-tavern",
    "cape": "cape-tail-bear",
-   "helm": "hair-anvil-barkeep",
+   "helm": "hair-26",
    "weapon": "weapon-tankard",
    "morph": [
     1.08,
     1.2
-   ]
+   ],
+   "tints": {
+    "skin": "GOLDEN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-02",
+    "ears-03"
+   ],
+   "base": "base-female"
   },
   "netty": {
-   "face": "face-netty",
+   "face": "face-f08",
    "armor": "armor-villager-woman",
    "cape": null,
-   "helm": "hair-netty",
+   "helm": "hair-40",
    "weapon": "weapon-netting-needle",
    "morph": [
     0.98,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "SILVER",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "maud": {
-   "face": "face-maud",
+   "face": "face-f10",
    "armor": "armor-elder-woman",
    "cape": null,
-   "helm": "hair-maud",
+   "helm": "hair-37",
    "weapon": "weapon-flat-cap-held",
    "morph": [
     0.93,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "pip": {
-   "face": "face-pip",
+   "face": "face-m02",
    "armor": "armor-tavern-m",
    "cape": null,
-   "helm": "hair-pip",
+   "helm": "hair-03",
    "weapon": "weapon-stew-pot",
    "morph": [
     0.72,
     0.8
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "osric": {
-   "face": "face-osric",
+   "face": "face-m07",
    "armor": "armor-merchant",
    "cape": "cape-short-lavender",
-   "helm": "hair-osric",
+   "helm": "hair-05",
    "weapon": "weapon-silk-bolt",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-03"
+   ],
+   "base": "base-male"
   },
   "lark": {
-   "face": "face-lark",
+   "face": "face-m04",
    "armor": "armor-busker",
    "cape": "cape-short-lavender",
-   "helm": "helm-beret",
+   "helm": "hair-21",
    "weapon": "weapon-lute",
    "morph": [
     1.04,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "VIOLET"
+   },
+   "extras": [
+    "ears-01"
+   ],
+   "base": "base-male"
   },
   "ilsa": {
-   "face": "face-ilsa",
+   "face": "face-f03",
    "armor": "armor-villager-woman",
    "cape": null,
-   "helm": "hair-ilsa",
+   "helm": "hair-34",
    "weapon": "weapon-scrolls",
    "morph": [
     0.99,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "GOLDEN",
+    "hair": "COPPER",
+    "eyes": "GREEN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "oswin": {
-   "face": "face-oswin",
+   "face": "face-m03",
    "armor": "armor-royal-guard",
    "cape": "cape-royal",
    "helm": "helm-royal-guard",
@@ -8275,54 +2738,96 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "hesper": {
-   "face": "face-hesper",
+   "face": "face-f10",
    "armor": "armor-temple",
    "cape": null,
-   "helm": "hair-hesper",
+   "helm": "hair-27",
    "weapon": "weapon-broom",
    "morph": [
     0.99,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "SILVER",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "wren": {
-   "face": "face-wren",
+   "face": "face-f01",
    "armor": "armor-urchin-f",
    "cape": null,
-   "helm": "hair-wren",
+   "helm": "hair-26",
    "weapon": "weapon-coin",
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "BROWN",
+    "hair": "BLACK",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "imra-vell": {
-   "face": "face-imra-vell",
+   "face": "face-f07",
    "armor": "armor-fencer",
    "cape": null,
-   "helm": "hair-imra-vell",
+   "helm": "hair-13",
    "weapon": "weapon-practice-sword",
    "morph": [
     0.99,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-03"
+   ],
+   "base": "base-female"
   },
   "tamsin": {
-   "face": "face-tamsin",
+   "face": "face-f07",
    "armor": "armor-lodge-ranger",
    "cape": "cape-tamsin",
-   "helm": "hair-tamsin",
+   "helm": "hair-26",
    "weapon": "weapon-shortbow",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "CHESTNUT",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "skin-02",
+    "ears-05"
+   ],
+   "base": "base-female"
   },
   "garrick": {
-   "face": "face-garrick",
+   "face": "face-m09",
    "armor": "armor-caravan",
    "cape": null,
    "helm": "helm-wide-brim",
@@ -8330,21 +2835,40 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-03",
+    "skin-02"
+   ],
+   "base": "base-male"
   },
   "aldric": {
-   "face": "face-aldric",
+   "face": "face-m09",
    "armor": "armor-aldric",
    "cape": "cape-campaign",
-   "helm": "hair-aldric",
+   "helm": "hair-01",
    "weapon": "weapon-longsword",
    "morph": [
     1.0,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "SKY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "recruit": {
-   "face": "face-recruit",
+   "face": "face-m02",
    "armor": "armor-recruit",
    "cape": null,
    "helm": "helm-kettle",
@@ -8352,54 +2876,95 @@
    "morph": [
     0.96,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "GOLD",
+    "eyes": "BLUE"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "thessaly": {
-   "face": "face-thessaly",
+   "face": "face-f09",
    "armor": "armor-thessaly",
    "cape": null,
-   "helm": "hair-thessaly",
+   "helm": "hair-01",
    "weapon": "weapon-staff-ring",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "thessaly.thessaly-crystal": {
-   "face": "face-thessaly",
+   "face": "face-f09",
    "armor": "armor-thessaly",
    "cape": null,
-   "helm": "hair-thessaly",
+   "helm": "hair-01",
    "weapon": "weapon-staff-ring",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "brenna": {
-   "face": "face-brenna",
+   "face": "face-f07",
    "armor": "armor-brenna",
    "cape": "cape-ash",
-   "helm": "hair-brenna",
+   "helm": "hair-42",
    "weapon": "weapon-battleaxe",
    "morph": [
     1.01,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "skin-04",
+    "skin-06"
+   ],
+   "base": "base-female"
   },
   "brenna.protectorate": {
-   "face": "face-brenna",
+   "face": "face-f07",
    "armor": "armor-brenna-protectorate",
    "cape": "cape-ash",
-   "helm": "hair-brenna",
+   "helm": "hair-42",
    "weapon": "weapon-battleaxe",
    "morph": [
     1.01,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "skin-04",
+    "skin-06"
+   ],
+   "base": "base-female"
   },
   "gannet": {
-   "face": "face-gannet",
+   "face": "face-f08",
    "armor": "armor-gannet",
    "cape": null,
    "helm": "helm-lace-cap",
@@ -8407,54 +2972,97 @@
    "morph": [
     0.99,
     1.2
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "hester": {
-   "face": "face-hester",
+   "face": "face-f10",
    "armor": "armor-elder-woman",
    "cape": null,
-   "helm": "hair-hester",
+   "helm": "hair-37",
    "weapon": "weapon-folded-shawl",
    "morph": [
     0.9,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "WHITE",
+    "eyes": "SKY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "tobin": {
-   "face": "face-tobin",
+   "face": "face-m07",
    "armor": "armor-cider-presser",
    "cape": null,
-   "helm": "hair-tobin",
+   "helm": "hair-11",
    "weapon": "weapon-mallet",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07",
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "tobin.levy": {
-   "face": "face-tobin",
+   "face": "face-m07",
    "armor": "armor-levy",
    "cape": null,
-   "helm": "hair-tobin",
+   "helm": "hair-11",
    "weapon": "weapon-spade",
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07",
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "harrow": {
-   "face": "face-harrow",
+   "face": "face-m08",
    "armor": "armor-harrow",
    "cape": null,
-   "helm": "hair-harrow",
+   "helm": "hair-10",
    "weapon": "weapon-heron-cane",
    "morph": [
     1.0,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-11"
+   ],
+   "base": "base-male"
   },
   "hobb": {
-   "face": "face-hobb",
+   "face": "face-m09",
    "armor": "armor-woodcutter",
    "cape": null,
    "helm": "helm-knit-cap",
@@ -8462,21 +3070,40 @@
    "morph": [
     1.08,
     1.15
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "beard-08",
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "maleficio": {
-   "face": "face-maleficio",
+   "face": "face-m10",
    "armor": "armor-maleficio",
    "cape": null,
-   "helm": "hair-maleficio",
+   "helm": "hair-10",
    "weapon": "weapon-black-box",
    "morph": [
     1.01,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "maleficio-young": {
-   "face": "face-maleficio-young",
+   "face": "face-m09",
    "armor": "armor-scholar",
    "cape": null,
    "helm": null,
@@ -8484,10 +3111,19 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "relief-column-echo": {
-   "face": "face-town-14",
+   "face": "face-m05",
    "armor": "armor-old-pattern",
    "cape": null,
    "helm": "helm-nasal",
@@ -8495,21 +3131,39 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "lost-boy": {
-   "face": "face-lost-boy",
+   "face": "face-m01",
    "armor": "armor-urchin",
    "cape": null,
-   "helm": "hair-lost-boy",
+   "helm": "hair-08",
    "weapon": "weapon-flat-cap-held",
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "mags": {
-   "face": "face-mags",
+   "face": "face-f08",
    "armor": "armor-pedlar",
    "cape": "cape-pedlar-pack",
    "helm": "helm-straw-hat",
@@ -8517,10 +3171,17 @@
    "morph": [
     0.82,
     1.25
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "SILVER",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "leon.ill": {
-   "face": "face-leon-ill",
+   "face": "face-m10",
    "armor": "armor-leon-furs",
    "cape": "cape-leon",
    "helm": "helm-crown",
@@ -8528,21 +3189,37 @@
    "morph": [
     0.95,
     1.1
-   ]
+   ],
+   "tints": {
+    "skin": "STONE",
+    "hair": "COPPER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "elara.act3": {
-   "face": "face-elara",
+   "face": "face-f05",
    "armor": "armor-elara-field",
    "cape": "cape-travelling",
-   "helm": "hair-elara",
+   "helm": "hair-16",
    "weapon": "weapon-map",
    "morph": [
     1.08,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "BLACK",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "elara.crowned": {
-   "face": "face-elara",
+   "face": "face-f05",
    "armor": "armor-elara-queen",
    "cape": null,
    "helm": "helm-crown",
@@ -8550,10 +3227,17 @@
    "morph": [
     1.08,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "BLACK",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "hale.protectorate": {
-   "face": "face-hale",
+   "face": "face-m09",
    "armor": "armor-protectorate",
    "cape": "cape-watch-captain",
    "helm": "helm-watch-crest",
@@ -8561,10 +3245,19 @@
    "morph": [
     1.03,
     1.14
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "refugee-child.aged": {
-   "face": "face-refugee-child-aged",
+   "face": "face-f07",
    "armor": "armor-refugee-child",
    "cape": null,
    "helm": null,
@@ -8572,21 +3265,35 @@
    "morph": [
     0.98,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "CHESTNUT",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "anselle": {
-   "face": "face-anselle",
+   "face": "face-f10",
    "armor": "armor-anselle",
    "cape": null,
-   "helm": "hair-anselle",
+   "helm": "hair-37",
    "weapon": "weapon-lantern",
    "morph": [
     0.98,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "HAZEL"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "orla": {
-   "face": "face-orla",
+   "face": "face-f08",
    "armor": "armor-beekeeper",
    "cape": null,
    "helm": "helm-bee-veil",
@@ -8594,10 +3301,19 @@
    "morph": [
     0.98,
     1.1
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "SILVER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "corwin": {
-   "face": "face-corwin",
+   "face": "face-m05",
    "armor": "armor-corwin",
    "cape": "cape-corwin",
    "helm": "helm-corwin",
@@ -8605,10 +3321,17 @@
    "morph": [
     1.04,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "BLUE"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "severin": {
-   "face": "face-severin",
+   "face": "face-m08",
    "armor": "armor-severin",
    "cape": "cape-severin",
    "helm": "helm-crown-thorns",
@@ -8616,10 +3339,17 @@
    "morph": [
     1.1,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "SILVER",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "severin.severin-cell": {
-   "face": "face-severin-cell",
+   "face": "face-m08",
    "armor": "armor-prisoner",
    "cape": null,
    "helm": null,
@@ -8627,87 +3357,145 @@
    "morph": [
     1.1,
     0.85
-   ]
+   ],
+   "tints": {
+    "skin": "STONE",
+    "hair": "SILVER",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "isadora": {
-   "face": "face-isadora",
+   "face": "face-f06",
    "armor": "armor-isadora",
    "cape": null,
-   "helm": "hair-isadora",
+   "helm": "hair-41",
    "weapon": "weapon-night-flowers",
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "valencia-child": {
-   "face": "face-valencia-child",
+   "face": "face-f01",
    "armor": "armor-child-dress",
    "cape": null,
-   "helm": "hair-valencia-child",
+   "helm": "hair-21",
    "weapon": null,
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "pell": {
-   "face": "face-pell",
+   "face": "face-m02",
    "armor": "armor-morvaine-man",
    "cape": null,
-   "helm": "hair-pell",
+   "helm": "hair-17",
    "weapon": "weapon-flat-cap-held",
    "morph": [
     0.95,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "ide": {
-   "face": "face-ide",
+   "face": "face-f04",
    "armor": "armor-shift",
    "cape": null,
-   "helm": "hair-ide",
+   "helm": "hair-47",
    "weapon": null,
    "morph": [
     0.97,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "maren-elder": {
-   "face": "face-maren-elder",
+   "face": "face-f09",
    "armor": "armor-morvaine-woman",
    "cape": null,
-   "helm": "hair-maren-elder",
+   "helm": "hair-40",
    "weapon": "weapon-walking-stick",
    "morph": [
     0.98,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "WHITE",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "blood-house-steward": {
-   "face": "face-blood-house-steward",
+   "face": "face-m08",
    "armor": "armor-morvaine-livery",
    "cape": null,
-   "helm": "hair-blood-house-steward",
+   "helm": "hair-06",
    "weapon": "weapon-ledger-pen",
    "morph": [
     1.0,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "hollowmere-child": {
-   "face": "face-hollowmere-child",
+   "face": "face-m01",
    "armor": "armor-morvaine-man",
    "cape": null,
-   "helm": "hair-hollowmere-child",
+   "helm": "hair-03",
    "weapon": "weapon-toy-sword",
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "GREY"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "hollowmere-farmer": {
-   "face": "face-hollowmere-farmer",
+   "face": "face-f07",
    "armor": "armor-morvaine-woman",
    "cape": null,
    "helm": "helm-kerchief",
@@ -8715,29 +3503,52 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "ruck": {
-   "face": "face-ruck",
+   "face": "face-m09",
    "armor": "armor-sailor",
    "cape": null,
-   "helm": "hair-ruck",
+   "helm": "hair-11",
    "weapon": "weapon-cutlass",
    "morph": [
     0.95,
     1.1
-   ]
+   ],
+   "tints": {
+    "skin": "BROWN",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-05"
+   ],
+   "base": "base-male"
   },
   "davin": {
-   "face": "face-davin",
+   "face": "face-m02",
    "armor": "armor-davin",
    "cape": null,
-   "helm": "hair-davin",
+   "helm": "hair-03",
    "weapon": "weapon-corwin-sword",
    "morph": [
     0.98,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "vorlaith": {
    "face": "face-vorlaith",
@@ -8748,21 +3559,33 @@
    "morph": [
     1.2,
     0.95
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "guild-apprentice": {
-   "face": "face-guild-apprentice",
+   "face": "face-f02",
    "armor": "armor-guild-apprentice",
    "cape": null,
-   "helm": "hair-guild-apprentice",
+   "helm": "hair-22",
    "weapon": "weapon-glass-lamp",
    "morph": [
     0.94,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "HONEY",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "mason": {
-   "face": "face-town-12",
+   "face": "face-m09",
    "armor": "armor-smith",
    "cape": null,
    "helm": "helm-flat-cap",
@@ -8770,21 +3593,39 @@
    "morph": [
     1.0,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-08"
+   ],
+   "base": "base-male"
   },
   "elder": {
-   "face": "face-town-5",
+   "face": "face-m10",
    "armor": "armor-elder-coat",
    "cape": null,
-   "helm": "hair-town-5",
+   "helm": "hair-11",
    "weapon": "weapon-walking-stick",
    "morph": [
     0.97,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-11"
+   ],
+   "base": "base-male"
   },
   "trader": {
-   "face": "face-town-2",
+   "face": "face-f03",
    "armor": "armor-trader",
    "cape": null,
    "helm": "helm-wide-brim",
@@ -8792,10 +3633,17 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "DARK BROWN",
+    "eyes": "GREEN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "baker": {
-   "face": "face-town-4",
+   "face": "face-f06",
    "armor": "armor-baker",
    "cape": null,
    "helm": "helm-kerchief",
@@ -8803,21 +3651,37 @@
    "morph": [
     0.98,
     1.1
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "smith": {
-   "face": "face-town-3",
+   "face": "face-m09",
    "armor": "armor-smith",
    "cape": null,
-   "helm": "hair-town-3",
+   "helm": "hair-04",
    "weapon": "weapon-hammer-tongs",
    "morph": [
     1.0,
     1.1
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "flower-seller": {
-   "face": "face-town-2",
+   "face": "face-f03",
    "armor": "armor-villager-woman",
    "cape": null,
    "helm": "helm-kerchief",
@@ -8825,32 +3689,57 @@
    "morph": [
     0.98,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "DARK BROWN",
+    "eyes": "GREEN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "traveller": {
-   "face": "face-town-14",
+   "face": "face-m05",
    "armor": "armor-road",
    "cape": "cape-travelling",
-   "helm": "hair-town-14",
+   "helm": "hair-02",
    "weapon": "weapon-walking-stick",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "seamstress": {
-   "face": "face-town-10",
+   "face": "face-f03",
    "armor": "armor-villager-woman",
    "cape": null,
-   "helm": "hair-town-10",
+   "helm": "hair-29",
    "weapon": null,
    "morph": [
     0.98,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "courier": {
-   "face": "face-town-9",
+   "face": "face-m02",
    "armor": "armor-courier",
    "cape": null,
    "helm": "helm-flat-cap",
@@ -8858,32 +3747,55 @@
    "morph": [
     0.96,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "pilgrim": {
-   "face": "face-town-13",
+   "face": "face-f06",
    "armor": "armor-pilgrim",
    "cape": null,
-   "helm": "hair-town-13",
+   "helm": "hair-26",
    "weapon": "weapon-pilgrim-staff",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "BROWN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "weaver": {
-   "face": "face-town-4",
+   "face": "face-f06",
    "armor": "armor-villager-woman",
    "cape": null,
-   "helm": "hair-town-4",
+   "helm": "hair-38",
    "weapon": "weapon-spindle",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "farmhand": {
-   "face": "face-town-1",
+   "face": "face-m03",
    "armor": "armor-villager-man",
    "cape": null,
    "helm": "helm-straw-hat",
@@ -8891,54 +3803,95 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "GOLD",
+    "eyes": "BLUE"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "old-man": {
-   "face": "face-town-5",
+   "face": "face-m10",
    "armor": "armor-elder-coat",
    "cape": null,
-   "helm": "hair-town-5",
+   "helm": "hair-11",
    "weapon": "weapon-walking-stick",
    "morph": [
     0.94,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-11"
+   ],
+   "base": "base-male"
   },
   "maid": {
-   "face": "face-town-10",
+   "face": "face-f03",
    "armor": "armor-maid",
    "cape": null,
-   "helm": "hair-town-10",
+   "helm": "hair-29",
    "weapon": "weapon-feather-duster",
    "morph": [
     0.97,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "porter": {
-   "face": "face-town-11",
+   "face": "face-m05",
    "armor": "armor-porter",
    "cape": null,
-   "helm": "hair-town-11",
+   "helm": "hair-03",
    "weapon": "weapon-crate",
    "morph": [
     1.0,
     1.08
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "old-woman": {
-   "face": "face-town-6",
+   "face": "face-f10",
    "armor": "armor-elder-woman",
    "cape": "cape-old-woman",
-   "helm": "hair-town-6",
+   "helm": "hair-37",
    "weapon": "weapon-basket",
    "morph": [
     0.9,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "child": {
-   "face": "face-town-7",
+   "face": "face-m01",
    "armor": "armor-urchin",
    "cape": null,
    "helm": "helm-flat-cap",
@@ -8946,21 +3899,37 @@
    "morph": [
     0.62,
     0.66
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "youth": {
-   "face": "face-town-9",
+   "face": "face-m02",
    "armor": "armor-villager-man",
    "cape": null,
-   "helm": "hair-town-9",
+   "helm": "hair-03",
    "weapon": null,
    "morph": [
     0.9,
     0.88
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-male"
   },
   "pool-questeria": {
-   "face": "face-town-4",
+   "face": "face-f06",
    "armor": "armor-villager-woman",
    "cape": null,
    "helm": "helm-kerchief",
@@ -8968,32 +3937,57 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "pool-court": {
-   "face": "face-town-16",
+   "face": "face-m04",
    "armor": "armor-noble",
    "cape": null,
-   "helm": "helm-beret",
+   "helm": "hair-21",
    "weapon": null,
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "GREEN"
+   },
+   "extras": [
+    "ears-01"
+   ],
+   "base": "base-male"
   },
   "pool-court-lady": {
-   "face": "face-town-10",
+   "face": "face-f03",
    "armor": "armor-noble-gown",
    "cape": null,
-   "helm": "hair-town-10",
+   "helm": "hair-29",
    "weapon": null,
    "morph": [
     0.98,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "pool-saltwind": {
-   "face": "face-town-12",
+   "face": "face-m09",
    "armor": "armor-fisher",
    "cape": null,
    "helm": "helm-knit-cap",
@@ -9001,32 +3995,57 @@
    "morph": [
     1.0,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-08"
+   ],
+   "base": "base-male"
   },
   "pool-doomward": {
-   "face": "face-town-14",
+   "face": "face-m05",
    "armor": "armor-refugee-man",
    "cape": "cape-blanket",
-   "helm": "hair-town-14",
+   "helm": "hair-02",
    "weapon": "weapon-walking-stick",
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "pool-morvaine": {
-   "face": "face-town-18",
+   "face": "face-f07",
    "armor": "armor-morvaine-woman",
    "cape": null,
-   "helm": "hair-town-18",
+   "helm": "hair-33",
    "weapon": "weapon-lantern",
    "morph": [
     1.0,
     0.92
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "pool-abbey": {
-   "face": "face-town-15",
+   "face": "face-f06",
    "armor": "armor-abbey-lay",
    "cape": null,
    "helm": "helm-straw-hat",
@@ -9034,29 +4053,56 @@
    "morph": [
     0.72,
     0.8
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "HAZEL"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "red-gull-thug": {
-   "face": "face-red-gull",
+   "face": "face-m06",
    "armor": "armor-red-gull",
    "cape": null,
-   "helm": "hair-red-gull",
+   "helm": null,
    "weapon": "weapon-cudgel",
    "morph": [
     1.08,
     1.15
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01",
+    "skin-05"
+   ],
+   "base": "base-male"
   },
   "bosun-grell": {
-   "face": "face-grell",
+   "face": "face-m06",
    "armor": "armor-grell",
    "cape": null,
-   "helm": "hair-grell",
+   "helm": null,
    "weapon": "weapon-cutlass",
    "morph": [
     0.85,
     1.55
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "COPPER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-08",
+    "skin-02"
+   ],
+   "base": "base-male"
   },
   "hollowed-footman": {
    "face": "face-hollowed",
@@ -9067,7 +4113,10 @@
    "morph": [
     0.97,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "hollowed-hexer": {
    "face": "face-hollowed",
@@ -9078,7 +4127,10 @@
    "morph": [
     1.01,
     0.9
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "hollowed-sapper": {
    "face": "face-hollowed",
@@ -9089,7 +4141,10 @@
    "morph": [
     0.95,
     1.05
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "sapper-chief": {
    "face": "face-hollowed",
@@ -9100,7 +4155,10 @@
    "morph": [
     1.06,
     1.2
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "vault-construct": {
    "face": "face-construct-vault",
@@ -9111,10 +4169,13 @@
    "morph": [
     1.2,
     1.35
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "kael-duel": {
-   "face": "face-kael",
+   "face": "face-m04",
    "armor": "armor-kael",
    "cape": "cape-tail-ember",
    "helm": "helm-kael-hood",
@@ -9122,7 +4183,16 @@
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "BLACK",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "horns-02"
+   ],
+   "base": "base-male"
   },
   "hollowed-climber": {
    "face": "face-hollowed",
@@ -9133,10 +4203,13 @@
    "morph": [
     1.02,
     0.88
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "varkhul": {
-   "face": "face-varkhul",
+   "face": "face-m10",
    "armor": "armor-varkhul",
    "cape": "cape-varkhul",
    "helm": "helm-varkhul",
@@ -9144,43 +4217,79 @@
    "morph": [
     1.2,
     1.25
-   ]
+   ],
+   "tints": {
+    "skin": "STONE",
+    "hair": "SILVER",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "varkhul.varkhul-unmasked": {
-   "face": "face-varkhul",
+   "face": "face-m10",
    "armor": "armor-varkhul-split",
    "cape": "cape-varkhul",
-   "helm": "hair-varkhul",
+   "helm": "hair-47",
    "weapon": null,
    "morph": [
     1.2,
     1.25
-   ]
+   ],
+   "tints": {
+    "skin": "STONE",
+    "hair": "SILVER",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "maleficio-boss": {
-   "face": "face-maleficio",
+   "face": "face-m10",
    "armor": "armor-maleficio-ascendant",
    "cape": null,
-   "helm": "hair-maleficio",
+   "helm": "hair-10",
    "weapon": "weapon-black-box",
    "morph": [
     1.01,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "SILVER",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "cube-cultist": {
-   "face": "face-cube-cultist",
+   "face": "face-m05",
    "armor": "armor-cultist",
    "cape": null,
-   "helm": "hair-cube-cultist",
+   "helm": "hair-01",
    "weapon": "weapon-cultist-dagger",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "skin-06"
+   ],
+   "base": "base-male"
   },
   "bandit": {
-   "face": "face-town-11",
+   "face": "face-m05",
    "armor": "armor-bandit",
    "cape": null,
    "helm": "helm-bandit-hood",
@@ -9188,21 +4297,37 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "thrall": {
-   "face": "face-thrall",
+   "face": "face-m05",
    "armor": "armor-thrall",
    "cape": null,
-   "helm": "hair-thrall",
+   "helm": "hair-01",
    "weapon": "weapon-spear-lantern",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "vesk": {
-   "face": "face-thrall",
+   "face": "face-m05",
    "armor": "armor-thrall-knight",
    "cape": "cape-thrall-knight",
    "helm": "helm-vesk-wolf",
@@ -9210,10 +4335,17 @@
    "morph": [
     1.08,
     1.15
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "vreya": {
-   "face": "face-vreya",
+   "face": "face-f04",
    "armor": "armor-thrall-knight-f",
    "cape": "cape-thrall-knight",
    "helm": "helm-vreya-crown",
@@ -9221,10 +4353,17 @@
    "morph": [
     1.06,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "WHITE",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "mordain": {
-   "face": "face-thrall",
+   "face": "face-m05",
    "armor": "armor-thrall-knight",
    "cape": "cape-thrall-knight",
    "helm": "helm-mordain-beak",
@@ -9232,10 +4371,17 @@
    "morph": [
     1.08,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "COPPER",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "gilded-knight": {
-   "face": "face-town-14",
+   "face": "face-m05",
    "armor": "armor-gilded-knight",
    "cape": "cape-gilded",
    "helm": "helm-gilded",
@@ -9243,29 +4389,50 @@
    "morph": [
     1.02,
     1.05
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "DARK BROWN",
+    "eyes": "GREY"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "gilded-sergeant": {
-   "face": "face-town-12",
+   "face": "face-m09",
    "armor": "armor-gilded-knight",
    "cape": "cape-gilded",
-   "helm": "hair-town-12",
+   "helm": "hair-02",
    "weapon": "weapon-mace-shield",
    "morph": [
     1.0,
     1.12
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-08"
+   ],
+   "base": "base-male"
   },
   "drowned": {
    "face": "face-drowned",
    "armor": "armor-drowned",
    "cape": null,
-   "helm": "hair-drowned",
+   "helm": null,
    "weapon": null,
    "morph": [
     0.97,
     1.05
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "blood-wight": {
    "face": "face-blood-wight",
@@ -9276,7 +4443,10 @@
    "morph": [
     1.1,
     0.85
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "sun-scorched": {
    "face": "face-sun-scorched",
@@ -9287,7 +4457,10 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "thornling": {
    "face": "face-thornling",
@@ -9298,7 +4471,10 @@
    "morph": [
     0.68,
     0.7
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "priest-construct": {
    "face": "face-construct-priest",
@@ -9309,10 +4485,13 @@
    "morph": [
     1.2,
     1.3
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "severin-boss": {
-   "face": "face-severin",
+   "face": "face-m08",
    "armor": "armor-severin",
    "cape": "cape-severin-wings",
    "helm": "helm-crown-thorns",
@@ -9320,10 +4499,17 @@
    "morph": [
     1.1,
     0.9
-   ]
+   ],
+   "tints": {
+    "skin": "PORCELAIN",
+    "hair": "SILVER",
+    "eyes": "RED"
+   },
+   "extras": [],
+   "base": "base-male"
   },
   "smuggler": {
-   "face": "face-town-10",
+   "face": "face-f03",
    "armor": "armor-smuggler",
    "cape": null,
    "helm": "helm-bandana",
@@ -9331,10 +4517,19 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "FAIR",
+    "hair": "COPPER",
+    "eyes": "BLUE"
+   },
+   "extras": [
+    "skin-01"
+   ],
+   "base": "base-female"
   },
   "protectorate-watchman": {
-   "face": "face-town-11",
+   "face": "face-m05",
    "armor": "armor-protectorate",
    "cape": "cape-watch",
    "helm": "helm-watch",
@@ -9342,10 +4537,19 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-01"
+   ],
+   "base": "base-male"
   },
   "protectorate-warden": {
-   "face": "face-town-3",
+   "face": "face-m09",
    "armor": "armor-protectorate-warden",
    "cape": null,
    "helm": "helm-warden",
@@ -9353,7 +4557,16 @@
    "morph": [
     1.08,
     1.18
-   ]
+   ],
+   "tints": {
+    "skin": "UMBER",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-07"
+   ],
+   "base": "base-male"
   },
   "crown-hollowed": {
    "face": "face-crown-hollowed",
@@ -9364,7 +4577,10 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "crown-construct": {
    "face": "face-construct-crown",
@@ -9375,21 +4591,33 @@
    "morph": [
     1.25,
     1.2
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "kael-shadow": {
-   "face": "face-kael",
+   "face": "face-m04",
    "armor": "armor-kael-shadow",
    "cape": "cape-tail-ember",
-   "helm": "hair-kael",
+   "helm": "hair-03",
    "weapon": "weapon-kael-knives",
    "morph": [
     1.0,
     0.95
-   ]
+   ],
+   "tints": {
+    "skin": "TAN",
+    "hair": "BLACK",
+    "eyes": "AMBER"
+   },
+   "extras": [
+    "horns-02"
+   ],
+   "base": "base-male"
   },
   "sb-sovereign": {
-   "face": "face-player-3",
+   "face": "face-f04",
    "armor": "armor-sovereign",
    "cape": null,
    "helm": "helm-crown-dusk-dawn",
@@ -9397,7 +4625,14 @@
    "morph": [
     1.02,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "PEACH",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [],
+   "base": "base-female"
   },
   "unmade": {
    "face": "face-unmade",
@@ -9408,7 +4643,10 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "unmade.b": {
    "face": "face-unmade",
@@ -9419,7 +4657,10 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "unmade.c": {
    "face": "face-unmade",
@@ -9430,7 +4671,10 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "unmade.d": {
    "face": "face-unmade",
@@ -9441,18 +4685,30 @@
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {},
+   "extras": [],
+   "base": "base-male"
   },
   "ashfall-raider": {
-   "face": "face-town-12",
+   "face": "face-m09",
    "armor": "armor-ashfall-raider",
    "cape": "cape-ash",
-   "helm": "hair-town-12",
+   "helm": "hair-02",
    "weapon": "weapon-raider-kit",
    "morph": [
     1.0,
     1.0
-   ]
+   ],
+   "tints": {
+    "skin": "OLIVE",
+    "hair": "BLACK",
+    "eyes": "BROWN"
+   },
+   "extras": [
+    "beard-08"
+   ],
+   "base": "base-male"
   }
  },
  "gear": [

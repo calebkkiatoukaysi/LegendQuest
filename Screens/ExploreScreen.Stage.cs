@@ -219,11 +219,24 @@ public partial class ExploreScreen : ICutsceneStage
     /// <inheritdoc/>
     public float Animate(string actor, string clip, string partner)
     {
-        if (!LegacyClips.TryGet(clip, out WalkerPose pose)) return 0f;
-
         Vector2? toward = partner is not null && Figures(partner) is [var them, ..] ? them.Walker.Position : null;
+        // A figure from parts plays the clip itself; one off a sheet strikes the pose it's nearest.
+        float played = 0f;
         foreach ((_, WalkerSprite walker, _) in Figures(actor))
         {
+            if (!walker.PlaysClips) continue;
+            _gestures.Remove(walker);
+            _downed.Remove(walker);
+            if (toward is Vector2 near && near != walker.Position) walker.Face(near);
+            float seconds = walker.PlayClip(clip);
+            if (seconds > 0f) _gestures.Add(walker);
+            played = MathF.Max(played, MathF.Min(seconds, LegacyClips.Seconds));
+        }
+        if (!LegacyClips.TryGet(clip, out WalkerPose pose)) return played;
+
+        foreach ((_, WalkerSprite walker, _) in Figures(actor))
+        {
+            if (walker.PlaysClips) continue;
             _gestures.Remove(walker);
             _downed.Remove(walker);
             if (pose == WalkerPose.None)
@@ -237,7 +250,7 @@ public partial class ExploreScreen : ICutsceneStage
             if (pose == WalkerPose.Downed) _downed.Add(walker);
             else _gestures.Add(walker);
         }
-        return pose == WalkerPose.None ? 0f : LegacyClips.Seconds;
+        return pose == WalkerPose.None ? played : MathF.Max(played, LegacyClips.Seconds);
     }
 
     /// <inheritdoc/>

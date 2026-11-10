@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using LegendQuest.Characters;
 using LegendQuest.Collisions;
 
 namespace LegendQuest.Characters;
@@ -57,15 +58,23 @@ public class WalkerSprite
     private const float BreathSeconds = 3.4f;
 
     /// <summary>
-    /// A figure put together from parts moves each piece on top of the whole figure's lean (radians,
-    /// toward the way it faces): the head nods with the breath and against the stride; what's in the
-    /// near hand sways with the breath, swings with the stride, and goes back for a wind-up, through
-    /// for a strike and up for a cast; the far hand braces against a blow; the cape sways on its own
-    /// time, trails a walk and flies out from a lunge.
+    /// A figure put together from parts plays the clips (ClipLibrary) on its skeleton: standing
+    /// breathes, moving jogs (the party's pace) or, slower, walks (a stroll), each fighting pose plays
+    /// its move (for the weapon in hand), and a cutscene can play any clip by name (PlayClip).
     /// </summary>
-    private const float HeadNod = 0.012f, HeadCounter = 0.02f;
-    private const float HandSway = 0.025f, HandSwing = 0.07f, FarSwing = 0.04f;
-    private const float CapeSway = 0.025f, CapeSeconds = 2.9f, CapeTrail = 0.12f, CapeFlutter = 0.04f;
+    private const string IdleClip = "idle", JogClip = "jog", StrollClip = "walk";
+
+    /// <summary>
+    /// How fast someone from parts is going decides how they move: from JogFrom world pixels a second
+    /// they jog, and under StrollUnder they walk (between, whichever they were doing). A clip that
+    /// moves the figure along plays as much faster or slower as they're really going than the pace its
+    /// planted feet were worked out for, so the feet don't slide, within MinPace and MaxPace; walking
+    /// on the spot (InPlace or slower: the character screen) it plays at its own pace. The speed is
+    /// eased over SpeedSettle seconds, and a jump of more than MaxGroundSpeed (a door, a cut) isn't
+    /// walking.
+    /// </summary>
+    private const float JogFrom = 40f, StrollUnder = 34f, InPlace = 3f, MinPace = 0.6f, MaxPace = 1.7f;
+    private const float SpeedSettle = 0.1f, MaxGroundSpeed = 300f;
 
     /// <summary>How much deeper each piece behind the front one sorts, so a figure's pieces stay in order between two people at the same depth.</summary>
     private const float PieceStep = 1e-6f;
@@ -124,15 +133,23 @@ public class WalkerSprite
     private float _stretch;
     private float _lying;
 
-    /// <summary>A figure from parts: its head's nod, its near hand's swing, its far hand's brace, its cape's kick and its cast glow, each eased toward the pose's.</summary>
-    private float _nod;
-    private float _swing;
-    private float _brace;
-    private float _kick;
+    /// <summary>A figure from parts: its cast glow, eased toward the pose's.</summary>
     private float _glow;
 
-    /// <summary>How far through its sway the cape is, in seconds.</summary>
-    private float _cape = _made * BreathSpacing % 1f * CapeSeconds;
+    /// <summary>A figure from parts: the clip it's playing, the clip a cutscene asked for (held until another pose or Release), and its skeleton worked out.</summary>
+    private ClipPlayer _player;
+    private Clip _gesture;
+    private float[] _turns;
+
+    /// <summary>How fast they're going over the ground, eased, in world pixels a second; where they were last update; and whether they last moved at a stroll.</summary>
+    private float _groundSpeed;
+    private Vector2 _lastPosition;
+    private bool _measured, _strolling;
+
+    /// <summary>Whether the clip playing says when the feet land (Stepped fires then rather than off the sheet's frames).</summary>
+    private bool _clipSteps;
+    private Vector2[] _joints, _at;
+    private readonly List<ImportedFigure.Piece> _order = new();
 
     /// <summary>How far through a breath an imported picture is, in seconds.</summary>
     private float _breath = _made++ * BreathSpacing % 1f * BreathSeconds;
@@ -222,6 +239,7 @@ public class WalkerSprite
     /// <param name="seconds">How long to hold it before going back, or 0 to hold it until another pose or Release (someone Downed stays down).</param>
     public void Play(WalkerPose pose, float seconds = 0f)
     {
+        _gesture = null;
         _pose = pose;
         _poseHeld = seconds <= 0f;
         _poseLeft = seconds;
@@ -229,6 +247,20 @@ public class WalkerSprite
 
     /// <summary>Lets go of whatever pose they're in, back to standing or walking.</summary>
     public void Release() => Play(WalkerPose.None);
+
+    /// <summary>Whether they're a figure from parts that plays clips.</summary>
+    public bool PlaysClips => Body is { Joints: not null } && Skeleton.Current is not null;
+
+    /// <summary>Plays a clip by name (ClipLibrary) until another pose or Release: one that doesn't loop holds its last pose.</summary>
+    /// <param name="name">The clip's name, or another name for it.</param>
+    /// <returns>How long it takes, in seconds; 0 if they don't play clips or there's no such clip.</returns>
+    public float PlayClip(string name)
+    {
+        if (!PlaysClips || !ClipLibrary.TryGet(name, Body.Base, out Clip clip)) return 0f;
+        _pose = WalkerPose.None;
+        _gesture = clip;
+        return clip.Length;
+    }
 
     /// <summary>Moves the figure out and back again, easing in and out: a lunge toward a foe, a recoil from a blow, a sidestep from one that missed.</summary>
     /// <param name="by">How far it goes at its height, in world pixels.</param>
@@ -260,7 +292,9 @@ public class WalkerSprite
             _poseLeft -= seconds;
             if (_poseLeft <= 0f) _pose = WalkerPose.None;
         }
+        Measure(seconds);
         Settle(seconds);
+        Animate(seconds);
 
         if (!IsWalking)
         {
@@ -272,9 +306,25 @@ public class WalkerSprite
         _clock += seconds;
         int frame = 1 + (int)(_clock / StepTime) % WalkFrames;
 
-        // The first step happens right away, so even a quick tap makes a footstep.
-        if (frame != _frame && (frame == 1 || frame == 3)) Stepped?.Invoke();
+        // The first step happens right away, so even a quick tap makes a footstep. A figure from parts
+        // steps when its clip's feet land instead (Animate).
+        if (frame != _frame && (frame == 1 || frame == 3) && !_clipSteps) Stepped?.Invoke();
         _frame = frame;
+    }
+
+    /// <summary>Eases the speed they're going over the ground toward how far they've moved since the last update.</summary>
+    /// <param name="seconds">How long since the last update.</param>
+    private void Measure(float seconds)
+    {
+        if (seconds <= 0f) return;
+        if (_measured)
+        {
+            float moved = Vector2.Distance(Position, _lastPosition) / seconds;
+            if (moved > MaxGroundSpeed) moved = _groundSpeed;
+            _groundSpeed += (moved - _groundSpeed) * (1f - MathF.Exp(-seconds / SpeedSettle));
+        }
+        _lastPosition = Position;
+        _measured = true;
     }
 
     /// <summary>Turns to face a point: whichever of the four ways is closest, or with SideOnly on, left or right by which side of them it's on.</summary>
@@ -355,63 +405,145 @@ public class WalkerSprite
         ImportedFigure body = Body;
         float rest = fall * MathF.Min(body.Feet.X, body.Picture.Height * LyingRest) * ImportedFigure.Texel;
 
-        var at = new Vector2(feet.X, feet.Y - MathF.Round((bob + rest) / pixel) * pixel);
-        var scale = new Vector2(ImportedFigure.Texel, ImportedFigure.Texel * stretch);
-        if (body.Rig.Count > 0)
+        if (PlaysClips && body.Rig.Count > 0)
         {
-            DrawPieces(spriteBatch, body, at, rotation, scale, stride, colour, layerDepth, fall);
+            DrawRigged(spriteBatch, body, feet, new Vector2(ImportedFigure.Texel), colour, layerDepth);
             return;
         }
+        var at = new Vector2(feet.X, feet.Y - MathF.Round((bob + rest) / pixel) * pixel);
+        var scale = new Vector2(ImportedFigure.Texel, ImportedFigure.Texel * stretch);
         var origin = new Vector2(left ? body.Picture.Width - body.Feet.X : body.Feet.X, body.Feet.Y);
         spriteBatch.Draw(body.Picture, at, null, colour, rotation, origin, scale, left ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
     }
 
     /// <summary>
-    /// A figure from parts, piece by piece: each piece's socket goes where the whole figure's lean,
-    /// stretch and mirroring carry it, and the piece turns about it by its own motion (Turn) on top.
-    /// Then the cast glow in the near hand.
+    /// A figure from parts, piece by piece, as its clip has it now: the skeleton worked out
+    /// (Skeleton.Solve), each piece drawn turned with its bone about where its joint has gone,
+    /// mirrored facing left, back to front, with what the clip brings in front of the chest after the
+    /// head. Then the cast glow in the near hand.
     /// </summary>
-    private void DrawPieces(SpriteBatch spriteBatch, ImportedFigure body, Vector2 at, float rotation, Vector2 scale, float stride, Color colour, float layerDepth, float fall)
+    private void DrawRigged(SpriteBatch spriteBatch, ImportedFigure body, Vector2 at, Vector2 scale, Color colour, float layerDepth)
     {
+        Skeleton skeleton = Skeleton.Current;
+        if (_player is null || _joints is null || _joints.Length != skeleton.Count) Animate(0f);
         bool left = Facing == Direction.Left;
-        float sign = left ? -1f : 1f, cos = MathF.Cos(rotation), sin = MathF.Sin(rotation);
-        Vector2 Place(Vector2 onPicture)
+        float sign = left ? -1f : 1f;
+        for (int i = 0; i < skeleton.Count; i++) _joints[i] = body.Joints.TryGetValue(skeleton.Names[i], out Vector2 joint) ? joint : body.Feet;
+        skeleton.Solve(_player.Pose, _joints, body.RigPx, _turns, _at);
+        Vector2 Place(Vector2 onPicture) => at + (onPicture - body.Feet) * new Vector2(sign, 1f) * scale;
+
+        // Back to front, what the clip brings in front of the chest moved to just after the head.
+        _order.Clear();
+        IReadOnlyList<string> front = _player.Clip?.Front ?? Array.Empty<string>();
+        int afterHead = -1;
+        foreach (ImportedFigure.Piece piece in body.Rig)
         {
-            Vector2 d = (onPicture - body.Feet) * new Vector2(sign, 1f) * scale;
-            return at + new Vector2(d.X * cos - d.Y * sin, d.X * sin + d.Y * cos);
+            if (front.Count > 0 && Contains(front, piece.Bone)) continue;
+            _order.Add(piece);
+            if (piece.Key == "head") afterHead = _order.Count;
+        }
+        if (front.Count > 0)
+        {
+            int at0 = afterHead < 0 ? _order.Count : afterHead;
+            foreach (ImportedFigure.Piece piece in body.Rig)
+                if (Contains(front, piece.Bone)) _order.Insert(at0++, piece);
         }
 
-        IReadOnlyList<ImportedFigure.Piece> pieces = body.Rig;
-        for (int i = 0; i < pieces.Count; i++)
+        for (int k = 0; k < _order.Count; k++)
         {
-            ImportedFigure.Piece piece = pieces[i];
+            ImportedFigure.Piece piece = _order[k];
+            int i = skeleton.IndexOf(piece.Bone);
+            if (i < 0) continue;
             Vector2 origin = piece.Pivot - piece.Offset;
             if (left) origin.X = piece.Picture.Width - origin.X;
-            float turn = sign * Turn(piece.Bone, stride) * (1f - fall);
-            float depth = MathF.Min(1f, layerDepth + (pieces.Count - 1 - i) * PieceStep);
-            spriteBatch.Draw(piece.Picture, Place(piece.Pivot), null, colour, rotation + turn, origin, scale, left ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+            BonePose own = _player.Pose[i];
+            float depth = MathF.Min(1f, layerDepth + (_order.Count - 1 - k) * PieceStep);
+            spriteBatch.Draw(piece.Picture, Place(_at[i]), null, colour, sign * _turns[i], origin, scale * new Vector2(own.Sx, own.Sy),
+                left ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
         }
 
-        if (_glow <= 0.01f || body.Hand is not Vector2 near) return;
+        if (_glow <= 0.01f) return;
+        int hand = skeleton.IndexOf("hand_near");
+        if (hand < 0) return;
         float size = body.Size.Y * CastGlowSize * (0.85f + 0.15f * MathF.Sin(_breath * 9f));
-        spriteBatch.Draw(_shadow, Place(near), null, CastGlow * (_glow * 0.75f * Opacity), 0f, new Vector2(_shadow.Width, _shadow.Height) / 2f,
+        spriteBatch.Draw(_shadow, Place(_at[hand]), null, CastGlow * (_glow * 0.75f * Opacity), 0f, new Vector2(_shadow.Width, _shadow.Height) / 2f,
             size / _shadow.Width, SpriteEffects.None, MathF.Max(0f, layerDepth - PieceStep));
     }
 
-    /// <summary>How far a piece turns about its socket now, toward the way the figure faces: its pose's, eased, and its breath, stride or sway.</summary>
-    private float Turn(FigureBone bone, float stride)
+    private static bool Contains(IReadOnlyList<string> names, string name)
     {
-        float breath = _breath / BreathSeconds * MathHelper.TwoPi;
-        float walking = IsWalking ? 1f : 0f;
-        return bone switch
+        for (int i = 0; i < names.Count; i++)
+            if (names[i] == name) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// For a figure from parts, picks the clip for what they're doing and moves it on: a cutscene's
+    /// clip while it holds; else their fighting pose's move, for the weapon in hand; else jogging or
+    /// strolling, at the pace they're going; else standing. Fires Stepped as the clip's feet land.
+    /// </summary>
+    /// <param name="seconds">How long since the last update.</param>
+    private void Animate(float seconds)
+    {
+        if (!PlaysClips) return;
+        Skeleton skeleton = Skeleton.Current;
+        if (_player is null || _joints is null || _joints.Length != skeleton.Count)
         {
-            FigureBone.Head => _nod + HeadNod * MathF.Sin(breath) - walking * HeadCounter * MathF.Sin(stride),
-            FigureBone.Near => _swing + HandSway * MathF.Sin(breath + 1f) + walking * HandSwing * MathF.Sin(stride),
-            FigureBone.Far => _brace - walking * FarSwing * MathF.Sin(stride),
-            FigureBone.Back => _kick + CapeSway * MathF.Sin(_cape / CapeSeconds * MathHelper.TwoPi)
-                + walking * (CapeTrail + CapeFlutter * MathF.Sin(stride * 2f)),
-            _ => 0f,
+            _player = new ClipPlayer(skeleton);
+            _turns = new float[skeleton.Count];
+            _joints = new Vector2[skeleton.Count];
+            _at = new Vector2[skeleton.Count];
+        }
+        ImportedFigure body = Body;
+        Clip clip = _gesture ?? (_pose != WalkerPose.None ? PoseClip(_pose) : null);
+        if (clip is null && IsWalking)
+        {
+            if (_groundSpeed >= JogFrom) _strolling = false;
+            else if (_groundSpeed > InPlace && _groundSpeed < StrollUnder) _strolling = true;
+            clip = ClipLibrary.Get(_strolling ? StrollClip : JogClip, body.Base);
+        }
+        clip ??= ClipLibrary.Get(IdleClip, body.Base);
+
+        // A clip that goes somewhere plays at the pace they're really going, so the feet stay put.
+        float pace = 1f;
+        if (clip is { Speed: > 0f } && _groundSpeed > InPlace && body.RigPx > 0f)
+            pace = Math.Clamp(_groundSpeed / (clip.Speed * body.RigPx * ImportedFigure.Texel), MinPace, MaxPace);
+
+        Clip before = _player.Clip;
+        float from = _player.Time;
+        _player.Play(clip, pace);
+        if (_player.Clip != before) from = -1e-4f;
+        _player.Update(seconds);
+
+        // Each foot that's landed since the last update.
+        _clipSteps = clip is not null && clip.Steps.Count > 0;
+        if (!_clipSteps || seconds <= 0f) return;
+        float now = _player.Time;
+        foreach (float step in clip.Steps)
+            if (now >= from ? step > from && step <= now : step > from || step <= now)
+                Stepped?.Invoke();
+    }
+
+    /// <summary>The clip a fighting pose plays: the wind-up and the strike for the weapon in hand (one-handed if they hold one, unarmed if not), the cast, the flinch, or lying down.</summary>
+    private Clip PoseClip(WalkerPose pose)
+    {
+        string weapon = Body is ImportedFigure body && HoldsWeapon(body) ? "one-hand" : "unarmed";
+        return pose switch
+        {
+            WalkerPose.WindUp => ClipLibrary.ForMove("windup", weapon),
+            WalkerPose.Strike => ClipLibrary.ForMove("strike", weapon),
+            WalkerPose.Cast => ClipLibrary.ForMove("cast", null) ?? ClipLibrary.Get("cast"),
+            WalkerPose.Hurt => ClipLibrary.Get("hurt"),
+            WalkerPose.Downed => ClipLibrary.Get("downed"),
+            _ => null,
         };
+    }
+
+    private static bool HoldsWeapon(ImportedFigure body)
+    {
+        foreach (ImportedFigure.Piece piece in body.Rig)
+            if (piece.Key == RigComposer.Weapon) return true;
+        return false;
     }
 
     /// <summary>Breathes, and eases an imported picture's lean and stretch toward its pose's, and down to lying when it's Downed or back up when it isn't.</summary>
@@ -419,28 +551,12 @@ public class WalkerSprite
     private void Settle(float seconds)
     {
         _breath = (_breath + seconds) % BreathSeconds;
-        _cape = (_cape + seconds) % CapeSeconds;
         float toward = 1f - MathF.Exp(-PoseRate * seconds);
         _lean += (LeanOf(_pose) - _lean) * toward;
-        (float nod, float swing, float brace, float kick) = PieceTurns(_pose);
-        _nod += (nod - _nod) * toward;
-        _swing += (swing - _swing) * toward;
-        _brace += (brace - _brace) * toward;
-        _kick += (kick - _kick) * toward;
         _glow += ((_pose == WalkerPose.Cast ? 1f : 0f) - _glow) * toward;
         _stretch += ((_pose == WalkerPose.Cast ? CastStretch : 0f) - _stretch) * toward;
         _lying += ((_pose == WalkerPose.Downed ? 1f : 0f) - _lying) * (1f - MathF.Exp(-FallRate * seconds));
     }
-
-    /// <summary>How far a figure from parts turns its head, its near hand, its far hand and its cape for a pose, in radians toward the way it faces.</summary>
-    private static (float Nod, float Swing, float Brace, float Kick) PieceTurns(WalkerPose pose) => pose switch
-    {
-        WalkerPose.WindUp => (-0.04f, -0.75f, 0.05f, -0.05f),
-        WalkerPose.Strike => (0.07f, 0.55f, -0.1f, 0.12f),
-        WalkerPose.Cast => (-0.12f, -0.45f, 0f, -0.04f),
-        WalkerPose.Hurt => (-0.16f, -0.15f, 0.18f, -0.06f),
-        _ => (0f, 0f, 0f, 0f),
-    };
 
     /// <summary>How far an imported picture leans for a pose, in radians toward the way it faces.</summary>
     private static float LeanOf(WalkerPose pose) => pose switch

@@ -19,7 +19,13 @@ public enum PartSlot
     Armor,
     Head,
     Face,
+
+    /// <summary>What's on the face that isn't the face: a beard or moustache, earrings and the like, a scar or freckles. Several at once, drawn over the face and under the hair.</summary>
+    Facial,
     Helm,
+
+    /// <summary>What marks a people: pointed ears, horns, beast ears or feathers. Several at once, drawn over the hair or the helm.</summary>
+    Marks,
     Weapon,
     Offhand,
 }
@@ -41,29 +47,6 @@ public enum PartSlot
 /// they do.
 /// </para>
 /// </remarks>
-/// <summary>
-/// The pieces a figure moves in, back to front: the cape, the body (with the armor), the head (with
-/// the face and the helm), and what's in each hand. Each turns about its socket (Sockets.OfBone)
-/// on top of the whole figure's lean and breath.
-/// </summary>
-public enum FigureBone
-{
-    /// <summary>The cape, swaying from the back.</summary>
-    Back,
-
-    /// <summary>The body and the armor, from the root: the whole figure's lean is this.</summary>
-    Body,
-
-    /// <summary>The head, the face and the helm, nodding on the neck.</summary>
-    Head,
-
-    /// <summary>What's in the near hand, swung from it.</summary>
-    Near,
-
-    /// <summary>What's in the far hand, braced on it.</summary>
-    Far,
-}
-
 public static class Sockets
 {
     /// <summary>The ground between the feet. The body scales about it, and the figure stands on it.</summary>
@@ -96,7 +79,7 @@ public static class Sockets
     {
         PartSlot.Cape => Back,
         PartSlot.Body or PartSlot.Armor => Root,
-        PartSlot.Head or PartSlot.Face or PartSlot.Helm => Neck,
+        PartSlot.Head or PartSlot.Face or PartSlot.Facial or PartSlot.Helm or PartSlot.Marks => Neck,
         PartSlot.Weapon => NearHand,
         PartSlot.Offhand => FarHand,
         _ => throw new ArgumentOutOfRangeException(nameof(slot), slot, "a slot with no socket"),
@@ -105,28 +88,6 @@ public static class Sockets
     /// <summary>A slot's name as parts.json writes it.</summary>
     /// <param name="slot">The slot.</param>
     public static string Name(PartSlot slot) => slot.ToString().ToLowerInvariant();
-
-    /// <summary>The piece a slot's part moves with.</summary>
-    /// <param name="slot">The slot.</param>
-    public static FigureBone BoneOf(PartSlot slot) => slot switch
-    {
-        PartSlot.Cape => FigureBone.Back,
-        PartSlot.Body or PartSlot.Armor => FigureBone.Body,
-        PartSlot.Head or PartSlot.Face or PartSlot.Helm => FigureBone.Head,
-        PartSlot.Weapon => FigureBone.Near,
-        _ => FigureBone.Far,
-    };
-
-    /// <summary>The socket a piece turns about.</summary>
-    /// <param name="bone">The piece.</param>
-    public static string OfBone(FigureBone bone) => bone switch
-    {
-        FigureBone.Back => Back,
-        FigureBone.Body => Root,
-        FigureBone.Head => Neck,
-        FigureBone.Near => NearHand,
-        _ => FarHand,
-    };
 
     /// <summary>The slot a name in parts.json is, if it's one.</summary>
     /// <param name="name">The name.</param>
@@ -172,7 +133,7 @@ public readonly record struct Morph(float Height, float Width)
     /// <param name="slot">The slot.</param>
     public Vector2 ScaleOf(PartSlot slot) => slot switch
     {
-        PartSlot.Head or PartSlot.Face or PartSlot.Helm => new Vector2(HeadScale),
+        PartSlot.Head or PartSlot.Face or PartSlot.Facial or PartSlot.Helm or PartSlot.Marks => new Vector2(HeadScale),
         PartSlot.Weapon or PartSlot.Offhand => new Vector2(Height),
         _ => new Vector2(Width, Height),
     };

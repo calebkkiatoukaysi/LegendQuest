@@ -41,10 +41,10 @@ for pixel, on the base's 1024 x 1536 canvas on solid black. This:
     figure, grown a few pixels in under the body's edge, with its Base and Trim to dye; and each
     weapon and off-hand item (weapons/weapon-<x>.png, weapons/offhand-<x>.png) into the changed
     pieces that reach a hand, leaving out the base's fingers where ChatGPT redrew them;
-  - makes each base's two holding hands, the fists drawn over whatever a hand holds so the fingers
-    close over the grip: the ones painted for it (hands/hand-<man or woman>.png, Story/13 §3.3), or
-    till they come a plain fist of its own (simple_fist); kept as shade, the game colours them as
-    the skin or the glove they cover (Characters/Parts/RigComposer.cs's LiftFist);
+  - cuts each base's body and every armor into the skeleton's pieces (tools/rig/skeleton.py), one
+    per bone, each with what the pieces in front of it hide filled in, so the game can turn them
+    about their joints and play the clips (tools/rig/clips.py, written to clips.json beside the
+    parts); an armor is cut where its base is, so it moves with the body under it;
   - shrinks every layer to PART_SCALE on the canvas's own grid, so a part drawn at its socket lands
     on the pixel it was painted on, records each one's pivot (its socket in its own pixels), and
     packs them into atlas pages, one set per slot;
@@ -72,18 +72,21 @@ import json
 import os
 import re
 import sys
-import warnings
 
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import import_character as ic  # noqa: E402  (its PNG reader and writer, masks, resampling, game data and section writer)
+sys.path.insert(0, os.path.join(HERE, "rig"))
+import skeleton as K  # noqa: E402  (the joints, and the cut into the bones' pieces)
+import clips as CL  # noqa: E402  (the clip library the game plays)
 
 ROOT = os.path.dirname(HERE)
 SOURCE = os.path.join(ROOT, "tools", "source", "characters")
 PARTS = os.path.join(ROOT, "Content", "Characters", "Parts")
 MANIFEST = os.path.join(PARTS, "parts.json")
+CLIPS = os.path.join(PARTS, "clips.json")
 STORY = os.path.join(ROOT, "Story", "13-art-prompts.md")
 PREVIEWS = os.path.join(ROOT, "shots", "art", "parts")
 
@@ -96,27 +99,27 @@ PART_SCALE = 0.5
 
 BASES = ("base-male", "base-female")
 #: The jaw seam (§2.3): from under the ear to the chin. Above it is the face's (or the helm's), below it the body's.
-SEAM = {"base-male": ((510, 250), (595, 293)), "base-female": ((490, 272), (578, 325))}
+SEAM = {"base-male": ((490, 262), (566, 304)), "base-female": ((482, 292), (553, 330))}
 #: Where to look for each hand (the near one is the lit one on the left), and the shoulder line.
-#: Each base's fists themselves (left, right, top, bottom on the canvas), the near one first: clear of
-#: the thigh and the shorts beside them, the wrist at the top. What a hand holds is drawn under its
-#: fist (fist_mask; Characters/Parts/RigComposer.cs's LiftFist). tools/part_sheet.py's FIST_BOXES are
-#: the same boxes, for the weapon sheets' fists.
-FISTS = {"base-male": ((276, 398, 760, 862), (663, 762, 760, 860)),
-         "base-female": ((296, 398, 760, 862), (657, 738, 760, 860))}
-NEAR_HAND = {"base-male": (270, 770, 410, 860), "base-female": (295, 770, 425, 860)}
-FAR_HAND = {"base-male": (640, 760, 760, 860), "base-female": (640, 760, 745, 860)}
-SHOULDERS = {"base-male": 330, "base-female": 365}
+NEAR_HAND = {"base-male": (256, 765, 373, 869), "base-female": (270, 768, 368, 872)}
+FAR_HAND = {"base-male": (676, 760, 769, 863), "base-female": (669, 772, 753, 869)}
+SHOULDERS = {"base-male": 335, "base-female": 370}
 #: How far above the seam the body goes, under the jaw, in the canvas's pixels.
 SKIRT = 10
 
 #: Every socket a base has, and the slot each part hangs from which socket.
 SOCKETS = ("root", "neck", "crown", "chest", "back", "hand.near", "hand.far")
-SLOT_SOCKET = {"body": "root", "head": "neck", "face": "neck", "armor": "root", "cape": "back", "helm": "neck",
-               "weapon": "hand.near", "offhand": "hand.far"}
+SLOT_SOCKET = {"body": "root", "head": "neck", "face": "neck", "facial": "neck", "armor": "root", "cape": "back", "helm": "neck",
+               "marks": "neck", "weapon": "hand.near", "offhand": "hand.far"}
 #: The folders under tools/source/characters a slot's parts are in.
 FOLDERS = {"face": "faces", "armor": "armors", "hair": "hairs", "helm": "helms", "cape": "capes", "weapon": "weapons",
-           "offhand": "weapons"}
+           "offhand": "weapons", "beard": "extras", "jewel": "extras", "skin": "extras", "ears": "extras", "horns": "extras"}
+#: The extras (§4.10), by the first word of their ids: what slot each is in, and what of it the game
+#: dyes: a beard and furred ears the hair's colour, a scar, freckles or a Sylvan's ears the skin's,
+#: jewellery and horns as painted. The library's hairs and extras are painted on both bases: the
+#: woman's copy is the man's id and -f (pair_basis).
+EXTRAS = {"beard": ("facial", "hair"), "jewel": ("facial", None), "skin": ("facial", "skin"),
+          "ears": ("marks", "ears"), "horns": ("marks", None)}
 
 # The faces painted before the head was fixed, head and hair together on the bases with their
 # features: each is split into its face and its hair (split_face).
@@ -209,6 +212,30 @@ EYE_REACH = 14
 WHITE_L, WHITE_C = 72.0, 18.0
 IRIS_REACH = 9
 IRIS_SKIN = 18.0
+# A face painted on a blank base, which has no eyes of its own to say where a face's go
+# (brows_and_irises): its brows and eyes are in these rows and columns of the head box (fractions
+# of it), above the mouth. Its whites are lighter than CREAM_L and greyer than CREAM_C (ChatGPT
+# often paints them cream, but the skin is twice as coloured); an iris is a solid shape within
+# IRIS_REACH of them, between IRIS_L in lightness, coloured past IRIS_C, of IRIS_LEAST pixels or
+# more with IRIS_INSIDE of them that near; a brow is a solid shape darker than BROW_L and greyer
+# than BROW_C (a scar is redder), of BROW_LEAST pixels or more, over the lids.
+FEATURE_ROWS, FEATURE_COLUMNS = (0.28, 0.76), (0.28, 1.02)
+CREAM_L, CREAM_C = 76.0, 32.0
+IRIS_L, IRIS_C, IRIS_LEAST, IRIS_INSIDE = (9.0, 56.0), 12.0, 15, 0.85
+BROW_L, BROW_C, BROW_LEAST = 40.0, 32.0, 40
+# The upper lid, its lashes and a liner are within LID pixels over the top of an eye, and reach
+# EYE_SPREAD past its corners; a brow is above that.
+LID, EYE_SPREAD = 7, 14
+# A brow painted darker than this (its tone's brightness, 0 to 1) has its specks pulled in to its
+# tone before it's dyed (face_layer).
+BROW_TEXTURE = 0.12
+# How far a brow is grown back down under the lid line, and how close to an eye it can come.
+BROW_REGROW, BROW_GAP, BROW_TINT = 12, 4, 8.0
+# A head and a face fade out over SEAM_FEATHER pixels down to the jaw seam (less than SKIRT, so
+# the body's under all of it). A face on the blank keeps the blank's outline: what's darker than
+# OUTLINE_DARK (0 to 1) within OUTLINE_BAND of the head's edge.
+SEAM_FEATHER = 8
+OUTLINE_BAND, OUTLINE_DARK = 5, 0.3
 
 A_BEGIN = "<!-- character parts: written by tools/import_parts.py; don't edit between these two lines -->"
 A_END = "<!-- end character parts -->"
@@ -237,10 +264,14 @@ def story():
 
 
 def basis(text):
-    """{part id: the id it edits}, from each entry's **Basis:** line."""
+    """{part id: the id it edits}, from each entry's **Basis:** line; and for each of the library's
+    hairs and extras painted on the man, its pair on the woman (<id>-f), on her blank base."""
     out = {}
     for m in re.finditer(r"^#### `([a-z0-9.-]+)` ·[^\n]*\n+\*\*Basis:\*\* Edits `([a-z0-9.-]+)`", text, re.M):
         out[m.group(1)] = m.group(2)
+    for pid, edited in list(out.items()):
+        if edited == "base-male-blank" and re.match(r"(hair-\d\d|(?:jewel|skin|ears|horns)-[a-z0-9-]+)$", pid) and not pid.endswith("-f"):
+            out.setdefault(pid + "-f", "base-female-blank")
     return out
 
 
@@ -327,12 +358,45 @@ def check_gear_part(part, slot, base, edits, what):
 RECIPE_SLOTS = ("face", "armor", "cape", "helm", "weapon")
 
 
+def swatch_names():
+    """{"skin" | "hair" | "eyes": [names]}: the game's swatches (Characters/Parts/Swatches.cs), which
+    a recipe's colours are named from."""
+    text = open(os.path.join(ROOT, "Characters", "Parts", "Swatches.cs"), encoding="utf-8").read()
+    out = {}
+    for channel, prop in (("skin", "Skin"), ("hair", "Hair"), ("eyes", "Eyes")):
+        block = re.search(r"Swatch> %s \{ get; \} = new Swatch\[\]\s*\{(.*?)\};" % prop, text, re.S)
+        if not block:
+            fail("Characters/Parts/Swatches.cs has no %s swatches" % prop)
+        out[channel] = re.findall(r'new\("([A-Z ]+)"', block.group(1))
+    return out
+
+
+def colours(cell, rid, names):
+    """A recipe's Colours cell ("skin TAN, hair CHESTNUT, eyes GREEN", any of the three, or "—") as
+    {"skin": name, ...}, each a swatch the game has."""
+    out = {}
+    if cell.strip() in ("", "—", "-"):
+        return out
+    for part in cell.split(","):
+        m = re.match(r"\s*(skin|hair|eyes)\s+([A-Z][A-Z ]*?)\s*$", part)
+        if not m:
+            fail("§7's row for %s has colours I can't read: %r (skin NAME, hair NAME, eyes NAME)" % (rid, cell))
+        channel, name = m.groups()
+        if name not in names[channel]:
+            fail("§7's row for %s colours its %s %s, which isn't one of the game's swatches: %s"
+                 % (rid, channel, name, ", ".join(names[channel])))
+        out[channel] = name
+    return out
+
+
 def recipes(text):
     """{id: recipe} from §7's table, its columns found by their headings: the part in each slot
-    (None for an empty one; the Helm column is what's on the head, a hair or a helm) and the morph."""
+    (None for an empty one; the Helm column is what's on the head, a hair or a helm), the morph and
+    the colours (the skin, hair and eyes it's recoloured to, by swatch name; {} for as painted)."""
     start, end = text.index("\n## 7."), text.index("\n### 7.1 ")
     out = {}
     columns = None
+    names = swatch_names()
     for line in text[start:end].split("\n"):
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if line.startswith("| Id |"):
@@ -346,6 +410,8 @@ def recipes(text):
             fail("§7's row for %s has no morph (h × w): %s" % (cells[0], row.get("morph")))
         recipe = {slot: (None if row.get(slot, "—") in ("—", "-", "") else row[slot].strip("`")) for slot in RECIPE_SLOTS}
         recipe["morph"] = [float(morph.group(1)), float(morph.group(2))]
+        recipe["tints"] = colours(row.get("colours", ""), cells[0].strip("`"), names)
+        recipe["extras"] = re.findall(r"`([a-z0-9.-]+)`", row.get("extras", ""))
         out[cells[0].strip("`")] = recipe
     if not out:
         fail("no recipes in Story/13-art-prompts.md §7")
@@ -473,6 +539,38 @@ def shrink(colour, alpha, mask=None):
     return Layer(rgba, (ox0 + sx0, oy0 + sy0), channels)
 
 
+def cut_pieces(base, colour, alpha, mask=None, prior=None):
+    """A figure on its base's canvas (colour 0 to 255, alpha 0 to 1, and its mask, 0 to 1, if it has
+    one) shrunk to PART_SCALE as shrink does and cut into the skeleton's pieces there:
+    ({bone: Layer}, its labels). `prior` is its base body's labels: an armor is cut where its base is,
+    so it moves with the body under it."""
+    w, h = int(round(CANVAS[0] * PART_SCALE)), int(round(CANVAS[1] * PART_SCALE))
+    whole, size = (0, 0, CANVAS[0], CANVAS[1]), (w, h)
+    premultiplied = np.concatenate([colour / 255.0 * alpha[:, :, None], alpha[:, :, None]], axis=2)
+    small = ic.straight(ic.resample(premultiplied, whole, size)).astype(np.float64)
+    channels = [small[:, :, :3]]
+    if mask is not None:
+        mask = mask if mask.ndim == 3 else np.stack([mask, np.zeros(mask.shape), np.zeros(mask.shape)], axis=2)
+        for k in range(3):
+            shrunk = ic.resample(np.repeat(mask[:, :, k:k + 1], 4, axis=2), whole, size)[:, :, :1] if mask[:, :, k].any() else np.zeros((h, w, 1))
+            channels.append(np.clip(shrunk, 0.0, 1.0) * 255.0)
+    out, own = K.pieces(base, np.concatenate(channels, axis=2), small[:, :, 3] / 255.0, scale=PART_SCALE, prior=prior, with_labels=True)
+    layers = {}
+    for bone, (c, a) in out.items():
+        box = bbox(a > 0)
+        if box is None:
+            continue
+        x0, y0, x1, y1 = box
+        rgba = np.dstack([c[y0:y1, x0:x1, :3], a[y0:y1, x0:x1] * 255.0])
+        rgba = np.rint(np.clip(rgba, 0, 255)).astype(np.uint8)
+        piece_mask = None
+        if mask is not None:
+            piece_mask = np.full(rgba.shape, 255, np.uint8)
+            piece_mask[:, :, :3] = np.rint(np.clip(c[y0:y1, x0:x1, 3:6], 0, 255))
+        layers[bone] = Layer(rgba, (x0, y0), piece_mask)
+    return layers, own
+
+
 # --------------------------------------------------------------------------- #
 # Bases: sockets, body and bald head
 # --------------------------------------------------------------------------- #
@@ -553,8 +651,35 @@ class Base:
 # Faces
 # --------------------------------------------------------------------------- #
 
-def face_layer(base, rgb):
-    """A face's layer on its base: (colour, alpha, its skin against the base's, notes)."""
+def seam_fade(base):
+    """How much of a head layer shows down to the jaw seam: all of it SEAM_FEATHER over the seam,
+    fading out to nothing on it, so a head or a face goes smoothly into the neck of the body under
+    it (which reaches SKIRT up under the jaw) instead of stopping in a stepped line."""
+    return np.clip((base.seam[None, :] - rows()) / SEAM_FEATHER, 0.0, 1.0)
+
+
+def on_head(base, rgb, colour):
+    """A face painted on the blank base, given the head's own edge: (colour, alpha). Nobody's head
+    changes shape, so its alpha is the blank's own smooth outline down to the seam (seam_fade),
+    whatever ChatGPT drew a pixel in or out of it, with nothing keyed out inside; and its colour is
+    as painted, but the blank's own where it's anti-aliased, and no lighter than the blank's outline
+    within OUTLINE_BAND of the edge, so every face has the mannequin's clean outline round it."""
+    alpha = base.alpha * seam_fade(base)
+    there = alpha > 0
+    colour = colour.copy()
+    colour[there] = rgb[there]
+    solid = base.alpha > 0.5
+    dark = (base.colour @ np.array([0.299, 0.587, 0.114])) < OUTLINE_DARK * 255.0
+    lines = solid & ~erode(solid, OUTLINE_BAND) & dark & there
+    colour[lines] = np.minimum(colour[lines], base.colour[lines])
+    rim = there & (base.alpha < 0.99)
+    colour[rim] = base.colour[rim]
+    return colour, alpha
+
+
+def face_layer(base, rgb, on_blank=False):
+    """A face's layer on its base: (colour, alpha, its skin against the base's, notes). One
+    `on_blank` (painted on the blank base) is the head, edged as the blank is (on_head)."""
     notes = []
     changed = (rgb != base.rgb).any(axis=2)
     if not changed.any():
@@ -565,6 +690,10 @@ def face_layer(base, rgb):
     win = (slice(y0, y1), slice(x0, x1))
     colour, alpha = base.colour.copy(), base.alpha.copy()
     colour[win], alpha[win] = key_black(rgb[win])
+    # Nothing inside the head is background: a black brow or a pupil big and thick enough to pass
+    # for a gap in the figure (key_black) is the face's.
+    inside = erode(base.above & (base.alpha > 0.99), 2)
+    colour[inside], alpha[inside] = rgb[inside], 1.0
     figure = alpha > 0.5
     above = base.above
 
@@ -592,6 +721,32 @@ def face_layer(base, rgb):
         ratio = np.ones(3)
         notes.append("too little bare skin to measure it by; left as the base's")
 
+    if on_blank:
+        colour, alpha = on_head(base, rgb, colour)
+    else:
+        alpha = old_face_alpha(base, rgb, alpha, ratio, changed, figure, (x0, y0, x1, y1), notes)
+    skin, hair, eyes, hair_tone, eye_tone = face_dyes(base, rgb, alpha > 0.5, ratio)
+    if hair_tone is not None and not base.eyes.any():
+        # The dye shades a pixel by how much brighter or darker it is than its channel's tone, so
+        # the specks in a brow painted near black would come out stripes: they're pulled in to its
+        # tone by as much as it's darker than BROW_TEXTURE, which leaves it as it was undyed.
+        luma = float(np.asarray(hair_tone) @ np.array([0.299, 0.587, 0.114])) / 255.0
+        squeeze = float(np.clip(luma / BROW_TEXTURE, 0.25, 1.0))
+        if squeeze < 1.0:
+            core = hair >= 1.0
+            colour[core] = np.asarray(hair_tone) + (colour[core] - np.asarray(hair_tone)) * squeeze
+    if hair_tone is None:
+        notes.append("no hair to dye")
+    if eye_tone is None:
+        notes.append("no eyes found to dye")
+    return colour, alpha, ratio, notes, np.stack([skin, hair, eyes], axis=2), [hair_tone, eye_tone]
+
+
+def old_face_alpha(base, rgb, alpha, ratio, changed, figure, box, notes):
+    """A face painted the old way, head and hair together on the base: its alpha, everything above
+    the seam and what hangs from it below."""
+    x0, y0, x1, y1 = box
+    above = base.above
     # Below the seam: what isn't the tinted base (or is where the base has nothing), without the
     # outlines ChatGPT moved, grown back along its thin ends and with the gaps between strands
     # filled, so long as it hangs from the head.
@@ -624,13 +779,7 @@ def face_layer(base, rgb):
         keep = np.where(below, keep * fade, keep)
         notes.append("hair reaches the bottom of its cell; faded out there")
     # Only the head and what's near it: specks and leftovers elsewhere in the cell go.
-    alpha = keep_near_main(alpha * keep)
-    skin, hair, eyes, hair_tone, eye_tone = face_dyes(base, rgb, alpha > 0.5, ratio)
-    if hair_tone is None:
-        notes.append("no hair to dye")
-    if eye_tone is None:
-        notes.append("no eyes found to dye")
-    return colour, alpha, ratio, notes, np.stack([skin, hair, eyes], axis=2), [hair_tone, eye_tone]
+    return keep_near_main(alpha * keep)
 
 
 def blank_of(base):
@@ -671,9 +820,12 @@ def split_face(base, rgb, alpha, hair, ratio):
 
 
 def head_piece(base, rgb, hair):
-    """A hair's or a helm's layer on its blank base: what it changed, in pieces that reach the head,
-    grown back along their thin ends and with the gaps between strands filled: (colour, alpha, mask,
-    tones). A hair is all hair to dye; a helm's Base and Trim are its two biggest materials."""
+    """A hair's, a helm's or an extra's layer on its blank base: what it changed, in pieces that
+    reach the head, grown back along their thin ends and with the gaps between strands filled:
+    (colour, alpha, mask, tones). `hair` says what's dyed: True (a hair, all of it hair), "skin" (the
+    skin, by ratio: a scar, freckles, a Sylvan's ears), "ears" (skin and fur: beast ears are the
+    hair's colour, pointed ones the skin's), None (as painted: jewellery, horns) or False (a helm,
+    its Base and Trim the two biggest materials)."""
     colour, alpha = key_black(rgb)
     figure = alpha > 0.5
     distance = np.abs(rgb.astype(np.float64) - base.rgb).max(axis=2)
@@ -693,6 +845,15 @@ def head_piece(base, rgb, hair):
     alpha = keep_near_main(alpha * kept)
     there = alpha > 0.5
     nothing = np.zeros(alpha.shape)
+    if hair is None:
+        return colour, alpha, np.stack([nothing, nothing, nothing], axis=2), None
+    if hair in ("skin", "ears"):
+        skin = skin_weight(rgb) * there
+        if hair == "skin":
+            return colour, alpha, np.stack([skin, nothing, nothing], axis=2), None
+        fur = there & (skin < 0.5) & ~outline(lab(rgb))
+        fur_tone = tone(rgb, fur) if fur.sum() >= 60 else None
+        return colour, alpha, np.stack([skin, fur.astype(np.float64) if fur_tone else nothing, nothing], axis=2), [fur_tone, None] if fur_tone else None
     if hair:
         lit = there & ~outline(lab(rgb))
         hair_tone = tone(rgb, lit) if lit.sum() >= 100 else None
@@ -704,6 +865,21 @@ def head_piece(base, rgb, hair):
 def part_ids(slot):
     folder = os.path.join(SOURCE, FOLDERS[slot])
     return sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(folder, slot + "-*.png")))
+
+
+def extra_layers(blanks, edits, layers, report, drawn):
+    """The extras (§4.10) painted on the blank bases: each beard, piece of jewellery, scar, pair of
+    ears or horns, in its slot (EXTRAS); `drawn` is build's, which redraws a part as vector art when that's on."""
+    for kind, (slot, dyes) in EXTRAS.items():
+        for pid in part_ids(kind):
+            base = base_of(pid, edits)
+            if base is None:
+                fail("tools/source/characters/extras/%s.png isn't an extra in Story/13-art-prompts.md §4.10, or what it edits isn't" % pid)
+            colour, alpha, mask, tones = head_piece(blanks[base], load(os.path.join(SOURCE, FOLDERS[kind], pid + ".png")),
+                                                    True if dyes == "hair" else dyes)
+            colour, alpha = drawn(pid, colour, alpha)
+            layers[pid] = (slot, base, shrink(colour, alpha, mask), {"tones": tones} if tones else {})
+            report.append("  %-24s %s, %s" % (pid, base, slot))
 
 
 def armor_layer(base, rgb):
@@ -718,118 +894,6 @@ def armor_layer(base, rgb):
     alpha = keep_near_main(alpha * under)
     (base_mask, trim_mask), tones = armor_dyes(rgb, alpha, skin)
     return colour, alpha, np.stack([skin, base_mask, trim_mask], axis=2), tones
-
-
-def fist_mask(base, box):
-    """A base's fist in its box (FISTS), as alpha: the biggest piece of the figure there, opened so
-    the hair-thin edge of an outline running on beside it goes."""
-    c0, c1, r0, r1 = box
-    inside = np.zeros(base.alpha.shape, bool)
-    inside[r0:r1, c0:c1] = True
-    labels, count = ic.components((base.alpha > 0.5) & inside)
-    if not count:
-        fail("%s has no fist in %s" % (base.name, (box,)))
-    sizes = np.bincount(labels.ravel())
-    sizes[0] = 0
-    keep = labels == int(np.argmax(sizes))
-    keep &= ic.grow(erode(keep, 2), 2)
-    return base.alpha * keep
-
-
-#: The simple fist drawn over what a hand holds: how much its finger creases are closed and its
-#: outline smoothed, how far it reaches past the painted fist (so none of that shows round it), how
-#: thick its outline is, and the width of its shadow along the lower right and its light along the
-#: upper left. Its shades, as a share of the hand's own colour: lit, shadow, highlight, outline.
-FIST_CLOSE = 5
-FIST_SMOOTH = 7
-FIST_COVER = 2
-FIST_LINE = 3
-FIST_SHADOW = 16
-FIST_LIGHT = 6
-FIST_SHADES = (1.0, 0.76, 1.12, 0.22)
-#: Its top, the wrist, has no outline and fades over FIST_FADE rows into the arm it covers; and
-#: FINGERS short lines (FINGER_LENGTH long) part the fingers along its bottom, at these shares of its width.
-FIST_FADE = 10
-FINGERS = (0.34, 0.52, 0.70)
-FINGER_LENGTH = 28
-#: The shades are kept in the mask's colour as a share of this, so a highlight brighter than the hand fits.
-FIST_UNIT = 200.0
-#: Drawing it (RigComposer.cs's PlainFist): the hand's own outline is kept FIST_EDGE pixels in from
-#: its edge, and inside that every colour is the median of those FIST_MEDIAN round it.
-FIST_EDGE = 2
-FIST_MEDIAN = 2
-
-
-def simple_fist(base, box):
-    """The fist drawn over what a hand holds, as plain as the game's other art is detailed: the
-    painted fist's shape with its creases closed, smoothed round and grown a little to cover it, in
-    one flat shade with a hard shadow along the lower right, a thin light along the upper left and a
-    clean outline, all lit from the upper left. Its colour is grey, the shade as a share of
-    FIST_UNIT; the game multiplies it by the colour of the hand it covers, skin or glove. Returns
-    (colour, alpha) on the canvas."""
-    painted = fist_mask(base, box) > 0.5
-    shape = erode(ic.grow(painted, FIST_CLOSE), FIST_CLOSE)
-    soft = ic.box_sum(shape.astype(np.float64), FIST_SMOOTH) / float((2 * FIST_SMOOTH + 1) ** 2)
-    shape = ic.grow(soft > 0.5, FIST_COVER) | painted
-
-    def inside_after(dx, dy):
-        moved = np.zeros_like(shape)
-        h, w = shape.shape
-        moved[max(0, -dy):h - max(0, dy), max(0, -dx):w - max(0, dx)] = shape[max(0, dy):h - max(0, -dy), max(0, dx):w - max(0, -dx)]
-        return moved
-
-    lit, dark, light, ink = FIST_SHADES
-    ys, xs = np.nonzero(shape)
-    top, left, right = ys.min(), xs.min(), xs.max()
-    shade = np.where(shape, lit, 0.0)
-    shade[shape & ~inside_after(FIST_SHADOW, FIST_SHADOW)] = dark
-    shade[shape & ~inside_after(-FIST_LIGHT, -FIST_LIGHT) & (shade == lit)] = light
-    outline = shape & ~erode(shape, FIST_LINE)
-    outline[:top + FIST_LINE + 1] = False
-    shade[outline] = ink
-    # The fingers, parted by short lines up from the bottom edge.
-    for share in FINGERS:
-        x = int(round(left + share * (right - left)))
-        column = np.nonzero(shape[:, x])[0]
-        bottom = column.max()
-        shade[bottom - FINGER_LENGTH:bottom + 1, x:x + FIST_LINE - 1][shape[bottom - FINGER_LENGTH:bottom + 1, x:x + FIST_LINE - 1]] = ink
-    grey = np.clip(shade / (255.0 / FIST_UNIT), 0.0, 1.0) * 255.0
-    colour = np.repeat(grey[:, :, None], 3, axis=2)
-    alpha = shape.astype(np.float64)
-    fade = np.clip((np.arange(shape.shape[0]) - top) / float(FIST_FADE), 0.0, 1.0)
-    return colour, alpha * fade[:, None]
-
-
-#: The holding hands painted in ChatGPT (Story/13 §3.3), one picture per base: hand-male.png and
-#: hand-female.png, each an edit of its base with plainer fists. Till one's there, simple_fist stands in.
-HANDS = os.path.join(SOURCE, "hands")
-
-
-def painted_fist(base, box, rgb):
-    """A base's holding hand as ChatGPT painted it (§3.3): the fist in its box on the painted
-    picture, the biggest piece of the figure there, opened; its shading and lines kept as a share of
-    the hand's own colour (the brighter half of the fist, which is how the game measures the hand it
-    covers), in FIST_UNITs, so the game can colour it as skin or glove; fading into the arm at the
-    wrist. Returns (colour, alpha) as simple_fist does, and how much of the base's own fist it covers."""
-    colour, alpha = key_black(rgb)
-    c0, c1, r0, r1 = box
-    inside = np.zeros(alpha.shape, bool)
-    inside[r0:r1, c0:c1] = True
-    labels, count = ic.components((alpha > 0.5) & inside)
-    if not count:
-        fail("%s has no fist in %s" % (os.path.join(HANDS, "hand-" + base.name.split("-", 1)[1] + ".png"), (box,)))
-    sizes = np.bincount(labels.ravel())
-    sizes[0] = 0
-    keep = labels == int(np.argmax(sizes))
-    keep &= ic.grow(erode(keep, 2), 2)
-    luma = colour @ np.array([0.299, 0.587, 0.114])
-    lit = luma[keep]
-    reference = max(1.0, float(lit[lit >= lit.mean()].mean()))
-    grey = np.clip(luma / reference * FIST_UNIT, 0.0, 255.0) * keep
-    top = np.nonzero(keep.any(axis=1))[0].min()
-    fade = np.clip((np.arange(alpha.shape[0]) - top) / float(FIST_FADE), 0.0, 1.0)
-    own = fist_mask(base, box) > 0.5
-    return np.repeat(grey[:, :, None], 3, axis=2), alpha * keep * fade[:, None], float((own & keep).sum()) / max(1, own.sum())
 
 
 def changed_pieces(base, rgb, where):
@@ -1007,6 +1071,67 @@ def armor_dyes(rgb, alpha, skin):
     return masks, tones
 
 
+def brows_and_irises(base, rgb, L, figure):
+    """A face painted on a blank base, which has no eyes of its own to go by: its brows (dyed the
+    hair's colour) and its irises (the eyes'), as masks. The eyes are found by their whites, cream
+    or white, in the head box's FEATURE_ROWS and FEATURE_COLUMNS, and an iris is what's coloured in
+    them, lighter than the lines and the pupil (which keep their own dark). The brows are the solid
+    dark shapes over the upper lids, their lashes and a liner; the thin lines of a frown or a
+    wrinkle are too thin to count. Nothing's found on a face with no whites showing (eyes shut)."""
+    chroma = np.hypot(L[..., 1], L[..., 2])
+    hx, hy, hw, hh = base.head
+    across = np.arange(CANVAS[0])[None, :]
+    band = (figure & base.above & (rows() >= hy + FEATURE_ROWS[0] * hh) & (rows() <= hy + FEATURE_ROWS[1] * hh)
+            & (across >= hx + FEATURE_COLUMNS[0] * hw) & (across <= hx + FEATURE_COLUMNS[1] * hw))
+    changed = np.abs(rgb.astype(np.float64) - base.rgb).max(axis=2) > CHANGED
+    whites = band & changed & (L[..., 0] > CREAM_L) & (chroma < CREAM_C)
+    iris = np.zeros(figure.shape, bool)
+    brows = np.zeros(figure.shape, bool)
+    if not whites.any():
+        return brows.astype(np.float64), iris
+    # A line LID above the top of the eyes in each column (spread EYE_SPREAD each way, past the
+    # corners): the lids, lashes and liner are under it, the brows over it.
+    top = np.where(whites.any(axis=0), np.argmax(whites, axis=0), CANVAS[1]).astype(np.float64)
+    spread = np.min(np.stack([np.roll(top, d) for d in range(-EYE_SPREAD, EYE_SPREAD + 1)]), axis=0)
+    over = rows() < (spread - LID)[None, :]
+    # An iris is the colour of the base's deepest shadow and as dark as a brow, so it's told by
+    # where it is: a solid shape (an outline's soft edge is too thin) under the line and in the eye,
+    # all of it near the whites (a scar's stroke that crosses an eye runs on past it).
+    reach = ic.grow(whites, IRIS_REACH)
+    coloured = (band & changed & ~whites & ~over & (L[..., 0] > IRIS_L[0]) & (L[..., 0] < IRIS_L[1]) & (chroma > IRIS_C))
+    solid = ic.grow(erode(coloured, 1), 1) & coloured
+    labels, count = ic.components(solid)
+    if count:
+        sizes = np.bincount(labels.ravel(), minlength=count + 1)
+        inside = np.bincount(labels.ravel(), weights=reach.ravel().astype(np.float64), minlength=count + 1)
+        kept = (sizes >= IRIS_LEAST) & (inside >= IRIS_INSIDE * sizes)
+        kept[0] = False
+        iris = ic.grow(kept[labels], 1) & coloured & reach
+    # The brows: what's solid and dark over the line (by its lightness alone: a brow is the skin's
+    # hue, far darker than any of its shading, and to_skin counts lightness for less).
+    core = band & changed & over & (L[..., 0] < BROW_L) & (chroma < BROW_C)
+    solid = ic.grow(erode(core, 1), 1) & core
+    labels, count = ic.components(solid)
+    if count:
+        sizes = np.bincount(labels.ravel(), minlength=count + 1)
+        kept = sizes >= BROW_LEAST
+        kept[0] = False
+        brows = kept[labels]
+        # A brow's inner end can dip under the line towards the nose: it's grown back down what's
+        # as dark and brown (the lids, lashes and liner are drawn near black, greyer than
+        # BROW_TINT), so long as it keeps BROW_GAP from the eye. A brow painted black isn't.
+        under = (band & changed & (L[..., 0] < BROW_L) & (chroma > BROW_TINT) & (chroma < BROW_C)
+                 & ~ic.grow(whites | iris, BROW_GAP))
+        for _ in range(BROW_REGROW):
+            brows = brows | (ic.grow(brows, 1) & under)
+    # Their soft edges, where they shade into the skin, count for as much as they're brow: a pixel
+    # half brow and half skin, dyed all the way against a near-black brow's tone, would go pale.
+    edge = ic.grow(brows, 1) & ~brows & changed & over & (chroma < BROW_C)
+    weight = brows.astype(np.float64)
+    weight[edge] = np.clip((IRIS_L[1] - L[..., 0][edge]) / (IRIS_L[1] - BROW_L), 0.0, 1.0)
+    return weight, iris
+
+
 def face_dyes(base, rgb, figure, ratio):
     """A face's skin, hair and eyes: (skin mask, hair mask, eye mask, hair tone, eye tone).
     The skin and the hair are told apart by colour: the skin's is the base's cheeks times the face's
@@ -1032,7 +1157,7 @@ def face_dyes(base, rgb, figure, ratio):
     local = ic.box_sum(L[..., 0], FACE_EDGE_REACH) / float((2 * FACE_EDGE_REACH + 1) ** 2)
     labels, count = regions(figure & ~lines & ~(L[..., 0] < local - FACE_EDGE))
     hair = np.zeros(figure.shape, bool)
-    hair_tone = None
+    hair_tone, hair_weight = None, None
     if count:
         changed = np.abs(rgb - base.tinted(ratio)).max(axis=2) > CHANGED
         flat_labels = labels.ravel()
@@ -1069,18 +1194,25 @@ def face_dyes(base, rgb, figure, ratio):
             else:
                 hair[:] = False
 
-    zone = base.eyes & figure
-    whites = zone & (L[..., 0] > WHITE_L) & (np.hypot(L[..., 1], L[..., 2]) < WHITE_C)
-    iris = zone & ic.grow(whites, IRIS_REACH) & ~whites & ~lines & ~hair & (to_skin > IRIS_SKIN)
-    if iris.sum() < 20 or whites.sum() < 6:
-        # Eyes narrowed to slits show no whites: what's plainly coloured and not skin, where they are.
-        iris = zone & ~lines & ~hair & (to_skin > IRIS_SKIN * 1.5) & (np.hypot(L[..., 1], L[..., 2]) > 10.0) & (L[..., 0] > 20.0)
+    if base.eyes.any():
+        zone = base.eyes & figure
+        whites = zone & (L[..., 0] > WHITE_L) & (np.hypot(L[..., 1], L[..., 2]) < WHITE_C)
+        iris = zone & ic.grow(whites, IRIS_REACH) & ~whites & ~lines & ~hair & (to_skin > IRIS_SKIN)
+        if iris.sum() < 20 or whites.sum() < 6:
+            # Eyes narrowed to slits show no whites: what's plainly coloured and not skin, where they are.
+            iris = zone & ~lines & ~hair & (to_skin > IRIS_SKIN * 1.5) & (np.hypot(L[..., 1], L[..., 2]) > 10.0) & (L[..., 0] > 20.0)
+    else:
+        brows, iris = brows_and_irises(base, rgb, L, figure)
+        if not hair.any() and (brows >= 1.0).sum() >= BROW_LEAST:
+            hair, hair_tone, hair_weight = brows > 0, tone(rgb, brows >= 1.0), brows
     eye_tone = tone(rgb, iris) if iris.sum() >= 20 else None
     if eye_tone is None:
         iris[:] = False
 
-    skin = ic.smoothstep(MATERIAL_SAME * 2.0, MATERIAL_SAME, to_skin) * figure * ~hair * ~iris
-    return skin, hair.astype(np.float64), iris.astype(np.float64), hair_tone, eye_tone
+    if hair_weight is None:
+        hair_weight = hair.astype(np.float64)
+    skin = ic.smoothstep(MATERIAL_SAME * 2.0, MATERIAL_SAME, to_skin) * figure * (1.0 - hair_weight) * ~iris
+    return skin, hair_weight, iris.astype(np.float64), hair_tone, eye_tone
 
 
 def keep_near_main(alpha):
@@ -1139,7 +1271,7 @@ def pack(images):
 # --------------------------------------------------------------------------- #
 
 #: Back to front. "head" is the base's bald head, drawn only when there's no face.
-ORDER = ("cape", "body", "armor", "head", "face", "helm", "weapon", "offhand")
+ORDER = ("cape", "body", "armor", "head", "face", "facial", "helm", "marks", "weapon", "offhand")
 
 
 def head_scale(morph):
@@ -1154,7 +1286,7 @@ def fit(slot, source, target):
     if source is target:
         return 1.0, 1.0
     s, t = source["sockets"], target["sockets"]
-    if slot in ("head", "face", "helm"):
+    if slot in ("head", "face", "facial", "helm", "marks"):
         k = target["head"][3] / source["head"][3]
         return k, k
     if slot == "cape":
@@ -1170,7 +1302,7 @@ def transform(slot, morph, sockets):
     rx, ry = sockets["root"]
     sx, sy = sockets[SLOT_SOCKET[slot]]
     at = (rx + (sx - rx) * mw, ry + (sy - ry) * mh)
-    if slot in ("head", "face", "helm"):
+    if slot in ("head", "face", "facial", "helm", "marks"):
         s = head_scale(morph)
         return at, (s, s)
     if slot in ("weapon", "offhand"):
@@ -1191,16 +1323,15 @@ def dye(rgb, painted, colour):
 
 #: The piece each slot moves with, back to front: Characters/Parts/Sockets.cs's BoneOf.
 BONES = ("back", "body", "head", "near", "far")
-BONE_OF = {"cape": "back", "body": "body", "armor": "body", "head": "head", "face": "head", "helm": "head",
-           "weapon": "near", "offhand": "far"}
+BONE_OF = {"cape": "back", "body": "body", "armor": "body", "head": "head", "face": "head", "facial": "head",
+           "helm": "head", "marks": "head", "weapon": "near", "offhand": "far"}
 
 
-def compose(layers, morph, sockets, skin, fits=None, dyes=None, fists=None):
+def compose(layers, morph, sockets, skin, fits=None, dyes=None):
     """A recipe's layers ({slot: (Layer, pivot)}) put together at their sockets: (premultiplied
     float RGBA, where the root is on it). `fits` scales a slot's part further ({slot: (fx, fy)}): one
     painted on the other base, fitted to this one (fit). `dyes` recolours a slot's two dye channels
-    ({slot: [(swatch, painted tone) or None, ...]}, both 0 to 255). `fists` ({"near": (Layer, pivot),
-    "far": ...}, the base's fist masks) draws what a hand holds under its fist, as the game does."""
+    ({slot: [(swatch, painted tone) or None, ...]}, both 0 to 255)."""
     placed = []
     for slot in ORDER:
         if slot not in layers:
@@ -1238,47 +1369,6 @@ def compose(layers, morph, sockets, skin, fits=None, dyes=None, fists=None):
         piece = pieces.setdefault(bone, np.zeros((y1 - y0, x1 - x0, 4)))
         region = piece[t - y0:t - y0 + p.shape[0], l - x0:l - x0 + p.shape[1]]
         region[:] = p + region * (1.0 - p[:, :, 3:])
-    # What a hand holds goes under its fist: the fist, as the body and armor draw it, is lifted off
-    # the body onto the hand's piece (RigComposer.cs's LiftFist).
-    for hand, (layer, pivot) in (fists or {}).items():
-        if hand not in pieces or "body" not in pieces:
-            continue
-        at, (sx, sy) = transform("body", morph, sockets)
-        w, h = layer.size
-        nw, nh = max(1, int(round(w * sx))), max(1, int(round(h * sy)))
-        left, top = int(round(at[0] - pivot[0] * nw / w)) - x0, int(round(at[1] - pivot[1] * nh / h)) - y0
-        a = layer.rgba[:, :, 3:].astype(np.float64) / 255.0
-        grey = layer.rgba[:, :, :1].astype(np.float64) / FIST_UNIT
-        if (nw, nh) != (w, h):
-            both = ic.resample(np.concatenate([grey * a, grey * a, grey * a, a], axis=2), (0, 0, w, h), (nw, nh))
-            a = both[:, :, 3:]
-            grey = both[:, :, :1] / np.maximum(a, 1e-6)
-        if left < 0 or top < 0 or left + nw > x1 - x0 or top + nh > y1 - y0:
-            continue
-        body = pieces["body"][top:top + nh, left:left + nw]
-        held = pieces[hand][top:top + nh, left:left + nw]
-        # The fist made plain (RigComposer.cs's PlainFist): its own outline kept, and inside it the
-        # median of the colours round each pixel, so its lines go and its skin and glove stay, shaded
-        # with the plain fist's grey.
-        fist = (a[:, :, 0] > 0) & (body[:, :, 3] >= 0.5)
-        if not fist.any():
-            continue
-        straight = np.where(fist[:, :, None], body[:, :, :3] / np.maximum(body[:, :, 3:], 1e-6), 0.0)
-        padded = np.pad(fist, FIST_EDGE, constant_values=False)
-        edge = fist & ~np.all([padded[FIST_EDGE + dy:FIST_EDGE + dy + nh, FIST_EDGE + dx:FIST_EDGE + dx + nw]
-                               for dy in range(-FIST_EDGE, FIST_EDGE + 1) for dx in range(-FIST_EDGE, FIST_EDGE + 1)], axis=0)
-        inner = fist & ~edge
-        r = FIST_MEDIAN
-        values = np.pad(np.where(inner[:, :, None], straight, np.nan), ((r, r), (r, r), (0, 0)), constant_values=np.nan)
-        window = np.stack([values[r + dy:r + dy + nh, r + dx:r + dx + nw] for dy in range(-r, r + 1) for dx in range(-r, r + 1)])
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)  # the windows outside the fist are empty
-            smooth = np.nan_to_num(np.nanmedian(window, axis=0))
-        shown = np.where(inner[:, :, None], np.clip(smooth * grey, 0.0, 1.0), straight)
-        alpha = body[:, :, 3:] * a * fist[:, :, None]
-        lifted = np.concatenate([shown * alpha, alpha], axis=2)
-        body *= 1.0 - a
-        held[:] = lifted + held * (1.0 - lifted[:, :, 3:])
     canvas = np.zeros((y1 - y0, x1 - x0, 4))
     for bone in BONES:
         if bone in pieces:
@@ -1372,6 +1462,8 @@ def build(check, vector=VECTOR):
     bases = {name: Base(name) for name in BASES}
     blanks = {name: blank_of(b) for name, b in bases.items()}
     layers = {}         # part id -> (slot, base, Layer, extra fields)
+    pieced = {}         # part id -> {bone: Layer}, a body's or an armor's pieces
+    prior = {}          # base -> its body's labels, which its armors are cut by
     def drawn(pid, colour, alpha):
         return as_vector(pid, colour, alpha) if vector is True or (vector and pid in vector) else (colour, alpha)
 
@@ -1383,20 +1475,8 @@ def build(check, vector=VECTOR):
         k = blanks[name]
         if k is not b:
             colour, alpha = drawn(name + "-blank", k.colour, k.alpha)
-        layers[name + ".head"] = ("head", name, shrink(colour, alpha * k.above, k.skin * k.above), {})
-        # Its holding hands: what a hand holds is drawn under the fist that holds it, the one painted
-        # for it (painted_fist) or, till there is one, a plain one of the importer's (simple_fist).
-        painted = os.path.join(HANDS, "hand-%s.png" % name.split("-", 1)[1])
-        hands = load(painted) if os.path.exists(painted) else None
-        for hand, box in zip(("near", "far"), FISTS[name]):
-            if hands is None:
-                colour, alpha = simple_fist(b, box)
-            else:
-                colour, alpha, covers = painted_fist(b, box, hands)
-                if covers < 0.97:
-                    print("import_parts: the painted %s fist on %s covers only %d%% of the base's own, which shows round it: "
-                          "ask ChatGPT for it a touch bigger" % (hand, name, round(covers * 100)))
-            layers["%s.hand.%s" % (name, hand)] = ("body", name, shrink(colour, alpha), {})
+        layers[name + ".head"] = ("head", name, shrink(colour, alpha * seam_fade(k), k.skin * k.above), {})
+        pieced[name + ".body"], prior[name] = cut_pieces(name, b.colour, b.alpha * under, b.skin * under)
 
     report, previews = [], {name: ([], []) for name in BASES}
     # The faces: the new ones, features on the blank base, and the old head-and-hair ones (split)
@@ -1408,9 +1488,15 @@ def build(check, vector=VECTOR):
         if base is None:
             fail("%s isn't a face in Story/13-art-prompts.md §4, or what it edits isn't" % rel(path))
         b = bases[base] if old else blanks[base]
-        colour, alpha, ratio, notes, mask, tones = face_layer(b, load(path))
+        colour, alpha, ratio, notes, mask, tones = face_layer(b, load(path), on_blank=not old)
         hair = mask[:, :, 1] > 0.5
-        face_alpha, hair_alpha = split_face(b, load(path), alpha, hair, ratio)
+        if old:
+            face_alpha, hair_alpha = split_face(b, load(path), alpha, hair, ratio)
+        else:
+            # Painted on the blank base: the whole head is the face's, its brows and wrinkles and
+            # scars, and nothing under the seam (a sheet's cell has ChatGPT's redrawn shoulders there;
+            # a beard is an extra).
+            face_alpha, hair_alpha = alpha, np.zeros(alpha.shape)
         hid = "hair-" + fid[len("face-"):]
         nothing = np.zeros(alpha.shape)
         if hair_alpha.sum() >= HAIR_LEAST and not os.path.exists(os.path.join(SOURCE, FOLDERS["hair"], hid + ".png")):
@@ -1418,7 +1504,7 @@ def build(check, vector=VECTOR):
             hair_mask = np.stack([nothing, mask[:, :, 1] * (hair_alpha > 0), nothing], axis=2)
             layers[hid] = ("helm", base, shrink(hair_colour, hair_alpha, hair_mask), {"tones": [tones[0], None]})
             report.append("  %-24s %s, split from %s's head" % (hid, base, fid))
-        facial = hair & (face_alpha > 0)
+        facial = (mask[:, :, 1] > 0) & (face_alpha > 0)
         face_mask = np.stack([mask[:, :, 0], mask[:, :, 1] * facial, mask[:, :, 2]], axis=2)
         face_tones = [tones[0] if facial.sum() >= 50 else None, tones[1]]
         colour, face_alpha = drawn(fid, colour, face_alpha)
@@ -1436,6 +1522,7 @@ def build(check, vector=VECTOR):
             colour, alpha = drawn(pid, colour, alpha)
             layers[pid] = ("helm", base, shrink(colour, alpha, mask), {"tones": tones})
             report.append("  %-24s %s" % (pid, base))
+    extra_layers(blanks, edits, layers, report, drawn)
     for aid in part_ids("armor"):
         base = base_of(aid, edits)
         if base is None:
@@ -1443,6 +1530,7 @@ def build(check, vector=VECTOR):
         colour, alpha, mask, tones = armor_layer(bases[base], load(os.path.join(SOURCE, FOLDERS["armor"], aid + ".png")))
         colour, alpha = drawn(aid, colour, alpha)
         layers[aid] = ("armor", base, shrink(colour, alpha, mask), {"tones": tones})
+        pieced[aid] = cut_pieces(base, colour, alpha, mask, prior[base])[0]
         report.append("  %-24s %s, dyes %s" % (aid, base, ", ".join("none" if t is None else "#%02x%02x%02x" % tuple(int(round(v)) for v in t) for t in tones)))
     # The capes, painted in the black behind the figure, and what the hands hold.
     for slot in ("cape", "weapon", "offhand"):
@@ -1460,9 +1548,10 @@ def build(check, vector=VECTOR):
     by_slot = {}
     for pid, (slot, base, layer, _) in layers.items():
         group = "base" if slot in ("body", "head") else slot
-        by_slot.setdefault(group, {})[pid] = layer.rgba
-        if layer.mask is not None:
-            by_slot[group][pid + "#mask"] = layer.mask
+        for key, piece in ({pid + "@" + bone: p for bone, p in pieced[pid].items()} if pid in pieced else {pid: layer}).items():
+            by_slot.setdefault(group, {})[key] = piece.rgba
+            if piece.mask is not None:
+                by_slot[group][key + "#mask"] = piece.mask
     files, page_sizes, where = {}, {}, {}
     for group in sorted(by_slot):
         pages, places = pack(by_slot[group])
@@ -1473,27 +1562,43 @@ def build(check, vector=VECTOR):
         for pid, (k, x, y, w, h) in places.items():
             where[pid] = ("%s-%d" % (group, k), [x, y, w, h])
 
-    manifest = {"version": 5, "scale": PART_SCALE, "standardHeight": STANDARD * PART_SCALE,
+    # Each recipe's base, from what its face or armor is painted on, made or not: until its face is
+    # painted, someone is the bare mannequin of their base.
+    for r in book.values():
+        r["base"] = next((base_of(r[k], edits) for k in ("face", "armor") if r.get(k) and base_of(r[k], edits)), None)
+    manifest = {"version": 6, "scale": PART_SCALE, "standardHeight": STANDARD * PART_SCALE,
                 "canvas": [int(round(CANVAS[0] * PART_SCALE)), int(round(CANVAS[1] * PART_SCALE))],
                 "sockets": list(SOCKETS), "slotSockets": SLOT_SOCKET, "order": list(ORDER),
+                "bones": [list(b) for b in K.BONES], "draw": list(K.DRAW),
                 "pages": page_sizes, "bases": {}, "parts": {}, "recipes": book, "gear": items, "own": own}
     for name, b in bases.items():
         manifest["bases"][name] = {"sockets": {k: scaled(v) for k, v in b.sockets.items()},
                                    "head": [round(v * PART_SCALE, 2) for v in b.head],
                                    "body": name + ".body", "bald": name + ".head", "skin": b.skin_tone,
-                                   "hands": {"near": name + ".hand.near", "far": name + ".hand.far"}}
+                                   "joints": {j: scaled(v) for j, v in K.JOINTS[name].items()},
+                                   "rigPx": round(K.RIG_PX[name] * PART_SCALE, 4)}
+
+    def placed(key, layer, socket, base):
+        """Where a layer is on its page, and its socket in its own pixels."""
+        sx, sy = bases[base].sockets[socket]
+        page, rect = where[key]
+        entry = {"page": page, "rect": rect, "pivot": [round(sx * PART_SCALE - layer.at[0], 2), round(sy * PART_SCALE - layer.at[1], 2)]}
+        if key + "#mask" in where:
+            entry["maskRect"] = where[key + "#mask"][1]
+        return entry
+
     for pid in sorted(layers):
         slot, base, layer, extra = layers[pid]
         socket = SLOT_SOCKET[slot]
-        sx, sy = bases[base].sockets[socket]
-        page, rect = where[pid]
-        entry = {"slot": slot, "base": base, "socket": socket, "page": page, "rect": rect,
-                 "pivot": [round(sx * PART_SCALE - layer.at[0], 2), round(sy * PART_SCALE - layer.at[1], 2)]}
-        if pid + "#mask" in where:
-            entry["maskRect"] = where[pid + "#mask"][1]
+        entry = {"slot": slot, "base": base, "socket": socket}
+        if pid in pieced:
+            entry["pieces"] = {bone: placed(pid + "@" + bone, p, socket, base) for bone, p in pieced[pid].items()}
+        else:
+            entry.update(placed(pid, layer, socket, base))
         entry.update(extra)
         manifest["parts"][pid] = entry
     data = json.dumps(manifest, indent=1) + "\n"
+    clip_data = CL.dumps(CL.build())
 
     # A face and its armor are the body, so they have to be on one base; the game won't start with
     # a recipe that puts them on two. Checked here against what every part edits, made or not, so it's
@@ -1514,6 +1619,8 @@ def build(check, vector=VECTOR):
                 if not os.path.exists(os.path.join(PARTS, n)) or not np.array_equal(ic.read_png(os.path.join(PARTS, n))[0], img)]
         if not os.path.exists(MANIFEST) or open(MANIFEST, encoding="utf-8").read() != data:
             late.append(rel(MANIFEST))
+        if not os.path.exists(CLIPS) or open(CLIPS, encoding="utf-8").read() != clip_data:
+            late.append(rel(CLIPS))
         late += [rel(p) for p in stale]
         if late:
             print("import_parts: out of date; run python tools/import_parts.py:\n  " + "\n  ".join(late))
@@ -1528,6 +1635,8 @@ def build(check, vector=VECTOR):
         ic.write_png(os.path.join(PARTS, name), img)
     with open(MANIFEST, "w", encoding="utf-8", newline="\n") as f:
         f.write(data)
+    with open(CLIPS, "w", encoding="utf-8", newline="\n") as f:
+        f.write(clip_data)
     ic.rewrite(ic.MGCB, M_BEGIN, M_END, mgcb_section(sorted(files)), None)
     ic.rewrite(ic.ASSETS, A_BEGIN, A_END, assets_section(sorted(files), layers, where), A_ANCHOR)
 
@@ -1553,8 +1662,10 @@ def write_previews(bases, layers, manifest, book):
     save_rgb(os.path.join(PREVIEWS, "sockets.png"), grid(sheet, 2, back))
 
     def parts_of(pid):
+        """A part's whole layer and its socket in its pixels (a body's too, cut into pieces for the game)."""
         slot, base, layer, _ = layers[pid]
-        return layer, manifest["parts"][pid]["pivot"]
+        sx, sy = bases[base].sockets[SLOT_SOCKET[slot]]
+        return layer, (sx * PART_SCALE - layer.at[0], sy * PART_SCALE - layer.at[1])
 
     def geometry(name):
         """A base's sockets and head box at PART_SCALE, as fit takes them."""
@@ -1615,9 +1726,8 @@ def write_previews(bases, layers, manifest, book):
                 parts[slot] = parts_of(r[slot])
                 if layers[r[slot]][1] != base:
                     fits[slot] = fit(slot, geometry(layers[r[slot]][1]), geometry(base))
-        fists = {"near": parts_of(base + ".hand.near"), "far": parts_of(base + ".hand.far")}
         skin = layers[face][3]["skin"] if face else None
-        canvas, root = compose(parts, r["morph"], {k: scaled(v) for k, v in bases[base].sockets.items()}, skin, fits=fits, fists=fists)
+        canvas, root = compose(parts, r["morph"], {k: scaled(v) for k, v in bases[base].sockets.items()}, skin, fits=fits)
         img = flat(canvas, (70, 76, 92))
         figures.append(img[::2, ::2])
     if figures:
@@ -1689,6 +1799,7 @@ def mgcb_section(names):
         png = "Characters/Parts/" + name
         lines += ["#begin " + png] + list(ic.TEXTURE) + ["/build:" + png, ""]
     lines += ["#begin Characters/Parts/parts.json", "/copy:Characters/Parts/parts.json", ""]
+    lines += ["#begin Characters/Parts/clips.json", "/copy:Characters/Parts/clips.json", ""]
     return lines + [M_END]
 
 
@@ -1697,15 +1808,33 @@ def assets_section(names, layers, where):
              "The characters' parts made in ChatGPT from Story/13-art-prompts.md, each an edit of one of the two bases "
              "(tools/source/characters/base-male.png and base-female.png), cut by `tools/import_parts.py` from the pictures "
              "it keeps in tools/source/characters: keyed off the black, a base split at the jaw seam into its body and its "
-             "bald head, a face cut to its head and the hair below its jaw, shrunk to half size and packed into atlas pages. "
-             "The game puts each character together from their recipe at the base's sockets (Characters/Parts).", "",
+             "bald head, a face cut to its head and the hair below its jaw, a body and every armor cut into the skeleton's "
+             "pieces, one per bone, shrunk to half size and packed into atlas pages. The game puts each character together "
+             "from their recipe at the base's sockets and plays the clips on its skeleton (Characters/Parts).", "",
              "tools/import_parts.py - written by Caleb Kiatoukaysi for Legend Quest, cuts the parts into layers at the bases' "
-             "sockets, packs them into atlas pages and writes parts.json", "",
+             "sockets and the bodies and armors into the skeleton's pieces, packs them into atlas pages and writes parts.json "
+             "and clips.json", "",
+             "tools/split_bases.py - written by Caleb Kiatoukaysi for Legend Quest, stands the two jointed mannequins from one "
+             "picture of them side by side each on its own 1024 by 1536 canvas, as base-male.png and base-female.png and "
+             "their blank versions", "",
+             "tools/rig/skeleton.py - written by Caleb Kiatoukaysi for Legend Quest, the mannequins' skeleton (each joint at "
+             "the middle of its painted ball) and the cut of a figure into its bones' pieces along the painted seams, with "
+             "what each piece hides filled in; and the forward kinematics the game's own follow", "",
+             "tools/rig/clips.py - written by Caleb Kiatoukaysi for Legend Quest, the clips the figures play (standing, "
+             "the fighting moves for each kind of weapon, casting, kneeling, sitting, dancing, clapping, jumping, "
+             "waving and the cutscenes' gestures) as keys on the skeleton's bones, the feet kept on the ground by IK and "
+             "each forearm, hand and the head following a beat behind", "",
+             "tools/rig/gait.py - written by Caleb Kiatoukaysi for Legend Quest, the jog, the walk and the run worked out "
+             "on the skeleton: planted feet rolling heel to toe at the pace the figure moves, the legs reaching them by "
+             "IK, the hips riding on the planted knee, the arms swinging against the legs", "",
+             "Content/Characters/Parts/clips.json - every clip from tools/rig/clips.py, its other names and which clip each "
+             "fighting move plays for each kind of weapon; written by tools/import_parts.py", "",
              "tools/vectorize.py - written by Caleb Kiatoukaysi for Legend Quest, redraws a picture as vector art (flat cel "
              "colours, smooth lines, Bezier outlines) and draws it back at any size; the importer runs the parts through it "
              "when VECTOR is on", "",
-             "Content/Characters/Parts/parts.json - the sockets of each base, where every part is on its page and which "
-             "socket it hangs from, and every recipe from Story/13-art-prompts.md §7; written by tools/import_parts.py", ""]
+             "Content/Characters/Parts/parts.json - the sockets and joints of each base, the skeleton, where every part "
+             "(or each of its pieces) is on its page and which socket it hangs from, and every recipe from "
+             "Story/13-art-prompts.md §7; written by tools/import_parts.py", ""]
     for name in names:
         page = name[:-4]
         held = sorted(pid for pid, (p, _) in where.items() if p == page and not pid.endswith("#mask"))

@@ -66,11 +66,14 @@ public sealed class ImportedFigure
     /// <param name="pixels">The picture, premultiplied, info.Size big, row by row.</param>
     /// <param name="fileHeight">How tall a standard adult is in the picture's pixels: ImportedArt.FileHeight for an imported picture, the parts' own for one put together from them.</param>
     /// <param name="hasBody">Whether it has a body to stand in a room with. One put together from parts before its armor's made has only a face to give the portraits.</param>
+    /// <param name="onBase">For a figure from parts, the base it's built on (base-male, base-female), so it plays the clips worked out for its own proportions.</param>
     public ImportedFigure(GraphicsDevice device, ImportedArtInfo info, Color[] pixels, float fileHeight = ImportedArt.FileHeight, bool hasBody = true,
-        IReadOnlyList<RigComposer.Layer> layers = null, Vector2? hand = null)
+        IReadOnlyList<RigComposer.Layer> layers = null, Vector2? hand = null, IReadOnlyDictionary<string, Vector2> joints = null, float rigPx = 0f,
+        string onBase = null)
     {
         _device = device;
         HasBody = hasBody;
+        Base = onBase;
         int width = info.Size[0], height = info.Size[1];
 
         float shrink = ImportedArt.RoomHeight / fileHeight;
@@ -107,7 +110,14 @@ public sealed class ImportedFigure
                 for (int y = 0; y < box.Height; y++) Array.Copy(small, (box.Y + y) * roomWidth + box.X, cut, y * box.Width, box.Width);
                 var texture = new Texture2D(device, box.Width, box.Height);
                 texture.SetData(cut);
-                rig.Add(new Piece(layer.Bone, texture, new Vector2(box.X, box.Y), layer.Pivot * across));
+                rig.Add(new Piece(layer.Key, layer.Bone, texture, new Vector2(box.X, box.Y), layer.Pivot * across));
+            }
+            if (joints is not null)
+            {
+                var placed = new Dictionary<string, Vector2>(StringComparer.Ordinal);
+                foreach ((string bone, Vector2 joint) in joints) placed[bone] = joint * across;
+                Joints = placed;
+                RigPx = rigPx * across.Y;
             }
         }
         Rig = rig;
@@ -117,12 +127,22 @@ public sealed class ImportedFigure
     /// <summary>Where the near hand is on the picture, for a figure from parts (a cast glows there); null for a whole picture.</summary>
     public Vector2? Hand { get; }
 
-    /// <summary>One piece of a figure at the rooms' size: its picture, trimmed; where its top left is on the whole picture; the socket it turns about, on the whole picture; and which piece it is.</summary>
-    /// <param name="Bone">Which piece.</param>
+    /// <summary>One piece of a figure at the rooms' size: which it is and the bone it moves with; its picture, trimmed; where its top left is on the whole picture; and its bone's joint, on the whole picture.</summary>
+    /// <param name="Key">Which piece: a bone's name, or RigComposer's Cape, Weapon or Offhand.</param>
+    /// <param name="Bone">The bone it moves with.</param>
     /// <param name="Picture">Its picture.</param>
     /// <param name="Offset">Where its top left is on the whole picture.</param>
-    /// <param name="Pivot">The socket it turns about, on the whole picture.</param>
-    public sealed record Piece(FigureBone Bone, Texture2D Picture, Vector2 Offset, Vector2 Pivot);
+    /// <param name="Pivot">Its bone's joint, on the whole picture: what it turns about.</param>
+    public sealed record Piece(string Key, string Bone, Texture2D Picture, Vector2 Offset, Vector2 Pivot);
+
+    /// <summary>For a figure from parts, every bone's joint on the whole picture, by the bone's name; null for a whole picture.</summary>
+    public IReadOnlyDictionary<string, Vector2> Joints { get; }
+
+    /// <summary>For a figure from parts, how many of the picture's pixels one of the clips' units is.</summary>
+    public float RigPx { get; }
+
+    /// <summary>For a figure from parts, the base it's built on (base-male, base-female); null for a whole picture.</summary>
+    public string Base { get; }
 
     /// <summary>The pieces it moves in, back to front, for a figure put together from parts; none for a whole picture, which moves as one.</summary>
     public IReadOnlyList<Piece> Rig { get; }

@@ -68,6 +68,17 @@ public static class Swatches
     /// <param name="number">The look's number.</param>
     public static Color? Pick(IReadOnlyList<Swatch> list, int number) => number <= 0 ? null : list[(number - 1) % list.Count].Colour;
 
+    /// <summary>The colour of the swatch so named in a list, or null for no name or one that isn't there.</summary>
+    /// <param name="list">The list.</param>
+    /// <param name="name">The swatch's name, as Story/13-art-prompts.md §7 gives it.</param>
+    public static Color? Named(IReadOnlyList<Swatch> list, string name)
+    {
+        if (name is null) return null;
+        foreach (Swatch swatch in list)
+            if (swatch.Name == name) return swatch.Colour;
+        return null;
+    }
+
     /// <summary>A swatch's name for a look's number: AS PAINTED for 0.</summary>
     /// <param name="list">The list.</param>
     /// <param name="number">The look's number.</param>
@@ -92,6 +103,16 @@ public readonly record struct Tints(Color? Skin, Color? Hair, Color? Eyes, Color
     public static Tints Of(CharacterLook look) => look is null ? default : new Tints(
         Swatches.Pick(Swatches.Skin, look.SkinTint), Swatches.Pick(Swatches.Hair, look.HairTint), Swatches.Pick(Swatches.Eyes, look.EyeTint),
         Swatches.Pick(Swatches.Cloth, look.BaseTint), Swatches.Pick(Swatches.Cloth, look.TrimTint));
+
+    /// <summary>The colours a recipe names (Story/13-art-prompts.md §7): its skin, hair and eyes.</summary>
+    /// <param name="named">"skin", "hair" and "eyes" to swatch names, any of them; null for none.</param>
+    public static Tints Named(IReadOnlyDictionary<string, string> named) => named is null ? default : new Tints(
+        Swatches.Named(Swatches.Skin, named.GetValueOrDefault("skin")), Swatches.Named(Swatches.Hair, named.GetValueOrDefault("hair")),
+        Swatches.Named(Swatches.Eyes, named.GetValueOrDefault("eyes")), null, null);
+
+    /// <summary>These colours, with another's wherever these leave one as painted: a look's own over its recipe's.</summary>
+    /// <param name="under">The colours to fall back on.</param>
+    public Tints Over(Tints under) => new(Skin ?? under.Skin, Hair ?? under.Hair, Eyes ?? under.Eyes, Base ?? under.Base, Trim ?? under.Trim);
 
     /// <summary>All five, for an outfit's Key.</summary>
     public string Key => string.Join(",", Swatches.Hex(Skin), Swatches.Hex(Hair), Swatches.Hex(Eyes), Swatches.Hex(Base), Swatches.Hex(Trim));

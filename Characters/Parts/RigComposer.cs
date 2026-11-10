@@ -19,7 +19,9 @@ namespace LegendQuest.Characters;
 /// <param name="Pivot">Its socket in its own pixels.</param>
 /// <param name="SkinRatio">For a face, its skin against the base's; one for anything else.</param>
 /// <param name="Tones">The colour each of its two dye channels was painted, 0 to 1, or null for one it hasn't.</param>
-public sealed record PartImage(string Id, PartSlot Slot, string Base, int Width, int Height, Color[] Pixels, Color[] Mask, Vector2 Pivot, Vector3 SkinRatio, Vector3?[] Tones);
+/// <param name="Bone">For one bone's piece of a body or an armor, the bone; null for a part that's whole.</param>
+public sealed record PartImage(string Id, PartSlot Slot, string Base, int Width, int Height, Color[] Pixels, Color[] Mask, Vector2 Pivot, Vector3 SkinRatio, Vector3?[] Tones,
+    string Bone = null);
 
 /// <summary>How one part's coloured as it's put together: its skin multiplied by a ratio, and its two dye channels dyed to swatches.</summary>
 /// <param name="SkinRatio">What its skin's multiplied by, red, green and blue: one for as it is.</param>
@@ -32,55 +34,63 @@ public readonly record struct Paint(Vector3 SkinRatio, Color? First = null, Colo
 }
 
 /// <summary>
-/// Puts a character together from their parts at their base's sockets, morphed, into one
-/// premultiplied picture: the same as tools/import_parts.py's compose, which draws the previews.
+/// Puts a figure together from its parts, the way the game draws it: each part at its socket, moved
+/// and scaled by the morph, coloured (Paint), and laid into the picture of the piece it moves with.
+/// A body or an armor comes in its bones' pieces, each into its bone's picture; the head, the face
+/// and the hair or helm into the head's; the cape into one behind everything that moves with the
+/// chest; and what each hand holds into one just under that hand. Each picture turns about its
+/// bone's joint (Skeleton), and the clips (ClipLibrary) move them.
 /// </summary>
-/// <remarks>
-/// <para>
-/// Each part is drawn back to front by its slot, with its pivot on its socket where the morph moved
-/// it, at the size the morph gives its slot (Morph.ScaleOf), and a cape, helm or weapon painted on the
-/// other base scaled to fit this one. Each is coloured as its Paint says: its skin multiplied to the
-/// face's or the one picked, and its dye channels dyed (Dye). A part at its own size is copied as it is, so a character
-/// with no morph comes out pixel for pixel as the parts were painted; one that's scaled is resampled
-/// on premultiplied colour, so its edges don't darken.
-/// </para>
-/// <para>
-/// Drawn once, when someone's figure is first asked for, and kept: a figure is drawn as one picture,
-/// so the rooms' point-sampled batch keeps it crisp, and a morph is filtered properly instead of
-/// stretched a pixel at a time.
-/// </para>
-/// </remarks>
 public static class RigComposer
 {
-    /// <summary>A character put together: the picture, how big it is, where the root is on it, the box round the head, and the pieces it moves in.</summary>
-    /// <param name="Pixels">The picture, premultiplied, row by row.</param>
+    /// <summary>The cape's picture, behind everything, moving with the chest.</summary>
+    public const string Cape = "cape";
+
+    /// <summary>What the near hand holds, just under it, moving with it.</summary>
+    public const string Weapon = "weapon";
+
+    /// <summary>What the far hand holds, just under it, moving with it.</summary>
+    public const string Offhand = "offhand";
+
+    /// <summary>The bone the cape moves with, and the hands that hold things.</summary>
+    private const string Chest = "chest", NearHand = "hand_near", FarHand = "hand_far", HeadBone = "head";
+
+    /// <summary>A figure put together: the whole picture (premultiplied), its size, the root, the head box, its pieces back to front, the near hand, and each bone's joint, all on the picture.</summary>
+    /// <param name="Pixels">The whole figure, premultiplied, row by row.</param>
     /// <param name="Width">How wide it is.</param>
     /// <param name="Height">How tall it is.</param>
-    /// <param name="Root">Where the root (the ground between the feet) is on it.</param>
-    /// <param name="Head">The box round the head, crown to chin, on it.</param>
-    /// <param name="Layers">Each piece that has a part in it, back to front: the same picture split up, every one the picture's size so they line up.</param>
-    /// <param name="Hand">Where the near hand is on it.</param>
-    public sealed record Result(Color[] Pixels, int Width, int Height, Vector2 Root, Rectangle Head, IReadOnlyList<Layer> Layers, Vector2 Hand);
+    /// <param name="Root">The root (the ground between the feet).</param>
+    /// <param name="Head">The box round the head.</param>
+    /// <param name="Layers">Its pieces back to front.</param>
+    /// <param name="Hand">Where the near hand is.</param>
+    /// <param name="Joints">Each bone's joint, by the bone's name.</param>
+    public sealed record Result(Color[] Pixels, int Width, int Height, Vector2 Root, Rectangle Head, IReadOnlyList<Layer> Layers, Vector2 Hand, IReadOnlyDictionary<string, Vector2> Joints);
 
-    /// <summary>One piece of a character: its parts on a picture the whole figure's size, and the socket it turns about on it.</summary>
-    /// <param name="Bone">Which piece.</param>
-    /// <param name="Pixels">Its parts, premultiplied, on the whole picture's canvas.</param>
-    /// <param name="Pivot">Its socket on that canvas, where the morph moved it.</param>
-    public sealed record Layer(FigureBone Bone, Color[] Pixels, Vector2 Pivot);
+    /// <summary>One piece of a figure on the whole picture's canvas: which it is (a bone, or the cape or what a hand holds), the bone it moves with, its pixels, and its bone's joint.</summary>
+    /// <param name="Key">Which piece: a bone's name, Cape, Weapon or Offhand.</param>
+    /// <param name="Bone">The bone it moves with.</param>
+    /// <param name="Pixels">Its pixels on the whole canvas, premultiplied.</param>
+    /// <param name="Pivot">Its bone's joint on the canvas.</param>
+    public sealed record Layer(string Key, string Bone, Color[] Pixels, Vector2 Pivot);
 
-    /// <summary>Puts the parts together.</summary>
-    /// <param name="sockets">The base's sockets, by name, on the scaled canvas.</param>
-    /// <param name="head">The base's head box on the scaled canvas: left, top, width, height.</param>
-    /// <param name="parts">The parts, in any order. They're drawn by slot.</param>
-    /// <param name="morph">How much taller and broader than the base.</param>
+    /// <summary>
+    /// Puts parts together into a figure on the base whose sockets, head box and joints these are:
+    /// each part at its slot's socket (Sockets.Of) moved by the morph, scaled by it and by its fit,
+    /// coloured by its paint, in slot order within each piece.
+    /// </summary>
+    /// <param name="sockets">The base's sockets, in the parts' pixels.</param>
+    /// <param name="head">The base's head box: left, top, width, height.</param>
+    /// <param name="joints">The base's joints, by name, in the parts' pixels.</param>
+    /// <param name="skeleton">The skeleton: its bones, their joints and the order they're drawn in.</param>
+    /// <param name="parts">The parts.</param>
+    /// <param name="morph">How the figure's shaped.</param>
     /// <param name="paint">How each part's coloured.</param>
-    /// <param name="fit">How much more to scale a part painted on the other base, so it fits this one (PartCatalog's Fit); null for none.</param>
-    /// <param name="fists">The base's fists, the near hand's piece's and the far's, as masks on the body's canvas: what a hand holds is drawn under its fist (LiftFist). Null to draw it over.</param>
-    public static Result Compose(IReadOnlyDictionary<string, Vector2> sockets, float[] head, IEnumerable<PartImage> parts, Morph morph, Func<PartImage, Paint> paint, Func<PartImage, Vector2> fit = null,
-        IReadOnlyDictionary<FigureBone, PartImage> fists = null)
+    /// <param name="fit">How much more each part's scaled to fit this base (PartCatalog.Fit); one if null.</param>
+    public static Result Compose(IReadOnlyDictionary<string, Vector2> sockets, float[] head, IReadOnlyDictionary<string, Vector2> joints, Skeleton skeleton,
+        IEnumerable<PartImage> parts, Morph morph, Func<PartImage, Paint> paint, Func<PartImage, Vector2> fit = null)
     {
         Vector2 root = sockets[Sockets.Root];
-        var placed = new List<(Color[] Pixels, int Width, int Height, int Left, int Top, FigureBone Bone)>();
+        var placed = new List<(Color[] Pixels, int Width, int Height, int Left, int Top, string Key)>();
         foreach (PartImage part in parts.OrderBy(p => p.Slot))
         {
             Vector2 at = morph.Move(sockets[Sockets.Of(part.Slot)], root);
@@ -91,37 +101,43 @@ public static class RigComposer
             int top = (int)MathF.Round(at.Y - part.Pivot.Y * height / part.Height);
             Color[] pixels = Painted(part, paint(part));
             if (width != part.Width || height != part.Height) pixels = ImportedFigure.Scaled(pixels, part.Width, part.Height, width, height);
-            placed.Add((pixels, width, height, left, top, Sockets.BoneOf(part.Slot)));
+            placed.Add((pixels, width, height, left, top, KeyOf(part)));
         }
         if (placed.Count == 0) throw new ArgumentException("There are no parts to put together.", nameof(parts));
 
-        int x0 = placed.Min(p => p.Left), y0 = placed.Min(p => p.Top);
-        int x1 = placed.Max(p => p.Left + p.Width), y1 = placed.Max(p => p.Top + p.Height);
+        // The canvas holds every part, and the root under the feet with a row or two to spare.
+        int x0 = Math.Min(placed.Min(p => p.Left), (int)MathF.Floor(root.X) - 1), y0 = placed.Min(p => p.Top);
+        int x1 = Math.Max(placed.Max(p => p.Left + p.Width), (int)MathF.Ceiling(root.X) + 1);
+        int y1 = Math.Max(placed.Max(p => p.Top + p.Height), (int)MathF.Ceiling(root.Y) + 2);
         int canvasWidth = x1 - x0, canvasHeight = y1 - y0;
 
-        // Each piece's own picture, its parts put together in slot order, and where it turns.
-        var pieces = new Dictionary<FigureBone, Color[]>();
-        foreach ((Color[] pixels, int width, int height, int left, int top, FigureBone bone) in placed)
+        // Each piece's own picture, its parts put together in slot order.
+        var pieces = new Dictionary<string, Color[]>(StringComparer.Ordinal);
+        foreach ((Color[] pixels, int width, int height, int left, int top, string key) in placed)
         {
-            if (!pieces.TryGetValue(bone, out Color[] layer)) pieces[bone] = layer = new Color[canvasWidth * canvasHeight];
+            if (!pieces.TryGetValue(key, out Color[] layer)) pieces[key] = layer = new Color[canvasWidth * canvasHeight];
             Over(layer, canvasWidth, pixels, width, height, left - x0, top - y0);
         }
-        var pivots = Enum.GetValues<FigureBone>().ToDictionary(bone => bone, bone => morph.Move(sockets[Sockets.OfBone(bone)], root) - new Vector2(x0, y0));
-        if (fists is not null && pieces.TryGetValue(FigureBone.Body, out Color[] body))
-        {
-            foreach ((FigureBone bone, PartImage fist) in fists)
-            {
-                if (pieces.TryGetValue(bone, out Color[] held) && LiftFist(body, held, canvasWidth, canvasHeight, fist, sockets, root, morph, x0, y0) is Vector2 wrist)
-                    pivots[bone] = wrist;
-            }
-        }
+        var at0 = new Vector2(x0, y0);
+        var jointAt = new Dictionary<string, Vector2>(StringComparer.Ordinal);
+        for (int i = 0; i < skeleton.Count; i++)
+            jointAt[skeleton.Names[i]] = morph.Move(joints[skeleton.Joints[i]], root) - at0;
 
+        // Back to front: the cape, then the bones as they're drawn, what each hand holds just under it.
+        var order = new List<string> { Cape };
+        foreach (string bone in skeleton.Draw)
+        {
+            if (bone == NearHand) order.Add(Weapon);
+            if (bone == FarHand) order.Add(Offhand);
+            order.Add(bone);
+        }
         var layers = new List<Layer>();
         var canvas = new Color[canvasWidth * canvasHeight];
-        foreach (FigureBone bone in Enum.GetValues<FigureBone>())
+        foreach (string key in order)
         {
-            if (!pieces.TryGetValue(bone, out Color[] layer)) continue;
-            layers.Add(new Layer(bone, layer, pivots[bone]));
+            if (!pieces.TryGetValue(key, out Color[] layer)) continue;
+            string bone = RidesOn(key);
+            layers.Add(new Layer(key, bone, layer, jointAt[bone]));
             Over(canvas, canvasWidth, layer, canvasWidth, canvasHeight, 0, 0);
         }
 
@@ -131,8 +147,27 @@ public static class RigComposer
         float headLeft = neckAt.X + (head[0] - neck.X) * s - x0, headTop = neckAt.Y + (head[1] - neck.Y) * s - y0;
         var box = new Rectangle((int)MathF.Floor(headLeft), (int)MathF.Floor(headTop), (int)MathF.Ceiling(head[2] * s), (int)MathF.Ceiling(head[3] * s));
         box = Rectangle.Intersect(box, new Rectangle(0, 0, canvasWidth, canvasHeight));
-        return new Result(canvas, canvasWidth, canvasHeight, root - new Vector2(x0, y0), box, layers, morph.Move(sockets[Sockets.NearHand], root) - new Vector2(x0, y0));
+        return new Result(canvas, canvasWidth, canvasHeight, root - at0, box, layers, morph.Move(sockets[Sockets.NearHand], root) - at0, jointAt);
     }
+
+    /// <summary>Which piece a part goes into: its bone for a body's or an armor's piece; the head for what's on the head; the cape's, or the held things' own.</summary>
+    private static string KeyOf(PartImage part) => part.Bone ?? part.Slot switch
+    {
+        PartSlot.Cape => Cape,
+        PartSlot.Weapon => Weapon,
+        PartSlot.Offhand => Offhand,
+        PartSlot.Head or PartSlot.Face or PartSlot.Facial or PartSlot.Helm or PartSlot.Marks => HeadBone,
+        _ => Chest,
+    };
+
+    /// <summary>The bone a piece moves with.</summary>
+    public static string RidesOn(string key) => key switch
+    {
+        Cape => Chest,
+        Weapon => NearHand,
+        Offhand => FarHand,
+        _ => key,
+    };
 
     /// <summary>
     /// A part coloured as its paint says, kept premultiplied: each pixel's skin multiplied towards the
@@ -184,143 +219,6 @@ public static class RigComposer
 
     /// <summary>How bright a colour is, 0 to 1, as the dyes shade by it.</summary>
     public static float Luma(Vector3 colour) => 0.299f * colour.X + 0.587f * colour.Y + 0.114f * colour.Z;
-
-    /// <summary>
-    /// Holds what a hand holds the way a 2D game character does, under the fist: the fist comes off the
-    /// body's piece and goes over the hand's, on top of what it holds, plainer than it's painted, so the
-    /// hand reads as closed round a grip rather than clenched shut (PlainFist). It's put where the body
-    /// is, and fades into the arm at the wrist. Returns the wrist, the top of the fist across its
-    /// middle, which the hand's piece turns about so a swing keeps the hand on the arm; null if the
-    /// fist's off the canvas.
-    /// </summary>
-    private static Vector2? LiftFist(Color[] body, Color[] held, int canvasWidth, int canvasHeight, PartImage fist,
-        IReadOnlyDictionary<string, Vector2> sockets, Vector2 root, Morph morph, int x0, int y0)
-    {
-        Vector2 at = morph.Move(sockets[Sockets.Root], root);
-        Vector2 scale = morph.ScaleOf(PartSlot.Body);
-        int width = Math.Max(1, (int)MathF.Round(fist.Width * scale.X));
-        int height = Math.Max(1, (int)MathF.Round(fist.Height * scale.Y));
-        int left = (int)MathF.Round(at.X - fist.Pivot.X * width / fist.Width) - x0;
-        int top = (int)MathF.Round(at.Y - fist.Pivot.Y * height / fist.Height) - y0;
-        if (left < 0 || top < 0 || left + width > canvasWidth || top + height > canvasHeight) return null;
-        Color[] mask = width == fist.Width && height == fist.Height ? fist.Pixels : ImportedFigure.Scaled(fist.Pixels, fist.Width, fist.Height, width, height);
-
-        var under = new Color[width * height];
-        for (int y = 0; y < height; y++)
-            Array.Copy(body, (top + y) * canvasWidth + left, under, y * width, width);
-        Color[] lifted = PlainFist(under, mask, width, height);
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                int a = mask[y * width + x].A;
-                if (a == 0) continue;
-                int i = (top + y) * canvasWidth + left + x;
-                body[i] = Scaled(body[i], 255 - a);
-            }
-        }
-        Over(held, canvasWidth, lifted, width, height, left, top);
-        return new Vector2(left + width / 2f, top);
-    }
-
-    /// <summary>The shade the base's plain fist is kept at in its picture's colour, as a share of this: tools/import_parts.py's FIST_UNIT.</summary>
-    private const float FistUnit = 200f;
-
-    /// <summary>How far in from the fist's edge its own outline is kept, and how far round each pixel inside it the plain fist looks to smooth its lines away.</summary>
-    private const int FistEdge = 2;
-    private const int FistSmooth = 2;
-
-    /// <summary>
-    /// The fist the body and the armor draw (premultiplied, under the mask), made plain: its own
-    /// outline and silhouette kept, and inside it every colour the median of those round it, which
-    /// takes away its thin lines (the knuckles, the creases) and keeps its materials as they are (the
-    /// skin, a glove), then shaded with the base's plain fist (the mask's grey, a share of FistUnit: a
-    /// hard shadow, a thin light, the fingers parted by lines). Faded in by the mask's alpha.
-    /// </summary>
-    private static Color[] PlainFist(Color[] under, Color[] mask, int width, int height)
-    {
-        int n = width * height;
-        var inFist = new bool[n];
-        var colour = new Vector3[n];
-        for (int k = 0; k < n; k++)
-        {
-            Color c = under[k];
-            if (mask[k].A == 0 || c.A < 128) continue;
-            inFist[k] = true;
-            colour[k] = new Vector3(c.R, c.G, c.B) * (255f / c.A);
-        }
-
-        // Its outline: what's within FistEdge of where the fist ends.
-        var edge = new bool[n];
-        for (int y = 0; y < height; y++)
-            for (int x = 0; x < width; x++)
-                edge[y * width + x] = inFist[y * width + x] && Near(inFist, width, height, x, y, FistEdge, inside: false);
-
-        var plain = new Color[n];
-        var reds = new List<float>();
-        var greens = new List<float>();
-        var blues = new List<float>();
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                int k = y * width + x;
-                if (!inFist[k]) continue;
-                Color m = mask[k];
-                Vector3 shown = colour[k];
-                if (!edge[k])
-                {
-                    reds.Clear();
-                    greens.Clear();
-                    blues.Clear();
-                    for (int ny = Math.Max(0, y - FistSmooth); ny <= Math.Min(height - 1, y + FistSmooth); ny++)
-                    {
-                        for (int nx = Math.Max(0, x - FistSmooth); nx <= Math.Min(width - 1, x + FistSmooth); nx++)
-                        {
-                            int j = ny * width + nx;
-                            if (!inFist[j] || edge[j]) continue;
-                            reds.Add(colour[j].X);
-                            greens.Add(colour[j].Y);
-                            blues.Add(colour[j].Z);
-                        }
-                    }
-                    var smooth = new Vector3(Median(reds), Median(greens), Median(blues));
-                    float share = m.R * 255f / m.A / FistUnit;
-                    shown = Vector3.Clamp(smooth * share, Vector3.Zero, new Vector3(255f));
-                }
-                float alpha = under[k].A / 255f * (m.A / 255f);
-                Vector3 premultiplied = shown * alpha;
-                plain[k] = new Color((int)MathF.Round(premultiplied.X), (int)MathF.Round(premultiplied.Y), (int)MathF.Round(premultiplied.Z), (int)MathF.Round(alpha * 255f));
-            }
-        }
-        return plain;
-    }
-
-    /// <summary>Whether a pixel has, within reach, one that's in the set (inside) or one that isn't (or the picture's edge).</summary>
-    private static bool Near(bool[] set, int width, int height, int x, int y, int reach, bool inside)
-    {
-        for (int dy = -reach; dy <= reach; dy++)
-        {
-            for (int dx = -reach; dx <= reach; dx++)
-            {
-                int ny = y + dy, nx = x + dx;
-                bool there = ny >= 0 && nx >= 0 && ny < height && nx < width && set[ny * width + nx];
-                if (there == inside) return true;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>The middle of some values (sorting them).</summary>
-    private static float Median(List<float> values)
-    {
-        values.Sort();
-        return values.Count == 0 ? 0f : values[values.Count / 2];
-    }
-
-    /// <summary>A premultiplied colour at a share of itself, 0 to 255.</summary>
-    private static Color Scaled(Color c, int share) =>
-        new((c.R * share + 127) / 255, (c.G * share + 127) / 255, (c.B * share + 127) / 255, (c.A * share + 127) / 255);
 
     /// <summary>Lays a premultiplied picture over a premultiplied canvas: what's under shows through by what the picture leaves.</summary>
     private static void Over(Color[] canvas, int canvasWidth, Color[] pixels, int width, int height, int left, int top)

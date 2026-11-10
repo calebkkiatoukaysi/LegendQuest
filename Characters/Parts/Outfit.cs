@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace LegendQuest.Characters;
@@ -21,12 +22,18 @@ namespace LegendQuest.Characters;
 /// <param name="Tints">The colours it's dyed.</param>
 public sealed record Outfit(string Name, string Face, string Armor, string Cape, string Helm, string Weapon, string Offhand, Morph Morph, Tints Tints = default)
 {
+    /// <summary>Its facial parts and marks, in the order they're drawn within their slots: a beard, earrings, a scar, pointed ears, horns.</summary>
+    public IReadOnlyList<string> Extras { get; init; } = System.Array.Empty<string>();
+
     /// <summary>A recipe's outfit, with another face if one's given.</summary>
     /// <param name="name">The recipe's id.</param>
     /// <param name="recipe">The recipe.</param>
     /// <param name="face">The face to put on it instead of its own, or null for its own.</param>
     public static Outfit Of(string name, PartsFile.RecipeEntry recipe, string face = null) =>
-        new(name, face ?? recipe.Face, recipe.Armor, recipe.Cape, recipe.Helm, recipe.Weapon, null, new Morph(recipe.Morph[0], recipe.Morph[1]));
+        new(name, face ?? recipe.Face, recipe.Armor, recipe.Cape, recipe.Helm, recipe.Weapon, null, new Morph(recipe.Morph[0], recipe.Morph[1]), Tints.Named(recipe.Tints)) { Base = recipe.Base, Extras = recipe.Extras ?? System.Array.Empty<string>() };
+
+    /// <summary>The base its recipe is on, made yet or not: till its face is painted, it's that base's bare mannequin.</summary>
+    public string Base { get; init; }
 
     /// <summary>The hair that goes with a face: the one split from it (hair-x for face-x), which the importer makes from a face painted with its hair.</summary>
     /// <param name="face">The face's id.</param>
@@ -47,7 +54,7 @@ public sealed record Outfit(string Name, string Face, string Armor, string Cape,
     };
 
     /// <summary>Everything that changes the picture, together: the parts, the morph and the dyes. Not the name.</summary>
-    public string Key => string.Join("|", Face, Armor, Cape, Helm, Weapon, Offhand,
+    public string Key => string.Join("|", Base, Face, Armor, Cape, Helm, Weapon, Offhand, string.Join("+", Extras),
         Morph.Height.ToString("R", CultureInfo.InvariantCulture), Morph.Width.ToString("R", CultureInfo.InvariantCulture), Tints.Key);
 
     /// <summary>The part slot an equipment slot's item fills: body armour the armor, a cloak the cape, a head item the helm, and the hands' theirs. Null for gloves, boots, amulets and rings, which draw nothing.</summary>

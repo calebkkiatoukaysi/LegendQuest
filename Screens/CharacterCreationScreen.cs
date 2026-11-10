@@ -376,22 +376,34 @@ public class CharacterCreationScreen : MenuScreen
         _detailRow is not null && MenuEntries.Contains(_detailRow) && _details.TryGetValue(_detailRow, out Detail detail) ? detail : null;
 
     /// <summary>
-    /// Where each of a grid's items goes: as few lines as fit MostAcross on each, as even as they'll
-    /// go, centred under the rows.
+    /// Where each of a grid's items goes, centred under the rows, as even as they'll go: on as many
+    /// lines as let its items be biggest, no more than MostAcross full-size on a line, and shrunk when
+    /// it has more than fit full-size between the last row and the buttons (twenty faces, or the
+    /// whole hair library), the widest as wide as the rows.
     /// </summary>
     private Rectangle[] DetailBoxes(Detail detail)
     {
-        int lines = (detail.Count + MostAcross - 1) / MostAcross;
-        int across = (detail.Count + lines - 1) / lines;
-        var boxes = new Rectangle[detail.Count];
         float top = _rowsBottom + DetailTop;
+        float room = ButtonsY - ButtonSize.Y / 2f - DetailGap * 2 - top;
+        (int Lines, float Scale) best = (1, 0f);
+        for (int lines = (detail.Count + MostAcross - 1) / MostAcross; lines <= detail.Count; lines++)
+        {
+            int count = (detail.Count + lines - 1) / lines;
+            float scale = MathF.Min(1f, MathF.Min((RowSize.X - (count - 1) * DetailGap) / (float)(count * detail.Size.X),
+                                                  (room - (lines - 1) * DetailGap) / (lines * detail.Size.Y)));
+            if (scale > best.Scale + 0.001f) best = (lines, scale);
+            if (scale >= 1f) break;
+        }
+        int across = (detail.Count + best.Lines - 1) / best.Lines;
+        var size = new Point(Math.Max(1, (int)(detail.Size.X * best.Scale)), Math.Max(1, (int)(detail.Size.Y * best.Scale)));
+        var boxes = new Rectangle[detail.Count];
         for (int i = 0; i < detail.Count; i++)
         {
             int line = i / across, column = i % across;
             int here = Math.Min(across, detail.Count - line * across);
-            float width = here * detail.Size.X + (here - 1) * DetailGap;
+            float width = here * size.X + (here - 1) * DetailGap;
             float left = OptionsPanel.Center.X - width / 2f;
-            boxes[i] = new Rectangle((int)(left + column * (detail.Size.X + DetailGap)), (int)(top + line * (detail.Size.Y + DetailGap)), detail.Size.X, detail.Size.Y);
+            boxes[i] = new Rectangle((int)(left + column * (size.X + DetailGap)), (int)(top + line * (size.Y + DetailGap)), size.X, size.Y);
         }
         return boxes;
     }
@@ -568,7 +580,7 @@ public class CharacterCreationScreen : MenuScreen
     {
         IReadOnlyList<string> hairs = PartCatalog.PlayerHairs;
         var names = new List<string> { "OWN HAIR", "BALD" };
-        foreach (string hair in hairs) names.Add("HAIR " + hair["hair-player-".Length..].ToUpperInvariant());
+        foreach (string hair in hairs) names.Add("HAIR " + int.Parse(hair["hair-".Length..], System.Globalization.CultureInfo.InvariantCulture));
         int Get() => _member.Look.HairPart switch { null => 0, "" => 1, string hair => 2 + Math.Max(0, IndexOf(hairs, hair)) };
         void Set(int v) => _member.Look.HairPart = v == 0 ? null : v == 1 ? string.Empty : hairs[v - 2];
         MenuEntry row = Adjustable(1, "HAIR", Get, Set, names, painted);
@@ -838,7 +850,8 @@ public class CharacterCreationScreen : MenuScreen
     private static IReadOnlyList<string> PortraitNames()
     {
         var names = new List<string> { "DRAWN" };
-        foreach (string face in PartCatalog.PlayerFaces) names.Add("PAINTED " + face["face-player-".Length..].ToUpperInvariant());
+        foreach (string face in PartCatalog.PlayerFaces)
+            names.Add((face[5] == 'm' ? "MAN " : "WOMAN ") + int.Parse(face[6..], System.Globalization.CultureInfo.InvariantCulture));
         return names;
     }
 
