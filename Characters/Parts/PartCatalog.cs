@@ -36,7 +36,7 @@ namespace LegendQuest.Characters;
 /// what someone wears makes a new outfit, and a figure is put together once per outfit.
 /// </para>
 /// </remarks>
-public static class PartCatalog
+public static partial class PartCatalog
 {
     /// <summary>Where the pages and parts.json are, under Content.</summary>
     public const string Folder = "Characters/Parts";
@@ -116,6 +116,55 @@ public static class PartCatalog
             Own[who] = rows.ToDictionary(r => (GearSlot(r.Slot).Value, r.Item), r => r.Part);
         PlayerFaces = Numbered(file, "face-m").Concat(Numbered(file, "face-f")).Where(IsSetFace).ToArray();
         PlayerHairs = Numbered(file, "hair-").Where(IsLibrary).ToArray();
+    }
+
+    /// <summary>
+    /// The kinds of extra the creation screen offers a row each, in order: the kind, the row's label,
+    /// the parts' prefix, and which numbers of it are that kind (the jewellery is earrings, then what's
+    /// worn on the face, then the piercings), and whether only the man's base has them (beards).
+    /// </summary>
+    public static readonly (string Kind, string Label, string Prefix, int First, int Last, bool ManOnly)[] ExtraKinds =
+    {
+        ("beard", "BEARD", "beard-", 1, 12, true),
+        ("earrings", "EARRINGS", "jewel-", 1, 6, false),
+        ("face", "ON THE FACE", "jewel-", 7, 12, false),
+        ("piercings", "PIERCINGS", "jewel-", 13, 24, false),
+        ("marks", "MARKS", "skin-", 1, 6, false),
+        ("ears", "EARS", "ears-", 1, 6, false),
+        ("horns", "HORNS", "horns-", 1, 6, false),
+    };
+
+    /// <summary>The kind of extra a part is (ExtraKinds), or null if it isn't one: by its prefix and number, the woman's copy (-f) as the man's.</summary>
+    public static string ExtraKind(string id)
+    {
+        if (id is null) return null;
+        string man = id.EndsWith("-f", StringComparison.Ordinal) ? id[..^2] : id;
+        foreach ((string kind, _, string prefix, int first, int last, _) in ExtraKinds)
+            if (man.StartsWith(prefix, StringComparison.Ordinal) && int.TryParse(man[prefix.Length..], out int n) && n >= first && n <= last)
+                return kind;
+        return null;
+    }
+
+    /// <summary>The painted extras of a kind the creation screen offers, in order: the man's copy of each (the woman's is chosen on her base).</summary>
+    public static IReadOnlyList<string> PlayerExtras(string kind)
+    {
+        if (_file is null) return Array.Empty<string>();
+        var (_, _, prefix, _, _, _) = Array.Find(ExtraKinds, k => k.Kind == kind);
+        return prefix is null ? Array.Empty<string>()
+            : Numbered(_file, prefix).Where(id => !id.EndsWith("-f", StringComparison.Ordinal) && ExtraKind(id) == kind).ToArray();
+    }
+
+    /// <summary>A library hair's or an extra's name as its card has it ("THE BUZZ" is "BUZZ"), or null.</summary>
+    public static string NameOf(string id) => id is not null && _file is not null && _file.Parts.TryGetValue(id, out PartsFile.PartEntry part) ? part.Name : null;
+
+    /// <summary>Someone's extras: their recipe's, with each kind they've picked (CharacterLook.Extras) in its place, or none of it.</summary>
+    private static IReadOnlyList<string> Chosen(CharacterLook look, IReadOnlyList<string> recipe)
+    {
+        if (look.Extras is not { Count: > 0 } picked) return recipe;
+        var extras = recipe.Where(e => ExtraKind(e) is not string kind || !picked.ContainsKey(kind)).ToList();
+        foreach ((_, string id) in picked)
+            if (!string.IsNullOrEmpty(id) && Has(id)) extras.Add(id);
+        return extras;
     }
 
     /// <summary>Whether a part is the man's copy of one of the hair library's: hair- and two digits.</summary>
@@ -209,7 +258,27 @@ public static class PartCatalog
     /// An outfit with something on its head: its own hair or helm if that's painted, else the hair
     /// painted with its face (hair-x for face-x), so nobody's bald while their helm's still to make.
     /// </summary>
-    private static Outfit Headed(Outfit outfit) => Has(outfit.Helm) ? outfit : outfit with { Helm = Has(Outfit.HairOf(outfit.Face)) ? Outfit.HairOf(outfit.Face) : null };
+    private static Outfit Headed(Outfit outfit) => Has(outfit.Helm) ? outfit : outfit with { Helm = DefaultHair(outfit.Name, outfit.Face) };
+
+    /// <summary>
+    /// The hair someone has when nothing painted is on their head: the one painted with their face if
+    /// there is one, else a style from the library chosen by who they are (the same every time), so
+    /// nobody's bald while their helm or hood is still to paint. Null with no face.
+    /// </summary>
+    private static string DefaultHair(string who, string face)
+    {
+        if (face is null) return null;
+        if (Has(Outfit.HairOf(face))) return Outfit.HairOf(face);
+        bool woman = face.StartsWith("face-f", StringComparison.Ordinal);
+        int[] styles = woman ? WomenHairs : MenHairs;
+        int start = StableHash(who ?? face) % styles.Length;
+        for (int k = 0; k < styles.Length; k++)
+        {
+            string hair = "hair-" + styles[(start + k) % styles.Length].ToString("00", System.Globalization.CultureInfo.InvariantCulture);
+            if (Has(hair)) return hair;
+        }
+        return null;
+    }
 
     /// <summary>
     /// A party member with a face they picked: their own recipe with that face, if it's on the same
@@ -222,7 +291,8 @@ public static class PartCatalog
 
     /// <summary>What's on a party member's head before anything's worn there: their recipe's own piece if it's theirs (a companion's hood), else the hair painted with the face they picked.</summary>
     private static string OwnHead(string id, PartsFile.RecipeEntry recipe, string face) =>
-        id is not null && _file.Recipes.ContainsKey(id) && Has(recipe.Helm) && recipe.Face == face ? recipe.Helm : Outfit.HairOf(face);
+        id is not null && _file.Recipes.ContainsKey(id) && Has(recipe.Helm) && recipe.Face == face ? recipe.Helm
+        : recipe.Helm is string helm && helm.StartsWith("hair-", StringComparison.Ordinal) && Has(helm) ? helm : DefaultHair(id, face);
 
     /// <summary>
     /// A party member as they are now: the face they picked on their own recipe or the player's (as
@@ -249,6 +319,7 @@ public static class PartCatalog
             Weapon = Wears(member, name, EquipmentSlot.MainHand, onBase, null),
             Offhand = Wears(member, name, EquipmentSlot.OffHand, onBase, null),
             Tints = Tints.Of(member.Look).Over(outfit.Tints),
+            Extras = Chosen(member.Look, outfit.Extras),
             Morph = new Morph(outfit.Morph.Height * member.Look.PaintedMorph.Height, outfit.Morph.Width * member.Look.PaintedMorph.Width),
         };
     }
@@ -262,7 +333,8 @@ public static class PartCatalog
     /// </summary>
     private static string HeadOf(PartyMember member, string recipe, PartsFile.RecipeEntry entry, string face, string onBase)
     {
-        string hair = member.Look.HairPart switch { null => Has(Outfit.HairOf(face)) ? Outfit.HairOf(face) : null, "" => null, string picked => picked };
+        string hair = member.Look.HairPart switch { null => OwnHead(member.Id, entry, face), "" => null, string picked => picked };
+        if (hair is not null && !hair.StartsWith("hair-", StringComparison.Ordinal)) hair = DefaultHair(member.Id, face);
         if (member.Look.HideHelm) return hair;
         if (member.Equipment.ContainsKey(EquipmentSlot.Head)) return Wears(member, recipe, EquipmentSlot.Head, onBase, null) ?? hair;
         return OwnHead(member.Id, entry, face) is string own && own != Outfit.HairOf(face) && Has(own) ? own : hair;
@@ -377,7 +449,12 @@ public static class PartCatalog
         foreach ((string k, Standing kept) in Pictures)
             if (k == key) return kept;
         if (Composed(outfit) is not (RigComposer.Result result, bool hasBody, _, _)) return null;
+        return KeepPicture(key, height, result, hasBody);
+    }
 
+    /// <summary>A Standing picture made from an outfit's parts put together, kept with the last few.</summary>
+    private static Standing KeepPicture(string key, int height, RigComposer.Result result, bool hasBody)
+    {
         float scale = height / _file.StandardHeight;
         int width = Math.Max(1, (int)MathF.Round(result.Width * scale)), tall = Math.Max(1, (int)MathF.Round(result.Height * scale));
         var picture = new Texture2D(_device, width, tall);
@@ -393,16 +470,20 @@ public static class PartCatalog
     }
 
     /// <summary>
-    /// An outfit's parts put together at their own size: the picture, and whether it has a body
-    /// (its armor's painted). Null if its face isn't: a bald stranger in their clothes would stand in
-    /// for them in the rooms and the portraits, so they keep the look they had till then.
+    /// An outfit's parts put together at their own size: the picture, and whether it has a body.
+    /// Someone whose own armor isn't painted yet wears a stand-in on their base (StandIn: the
+    /// traveller's clothes, dyed their colours), so everyone with a painted face stands in the rooms
+    /// in the painted art rather than as they were. With `headOnly`, only what a portrait shows is put
+    /// together (the head, the torso and the upper arms, and what's on the head), for the menus'
+    /// thumbnails. Pure work on the parts' pixels, so it can run off the main thread.
     /// </summary>
-    private static (RigComposer.Result Result, bool HasBody, float RigPx, string Base)? Composed(Outfit outfit)
+    private static (RigComposer.Result Result, bool HasBody, float RigPx, string Base)? Composed(Outfit outfit, bool headOnly = false)
     {
         PartImage face = Part(outfit.Face), armor = Part(outfit.Armor);
         // Till their face is painted, someone is the bare mannequin of their base.
         string baseId = face?.Base ?? armor?.Base ?? outfit.Base;
         if (baseId is null || Skeleton.Current is null || !_file.Bases.TryGetValue(baseId, out PartsFile.BaseEntry b)) return null;
+        if (armor is null || armor.Base != baseId) armor = StandIn(baseId) ?? armor;
         // Everyone's head is the mannequin's, the face on it. The face and the armor are the body's own,
         // so they're on its base (Check makes sure). A cape, a hair or helm (one slot) or a weapon can
         // be on either: it hangs from its socket here and is scaled to fit (Fit).
@@ -413,6 +494,7 @@ public static class PartCatalog
         // The beard, the earrings, the scars over the face; the ears and horns over the hair.
         foreach (string extra in outfit.Extras)
             if (Part(OnBase(extra, baseId)) is PartImage worn && worn.Slot is PartSlot.Facial or PartSlot.Marks) parts.Add(worn);
+        if (headOnly) parts.RemoveAll(part => !InPortrait(part));
 
         var sockets = b.Sockets.ToDictionary(s => s.Key, s => new Vector2(s.Value[0], s.Value[1]), StringComparer.Ordinal);
         var joints = b.Joints.ToDictionary(j => j.Key, j => new Vector2(j.Value[0], j.Value[1]), StringComparer.Ordinal);
@@ -423,14 +505,20 @@ public static class PartCatalog
     /// <summary>What a part is drawn as: its bones' pieces for a body or an armor, else itself.</summary>
     private static IEnumerable<PartImage> Drawn(PartImage part) => PieceImages.TryGetValue(part.Id, out List<PartImage> pieces) ? pieces : new[] { part };
 
-    /// <summary>An outfit put together, kept by its Key.</summary>
+    /// <summary>An outfit put together, kept by its Key: the one already made, or the one being made in the background (Prewarm) waited for, or made now.</summary>
     private static ImportedFigure Build(Outfit outfit)
     {
         if (_device is null) return null;
         string key = outfit.Key;
         if (Built.TryGetValue(key, out ImportedFigure built)) return built;
+        return Keep(outfit, Warming(key) is { } task ? task.Result : Composed(outfit));
+    }
 
-        if (Composed(outfit) is not (RigComposer.Result result, bool hasBody, float rigPx, string onBase))
+    /// <summary>A figure made from an outfit's parts put together (or null for none), kept by its Key for the rooms.</summary>
+    private static ImportedFigure Keep(Outfit outfit, (RigComposer.Result Result, bool HasBody, float RigPx, string Base)? made)
+    {
+        string key = outfit.Key;
+        if (made is not (RigComposer.Result result, bool hasBody, float rigPx, string onBase))
         {
             Built[key] = null;
             return null;
@@ -440,7 +528,7 @@ public static class PartCatalog
         if (info.Problem() is string problem)
             throw new InvalidOperationException($"Putting {outfit.Name} together with {outfit.Face} made a picture that {problem}.");
 
-        built = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight, hasBody, result.Layers, result.Hand, result.Joints, rigPx, onBase);
+        var built = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight, hasBody, result.Layers, result.Hand, result.Joints, rigPx, onBase);
         Built[key] = built;
         return built;
     }

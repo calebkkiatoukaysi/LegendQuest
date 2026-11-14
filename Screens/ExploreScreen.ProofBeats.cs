@@ -56,8 +56,9 @@ public partial class ExploreScreen
     /// <summary>How long a waiting beat waits for what it waits on before it gives up and lets the run carry on, in frames.</summary>
     private const int ProofWaitFrames = 600;
 
-    /// <summary>What a reading beat holds for as a shot when it means the first question, or the dice landing, rather than a line by someone.</summary>
+    /// <summary>What a reading beat holds for as a shot when it means the first question, the dice in the air, or the dice landing, rather than a line by someone.</summary>
     private const string Asked = "?";
+    private const string Thrown = "~";
     private const string Rolled = "#";
 
     /// <summary>What a beat did on a frame: whether it's finished, and the shot to take on that frame, if any.</summary>
@@ -139,7 +140,7 @@ public partial class ExploreScreen
     private ProofBeat Answer(params int[] choices) => Do(() => ProofChoices(choices));
 
     /// <summary>Reads whatever conversations come up through to the end, answering the questions with the answers set, and holding on the first line each named speaker says for a shot.</summary>
-    /// <param name="holds">Who to hold on (a speaker id, Asked for the first question, Rolled for the dice landing) and the shot to take.</param>
+    /// <param name="holds">Who to hold on (a speaker id, Asked for the first question, Thrown for the dice in the air, Rolled for them landing) and the shot to take.</param>
     private ProofBeat Read(params (string Speaker, string Shot)[] holds) => ReadUntil(() => true, holds);
 
     /// <summary>Reads conversations the way Read does, but only counts it over once something's so as well: for a scene that a fight comes in the middle of, or that never ends but by leaving.</summary>
@@ -159,6 +160,11 @@ public partial class ExploreScreen
             _proofMove = Vector2.Zero;
             foreach ((string speaker, string shot) in holds)
             {
+                if (speaker == Thrown)
+                {
+                    if (dice is not null && dice.ProofThrown && ProofOnce(shot)) return new ProofTick(false, shot);
+                    continue;
+                }
                 if (speaker == Rolled)
                 {
                     if (dice is not null && dice.ProofLanded && ProofOnce(shot)) return new ProofTick(false, shot);

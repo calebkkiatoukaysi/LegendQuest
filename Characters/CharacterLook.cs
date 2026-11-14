@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace LegendQuest.Characters;
@@ -62,6 +63,13 @@ public class CharacterLook
     /// <summary>The painted hair (a hair part's id, as PartCatalog.PlayerHairs lists them), what's on their head when nothing's worn there or the helm's hidden: hair and helm are one slot. Null for the face's own (the hair painted with it), and empty for none at all.</summary>
     public string HairPart { get; set; }
 
+    /// <summary>
+    /// The painted extras they picked, by kind (PartCatalog.ExtraKinds: a beard, earrings, something on
+    /// the face, marks, ears, horns): an extra's id, or empty for none of that kind. A kind that isn't
+    /// here is their recipe's own; null for all of them their recipe's.
+    /// </summary>
+    public Dictionary<string, string> Extras { get; set; }
+
     /// <summary>The painted figure's skin: 0 for the face's own, or a number into Swatches.Skin, from 1.</summary>
     public int SkinTint { get; set; }
 
@@ -100,7 +108,12 @@ public class CharacterLook
         1f + BuildPerStep * Math.Clamp(BuildStep, SlightestStep, BroadestStep));
 
     /// <summary>A copy, so changing one look doesn't change another.</summary>
-    public CharacterLook Copy() => (CharacterLook)MemberwiseClone();
+    public CharacterLook Copy()
+    {
+        var copy = (CharacterLook)MemberwiseClone();
+        if (Extras is not null) copy.Extras = new Dictionary<string, string>(Extras);
+        return copy;
+    }
 
     /// <summary>Every number together, for keeping one baked sheet per look. Not saved; it's everything above.</summary>
     [JsonIgnore]

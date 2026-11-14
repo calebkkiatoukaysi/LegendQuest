@@ -1078,69 +1078,13 @@ def build_indicators():
     write_png(os.path.join(OUT, "indicators.png"), img)
 
 # --------------------------------------------------------------------------- #
-# The d20, for checks on screen
+# Ivory and ink, for the conversation icons and the key caps
 # --------------------------------------------------------------------------- #
-# A d20 seen face on is a hexagon with a triangle in the middle and the faces round it. The sheet
-# is eight frames of it tumbling (the hexagon turning through a sixth, with the facets catching the
-# light differently each frame) and a ninth, landed, with a clear face in the middle for the screen
-# to print the number on. DiceRollOverlay has the same frame size and count.
+# The d20's ivory, darkest to lightest, and its ink edge. The d20 itself is a 3D model now
+# (Components/DieModel.cs), and paints its faces in the same ivory as it loads.
 
-DIE = 40
-DIE_TUMBLE = 8
 DIE_IVORY = ((112, 96, 110), (168, 150, 150), (214, 200, 188), (244, 236, 222), (255, 252, 244))
 DIE_EDGE = (42, 30, 50)
-
-
-def _die_frame(img, ox, turn, landed):
-    """One frame: the hexagon turned by `turn` (0 to 1 of a sixth), its facets shaded from the top
-    left, edged dark."""
-    cx = cy = DIE / 2 - 0.5
-    radius = DIE / 2 - 2.5
-    corners = []
-    for k in range(6):
-        a = math.pi / 6 + k * math.pi / 3 + turn * math.pi / 3
-        corners.append((cx + radius * math.cos(a), cy + radius * math.sin(a)))
-    inner = []
-    for k in range(3):
-        a = -math.pi / 2 + k * 2 * math.pi / 3 + (0 if landed else turn * math.pi / 3)
-        inner.append((cx + radius * 0.52 * math.cos(a), cy + radius * 0.52 * math.sin(a)))
-
-    light = (-0.7, -0.7)
-    for y in range(DIE):
-        for x in range(DIE):
-            px, py = x + 0.5, y + 0.5
-            if not _inside_poly(px, py, corners):
-                continue
-            if _inside_poly(px, py, inner):
-                tone = 4 if landed else 3
-            else:
-                # Which facet: the angle round the middle, and how much that facet faces the light.
-                a = math.atan2(py - cy, px - cx) - turn * math.pi / 3
-                facet = math.floor(a / (math.pi / 3))
-                mid = (facet + 0.5) * math.pi / 3 + turn * math.pi / 3
-                facing = math.cos(mid) * light[0] + math.sin(mid) * light[1]
-                tone = 1 + round((facing + 1) * 1.4)
-            img[y][ox + x] = list(DIE_IVORY[max(0, min(4, tone))]) + [255]
-    # The edges: round the outside, and the inner triangle's sides.
-    for y in range(DIE):
-        for x in range(DIE):
-            px, py = x + 0.5, y + 0.5
-            if not _inside_poly(px, py, corners):
-                continue
-            near_out = any(not _inside_poly(px + dx, py + dy, corners) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
-            near_in = _inside_poly(px, py, inner) != any(_inside_poly(px + dx, py + dy, inner) for dx, dy in ((1, 0), (0, 1)))
-            if near_out or near_in and not landed:
-                img[y][ox + x] = list(DIE_EDGE) + [255]
-            elif near_in:
-                img[y][ox + x] = list(DIE_IVORY[1]) + [255]
-
-
-def build_dice():
-    img = new_image(DIE * (DIE_TUMBLE + 1), DIE)
-    for f in range(DIE_TUMBLE):
-        _die_frame(img, f * DIE, f / DIE_TUMBLE, False)
-    _die_frame(img, DIE_TUMBLE * DIE, 0.0, True)
-    write_png(os.path.join(OUT, "dice.png"), img)
 
 
 # --------------------------------------------------------------------------- #
@@ -1320,7 +1264,6 @@ if __name__ == "__main__":
     build_markers()
     build_cursors()
     build_indicators()
-    build_dice()
     build_dialogue_icons()
     build_keycaps()
     print("Done.")

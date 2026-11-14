@@ -12,7 +12,7 @@ The parts follow the Art Guide (§1 visual identity, §2 resolution, §11 prompt
 
 | Slot | What it is | Id |
 | --- | --- | --- |
-| **armor** | The whole outfit, which is the visible body below the neck: clothes, boots, gloves, belts, bags. For the people who aren't flesh (the Hollowed, the constructs, the drowned, Vorlaith) it's the body itself | `armor-…` |
+| **armor** | The whole outfit, which is the visible body below the neck, painted in the body's pieces (§5.0): clothes, boots, gloves, belts, bags. For the people who aren't flesh (the Hollowed, the constructs, the drowned, Vorlaith) it's the body itself | `armor-…` |
 | **cape** | What hangs behind the body: cloaks, capes, a pedlar's pack, and the Emberkin's and Wildkin's tails | `cape-…` |
 | **helm** | What sits over the head: helms, hats, hoods, crowns, circlets; or a hairstyle from the shared library (§4.8), in the same slot | `helm-…`, `hair-…` |
 | **extras** | Beards, jewellery, scars and a people's ears and horns, any number, shown with any hair or helm (§4.10) | `beard-…`, `jewel-…`, `skin-…`, `ears-…`, `horns-…` |
@@ -32,18 +32,24 @@ Two prompts you'll reuse. Ask them in the same chat as the part they're for.
 
 The face picture itself is `neutral`. The twelve are `03-art-overhaul.md` §5.2's: notable characters (§7.4) get all eleven others, named minor characters five (smile, sad, worried, angry, shock), and generic faces two (smile, worried). The game cuts the eyes, brows and mouth out of each by comparing it with the neutral face.
 
+**Fix the size** · `<part-id>.png`
+
+> That came back at a different size or layout from the picture I attached: something is cropped, zoomed, moved, or drawn bigger or smaller than it was. Do the same edit again on the attached picture. It is exactly the size it is (1024 × 1536 for a body or an armor, 1536 × 1024 for every sheet): give it back at exactly that size, laid out exactly as it is, every piece, figure and grey line in exactly the same place, at exactly the same size and angle. Don't crop, pad, zoom, stretch, rotate, flip, re-centre or re-frame it, add no border, and draw nothing bigger, smaller, longer or shorter: paint over the shapes that are there. I'll save it as <part-id>.png.
+
+Use it when Claude's check (§2.3, the size lock) says a picture has to be redone: a piece or a cell cropped off the edge, missing, or drawn far bigger or smaller than its template's. Attach the template again, not the picture that came back.
+
 **Realign** · `<part-id>.png`
 
 > That moved things that should have stayed put. Do the same edit again on the attached base image, but this time leave everything outside the part exactly where it was, pixel for pixel: the same pose, body, head, framing, canvas size and position, and background. Change only the part I asked for. I'll save it as <part-id>.png.
 
 ### 1.3 Making the parts
 
-1. **Make the base first** (§3): `base-male` and `base-female`, each in its own ChatGPT chat. Paste the style block (§2.1), the avoid list (§2.2) and the base prompt. When you're happy with it, keep that chat: every part is made from it.
-2. **For every part,** attach that base PNG (or keep working in the base's chat, so it's already there), paste the style block and the avoid list, then the part's prompt. Each entry's Basis line says which base it edits. A variant (an entry that says it edits another part's picture) attaches that picture instead. One part per request.
-3. **Check it, then send it.** Nothing outside the part may move: if it did, paste the Realign follow-up. Send the PNG to Claude named `<part-id>.png`, exactly the id in the entry's heading (every prompt ends with the file name). Claude cuts the part out by comparing it with the base, files it under `tools/source/characters/`, and credits it in `ASSETS.md`.
+1. **Paint the two bodies first** (§3.0): attach `body-parts-man.png` and paste the `body-man` prompt; then `body-parts-woman.png` and `body-woman`, each in a chat of its own. Send them back as `body-man.png` and `body-woman.png`. Claude cuts each into its fourteen pieces, stands the figure up as `base-male.png` or `base-female.png`, and draws every other template again from it, so everything after is painted on your own bodies.
+2. **Every other part is painted on a template** (a sheet): the card says which (its Basis line, and the Art Prompts page's Attach line). Attach that PNG, paste the card's prompt (the page's Copy button gives the whole of it: the sheet's block, the size lock and the list), and send what comes back named exactly as the prompt's last line says. One picture per message. The armors are one outfit to a picture, dressed piece by piece on `armor-parts-man.png` or `armor-parts-woman.png` (§5.0); faces, hair, extras, helms, capes and weapons come four to twelve to a picture (§4.0, §4.9, §4.10, §6.0).
+3. **The size lock.** Every template is exactly a size ChatGPT makes (1024 × 1536, or 1536 × 1024 for the sheets of four to twelve), and every prompt says to give it back at exactly that size, laid out exactly as it is. Claude checks each picture against its template before cutting it (§2.3): a little zoom, shift or other size, or a piece drawn a few per cent off, is put back exactly; a piece or a cell that's cropped, missing or redrawn far off comes back to you to paint again with the **Fix the size** follow-up (§1.2).
 4. **Characters are recipes** (§7): once their parts exist there's nothing more to draw. **Creatures** (§8) are drawn whole, in their own chats, as before.
 
-Every part is the base's canvas: 1024×1536, the standard figure about 85% of its height. Morphs resize characters in the game, so a child's or a Stoneborn's armor is drawn on the full-size base. Creatures that are wider than they are tall use a landscape canvas (the Art Guide's §2 allows larger canvases for creatures and bosses) and say how big they are next to a standard adult.
+The templates are drawn from the bodies stood up at rest, and till the bodies are painted, from the body templates' own pieces stood up the same way: every piece in the same place at the same size, so a sheet painted before the bodies come still cuts. The single cards (one part on the base, 1024 × 1536) are for redoing one part. Morphs resize characters in the game, so a child's or a Stoneborn's armor is drawn on the full-size body. Creatures that are wider than they are tall use a landscape canvas (the Art Guide's §2 allows larger canvases for creatures and bosses) and say how big they are next to a standard adult.
 
 Priorities: **P0** is everything the Prologue to Act 1 Chapter 4 needs (including the creation screen and Act 1's shops), **P1** the rest of Act 1, **P2** Acts 2 and 3. A part takes the priority of the earliest character who wears it.
 
@@ -67,13 +73,40 @@ Paste this second.
 
 ### 2.3 How ChatGPT uses the bases
 
-The bases are the owner's own pair of jointed mannequins (2026-11-09; the first pair, of 2026-11-06, is in the archive): a cel-shaded man and woman with tan skin and featureless faces, bald, in dark underwear, on a solid black background. Each is built like an artist's jointed mannequin, with a round ball and a thin seam at every joint (the shoulders, elbows, wrists, knees and ankles, and the pelvis's curved line across the top of each thigh), so the game can turn each piece about its joint and animate them (`tools/rig/skeleton.py` and `clips.py`). They stand in a three-quarter view facing right, the arms held a little away from the body with the fists closed, the legs apart in an easy stride, the far arm in deep shadow. `tools/split_bases.py` stood them, from one picture of the two side by side, on their own 1024 by 1536 canvases as `tools/source/characters/base-male.png` and `base-female.png`. Every part is an edit of one of them, so the base image itself sets the style, and these rules replace the style block for parts.
+The figures are a cut-out ("paper doll") rig (the owner's call, 2026-11-10): each body is painted in its fourteen pieces (§3.0), and `tools/body_parts.py` puts the pieces back together at rest as `tools/source/characters/base-male.png` and `base-female.png`: a bald, tan-skinned, cel-shaded man and woman with featureless faces, in dark underwear, on solid black, in a three-quarter view facing right, the arms a little away from the body with the fists closed, the legs apart, the far arm in shadow. The game puts the pieces on the skeleton and turns each about its joint (`tools/rig/skeleton.py`, `clips.py`).
 
-The owner's slot map (2026-11-06, the head fixed 2026-11-08): **armor is the body all the way up to the neck, the head is the mannequin's own and never changes shape, and the cape is the back.** The face is only the features painted on that head (eyes, brows, nose, mouth, marks, facial hair). **Hair and helm are one slot**, what's on the head: a hairstyle is a piece in it just as a helm is, and a helm that wants hair showing has it painted in. The weapon is what the near hand holds. The game stacks the parts in this order, back to front: cape, armor, head, face, hair or helm, weapon.
+Every part is painted on a template made from those pieces, never on a blank canvas:
 
-Faces, hairs and helms are painted on the **blank bases** (`base-male-blank` and `base-female-blank`, §3), so every face lands on the same head and every hair and helm fits it. The jointed mannequins are featureless already, so each blank base is the same picture as its base (`tools/split_bases.py` writes both).
+| Template | Size | What's on it | Parts |
+|---|---|---|---|
+| `body-parts-man`, `body-parts-woman` | 1024 × 1536 | the figure pulled apart into its fourteen pieces | the body (§3.0) |
+| `armor-parts-man`, `armor-parts-woman` | 1024 × 1536 | the same, less the head: the thirteen pieces an outfit dresses | each armor, one to a picture (§5.0) |
+| `face-sheet-male`, `face-sheet-female` | 1536 × 1024 | ten copies of the head and shoulders | the faces (§4.0) |
+| `hair-sheet` | 1536 × 1024 | eight columns, the man from the head to the hips above and the woman below | the hair (§4.9) |
+| `extra-sheet`, `extra-sheet-male` | 1536 × 1024 | six columns of the man's and the woman's head and chest; twelve of the man's | the extras (§4.10) |
+| `helm-sheet-male`, `helm-sheet-female` | 1536 × 1024 | four copies, the head to the hips, with room over the head | the helms (§6.0) |
+| `cape-sheet-male`, `cape-sheet-female` | 1536 × 1024 | four whole figures with room behind the back | the capes (§6.0) |
+| `weapon-sheet-male`, `weapon-sheet-female` | 1536 × 1024 | four columns of the two fists alone | what the hands hold (§6.0) |
 
-**Where the regions fall on the bases.** The values are approximate pixels, measured on the 1024 by 1536 canvas. The importer uses them; ChatGPT gets the same regions in words.
+`python tools/body_parts.py template` and `armor` write the first two from the skeleton; `python tools/part_sheet.py templates` writes the rest from the figure stood up. Till the bodies are painted the sheets show the body templates' own pieces stood up the same way, and they're drawn again from the painted bodies when those come: every piece in the same place at the same size, so a sheet painted on either cuts the same.
+
+The owner's slot map (2026-11-06, the head fixed 2026-11-08): **armor is the body all the way up to the neck, piece by piece, the head is the mannequin's own and never changes shape, and the cape is the back.** The face is only the features painted on that head (eyes, brows, nose, mouth). **Hair and helm are one slot**, what's on the head: a hairstyle is a piece in it just as a helm is, and a helm hides the hair (a helm that wants hair showing has it painted in). The hair, the helm, the face and the extras turn with the head; the cape hangs from the torso; the weapon is what the near hand holds and turns with it. The game stacks the parts in this order, back to front: cape, armor, head, face, extras, hair or helm, ears and horns, weapon, each limb's pieces in the skeleton's own order (which a clip can change: a punch brings the far arm in front).
+
+**The size lock.** ChatGPT redraws the whole picture it's given, and can send it back zoomed, shifted, cropped, at another size, or with a piece drawn bigger than it was. So:
+
+- every template is exactly a size ChatGPT makes (1024 × 1536 or 1536 × 1024), so it has no reason to resize anything;
+- every prompt carries the **Size** block below, the tall one for a body or an armor and the wide one for a sheet;
+- every picture that comes back is checked against its template before it's cut: `python tools/body_parts.py check <png> <id>` for a body or an armor, `python tools/part_sheet.py check <png> <sheet-id>` for a sheet. A small zoom, shift or other size is put back exactly by the cut, and each body piece is held to its template's size and place (a forearm drawn 6% longer still meets the elbow and the wrist); a piece or a cell that's cropped off the edge, missing, redrawn far off its size, or painted where it'd be lost means the picture is redone with **Fix the size** (§1.2).
+
+**Size (tall)** · bodies and armors
+
+> SIZE. The attached picture is exactly 1024 × 1536 pixels. Give it back at exactly 1024 × 1536, laid out exactly as it is: every piece and figure in exactly the same place, at exactly the same size and the same angle. Don't crop, pad, zoom, stretch, squash, rotate, flip, re-centre or re-frame the picture, add no border or frame, and draw nothing bigger, smaller, longer or shorter than it is: paint over the shapes that are there.
+
+**Size (wide)** · every sheet
+
+> SIZE. The attached picture is exactly 1536 × 1024 pixels. Give it back at exactly 1536 × 1024, laid out exactly as it is: every piece and figure, and every grey line, in exactly the same place, at exactly the same size and the same angle. Don't crop, pad, zoom, stretch, squash, rotate, flip, re-centre or re-frame the picture, add no border or frame, and draw nothing bigger, smaller, longer or shorter than it is: paint over the shapes that are there.
+
+**Where the regions fall on the bases.** The values are approximate pixels, measured on the 1024 by 1536 canvas of the figure stood up. The importer uses them; ChatGPT gets the same regions in words.
 
 | Landmark | `base-male` | `base-female` |
 |---|---|---|
@@ -88,49 +121,42 @@ The back of the figure faces the left of the picture. A cape therefore shows pas
 
 **Setup brief**
 
-Paste this once at the start of each ChatGPT chat, before the first part. Or put it in a ChatGPT Project's instructions and upload both bases to the Project. Every card's prompt carries its own slot rule too, so a card still works without the brief.
+Paste this once at the start of each ChatGPT chat, before the first picture. Or put it in a ChatGPT Project's instructions and upload the templates to the Project. Every card's prompt carries its own rules too, so a card still works without the brief.
 
-> I'm making the characters for a 2D fantasy game, and I need you to paint their parts as edits of a base character. Please read this whole brief before the first image, and follow it for every image in this chat.
+> I'm making the characters for an original 2D fantasy game, built as a cut-out ("paper doll") rig: every figure is drawn in separate pieces that the game puts on a skeleton and turns at the joints. Every image you make in this chat is an EDIT of a template I attach. Please read this whole brief before the first image, and follow it for every image in this chat.
 >
-> THE BASES. I'll attach one of two base characters, base-male.png or base-female.png, or their blank versions, base-male-blank.png and base-female-blank.png, the same featureless figures. Each is 1024 × 1536 pixels: a bald, tan-skinned, cel-shaded jointed mannequin with a featureless face, a round ball and a thin seam at each joint (shoulders, elbows, wrists, knees, ankles, and the curved line across the top of each thigh). It stands in a three-quarter view facing right, its arms held a little away from its body with the fists closed, its legs apart in an easy stride, wears plain dark underwear, and is on a solid black background. The game animates it by turning each piece about its joint, so keep the gap of black between each arm and the body, and between the legs, as it is. Every character in the game is built on these exact two figures. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel. Anything that shifts, even a little, shows up as a seam.
+> THE TEMPLATES. Each shows a bald, tan-skinned, cel-shaded mannequin, a man or a woman, with a featureless face, in a three-quarter view facing right, on a solid black background: the near arm and leg are on the left of the picture, the far ones on the right, and the far arm is in shadow. I'll attach one of these:
+> - a BODY or an ARMOR template, 1024 × 1536: the figure pulled apart into its pieces, with black gaps between them: the head; the torso, one piece from the neck down to the shorts; each upper arm, forearm and fist; each thigh, shin and foot. An armor template has no head. Repaint or dress every piece exactly where it is, each on its own.
+> - a FACE, HAIR, EXTRA or HELM sheet, 1536 × 1024: copies of the figure's head and shoulders (or the head to the hips) in cells divided by thin grey lines. Paint on each head what I list for its cell, numbered left to right along the top row and then the bottom.
+> - a CAPE sheet, 1536 × 1024: four whole figures, one to a column. Hang the cape I list behind each.
+> - a WEAPON sheet, 1536 × 1024: four columns showing only the two closed fists. Put the item I list through the near (left, lit) fist of each, with no arm or body.
 >
-> THE SLOTS. Each image you make is exactly one part, in one slot:
-> 1. ARMOR is the body, everything from the jawline down: the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet. An armor replaces all the skin and the underwear below the jaw with the outfit. Its collar sits at the neck, the fists get gloves or stay bare, and the feet get boots or shoes. It never touches the head.
-> 2. HAIR OR HELM is what's on the head: one slot for both, painted on the blank head. A HAIR is a hairstyle, painted a plain mid brown (the game recolours it), shared by many characters, men and women alike; a HELM is any helmet, hood, hat, crown, circlet or mask. Either may hang down over the neck and shoulders (long hair, a hood's drape, a mail coif, a plume, a veil), because the game draws it on top of the armor. A helm replaces the hair entirely, so if a helm should show hair (under a hat, round a circlet), paint that hair in as part of the helm. Where either leaves the face open, keep the blank face exactly as it is, because the game puts each character's own face there. Beards, jewellery, scars, pointed ears, horns and beast ears are never part of a hair or a helm: they're EXTRAS (6).
-> 3. CAPE is the back: anything that hangs behind the body from the shoulders or the waist, such as a cape, a cloak, wings, a tail, a pack or a quiver. The game draws it behind the body. So paint it only in the black space behind and around the figure, and never over the body, the arms or the head. In this pose the figure's back is toward the LEFT of the picture. A cape therefore shows past the left edge of the shoulders, back and legs, above the shoulders behind the neck, and between and below the legs.
-> 4. WEAPON is what the near hand holds. The near hand is the lit fist on the LEFT of the picture; the fist on the right, in shadow, is the far hand. The grip passes through the near fist, and the curled fingers stay exactly as they are, closed over it. The weapon shows above and below the fist. A shield or a second item goes on the far arm only when I ask for it.
-> 5. FACE is only the features, painted on the blank head: eyes, eyebrows, nose and mouth, clean-shaven. The faces are shared, ten men's and ten women's, each worn by many characters, so paint the skin in the base's own warm tan and the eyes and eyebrows a mid brown: the game recolours the skin, the eyes and the hair for each character. The head itself never changes: keep its outline, size, angle and position, the skull and the ears, and paint no hair on it (the hair is a part of its own). Pointed ears, horns and beast ears go with the hair or the helm, never the face. The neck belongs to the armor, so leave the neck and everything below it exactly as they are.
-> 6. EXTRA is one thing on the head that isn't the face or the hair, painted on the blank head on its own: a beard or moustache (plain mid brown), a piece of jewellery (an earring, a nose ring, spectacles, an eyepatch), a skin mark (freckles, a scar, a tattoo) or a people's ears or horns. Paint only that thing, exactly where it sits on the head, and change nothing else. The game layers it over the face (or, ears and horns, over the hair).
+> THE SLOTS. Each image is one kind of part:
+> 1. ARMOR is the body from the jaw down, piece by piece: each piece gets its own part of the outfit (the torso the shirt or the breastplate and, below it, the belt and the top of the trousers or the skirt, each arm piece its sleeve, each fist a glove or stays bare, each leg piece its trouser leg, each foot its boot). It never touches the head.
+> 2. HAIR or HELM is what's on the head, one slot for both. A helm hides the hair entirely; if a helm should show hair, paint that hair in as part of it. Either may hang over the neck and shoulders. Wherever it leaves the face open, keep the blank face exactly as it is. A hair is painted plain mid brown.
+> 3. FACE is only the features painted on the blank head: eyes, brows, nose and mouth, clean-shaven, in the base's own tan with mid-brown eyes and brows. The head itself never changes shape.
+> 4. EXTRA is one thing on the head on its own: a beard (plain mid brown), a piece of jewellery, a skin mark, or a people's ears or horns.
+> 5. CAPE is the back: cloaks, capes, packs, tails. Paint it only in the black behind and around the figure, never over the body. The figure's back faces the LEFT of the picture.
+> 6. WEAPON is what the near hand holds: the grip passes through the curled fingers, which stay exactly as they are.
 >
-> FACE SHEETS. Sometimes I'll attach a face sheet instead of a base: ten copies of the blank head and shoulders in a grid of five columns and two rows, divided by thin grey lines. Then paint one face per cell, in the order I list them: the features only, no hair, every head exactly where it is in its cell, as in a single edit.
->
-> HAIR SHEETS. Sometimes I'll attach a hair sheet: eight columns divided by thin grey lines, the blank man from the head to the hips at the top of each and the blank woman at the bottom. Then give both heads in each column the hairstyle I list for it, the same style on each, painted a plain mid brown; keep every head and face exactly where they are, as in a single edit, and keep each hairstyle inside its own cell.
->
-> EXTRA SHEETS. Sometimes I'll attach an extra sheet: six columns divided by thin grey lines, each the blank man's head and chest above and the blank woman's below (or, for beards, twelve cells all of the man). Then paint the one extra I list for each column (or cell) on both heads, and nothing else.
->
-> ARMOR SHEETS. Sometimes I'll attach an armor sheet: four copies of the base standing full length, side by side in columns divided by thin grey lines. Then dress each figure in the outfit I list for its column, and keep every figure, its bald head and its pose exactly where they are, as in a single edit. Clothes stay inside their own column.
->
-> HELM, CAPE AND WEAPON SHEETS. Sometimes I'll attach a helm sheet (four blank figures from the top of the head to the hips), a cape sheet (four full figures, a little smaller, side by side) or a weapon sheet (four columns of two floating fists, the rest of the figure left out). Then give each column the helm, the cape or the held item I list for it, keep every figure and fist exactly where it is, as in a single edit, and keep each part inside its own column. A held item is gripped in the closed fist as it is, with no pose.
->
-> The game layers them back to front: cape, armor, face, extras (beards, jewellery, scars), hair or helm, ears and horns, weapon.
+> THE SIZE RULE, for every image: give it back at exactly the size of the picture I attached, laid out exactly as it is: every piece, figure and grey line in the same place, at the same size and the same angle. Never crop, pad, zoom, stretch, rotate, flip, re-centre or re-frame the picture, never add a border, and never draw a piece bigger, smaller, longer or shorter than it is. The game lays your picture over the template pixel for pixel, so anything that moves shows as a seam, or a gap at a joint.
 >
 > THE RULES FOR EVERY IMAGE:
-> - Edit the attached image; never redraw it from scratch. Change only the slot I ask for, and keep every other pixel exactly as it is in the base.
-> - Keep the same 1024 × 1536 canvas, the same solid black background, the same pose, the same body proportions, and the same position and size in the frame. Don't crop, zoom, shift, rotate or flip anything.
-> - Use the same art style as the base: crisp dark outlines, flat cel shading in two to four tones per colour, light from the upper left, and the same colouring.
-> - Wherever your slot doesn't reach, keep the base's bald head, face, skin and underwear unchanged.
-> - No text, no labels, no ground, no floor shadow, no frame, and no extra objects or figures. No glow may spill onto the background unless I ask for it.
-> - Give me back one PNG, 1024 × 1536.
+> - Edit the attached image; never redraw it from scratch. Change only what I ask for.
+> - Keep the solid black background and the black gaps between the pieces: no piece may touch another.
+> - Use the template's art style: crisp dark outlines, flat cel shading in two to four tones per colour, light from the upper left.
+> - No text, labels, numbers, guide lines, ground, floor shadow, frame, or extra objects or figures. No glow spilling onto the background unless I ask for it.
+> - Original designs only: nothing copied from an existing game, film, comic or brand.
 >
-> Each request will start with the rule for its slot and then describe the part. If a request ever seems to break these rules, follow the rules. Reply "Ready" if you understand, and wait for the first request.
+> Each request will name what to paint. If a request ever seems to break these rules, follow the rules. Reply "Ready" if you understand, and wait for the first request.
 
 **Every edit**
 
 > Edit the attached image. It is a base character for a 2D game. The game stacks parts painted on it like transparent sheets, so your edit has to line up with it pixel for pixel. Keep the same 1024 × 1536 canvas, the same solid black background, the same pose with the arms a little away from the body and the fists closed, the same body proportions, the same position and size in the frame, and the same three-quarter view facing right. Keep exactly the same art style: crisp dark outlines, flat cel shading, the same light from the upper left, the same colouring. Change only the slot named below, and keep every other pixel exactly as it is. Don't crop, zoom, shift, rotate or flip anything. No text, no ground, no shadow on the floor, no extra objects or people.
 
-**Armor**
+**Armor pieces**
 
-> This is an ARMOR, which is the body from the jawline down. Replace all the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit described below. Fit it to this exact body and pose: its collar at the neck, gloves or bare hands on the same closed fists, boots or shoes on the same feet. The game animates the figure by turning each limb at its joint, so keep the gap of black between each arm and the body, and between the legs, as it is: a sleeve, a glove and a boot stay on their own limb. Where the outfit leaves skin showing, keep the base's tan skin there. The outline can grow where the clothes are loose (sleeves, skirts, coat tails, pauldrons), but the arms, legs, hands and feet stay exactly where they are. Don't touch the head above the jawline: keep the same bald head and the same face. The outfit:
+> This is an ARMOR, painted in pieces. The attached picture is a body for a 2D game's cut-out character rig, pulled apart into its thirteen pieces on a black background, everything but the head: the torso, one piece from the neck down to the shorts; and for each arm the upper arm, the forearm and the closed fist, for each leg the thigh, the shin and the foot. The figure faces right in three-quarter view: the near arm and leg are on the left of the picture, the far arm and leg on the right, and the far arm is in shadow. The game puts the pieces back together on a skeleton and turns each one at its joint, so dress every piece on its own, exactly where it is, at its size and its angle, in the outfit described below: the torso gets the shirt, the coat's body, the breastplate and the collar at the neck and, where its shorts are, the belt and the top of the trousers, the shorts or the skirt; each upper arm and forearm its own part of the sleeve (a pauldron goes on the upper arm); each fist a glove, or it stays bare and closed; each thigh and shin its own part of the trouser leg, the skirt or the coat's tails; each foot its boot or shoe. A skirt, a robe or a long coat is split the same way, its top on the torso and the rest over each thigh and shin. Draw every piece whole, as it would look if nothing were in front of it, its round ends at the joints dressed too, so it can turn under the next piece without a gap. Loose clothes may make a piece a little bigger than the body under it, but keep the black gaps: no piece may touch another, and nothing is painted in the gaps or where the head would be. Where the outfit leaves skin bare, keep the body's own warm tan skin. Don't add a head, a helmet, a hood, a cape or a weapon: they're parts of their own. Use exactly the template's art style: thick deep-brown outlines, flat cel shading, light from the upper left. No text, labels or numbers.
 
 **Helm**
 
@@ -168,21 +194,19 @@ Paste this once at the start of each ChatGPT chat, before the first part. Or put
 
 > This is a FACE SHEET: ten copies of the same blank base character's head and shoulders, in a grid of five columns and two rows of equal cells divided by thin grey lines, on a solid black background. Paint a different face onto the blank head in each cell, following the numbered list below. The cells are numbered left to right, 1 to 5 along the top row and 6 to 10 along the bottom row. In every cell, keep the head exactly where it is, at the same size, angle and position, with the same head outline, skull and ears, in a three-quarter view facing right. Paint only the features (eyes, eyebrows, nose and mouth), clean-shaven, and no hair: the hair and any beard are parts of their own. Make the ten faces clearly different people: different shapes, ages and characters. Paint every one with the skin in the base's own warm tan and the eyes and brows a mid brown, since the game recolours them. Keep the grey lines, the black and the shoulders exactly as they are.
 
-**Armor sheet**
-
-> This is an ARMOR SHEET: four copies of the same bald base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Dress each figure in a different outfit, following the numbered list below; the figures are numbered 1 to 4 from left to right. Each outfit is the body from the jawline down: replace the skin and the underwear below the jaw (the neck, shoulders, chest, back, arms, hands, waist, hips, legs and feet) with the outfit, fitted to that exact body and pose, its collar at the neck, gloves or bare hands on the same closed fists, boots or shoes on the same feet. The game animates the figures by turning each limb at its joint, so keep the gap of black between each arm and the body, and between the legs, as it is. Where an outfit leaves skin showing, keep the base's tan skin there. In every column keep the figure exactly where it is, at the same size and in the same pose, with the same bald head and the same face, untouched above the jawline. Loose clothes (sleeves, skirts, coat tails, pauldrons) may widen the outline, but they must stay inside their own column and never cross a grey line; the arms, legs, hands and feet stay exactly where they are. Make each outfit its own: don't let colours or pieces of one leak into another. Use exactly the base's art style: crisp dark outlines, flat cel shading, light from the upper left. Don't move, resize, crop or flip any figure; keep the grey lines and the black background; no text, numbers or labels anywhere. Give it back as one PNG, 1536 × 1024. The outfits:
-
 **Helm sheet**
 
 > This is a HELM SHEET: four copies of the same blank base character from the top of the head to the hips, side by side in four equal columns divided by thin grey lines, on a solid black background. Put a different helm, hood, hat, crown or mask on each head, following the numbered list below; the figures are numbered 1 to 4 from left to right. Hair and helm are one slot: a helm replaces the hair, so if one should show hair (under a brim, round a circlet or a crown), paint that hair in as part of it; otherwise add none. Fit each to its head's exact size, angle and position, and where it leaves the face open, keep the blank face exactly as it is. A helm may hang down over the neck and shoulders (a hood's drape, a mail coif, a plume, a veil), but keep each inside its own column, keep every head and body exactly where it is, as in a single edit, and keep the grey lines and the black exactly as they are.
 
 **Cape sheet**
 
-> This is a CAPE SHEET: four copies of the same base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Give each figure a different cape, cloak, tail or back piece, following the numbered list below; the figures are numbered 1 to 4 from left to right. A cape hangs behind the body: paint it only in the black space behind and around each figure, never over the body, the arms, the head or the underwear, and put no straps, clasps or collars across the front of the body. Each figure's back faces the LEFT of its column, so a cape shows past the left edge of the shoulders, back and legs, above the shoulders behind the neck, and between and below the legs. Keep every figure exactly where it is, at the same size and in the same pose, with the same bald head and face; keep each cape inside its own column, never across a grey line; and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
+> This is a CAPE SHEET: four copies of the same base character standing full length, side by side in four equal columns divided by thin grey lines, on a solid black background. Give each figure a different cape, cloak, tail or back piece, following the numbered list below; the figures are numbered 1 to 4 from left to right. A cape hangs behind the body: paint it only in the black space behind and around each figure, never over the body, the arms, the head or the underwear, and put no straps, clasps or collars across the front of the body. Each figure's back faces the LEFT of its column, so a cape shows past the left edge of the shoulders, back and legs, above the shoulders behind the neck, and between and below the legs. Keep every figure exactly where it is, at the same size and in the same pose, with the same bald head and face; keep each cape inside its own column, never across a grey line; and keep the grey lines and the black exactly as they are.
 
 **Weapon sheet**
 
-> This is a WEAPON SHEET: four columns divided by thin grey lines, on a solid black background. Each column shows the same two closed fists, each with a short stub of forearm, floating where a character's hands are; the rest of the figure is left out on purpose. The lit fist on the LEFT of each column is the near hand; the shadowed fist on the RIGHT is the far hand. Give each column a different weapon or held item, following the numbered list below; the columns are numbered 1 to 4 from left to right. Hold every item the way a 2D game character holds one, with no pose at all: the closed fist grips it as it is, the grip passing straight through the curled fingers, which stay exactly as they are, and the item shows above and below the fist. A weapon is held low with its point or head forward, toward the right, unless the list says otherwise. A carried thing (a basket, a pot, a lantern) hangs straight down from the fist by its handle. A shield is worn on the far forearm, its middle just above the far fist. The far fist holds something only when the list says so. Don't draw arms, a body or a head, and don't move, turn, open or redraw the fists. Keep each item whole and inside its own column, never across a grey line, and keep the grey lines and the black exactly as they are. Give it back as one PNG, 1536 × 1024.
+> This is a WEAPON SHEET: four columns divided by thin grey lines, on a solid black background. Each column shows the same two closed fists, each with a short stub of forearm, floating where a character's hands are; the rest of the figure is left out on purpose. The lit fist on the LEFT of each column is the near hand; the shadowed fist on the RIGHT is the far hand. Give each column a different weapon or held item, following the numbered list below; the columns are numbered 1 to 4 from left to right. Hold every item the way a 2D game character holds one, with no pose at all: the closed fist grips it as it is, the grip passing straight through the curled fingers, which stay exactly as they are, and the item shows above and below the fist. A weapon is held low with its point or head forward, toward the right, unless the list says otherwise. A carried thing (a basket, a pot, a lantern) hangs straight down from the fist by its handle. A shield is worn on the far forearm, its middle just above the far fist. The far fist holds something only when the list says so. Don't draw arms, a body or a head, and don't move, turn, open or redraw the fists. Keep each item whole and inside its own column, never across a grey line, and keep the grey lines and the black exactly as they are.
+
+Each sheet's prompt is its block above, then **Size (wide)**, then the sheet's list; each armor's is **Armor pieces**, then **Size (tall)**, then the outfit (§5.0); a single card's is **Every edit**, its slot's block and the card, then **Size (tall)**.
 
 **Creature**
 
@@ -198,9 +222,9 @@ The owner's call (2026-11-08): the parts are drawn in ChatGPT as clean vector-st
 
 **After every card**
 
-> Before you send it, check: nothing outside the part moved or changed size, every new edge is crisp, there are no gradients or textures, and the background is still flat black. Fix anything that fails before you send it.
+> Before you send it, check: the picture is exactly the size of the one I attached, every piece and figure is exactly where it was and the same size (nothing cropped, zoomed, moved, stretched or drawn bigger), nothing outside the part changed, every new edge is crisp, there are no gradients or textures, and the background and the gaps between the pieces are still flat black. Fix anything that fails before you send it.
 
-**The vector setup brief.** Optional, since every wrapped card is complete on its own: paste it into a ChatGPT Project's instructions, with the four bases uploaded, to keep a run of parts consistent.
+**The vector setup brief.** Optional, since every wrapped card is complete on its own: paste it into a ChatGPT Project's instructions, with the templates uploaded, to keep a run of parts consistent.
 
 > I'm making the characters for an original 2D fantasy game. Every image you make in this chat is one part of a character, painted as an EDIT of a base image I attach, in a clean VECTOR art style. Read this whole brief first and follow it for every image in this chat. Reply "Ready" and wait for my first request.
 >
@@ -213,45 +237,65 @@ The owner's call (2026-11-08): the parts are drawn in ChatGPT as clean vector-st
 > - Faces are clean, semi-realistic anime: expressive eyes that aren't oversized, drawn as flat shapes with one white highlight each, a simple defined nose, a small mouth.
 > - Details stay readable when small: belts, buckles, seams and trims are clear flat pieces, not fine scribbles.
 >
-> THE BASES
-> I'll attach one of four base images: base-male.png, base-female.png, or their blank versions base-male-blank.png and base-female-blank.png (the same featureless figures). Each is 1024 x 1536: a bald, tan-skinned jointed mannequin with a featureless face and a ball and thin seam at each joint, in a three-quarter view facing right, its arms a little away from its body with the fists closed, its legs apart, in plain dark underwear, on a solid black background. The game turns each piece about its joint, so keep the gaps between the arms and the body and between the legs clear. The game stacks your images on top of each other like transparent sheets, so every image must line up with the base pixel for pixel.
+> THE TEMPLATES
+> I'll attach a template: a bald, tan-skinned mannequin with a featureless face, man or woman, in a three-quarter view facing right, on a solid black background, the near arm and leg on the left of the picture, the far arm in shadow. The game is a cut-out rig: it puts the figure's pieces on a skeleton and turns them at the joints, and stacks your images over the template pixel for pixel.
+> - BODY or ARMOR template, 1024 x 1536: the figure pulled apart into its pieces with black gaps between them (head; torso; hips; each upper arm, forearm and fist; each thigh, shin and foot; an armor template has no head). Repaint or dress every piece where it is, on its own, whole, its round joint ends included; never let pieces touch.
+> - FACE / HAIR / EXTRA / HELM sheet, 1536 x 1024: heads (with the shoulders, or to the hips) in cells divided by thin grey lines; paint each cell's item on its head.
+> - CAPE sheet, 1536 x 1024: four whole figures; hang each cape behind its figure.
+> - WEAPON sheet, 1536 x 1024: four columns of the two closed fists only; put each item through the near (left) fist, with no arm or body.
 >
-> THE SLOTS (each image is exactly one part)
-> 1. ARMOR is the body from the jawline down: neck, shoulders, chest, arms, hands, waist, legs and feet. It replaces the skin and underwear below the jaw with the outfit: collar at the neck, gloves or bare fists, boots or shoes. Where the outfit leaves skin showing, keep the base's skin. It never touches the head.
-> 2. HAIR or HELM is what sits on the head, one slot for both, painted on the blank head. A helm replaces the hair entirely; if a helm should show hair, paint that hair in as part of the helm. Either may hang over the neck and shoulders. Wherever it leaves the face open, keep the blank face exactly as it is. A hair is painted plain mid brown, for everyone. Beards, jewellery, scars, ears and horns are EXTRAS, never part of a hair or a helm.
-> 3. CAPE is the back: cloaks, capes, packs, quivers, tails. Paint it only in the black space behind and around the figure, never over the body, arms or head. The figure's back faces the LEFT of the picture, so a cape shows past the left edge of the shoulders, back and legs, and between and below the legs.
-> 4. WEAPON is what the near hand holds: the lit fist on the LEFT of the picture. The grip passes through the curled fingers, which stay exactly as they are; the weapon shows above and below the fist and stays inside the canvas.
-> 5. FACE is only the features painted on the blank head: eyes, brows, nose and mouth, clean-shaven. The faces are shared, ten men's and ten women's, so paint the skin in the base's own tan and the eyes and brows a mid brown; the game recolours them per character. The head never changes shape, and no hair, beard, ears or horns go on it.
-> 6. EXTRA is one thing on the head on its own: a beard or moustache (plain mid brown), a piece of jewellery, a skin mark, or a people's ears or horns. Paint only that thing, where it sits.
+> THE SLOTS (each image is one kind of part)
+> 1. ARMOR is the body from the jaw down, piece by piece: each piece gets its own part of the outfit. Where the outfit leaves skin, keep the body's skin. It never touches the head.
+> 2. HAIR or HELM is what sits on the head, one slot for both. A helm hides the hair; if a helm should show hair, paint that hair in as part of it. Wherever it leaves the face open, keep the blank face exactly as it is. A hair is painted plain mid brown.
+> 3. FACE is only the features painted on the blank head: eyes, brows, nose and mouth, clean-shaven, in the template's tan with mid-brown eyes and brows. The head never changes shape.
+> 4. EXTRA is one thing on the head on its own: a beard (plain mid brown), a piece of jewellery, a skin mark, or a people's ears or horns.
+> 5. CAPE is the back: paint it only in the black behind and around the figure, never over the body. The figure's back faces the LEFT of the picture.
+> 6. WEAPON is what the near hand holds: the grip passes through the curled fingers, which stay exactly as they are.
 >
-> SHEETS
-> Sometimes I'll attach a sheet instead of a base, its cells divided by thin grey lines:
-> - FACE SHEET: ten blank heads, 5 across and 2 down. Paint one face per cell in the order I list them (1-5 along the top row, 6-10 along the bottom).
-> - HAIR SHEET: eight columns, each the blank man (top) and woman (bottom) from the head to the hips. One hairstyle per column, the same on both heads, numbered 1-8 from the left, plain mid brown.
-> - EXTRA SHEET: six columns, each the blank man's head and chest (top) and the woman's (bottom); or twelve cells of the man for beards. One extra per column (or cell), on both heads.
-> - ARMOR SHEET: four full figures side by side, 1536 x 1024. One outfit per column, numbered 1-4 from the left.
-> - HELM SHEET: four blank figures from the top of the head to the hips, side by side. One helm per column, numbered 1-4 from the left.
-> - CAPE SHEET: four full figures side by side, 1536 x 1024. One cape per column, numbered 1-4 from the left.
-> - WEAPON SHEET: four columns of two floating fists, the rest of the figure left out, 1536 x 1024. One held item per column, numbered 1-4 from the left, gripped straight through the closed fist with no pose; never draw arms or a body.
-> Keep every figure exactly where it is in its cell, keep each part inside its own cell, and keep the grey lines and the black.
+> THE SIZE RULE
+> Give every image back at exactly the size of the picture I attached, laid out exactly as it is: every piece, figure and grey line in the same place, at the same size and angle. Never crop, pad, zoom, stretch, rotate, flip, re-centre or re-frame it, never add a border, and never draw a piece bigger, smaller, longer or shorter.
 >
 > THE RULES FOR EVERY IMAGE
 > - EDIT the attached image; never redraw it from scratch. Change only the slot I ask for and keep every other pixel as it is.
-> - Same canvas size, same flat pure-black background, same pose, same proportions, same position and size in the frame. Don't crop, zoom, shift, rotate or flip anything.
-> - Where a request says "the same art style as the base", read it as: the base's line positions, proportions, light and colours, drawn in the vector look above.
+> - Same canvas size, same flat pure-black background, same pieces in the same places at the same sizes, the same black gaps between them. Don't crop, zoom, shift, rotate or flip anything.
+> - Where a request says "the template's art style" or "the same art style as the base", read it as: its line positions, proportions, light and colours, drawn in the vector look above.
 > - No text, letters, numbers, labels, signature or watermark. No ground, floor shadow, frame or border. No extra objects or figures. No glow spilling onto the background unless I ask for it.
 > - Original designs only: nothing copied from an existing game, film, comic or brand.
 > - Give me one PNG at the same size as the image I attached.
 >
-> Before you send each image, check it: the figure hasn't moved or changed size, only the requested slot changed, every edge is crisp, there are no gradients or textures, and the background is still flat black. If any check fails, fix it before sending.
+> Before you send each image, check it: it's exactly the size of the picture I attached, no piece or figure has moved or changed size, only the requested part changed, every edge is crisp, there are no gradients or textures, and the background is still flat black. If any check fails, fix it before sending.
 >
 > Each request will name the slot and describe the part. If a request seems to break these rules, follow these rules.
 
 ## 3. Base
 
-### 3.1 The mannequin
+### 3.0 The mannequins in pieces
 
-Two figures, the alignment reference for everything else. Make them first and keep their chats.
+The two bodies are painted in pieces, not as whole figures: a cut-out ("paper doll") rig, in which each
+piece is drawn whole on its own and turns about its joint on the skeleton, and everything worn is drawn
+the same way, piece by piece. Each body's template (`tools/source/characters/body-parts-man.png` and
+`body-parts-woman.png`, made by `python tools/body_parts.py template` from the mannequin before them)
+is the figure pulled apart into its fourteen pieces, in the pose and the proportions the skeleton, the
+sockets and every clip are made for; `python tools/body_parts.py check <png> body-man` (or `body-woman`)
+says whether ChatGPT kept to it (§2.3, the size lock), and `python tools/body_parts.py cut <png> body-man`
+puts each painted piece back where it belongs, held to its template's size and place, and stands the
+figure up as `base-male.png` (or `base-female.png`), which every other template is drawn from.
+
+#### `body-man` · The man in pieces · P0
+
+**Basis:** Edits `body-parts-man` (the owner's call on 2026-11-10: a cut-out rig, the torso one piece, the same view; on 2026-11-11: no hips piece, the torso runs from the neck to the shorts).
+
+Edit the attached picture. It shows a jointed man's mannequin for a 2D game's cut-out character rig, pulled apart into its fourteen pieces on a black background: the head; the torso, one piece from the neck down to the end of its dark grey boxer shorts, which have a light band round the waist and the legs; and for each arm the upper arm, the forearm and the closed fist, for each leg the thigh, the shin and the foot. The figure faces right in three-quarter view: the near arm and leg are on the left of the picture, the far arm and leg on the right, and the far arm is in shadow. Repaint every piece as a clean, finished piece of a bald mannequin with a featureless face (no eyes, nose, mouth or ears), each in exactly the same place, at exactly the same size and at the same angle as the piece already there, and keep the black gaps between them: no piece may touch another. Draw each piece whole, as it would look if nothing were in front of it, and finish it with a smooth round end wherever it meets the next piece (the neck, the shoulders, elbows, wrists, hips, knees and ankles), so it can turn under that piece without a gap. Keep the proportions and the muscle shapes as they are. Paint it as clean vector-style 2D game art: thick deep-brown outlines, flat hard-edged cel shading in two or three tones, light from the upper left, a warm tan skin, smooth curves, no texture, no gradients, no blur. Keep the solid black background; add nothing else: no labels, numbers, guide lines, joints drawn as circles, ground shadow or extra pieces. SIZE. The attached picture is exactly 1024 × 1536 pixels. Give it back at exactly 1024 × 1536, laid out exactly as it is: every piece and figure in exactly the same place, at exactly the same size and the same angle. Don't crop, pad, zoom, stretch, squash, rotate, flip, re-centre or re-frame the picture, add no border or frame, and draw nothing bigger, smaller, longer or shorter than it is: paint over the shapes that are there. I'll save it as body-man.png.
+
+#### `body-woman` · The woman in pieces · P0
+
+**Basis:** Edits `body-parts-woman` (the owner's call on 2026-11-10: a cut-out rig, the torso one piece, the same view; on 2026-11-11: no hips piece, the torso runs from the neck to the shorts).
+
+Edit the attached picture. It shows a jointed woman's mannequin for a 2D game's cut-out character rig, pulled apart into its fourteen pieces on a black background: the head; the torso, one piece from the neck down to her dark grey briefs, with her top, a dark grey strapless band, across the chest; and for each arm the upper arm, the forearm and the closed fist, for each leg the thigh, the shin and the foot. The figure faces right in three-quarter view: the near arm and leg are on the left of the picture, the far arm and leg on the right, and the far arm is in shadow. Repaint every piece as a clean, finished piece of a bald mannequin with a featureless face (no eyes, nose, mouth or ears), each in exactly the same place, at exactly the same size and at the same angle as the piece already there, and keep the black gaps between them: no piece may touch another. Draw each piece whole, as it would look if nothing were in front of it, and finish it with a smooth round end wherever it meets the next piece (the neck, the shoulders, elbows, wrists, hips, knees and ankles), so it can turn under that piece without a gap. Keep the proportions and the muscle shapes as they are. Paint it as clean vector-style 2D game art: thick deep-brown outlines, flat hard-edged cel shading in two or three tones, light from the upper left, a warm tan skin, smooth curves, no texture, no gradients, no blur. Keep the solid black background; add nothing else: no labels, numbers, guide lines, joints drawn as circles, ground shadow or extra pieces. SIZE. The attached picture is exactly 1024 × 1536 pixels. Give it back at exactly 1024 × 1536, laid out exactly as it is: every piece and figure in exactly the same place, at exactly the same size and the same angle. Don't crop, pad, zoom, stretch, squash, rotate, flip, re-centre or re-frame the picture, add no border or frame, and draw nothing bigger, smaller, longer or shorter than it is: paint over the shapes that are there. I'll save it as body-woman.png.
+
+### 3.1 The mannequin (whole, retired)
+
+The whole figures these were before §3.0's pieces, kept for the record; `tools/body_parts.py cut` now writes `base-male.png` and `base-female.png` from the pieces.
 
 #### `base-male` · The base mannequin, man · P0
 
@@ -307,7 +351,7 @@ What marks a people isn't on the face any more: Sylvan pointed ears, Emberkin ho
 
 ### 4.0 Face sheets (ten at a time)
 
-Two sheets make the whole set, one for each base. The attached template (`tools/source/characters/face-sheet-male.png` or `face-sheet-female.png`, made by `python tools/part_sheet.py templates`) is ten copies of the blank base's head and shoulders at full size, five across and two down, so each face lines up with the base just as a single edit would. `python tools/part_sheet.py cut <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/faces/<face-id>.png`. The single cards in §4.1 and §4.2 are for redoing one face.
+Two sheets make the whole set, one for each base. The attached template (`tools/source/characters/face-sheet-male.png` or `face-sheet-female.png`, made by `python tools/part_sheet.py templates`) is ten copies of the head and shoulders of the body stood up (§2.3) at full size, five across and two down, so each face lines up with the base just as a single edit would. `python tools/part_sheet.py check <png> <sheet-id>` says whether ChatGPT kept to the template, and `python tools/part_sheet.py fit <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/faces/<face-id>.png`. The single cards in §4.1 and §4.2 are for redoing one face.
 
 The cells are numbered left to right, 1 to 5 along the top row and 6 to 10 along the bottom.
 
@@ -840,7 +884,7 @@ Edit the attached blank base image: change ONLY the hair. Give the bald head thi
 
 ### 4.9 Hair sheets (eight styles at a time, on both bases)
 
-The library eight styles at a time, each sheet one ChatGPT picture. The attached template (`tools/source/characters/hair-sheet.png`, made by `python tools/part_sheet.py templates`) is the blank man eight times along the top and the blank woman eight times along the bottom, each from the top of the head to the hips at half size (the size the game keeps its parts, so nothing's lost), so a long braid has room. Each column is one style: ChatGPT paints it on the man above and the woman below. `python tools/part_sheet.py cut <png> <sheet-id>` puts each back on its base as `tools/source/characters/hairs/<id>.png` (the man's) and `<id>-f.png` (the woman's).
+The library eight styles at a time, each sheet one ChatGPT picture. The attached template (`tools/source/characters/hair-sheet.png`, made by `python tools/part_sheet.py templates`) is the man stood up (§2.3) eight times along the top and the woman eight times along the bottom, each from the top of the head to the hips at half size (the size the game keeps its parts, so nothing's lost), so a long braid has room. Each column is one style: ChatGPT paints it on the man above and the woman below. `python tools/part_sheet.py check <png> <sheet-id>` says whether ChatGPT kept to the template, and `python tools/part_sheet.py fit <png> <sheet-id>` puts each back on its base as `tools/source/characters/hairs/<id>.png` (the man's) and `<id>-f.png` (the woman's).
 
 | Sheet | Base | Priority | Cells, in order |
 |---|---|---|---|
@@ -945,7 +989,7 @@ I'll save it as hair-sheet-06.png.
 
 What goes on the head that isn't the face or the hair, so it shows whatever hair or helm is worn: **beards and moustaches** (`beard-*`, the man's), **jewellery and the like** (`jewel-*`: earrings, a nose ring, spectacles, an eyepatch, a monocle, a quill behind the ear), **skin marks** (`skin-*`: freckles, scars, a tattoo, ash) and **a people's ears and horns** (`ears-*`, `horns-*`: a Sylvan's pointed ears, a Wildkin's beast ears or feathers, an Emberkin's horns). Beards, jewellery and skin marks are drawn over the face and under the hair; ears and horns over the hair or the helm (a hood included). A character can wear any number of them (§7's Extras column). All but the beards are painted on both bases (the woman's copy `-f`). A beard is recoloured to the character's hair, a skin mark and pointed ears to their skin, fur to their hair; jewellery and horns keep their own colours. `tools/import_parts.py` cuts them from `tools/source/characters/extras/`.
 
-The extra sheets (`tools/source/characters/extra-sheet.png` for both bases, the man's six above and the woman's six below, one item a column; `extra-sheet-male.png` for the beards, twelve on the man) hold each head, neck and chest at three-quarter size. `python tools/part_sheet.py cut <png> <sheet-id>` cuts them into `tools/source/characters/extras/`.
+The extra sheets (`tools/source/characters/extra-sheet.png` for both bases, the man's six above and the woman's six below, one item a column; `extra-sheet-male.png` for the beards, twelve on the man) hold each head, neck and chest at three-quarter size. `python tools/part_sheet.py check <png> <sheet-id>`, then `fit`, cuts them into `tools/source/characters/extras/`.
 
 | Sheet | Base | Priority | Cells, in order |
 |---|---|---|---|
@@ -955,6 +999,8 @@ The extra sheets (`tools/source/characters/extra-sheet.png` for both bases, the 
 | `extra-sheet-04` | `both` | P0 | `skin-01`, `skin-02`, `skin-03`, `skin-04`, `skin-05`, `skin-06` |
 | `extra-sheet-05` | `both` | P0 | `ears-01`, `ears-02`, `ears-03`, `ears-04`, `ears-05`, `ears-06` |
 | `extra-sheet-06` | `both` | P0 | `horns-01`, `horns-02`, `horns-03`, `horns-04`, `horns-05`, `horns-06` |
+| `extra-sheet-07` | `both` | P2 | `jewel-13`, `jewel-14`, `jewel-15`, `jewel-16`, `jewel-17`, `jewel-18` |
+| `extra-sheet-08` | `both` | P2 | `jewel-19`, `jewel-20`, `jewel-21`, `jewel-22`, `jewel-23`, `jewel-24` |
 
 #### `extra-sheet-01` · Extra sheet: the twelve beards and moustaches · P0
 
@@ -1039,6 +1085,32 @@ I'll save it as extra-sheet-05.png.
 6. Two small dark horns curling back behind the ears.
 Each column is one item, on the man above and the woman below.
 I'll save it as extra-sheet-06.png.
+
+#### `extra-sheet-07` · Extra sheet: piercings, ears and nose · P2
+
+**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-13`, 2 `jewel-14`, 3 `jewel-15`, 4 `jewel-16`, 5 `jewel-17`, 6 `jewel-18`.
+
+1. A row of small silver studs up the edge of the ear, and one at the lobe.
+2. A silver bar through the top of the ear, with a stud and a ring lower down.
+3. A silver cuff and small rings up the ear, and a square stud at the lobe.
+4. A silver ring through the septum and a small stud in the nostril.
+5. Two silver studs through the eyebrow and one under the lower lip.
+6. Silver rings through the eyebrow, the nostril and both corners of the lower lip.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-07.png.
+
+#### `extra-sheet-08` · Extra sheet: piercings, more · P2
+
+**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-19`, 2 `jewel-20`, 3 `jewel-21`, 4 `jewel-22`, 5 `jewel-23`, 6 `jewel-24`.
+
+1. Gold cuffs and small rings up the edge of the ear.
+2. A round gold plug stretching the earlobe.
+3. Two small silver studs through the eyebrow.
+4. A beaded silver ring through the septum.
+5. Two silver studs under the lower lip, one either side.
+6. Gold cuffs up the ear with a small drop at the lobe, a stud in the nostril and one under the lip.
+Each column is one item, on the man above and the woman below.
+I'll save it as extra-sheet-08.png.
 
 #### `beard-01` · Stubble · P0
 
@@ -1184,6 +1256,78 @@ Edit the attached blank base image: change ONLY this: a quill pen tucked behind 
 
 Edit the attached blank base image: change ONLY this: a single pearl earring. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-12.png.
 
+#### `jewel-13` · Ear studs · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-13-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a row of small silver studs up the edge of the ear, and one at the lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-13.png.
+
+#### `jewel-14` · The industrial bar · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-14-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a silver bar through the top of the ear, with a stud and a ring lower down. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-14.png.
+
+#### `jewel-15` · Ear cuffs and studs · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-15-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a silver cuff and small rings up the ear, and a square stud at the lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-15.png.
+
+#### `jewel-16` · The septum ring · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-16-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a silver ring through the septum and a small stud in the nostril. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-16.png.
+
+#### `jewel-17` · Brow and lip studs · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-17-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two silver studs through the eyebrow and one under the lower lip. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-17.png.
+
+#### `jewel-18` · Rings · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-18-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: silver rings through the eyebrow, the nostril and both corners of the lower lip. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-18.png.
+
+#### `jewel-19` · Gold ear cuffs · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-19-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: gold cuffs and small rings up the edge of the ear. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-19.png.
+
+#### `jewel-20` · The ear plug · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-20-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a round gold plug stretching the earlobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-20.png.
+
+#### `jewel-21` · Brow studs · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-21-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two small silver studs through the eyebrow. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-21.png.
+
+#### `jewel-22` · The beaded septum ring · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-22-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: a beaded silver ring through the septum. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-22.png.
+
+#### `jewel-23` · Lip studs · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-23-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: two silver studs under the lower lip, one either side. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-23.png.
+
+#### `jewel-24` · Mixed piercings · P2
+
+**Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-24-f`, on `base-female-blank`.
+
+Edit the attached blank base image: change ONLY this: gold cuffs up the ear with a small drop at the lobe, a stud in the nostril and one under the lip. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-24.png.
+
 #### `skin-01` · Freckles · P0
 
 **Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `skin-01-f`, on `base-female-blank`.
@@ -1295,1195 +1439,1014 @@ Edit the attached blank base image: change ONLY this: two small dark horns curli
 
 ## 5. Armors
 
-The outfits described across the cast, deduplicated: a unique armor for each notable character, shared armors for groups, and the armors in the item catalog. Each one dresses the bald base.
+The outfits described across the cast, deduplicated: a unique armor for each notable character, shared armors for groups, and the armors in the item catalog. Each one dresses the body's pieces (§5.0).
 
-### 5.0 Armor sheets (four at a time)
+### 5.0 Armors in pieces (one to a picture)
 
-The owner's call (2026-11-07): make the armors four at a time, as the faces are made eight at a time (§4.0). Every armor that dresses a base is in one sheet here, and each sheet is one ChatGPT picture. The attached template (`tools/source/characters/armor-sheet-male.png` or `armor-sheet-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the whole base, side by side, at five-eighths of its size: still more detail than the game keeps. `python tools/part_sheet.py cut <png> <sheet-id>` lines each figure up by its bald head and scales it back onto the base's canvas as `tools/source/characters/armors/<armor-id>.png`, exactly as a single edit would be, and `python tools/import_parts.py` takes it into the game. The single armor cards in §5.1 onward stay for redoing one armor, for the variants that edit another armor, and for the creature bodies (the ones that change the body's shape), which need a whole canvas each.
+The owner's call (2026-11-10, a cut-out rig): every armor is painted in pieces, on its base's armor template (`tools/source/characters/armor-parts-man.png` or `armor-parts-woman.png`, written by `python tools/body_parts.py armor`): the body's template less its head, the thirteen pieces an outfit dresses, in their places, 1024 × 1536. One outfit to a picture, since each is thirteen pieces and they need the room. Each card's prompt is §2.3's **Armor pieces** block, then **Size (tall)**, then the outfit; the variants that change another armor attach that armor's own picture instead, and say so. `python tools/body_parts.py check <png> <armor-id>` says whether ChatGPT kept the template's size and layout (every piece covering its body piece, nothing lost in the gaps), and `python tools/body_parts.py cut <png> <armor-id>` puts each piece back at rest as `tools/source/characters/armors/<armor-id>/<bone>.png`. The armors of the bodies that aren't flesh (the Hollowed, the constructs, the drowned, the glass king) are painted the same way: the whole body, skin and all, piece by piece.
 
-The figures are numbered left to right, 1 to 4. The sheets are filled in priority order, so the early ones hold the armors the game needs first.
-
-| Sheet | Base | Priority | Cells, in order |
-|---|---|---|---|
-| `armor-sheet-m01` | `base-male` | P0 | `armor-traveller`, `armor-child-cove`, `armor-kael`, `armor-brannock` |
-| `armor-sheet-m02` | `base-male` | P0 | `armor-sailor`, `armor-fisher`, `armor-red-gull`, `armor-grell` |
-| `armor-sheet-m03` | `base-male` | P0 | `armor-watch`, `armor-watch-captain`, `armor-clerk`, `armor-refugee-man` |
-| `armor-sheet-m04` | `base-male` | P0 | `armor-leon`, `armor-crane`, `armor-royal-livery`, `armor-royal-guard` |
-| `armor-sheet-m05` | `base-male` | P0 | `armor-villager-man`, `armor-merchant`, `armor-busker`, `armor-urchin` |
-| `armor-sheet-m06` | `base-male` | P0 | `armor-noble`, `armor-elder-coat`, `armor-smith`, `armor-road` |
-| `armor-sheet-m07` | `base-male` | P0 | `armor-courier`, `armor-porter`, `armor-padded`, `armor-leather` |
-| `armor-sheet-m08` | `base-male` | P0 | `armor-studded`, `armor-hide`, `armor-chain-shirt`, `armor-chain-mail` |
-| `armor-sheet-m09` | `base-male` | P0 | `armor-scale`, `armor-plate`, `armor-mage-robes`, `armor-champion` |
-| `armor-sheet-m10` | `base-male` | P1 | `armor-caravan`, `armor-aldric`, `armor-recruit`, `armor-cider-presser` |
-| `armor-sheet-m11` | `base-male` | P1 | `armor-levy`, `armor-harrow`, `armor-woodcutter`, `armor-maleficio` |
-| `armor-sheet-m12` | `base-male` | P1 | `armor-scholar`, `armor-old-pattern`, `armor-varkhul`, `armor-cultist` |
-| `armor-sheet-m13` | `base-male` | P1 | `armor-bandit`, `armor-kael-shadow`, `armor-corwin`, `armor-severin` |
-| `armor-sheet-m14` | `base-male` | P2 | `armor-morvaine-man`, `armor-morvaine-livery`, `armor-prisoner`, `armor-davin` |
-| `armor-sheet-m15` | `base-male` | P2 | `armor-thrall`, `armor-thrall-knight`, `armor-gilded-knight`, `armor-protectorate` |
-| `armor-sheet-m16` | `base-male` | P2 | `armor-protectorate-warden`, `armor-unmade-bronze`, `armor-pikeman`, `armor-ashfall-raider` |
-| `armor-sheet-m17` | `base-male` | P0 | `armor-tavern-m` |
-| `armor-sheet-f01` | `base-female` | P0 | `armor-traveller-f`, `armor-sb-traveller`, `armor-sera`, `armor-mira` |
-| `armor-sheet-f02` | `base-female` | P0 | `armor-corra`, `armor-odelle`, `armor-refugee-woman`, `armor-refugee-child` |
-| `armor-sheet-f03` | `base-female` | P0 | `armor-glassblower`, `armor-elara`, `armor-elara-disguise`, `armor-tavern` |
-| `armor-sheet-f04` | `base-female` | P0 | `armor-villager-woman`, `armor-elder-woman`, `armor-temple`, `armor-fencer` |
-| `armor-sheet-f05` | `base-female` | P0 | `armor-lodge-ranger`, `armor-noble-gown`, `armor-trader`, `armor-baker` |
-| `armor-sheet-f06` | `base-female` | P0 | `armor-pilgrim`, `armor-maid`, `armor-padded-f`, `armor-leather-f` |
-| `armor-sheet-f07` | `base-female` | P0 | `armor-studded-f`, `armor-hide-f`, `armor-chain-shirt-f`, `armor-chain-mail-f` |
-| `armor-sheet-f08` | `base-female` | P0 | `armor-scale-f`, `armor-plate-f`, `armor-mage-robes-f`, `armor-champion-f` |
-| `armor-sheet-f09` | `base-female` | P1 | `armor-mira-apprentice`, `armor-thessaly`, `armor-brenna`, `armor-gannet` |
-| `armor-sheet-f10` | `base-female` | P1 | `armor-pedlar`, `armor-lord-protector`, `armor-sovereign`, `armor-valencia` |
-| `armor-sheet-f11` | `base-female` | P2 | `armor-abbey-habit`, `armor-anselle`, `armor-beekeeper`, `armor-isadora` |
-| `armor-sheet-f12` | `base-female` | P2 | `armor-child-dress`, `armor-morvaine-woman`, `armor-shift`, `armor-abbey-lay` |
-| `armor-sheet-f13` | `base-female` | P0 | `armor-guild-apprentice`, `armor-smuggler`, `armor-child-cove-f`, `armor-urchin-f` |
-| `armor-sheet-f14` | `base-female` | P2 | `armor-thrall-knight-f` |
-
-#### `armor-sheet-m01` · Armor sheet: 4 outfits (The traveller, A cove child's clothes, Kael's hooded leathers, Brannock's soldier-smith kit) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-traveller`, 2 `armor-child-cove`, 3 `armor-kael`, 4 `armor-brannock`.
-
-1. The traveller: a practical traveller's outfit: a cream linen shirt with the sleeves rolled to the elbow and the collar open; a fitted navy-blue waistcoat with small brass buttons, a little worn at the edges; a brown leather belt with a brass buckle, a pouch and a small sheathed knife; worn brown wool trousers, patched at one knee; scuffed brown leather boots to mid-calf; brown fingerless leather gloves; and a small herring whittled from pale driftwood on a waxed cord round the neck, resting on the chest.
-2. A cove child's clothes: a child's poor clothes from a fishing cove, cut to fit (the game's morph makes the wearer child-sized): a cove-blue (a soft, sea-grey blue) knitted jumper, darned at both elbows and a little too big; a cream shirt collar showing; brown canvas trousers rolled to the knee and patched; bare feet.
-3. Kael's hooded leathers: a close-fitting dark leather coat to the hip in layered panels, with straps and buckles across the chest; a charcoal half-cloak over the shoulders with its pointed hood hanging down the back; a wide ember-red sash wound round the waist, its ends hanging at the far hip; dark grey trousers; soft dark boots with the legs wrapped in cloth bands to the knee; dark fingerless gloves; a few lockpicks in a strap on the forearm.
-4. Brannock's soldier-smith kit: a charcoal padded work shirt with the sleeves pushed up; a chain-mail shirt over it to the hips; a battered iron breastplate with tarnished-gold edging, dented and scratched; one heavy iron pauldron on the near shoulder; a thick dark-leather apron-like skirt to the knees over dark trousers, like a smith's; a wide belt with a big iron buckle and a battered metal flask; heavy iron-capped boots.
-I'll save it as armor-sheet-m01.png.
-
-#### `armor-sheet-m02` · Armor sheet: 4 outfits (A sailor's clothes, A fisherman's oilskins, A Red Gull's rig, Bosun Grell's coat and hook) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-sailor`, 2 `armor-fisher`, 3 `armor-red-gull`, 4 `armor-grell`.
-
-1. A sailor's clothes: a navy-and-cream striped knitted jersey with the sleeves pushed up; a sleeveless brown oilskin waistcoat; canvas trousers rolled to the shin; bare feet with tarred soles; a rope lanyard at the belt.
-2. A fisherman's oilskins: a thick grey knitted jumper, darned at the elbows; a sleeveless mustard oilskin smock over it, cracked and patched; canvas trousers rolled at the shin; tall black tarred sea boots; a brass fish hook on a cord at the belt.
-3. A Red Gull's rig: a raspberry-red bandana knotted round the throat; a cream-and-navy striped jersey with the sleeves rolled over the forearms; a scuffed leather shoulder guard on the near shoulder, buckled with straps across the chest; a wide raspberry-red sash at the waist; brown canvas trousers; tall worn boots.
-4. Bosun Grell's coat and hook: an open, knee-length bosun's coat in raspberry red, frayed at the cuffs and stained with tar, with tarnished brass buttons; an oatmeal shirt under it, half unlaced; a gull tattoo on the near forearm; a broad belt with a big brass buckle; dark canvas trousers; heavy boots. The far hand is gone at the wrist: in its place, a steel hook strapped to a leather cuff.
-I'll save it as armor-sheet-m02.png.
-
-#### `armor-sheet-m03` · Armor sheet: 4 outfits (The City Watch uniform, The Watch captain's coat, A clerk's waistcoat, A refugee man's clothes) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-watch`, 2 `armor-watch-captain`, 3 `armor-clerk`, 4 `armor-refugee-man`.
-
-1. The City Watch uniform: a navy-blue Watch coat to mid-thigh over a padded jack, brass buttons, a small brass badge shaped like a lantern on the chest; a brown leather belt; navy trousers; black boots.
-2. The Watch captain's coat: a navy-blue Watch coat to mid-thigh over a chain-mail shirt, with brass buttons and a larger brass lantern badge on the chest; a brown leather belt and baldric with a short sword; a rolled paper roster tucked into the belt; navy trousers; worn black boots, well polished.
-3. A clerk's waistcoat: an oatmeal shirt with black sleeve garters; a mustard-ochre waistcoat with a watch chain; sand-coloured trousers; polished brown shoes; ink stains on the fingers.
-4. A refugee man's clothes: a faded black wool coat with mismatched patches over a grey shirt; a charcoal scarf; grey trousers tied at the ankle with twine; cracked boots.
-I'll save it as armor-sheet-m03.png.
-
-#### `armor-sheet-m04` · Armor sheet: 4 outfits (King Leon's robes, Crane's long coat, The palace livery, The Royal Guard's armour) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-leon`, 2 `armor-crane`, 3 `armor-royal-livery`, 4 `armor-royal-guard`.
-
-1. King Leon's robes: a long white robe-coat to the ankles with sun-gold trim at the hem and cuffs and a gold sash; a broad collar of ermine (white fur with small black tips) over the shoulders; soft white boots; and at the hip, a long, plain, very old sword in a worn scabbard, its grip blue leather worn pale, a small gold sun on the crossguard.
-2. Crane's long coat: a floor-length plum-coloured coat, close at the chest and long in the skirt, with a high standing collar, silver trim and a column of small silver buttons; a dark-grey waistcoat; a white stock at the throat; dark trousers and narrow black boots; silver rings on several fingers, one a signet set with a small black cube.
-3. The palace livery: a navy-blue livery tunic with a gold sun badge on the chest and gold piping; a white shirt; navy breeches; soft brown boots; a dispatch pouch on a strap across the body.
-4. The Royal Guard's armour: a navy-blue tabard with a large gold sun embroidered on the chest, over polished mail; steel pauldrons with gold edging; a white sash; navy trousers; steel-capped black boots.
-I'll save it as armor-sheet-m04.png.
-
-#### `armor-sheet-m05` · Armor sheet: 4 outfits (A townsman's clothes, A merchant's waistcoat, A busker's finery, A street child's hand-me-downs) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-villager-man`, 2 `armor-merchant`, 3 `armor-busker`, 4 `armor-urchin`.
-
-1. A townsman's clothes: a loose oatmeal shirt with the sleeves rolled and a rust-orange neckerchief; a grey-blue waistcoat, unbuttoned; brown trousers held up with braces; muddy boots.
-2. A merchant's waistcoat: a white shirt with full sleeves; an embroidered dusty-plum waistcoat; dark burgundy-brown trousers; polished shoes; a tailor's tape round the neck.
-3. A busker's finery: a blush-pink shirt with billowing sleeves; a rose waistcoat; sand-coloured trousers; soft boots.
-4. A street child's hand-me-downs: a child's hand-me-downs (the game's morph makes the wearer small): an oatmeal shirt; a charcoal waistcoat far too big; bark-brown trousers rolled at the ankle; bare, dirty feet.
-I'll save it as armor-sheet-m05.png.
-
-#### `armor-sheet-m06` · Armor sheet: 4 outfits (A courtier's doublet, An old man's long coat, A smith's apron, A traveller's road clothes) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-noble`, 2 `armor-elder-coat`, 3 `armor-smith`, 4 `armor-road`.
-
-1. A courtier's doublet: a fitted velvet doublet in deep teal with slashed sleeves showing cream silk; a lace collar; dark hose and breeches; soft black shoes with buckles; a ring or two.
-2. An old man's long coat: a long dove-grey coat to the shin with dark-grey trim and pewter buttons; a slate waistcoat; a white shirt with a soft collar; grey trousers; black shoes.
-3. A smith's apron: a cream shirt with the sleeves rolled above the elbow, open at the throat; a heavy, scorched brown leather apron to the knee; thick leather gloves tucked into the apron string; dark trousers; heavy boots.
-4. A traveller's road clothes: a dark-brown tunic belted at the waist; charcoal trousers; boots worn through at the toes and wrapped in cloth; a small pack on the back with a bedroll and a tin cup.
-I'll save it as armor-sheet-m06.png.
-
-#### `armor-sheet-m07` · Armor sheet: 4 outfits (A courier's clothes, A porter's clothes, Padded armour, Leather armour) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-courier`, 2 `armor-porter`, 3 `armor-padded`, 4 `armor-leather`.
-
-1. A courier's clothes: a cream shirt with rolled sleeves; dark-grey braces; charcoal trousers tucked into soft running boots; a big leather mail satchel bulging with letters on a strap across the body.
-2. A porter's clothes: a sweat-stained cream shirt with rolled sleeves; brown braces; a leather shoulder pad on the far shoulder; brown canvas trousers; heavy boots; a crate hook at the belt.
-3. Padded armour: a quilted padded gambeson to mid-thigh, stitched in a diamond pattern, with a high collar and laced sides, in undyed oatmeal; quilted leg wraps over brown trousers; plain brown boots.
-4. Leather armour: boiled-leather armour in stiff, rounded brown panels, stitched at the edges, strapped and buckled: a cuirass, shoulder guards, bracers and short tassets, over a dark shirt and leather leggings; brown boots; a few scuffs and one wide soft highlight on each panel.
-I'll save it as armor-sheet-m07.png.
-
-#### `armor-sheet-m08` · Armor sheet: 4 outfits (Studded leather, Hide armour, Chain shirt, Chain mail) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-studded`, 2 `armor-hide`, 3 `armor-chain-shirt`, 4 `armor-chain-mail`.
-
-1. Studded leather: the same kind of boiled-leather armour in stiff, rounded brown panels (a cuirass, shoulder guards, bracers, short tassets), studded all over with neat rows of small brass rivets; leather leggings; brown boots.
-2. Hide armour: bulky, layered animal hides in tan and brown with ragged edges, laced together with crossed thongs, a thick grey-brown fur collar over the shoulders, fur-trimmed leg wraps and hide boots.
-3. Chain shirt: a short chain shirt to the hips with short sleeves, its rings drawn as offset rows, dark steel with small bright highlights on the lit side and a scalloped hem, worn over a padded jack whose collar and cuffs show; dark trousers; brown boots.
-4. Chain mail: a long chain-mail coat to the knee with long sleeves and a split skirt, belted at the waist, drawn as offset rows of small rings in dark steel with dense small highlights, worn over a padded jack; mail chausses; brown boots.
-I'll save it as armor-sheet-m08.png.
-
-#### `armor-sheet-m09` · Armor sheet: 4 outfits (Scale mail, Plate armour, Mage robes, The Champion's tabard) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-scale`, 2 `armor-plate`, 3 `armor-mage-robes`, 4 `armor-champion`.
-
-1. Scale mail: a coat of small overlapping steel scales to the knee, laid in half-offset rows like a fish's, each scale with a highlight on its top edge and a deep shadow under the row above, edged with brown leather at the collar, hems and armholes, belted at the waist; leather leggings; brown boots.
-2. Plate armour: full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate.
-3. Mage robes: a mage's robe to the ankle in deep teal, with wide, bell-shaped sleeves, layered hems, two trim bands at the hem and cuffs carrying a small repeated geometric motif dotted with gold thread, and a knotted sash; soft shoes.
-4. The Champion's tabard: the traveller's clothes (a cream shirt with rolled sleeves, brown trousers, brown boots, fingerless gloves, the driftwood herring on its cord) with, over them, a knee-length tabard in deep navy blue, open at the sides and belted at the waist, a gold sun embroidered on the chest, and a border of sun-gold trim worked in a pattern of two linked rings all round its edges.
-I'll save it as armor-sheet-m09.png.
-
-#### `armor-sheet-m10` · Armor sheet: 4 outfits (A caravan master's duster, Aldric's worn plate, A recruit's gambeson, A cider-presser's apron) · P1
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-caravan`, 2 `armor-aldric`, 3 `armor-recruit`, 4 `armor-cider-presser`.
-
-1. A caravan master's duster: a long oiled-brown duster coat to the shin, open; a faded grey scarf against the road dust; a leather waistcoat over a grey shirt; dark trousers; long riding boots; a coiled driving whip at the belt.
-2. Aldric's worn plate: worn steel plate that doesn't quite match, dented and scratched (a breastplate, rounded pauldrons, vambraces and greaves), over chain mail and a padded jack; a battered sword belt; old boots.
-3. A recruit's gambeson: a quilted navy-blue gambeson with brass buttons, a little too long; a brown belt; grey wool trousers; boots with snow on them; a grey woollen scarf.
-4. A cider-presser's apron: an apple-green work shirt with the sleeves rolled; a heavy, stained brown leather presser's apron; brown trousers; sturdy boots; a wide, old burn scar across the back of the near hand.
-I'll save it as armor-sheet-m10.png.
-
-#### `armor-sheet-m11` · Armor sheet: 4 outfits (A levy coat, Lord Harrow's heron coat, A woodcutter's clothes, Maleficio's high-backed robes) · P1
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-levy`, 2 `armor-harrow`, 3 `armor-woodcutter`, 4 `armor-maleficio`.
-
-1. A levy coat: a patched grey levy coat over a work shirt, mud to the knees, rope for a belt, worn boots.
-2. Lord Harrow's heron coat: a long frock coat in heron green (a deep grey-green) with a grey heron embroidered on the breast; a grey silk waistcoat; a white cravat; grey breeches; white stockings and black buckled shoes; grey kid gloves.
-3. A woodcutter's clothes: a faded brown-and-ochre checked flannel shirt with the sleeves rolled; a leather waistcoat; canvas trousers held up with braces; heavy hobnailed boots; a coil of rope at the belt; sawdust everywhere.
-4. Maleficio's high-backed robes: long charcoal scholar's robes to the floor, layered, with a tall, stiff, fan-shaped back to the collar that rises behind the head; the hems, cuffs and the edge of the high collar glow faintly ember orange, like paper just starting to burn; a dark sash with an archivist's keys; soft dark shoes.
-I'll save it as armor-sheet-m11.png.
-
-#### `armor-sheet-m12` · Armor sheet: 4 outfits (A scholar's robes, Old-pattern mail and surcoat, Varkhul's Hollow plate, A cube cultist's robe) · P1
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-scholar`, 2 `armor-old-pattern`, 3 `armor-varkhul`, 4 `armor-cultist`.
-
-1. A scholar's robes: plain brown-and-charcoal scholar's robes to the ankle with the sleeves pushed up, a cord belt with a pen case, soft shoes, ink on the fingers.
-2. Old-pattern mail and surcoat: an old-fashioned long mail hauberk to the knees with a padded coif down round the neck; a navy surcoat over it with a faded gold sun badge in an older, simpler style; a plain belt; old riveted boots.
-3. Varkhul's Hollow plate: full plate of blackened iron, ash grey at the edges, old and fine under the corruption, with a faded engraved crest on the breastplate; its seams are cracked and leak a dull ember-orange glow from inside; a ragged ash-grey surcoat hanging in strips; armoured gauntlets and sabatons.
-4. A cube cultist's robe: a plain black robe to the ankle with a high collar, belted with black cord; a pendant of a small black iron cube on a chain at the chest; a pouch of black iron coins stamped with a cube; black wrapped boots.
-I'll save it as armor-sheet-m12.png.
-
-#### `armor-sheet-m13` · Armor sheet: 4 outfits (A bandit's leathers, Kael, the Protectorate Shadow, Sir Corwin's gilded plate, Severin's velvet coat) · P1
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-bandit`, 2 `armor-kael-shadow`, 3 `armor-corwin`, 4 `armor-severin`.
-
-1. A bandit's leathers: a scuffed leather jerkin; a mismatched leather bracer; dark trousers; worn boots; a dirty brown scarf round the neck; a sack of stolen goods at the belt.
-2. Kael, the Protectorate Shadow: finer black leathers with violet piping, layered and buckled; a long black coat with a high collar; a violet sash with a gold crown badge pinned to it; a black leather half-mask pulled down round the neck; black gloves; polished black boots.
-3. Sir Corwin's gilded plate: full plate armour in polished steel with gold-leaf edging on every plate and a small sun engraved on each pauldron; a long white tabard over it with a large gold sun on the chest and gold trim; gilded gauntlets; armoured boots.
-4. Severin's velvet coat: a long, close-fitting coat of black velvet to the ankles, with a high collar lined in wine red and tarnished silver clasps; a wine-red waistcoat; a black cravat with a dark-red stone pin; black gloves; long black boots.
-I'll save it as armor-sheet-m13.png.
-
-#### `armor-sheet-m14` · Armor sheet: 4 outfits (A valley man's wool coat, A vampire household's livery, A prisoner's shirt, Davin's cut-down tabard) · P2
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-morvaine-man`, 2 `armor-morvaine-livery`, 3 `armor-prisoner`, 4 `armor-davin`.
-
-1. A valley man's wool coat: a high-collared coat of dark grey wool, too thin for the weather, buttoned to the chin; a black knitted scarf; patched charcoal trousers; worn boots.
-2. A vampire household's livery: a black livery coat with a high collar and wine-red piping; a black waistcoat; a starched white stock; white gloves; black breeches and stockings; polished black shoes; a ring of keys at the belt.
-3. A prisoner's shirt: a plain, stained linen shirt and dark trousers, bare feet, the wrists in iron cuffs with a short chain between them.
-4. Davin's cut-down tabard: a mail shirt a little big for the wearer; over it a white tabard with a large gold sun, plainly cut down from a bigger man's and re-hemmed by hand with uneven stitches; a brown belt; leather gloves; plain steel greaves over brown boots.
-I'll save it as armor-sheet-m14.png.
-
-#### `armor-sheet-m15` · Armor sheet: 4 outfits (A thrall's tabard, A thrall-knight's black plate, A Gilded knight's armour, The Protectorate's tabard) · P2
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-thrall`, 2 `armor-thrall-knight`, 3 `armor-gilded-knight`, 4 `armor-protectorate`.
-
-1. A thrall's tabard: a dark mail shirt under a wine-red tabard with a black thorn emblem; a high black wool collar; black leather gloves; dark trousers; black boots.
-2. A thrall-knight's black plate: full plate of glossy black steel with thin wine-red trim on every edge, sharp but elegant, with layered black cloth showing between the plates and flared tassets over the hips; black gauntlets and pointed sabatons.
-3. A Gilded knight's armour: steel plate with gold-painted edges (plainer than a commander's); a white tabard with a gold sun on the chest; armoured boots.
-4. The Protectorate's tabard: the navy-blue Watch coat with brass buttons, and over it a violet tabard with a gold border and a gold stylised crown on the chest; a violet armband; a brown belt with a pouch of papers; navy trousers; black boots.
-I'll save it as armor-sheet-m15.png.
-
-#### `armor-sheet-m16` · Armor sheet: 4 outfits (A Protectorate warden's plate, Ancient bronze scale, A pikeman's breastplate, An Ashfall raider's kit) · P2
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-protectorate-warden`, 2 `armor-unmade-bronze`, 3 `armor-pikeman`, 4 `armor-ashfall-raider`.
-
-1. A Protectorate warden's plate: heavy steel plate with a violet enamel finish on the breastplate and pauldrons and gold edging, a stylised gold crown embossed on the chest; a violet surcoat skirt; heavy gauntlets and sabatons.
-2. Ancient bronze scale: ancient bronze scale armour, bronze greaves, a short pleated kilt, sandals; the colours faded and slightly greyed, as if not quite here.
-3. A pikeman's breastplate: a steel breastplate and tassets over a padded doublet with puffed sleeves, breeches and tall boots; the colours faded and slightly greyed, as if not quite here.
-4. An Ashfall raider's kit: patched black-and-grey leather armour over a mail shirt; a violet strip of cloth tied round the near arm; wrapped boots.
-I'll save it as armor-sheet-m16.png.
-
-#### `armor-sheet-m17` · Armor sheet: 1 outfit (A tavern apron, on the man's base) · P0
-
-**Basis:** Edits `armor-sheet-male`. Cells: 1 `armor-tavern-m`.
-
-1. A tavern apron, on the man's base: a cream shirt with the sleeves rolled up; a charcoal waistcoat; a long, stained leather apron; dark trousers; heavy boots.
-Leave figures 2, 3 and 4 exactly as they are: bald, in the plain underwear, unchanged.
-I'll save it as armor-sheet-m17.png.
-
-#### `armor-sheet-f01` · Armor sheet: 4 outfits (The traveller, on the woman's base, The Soul-Bound's traveller, Sera's ranger coat, Mira's archivist's clothes) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-traveller-f`, 2 `armor-sb-traveller`, 3 `armor-sera`, 4 `armor-mira`.
-
-1. The traveller, on the woman's base: a practical traveller's outfit: a cream linen shirt with the sleeves rolled to the elbow and the collar open; a fitted navy-blue waistcoat with small brass buttons, a little worn at the edges; a brown leather belt with a brass buckle, a pouch and a small sheathed knife; worn brown wool trousers, patched at one knee; scuffed brown leather boots to mid-calf; brown fingerless leather gloves; and a small herring whittled from pale driftwood on a waxed cord round the neck, resting on the chest.
-2. The Soul-Bound's traveller: a fitted, knee-length coat-tunic in deep brick crimson (warm and bright, not a wine colour) with a high collar, a row of dark buttons and dark trim, split at the hips; a cream shirt under it, the cuffs showing; a dark leather belt with two pouches and, at the back, a short whittling knife with a cord through its handle; charcoal-grey fitted trousers; tall dark-brown boots to the knee; dark fingerless gloves; and a small driftwood herring on a waxed cord at the neck.
-3. Sera's ranger coat: a moss-green ranger's coat to mid-thigh, fitted and belted, split at the sides, with a stand collar and thin cream piping; an oatmeal shirt under it; a wide belt of undyed leather with a hunting knife, a pouch and a quiver of grey-fletched arrows at the far hip; olive trousers; tall undyed-leather boots laced to the knee; a leather bracer on the far forearm.
-4. Mira's archivist's clothes: a cream blouse with full sleeves pushed up to the elbow; a fitted ink-blue waistcoat-bodice, laced at the front, with dark-blue piping; a long parchment-coloured skirt to the ankle, the hem worn; sensible brown lace-up boots; a brown leather belt with a small pouch and an ink bottle; and a battered brown leather satchel worn across the body, stuffed with papers, with three leather scroll tubes strapped to its side.
-I'll save it as armor-sheet-f01.png.
-
-#### `armor-sheet-f02` · Armor sheet: 4 outfits (Corra's net-mender's clothes, Captain Odelle's sea-coat, A refugee woman's clothes, A refugee child's smock) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-corra`, 2 `armor-odelle`, 3 `armor-refugee-woman`, 4 `armor-refugee-child`.
-
-1. Corra's net-mender's clothes: a thick, cove-blue (a soft, sea-grey blue) knitted shawl round the shoulders, knotted at the front; an oatmeal blouse with the sleeves rolled; a faded blue kerchief at the throat; a long apron of oiled brown canvas over a long brown wool skirt; plain worn boots; a ball of tarred twine and a wooden netting needle hanging from the belt on a cord.
-2. Captain Odelle's sea-coat: a white linen shirt, open at the neck, the sleeves loose; a fitted crimson waistcoat with brass buttons; a long charcoal sea-coat worn open, its skirts to the knee and its cuffs turned back; charcoal breeches; tall black sea boots, salt-stained; a wide leather belt holding a short one-shot flintlock pistol.
-3. A refugee woman's clothes: an oatmeal shirt patched with sacking; a charcoal wool waistcoat; a long, mud-hemmed chestnut-brown skirt; boots split at the toes and bound with twine.
-4. A refugee child's smock: an oversized oatmeal smock belted with a length of rope; a small charcoal shawl round the shoulders; brown woollen stockings, one sagging; boots far too big.
-I'll save it as armor-sheet-f02.png.
-
-#### `armor-sheet-f03` · Armor sheet: 4 outfits (A glassblower's apron, Elara's riding coat, Elara in disguise, A tavern apron) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-glassblower`, 2 `armor-elara`, 3 `armor-elara-disguise`, 4 `armor-tavern`.
-
-1. A glassblower's apron: a blush-pink linen shirt with the sleeves rolled up; a teal waistcoat; a long sand-coloured skirt; a thick leather glassblower's apron, scorched and pitted; sturdy boots; both hands wrapped in clean linen bandages to the wrist.
-2. Elara's riding coat: a fitted riding coat to the knee in deep royal blue, with a high collar, a double row of small gold buttons and sun-gold trim at the hem, cuffs and collar, split at the back; a short royal-blue cape over the near shoulder only, fastened with a gold sun-shaped clasp; a white shirt; dark navy riding breeches; tall black riding boots; brown leather riding gloves; a slim sword at the hip.
-3. Elara in disguise: plain clothes with no gold anywhere: a plain charcoal waistcoat over a white shirt; dark breeches; scuffed riding boots; a plain sword at the hip.
-4. A tavern apron: a cream shirt with the sleeves rolled up; a charcoal waistcoat; a long, stained leather apron; dark trousers; heavy boots.
-I'll save it as armor-sheet-f03.png.
-
-#### `armor-sheet-f04` · Armor sheet: 4 outfits (A townswoman's clothes, An old woman's dress and shawl, A temple sister's tabard, A fencing-master's doublet) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-villager-woman`, 2 `armor-elder-woman`, 3 `armor-temple`, 4 `armor-fencer`.
-
-1. A townswoman's clothes: a cream blouse with full sleeves; a teal bodice-waistcoat laced at the front; a long mustard skirt with a dusty-pink underskirt showing at the hem; a white apron; brown shoes.
-2. An old woman's dress and shawl: a plain grey-brown wool dress to the ankle; a soft, muted mauve-grey knitted shawl crossed over both shoulders and tied at the back; a clean linen apron; soft, worn shoes.
-3. A temple sister's tabard: a white blouse; an ochre tabard-tunic with a small gold sun embroidered on the chest; a long sand-coloured skirt; an ochre shawl; plain sandals.
-4. A fencing-master's doublet: a fitted, quilted fencing doublet in cream with navy panels and brass buckles down one side; leather bracers on both forearms; a wide belt hung with eight small enamel tokens, each a different colour; navy breeches; soft leather boots.
-I'll save it as armor-sheet-f04.png.
-
-#### `armor-sheet-f05` · Armor sheet: 4 outfits (The Lodge ranger's kit, A lady of the court's gown, A trader's waistcoat, A baker's dress and apron) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-lodge-ranger`, 2 `armor-noble-gown`, 3 `armor-trader`, 4 `armor-baker`.
-
-1. The Lodge ranger's kit: an oatmeal shirt; a forest-green leather jerkin; an olive ranger's coat to mid-thigh with a moss-green collar; olive trousers; tall laced boots; a thick leather falconer's glove on the far hand; a short sword at the hip.
-2. A lady of the court's gown: a fitted gown in dusty rose silk with a square neckline, long sleeves slashed with cream, a fine embroidered bodice, and a full skirt to the floor; a pearl necklace.
-3. A trader's waistcoat: a cream shirt with rolled sleeves; a tan suede waistcoat with many pockets; brown trousers; tall brown boots; a leather satchel across the body; a small set of brass scales at the belt.
-4. A baker's dress and apron: a long-sleeved dress in deep brick red with the sleeves pushed up; a big white apron dusted with flour; sturdy brown shoes.
-I'll save it as armor-sheet-f05.png.
-
-#### `armor-sheet-f06` · Armor sheet: 4 outfits (A pilgrim's robe, A maid's dress, Padded armour, woman's base, Leather armour, woman's base) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-pilgrim`, 2 `armor-maid`, 3 `armor-padded-f`, 4 `armor-leather-f`.
-
-1. A pilgrim's robe: a long, dusty, dark plum-brown travelling robe to the ankle with its hood down, belted with a rope; a small round brass sun token on a cord at the chest; sandals over wrapped feet; a cloth bag of bread at the hip.
-2. A maid's dress: a dusty-blue dress with short puffed sleeves; a white apron with a frill; black shoes.
-3. Padded armour, woman's base: a quilted padded gambeson to mid-thigh, stitched in a diamond pattern, with a high collar and laced sides, in undyed oatmeal; quilted leg wraps over brown trousers; plain brown boots.
-4. Leather armour, woman's base: boiled-leather armour in stiff, rounded brown panels, stitched at the edges, strapped and buckled: a cuirass, shoulder guards, bracers and short tassets, over a dark shirt and leather leggings; brown boots; a few scuffs and one wide soft highlight on each panel.
-I'll save it as armor-sheet-f06.png.
-
-#### `armor-sheet-f07` · Armor sheet: 4 outfits (Studded leather, woman's base, Hide armour, woman's base, Chain shirt, woman's base, Chain mail, woman's base) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-studded-f`, 2 `armor-hide-f`, 3 `armor-chain-shirt-f`, 4 `armor-chain-mail-f`.
-
-1. Studded leather, woman's base: the same kind of boiled-leather armour in stiff, rounded brown panels (a cuirass, shoulder guards, bracers, short tassets), studded all over with neat rows of small brass rivets; leather leggings; brown boots.
-2. Hide armour, woman's base: bulky, layered animal hides in tan and brown with ragged edges, laced together with crossed thongs, a thick grey-brown fur collar over the shoulders, fur-trimmed leg wraps and hide boots.
-3. Chain shirt, woman's base: a short chain shirt to the hips with short sleeves, its rings drawn as offset rows, dark steel with small bright highlights on the lit side and a scalloped hem, worn over a padded jack whose collar and cuffs show; dark trousers; brown boots.
-4. Chain mail, woman's base: a long chain-mail coat to the knee with long sleeves and a split skirt, belted at the waist, drawn as offset rows of small rings in dark steel with dense small highlights, worn over a padded jack; mail chausses; brown boots.
-I'll save it as armor-sheet-f07.png.
-
-#### `armor-sheet-f08` · Armor sheet: 4 outfits (Scale mail, woman's base, Plate armour, woman's base, Mage robes, woman's base, The Champion's tabard, on the woman's base) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-scale-f`, 2 `armor-plate-f`, 3 `armor-mage-robes-f`, 4 `armor-champion-f`.
-
-1. Scale mail, woman's base: a coat of small overlapping steel scales to the knee, laid in half-offset rows like a fish's, each scale with a highlight on its top edge and a deep shadow under the row above, edged with brown leather at the collar, hems and armholes, belted at the waist; leather leggings; brown boots.
-2. Plate armour, woman's base: full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate.
-3. Mage robes, woman's base: a mage's robe to the ankle in deep teal, with wide, bell-shaped sleeves, layered hems, two trim bands at the hem and cuffs carrying a small repeated geometric motif dotted with gold thread, and a knotted sash; soft shoes.
-4. The Champion's tabard, on the woman's base: the traveller's clothes (a cream shirt with rolled sleeves, brown trousers, brown boots, fingerless gloves, the driftwood herring on its cord) with, over them, a knee-length tabard in deep navy blue, open at the sides and belted at the waist, a gold sun embroidered on the chest, and a border of sun-gold trim worked in a pattern of two linked rings all round its edges.
-I'll save it as armor-sheet-f08.png.
-
-#### `armor-sheet-f09` · Armor sheet: 4 outfits (An archive apprentice's smock, The Archmage's robes, Brenna's ash-walker kit, Mother Gannet's shawl and dress) · P1
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-mira-apprentice`, 2 `armor-thessaly`, 3 `armor-brenna`, 4 `armor-gannet`.
-
-1. An archive apprentice's smock: an oversized parchment-coloured apprentice's smock to the knee with ink-blue cuffs, belted with a cord; dark stockings; plain shoes.
-2. The Archmage's robes: an A-line robe to the ankle in deep cobalt blue, with wide sleeves and two bands of trim at the hem and cuffs carrying a plain, repeated geometric motif in pale silver thread; a short cobalt mantle over the shoulders with a high collar; a dark sash with a few small brass keys and a slim book on a chain; plain dark boots. On the near hand, the ring finger and the little finger are missing, healed long ago.
-3. Brenna's ash-walker kit: a black-dyed leather jerkin over a mail shirt; one old, cracked knight's pauldron on the near shoulder, finer than the rest of the kit, with a worn engraved crest; black trousers; boots wrapped in grey cloth to the knee.
-4. Mother Gannet's shawl and dress: a heavy mustard-yellow wool shawl round the shoulders, pinned with a large brass brooch; a brown wool dress to the floor; a ring of iron keys and a fat coin purse at the belt; rings on several fingers.
-I'll save it as armor-sheet-f09.png.
-
-#### `armor-sheet-f10` · Armor sheet: 4 outfits (A pedlar's patched coat, The Lord Protector's coat, The Sovereign's armour, Valencia's gown) · P1
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-pedlar`, 2 `armor-lord-protector`, 3 `armor-sovereign`, 4 `armor-valencia`.
-
-1. A pedlar's patched coat: a patched mustard-and-brown skirt over trousers; a man's old green coat with deep pockets; a striped scarf; stout boots; a smooth grey stone with a hole in it hanging on a cord at the neck.
-2. The Lord Protector's coat: a long coat to mid-calf in deep navy blue, close at the chest and flaring at the hem, with a stiff standing collar, a double row of small gold buttons and narrow violet-and-gold edging, a rich violet lining showing at the front opening and the turned-back cuffs; a cream shirt and dark cravat under it; charcoal trousers and polished black knee boots; a dark belt with a heavy gold key with a sun-shaped bow on the near hip; the driftwood herring on its cord at the neck; and a faint violet light leaking from the belt pouch.
-3. The Sovereign's armour: dark, close-fitting plate armour of blackened steel with violet-and-gold edging on every plate, over a long navy coat whose high, stiff standing collar is turned up round the jaw and whose violet lining shows at the split of the skirts; armoured boots; no herring at the neck.
-4. Valencia's gown: a fitted bone-white gown, long-sleeved, with a very high, stiff standing collar that frames the jaw; a wine-red underskirt showing at the front split of the skirt; thin wine-red trim along the seams; long dark-wine gloves to above the elbow; neat black heeled boots.
-I'll save it as armor-sheet-f10.png.
-
-#### `armor-sheet-f11` · Armor sheet: 4 outfits (The abbey habit, Mother Anselle's habit, A beekeeper's smock, Lady Isadora's gown) · P2
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-abbey-habit`, 2 `armor-anselle`, 3 `armor-beekeeper`, 4 `armor-isadora`.
-
-1. The abbey habit: a plain, ankle-length habit of soft grey wool with a white linen collar; a plain rope belt with a small carved wooden bee on a cord; a white linen apron, a little stained with honey; plain dark shoes.
-2. Mother Anselle's habit: a plain ankle-length habit of soft grey wool with a white linen collar and white cuffs; a wide leather belt with a heavy iron ring of many keys at the hip and a short iron mace; a small carved wooden bee on a cord round the neck; sturdy black shoes.
-3. A beekeeper's smock: a brown wool habit with the sleeves rolled to the elbow; a honey-yellow canvas smock-apron over it, sticky at the front; thick leather gloves tucked in the belt; a hive tool on a cord; heavy clogs.
-4. Lady Isadora's gown: a long gown in deep midnight blue with fitted sleeves, a modest square neckline, a long train behind, and fine silver embroidery of small night-flowers at the hem; a pair of gardening gloves tucked into the belt; a small pair of silver shears on a chain.
-I'll save it as armor-sheet-f11.png.
-
-#### `armor-sheet-f12` · Armor sheet: 4 outfits (A little girl's dress, A valley woman's wool dress, A linen shift and shawl, A lay sister's habit) · P2
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-child-dress`, 2 `armor-morvaine-woman`, 3 `armor-shift`, 4 `armor-abbey-lay`.
-
-1. A little girl's dress: a plain dark-blue dress to the shin with a white collar, cut for a child (the game's morph makes her small); dark stockings; little black shoes.
-2. A valley woman's wool dress: a high-collared dress of dark grey wool to the ankle; a black wool shawl pinned with a pewter brooch; a dark apron; thick dark stockings; black boots; a small pewter cup on a chain at the belt.
-3. A linen shift and shawl: a plain, greyish linen shift to the shin; a dark wool shawl round the shoulders; a linen bandage round the inside of the far elbow; bare feet.
-4. A lay sister's habit: a plain ankle-length habit of undyed oatmeal wool; a brown work apron with a pocket of seed packets; a rope belt with a small wooden bee charm; clogs.
-I'll save it as armor-sheet-f12.png.
-
-#### `armor-sheet-f13` · Armor sheet: 4 outfits (A Guild apprentice's robe, A smuggler's oilskin, A cove child's clothes, on the woman's base, A street child's hand-me-downs, on the woman's base) · P0
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-guild-apprentice`, 2 `armor-smuggler`, 3 `armor-child-cove-f`, 4 `armor-urchin-f`.
-
-1. A Guild apprentice's robe: a short cobalt-blue apprentice's robe to the knee with plain trim, belted with a cord; grey trousers; soft shoes; a satchel.
-2. A smuggler's oilskin: a long, dark oilskin coat, salt-stained; a grey knitted jersey; a wide belt with hidden pouches; dark trousers; tall sea boots.
-3. A cove child's clothes, on the woman's base: a child's poor clothes from a fishing cove, cut to fit (the game's morph makes the wearer child-sized): a cove-blue (a soft, sea-grey blue) knitted jumper, darned at both elbows and a little too big; a cream shirt collar showing; brown canvas trousers rolled to the knee and patched; bare feet.
-4. A street child's hand-me-downs, on the woman's base: a child's hand-me-downs (the game's morph makes the wearer small): an oatmeal shirt; a charcoal waistcoat far too big; bark-brown trousers rolled at the ankle; bare, dirty feet.
-I'll save it as armor-sheet-f13.png.
-
-#### `armor-sheet-f14` · Armor sheet: 1 outfit (A thrall-knight's black plate, on the woman's base) · P2
-
-**Basis:** Edits `armor-sheet-female`. Cells: 1 `armor-thrall-knight-f`.
-
-1. A thrall-knight's black plate, on the woman's base: full plate of glossy black steel with thin wine-red trim on every edge, sharp but elegant, with layered black cloth showing between the plates and flared tassets over the hips; black gauntlets and pointed sabatons.
-Leave figures 2, 3 and 4 exactly as they are: bald, in the plain underwear, unchanged.
-I'll save it as armor-sheet-f14.png.
+The four-to-a-picture armor sheets of 2026-11-07 are retired with the whole figures. Make the armors in the order below (§5.1 onward), P0 first.
 
 ### 5.1 The player and the Soul-Bound
 
 #### `armor-traveller` · The traveller (the player's default) · P0
 
-**Basis:** Edits `base-male`. From the guide figure PLAYER (BASE); `03-art-overhaul.md` §7.2 (Act 1); the item `travelling-clothes`.
+**Basis:** Edits `armor-parts-man`. From the guide figure PLAYER (BASE); `03-art-overhaul.md` §7.2 (Act 1); the item `travelling-clothes`.
 
-Edit the attached base image: dress the body in a practical traveller's outfit: a cream linen shirt with the sleeves rolled to the elbow and the collar open; a fitted navy-blue waistcoat with small brass buttons, a little worn at the edges; a brown leather belt with a brass buckle, a pouch and a small sheathed knife; worn brown wool trousers, patched at one knee; scuffed brown leather boots to mid-calf; brown fingerless leather gloves; and a small herring whittled from pale driftwood on a waxed cord round the neck, resting on the chest. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-traveller.png.
+Dress the pieces in a practical traveller's outfit: a cream linen shirt with the sleeves rolled to the elbow and the collar open; a fitted navy-blue waistcoat with small brass buttons, a little worn at the edges; a brown leather belt with a brass buckle, a pouch and a small sheathed knife; worn brown wool trousers, patched at one knee; scuffed brown leather boots to mid-calf; brown fingerless leather gloves; and a small herring whittled from pale driftwood on a waxed cord round the neck, resting on the chest. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-traveller.png.
 
 #### `armor-traveller-f` · The traveller, on the woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-traveller`, fitted to the woman's base.
+**Basis:** Edits `armor-parts-woman`. As `armor-traveller`, fitted to the woman's base.
 
-Edit the attached base image: dress the body in a practical traveller's outfit: a cream linen shirt with the sleeves rolled to the elbow and the collar open; a fitted navy-blue waistcoat with small brass buttons, a little worn at the edges; a brown leather belt with a brass buckle, a pouch and a small sheathed knife; worn brown wool trousers, patched at one knee; scuffed brown leather boots to mid-calf; brown fingerless leather gloves; and a small herring whittled from pale driftwood on a waxed cord round the neck, resting on the chest. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-traveller-f.png.
+Dress the pieces in a practical traveller's outfit: a cream linen shirt with the sleeves rolled to the elbow and the collar open; a fitted navy-blue waistcoat with small brass buttons, a little worn at the edges; a brown leather belt with a brass buckle, a pouch and a small sheathed knife; worn brown wool trousers, patched at one knee; scuffed brown leather boots to mid-calf; brown fingerless leather gloves; and a small herring whittled from pale driftwood on a waxed cord round the neck, resting on the chest. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-traveller-f.png.
 
 #### `armor-sb-traveller` · The Soul-Bound's traveller · P0
 
-**Basis:** Edits `base-female`. From the guide figure SERA (burgundy, a dark cape); `Origins.cs` (crimson); `03-art-overhaul.md` §6.4 (the herring, the whittling knife).
+**Basis:** Edits `armor-parts-woman`. From the guide figure SERA (burgundy, a dark cape); `Origins.cs` (crimson); `03-art-overhaul.md` §6.4 (the herring, the whittling knife).
 
-Edit the attached base image: dress the body in a fitted, knee-length coat-tunic in deep brick crimson (warm and bright, not a wine colour) with a high collar, a row of dark buttons and dark trim, split at the hips; a cream shirt under it, the cuffs showing; a dark leather belt with two pouches and, at the back, a short whittling knife with a cord through its handle; charcoal-grey fitted trousers; tall dark-brown boots to the knee; dark fingerless gloves; and a small driftwood herring on a waxed cord at the neck. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-sb-traveller.png.
+Dress the pieces in a fitted, knee-length coat-tunic in deep brick crimson (warm and bright, not a wine colour) with a high collar, a row of dark buttons and dark trim, split at the hips; a cream shirt under it, the cuffs showing; a dark leather belt with two pouches and, at the back, a short whittling knife with a cord through its handle; charcoal-grey fitted trousers; tall dark-brown boots to the knee; dark fingerless gloves; and a small driftwood herring on a waxed cord at the neck. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-sb-traveller.png.
 
 #### `armor-champion` · The Champion's tabard · P1
 
-**Basis:** Edits `base-male`. **(derived)** From `03-art-overhaul.md` §7.2 (a Champion's tabard over the traveller's clothes, gold Soul-Bond trim) and §7.3 (sun gold).
+**Basis:** Edits `armor-parts-man`. **(derived)** From `03-art-overhaul.md` §7.2 (a Champion's tabard over the traveller's clothes, gold Soul-Bond trim) and §7.3 (sun gold).
 
-Edit the attached base image: dress the body in the traveller's clothes (a cream shirt with rolled sleeves, brown trousers, brown boots, fingerless gloves, the driftwood herring on its cord) with, over them, a knee-length tabard in deep navy blue, open at the sides and belted at the waist, a gold sun embroidered on the chest, and a border of sun-gold trim worked in a pattern of two linked rings all round its edges. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-champion.png.
+Dress the pieces in the traveller's clothes (a cream shirt with rolled sleeves, brown trousers, brown boots, fingerless gloves, the driftwood herring on its cord) with, over them, a knee-length tabard in deep navy blue, open at the sides and belted at the waist, a gold sun embroidered on the chest, and a border of sun-gold trim worked in a pattern of two linked rings all round its edges. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-champion.png.
 
 #### `armor-champion-f` · The Champion's tabard, on the woman's base · P1
 
-**Basis:** Edits `base-female`. As `armor-champion`, fitted to the woman's base.
+**Basis:** Edits `armor-parts-woman`. As `armor-champion`, fitted to the woman's base.
 
-Edit the attached base image: dress the body in the traveller's clothes (a cream shirt with rolled sleeves, brown trousers, brown boots, fingerless gloves, the driftwood herring on its cord) with, over them, a knee-length tabard in deep navy blue, open at the sides and belted at the waist, a gold sun embroidered on the chest, and a border of sun-gold trim worked in a pattern of two linked rings all round its edges. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-champion-f.png.
+Dress the pieces in the traveller's clothes (a cream shirt with rolled sleeves, brown trousers, brown boots, fingerless gloves, the driftwood herring on its cord) with, over them, a knee-length tabard in deep navy blue, open at the sides and belted at the waist, a gold sun embroidered on the chest, and a border of sun-gold trim worked in a pattern of two linked rings all round its edges. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-champion-f.png.
 
 #### `armor-lord-protector` · The Lord Protector's coat · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.2 (long, high-collared, deep blue with violet lining) and §6.4 (the outer key; the shard's light in the pouch).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.2 (long, high-collared, deep blue with violet lining) and §6.4 (the outer key; the shard's light in the pouch).
 
-Edit the attached base image: dress the body in a long coat to mid-calf in deep navy blue, close at the chest and flaring at the hem, with a stiff standing collar, a double row of small gold buttons and narrow violet-and-gold edging, a rich violet lining showing at the front opening and the turned-back cuffs; a cream shirt and dark cravat under it; charcoal trousers and polished black knee boots; a dark belt with a heavy gold key with a sun-shaped bow on the near hip; the driftwood herring on its cord at the neck; and a faint violet light leaking from the belt pouch. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-lord-protector.png.
+Dress the pieces in a long coat to mid-calf in deep navy blue, close at the chest and flaring at the hem, with a stiff standing collar, a double row of small gold buttons and narrow violet-and-gold edging, a rich violet lining showing at the front opening and the turned-back cuffs; a cream shirt and dark cravat under it; charcoal trousers and polished black knee boots; a dark belt with a heavy gold key with a sun-shaped bow on the near hip; the driftwood herring on its cord at the neck; and a faint violet light leaking from the belt pouch. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-lord-protector.png.
 
 #### `armor-sovereign` · The Sovereign's armour · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.2 (dark plate with violet-gold edging, the coat's collar kept).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.2 (dark plate with violet-gold edging, the coat's collar kept).
 
-Edit the attached base image: dress the body in dark, close-fitting plate armour of blackened steel with violet-and-gold edging on every plate, over a long navy coat whose high, stiff standing collar is turned up round the jaw and whose violet lining shows at the split of the skirts; armoured boots; no herring at the neck. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-sovereign.png.
+Dress the pieces in dark, close-fitting plate armour of blackened steel with violet-and-gold edging on every plate, over a long navy coat whose high, stiff standing collar is turned up round the jaw and whose violet lining shows at the split of the skirts; armoured boots; no herring at the neck. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-sovereign.png.
 
 #### `armor-child-cove` · A cove child's clothes · P0
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (the children on the pier: fishing-town kids, cove blue).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (the children on the pier: fishing-town kids, cove blue).
 
-Edit the attached base image: dress the body in a child's poor clothes from a fishing cove, cut to fit (the game's morph makes the wearer child-sized): a cove-blue (a soft, sea-grey blue) knitted jumper, darned at both elbows and a little too big; a cream shirt collar showing; brown canvas trousers rolled to the knee and patched; bare feet. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-child-cove.png.
+Dress the pieces in a child's poor clothes from a fishing cove, cut to fit (the game's morph makes the wearer child-sized): a cove-blue (a soft, sea-grey blue) knitted jumper, darned at both elbows and a little too big; a cream shirt collar showing; brown canvas trousers rolled to the knee and patched; bare feet. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-child-cove.png.
 
 #### `armor-child-cove-f` · A cove child's clothes, on the woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-child-cove`, fitted to the woman's base, for `sb-child`, whose face is painted on it.
+**Basis:** Edits `armor-parts-woman`. As `armor-child-cove`, fitted to the woman's base, for `sb-child`, whose face is painted on it.
 
-Edit the attached base image: dress the body in a child's poor clothes from a fishing cove, cut to fit (the game's morph makes the wearer child-sized): a cove-blue (a soft, sea-grey blue) knitted jumper, darned at both elbows and a little too big; a cream shirt collar showing; brown canvas trousers rolled to the knee and patched; bare feet. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-child-cove-f.png.
+Dress the pieces in a child's poor clothes from a fishing cove, cut to fit (the game's morph makes the wearer child-sized): a cove-blue (a soft, sea-grey blue) knitted jumper, darned at both elbows and a little too big; a cream shirt collar showing; brown canvas trousers rolled to the knee and patched; bare feet. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-child-cove-f.png.
 
 ### 5.2 The party
 
 #### `armor-sera` · Sera's ranger coat · P0
 
-**Basis:** Edits `base-female`. From the guide figure KIAN (a green ranger's coat); `03-art-overhaul.md` §7.4 (moss green and undyed leather).
+**Basis:** Edits `armor-parts-woman`. From the guide figure KIAN (a green ranger's coat); `03-art-overhaul.md` §7.4 (moss green and undyed leather).
 
-Edit the attached base image: dress the body in a moss-green ranger's coat to mid-thigh, fitted and belted, split at the sides, with a stand collar and thin cream piping; an oatmeal shirt under it; a wide belt of undyed leather with a hunting knife, a pouch and a quiver of grey-fletched arrows at the far hip; olive trousers; tall undyed-leather boots laced to the knee; a leather bracer on the far forearm. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-sera.png.
+Dress the pieces in a moss-green ranger's coat to mid-thigh, fitted and belted, split at the sides, with a stand collar and thin cream piping; an oatmeal shirt under it; a wide belt of undyed leather with a hunting knife, a pouch and a quiver of grey-fletched arrows at the far hip; olive trousers; tall undyed-leather boots laced to the knee; a leather bracer on the far forearm. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-sera.png.
 
 #### `armor-mira` · Mira's archivist's clothes · P0
 
-**Basis:** Edits `base-female`. From the guide figures NOREL and CATE; `03-art-overhaul.md` §7.4 (a satchel with three scroll tubes; ink blue and parchment).
+**Basis:** Edits `armor-parts-woman`. From the guide figures NOREL and CATE; `03-art-overhaul.md` §7.4 (a satchel with three scroll tubes; ink blue and parchment).
 
-Edit the attached base image: dress the body in a cream blouse with full sleeves pushed up to the elbow; a fitted ink-blue waistcoat-bodice, laced at the front, with dark-blue piping; a long parchment-coloured skirt to the ankle, the hem worn; sensible brown lace-up boots; a brown leather belt with a small pouch and an ink bottle; and a battered brown leather satchel worn across the body, stuffed with papers, with three leather scroll tubes strapped to its side. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-mira.png.
+Dress the pieces in a cream blouse with full sleeves pushed up to the elbow; a fitted ink-blue waistcoat-bodice, laced at the front, with dark-blue piping; a long parchment-coloured skirt to the ankle, the hem worn; sensible brown lace-up boots; a brown leather belt with a small pouch and an ink bottle; and a battered brown leather satchel worn across the body, stuffed with papers, with three leather scroll tubes strapped to its side. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-mira.png.
 
 #### `armor-mira-apprentice` · An archive apprentice's smock · P1
 
-**Basis:** Edits `base-female`. **(derived)** From A1-C8-01 (`echo mira-young`).
+**Basis:** Edits `armor-parts-woman`. **(derived)** From A1-C8-01 (`echo mira-young`).
 
-Edit the attached base image: dress the body in an oversized parchment-coloured apprentice's smock to the knee with ink-blue cuffs, belted with a cord; dark stockings; plain shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-mira-apprentice.png.
+Dress the pieces in an oversized parchment-coloured apprentice's smock to the knee with ink-blue cuffs, belted with a cord; dark stockings; plain shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-mira-apprentice.png.
 
 #### `armor-kael` · Kael's hooded leathers · P0
 
-**Basis:** Edits `base-male`. From the guide figure DRAINOR (a hooded dark cloak over layered leathers); `03-art-overhaul.md` §7.4 (charcoal, an ember-red sash).
+**Basis:** Edits `armor-parts-man`. From the guide figure DRAINOR (a hooded dark cloak over layered leathers); `03-art-overhaul.md` §7.4 (charcoal, an ember-red sash).
 
-Edit the attached base image: dress the body in a close-fitting dark leather coat to the hip in layered panels, with straps and buckles across the chest; a charcoal half-cloak over the shoulders with its pointed hood hanging down the back; a wide ember-red sash wound round the waist, its ends hanging at the far hip; dark grey trousers; soft dark boots with the legs wrapped in cloth bands to the knee; dark fingerless gloves; a few lockpicks in a strap on the forearm. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-kael.png.
+Dress the pieces in a close-fitting dark leather coat to the hip in layered panels, with straps and buckles across the chest; a charcoal half-cloak over the shoulders with its pointed hood hanging down the back; a wide ember-red sash wound round the waist, its ends hanging at the far hip; dark grey trousers; soft dark boots with the legs wrapped in cloth bands to the knee; dark fingerless gloves; a few lockpicks in a strap on the forearm. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-kael.png.
 
 #### `armor-kael-shadow` · Kael, the Protectorate Shadow · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (`kael-shadow`: Protectorate colours).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (`kael-shadow`: Protectorate colours).
 
-Edit the attached base image: dress the body in finer black leathers with violet piping, layered and buckled; a long black coat with a high collar; a violet sash with a gold crown badge pinned to it; a black leather half-mask pulled down round the neck; black gloves; polished black boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-kael-shadow.png.
+Dress the pieces in finer black leathers with violet piping, layered and buckled; a long black coat with a high collar; a violet sash with a gold crown badge pinned to it; a black leather half-mask pulled down round the neck; black gloves; polished black boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-kael-shadow.png.
 
 #### `armor-brannock` · Brannock's soldier-smith kit · P0
 
-**Basis:** Edits `base-male`. From the guide figure CERRO (a work shirt and an apron); `03-art-overhaul.md` §7.4 (iron grey, tarnished gold, plate); `Origins.cs` (chain).
+**Basis:** Edits `armor-parts-man`. From the guide figure CERRO (a work shirt and an apron); `03-art-overhaul.md` §7.4 (iron grey, tarnished gold, plate); `Origins.cs` (chain).
 
-Edit the attached base image: dress the body in a charcoal padded work shirt with the sleeves pushed up; a chain-mail shirt over it to the hips; a battered iron breastplate with tarnished-gold edging, dented and scratched; one heavy iron pauldron on the near shoulder; a thick dark-leather apron-like skirt to the knees over dark trousers, like a smith's; a wide belt with a big iron buckle and a battered metal flask; heavy iron-capped boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-brannock.png.
+Dress the pieces in a charcoal padded work shirt with the sleeves pushed up; a chain-mail shirt over it to the hips; a battered iron breastplate with tarnished-gold edging, dented and scratched; one heavy iron pauldron on the near shoulder; a thick dark-leather apron-like skirt to the knees over dark trousers, like a smith's; a wide belt with a big iron buckle and a battered metal flask; heavy iron-capped boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-brannock.png.
 
 #### `armor-valencia` · Valencia's gown · P2
 
-**Basis:** Edits `base-female`. From the guide figure VALENCIA (a pale dress); `03-art-overhaul.md` §7.4 (bone white and wine red; a high stiff collar and long gloves).
+**Basis:** Edits `armor-parts-woman`. From the guide figure VALENCIA (a pale dress); `03-art-overhaul.md` §7.4 (bone white and wine red; a high stiff collar and long gloves).
 
-Edit the attached base image: dress the body in a fitted bone-white gown, long-sleeved, with a very high, stiff standing collar that frames the jaw; a wine-red underskirt showing at the front split of the skirt; thin wine-red trim along the seams; long dark-wine gloves to above the elbow; neat black heeled boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-valencia.png.
+Dress the pieces in a fitted bone-white gown, long-sleeved, with a very high, stiff standing collar that frames the jaw; a wine-red underskirt showing at the front split of the skirt; thin wine-red trim along the seams; long dark-wine gloves to above the elbow; neat black heeled boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-valencia.png.
 
 #### `armor-abbey-habit` · The abbey habit · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (Sister Vale's habit); §7.5 (the `abbey` pool).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (Sister Vale's habit); §7.5 (the `abbey` pool).
 
-Edit the attached base image: dress the body in a plain, ankle-length habit of soft grey wool with a white linen collar; a plain rope belt with a small carved wooden bee on a cord; a white linen apron, a little stained with honey; plain dark shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-abbey-habit.png.
+Dress the pieces in a plain, ankle-length habit of soft grey wool with a white linen collar; a plain rope belt with a small carved wooden bee on a cord; a white linen apron, a little stained with honey; plain dark shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-abbey-habit.png.
 
 ### 5.3 Act 1 and the towns
 
 #### `armor-corra` · Corra's net-mender's clothes · P0
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (a net-mender's shawl, a ball of twine at the belt; cove blue and oiled brown).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (a net-mender's shawl, a ball of twine at the belt; cove blue and oiled brown).
 
-Edit the attached base image: dress the body in a thick, cove-blue (a soft, sea-grey blue) knitted shawl round the shoulders, knotted at the front; an oatmeal blouse with the sleeves rolled; a faded blue kerchief at the throat; a long apron of oiled brown canvas over a long brown wool skirt; plain worn boots; a ball of tarred twine and a wooden netting needle hanging from the belt on a cord. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-corra.png.
+Dress the pieces in a thick, cove-blue (a soft, sea-grey blue) knitted shawl round the shoulders, knotted at the front; an oatmeal blouse with the sleeves rolled; a faded blue kerchief at the throat; a long apron of oiled brown canvas over a long brown wool skirt; plain worn boots; a ball of tarred twine and a wooden netting needle hanging from the belt on a cord. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-corra.png.
 
 #### `armor-sailor` · A sailor's clothes · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the Saltwind pool (oilskins, caps, rolled sleeves).
+**Basis:** Edits `armor-parts-man`. **(derived)** From the Saltwind pool (oilskins, caps, rolled sleeves).
 
-Edit the attached base image: dress the body in a navy-and-cream striped knitted jersey with the sleeves pushed up; a sleeveless brown oilskin waistcoat; canvas trousers rolled to the shin; bare feet with tarred soles; a rope lanyard at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-sailor.png.
+Dress the pieces in a navy-and-cream striped knitted jersey with the sleeves pushed up; a sleeveless brown oilskin waistcoat; canvas trousers rolled to the shin; bare feet with tarred soles; a rope lanyard at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-sailor.png.
 
 #### `armor-odelle` · Captain Odelle's sea-coat · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (a white shirt, a crimson waistcoat, a charcoal cloak); the guide figure LEVL; `10-classes.md` (Deckhand: a pistol).
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (a white shirt, a crimson waistcoat, a charcoal cloak); the guide figure LEVL; `10-classes.md` (Deckhand: a pistol).
 
-Edit the attached base image: dress the body in a white linen shirt, open at the neck, the sleeves loose; a fitted crimson waistcoat with brass buttons; a long charcoal sea-coat worn open, its skirts to the knee and its cuffs turned back; charcoal breeches; tall black sea boots, salt-stained; a wide leather belt holding a short one-shot flintlock pistol. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-odelle.png.
+Dress the pieces in a white linen shirt, open at the neck, the sleeves loose; a fitted crimson waistcoat with brass buttons; a long charcoal sea-coat worn open, its skirts to the knee and its cuffs turned back; charcoal breeches; tall black sea boots, salt-stained; a wide leather belt holding a short one-shot flintlock pistol. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-odelle.png.
 
 #### `armor-fisher` · A fisherman's oilskins · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the Saltwind pool; Old Tomas.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the Saltwind pool; Old Tomas.
 
-Edit the attached base image: dress the body in a thick grey knitted jumper, darned at the elbows; a sleeveless mustard oilskin smock over it, cracked and patched; canvas trousers rolled at the shin; tall black tarred sea boots; a brass fish hook on a cord at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-fisher.png.
+Dress the pieces in a thick grey knitted jumper, darned at the elbows; a sleeveless mustard oilskin smock over it, cracked and patched; canvas trousers rolled at the shin; tall black tarred sea boots; a brass fish hook on a cord at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-fisher.png.
 
 #### `armor-red-gull` · A Red Gull's rig · P0
 
-**Basis:** Edits `base-male`. From the guide figure KELL (a striped shirt, a shoulder guard); the art plan (a gull-red bandana and sash).
+**Basis:** Edits `armor-parts-man`. From the guide figure KELL (a striped shirt, a shoulder guard); the art plan (a gull-red bandana and sash).
 
-Edit the attached base image: dress the body in a raspberry-red bandana knotted round the throat; a cream-and-navy striped jersey with the sleeves rolled over the forearms; a scuffed leather shoulder guard on the near shoulder, buckled with straps across the chest; a wide raspberry-red sash at the waist; brown canvas trousers; tall worn boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-red-gull.png.
+Dress the pieces in a raspberry-red bandana knotted round the throat; a cream-and-navy striped jersey with the sleeves rolled over the forearms; a scuffed leather shoulder guard on the near shoulder, buckled with straps across the chest; a wide raspberry-red sash at the waist; brown canvas trousers; tall worn boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-red-gull.png.
 
 #### `armor-grell` · Bosun Grell's coat and hook · P0
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a hook for a hand; Red Gull red); the art plan (an open bosun's coat, a gull tattoo).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (a hook for a hand; Red Gull red); the art plan (an open bosun's coat, a gull tattoo).
 
-Edit the attached base image: dress the body in an open, knee-length bosun's coat in raspberry red, frayed at the cuffs and stained with tar, with tarnished brass buttons; an oatmeal shirt under it, half unlaced; a gull tattoo on the near forearm; a broad belt with a big brass buckle; dark canvas trousers; heavy boots. The far hand is gone at the wrist: in its place, a steel hook strapped to a leather cuff. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-grell.png.
+Dress the pieces in an open, knee-length bosun's coat in raspberry red, frayed at the cuffs and stained with tar, with tarnished brass buttons; an oatmeal shirt under it, half unlaced; a gull tattoo on the near forearm; a broad belt with a big brass buckle; dark canvas trousers; heavy boots. The far hand is gone at the wrist: in its place, a steel hook strapped to a leather cuff. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-grell.png.
 
 #### `armor-watch` · The City Watch uniform · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (the Watch's blue); `03-art-overhaul.md` §7.3 (Watch navy and brass).
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (the Watch's blue); `03-art-overhaul.md` §7.3 (Watch navy and brass).
 
-Edit the attached base image: dress the body in a navy-blue Watch coat to mid-thigh over a padded jack, brass buttons, a small brass badge shaped like a lantern on the chest; a brown leather belt; navy trousers; black boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-watch.png.
+Dress the pieces in a navy-blue Watch coat to mid-thigh over a padded jack, brass buttons, a small brass badge shaped like a lantern on the chest; a brown leather belt; navy trousers; black boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-watch.png.
 
 #### `armor-watch-captain` · The Watch captain's coat · P0
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Hale: Watch navy and brass).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (Hale: Watch navy and brass).
 
-Edit the attached base image: dress the body in a navy-blue Watch coat to mid-thigh over a chain-mail shirt, with brass buttons and a larger brass lantern badge on the chest; a brown leather belt and baldric with a short sword; a rolled paper roster tucked into the belt; navy trousers; worn black boots, well polished. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-watch-captain.png.
+Dress the pieces in a navy-blue Watch coat to mid-thigh over a chain-mail shirt, with brass buttons and a larger brass lantern badge on the chest; a brown leather belt and baldric with a short sword; a rolled paper roster tucked into the belt; navy trousers; worn black boots, well polished. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-watch-captain.png.
 
 #### `armor-clerk` · A clerk's waistcoat · P0
 
-**Basis:** Edits `base-male`. **(derived)** From Fennick, the Guild's and the docks' clerks.
+**Basis:** Edits `armor-parts-man`. **(derived)** From Fennick, the Guild's and the docks' clerks.
 
-Edit the attached base image: dress the body in an oatmeal shirt with black sleeve garters; a mustard-ochre waistcoat with a watch chain; sand-coloured trousers; polished brown shoes; ink stains on the fingers. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-clerk.png.
+Dress the pieces in an oatmeal shirt with black sleeve garters; a mustard-ochre waistcoat with a watch chain; sand-coloured trousers; polished brown shoes; ink stains on the fingers. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-clerk.png.
+
+#### `armor-clerk-f` · A clerk's waistcoat, on the woman's base · P1
+
+**Basis:** Edits `armor-parts-woman`. As `armor-clerk`, fitted to the woman's base, for the town's women in the crowd (Caleb painted it on the woman's template, 2026-11-13).
+
+Dress the pieces in an oatmeal shirt with black sleeve garters; a mustard-ochre waistcoat with a watch chain; sand-coloured trousers; polished brown shoes; ink stains on the fingers. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-clerk-f.png.
 
 #### `armor-refugee-woman` · A refugee woman's clothes · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (Hedda: "sacking, charcoal and oat"); the `doomward` pool.
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (Hedda: "sacking, charcoal and oat"); the `doomward` pool.
 
-Edit the attached base image: dress the body in an oatmeal shirt patched with sacking; a charcoal wool waistcoat; a long, mud-hemmed chestnut-brown skirt; boots split at the toes and bound with twine. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-refugee-woman.png.
+Dress the pieces in an oatmeal shirt patched with sacking; a charcoal wool waistcoat; a long, mud-hemmed chestnut-brown skirt; boots split at the toes and bound with twine. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-refugee-woman.png.
 
 #### `armor-refugee-man` · A refugee man's clothes · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (the refugees); the `doomward` pool (grey and black, patched, practical).
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (the refugees); the `doomward` pool (grey and black, patched, practical).
 
-Edit the attached base image: dress the body in a faded black wool coat with mismatched patches over a grey shirt; a charcoal scarf; grey trousers tied at the ankle with twine; cracked boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-refugee-man.png.
+Dress the pieces in a faded black wool coat with mismatched patches over a grey shirt; a charcoal scarf; grey trousers tied at the ankle with twine; cracked boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-refugee-man.png.
+
+#### `armor-refugee-man-f` · A refugee's coat, on the woman's base · P1
+
+**Basis:** Edits `armor-parts-woman`. As `armor-refugee-man`, fitted to the woman's base, for the town's women in the crowd (Caleb painted it on the woman's template, 2026-11-13).
+
+Dress the pieces in a faded black wool coat with mismatched patches over a grey shirt; a charcoal scarf; grey trousers tied at the ankle with twine; cracked boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-refugee-man-f.png.
 
 #### `armor-refugee-child` · A refugee child's smock · P0
 
-**Basis:** Edits `base-female`. **(derived)** From Lise.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From Lise.
 
-Edit the attached base image: dress the body in an oversized oatmeal smock belted with a length of rope; a small charcoal shawl round the shoulders; brown woollen stockings, one sagging; boots far too big. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-refugee-child.png.
+Dress the pieces in an oversized oatmeal smock belted with a length of rope; a small charcoal shawl round the shoulders; brown woollen stockings, one sagging; boots far too big. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-refugee-child.png.
 
 #### `armor-glassblower` · A glassblower's apron · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (Yselle: blush, teal, sand; burned hands).
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (Yselle: blush, teal, sand; burned hands).
 
-Edit the attached base image: dress the body in a blush-pink linen shirt with the sleeves rolled up; a teal waistcoat; a long sand-coloured skirt; a thick leather glassblower's apron, scorched and pitted; sturdy boots; both hands wrapped in clean linen bandages to the wrist. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-glassblower.png.
+Dress the pieces in a blush-pink linen shirt with the sleeves rolled up; a teal waistcoat; a long sand-coloured skirt; a thick leather glassblower's apron, scorched and pitted; sturdy boots; both hands wrapped in clean linen bandages to the wrist. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-glassblower.png.
 
 #### `armor-elara` · Elara's riding coat · P0
 
-**Basis:** Edits `base-female`. From the guide figure ELARA (the long fitted coat), recoloured to royal blue because violet is reserved for {sb}; `03-art-overhaul.md` §7.4 (a short cape on one shoulder; royal blue and sun gold).
+**Basis:** Edits `armor-parts-woman`. From the guide figure ELARA (the long fitted coat), recoloured to royal blue because violet is reserved for {sb}; `03-art-overhaul.md` §7.4 (a short cape on one shoulder; royal blue and sun gold).
 
-Edit the attached base image: dress the body in a fitted riding coat to the knee in deep royal blue, with a high collar, a double row of small gold buttons and sun-gold trim at the hem, cuffs and collar, split at the back; a short royal-blue cape over the near shoulder only, fastened with a gold sun-shaped clasp; a white shirt; dark navy riding breeches; tall black riding boots; brown leather riding gloves; a slim sword at the hip. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-elara.png.
+Dress the pieces in a fitted riding coat to the knee in deep royal blue, with a high collar, a double row of small gold buttons and sun-gold trim at the hem, cuffs and collar, split at the back; a short royal-blue cape over the near shoulder only, fastened with a gold sun-shaped clasp; a white shirt; dark navy riding breeches; tall black riding boots; brown leather riding gloves; a slim sword at the hip. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-elara.png.
 
 #### `armor-elara-disguise` · Elara in disguise · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (`elara-hooded`: a charcoal vest); A1-C4-01.
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (`elara-hooded`: a charcoal vest); A1-C4-01.
 
-Edit the attached base image: dress the body in plain clothes with no gold anywhere: a plain charcoal waistcoat over a white shirt; dark breeches; scuffed riding boots; a plain sword at the hip. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-elara-disguise.png.
+Dress the pieces in plain clothes with no gold anywhere: a plain charcoal waistcoat over a white shirt; dark breeches; scuffed riding boots; a plain sword at the hip. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-elara-disguise.png.
 
 #### `armor-leon` · King Leon's robes · P0
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a broad ermine collar; white and sun gold) and §6.4 (`leon-sword`).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (a broad ermine collar; white and sun gold) and §6.4 (`leon-sword`).
 
-Edit the attached base image: dress the body in a long white robe-coat to the ankles with sun-gold trim at the hem and cuffs and a gold sash; a broad collar of ermine (white fur with small black tips) over the shoulders; soft white boots; and at the hip, a long, plain, very old sword in a worn scabbard, its grip blue leather worn pale, a small gold sun on the crossguard. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-leon.png.
+Dress the pieces in a long white robe-coat to the ankles with sun-gold trim at the hem and cuffs and a gold sash; a broad collar of ermine (white fur with small black tips) over the shoulders; soft white boots; and at the hip, a long, plain, very old sword in a worn scabbard, its grip blue leather worn pale, a small gold sun on the crossguard. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-leon.png.
 
 #### `armor-crane` · Crane's long coat · P0
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a very long coat, rings that catch the light; plum and silver) and §6.4 (`cube-seal-ring`).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (a very long coat, rings that catch the light; plum and silver) and §6.4 (`cube-seal-ring`).
 
-Edit the attached base image: dress the body in a floor-length plum-coloured coat, close at the chest and long in the skirt, with a high standing collar, silver trim and a column of small silver buttons; a dark-grey waistcoat; a white stock at the throat; dark trousers and narrow black boots; silver rings on several fingers, one a signet set with a small black cube. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-crane.png.
+Dress the pieces in a floor-length plum-coloured coat, close at the chest and long in the skirt, with a high standing collar, silver trim and a column of small silver buttons; a dark-grey waistcoat; a white stock at the throat; dark trousers and narrow black boots; silver rings on several fingers, one a signet set with a small black cube. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-crane.png.
+
+#### `armor-crane-f` · A long plum coat, on the woman's base · P1
+
+**Basis:** Edits `armor-parts-woman`. As `armor-crane`, fitted to the woman's base, a lady's long coat, for whoever needs one (Caleb painted it on the woman's template, 2026-11-13).
+
+Dress the pieces in a floor-length plum-coloured coat, close at the chest and long in the skirt, with a high standing collar, silver trim and a column of small silver buttons; a dark-grey waistcoat; a white stock at the throat; dark trousers and narrow black boots; silver rings on several fingers, one a signet set with a small black cube. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-crane-f.png.
 
 #### `armor-royal-livery` · The palace livery · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (the palace's navy and gold).
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (the palace's navy and gold).
 
-Edit the attached base image: dress the body in a navy-blue livery tunic with a gold sun badge on the chest and gold piping; a white shirt; navy breeches; soft brown boots; a dispatch pouch on a strap across the body. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-royal-livery.png.
+Dress the pieces in a navy-blue livery tunic with a gold sun badge on the chest and gold piping; a white shirt; navy breeches; soft brown boots; a dispatch pouch on a strap across the body. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-royal-livery.png.
 
 #### `armor-royal-guard` · The Royal Guard's armour · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (the palace guards in navy and gold).
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (the palace guards in navy and gold).
 
-Edit the attached base image: dress the body in a navy-blue tabard with a large gold sun embroidered on the chest, over polished mail; steel pauldrons with gold edging; a white sash; navy trousers; steel-capped black boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-royal-guard.png.
+Dress the pieces in a navy-blue tabard with a large gold sun embroidered on the chest, over polished mail; steel pauldrons with gold edging; a white sash; navy trousers; steel-capped black boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-royal-guard.png.
 
 #### `armor-tavern` · A tavern apron · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (Hessa: a charcoal vest, an apron); the inns' staff.
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (Hessa: a charcoal vest, an apron); the inns' staff.
 
-Edit the attached base image: dress the body in a cream shirt with the sleeves rolled up; a charcoal waistcoat; a long, stained leather apron; dark trousers; heavy boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-tavern.png.
+Dress the pieces in a cream shirt with the sleeves rolled up; a charcoal waistcoat; a long, stained leather apron; dark trousers; heavy boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-tavern.png.
 
 #### `armor-tavern-m` · A tavern apron, on the man's base · P0
 
-**Basis:** Edits `base-male`. As `armor-tavern`, fitted to the man's base, for `pip`, whose face is painted on it.
+**Basis:** Edits `armor-parts-man`. As `armor-tavern`, fitted to the man's base, for `pip`, whose face is painted on it.
 
-Edit the attached base image: dress the body in a cream shirt with the sleeves rolled up; a charcoal waistcoat; a long, stained leather apron; dark trousers; heavy boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-tavern-m.png.
+Dress the pieces in a cream shirt with the sleeves rolled up; a charcoal waistcoat; a long, stained leather apron; dark trousers; heavy boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-tavern-m.png.
 
 #### `armor-villager-woman` · A townswoman's clothes · P0
 
-**Basis:** Edits `base-female`. **(derived)** From the `questeria` pool (bright, layered cloth; aprons); the townswomen.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From the `questeria` pool (bright, layered cloth; aprons); the townswomen.
 
-Edit the attached base image: dress the body in a cream blouse with full sleeves; a teal bodice-waistcoat laced at the front; a long mustard skirt with a dusty-pink underskirt showing at the hem; a white apron; brown shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-villager-woman.png.
+Dress the pieces in a cream blouse with full sleeves; a teal bodice-waistcoat laced at the front; a long mustard skirt with a dusty-pink underskirt showing at the hem; a white apron; brown shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-villager-woman.png.
 
 #### `armor-villager-man` · A townsman's clothes · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the `questeria` pool; the farmhands and youths.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the `questeria` pool; the farmhands and youths.
 
-Edit the attached base image: dress the body in a loose oatmeal shirt with the sleeves rolled and a rust-orange neckerchief; a grey-blue waistcoat, unbuttoned; brown trousers held up with braces; muddy boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-villager-man.png.
+Dress the pieces in a loose oatmeal shirt with the sleeves rolled and a rust-orange neckerchief; a grey-blue waistcoat, unbuttoned; brown trousers held up with braces; muddy boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-villager-man.png.
 
 #### `armor-elder-woman` · An old woman's dress and shawl · P0
 
-**Basis:** Edits `base-female`. **(derived)** From Hester, Maud and the old women.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From Hester, Maud and the old women.
 
-Edit the attached base image: dress the body in a plain grey-brown wool dress to the ankle; a soft, muted mauve-grey knitted shawl crossed over both shoulders and tied at the back; a clean linen apron; soft, worn shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-elder-woman.png.
+Dress the pieces in a plain grey-brown wool dress to the ankle; a soft, muted mauve-grey knitted shawl crossed over both shoulders and tied at the back; a clean linen apron; soft, worn shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-elder-woman.png.
 
 #### `armor-merchant` · A merchant's waistcoat · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (Osric: white, plum).
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (Osric: white, plum).
 
-Edit the attached base image: dress the body in a white shirt with full sleeves; an embroidered dusty-plum waistcoat; dark burgundy-brown trousers; polished shoes; a tailor's tape round the neck. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-merchant.png.
+Dress the pieces in a white shirt with full sleeves; an embroidered dusty-plum waistcoat; dark burgundy-brown trousers; polished shoes; a tailor's tape round the neck. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-merchant.png.
 
 #### `armor-busker` · A busker's finery · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (Lark: blush, rose, sand).
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (Lark: blush, rose, sand).
 
-Edit the attached base image: dress the body in a blush-pink shirt with billowing sleeves; a rose waistcoat; sand-coloured trousers; soft boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-busker.png.
+Dress the pieces in a blush-pink shirt with billowing sleeves; a rose waistcoat; sand-coloured trousers; soft boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-busker.png.
 
 #### `armor-temple` · A temple sister's tabard · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (Hesper: white, ochre, a long skirt); (derived) the sun badge.
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (Hesper: white, ochre, a long skirt); (derived) the sun badge.
 
-Edit the attached base image: dress the body in a white blouse; an ochre tabard-tunic with a small gold sun embroidered on the chest; a long sand-coloured skirt; an ochre shawl; plain sandals. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-temple.png.
+Dress the pieces in a white blouse; an ochre tabard-tunic with a small gold sun embroidered on the chest; a long sand-coloured skirt; an ochre shawl; plain sandals. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-temple.png.
 
 #### `armor-urchin` · A street child's hand-me-downs · P0
 
-**Basis:** Edits `base-male`. From `Cast.cs` (Wren: oat, charcoal, a cloak); the lost boy; the city's children.
+**Basis:** Edits `armor-parts-man`. From `Cast.cs` (Wren: oat, charcoal, a cloak); the lost boy; the city's children.
 
-Edit the attached base image: dress the body in a child's hand-me-downs (the game's morph makes the wearer small): an oatmeal shirt; a charcoal waistcoat far too big; bark-brown trousers rolled at the ankle; bare, dirty feet. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-urchin.png.
+Dress the pieces in a child's hand-me-downs (the game's morph makes the wearer small): an oatmeal shirt; a charcoal waistcoat far too big; bark-brown trousers rolled at the ankle; bare, dirty feet. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-urchin.png.
 
 #### `armor-urchin-f` · A street child's hand-me-downs, on the woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-urchin`, fitted to the woman's base, for `wren`, whose face is painted on it.
+**Basis:** Edits `armor-parts-woman`. As `armor-urchin`, fitted to the woman's base, for `wren`, whose face is painted on it.
 
-Edit the attached base image: dress the body in a child's hand-me-downs (the game's morph makes the wearer small): an oatmeal shirt; a charcoal waistcoat far too big; bark-brown trousers rolled at the ankle; bare, dirty feet. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-urchin-f.png.
+Dress the pieces in a child's hand-me-downs (the game's morph makes the wearer small): an oatmeal shirt; a charcoal waistcoat far too big; bark-brown trousers rolled at the ankle; bare, dirty feet. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-urchin-f.png.
 
 #### `armor-fencer` · A fencing-master's doublet · P0
 
-**Basis:** Edits `base-female`. **(derived)** From Imra Vell, `10-classes.md` §5.1.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From Imra Vell, `10-classes.md` §5.1.
 
-Edit the attached base image: dress the body in a fitted, quilted fencing doublet in cream with navy panels and brass buckles down one side; leather bracers on both forearms; a wide belt hung with eight small enamel tokens, each a different colour; navy breeches; soft leather boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-fencer.png.
+Dress the pieces in a fitted, quilted fencing doublet in cream with navy panels and brass buckles down one side; leather bracers on both forearms; a wide belt hung with eight small enamel tokens, each a different colour; navy breeches; soft leather boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-fencer.png.
 
 #### `armor-lodge-ranger` · The Lodge ranger's kit · P0
 
-**Basis:** Edits `base-female`. From `Cast.cs` (Tamsin: oat, forest, olive); `03-art-overhaul.md` §7.3 (moss green for the Lodge).
+**Basis:** Edits `armor-parts-woman`. From `Cast.cs` (Tamsin: oat, forest, olive); `03-art-overhaul.md` §7.3 (moss green for the Lodge).
 
-Edit the attached base image: dress the body in an oatmeal shirt; a forest-green leather jerkin; an olive ranger's coat to mid-thigh with a moss-green collar; olive trousers; tall laced boots; a thick leather falconer's glove on the far hand; a short sword at the hip. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-lodge-ranger.png.
+Dress the pieces in an oatmeal shirt; a forest-green leather jerkin; an olive ranger's coat to mid-thigh with a moss-green collar; olive trousers; tall laced boots; a thick leather falconer's glove on the far hand; a short sword at the hip. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-lodge-ranger.png.
 
 #### `armor-noble` · A courtier's doublet · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the court in `Content/Zones/sunspire-keep.txt` ("Velvet in this heat").
+**Basis:** Edits `armor-parts-man`. **(derived)** From the court in `Content/Zones/sunspire-keep.txt` ("Velvet in this heat").
 
-Edit the attached base image: dress the body in a fitted velvet doublet in deep teal with slashed sleeves showing cream silk; a lace collar; dark hose and breeches; soft black shoes with buckles; a ring or two. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-noble.png.
+Dress the pieces in a fitted velvet doublet in deep teal with slashed sleeves showing cream silk; a lace collar; dark hose and breeches; soft black shoes with buckles; a ring or two. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-noble.png.
 
 #### `armor-noble-gown` · A lady of the court's gown · P0
 
-**Basis:** Edits `base-female`. **(derived)** From the court in `Content/Zones/sunspire-keep.txt`.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From the court in `Content/Zones/sunspire-keep.txt`.
 
-Edit the attached base image: dress the body in a fitted gown in dusty rose silk with a square neckline, long sleeves slashed with cream, a fine embroidered bodice, and a full skirt to the floor; a pearl necklace. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-noble-gown.png.
+Dress the pieces in a fitted gown in dusty rose silk with a square neckline, long sleeves slashed with cream, a fine embroidered bodice, and a full skirt to the floor; a pearl necklace. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-noble-gown.png.
 
 #### `armor-elder-coat` · An old man's long coat · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the `elder` and `old-man` sheets.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the `elder` and `old-man` sheets.
 
-Edit the attached base image: dress the body in a long dove-grey coat to the shin with dark-grey trim and pewter buttons; a slate waistcoat; a white shirt with a soft collar; grey trousers; black shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-elder-coat.png.
+Dress the pieces in a long dove-grey coat to the shin with dark-grey trim and pewter buttons; a slate waistcoat; a white shirt with a soft collar; grey trousers; black shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-elder-coat.png.
 
 #### `armor-trader` · A trader's waistcoat · P0
 
-**Basis:** Edits `base-female`. **(derived)** From the `trader` sheet.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From the `trader` sheet.
 
-Edit the attached base image: dress the body in a cream shirt with rolled sleeves; a tan suede waistcoat with many pockets; brown trousers; tall brown boots; a leather satchel across the body; a small set of brass scales at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-trader.png.
+Dress the pieces in a cream shirt with rolled sleeves; a tan suede waistcoat with many pockets; brown trousers; tall brown boots; a leather satchel across the body; a small set of brass scales at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-trader.png.
 
 #### `armor-baker` · A baker's dress and apron · P0
 
-**Basis:** Edits `base-female`. **(derived)** From the `baker` sheet.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From the `baker` sheet.
 
-Edit the attached base image: dress the body in a long-sleeved dress in deep brick red with the sleeves pushed up; a big white apron dusted with flour; sturdy brown shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-baker.png.
+Dress the pieces in a long-sleeved dress in deep brick red with the sleeves pushed up; a big white apron dusted with flour; sturdy brown shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-baker.png.
 
 #### `armor-smith` · A smith's apron · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the `smith` sheet; masons.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the `smith` sheet; masons.
 
-Edit the attached base image: dress the body in a cream shirt with the sleeves rolled above the elbow, open at the throat; a heavy, scorched brown leather apron to the knee; thick leather gloves tucked into the apron string; dark trousers; heavy boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-smith.png.
+Dress the pieces in a cream shirt with the sleeves rolled above the elbow, open at the throat; a heavy, scorched brown leather apron to the knee; thick leather gloves tucked into the apron string; dark trousers; heavy boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-smith.png.
 
 #### `armor-road` · A traveller's road clothes · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the `traveller` sheet.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the `traveller` sheet.
 
-Edit the attached base image: dress the body in a dark-brown tunic belted at the waist; charcoal trousers; boots worn through at the toes and wrapped in cloth; a small pack on the back with a bedroll and a tin cup. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-road.png.
+Dress the pieces in a dark-brown tunic belted at the waist; charcoal trousers; boots worn through at the toes and wrapped in cloth; a small pack on the back with a bedroll and a tin cup. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-road.png.
 
 #### `armor-courier` · A courier's clothes · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the `courier` sheet.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the `courier` sheet.
 
-Edit the attached base image: dress the body in a cream shirt with rolled sleeves; dark-grey braces; charcoal trousers tucked into soft running boots; a big leather mail satchel bulging with letters on a strap across the body. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-courier.png.
+Dress the pieces in a cream shirt with rolled sleeves; dark-grey braces; charcoal trousers tucked into soft running boots; a big leather mail satchel bulging with letters on a strap across the body. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-courier.png.
 
 #### `armor-pilgrim` · A pilgrim's robe · P0
 
-**Basis:** Edits `base-female`. **(derived)** From the `pilgrim` sheet; `enc-pilgrims` (a sun token).
+**Basis:** Edits `armor-parts-woman`. **(derived)** From the `pilgrim` sheet; `enc-pilgrims` (a sun token).
 
-Edit the attached base image: dress the body in a long, dusty, dark plum-brown travelling robe to the ankle with its hood down, belted with a rope; a small round brass sun token on a cord at the chest; sandals over wrapped feet; a cloth bag of bread at the hip. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-pilgrim.png.
+Dress the pieces in a long, dusty, dark plum-brown travelling robe to the ankle with its hood down, belted with a rope; a small round brass sun token on a cord at the chest; sandals over wrapped feet; a cloth bag of bread at the hip. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-pilgrim.png.
 
 #### `armor-porter` · A porter's clothes · P0
 
-**Basis:** Edits `base-male`. **(derived)** From the `porter` sheet.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the `porter` sheet.
 
-Edit the attached base image: dress the body in a sweat-stained cream shirt with rolled sleeves; brown braces; a leather shoulder pad on the far shoulder; brown canvas trousers; heavy boots; a crate hook at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-porter.png.
+Dress the pieces in a sweat-stained cream shirt with rolled sleeves; brown braces; a leather shoulder pad on the far shoulder; brown canvas trousers; heavy boots; a crate hook at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-porter.png.
 
 #### `armor-maid` · A maid's dress · P0
 
-**Basis:** Edits `base-female`. **(derived)** From the `maid` sheet.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From the `maid` sheet.
 
-Edit the attached base image: dress the body in a dusty-blue dress with short puffed sleeves; a white apron with a frill; black shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-maid.png.
+Dress the pieces in a dusty-blue dress with short puffed sleeves; a white apron with a frill; black shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-maid.png.
 
 #### `armor-caravan` · A caravan master's duster · P1
 
-**Basis:** Edits `base-male`. **(derived)** From Garrick, A1-C5-01.
+**Basis:** Edits `armor-parts-man`. **(derived)** From Garrick, A1-C5-01.
 
-Edit the attached base image: dress the body in a long oiled-brown duster coat to the shin, open; a faded grey scarf against the road dust; a leather waistcoat over a grey shirt; dark trousers; long riding boots; a coiled driving whip at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-caravan.png.
+Dress the pieces in a long oiled-brown duster coat to the shin, open; a faded grey scarf against the road dust; a leather waistcoat over a grey shirt; dark trousers; long riding boots; a coiled driving whip at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-caravan.png.
 
 #### `armor-aldric` · Aldric's worn plate · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (worn plate; steel and faded red).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (worn plate; steel and faded red).
 
-Edit the attached base image: dress the body in worn steel plate that doesn't quite match, dented and scratched (a breastplate, rounded pauldrons, vambraces and greaves), over chain mail and a padded jack; a battered sword belt; old boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-aldric.png.
+Dress the pieces in worn steel plate that doesn't quite match, dented and scratched (a breastplate, rounded pauldrons, vambraces and greaves), over chain mail and a padded jack; a battered sword belt; old boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-aldric.png.
 
 #### `armor-recruit` · A recruit's gambeson · P1
 
-**Basis:** Edits `base-male`. **(derived)** From A1-C7-01.
+**Basis:** Edits `armor-parts-man`. **(derived)** From A1-C7-01.
 
-Edit the attached base image: dress the body in a quilted navy-blue gambeson with brass buttons, a little too long; a brown belt; grey wool trousers; boots with snow on them; a grey woollen scarf. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-recruit.png.
+Dress the pieces in a quilted navy-blue gambeson with brass buttons, a little too long; a brown belt; grey wool trousers; boots with snow on them; a grey woollen scarf. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-recruit.png.
 
 #### `armor-thessaly` · The Archmage's robes · P1
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (Guild cobalt; two fingers missing on the near hand).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (Guild cobalt; two fingers missing on the near hand).
 
-Edit the attached base image: dress the body in an A-line robe to the ankle in deep cobalt blue, with wide sleeves and two bands of trim at the hem and cuffs carrying a plain, repeated geometric motif in pale silver thread; a short cobalt mantle over the shoulders with a high collar; a dark sash with a few small brass keys and a slim book on a chain; plain dark boots. On the near hand, the ring finger and the little finger are missing, healed long ago. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-thessaly.png.
+Dress the pieces in an A-line robe to the ankle in deep cobalt blue, with wide sleeves and two bands of trim at the hem and cuffs carrying a plain, repeated geometric motif in pale silver thread; a short cobalt mantle over the shoulders with a high collar; a dark sash with a few small brass keys and a slim book on a chain; plain dark boots. On the near hand, the ring finger and the little finger are missing, healed long ago. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-thessaly.png.
 
 #### `armor-brenna` · Brenna's ash-walker kit · P1
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (one cracked knight's pauldron; ash grey and black).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (one cracked knight's pauldron; ash grey and black).
 
-Edit the attached base image: dress the body in a black-dyed leather jerkin over a mail shirt; one old, cracked knight's pauldron on the near shoulder, finer than the rest of the kit, with a worn engraved crest; black trousers; boots wrapped in grey cloth to the knee. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-brenna.png.
+Dress the pieces in a black-dyed leather jerkin over a mail shirt; one old, cracked knight's pauldron on the near shoulder, finer than the rest of the kit, with a worn engraved crest; black trousers; boots wrapped in grey cloth to the knee. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-brenna.png.
 
 #### `armor-gannet` · Mother Gannet's shawl and dress · P1
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (a heavy shawl; mustard and brown).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (a heavy shawl; mustard and brown).
 
-Edit the attached base image: dress the body in a heavy mustard-yellow wool shawl round the shoulders, pinned with a large brass brooch; a brown wool dress to the floor; a ring of iron keys and a fat coin purse at the belt; rings on several fingers. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-gannet.png.
+Dress the pieces in a heavy mustard-yellow wool shawl round the shoulders, pinned with a large brass brooch; a brown wool dress to the floor; a ring of iron keys and a fat coin purse at the belt; rings on several fingers. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-gannet.png.
 
 #### `armor-cider-presser` · A cider-presser's apron · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Tobin: a cider-presser's apron, a burn on the near hand; apple green and brown).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (Tobin: a cider-presser's apron, a burn on the near hand; apple green and brown).
 
-Edit the attached base image: dress the body in an apple-green work shirt with the sleeves rolled; a heavy, stained brown leather presser's apron; brown trousers; sturdy boots; a wide, old burn scar across the back of the near hand. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-cider-presser.png.
+Dress the pieces in an apple-green work shirt with the sleeves rolled; a heavy, stained brown leather presser's apron; brown trousers; sturdy boots; a wide, old burn scar across the back of the near hand. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-cider-presser.png.
 
 #### `armor-levy` · A levy coat · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Tobin's levy coat); `07-companions.md` (`mira-tobin`).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (Tobin's levy coat); `07-companions.md` (`mira-tobin`).
 
-Edit the attached base image: dress the body in a patched grey levy coat over a work shirt, mud to the knees, rope for a belt, worn boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-levy.png.
+Dress the pieces in a patched grey levy coat over a work shirt, mud to the knees, rope for a belt, worn boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-levy.png.
 
 #### `armor-harrow` · Lord Harrow's heron coat · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a green coat with a grey heron on the breast; heron green and grey).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (a green coat with a grey heron on the breast; heron green and grey).
 
-Edit the attached base image: dress the body in a long frock coat in heron green (a deep grey-green) with a grey heron embroidered on the breast; a grey silk waistcoat; a white cravat; grey breeches; white stockings and black buckled shoes; grey kid gloves. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-harrow.png.
+Dress the pieces in a long frock coat in heron green (a deep grey-green) with a grey heron embroidered on the breast; a grey silk waistcoat; a white cravat; grey breeches; white stockings and black buckled shoes; grey kid gloves. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-harrow.png.
 
 #### `armor-woodcutter` · A woodcutter's clothes · P1
 
-**Basis:** Edits `base-male`. **(derived)** From Hobb and the cutters.
+**Basis:** Edits `armor-parts-man`. **(derived)** From Hobb and the cutters.
 
-Edit the attached base image: dress the body in a faded brown-and-ochre checked flannel shirt with the sleeves rolled; a leather waistcoat; canvas trousers held up with braces; heavy hobnailed boots; a coil of rope at the belt; sawdust everywhere. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-woodcutter.png.
+Dress the pieces in a faded brown-and-ochre checked flannel shirt with the sleeves rolled; a leather waistcoat; canvas trousers held up with braces; heavy hobnailed boots; a coil of rope at the belt; sawdust everywhere. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-woodcutter.png.
 
 #### `armor-maleficio` · Maleficio's high-backed robes · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (scholar's robes with a stiff high back; charcoal with ember edges).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (scholar's robes with a stiff high back; charcoal with ember edges).
 
-Edit the attached base image: dress the body in long charcoal scholar's robes to the floor, layered, with a tall, stiff, fan-shaped back to the collar that rises behind the head; the hems, cuffs and the edge of the high collar glow faintly ember orange, like paper just starting to burn; a dark sash with an archivist's keys; soft dark shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-maleficio.png.
+Dress the pieces in long charcoal scholar's robes to the floor, layered, with a tall, stiff, fan-shaped back to the collar that rises behind the head; the hems, cuffs and the edge of the high collar glow faintly ember orange, like paper just starting to burn; a dark sash with an archivist's keys; soft dark shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-maleficio.png.
 
 #### `armor-scholar` · A scholar's robes · P1
 
-**Basis:** Edits `base-male`. **(derived)** From `maleficio-young`; the archive's and the Guild's scholars.
+**Basis:** Edits `armor-parts-man`. **(derived)** From `maleficio-young`; the archive's and the Guild's scholars.
 
-Edit the attached base image: dress the body in plain brown-and-charcoal scholar's robes to the ankle with the sleeves pushed up, a cord belt with a pen case, soft shoes, ink on the fingers. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-scholar.png.
+Dress the pieces in plain brown-and-charcoal scholar's robes to the ankle with the sleeves pushed up, a cord belt with a pen case, soft shoes, ink on the fingers. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-scholar.png.
 
 #### `armor-old-pattern` · Old-pattern mail and surcoat · P1
 
-**Basis:** Edits `base-male`. **(derived)** From `enc-relief-ghost` ("old-pattern armour"); the Unmade's knight.
+**Basis:** Edits `armor-parts-man`. **(derived)** From `enc-relief-ghost` ("old-pattern armour"); the Unmade's knight.
 
-Edit the attached base image: dress the body in an old-fashioned long mail hauberk to the knees with a padded coif down round the neck; a navy surcoat over it with a faded gold sun badge in an older, simpler style; a plain belt; old riveted boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-old-pattern.png.
+Dress the pieces in an old-fashioned long mail hauberk to the knees with a padded coif down round the neck; a navy surcoat over it with a faded gold sun badge in an older, simpler style; a plain belt; old riveted boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-old-pattern.png.
 
 #### `armor-pedlar` · A pedlar's patched coat · P1
 
-**Basis:** Edits `base-female`. **(derived)** From `enc-mags`.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From `enc-mags`.
 
-Edit the attached base image: dress the body in a patched mustard-and-brown skirt over trousers; a man's old green coat with deep pockets; a striped scarf; stout boots; a smooth grey stone with a hole in it hanging on a cord at the neck. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-pedlar.png.
+Dress the pieces in a patched mustard-and-brown skirt over trousers; a man's old green coat with deep pockets; a striped scarf; stout boots; a smooth grey stone with a hole in it hanging on a cord at the neck. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-pedlar.png.
 
 #### `armor-varkhul` · Varkhul's Hollow plate · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Hollowed plate; ash, ember); A1-C6 (a knight once).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (Hollowed plate; ash, ember); A1-C6 (a knight once).
 
-Edit the attached base image: dress the body in full plate of blackened iron, ash grey at the edges, old and fine under the corruption, with a faded engraved crest on the breastplate; its seams are cracked and leak a dull ember-orange glow from inside; a ragged ash-grey surcoat hanging in strips; armoured gauntlets and sabatons. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-varkhul.png.
+Dress the pieces in full plate of blackened iron, ash grey at the edges, old and fine under the corruption, with a faded engraved crest on the breastplate; its seams are cracked and leak a dull ember-orange glow from inside; a ragged ash-grey surcoat hanging in strips; armoured gauntlets and sabatons. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-varkhul.png.
 
 ### 5.4 Act 2
 
 #### `armor-anselle` · Mother Anselle's habit · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (an abbey habit with no hood; a heavy key ring).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (an abbey habit with no hood; a heavy key ring).
 
-Edit the attached base image: dress the body in a plain ankle-length habit of soft grey wool with a white linen collar and white cuffs; a wide leather belt with a heavy iron ring of many keys at the hip and a short iron mace; a small carved wooden bee on a cord round the neck; sturdy black shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-anselle.png.
+Dress the pieces in a plain ankle-length habit of soft grey wool with a white linen collar and white cuffs; a wide leather belt with a heavy iron ring of many keys at the hip and a short iron mace; a small carved wooden bee on a cord round the neck; sturdy black shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-anselle.png.
 
 #### `armor-beekeeper` · A beekeeper's smock · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (Orla: honey yellow and brown).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (Orla: honey yellow and brown).
 
-Edit the attached base image: dress the body in a brown wool habit with the sleeves rolled to the elbow; a honey-yellow canvas smock-apron over it, sticky at the front; thick leather gloves tucked in the belt; a hive tool on a cord; heavy clogs. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-beekeeper.png.
+Dress the pieces in a brown wool habit with the sleeves rolled to the elbow; a honey-yellow canvas smock-apron over it, sticky at the front; thick leather gloves tucked in the belt; a hive tool on a cord; heavy clogs. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-beekeeper.png.
 
 #### `armor-corwin` · Sir Corwin's gilded plate · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (gilded plate; a sun tabard; gold-white).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (gilded plate; a sun tabard; gold-white).
 
-Edit the attached base image: dress the body in full plate armour in polished steel with gold-leaf edging on every plate and a small sun engraved on each pauldron; a long white tabard over it with a large gold sun on the chest and gold trim; gilded gauntlets; armoured boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-corwin.png.
+Dress the pieces in full plate armour in polished steel with gold-leaf edging on every plate and a small sun engraved on each pauldron; a long white tabard over it with a large gold sun on the chest and gold trim; gilded gauntlets; armoured boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-corwin.png.
 
 #### `armor-severin` · Severin's velvet coat · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a long black velvet coat; black and wine red).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (a long black velvet coat; black and wine red).
 
-Edit the attached base image: dress the body in a long, close-fitting coat of black velvet to the ankles, with a high collar lined in wine red and tarnished silver clasps; a wine-red waistcoat; a black cravat with a dark-red stone pin; black gloves; long black boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-severin.png.
+Dress the pieces in a long, close-fitting coat of black velvet to the ankles, with a high collar lined in wine red and tarnished silver clasps; a wine-red waistcoat; a black cravat with a dark-red stone pin; black gloves; long black boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-severin.png.
 
 #### `armor-isadora` · Lady Isadora's gown · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.4 (a long gown with a train; midnight blue).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.4 (a long gown with a train; midnight blue).
 
-Edit the attached base image: dress the body in a long gown in deep midnight blue with fitted sleeves, a modest square neckline, a long train behind, and fine silver embroidery of small night-flowers at the hem; a pair of gardening gloves tucked into the belt; a small pair of silver shears on a chain. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-isadora.png.
+Dress the pieces in a long gown in deep midnight blue with fitted sleeves, a modest square neckline, a long train behind, and fine silver embroidery of small night-flowers at the hem; a pair of gardening gloves tucked into the belt; a small pair of silver shears on a chain. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-isadora.png.
 
 #### `armor-child-dress` · A little girl's dress · P2
 
-**Basis:** Edits `base-female`. **(derived)** From `echo valencia-child`.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From `echo valencia-child`.
 
-Edit the attached base image: dress the body in a plain dark-blue dress to the shin with a white collar, cut for a child (the game's morph makes her small); dark stockings; little black shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-child-dress.png.
+Dress the pieces in a plain dark-blue dress to the shin with a white collar, cut for a child (the game's morph makes her small); dark stockings; little black shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-child-dress.png.
 
 #### `armor-morvaine-man` · A valley man's wool coat · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.5 (the `morvaine` pool: dark wool, high collars).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.5 (the `morvaine` pool: dark wool, high collars).
 
-Edit the attached base image: dress the body in a high-collared coat of dark grey wool, too thin for the weather, buttoned to the chin; a black knitted scarf; patched charcoal trousers; worn boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-morvaine-man.png.
+Dress the pieces in a high-collared coat of dark grey wool, too thin for the weather, buttoned to the chin; a black knitted scarf; patched charcoal trousers; worn boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-morvaine-man.png.
 
 #### `armor-morvaine-woman` · A valley woman's wool dress · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.5 (the `morvaine` pool).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.5 (the `morvaine` pool).
 
-Edit the attached base image: dress the body in a high-collared dress of dark grey wool to the ankle; a black wool shawl pinned with a pewter brooch; a dark apron; thick dark stockings; black boots; a small pewter cup on a chain at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-morvaine-woman.png.
+Dress the pieces in a high-collared dress of dark grey wool to the ankle; a black wool shawl pinned with a pewter brooch; a dark apron; thick dark stockings; black boots; a small pewter cup on a chain at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-morvaine-woman.png.
 
 #### `armor-shift` · A linen shift and shawl · P2
 
-**Basis:** Edits `base-female`. **(derived)** From Ide, `08-random-encounters.md` §5.1.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From Ide, `08-random-encounters.md` §5.1.
 
-Edit the attached base image: dress the body in a plain, greyish linen shift to the shin; a dark wool shawl round the shoulders; a linen bandage round the inside of the far elbow; bare feet. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-shift.png.
+Dress the pieces in a plain, greyish linen shift to the shin; a dark wool shawl round the shoulders; a linen bandage round the inside of the far elbow; bare feet. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-shift.png.
 
 #### `armor-morvaine-livery` · A vampire household's livery · P2
 
-**Basis:** Edits `base-male`. **(derived)** From the blood-house steward.
+**Basis:** Edits `armor-parts-man`. **(derived)** From the blood-house steward.
 
-Edit the attached base image: dress the body in a black livery coat with a high collar and wine-red piping; a black waistcoat; a starched white stock; white gloves; black breeches and stockings; polished black shoes; a ring of keys at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-morvaine-livery.png.
+Dress the pieces in a black livery coat with a high collar and wine-red piping; a black waistcoat; a starched white stock; white gloves; black breeches and stockings; polished black shoes; a ring of keys at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-morvaine-livery.png.
 
 #### `armor-abbey-lay` · A lay sister's habit · P2
 
-**Basis:** Edits `base-female`. From `03-art-overhaul.md` §7.5 (the `abbey` pool: habits, aprons).
+**Basis:** Edits `armor-parts-woman`. From `03-art-overhaul.md` §7.5 (the `abbey` pool: habits, aprons).
 
-Edit the attached base image: dress the body in a plain ankle-length habit of undyed oatmeal wool; a brown work apron with a pocket of seed packets; a rope belt with a small wooden bee charm; clogs. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-abbey-lay.png.
+Dress the pieces in a plain ankle-length habit of undyed oatmeal wool; a brown work apron with a pocket of seed packets; a rope belt with a small wooden bee charm; clogs. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-abbey-lay.png.
 
 ### 5.5 Act 3
 
 #### `armor-prisoner` · A prisoner's shirt · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (`severin-cell`: a plain shirt).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (`severin-cell`: a plain shirt).
 
-Edit the attached base image: dress the body in a plain, stained linen shirt and dark trousers, bare feet, the wrists in iron cuffs with a short chain between them. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-prisoner.png.
+Dress the pieces in a plain, stained linen shirt and dark trousers, bare feet, the wrists in iron cuffs with a short chain between them. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-prisoner.png.
 
 #### `armor-davin` · Davin's cut-down tabard · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Corwin's tabard cut down to fit).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (Corwin's tabard cut down to fit).
 
-Edit the attached base image: dress the body in a mail shirt a little big for the wearer; over it a white tabard with a large gold sun, plainly cut down from a bigger man's and re-hemmed by hand with uneven stitches; a brown belt; leather gloves; plain steel greaves over brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-davin.png.
+Dress the pieces in a mail shirt a little big for the wearer; over it a white tabard with a large gold sun, plainly cut down from a bigger man's and re-hemmed by hand with uneven stitches; a brown belt; leather gloves; plain steel greaves over brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-davin.png.
 
 #### `armor-vorlaith` · Vorlaith's glass body · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (a body of cracked glass with light moving inside).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (a body of cracked glass with light moving inside).
 
-Edit the attached base image: change everything below the neck into a body made entirely of clear, colourless glass, cracked all over with fine branching fractures, a cold white light drifting slowly inside like smoke in a bottle, brightest in the chest; the glass forms long, still robes that fall to the ground and a high collar; long glass fingers, relaxed. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-vorlaith.png.
+Turn the pieces into a body made entirely of clear, colourless glass, cracked all over with fine branching fractures, a cold white light drifting slowly inside like smoke in a bottle, brightest in the chest; the glass forms long, still robes that fall to the ground and a high collar; long glass fingers, relaxed. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-vorlaith.png.
 
 #### `armor-guild-apprentice` · A Guild apprentice's robe · P2
 
-**Basis:** Edits `base-female`. **(derived)** From A3-C2-01; Guild cobalt.
+**Basis:** Edits `armor-parts-woman`. **(derived)** From A3-C2-01; Guild cobalt.
 
-Edit the attached base image: dress the body in a short cobalt-blue apprentice's robe to the knee with plain trim, belted with a cord; grey trousers; soft shoes; a satchel. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-guild-apprentice.png.
+Dress the pieces in a short cobalt-blue apprentice's robe to the knee with plain trim, belted with a cord; grey trousers; soft shoes; a satchel. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-guild-apprentice.png.
 
 #### `armor-elara-field` · Elara, leading the resistance · P2
 
 **Basis:** Edits `armor-elara`. From `03-art-overhaul.md` §7.4 and §6.5 (Leon's sword on her back from A3-C2-05).
 
-Edit the attached image (armor-elara.png, the armor on the base): change ONLY her clothes after months of war in a forest: the royal-blue riding coat is stained with mud and torn at the hem, the gold trim dulled, the slim sword gone from the hip; and her father's long, plain, very old sword is strapped across her back, its blue leather grip and the small gold sun on its crossguard showing over the near shoulder. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-elara-field.png.
+Edit the attached picture (armor-elara.png, that outfit painted in pieces on the armor template): change ONLY her clothes after months of war in a forest: the royal-blue riding coat is stained with mud and torn at the hem, the gold trim dulled, the slim sword gone from the hip; and her father's long, plain, very old sword is strapped across her back, its blue leather grip and the small gold sun on its crossguard showing over the near shoulder. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-elara-field.png.
 
 #### `armor-elara-queen` · Elara, crowned · P2
 
 **Basis:** Edits `armor-elara`. From `03-art-overhaul.md` §7.4 (crowned, A3-C5-06).
 
-Edit the attached image (armor-elara.png, the armor on the base): change ONLY the cape: replace the short one-shoulder cape with a short white-and-gold mantle over both shoulders, and put her father's old sword (blue leather grip, a small gold sun on the crossguard) at her hip in place of the slim one. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-elara-queen.png.
+Edit the attached picture (armor-elara.png, that outfit painted in pieces on the armor template): change ONLY the cape: replace the short one-shoulder cape with a short white-and-gold mantle over both shoulders, and put her father's old sword (blue leather grip, a small gold sun on the crossguard) at her hip in place of the slim one. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-elara-queen.png.
 
 #### `armor-leon-furs` · King Leon, in furs · P2
 
 **Basis:** Edits `armor-leon`. From `03-art-overhaul.md` §7.4 (Leon, "ill, in furs").
 
-Edit the attached image (armor-leon.png, the armor on the base): change ONLY the robes: wrap him in a heavy fur-lined robe of navy and white with a thick fur collar and a woollen blanket round the shoulders, keeping the old sword at the hip. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-leon-furs.png.
+Edit the attached picture (armor-leon.png, that outfit painted in pieces on the armor template): change ONLY the robes: wrap him in a heavy fur-lined robe of navy and white with a thick fur collar and a woollen blanket round the shoulders, keeping the old sword at the hip. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-leon-furs.png.
 
 #### `armor-brenna-protectorate` · Brenna, sworn to the Protector · P2
 
 **Basis:** Edits `armor-brenna`. From `03-art-overhaul.md` §7.4 (an Act 3 Protectorate sash).
 
-Edit the attached image (armor-brenna.png, the armor on the base): change ONLY one thing: add a violet sash bound across the body from the near shoulder to the far hip, fixed with a gold crown badge. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-brenna-protectorate.png.
+Edit the attached picture (armor-brenna.png, that outfit painted in pieces on the armor template): change ONLY one thing: add a violet sash bound across the body from the near shoulder to the far hip, fixed with a gold crown badge. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-brenna-protectorate.png.
 
 ### 5.6 Humanoid foes
 
 #### `armor-hollowed-footman` · A Hollowed footman's body · P0
 
-**Basis:** Edits `base-male`. From the art plan (ash skin, cracks lit ember, a dented cuirass, a rotted tabard).
+**Basis:** Edits `armor-parts-man`. From the art plan (ash skin, cracks lit ember, a dented cuirass, a rotted tabard).
 
-Edit the attached base image: change everything below the neck into the body of a Hollowed footman, a dead soldier raised as an ash-grey husk: arms, hands and legs of dry ash-grey skin like burnt paper, cracked all over in fine lines glowing ember orange from inside; a dented, rust-streaked iron cuirass over rotting padded cloth; a ragged tabard of rotted brown-red cloth hanging in strips; rusted mail sleeves; wrapped legs and broken boots. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hollowed-footman.png.
+Turn the pieces into the body of a Hollowed footman, a dead soldier raised as an ash-grey husk: arms, hands and legs of dry ash-grey skin like burnt paper, cracked all over in fine lines glowing ember orange from inside; a dented, rust-streaked iron cuirass over rotting padded cloth; a ragged tabard of rotted brown-red cloth hanging in strips; rusted mail sleeves; wrapped legs and broken boots. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-hollowed-footman.png.
 
 #### `armor-hollowed-hexer` · A Hollowed hexer's body · P0
 
-**Basis:** Edits `base-male`. From the art plan (a tattered robe).
+**Basis:** Edits `armor-parts-man`. From the art plan (a tattered robe).
 
-Edit the attached base image: change everything below the neck into the body of a Hollowed spellcaster: long, bony ash-grey hands with faint ember-lit cracks, and a tattered, ash-stained robe in charcoal and faded brown to the ground, hanging in strips at the hem and sleeves; a cord belt with a bone-handled dagger and strings of small charms. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hollowed-hexer.png.
+Turn the pieces into the body of a Hollowed spellcaster: long, bony ash-grey hands with faint ember-lit cracks, and a tattered, ash-stained robe in charcoal and faded brown to the ground, hanging in strips at the hem and sleeves; a cord belt with a bone-handled dagger and strings of small charms. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-hollowed-hexer.png.
 
 #### `armor-hollowed-sapper` · A Hollowed sapper's body · P0
 
-**Basis:** Edits `base-male`. From the art plan (soot, a jerkin, charges, a lantern at the back of the belt).
+**Basis:** Edits `armor-parts-man`. From the art plan (soot, a jerkin, charges, a lantern at the back of the belt).
 
-Edit the attached base image: change everything below the neck into the body of a Hollowed tunneller: ash-grey, ember-cracked skin black with soot; a filthy leather jerkin over a torn shirt; a heavy belt with a pouch of round clay blasting charges with short fuses and a small iron lantern glowing orange at the back; wrapped legs and heavy broken boots; a coil of rope over one shoulder. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hollowed-sapper.png.
+Turn the pieces into the body of a Hollowed tunneller: ash-grey, ember-cracked skin black with soot; a filthy leather jerkin over a torn shirt; a heavy belt with a pouch of round clay blasting charges with short fuses and a small iron lantern glowing orange at the back; wrapped legs and heavy broken boots; a coil of rope over one shoulder. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-hollowed-sapper.png.
 
 #### `armor-hollowed-chief` · The sapper chief's body · P0
 
-**Basis:** Edits `base-male`. From the art plan (the sapper plus a bandolier of charges).
+**Basis:** Edits `armor-parts-man`. From the art plan (the sapper plus a bandolier of charges).
 
-Edit the attached base image: change everything below the neck into the body of the Hollowed sappers' leader: ash-grey, ember-cracked skin; a heavy, scorched leather jerkin reinforced with iron plates; a bandolier of round clay blasting charges across the chest; a wide belt with tools; thick gauntlets; heavy boots. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hollowed-chief.png.
+Turn the pieces into the body of the Hollowed sappers' leader: ash-grey, ember-cracked skin; a heavy, scorched leather jerkin reinforced with iron plates; a bandolier of round clay blasting charges across the chest; a wide belt with tools; thick gauntlets; heavy boots. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-hollowed-chief.png.
 
 #### `armor-construct-stone` · A vault construct's stone body · P0
 
-**Basis:** Edits `base-male`. From the art plan (dressed stone with gold inlay; joints that are dark gaps with gold light inside).
+**Basis:** Edits `armor-parts-man`. From the art plan (dressed stone with gold inlay; joints that are dark gaps with gold light inside).
 
-Edit the attached base image: change everything below the neck into the body of an ancient guardian statue built from blocks of pale, dressed sandstone with thin inlaid lines of gold running along their edges in geometric patterns: broad, blocky shoulders, a narrow stone waist, heavy legs and big three-fingered stone hands; every joint (shoulders, elbows, wrists, hips, knees) a dark gap with a warm gold light glowing inside; a few cracks and chips, moss in one crack. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-construct-stone.png.
+Turn the pieces into the body of an ancient guardian statue built from blocks of pale, dressed sandstone with thin inlaid lines of gold running along their edges in geometric patterns: broad, blocky shoulders, a narrow stone waist, heavy legs and big three-fingered stone hands; every joint (shoulders, elbows, wrists, hips, knees) a dark gap with a warm gold light glowing inside; a few cracks and chips, moss in one crack. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-construct-stone.png.
 
 #### `armor-hollowed-climber` · A Hollowed climber's body · P1
 
-**Basis:** Edits `base-male`. **(derived)** From `01-build-plan.md` §9; `11-combat.md` (climbers).
+**Basis:** Edits `armor-parts-man`. **(derived)** From `01-build-plan.md` §9; `11-combat.md` (climbers).
 
-Edit the attached base image: change everything below the neck into the body of a wiry Hollowed wall-climber: lean, ash-grey, ember-cracked limbs; ragged, close-bound strips of dark cloth; a rope with an iron grapnel coiled over the shoulder; iron climbing hooks strapped to both forearms; bare, clawed feet. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hollowed-climber.png.
+Turn the pieces into the body of a wiry Hollowed wall-climber: lean, ash-grey, ember-cracked limbs; ragged, close-bound strips of dark cloth; a rope with an iron grapnel coiled over the shoulder; iron climbing hooks strapped to both forearms; bare, clawed feet. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-hollowed-climber.png.
 
 #### `armor-cultist` · A cube cultist's robe · P1
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (a black robe, a cube pendant).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (a black robe, a cube pendant).
 
-Edit the attached base image: dress the body in a plain black robe to the ankle with a high collar, belted with black cord; a pendant of a small black iron cube on a chain at the chest; a pouch of black iron coins stamped with a cube; black wrapped boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-cultist.png.
+Dress the pieces in a plain black robe to the ankle with a high collar, belted with black cord; a pendant of a small black iron cube on a chain at the chest; a pouch of black iron coins stamped with a cube; black wrapped boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-cultist.png.
 
 #### `armor-bandit` · A bandit's leathers · P1
 
-**Basis:** Edits `base-male`. **(derived)** From `08-random-encounters.md` §3 (bandits).
+**Basis:** Edits `armor-parts-man`. **(derived)** From `08-random-encounters.md` §3 (bandits).
 
-Edit the attached base image: dress the body in a scuffed leather jerkin; a mismatched leather bracer; dark trousers; worn boots; a dirty brown scarf round the neck; a sack of stolen goods at the belt. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-bandit.png.
+Dress the pieces in a scuffed leather jerkin; a mismatched leather bracer; dark trousers; worn boots; a dirty brown scarf round the neck; a sack of stolen goods at the belt. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-bandit.png.
 
 #### `armor-thrall` · A thrall's tabard · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.3 (wine red for Morvaine's thralls).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.3 (wine red for Morvaine's thralls).
 
-Edit the attached base image: dress the body in a dark mail shirt under a wine-red tabard with a black thorn emblem; a high black wool collar; black leather gloves; dark trousers; black boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-thrall.png.
+Dress the pieces in a dark mail shirt under a wine-red tabard with a black thorn emblem; a high black wool collar; black leather gloves; dark trousers; black boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-thrall.png.
 
 #### `armor-thrall-knight` · A thrall-knight's black plate · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.4 (Vesk, Vreya, Mordain: black plate with red trim).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.4 (Vesk, Vreya, Mordain: black plate with red trim).
 
-Edit the attached base image: dress the body in full plate of glossy black steel with thin wine-red trim on every edge, sharp but elegant, with layered black cloth showing between the plates and flared tassets over the hips; black gauntlets and pointed sabatons. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-thrall-knight.png.
+Dress the pieces in full plate of glossy black steel with thin wine-red trim on every edge, sharp but elegant, with layered black cloth showing between the plates and flared tassets over the hips; black gauntlets and pointed sabatons. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-thrall-knight.png.
 
 #### `armor-thrall-knight-f` · A thrall-knight's black plate, on the woman's base · P2
 
-**Basis:** Edits `base-female`. As `armor-thrall-knight`, fitted to the woman's base, for `vreya`, whose face is painted on it.
+**Basis:** Edits `armor-parts-woman`. As `armor-thrall-knight`, fitted to the woman's base, for `vreya`, whose face is painted on it.
 
-Edit the attached base image: dress the body in full plate of glossy black steel with thin wine-red trim on every edge, sharp but elegant, with layered black cloth showing between the plates and flared tassets over the hips; black gauntlets and pointed sabatons. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-thrall-knight-f.png.
+Dress the pieces in full plate of glossy black steel with thin wine-red trim on every edge, sharp but elegant, with layered black cloth showing between the plates and flared tassets over the hips; black gauntlets and pointed sabatons. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-thrall-knight-f.png.
 
 #### `armor-gilded-knight` · A Gilded knight's armour · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.5 (the `order` pool: gilded plate and tabards).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.5 (the `order` pool: gilded plate and tabards).
 
-Edit the attached base image: dress the body in steel plate with gold-painted edges (plainer than a commander's); a white tabard with a gold sun on the chest; armoured boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-gilded-knight.png.
+Dress the pieces in steel plate with gold-painted edges (plainer than a commander's); a white tabard with a gold sun on the chest; armoured boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-gilded-knight.png.
 
 #### `armor-drowned` · A drowned body · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (grey-green, waterlogged clothes).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (grey-green, waterlogged clothes).
 
-Edit the attached base image: change everything below the neck into the body of a drowned corpse: bloated, sagging, grey-green waterlogged skin wrinkled at the fingers, barnacles crusted on one shoulder; the soaked, torn remains of a fisherman's jersey and canvas trousers, dark with water and tangled in fishing net; one bare foot, one boot; water running off it. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-drowned.png.
+Turn the pieces into the body of a drowned corpse: bloated, sagging, grey-green waterlogged skin wrinkled at the fingers, barnacles crusted on one shoulder; the soaked, torn remains of a fisherman's jersey and canvas trousers, dark with water and tangled in fishing net; one bare foot, one boot; water running off it. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-drowned.png.
 
 #### `armor-blood-wight` · A blood-wight's body · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (thin, grey, a red glow in the chest).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (thin, grey, a red glow in the chest).
 
-Edit the attached base image: change everything below the neck into the body of a terribly thin undead thing: all bones and taut ash-grey papery skin stretched over the ribs, with a deep red glow beating like a heart under the ribs; the rotted remains of a dark noble's coat hanging in strips; long fingers ending in black claws. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-blood-wight.png.
+Turn the pieces into the body of a terribly thin undead thing: all bones and taut ash-grey papery skin stretched over the ribs, with a deep red glow beating like a heart under the ribs; the rotted remains of a dark noble's coat hanging in strips; long fingers ending in black claws. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-blood-wight.png.
 
 #### `armor-sun-scorched` · A sun-scorched body · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (old priest's robes burned to the skin).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (old priest's robes burned to the skin).
 
-Edit the attached base image: change everything below the neck into the body of one of the burned dead: skin blackened and cracked like dried mud, the cracks glowing a faint hot gold; the remains of an old priest's white-and-gold robes burned onto the body, cloth and skin fused, the hems charred to nothing; a melted gold sun pendant fused to the chest; wisps of heat haze rising from the shoulders. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-sun-scorched.png.
+Turn the pieces into the body of one of the burned dead: skin blackened and cracked like dried mud, the cracks glowing a faint hot gold; the remains of an old priest's white-and-gold robes burned onto the body, cloth and skin fused, the hems charred to nothing; a melted gold sun pendant fused to the chest; wisps of heat haze rising from the shoulders. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-sun-scorched.png.
 
 #### `armor-thornling` · A thornling's bark body · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (bark-skinned, thorn fingers).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (bark-skinned, thorn fingers).
 
-Edit the attached base image: change everything below the neck into the body of a forest sprite made of living wood (the game's morph makes it child-sized): thin, knobbly limbs of rough dark bark with green moss in the cracks, long fingers ending in sharp black thorns, root-like feet, and a few tiny white flowers growing on one shoulder. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-thornling.png.
+Turn the pieces into the body of a forest sprite made of living wood (the game's morph makes it child-sized): thin, knobbly limbs of rough dark bark with green moss in the cracks, long fingers ending in sharp black thorns, root-like feet, and a few tiny white flowers growing on one shoulder. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-thornling.png.
 
 #### `armor-construct-priest` · A priest-construct's stone body · P2
 
-**Basis:** Edits `base-male`. **(derived)** From `03b-world-art.md` (`priest-construct`).
+**Basis:** Edits `armor-parts-man`. **(derived)** From `03b-world-art.md` (`priest-construct`).
 
-Edit the attached base image: change everything below the neck into the body of a stone guardian carved as a robed priest: sun-bleached sandstone robes falling in straight folds to the feet, gold inlay worn thin by sand, joints that are dark gaps with a hot white-gold light inside, cracks and sand-scour, one shoulder broken off and held together with old bronze bands. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-construct-priest.png.
+Turn the pieces into the body of a stone guardian carved as a robed priest: sun-bleached sandstone robes falling in straight folds to the feet, gold inlay worn thin by sand, joints that are dark gaps with a hot white-gold light inside, cracks and sand-scour, one shoulder broken off and held together with old bronze bands. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-construct-priest.png.
 
 #### `armor-smuggler` · A smuggler's oilskin · P2
 
-**Basis:** Edits `base-female`. **(derived)** From `08-random-encounters.md` §3 (smugglers).
+**Basis:** Edits `armor-parts-woman`. **(derived)** From `08-random-encounters.md` §3 (smugglers).
 
-Edit the attached base image: dress the body in a long, dark oilskin coat, salt-stained; a grey knitted jersey; a wide belt with hidden pouches; dark trousers; tall sea boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-smuggler.png.
+Dress the pieces in a long, dark oilskin coat, salt-stained; a grey knitted jersey; a wide belt with hidden pouches; dark trousers; tall sea boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-smuggler.png.
 
 #### `armor-protectorate` · The Protectorate's tabard · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §7.5 (the `protectorate` pool: violet-and-gold tabards over the Watch's kit).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §7.5 (the `protectorate` pool: violet-and-gold tabards over the Watch's kit).
 
-Edit the attached base image: dress the body in the navy-blue Watch coat with brass buttons, and over it a violet tabard with a gold border and a gold stylised crown on the chest; a violet armband; a brown belt with a pouch of papers; navy trousers; black boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-protectorate.png.
+Dress the pieces in the navy-blue Watch coat with brass buttons, and over it a violet tabard with a gold border and a gold stylised crown on the chest; a violet armband; a brown belt with a pouch of papers; navy trousers; black boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-protectorate.png.
 
 #### `armor-protectorate-warden` · A Protectorate warden's plate · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (the warden in heavy plate).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (the warden in heavy plate).
 
-Edit the attached base image: dress the body in heavy steel plate with a violet enamel finish on the breastplate and pauldrons and gold edging, a stylised gold crown embossed on the chest; a violet surcoat skirt; heavy gauntlets and sabatons. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-protectorate-warden.png.
+Dress the pieces in heavy steel plate with a violet enamel finish on the breastplate and pauldrons and gold edging, a stylised gold crown embossed on the chest; a violet surcoat skirt; heavy gauntlets and sabatons. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-protectorate-warden.png.
 
 #### `armor-construct-crown` · A crown-construct's metal body · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (violet-gold metal).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (violet-gold metal).
 
-Edit the attached base image: change everything below the neck into the body of a sleek war machine shaped like a knight: polished dark violet metal with bright gold inlay and gold edges, a narrow waist and broad shoulders, joints that are tight gold rings with violet light inside, and forearms that end in heavy gold-edged blades instead of hands. This replaces the base's body, skin included. The neck is part of this body, so change it to match; keep the bald head and its face above the jawline exactly as they are, and keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-construct-crown.png.
+Turn the pieces into the body of a sleek war machine shaped like a knight: polished dark violet metal with bright gold inlay and gold edges, a narrow waist and broad shoulders, joints that are tight gold rings with violet light inside, and forearms that end in heavy gold-edged blades instead of hands. This is the whole body, skin and all, so paint every piece as it, the neck at the top of the torso too; it may be a little bulkier than the body under it, but keep the black gaps.
+I'll save it as armor-construct-crown.png.
 
 #### `armor-unmade-bronze` · Ancient bronze scale · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (the Unmade: four armour variants); A3-C5-07 ("the armour of every age").
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (the Unmade: four armour variants); A3-C5-07 ("the armour of every age").
 
-Edit the attached base image: dress the body in ancient bronze scale armour, bronze greaves, a short pleated kilt, sandals; the colours faded and slightly greyed, as if not quite here. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-unmade-bronze.png.
+Dress the pieces in ancient bronze scale armour, bronze greaves, a short pleated kilt, sandals; the colours faded and slightly greyed, as if not quite here. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-unmade-bronze.png.
 
 #### `armor-pikeman` · A pikeman's breastplate · P2
 
-**Basis:** Edits `base-male`. From `03-art-overhaul.md` §9 (the Unmade).
+**Basis:** Edits `armor-parts-man`. From `03-art-overhaul.md` §9 (the Unmade).
 
-Edit the attached base image: dress the body in a steel breastplate and tassets over a padded doublet with puffed sleeves, breeches and tall boots; the colours faded and slightly greyed, as if not quite here. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-pikeman.png.
+Dress the pieces in a steel breastplate and tassets over a padded doublet with puffed sleeves, breeches and tall boots; the colours faded and slightly greyed, as if not quite here. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-pikeman.png.
 
 #### `armor-ashfall-raider` · An Ashfall raider's kit · P2
 
-**Basis:** Edits `base-male`. **(derived)** From `enc-brenna-raiders`; the `doomward` pool.
+**Basis:** Edits `armor-parts-man`. **(derived)** From `enc-brenna-raiders`; the `doomward` pool.
 
-Edit the attached base image: dress the body in patched black-and-grey leather armour over a mail shirt; a violet strip of cloth tied round the near arm; wrapped boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-ashfall-raider.png.
+Dress the pieces in patched black-and-grey leather armour over a mail shirt; a violet strip of cloth tied round the near arm; wrapped boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-ashfall-raider.png.
 
 #### `armor-maleficio-ascendant` · Maleficio, the Sovereign · P1
 
 **Basis:** Edits `armor-maleficio`. From `04-script-prologue-act1.md` A1-C8-02 (the Sovereign phase).
 
-Edit the attached image (armor-maleficio.png, the armor on the base): change ONLY the robes' state: lift them and the high collar as if in a hot updraught, set every ember-orange edge burning bright with sparks streaming upward, and run fine ember-orange cracks of light across the hands. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-maleficio-ascendant.png.
+Edit the attached picture (armor-maleficio.png, that outfit painted in pieces on the armor template): change ONLY the robes' state: lift them and the high collar as if in a hot updraught, set every ember-orange edge burning bright with sparks streaming upward, and run fine ember-orange cracks of light across the hands. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-maleficio-ascendant.png.
 
 #### `armor-varkhul-split` · Varkhul, the armour split open · P1
 
 **Basis:** Edits `armor-varkhul`. From `04-script-prologue-act1.md` A1-C6-01 ("The armour splits along its seams").
 
-Edit the attached image (armor-varkhul.png, the armor on the base): change ONLY the armour's state: it has split open along its seams and fallen away from the chest, the ember light gone out of it, showing a plain, stained padded jack underneath. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-varkhul-split.png.
+Edit the attached picture (armor-varkhul.png, that outfit painted in pieces on the armor template): change ONLY the armour's state: it has split open along its seams and fallen away from the chest, the ember light gone out of it, showing a plain, stained padded jack underneath. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-varkhul-split.png.
 
 #### `armor-crown-hollowed` · Crown-raised Hollowed body · P2
 
 **Basis:** Edits `armor-hollowed-footman`. From `03-art-overhaul.md` §9 (Hollowed in Protectorate sashes, violet eye light).
 
-Edit the attached image (armor-hollowed-footman.png, the armor on the base): change ONLY two things: the glowing cracks in the skin are violet instead of ember orange, and a violet sash with a gold crown badge is tied across the body over the old rotted tabard. Keep the bald head and its face exactly as they are, and keep everything else, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-crown-hollowed.png.
+Edit the attached picture (armor-hollowed-footman.png, that outfit painted in pieces on the armor template): change ONLY two things: the glowing cracks in the skin are violet instead of ember orange, and a violet sash with a gold crown badge is tied across the body over the old rotted tabard. Keep every piece on its own, exactly where it is, with the black gaps between them, and keep the line style.
+I'll save it as armor-crown-hollowed.png.
 
 ### 5.7 Items
 
 #### `armor-padded` · Padded armour · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`padded-armour`); the art plan's §1.8 (cloth: quilting diamonds; matte).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`padded-armour`); the art plan's §1.8 (cloth: quilting diamonds; matte).
 
-Edit the attached base image: dress the body in a quilted padded gambeson to mid-thigh, stitched in a diamond pattern, with a high collar and laced sides, in undyed oatmeal; quilted leg wraps over brown trousers; plain brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-padded.png.
+Dress the pieces in a quilted padded gambeson to mid-thigh, stitched in a diamond pattern, with a high collar and laced sides, in undyed oatmeal; quilted leg wraps over brown trousers; plain brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-padded.png.
 
 #### `armor-leather` · Leather armour · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`leather-armour`); the art plan's §1.8 (stiff rounded panels, stitching, straps; one wide highlight).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`leather-armour`); the art plan's §1.8 (stiff rounded panels, stitching, straps; one wide highlight).
 
-Edit the attached base image: dress the body in boiled-leather armour in stiff, rounded brown panels, stitched at the edges, strapped and buckled: a cuirass, shoulder guards, bracers and short tassets, over a dark shirt and leather leggings; brown boots; a few scuffs and one wide soft highlight on each panel. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-leather.png.
+Dress the pieces in boiled-leather armour in stiff, rounded brown panels, stitched at the edges, strapped and buckled: a cuirass, shoulder guards, bracers and short tassets, over a dark shirt and leather leggings; brown boots; a few scuffs and one wide soft highlight on each panel. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-leather.png.
 
 #### `armor-studded` · Studded leather · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`studded-leather`).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`studded-leather`).
 
-Edit the attached base image: dress the body in the same kind of boiled-leather armour in stiff, rounded brown panels (a cuirass, shoulder guards, bracers, short tassets), studded all over with neat rows of small brass rivets; leather leggings; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-studded.png.
+Dress the pieces in the same kind of boiled-leather armour in stiff, rounded brown panels (a cuirass, shoulder guards, bracers, short tassets), studded all over with neat rows of small brass rivets; leather leggings; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-studded.png.
 
 #### `armor-hide` · Hide armour · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`hide-armour`); the art plan's §1.8 (bulky, ragged edges, a fur collar, X-lacing).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`hide-armour`); the art plan's §1.8 (bulky, ragged edges, a fur collar, X-lacing).
 
-Edit the attached base image: dress the body in bulky, layered animal hides in tan and brown with ragged edges, laced together with crossed thongs, a thick grey-brown fur collar over the shoulders, fur-trimmed leg wraps and hide boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hide.png.
+Dress the pieces in bulky, layered animal hides in tan and brown with ragged edges, laced together with crossed thongs, a thick grey-brown fur collar over the shoulders, fur-trimmed leg wraps and hide boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-hide.png.
 
 #### `armor-chain-shirt` · Chain shirt · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`chain-shirt`); the art plan's §1.8 (sags, a scalloped hem).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`chain-shirt`); the art plan's §1.8 (sags, a scalloped hem).
 
-Edit the attached base image: dress the body in a short chain shirt to the hips with short sleeves, its rings drawn as offset rows, dark steel with small bright highlights on the lit side and a scalloped hem, worn over a padded jack whose collar and cuffs show; dark trousers; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-chain-shirt.png.
+Dress the pieces in a short chain shirt to the hips with short sleeves, its rings drawn as offset rows, dark steel with small bright highlights on the lit side and a scalloped hem, worn over a padded jack whose collar and cuffs show; dark trousers; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-chain-shirt.png.
 
 #### `armor-chain-mail` · Chain mail · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`chain-mail`).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`chain-mail`).
 
-Edit the attached base image: dress the body in a long chain-mail coat to the knee with long sleeves and a split skirt, belted at the waist, drawn as offset rows of small rings in dark steel with dense small highlights, worn over a padded jack; mail chausses; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-chain-mail.png.
+Dress the pieces in a long chain-mail coat to the knee with long sleeves and a split skirt, belted at the waist, drawn as offset rows of small rings in dark steel with dense small highlights, worn over a padded jack; mail chausses; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-chain-mail.png.
 
 #### `armor-scale` · Scale mail · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`scale-mail`); the art plan's §1.8 (scales in half-offset rows).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`scale-mail`); the art plan's §1.8 (scales in half-offset rows).
 
-Edit the attached base image: dress the body in a coat of small overlapping steel scales to the knee, laid in half-offset rows like a fish's, each scale with a highlight on its top edge and a deep shadow under the row above, edged with brown leather at the collar, hems and armholes, belted at the waist; leather leggings; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-scale.png.
+Dress the pieces in a coat of small overlapping steel scales to the knee, laid in half-offset rows like a fish's, each scale with a highlight on its top edge and a deep shadow under the row above, edged with brown leather at the collar, hems and armholes, belted at the waist; leather leggings; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-scale.png.
 
 #### `armor-plate` · Plate armour · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`plate-armour`); the art plan's §1.8 (rolled rims, rivets, lames; a reflection of the sky).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`plate-armour`); the art plan's §1.8 (rolled rims, rivets, lames; a reflection of the sky).
 
-Edit the attached base image: dress the body in full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-plate.png.
+Dress the pieces in full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-plate.png.
 
 #### `armor-mage-robes` · Mage robes · P0
 
-**Basis:** Edits `base-male`. From `Items/ItemCatalog.cs` (`mage-robes`); the art plan's §1.8 (an A-line to the ankle, wide sleeves, trim bands).
+**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`mage-robes`); the art plan's §1.8 (an A-line to the ankle, wide sleeves, trim bands).
 
-Edit the attached base image: dress the body in a mage's robe to the ankle in deep teal, with wide, bell-shaped sleeves, layered hems, two trim bands at the hem and cuffs carrying a small repeated geometric motif dotted with gold thread, and a knotted sash; soft shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-mage-robes.png.
+Dress the pieces in a mage's robe to the ankle in deep teal, with wide, bell-shaped sleeves, layered hems, two trim bands at the hem and cuffs carrying a small repeated geometric motif dotted with gold thread, and a knotted sash; soft shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-mage-robes.png.
 
 #### `armor-padded-f` · Padded armour, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-padded`.
+**Basis:** Edits `armor-parts-woman`. As `armor-padded`.
 
-Edit the attached base image: dress the body in a quilted padded gambeson to mid-thigh, stitched in a diamond pattern, with a high collar and laced sides, in undyed oatmeal; quilted leg wraps over brown trousers; plain brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-padded-f.png.
+Dress the pieces in a quilted padded gambeson to mid-thigh, stitched in a diamond pattern, with a high collar and laced sides, in undyed oatmeal; quilted leg wraps over brown trousers; plain brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-padded-f.png.
 
 #### `armor-leather-f` · Leather armour, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-leather`.
+**Basis:** Edits `armor-parts-woman`. As `armor-leather`.
 
-Edit the attached base image: dress the body in boiled-leather armour in stiff, rounded brown panels, stitched at the edges, strapped and buckled: a cuirass, shoulder guards, bracers and short tassets, over a dark shirt and leather leggings; brown boots; a few scuffs and one wide soft highlight on each panel. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-leather-f.png.
+Dress the pieces in boiled-leather armour in stiff, rounded brown panels, stitched at the edges, strapped and buckled: a cuirass, shoulder guards, bracers and short tassets, over a dark shirt and leather leggings; brown boots; a few scuffs and one wide soft highlight on each panel. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-leather-f.png.
 
 #### `armor-studded-f` · Studded leather, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-studded`.
+**Basis:** Edits `armor-parts-woman`. As `armor-studded`.
 
-Edit the attached base image: dress the body in the same kind of boiled-leather armour in stiff, rounded brown panels (a cuirass, shoulder guards, bracers, short tassets), studded all over with neat rows of small brass rivets; leather leggings; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-studded-f.png.
+Dress the pieces in the same kind of boiled-leather armour in stiff, rounded brown panels (a cuirass, shoulder guards, bracers, short tassets), studded all over with neat rows of small brass rivets; leather leggings; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-studded-f.png.
 
 #### `armor-hide-f` · Hide armour, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-hide`.
+**Basis:** Edits `armor-parts-woman`. As `armor-hide`.
 
-Edit the attached base image: dress the body in bulky, layered animal hides in tan and brown with ragged edges, laced together with crossed thongs, a thick grey-brown fur collar over the shoulders, fur-trimmed leg wraps and hide boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-hide-f.png.
+Dress the pieces in bulky, layered animal hides in tan and brown with ragged edges, laced together with crossed thongs, a thick grey-brown fur collar over the shoulders, fur-trimmed leg wraps and hide boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-hide-f.png.
 
 #### `armor-chain-shirt-f` · Chain shirt, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-chain-shirt`.
+**Basis:** Edits `armor-parts-woman`. As `armor-chain-shirt`.
 
-Edit the attached base image: dress the body in a short chain shirt to the hips with short sleeves, its rings drawn as offset rows, dark steel with small bright highlights on the lit side and a scalloped hem, worn over a padded jack whose collar and cuffs show; dark trousers; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-chain-shirt-f.png.
+Dress the pieces in a short chain shirt to the hips with short sleeves, its rings drawn as offset rows, dark steel with small bright highlights on the lit side and a scalloped hem, worn over a padded jack whose collar and cuffs show; dark trousers; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-chain-shirt-f.png.
 
 #### `armor-chain-mail-f` · Chain mail, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-chain-mail`.
+**Basis:** Edits `armor-parts-woman`. As `armor-chain-mail`.
 
-Edit the attached base image: dress the body in a long chain-mail coat to the knee with long sleeves and a split skirt, belted at the waist, drawn as offset rows of small rings in dark steel with dense small highlights, worn over a padded jack; mail chausses; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-chain-mail-f.png.
+Dress the pieces in a long chain-mail coat to the knee with long sleeves and a split skirt, belted at the waist, drawn as offset rows of small rings in dark steel with dense small highlights, worn over a padded jack; mail chausses; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-chain-mail-f.png.
 
 #### `armor-scale-f` · Scale mail, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-scale`.
+**Basis:** Edits `armor-parts-woman`. As `armor-scale`.
 
-Edit the attached base image: dress the body in a coat of small overlapping steel scales to the knee, laid in half-offset rows like a fish's, each scale with a highlight on its top edge and a deep shadow under the row above, edged with brown leather at the collar, hems and armholes, belted at the waist; leather leggings; brown boots. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-scale-f.png.
+Dress the pieces in a coat of small overlapping steel scales to the knee, laid in half-offset rows like a fish's, each scale with a highlight on its top edge and a deep shadow under the row above, edged with brown leather at the collar, hems and armholes, belted at the waist; leather leggings; brown boots. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-scale-f.png.
 
 #### `armor-plate-f` · Plate armour, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-plate`.
+**Basis:** Edits `armor-parts-woman`. As `armor-plate`.
 
-Edit the attached base image: dress the body in full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-plate-f.png.
+Dress the pieces in full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-plate-f.png.
 
 #### `armor-mage-robes-f` · Mage robes, woman's base · P0
 
-**Basis:** Edits `base-female`. As `armor-mage-robes`.
+**Basis:** Edits `armor-parts-woman`. As `armor-mage-robes`.
 
-Edit the attached base image: dress the body in a mage's robe to the ankle in deep teal, with wide, bell-shaped sleeves, layered hems, two trim bands at the hem and cuffs carrying a small repeated geometric motif dotted with gold thread, and a knotted sash; soft shoes. Any bare skin (hands, arms, neck, feet) keeps the base's warm tan skin tone; the game tints it to the wearer's skin. Keep the bald head and its face exactly as they are, and change nothing else: keep the body's proportions under the clothes, and the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as armor-mage-robes-f.png.
+Dress the pieces in a mage's robe to the ankle in deep teal, with wide, bell-shaped sleeves, layered hems, two trim bands at the hem and cuffs carrying a small repeated geometric motif dotted with gold thread, and a knotted sash; soft shoes. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
+I'll save it as armor-mage-robes-f.png.
 
 ---
 
@@ -2493,7 +2456,7 @@ The game's cloaks, helms and weapons (`Items/ItemCatalog.cs`) and the hats in `C
 
 ### 6.0 Sheets (four at a time)
 
-The owner's call (2026-11-08): the capes, helms and weapons four at a time, like the hair and the armors. Every card in §6.1 to §6.3 that's painted on a base is in one sheet here (29 sheets for the 107 P0 parts, 8 for P1's 25, 13 for P2's 38), each one ChatGPT picture. The attached template (`tools/source/characters/<kind>-sheet-male.png` or `-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the base: a helm sheet's are the blank base from the top of the canvas to the hips, at full size, with room for a crown; a cape sheet's and a weapon sheet's are the whole figure, a little smaller than an armor sheet's, with room behind the back for a cloak and over the head for a staff. `python tools/part_sheet.py cut <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/helms/`, `capes/` or `weapons/<id>.png`. A sheet holds one priority, so the opening chapters' parts are done first; the cards that edit another part (`weapon-black-box`, `weapon-brannock-1`, `weapon-brannock-41`, `weapon-brannock-42`) stay single, as do any redos.
+The owner's call (2026-11-08): the capes, helms and weapons four at a time, like the hair and the armors. Every card in §6.1 to §6.3 that's painted on a base is in one sheet here (29 sheets for the 107 P0 parts, 8 for P1's 25, 13 for P2's 38), each one ChatGPT picture. The attached template (`tools/source/characters/<kind>-sheet-male.png` or `-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the base: a helm sheet's are the blank base from the top of the canvas to the hips, at full size, with room for a crown; a cape sheet's and a weapon sheet's are the whole figure, a little smaller than an armor sheet's, with room behind the back for a cloak and over the head for a staff. `python tools/part_sheet.py check <png> <sheet-id>` says whether ChatGPT kept to the template, and `python tools/part_sheet.py fit <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/helms/`, `capes/` or `weapons/<id>.png`. A sheet holds one priority, so the opening chapters' parts are done first; the cards that edit another part (`weapon-black-box`, `weapon-brannock-1`, `weapon-brannock-41`, `weapon-brannock-42`) stay single, as do any redos.
 
 Each sheet's prompt is its kind's sheet block (§2.3) and the list below it.
 
@@ -4603,14 +4566,17 @@ Every part and creature in this file, in order. The characters are in §7.
 | `armor-watch` | The City Watch uniform | armor | §5 | P0 |
 | `armor-watch-captain` | The Watch captain's coat | armor | §5 | P0 |
 | `armor-clerk` | A clerk's waistcoat | armor | §5 | P0 |
+| `armor-clerk-f` | A clerk's waistcoat, on the woman's base | armor | §5 | P1 |
 | `armor-refugee-woman` | A refugee woman's clothes | armor | §5 | P0 |
 | `armor-refugee-man` | A refugee man's clothes | armor | §5 | P0 |
+| `armor-refugee-man-f` | A refugee's coat, on the woman's base | armor | §5 | P1 |
 | `armor-refugee-child` | A refugee child's smock | armor | §5 | P0 |
 | `armor-glassblower` | A glassblower's apron | armor | §5 | P0 |
 | `armor-elara` | Elara's riding coat | armor | §5 | P0 |
 | `armor-elara-disguise` | Elara in disguise | armor | §5 | P0 |
 | `armor-leon` | King Leon's robes | armor | §5 | P0 |
 | `armor-crane` | Crane's long coat | armor | §5 | P0 |
+| `armor-crane-f` | A long plum coat, on the woman's base | armor | §5 | P1 |
 | `armor-royal-livery` | The palace livery | armor | §5 | P0 |
 | `armor-royal-guard` | The Royal Guard's armour | armor | §5 | P0 |
 | `armor-tavern` | A tavern apron | armor | §5 | P0 |

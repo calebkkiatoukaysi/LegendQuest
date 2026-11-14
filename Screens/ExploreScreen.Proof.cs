@@ -135,7 +135,7 @@ public partial class ExploreScreen
             Wait(30),
             Shot("docks-event.png"),
             Walk(ProofIntoTheGulls),
-            ReadUntil(() => _game.Flags.Contains(Act1Chapter1.DocksDone), (Rolled, "docks-check.png"), ("red-gull", "docks-gulls.png"), ("hale", "docks-hale.png")),
+            ReadUntil(() => _game.Flags.Contains(Act1Chapter1.DocksDone), (Thrown, "docks-throw.png"), (Rolled, "docks-check.png"), ("red-gull", "docks-gulls.png"), ("hale", "docks-hale.png")),
             Wait(40),
             Shot("docks.png"),
             Out("city"));

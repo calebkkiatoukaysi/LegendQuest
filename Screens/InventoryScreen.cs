@@ -198,6 +198,9 @@ public class InventoryScreen : GameScreen
 
     /// <summary>The clock they turn by, and what's left of the swing and the glow when something changes on them.</summary>
     private float _turnClock;
+
+    /// <summary>The painted picture of them last put together, drawn till the one for what they wear now is ready.</summary>
+    private PartCatalog.Standing _standing;
     private float _swingClock;
     private float _glowClock;
 
@@ -870,7 +873,11 @@ public class InventoryScreen : GameScreen
     /// </summary>
     private void DrawFigure(SpriteBatch spriteBatch, float alpha)
     {
-        if (PartCatalog.Picture(PartCatalog.OutfitOf(Member), PaintedHeight) is { HasBody: true } standing)
+        // Put together off the main thread when what they wear changes: the last picture stays till the new one's ready.
+        Outfit outfit = PartCatalog.OutfitOf(Member);
+        if (PartCatalog.PictureWhenReady(outfit, PaintedHeight) is PartCatalog.Standing ready) _standing = ready;
+        else if (outfit is null) _standing = null;
+        if (_standing is { HasBody: true } standing)
         {
             float breath = 1f + PaintedBreath * MathF.Sin(_turnClock / PaintedBreathSeconds * MathHelper.TwoPi);
             float lean = _swingClock <= 0f ? 0f : _swingClock > SwingSeconds / 2f ? -PaintedSwingLean : PaintedSwingLean;

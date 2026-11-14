@@ -17,7 +17,8 @@ namespace LegendQuest.Screens;
 /// <remarks>
 /// The rules rolled it already (AbilityCheck); this only shows it, so a check comes out the same
 /// whether it's watched or not, the way the Black Box's table showed what the round engine said.
-/// With advantage the second die shows beside the first and the lower one greys out.
+/// The die is a real 3D one (DiceTable, DieModel), thrown on the panel and landing with the rolled
+/// number on top. With advantage the second die is thrown beside the first and the lower one fades.
 /// </remarks>
 public class DiceRollOverlay : GameScreen
 {
@@ -27,38 +28,32 @@ public class DiceRollOverlay : GameScreen
     private const string SuccessWord = "SUCCESS";
     private const string FailureWord = "FAILURE";
 
-    /// <summary>The panel in the middle, and where the dice sit on it.</summary>
+    /// <summary>The panel in the middle, where the dice come to rest on it, and the part of it they can be anywhere in while they're thrown.</summary>
     private static readonly Rectangle PanelBounds = new(500, 130, 600, 650);
     private static readonly Vector2 DieCentre = new(800f, 390f);
+    private static readonly Rectangle DiceArea = new(560, 215, 480, 340);
 
-    /// <summary>The d20 sheet: how big a frame is, how many tumble frames come before the face, and how much bigger it's drawn.</summary>
-    private const int DieFrame = 40;
-    private const int TumbleFrames = 8;
-    private const float DieScale = 4f;
-
-    /// <summary>How far apart the two dice are with advantage, and how far the number sits under the die's middle.</summary>
+    /// <summary>How far apart the two dice are with advantage, and the room between the bottom of a die and the modifiers under it.</summary>
     private const float PairGap = 92f;
-    private const float NumberDrop = 6f;
+    private const float UnderDie = 26f;
 
-    /// <summary>How long the tumble lasts, and how long a tumble frame is up.</summary>
+    /// <summary>How long the throw lasts, from the press to the dice at rest.</summary>
     private const float TumbleSeconds = 0.9f;
-    private const float TumbleFrameTime = 0.07f;
 
-    /// <summary>How the losing die of an advantage roll is drawn.</summary>
-    private static readonly Color Dropped = Color.White * 0.35f;
+    /// <summary>When the proof run's shot of the dice in the air is taken, in seconds into the throw: near the top of the first hop.</summary>
+    private const float ProofThrowShot = 0.12f;
 
     private static readonly TimeSpan FadeTime = TimeSpan.FromSeconds(0.2);
 
     private readonly InputAction _press = new(new[] { Buttons.A }, new[] { Keys.Space, Keys.Enter, Keys.E }, true);
     private readonly CheckResult _result;
     private readonly FormPanel _panel = new();
+    private readonly DiceTable _table;
 
     private ContentManager _content;
     private AudioManager _audio;
     private SpriteFont _font;
     private SpriteFont _detailFont;
-    private Texture2D _dice;
-    private float _clock;
     private bool _rolled;
     private bool _landed;
 
@@ -70,12 +65,13 @@ public class DiceRollOverlay : GameScreen
     public DiceRollOverlay(CheckResult result)
     {
         _result = result;
+        _table = new DiceTable(DiceArea, TumbleSeconds, Dice(), result.Success ? Palette.Gold : Palette.Ember);
         IsPopup = true;
         TransitionOnTime = FadeTime;
         TransitionOffTime = FadeTime;
     }
 
-    /// <summary>Loads the panel, the fonts and the dice.</summary>
+    /// <summary>Loads the panel and the fonts, and builds the dice.</summary>
     public override void Activate()
     {
         _content ??= new ContentManager(ScreenManager.Game.Services, "Content");
@@ -83,11 +79,15 @@ public class DiceRollOverlay : GameScreen
         _panel.LoadContent(_content, ScreenManager.GraphicsDevice);
         _font = _content.Load<SpriteFont>("spectral-ui");
         _detailFont = _content.Load<SpriteFont>("spectral-detail");
-        _dice = _content.Load<Texture2D>("dice");
+        _table.LoadContent(_content, ScreenManager.GraphicsDevice);
     }
 
     /// <summary>Unloads the panel and the dice.</summary>
-    public override void Unload() => _content?.Unload();
+    public override void Unload()
+    {
+        _content?.Unload();
+        _table.Dispose();
+    }
 
     /// <summary>A press rolls, and once it's landed, a press goes on.</summary>
     /// <param name="gameTime">The frame's timing.</param>
@@ -97,49 +97,43 @@ public class DiceRollOverlay : GameScreen
         if (_press.Occurred(input) || input.IsNewLeftClick) Press();
     }
 
-    /// <summary>Runs the tumble, and lands it.</summary>
+    /// <summary>Turns the dice, throws them, and lands them.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     /// <param name="otherScreenHasFocus">Whether a screen above has the input.</param>
     /// <param name="coveredByOtherScreen">Whether a non-popup screen is on top.</param>
     public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
     {
         base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-        if (!_rolled || _landed) return;
-
-        _clock += (float)gameTime.ElapsedGameTime.TotalSeconds;
-        if (_clock < TumbleSeconds) return;
+        _table.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+        if (!_rolled || _landed || !_table.Landed) return;
 
         _landed = true;
         _audio.Play(_result.Success ? Sfx.CheckPass : Sfx.CheckFail);
     }
 
-    /// <summary>Draws the veil, the panel, the label and the DC, the dice, the modifiers, and once it's landed, the total and the verdict.</summary>
+    /// <summary>Draws the veil, the panel, the dice, the label and the DC, the modifiers, and once it's landed, the total and the verdict.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
     {
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
         float alpha = TransitionAlpha;
 
+        // The dice go on their own target first, before anything's begun on the canvas.
+        _table.Render(ScreenManager.GraphicsDevice);
+
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
         _panel.DrawVeil(spriteBatch, alpha);
         _panel.Draw(spriteBatch, PanelBounds, alpha);
-        DrawDice(spriteBatch, alpha);
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
+        _table.Draw(spriteBatch, alpha);
         float y = PanelBounds.Top + FormPanel.Padding;
         Text.Draw(spriteBatch, _font, _result.Label, PanelBounds.Center.X, y, Palette.Heading * alpha, Palette.FormShadow * alpha, centred: true);
         y += _font.LineSpacing;
         Text.Draw(spriteBatch, _detailFont, "DC " + _result.Dc, PanelBounds.Center.X, y, Palette.Torch * alpha, Palette.FormShadow * alpha, centred: true);
 
-        if (_landed)
-        {
-            foreach (DieAt die in Dice())
-                Text.Draw(spriteBatch, _font, die.Value.ToString(), die.Centre.X, die.Centre.Y - _font.LineSpacing / 2f + NumberDrop,
-                    Palette.Ink * (die.Kept ? alpha : alpha * 0.5f), Color.Transparent, centred: true);
-        }
-
-        y = DieCentre.Y + DieFrame * DieScale / 2f + 16f;
+        y = DieCentre.Y + DiceTable.Radius + UnderDie;
         foreach ((string source, int amount) in _result.Modifiers)
         {
             Text.Draw(spriteBatch, _detailFont, source + "  " + Signed(amount), PanelBounds.Center.X, y, Palette.Bone * alpha, Palette.FormShadow * alpha, centred: true);
@@ -169,6 +163,9 @@ public class DiceRollOverlay : GameScreen
     /// <summary>For the proof run: whether the dice have landed, so a shot can show them.</summary>
     internal bool ProofLanded => _landed;
 
+    /// <summary>For the proof run: whether the dice are in the air, near the top of their first hop, for a shot of them tumbling.</summary>
+    internal bool ProofThrown => _rolled && !_landed && _table.Thrown >= ProofThrowShot;
+
     /// <summary>For the proof run: the same as a press.</summary>
     internal void ProofPress() => Press();
 
@@ -180,6 +177,7 @@ public class DiceRollOverlay : GameScreen
         if (!_rolled)
         {
             _rolled = true;
+            _table.Throw();
             _audio.Play(Sfx.DiceRoll);
             return;
         }
@@ -189,36 +187,20 @@ public class DiceRollOverlay : GameScreen
         Closed?.Invoke();
     }
 
-    /// <summary>The dice: tumbling, or landed on their faces.</summary>
-    private void DrawDice(SpriteBatch spriteBatch, float alpha)
-    {
-        int tumble = (int)(_clock / TumbleFrameTime) % TumbleFrames;
-        foreach (DieAt die in Dice())
-        {
-            int frame = _landed ? TumbleFrames : _rolled ? (tumble + die.Index * 3) % TumbleFrames : 0;
-            var source = new Rectangle(frame * DieFrame, 0, DieFrame, DieFrame);
-            Color tint = !_landed || die.Kept ? Color.White : Dropped;
-            spriteBatch.Draw(_dice, die.Centre, source, tint * alpha, 0f, new Vector2(DieFrame / 2f), DieScale, SpriteEffects.None, 0f);
-        }
-    }
-
     /// <summary>Where each die is, what it rolled, and whether it's the one that counts.</summary>
-    private DieAt[] Dice()
+    private DiceTable.Die[] Dice()
     {
-        if (_result.Rolls.Count == 1) return new[] { new DieAt(0, DieCentre, _result.Rolls[0], true) };
+        if (_result.Rolls.Count == 1) return new[] { new DiceTable.Die(DieCentre, _result.Rolls[0], true) };
 
         // The kept die is the first one that rolled the kept number.
         bool firstKept = _result.Rolls[0] == _result.Kept;
         return new[]
         {
-            new DieAt(0, DieCentre - new Vector2(PairGap, 0f), _result.Rolls[0], firstKept),
-            new DieAt(1, DieCentre + new Vector2(PairGap, 0f), _result.Rolls[1], !firstKept),
+            new DiceTable.Die(DieCentre - new Vector2(PairGap, 0f), _result.Rolls[0], firstKept),
+            new DiceTable.Die(DieCentre + new Vector2(PairGap, 0f), _result.Rolls[1], !firstKept),
         };
     }
 
     /// <summary>A number with its sign, the way modifiers are written: +2, -1, +0.</summary>
     private static string Signed(int amount) => amount < 0 ? amount.ToString() : "+" + amount;
-
-    /// <summary>One die on the panel.</summary>
-    private readonly record struct DieAt(int Index, Vector2 Centre, int Value, bool Kept);
 }

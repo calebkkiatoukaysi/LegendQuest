@@ -32,17 +32,20 @@ public static class Text
     /// <param name="shadow">Colour of the shadow behind it.</param>
     /// <param name="centred">True to centre the line on <paramref name="x"/>.</param>
     /// <param name="rightAligned">True to end the line at <paramref name="x"/>.</param>
+    /// <param name="width">The widest it may be, in screen pixels: a longer line is drawn smaller to fit, centred on its line's height. 0 for any width.</param>
     public static void Draw(SpriteBatch spriteBatch, SpriteFont font, string text, float x, float y,
-        Color color, Color shadow, bool centred = false, bool rightAligned = false)
+        Color color, Color shadow, bool centred = false, bool rightAligned = false, float width = 0f)
     {
         if (string.IsNullOrEmpty(text)) return;
 
         Vector2 size = font.MeasureString(text);
+        float scale = width > 0f && size.X > width ? width / size.X : 1f;
+        size *= scale;
         float left = centred ? x - size.X / 2f : rightAligned ? x - size.X : x;
-        var position = new Vector2(MathF.Round(left), MathF.Round(y));
+        var position = new Vector2(MathF.Round(left), MathF.Round(y + font.LineSpacing * (1f - scale) / 2f));
 
-        spriteBatch.DrawString(font, text, position + Palette.ShadowOffset, shadow, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.TextShadow);
-        spriteBatch.DrawString(font, text, position, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layers.Text);
+        spriteBatch.DrawString(font, text, position + Palette.ShadowOffset, shadow, 0f, Vector2.Zero, scale, SpriteEffects.None, Layers.TextShadow);
+        spriteBatch.DrawString(font, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, Layers.Text);
     }
 
     /// <summary>Draws a soft dark smudge round some text, so it reads over bright grass as well as the dark.</summary>

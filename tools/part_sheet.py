@@ -2,7 +2,9 @@
 Part sheets: several parts in one ChatGPT picture instead of one picture each.
 
     python tools/part_sheet.py templates                  # the blank sheets, from the bases
-    python tools/part_sheet.py cut <png> <sheet-id> [--force]
+    python tools/part_sheet.py check <png> <sheet-id>     # does it keep the template's size and layout?
+    python tools/part_sheet.py fit <png> <sheet-id> [--force] [--check <png>] [--record <json>]   # cut it, wherever ChatGPT put things
+    python tools/part_sheet.py cut <png> <sheet-id> [--force]   # cut one that kept to the template exactly
     python tools/part_sheet.py list                       # the sheets and their cells, from Story/13 §4.0, §4.9, §4.10, §5.0 and §6.0
 
 Seven kinds, each a 1536x1024 picture of cells with thin grey lines between them, on black:
@@ -40,9 +42,29 @@ Seven kinds, each a 1536x1024 picture of cells with thin grey lines between them
 
 `templates` writes the blank sheets, <kind>-sheet-male.png and <kind>-sheet-female.png for each kind,
 into tools/source/characters; a pair sheet's is <kind>-sheet.png (hair-sheet.png, extra-sheet.png),
-and the beards' extra-sheet-male.png. The face, hair and helm sheets are made from the blank bases
-(base-male-blank.png, base-female-blank.png) once they're there, and from the bases till then; run it
-again when they come.
+and the beards' extra-sheet-male.png. Since the cut-out rig (2026-11-11) the bases are the bodies
+painted in pieces and stood up at rest by tools/body_parts.py (base-male.png, base-female.png); till
+they're painted, the sheets are drawn from the body templates' own pieces stood up the same way
+(body_parts.standing), the same shapes in the same places, so a sheet painted on either cuts the
+same. Run it again when the bodies come. An armor isn't a sheet of four whole figures any more: it's
+painted in pieces on body_parts.py's armor template (armor-parts-man.png, armor-parts-woman.png), so
+`templates` makes no armor sheets; the armor kind stays only to cut the old ones.
+
+Every template is 1536 x 1024, a size ChatGPT makes as it is, so it has no reason to crop, pad or
+stretch the picture it sends back. It still sometimes does (a 1535-wide sheet, busts drawn bigger,
+a figure a little taller): `check` says whether a sheet kept to its template, cell by cell (its
+size against the template's, where it is, how well it matched), and whether it's good to cut or
+should be redone; `fit` cuts it wherever ChatGPT put things, each cell back at its base's size.
+
+`fit` is `cut` for a sheet ChatGPT didn't keep to the template for: painted at another size (1774 x
+887, say), with the busts drawn bigger than the template's, or every figure a little taller. It finds
+each cell between the sheet's grey lines and finds the base under it anywhere, at any scale
+(tools/sheet_fit.py), matched on FIT_WINDOWS, where the part leaves the base alone; then puts the cell
+back on the canvas the same way, keeping a hair's or an extra's pixels only where they differ from
+the base drawn the same way (changed_only) and only what's the part's own (own_part). `--check <png>`
+writes a picture of each cell put back, with the base's outline over it, to see the fit is exact;
+`--record <json>` keeps each cell's fit (scale, place, score, and the sheet's hash), so cutting the
+same sheet again uses it instead of fitting again.
 
 `cut` keeps the sheet ChatGPT sent back as tools/source/characters/sheets/<sheet-id>.png, then for
 each cell:
@@ -75,6 +97,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import import_character as ic  # noqa: E402  (its PNG reader and writer, and Mitchell resampling)
+import sheet_fit  # noqa: E402  (a cell found on its base at any scale and place)
 
 CHARS = os.path.join(ROOT, "tools", "source", "characters")
 SHEETS = os.path.join(CHARS, "sheets")
@@ -287,12 +310,22 @@ def resample_rgb(rgb, box, size, weight=None):
     return np.rint(np.clip(out[:, :, :3], 0.0, 1.0) * 255.0).astype(np.uint8)
 
 
+_STANDING = {}
+
+
 def base(name, kind=None):
-    """A base as RGB; for a face, a hair or a helm, the blank base (its features taken off) if it's there."""
+    """A base as RGB; for a face, a hair or a helm, the blank base (its features taken off) if it's
+    there. Till the body's painted, the body template's own pieces stood up (body_parts.standing)."""
     blank = os.path.join(CHARS, name + "-blank.png")
     if kind in ON_BLANK and os.path.exists(blank):
         return load(blank)
-    return load(os.path.join(CHARS, name + ".png"))
+    own = os.path.join(CHARS, name + ".png")
+    if os.path.exists(own):
+        return load(own)
+    if name not in _STANDING:
+        import body_parts
+        _STANDING[name] = body_parts.standing(name)
+    return _STANDING[name].copy()
 
 
 def base_file(name, kind):
@@ -569,13 +602,589 @@ def spills(kind, got, tpl, mine, x, y, dx, dy):
     return notes
 
 
+#: What a fitted cell is matched on: windows of the base's canvas the part leaves alone, by kind.
+#: head: the bald head and round it; near_fist, far_fist: the hands; face_front: the face's profile,
+#: forehead to chin (a fringe may cover some); forehead: the brow and the front of the face above
+#: the nose (a horn, an ear or a beard is elsewhere); chest: the chest and the front of the body
+#: under the shoulders (long hair or a long beard covers some).
+FIT_WINDOWS = {"hair": ("face_front", "chest"), "extra": ("forehead", "chest"), "face": ("chest",),
+               "helm": ("chest",), "armor": ("head", "near_fist", "far_fist"),
+               "cape": ("head", "near_fist", "far_fist"), "weapon": ("head",)}
+#: A fitted cell scoring under this (normalised cross-correlation, 1 the best) is reported as poor.
+FIT_POOR = 0.75
+#: `check`: a cell drawn more than CHECK_SIZE bigger or smaller than the template's, or CHECK_PLACE
+#: template pixels from its place, is put back by the fit; more than CHECK_REDO_SIZE, it's redone.
+CHECK_SIZE, CHECK_PLACE, CHECK_REDO_SIZE = 0.02, 8.0, 0.15
+#: A cell whose scale is further than this (a share of it) from its row's is fitted again near the row's.
+FIT_ODD = 0.025
+#: Where a cell differs from the base drawn at its first fit by more than this (lightness), grown by
+#: FIT_COVER, its part covers the base (occluded).
+FIT_OCCLUDED, FIT_COVER = 40.0, 4
+#: A cell led off at first that's found again further than this from its row's scale has its scale
+#: held at the row's (only its place found).
+FIT_SAME = 0.012
+#: How far in from a fitted cell's edges its pixels count, in the cell's own pixels.
+FIT_SPARE = 3
+#: A head part fitted from a sheet keeps only itself (own_part, which says how these are used).
+FIT_LINE, FIT_SPECK, FIT_THICK = 35.0, 8, 2
+#: Within FIT_EDGE of the base's lines and edges, a fitted pixel is changed only if its colour isn't
+#: within FIT_DRIFT pixels in the base drawn the same way (changed_only).
+FIT_EDGE, FIT_DRIFT = 6, 3
+#: A part's soft edge is what round it is at least FIT_SOFT darker than the base; skin is the part's
+#: only within FIT_BODY of its own colours.
+FIT_SOFT, FIT_BODY = 8.0, 4
+#: Skin is at least FIT_SKIN_LUM bright and its red over its blue by FIT_WARM; a run of ChatGPT's
+#: head outline drawn off the base's lies within FIT_GAP of its edge (head_part).
+FIT_SKIN_LUM, FIT_WARM, FIT_GAP = 115.0, 40, 8
+#: A pixel of ChatGPT's bigger head is the part's if the part's body is within FIT_REACH of it, off the head.
+FIT_REACH = 10
+#: A hair's pale highlight looks like skin. Off the head, a patch of it (FIT_SHINE pixels or more)
+#: whose edge (FIT_SHINE_EDGE pixels round it) is FIT_SHINE_RING the hair's own, with almost none
+#: of it (FIT_SHINE_OPEN) on the black or the bare head, is the hair's shine, kept as painted, not
+#: ChatGPT's head drawn bigger.
+FIT_SHINE, FIT_SHINE_EDGE, FIT_SHINE_RING, FIT_SHINE_OPEN = 15, 2, 0.8, 0.05
+#: A run of line along the base's edge this long or longer, with no body beside it, is the head's outline drawn off.
+FIT_LONG = 24
+#: A thin piece with no solid body, FIT_ALONG_SHARE of it within FIT_ALONG_LINE of the base's
+#: outline, is that outline drawn a little off.
+FIT_ALONG_LINE, FIT_ALONG_SHARE = 4, 0.7
+#: A hairstyle's face and ear, with nothing of its own on them: below FIT_EYES of the head box down,
+#: in front of FIT_EAR of it across (the back of the ear).
+FIT_EYES, FIT_EAR = 0.5, 0.08
+#: ... and its jaw and chin, below FIT_JAW of the head box down; jewellery's, marks', ears' and horns'
+#: too, in front of FIT_CHEEK of it across (an earring hangs behind that).
+FIT_JAW, FIT_CHEEK = 0.75, 0.4
+#: The skin's own hue, and the browns its outline blends through: green over red, then blue over red,
+#: from and to (silver is greyer, gold yellower).
+FIT_HUE = (0.45, 0.76, 0.2, 0.62)
+#: Darker than this (its brightest channel) is the sheet's black background.
+FIT_BLACK = 16
+
+
+def fit_windows(kind, base_name, names=None):
+    """The weight a fitted cell is matched with over the base's canvas: 1 in the kind's FIT_WINDOWS
+    (or the windows `names`)."""
+    import import_parts as ip
+    b = ip.Base(base_name)
+    hx, hy, hw, hh = b.head
+    shoulders = ip.SHOULDERS[base_name]
+    near, far = ip.NEAR_HAND[base_name], ip.FAR_HAND[base_name]
+    boxes = {"head": (hy - 10, hy + hh + 6, hx - 10, hx + hw + 10),
+             "near_fist": (near[1], near[3], near[0], near[2]),
+             "far_fist": (far[1], far[3], far[0], far[2]),
+             "face_front": FACE_FRONT[base_name],
+             "forehead": (hy + 0.12 * hh, hy + 0.55 * hh, hx + 0.45 * hw, hx + hw + 14),
+             "chest": (shoulders - 20, shoulders + 200, hx + 0.1 * hw, hx + hw + 50)}
+    weight = np.zeros(base(base_name).shape[:2])
+    for name in names or FIT_WINDOWS[kind]:
+        r0, r1, c0, c1 = (int(round(v)) for v in boxes[name])
+        weight[max(0, r0):r1, max(0, c0):c1] = 1.0
+    return weight
+
+
+def occluded(cell, b, s, tx, ty):
+    """Where on the base's canvas a cell's part covers the base, by its first fit (s, tx, ty): where
+    the cell differs from the base drawn there by more than FIT_OCCLUDED, grown by FIT_COVER."""
+    ch, cw = cell.shape[:2]
+    drawn = resample_rgb(b, (-tx / s, -ty / s, cw / s, ch / s), (cw, ch))
+    differs = np.abs(sheet_fit.luma(drawn) - sheet_fit.luma(cell)) > FIT_OCCLUDED
+    differs = ic.grow(differs, FIT_COVER)
+    h, w = b.shape[:2]
+    cx = np.rint(tx + s * np.arange(w)).astype(int)
+    cy = np.rint(ty + s * np.arange(h)).astype(int)
+    ix, iy = np.nonzero((cx >= 0) & (cx < cw))[0], np.nonzero((cy >= 0) & (cy < ch))[0]
+    out = np.zeros((h, w), bool)
+    out[np.ix_(iy, ix)] = differs[np.ix_(cy[iy], cx[ix])]
+    return out
+
+
+def changed_only(out, b, cell_size_, s, tx, ty):
+    """A fitted cell put back on the canvas (out), kept only where it differs from the base drawn
+    into the cell the same way and put back again (ref: so the softening cancels), and only inside
+    what the cell covers (FIT_SPARE in from its edges, where the resampling runs out); the base's own
+    pixel everywhere else. Returns (the part on the canvas, what was kept).
+
+    ChatGPT redraws the base as it paints, a pixel or a few off along its outlines and the edge of
+    its figure: within FIT_EDGE of those, a pixel counts as changed only if no pixel of ref within
+    FIT_DRIFT has its colour. Elsewhere any difference past GEAR_CHANGED counts, and so does anything
+    painted on the base's black however dark (a part's outline is near black, and dropped there it
+    would be keyed out with the background and leave the part's edge ragged). Specks are opened
+    away and what's kept grown a little, for its soft edge."""
+    h, w = b.shape[:2]
+    cw, ch = cell_size_
+    drawn = resample_rgb(b, (-tx / s, -ty / s, cw / s, ch / s), (cw, ch))
+    ref = resample_rgb(drawn, (tx, ty, w * s, h * s), (w, h))
+    covered = sheet_fit.footprint((h, w), cell_size_, s, tx, ty, FIT_SPARE)
+    o, r = out.astype(np.int16), ref.astype(np.int16)
+    plain = np.abs(o - r).max(axis=2)
+    lum = r.astype(np.float64) @ np.array([0.299, 0.587, 0.114])
+    figure = r.max(axis=2) >= FIT_BLACK
+    lines = (lum < FIT_LINE) & figure
+    near = ic.grow(lines | (ic.grow(figure, 1) & ic.grow(~figure, 1)), FIT_EDGE)
+    drift = plain.copy()
+    pad = np.pad(r, ((FIT_DRIFT, FIT_DRIFT), (FIT_DRIFT, FIT_DRIFT), (0, 0)), mode="edge")
+    for dy in range(-FIT_DRIFT, FIT_DRIFT + 1):
+        for dx in range(-FIT_DRIFT, FIT_DRIFT + 1):
+            if dy * dy + dx * dx > FIT_DRIFT * FIT_DRIFT:
+                continue
+            moved = pad[FIT_DRIFT + dy:FIT_DRIFT + dy + h, FIT_DRIFT + dx:FIT_DRIFT + dx + w]
+            drift = np.minimum(drift, np.abs(o - moved).max(axis=2))
+    difference = np.where(near, drift, plain)
+    on_black = ~ic.grow(figure, FIT_DRIFT) & (out.max(axis=2) >= FIT_BLACK)
+    changed = ((difference > GEAR_CHANGED) | on_black) & covered
+    changed = ic.grow(~ic.grow(~changed, 1), 1)
+    # The part's soft edge: what's round it, so long as it's darker than the base there (an
+    # outline blending into what's under it), not lighter (ChatGPT's rim light on the skin).
+    darker = (out.astype(np.float64) @ np.array([0.299, 0.587, 0.114])) < lum - FIT_SOFT
+    changed = changed | (ic.grow(changed, 2) & covered & (plain > GEAR_CHANGED // 2) & (darker | on_black))
+    return np.where(changed[:, :, None], out, b), changed
+
+
+def fit_cut(png, sheet_id, force=False, check=None, record=None, write=True):
+    """`cut` for a sheet laid out ChatGPT's own way: each cell found on its base (sheet_fit). With
+    write False, nothing's written: how each cell sits against the template is reported, and the
+    verdict on the sheet returned (GOOD: cut it; REDO: ask ChatGPT for it again)."""
+    import hashlib
+    import json
+    digest = hashlib.sha256(open(png, "rb").read()).hexdigest()
+    records = json.load(open(record, encoding="utf-8")) if record and os.path.exists(record) else {}
+    known = records.get(sheet_id, {}).get("cells", {}) if records.get(sheet_id, {}).get("sha256") == digest else {}
+    table = sheets_table()
+    if sheet_id not in table:
+        sys.exit("part_sheet: %s isn't a sheet in Story/13 (python tools/part_sheet.py list)" % sheet_id)
+    kind = kind_of(sheet_id)
+    k_ = KINDS[kind]
+    base_name, _, ids = table[sheet_id]
+    got = load(png)
+    redo, fixed = [], []
+    if got.shape[:2] != (SHEET_H, SHEET_W):
+        fixed.append("it came back %dx%d, not %dx%d" % (got.shape[1], got.shape[0], SHEET_W, SHEET_H))
+    boxes = sheet_fit.cell_boxes(got, k_["cols"], k_["rows"])
+    folder = os.path.join(CHARS, k_["folder"])
+    if write:
+        os.makedirs(folder, exist_ok=True)
+    report, shown, fits = [], [], []
+    windows = {}
+    placed = []
+    for k, cell_base, part in cells(kind, base_name, ids):
+        x0, y0, x1, y1 = boxes[k]
+        b = base(cell_base, kind)
+        if cell_base not in windows:
+            windows[cell_base] = fit_windows(kind, cell_base)
+        cell = got[y0:y1, x0:x1]
+        found = [f[4] for f in fits if f[1] == cell_base]
+        if str(k) in known:
+            score, s, tx, ty = known[str(k)]
+        else:
+            score, s, tx, ty = sheet_fit.fit(cell, np.ones(cell.shape[:2]), b, windows[cell_base],
+                                             near=float(np.median(found)) if found else None)
+        fits.append((k, cell_base, part, score, s, tx, ty))
+    # Each cell found again, matched on its windows less what its part covers there (occluded), so
+    # the part doesn't pull the fit: within FIT_ODD of its first scale, or of its row's where the
+    # first is far from the rest or matched poorly (long hair or a braid over the chest led it off;
+    # a row's cells are the same bust at much the same size).
+    firsts = list(fits)
+    for i, (k, cell_base, part, score, s, tx, ty) in enumerate(firsts):
+        if str(k) in known:
+            continue
+        middle = float(np.median([f[4] for f in firsts if f[1] == cell_base]))
+        centre = middle if abs(s - middle) > FIT_ODD * middle or score < FIT_POOR else s
+        x0, y0, x1, y1 = boxes[k]
+        cell = got[y0:y1, x0:x1]
+        b = base(cell_base, kind)
+        weight = windows[cell_base] * ~occluded(cell, b, s, tx, ty)
+        again = sheet_fit.fit(cell, np.ones(cell.shape[:2]), b, weight, near=centre,
+                              span=FIT_ODD * centre, strict=True)
+        if abs(again[1] - middle) > (FIT_SAME if centre == middle else FIT_ODD) * middle:
+            # Still far from its row (FIT_SAME, for one led off at first): what's left uncovered (a
+            # bob hides the face's profile) can't tell the scale, so it's the row's, and only the
+            # place is found.
+            again = sheet_fit.fit(cell, np.ones(cell.shape[:2]), b, weight, near=middle, fixed=True)
+        fits[i] = (k, cell_base, part) + tuple(again)
+    for k, cell_base, part, score, s, tx, ty in fits:
+        x0, y0, x1, y1 = boxes[k]
+        b = base(cell_base, kind)
+        h, w = b.shape[:2]
+        mine = np.zeros(got.shape[:2])
+        mine[y0:y1, x0:x1] = 1.0
+        out = resample_rgb(got, (x0 + tx, y0 + ty, w * s, h * s), (w, h), weight=mine)
+        ref, covered = drawn_back(b, (x1 - x0, y1 - y0), s, tx, ty)
+        placed.append((k, cell_base, part, b, out, ref, covered, (x0, y0, x1, y1), score, s, tx, ty))
+    for k, cell_base, part, b, out, ref, covered, (x0, y0, x1, y1), score, s, tx, ty in placed:
+        if kind in ("hair", "extra"):
+            out, kept = head_part(out, b, ref, covered, cell_base, part)
+        elif kind in ("cape", "weapon"):
+            out, kept = changed_only(out, b, (x1 - x0, y1 - y0), s, tx, ty)
+        else:
+            kept = out.max(axis=2) > 60
+        notes = fit_spills(kept, sheet_fit.footprint(kept.shape, (x1 - x0, y1 - y0), s, tx, ty, FIT_SPARE + 3), kind)
+        if score < FIT_POOR:
+            notes.insert(0, "POOR FIT (%.2f): check it, or make it on its own" % score)
+            redo.append("cell %d (%s) isn't the template's figure (fit %.2f)" % (k + 1, part, score))
+        # Against the template: the cell's figure at the template's scale (the sheet's own size
+        # allowed for) and in its place, in the template's pixels.
+        rx, ry = got.shape[1] / float(SHEET_W), got.shape[0] / float(SHEET_H)
+        ratio = float(np.sqrt(rx * ry))
+        ox, oy = k_["origin"][cell_base]
+        cw_, ch_ = cell_size(kind)
+        cx_, cy_ = cell_box(kind, k)
+        # The canvas point at the template cell's middle: where the template has it on the sheet,
+        # and where ChatGPT drew it.
+        mx, my = (cw_ / 2.0 + ox) / k_["scale"], (ch_ / 2.0 + oy) / k_["scale"]
+        moved = float(np.hypot(x0 + tx + s * mx - (cx_ + cw_ / 2.0) * rx, y0 + ty + s * my - (cy_ + ch_ / 2.0) * ry)) / ratio
+        grown = s / (k_["scale"] * ratio) - 1.0
+        notes.append("as drawn %+.1f%% in size, %.0f pixels from its place" % (grown * 100, moved))
+        if abs(grown) > CHECK_REDO_SIZE:
+            redo.append("cell %d (%s) was drawn %+.0f%% in size" % (k + 1, part, grown * 100))
+        elif abs(grown) > CHECK_SIZE or moved > CHECK_PLACE:
+            fixed.append("cell %d drawn %+.1f%% in size, %.0f pixels off" % (k + 1, grown * 100, moved))
+        own = [n for n in notes if "runs off" in n and (kind not in ("face", "helm") or "top" in n)]
+        if own:
+            redo.append("cell %d (%s) %s" % (k + 1, part, own[0]))
+        if not write:
+            report.append("  cell %d %s: scale %.4f, at %+.1f, %+.1f, fit %.3f%s" % (k + 1, part, s, tx, ty, score,
+                                                                                ("; " + "; ".join(notes)) if notes else ""))
+            continue
+        dest = os.path.join(folder, part + ".png")
+        if os.path.exists(dest) and not force:
+            report.append("  cell %d %s: kept the one already there (--force to replace it)" % (k + 1, part))
+        else:
+            save(dest, out)
+            report.append("  cell %d %s: scale %.4f, at %+.1f, %+.1f, fit %.3f%s" % (k + 1, part, s, tx, ty, score,
+                                                                                ("; " + "; ".join(notes)) if notes else ""))
+        if check:
+            shown.append(fit_picture(out, b, kind))
+    # A row's cells are laid out alike: one far from the rest has likely been found in the wrong place.
+    for row in sorted({f[1] for f in fits}):
+        scales = np.array([f[4] for f in fits if f[1] == row])
+        middle = float(np.median(scales))
+        for f in fits:
+            if f[1] == row and abs(f[4] - middle) > FIT_ODD * middle:
+                report.append("  cell %d %s: ODD SCALE %.3f against its row's %.3f; check it" % (f[0] + 1, f[2], f[4], middle))
+                redo.append("cell %d (%s) is at a different size from the rest of its row" % (f[0] + 1, f[2]))
+    verdict = ("REDO: " + "; ".join(redo)) if redo else ("GOOD: " + ("; ".join(fixed) + ", which the fit puts back" if fixed else "the template's size and layout"))
+    if not write:
+        print("part_sheet: checked %s (%s, %d %ss, %dx%d) against its template"
+              % (sheet_id, base_name, len(fits), kind, got.shape[1], got.shape[0]))
+        print("\n".join(report))
+        print(verdict)
+        return verdict
+    if record:
+        records[sheet_id] = {"sha256": digest, "size": [got.shape[1], got.shape[0]],
+                             "cells": {str(f[0]): [round(f[3], 4), round(f[4], 6), round(f[5], 3), round(f[6], 3)] for f in fits}}
+        with open(record, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(records, f, indent=1)
+    os.makedirs(SHEETS, exist_ok=True)
+    kept = os.path.join(SHEETS, sheet_id + ".png")
+    if os.path.abspath(png) != os.path.abspath(kept):
+        shutil.copyfile(png, kept)
+    write_assets(table)
+    if check and shown:
+        tall = max(p.shape[0] for p in shown)
+        save(check, np.concatenate([np.pad(p, ((0, tall - p.shape[0]), (0, 4), (0, 0))) for p in shown], axis=1))
+    print("part_sheet: fitted %s (%s, %d %ss, %dx%d) into tools/source/characters/%s/"
+          % (sheet_id, base_name, len(fits), kind, got.shape[1], got.shape[0], k_["folder"]))
+    print("\n".join(report))
+    print(verdict)
+    return verdict
+
+
+def drawn_back(b, cell_size_, s, tx, ty):
+    """The base drawn into a fitted cell and put back the same way (the same softening), and what
+    the cell covers (FIT_SPARE in from its edges)."""
+    h, w = b.shape[:2]
+    cw, ch = cell_size_
+    drawn = resample_rgb(b, (-tx / s, -ty / s, cw / s, ch / s), (cw, ch))
+    return resample_rgb(drawn, (tx, ty, w * s, h * s), (w, h)), sheet_fit.footprint((h, w), cell_size_, s, tx, ty, FIT_SPARE)
+
+
+def _drift(a, b, reach):
+    """Each pixel's nearest colour match (largest channel difference) in b within `reach` pixels."""
+    h, w = a.shape[:2]
+    x, y = a.astype(np.int16), np.pad(b.astype(np.int16), ((reach, reach), (reach, reach), (0, 0)), mode="edge")
+    best = np.full((h, w), 999, np.int16)
+    for dy in range(-reach, reach + 1):
+        for dx in range(-reach, reach + 1):
+            if dy * dy + dx * dx <= reach * reach:
+                best = np.minimum(best, np.abs(x - y[reach + dy:reach + dy + h, reach + dx:reach + dx + w]).max(axis=2))
+    return best
+
+
+def shine(labels, count, sizes, own, open_):
+    """Which of the pale pieces (labels, 1 to count) are a hair's shine: FIT_SHINE pixels or more,
+    their edge (FIT_SHINE_EDGE round them) at least FIT_SHINE_RING the hair's own (`own`), at most
+    FIT_SHINE_OPEN on the black or the bare head (`open_`). A bool per label."""
+    out = np.zeros(count + 1, bool)
+    h, w = labels.shape
+    r = FIT_SHINE_EDGE
+    for lab_ in np.nonzero(sizes >= FIT_SHINE)[0]:
+        if lab_ == 0:
+            continue
+        ys, xs = np.nonzero(labels == lab_)
+        y0, y1, x0, x1 = max(0, ys.min() - r), min(h, ys.max() + r + 1), max(0, xs.min() - r), min(w, xs.max() + r + 1)
+        piece = labels[y0:y1, x0:x1] == lab_
+        ring = ic.grow(piece, r) & ~piece & (labels[y0:y1, x0:x1] != lab_)
+        if not ring.any():
+            continue
+        out[lab_] = (own[y0:y1, x0:x1][ring].mean() >= FIT_SHINE_RING
+                     and open_[y0:y1, x0:x1][ring].mean() <= FIT_SHINE_OPEN)
+    return out
+
+
+def head_part(out, b, ref, covered, base_name, part):
+    """A fitted hair or extra, sorted pixel by pixel against the base drawn the same way (ref):
+    (the part on the canvas, kept). A pixel is new where it differs from ref past GEAR_CHANGED, or is
+    painted at all on ref's black (an outline is near black). Then, of what's new:
+
+      - body, the part's own colours (not black, not a line darker than FIT_LINE, not skin: warm
+        and at least FIT_SKIN_LUM bright, red over green over blue by FIT_WARM, as the base's skin
+        is lit or shining and every hair, beard and item is painted darker or another colour), is
+        kept, all of it. A skin mark (skin-*) is skin by nature, so for one nothing counts as skin;
+      - a line or skin within FIT_EDGE of ref's lines and edges, whose colour is in ref within
+        FIT_DRIFT pixels, and further than FIT_BODY from body, is the base drawn a few pixels off:
+        it goes (a hair's own dark strands touch its body, so they stay);
+      - skin on the base's head that touches the base's bare skin is the base showing (a scalp, its
+        shine, a face): it goes; skin the part closes round (a highlight) stays;
+      - skin off the base's head is ChatGPT's head drawn bigger (for anything but a pair of ears,
+        whose skin it is): each pixel of it with the part's solid body (FIT_THICK; an outline's
+        soft edge is thin) just beyond it, off the head (within FIT_REACH), is the gap between the
+        face and the part, and is filled with the part's own nearest colour, so the part meets the
+        face with no gap and no pale strip; the rest of it goes, and so does a run of line along
+        the base's edge, FIT_LONG or longer, with no body within FIT_BODY (the head's outline,
+        drawn off);
+      - a hairstyle has nothing on the face below the eyes or on the ear (FIT_EYES, FIT_EAR), or
+        just off them, but solid hair coming down from above the eyes (a fringe, hair over the ear,
+        the far side of a bob): ChatGPT shades the jaw and the ear in the hair's own hue, so only
+        where it is tells; below FIT_JAW, the jaw and chin, only solid hair of the hair's colour
+        from above, and none of ChatGPT's wider head filled in;
+      - jewellery, marks, ears and horns have nothing on the jaw and chin in front of FIT_CHEEK
+        but metal and stones (a lip ring): not the skin's hue (FIT_HUE), a line or skin;
+      - specks under FIT_SPECK go, pieces with fewer than FIT_SPECK pixels of body (a run of
+        outline, a shadow ChatGPT drew darker; a wisp of hair is thin, but the hair's colour), and
+        thin pieces with no solid body lying along the base's outline (FIT_ALONG_SHARE of them
+        within FIT_ALONG_LINE), and every pixel within FIT_ALONG_LINE of the outline and further than
+        FIT_BODY from solid body, as such a run can join the part: the outline drawn off, its soft
+        edge the part's colour;
+        under the jaw seam only solid pieces (FIT_THICK) with body in
+        them that grow from the head stay (a beard, long hair, an earring), not a neck or a chest;
+      - round what's kept, its soft edge: what's darker than the base there, or on the black, and
+        not skin.
+    The base's own pixel is everywhere else, and only what the cell covers counts."""
+    import import_parts as ip
+    h, w = b.shape[:2]
+    weights = np.array([0.299, 0.587, 0.114])
+    o, r = out.astype(np.int16), ref.astype(np.int16)
+    plain = np.abs(o - r).max(axis=2)
+    lum_o, lum_r = out.astype(np.float64) @ weights, ref.astype(np.float64) @ weights
+    figure = ref.max(axis=2) >= FIT_BLACK
+    black = out.max(axis=2) < FIT_BLACK
+    line = (lum_o < FIT_LINE) & ~black
+    rgb = out.astype(np.int16)
+    skin = ((lum_o >= FIT_SKIN_LUM) & (rgb[..., 0] >= rgb[..., 1]) & (rgb[..., 1] >= rgb[..., 2])
+            & (rgb[..., 0] - rgb[..., 2] >= FIT_WARM) & ~line & ~black)
+    if part.startswith("skin-"):
+        skin[:] = False
+    on_black = ~ic.grow(figure, FIT_DRIFT) & ~black
+    new = ((plain > GEAR_CHANGED) | on_black) & covered
+    body = new & ~black & ~line & ~skin
+    by_body = ic.grow(body, FIT_BODY)
+    near = ic.grow(((lum_r < FIT_LINE) & figure) | (ic.grow(figure, 1) & ic.grow(~figure, 1)), FIT_EDGE)
+    offset = new & near & (_drift(out, ref, FIT_DRIFT) <= GEAR_CHANGED) & ~by_body & (line | skin | black)
+    kept = new & ~offset
+    kept = ic.grow(~ic.grow(~kept, 1), 1) & covered
+    paint = out.copy()
+    # Skin and stray outline in what's kept: the base showing, a highlight, ChatGPT's head drawn
+    # bigger than the base's (along its edge: filled with the part where the part runs beside it,
+    # gone where the background does), or an ear.
+    bare = figure & ~kept
+    band = ic.grow(figure, FIT_GAP) & ic.grow(~figure, FIT_GAP)
+    # The part's solid body: an outline's soft edge is a part's colour too, but thin.
+    solid_body = ic.grow(~ic.grow(~(body & kept), FIT_THICK), FIT_THICK) & body & kept
+    beside = ic.grow(solid_body, FIT_BODY)
+    strip = np.zeros((h, w), bool)
+    labels, count = ic.components(kept & skin)
+    if count:
+        sizes = np.maximum(np.bincount(labels.ravel(), minlength=count + 1), 1)
+        on_head = np.bincount(labels.ravel(), weights=figure.ravel().astype(np.float64), minlength=count + 1) > 0.5 * sizes
+        touches = np.zeros(count + 1, bool)
+        touches[np.unique(labels[ic.grow(bare, 1) & (labels > 0)])] = True
+        # The base showing: skin on its head that touches its bare skin.
+        showing = touches & on_head
+        # ChatGPT's head drawn bigger, off the base's (by any amount: a bald dome drawn taller than
+        # the base's; not by touching it, as its inner edge, the base's own drawn a pixel or two
+        # off, has gone already): the part's where its body lies just beyond, off the head
+        # (FIT_REACH), and gone everywhere else. A pair of ears is the one part that is skin off the head.
+        bigger = ~on_head & (not part.startswith("ears-"))
+        if part.startswith("hair-"):
+            # A hair's shine: pale, but the hair all round it and nothing open beside it.
+            bigger &= ~shine(labels, count, sizes, kept & ~skin, black | bare)
+        showing[0] = bigger[0] = False
+        bigger_px = bigger[labels]
+        strip = bigger_px & ic.grow(solid_body & ~figure, FIT_REACH)
+        kept &= ~showing[labels] & ~(bigger_px & ~strip)
+    # ChatGPT's head outline, drawn off the base's: long runs of line along its edge with no body
+    # beside them (a strap crossing the edge is short, so it stays).
+    runs, n = ic.components(kept & line & band & ~beside)
+    if n:
+        ys_, xs_ = np.nonzero(runs)
+        ids = runs[ys_, xs_]
+        top, bottom = np.full(n + 1, 1 << 30), np.full(n + 1, -1)
+        left, right = np.full(n + 1, 1 << 30), np.full(n + 1, -1)
+        np.minimum.at(top, ids, ys_)
+        np.maximum.at(bottom, ids, ys_)
+        np.minimum.at(left, ids, xs_)
+        np.maximum.at(right, ids, xs_)
+        long_ = np.maximum(bottom - top, right - left) >= FIT_LONG
+        long_[0] = False
+        kept &= ~long_[runs]
+    if strip.any():
+        source = solid_body & kept & ~strip
+        colour = paint.astype(np.float64)
+        have, todo = source.copy(), strip.copy()
+        for _ in range(64):
+            if not todo.any():
+                break
+            mean = ic.local_mean(np.where(have[..., None], colour, 0.0), have.astype(np.float64), (1,))
+            step = todo & ~np.isnan(mean[..., 0])
+            if not step.any():
+                break
+            colour[step] = mean[step]
+            have |= step
+            todo &= ~step
+        paint = np.rint(colour).astype(np.uint8)
+        kept &= ~todo
+    # Specks, and pieces with none of the part's own colour in them (a run of outline, a shadow
+    # ChatGPT drew darker than the base's): a wisp of hair is thin but is the hair's colour.
+    # And thin pieces with no solid body that lie along the base's outline nearly all their length:
+    # its outline drawn a little off, whose soft edge is a part's colour (a wisp of hair runs off
+    # across the scalp, so it stays).
+    outline_near = ic.grow(((lum_r < FIT_LINE) & figure) | (ic.grow(figure, 1) & ic.grow(~figure, 1)), FIT_ALONG_LINE)
+    solid_now = ic.grow(~ic.grow(~(body & kept), FIT_THICK), FIT_THICK) & body & kept
+    # Pixel by pixel too, as such a run often joins the part (along the profile up to the hair):
+    # what's thin, away from the part's solid body, and on the base's outline.
+    kept &= ~(outline_near & ~ic.grow(solid_now, FIT_BODY))
+    labels, count = ic.components(kept)
+    if count:
+        def per(mask):
+            return np.bincount(labels.ravel(), weights=mask.ravel().astype(np.float64), minlength=count + 1)
+
+        sizes = np.maximum(np.bincount(labels.ravel(), minlength=count + 1), 1)
+        coloured, solid_px, along = per(body), per(solid_now), per(outline_near) / sizes
+        small = (sizes < FIT_SPECK) | (coloured < FIT_SPECK) | ((solid_px < FIT_SPECK) & (along >= FIT_ALONG_SHARE))
+        small[0] = False
+        kept &= ~small[labels]
+    geometry = ip.Base(base_name)
+    above = geometry.above
+    if part.startswith("hair-"):
+        # A hairstyle has nothing of its own on the face below the eyes or on the ear (nor just off
+        # them, where ChatGPT draws the jaw a little wider): only hair coming down from above the
+        # eyes, solid (a fringe, hair over the ear, the far side of a bob). ChatGPT shades the jaw
+        # and the ear in the hair's own hue, so a shadow there can't be told from hair by its
+        # colour, only by where it is.
+        hx, hy, hw, hh = geometry.head
+        eyes = hy + FIT_EYES * hh
+        across, down = np.arange(w)[None, :], np.arange(h)[:, None]
+        face = (down > eyes) & (across > hx + FIT_EAR * hw) & ic.grow(figure & above, FIT_GAP * 2)
+        # The hair's mass: anything kept that's thick and not skin (its shadowed side can be as
+        # dark as a line, but a line is thin).
+        hairy = (body | strip | line) & kept & ~(skin & ~strip)
+        mass = ic.grow(~ic.grow(~hairy, FIT_THICK), FIT_THICK) & hairy
+        labels, count = ic.components(mass)
+        from_above = np.zeros(count + 1, bool)
+        from_above[np.unique(labels[(down < eyes) & (labels > 0)])] = True
+        from_above[0] = False
+        hanging_hair = ic.grow(from_above[labels], FIT_BODY) & kept
+        kept &= ~(face & ~hanging_hair)
+        # The jaw and chin, below the mouth: hair hangs past them, never on them, so nothing of
+        # ChatGPT's wider head is filled there, and only solid hair of the hair's own colour (not
+        # a jaw's shadow, as dark as a line) that comes from above stays.
+        jaw = face & (down > hy + FIT_JAW * hh)
+        coloured = ic.grow(~ic.grow(~(body & kept), FIT_THICK), FIT_THICK) & body & kept
+        labels, count = ic.components(coloured)
+        from_above = np.zeros(count + 1, bool)
+        from_above[np.unique(labels[(down < eyes) & (labels > 0)])] = True
+        from_above[0] = False
+        kept &= ~(jaw & ~(ic.grow(from_above[labels], FIT_BODY) & ~strip))
+    if part.startswith(("jewel-", "skin-", "ears-", "horns-")):
+        # On the jaw and the chin in front of the ear (an earring hangs behind it), jewellery, marks,
+        # ears and horns have only metal and stones (a lip ring, a stud): what's there in the skin's
+        # own hue (ChatGPT's jaw drawn a little off, its outline blended into the skin), a line or
+        # skin goes, but a ring's outline beside its metal stays.
+        hx, hy, hw, hh = geometry.head
+        across, down = np.arange(w)[None, :], np.arange(h)[:, None]
+        jaw = (down > hy + FIT_JAW * hh) & (across > hx + FIT_CHEEK * hw) & ic.grow(figure & above, FIT_GAP * 2)
+        c = out.astype(np.float64)
+        red = np.maximum(c[..., 0], 1.0)
+        hued = ((c[..., 0] >= c[..., 1]) & (c[..., 1] >= c[..., 2]) & (c[..., 1] / red >= FIT_HUE[0]) & (c[..., 1] / red <= FIT_HUE[1])
+                & (c[..., 2] / red >= FIT_HUE[2]) & (c[..., 2] / red <= FIT_HUE[3]))
+        metal = kept & ~hued & ~line & ~skin & ~black
+        kept &= ~(jaw & (hued | skin | (line & ~ic.grow(metal, 2))))
+    head = ic.grow(above & figure, 4)
+    solid = ic.grow(~ic.grow(~kept, FIT_THICK), FIT_THICK) & kept
+    labels, count = ic.components(solid)
+    reach = np.zeros(count + 1, bool)
+    reach[np.unique(labels[head & solid])] = True
+    reach &= np.bincount(labels.ravel(), weights=(body & solid).ravel().astype(np.float64), minlength=count + 1) >= FIT_SPECK
+    reach[0] = False
+    hanging = reach[labels]
+    for _ in range(FIT_THICK + 1):
+        hanging = ic.grow(hanging, 1) & kept
+    kept = (kept & above) | hanging
+    darker = lum_o < lum_r - FIT_SOFT
+    kept = kept | (ic.grow(kept, 2) & covered & (plain > GEAR_CHANGED // 2) & (darker | on_black) & ~black & ~skin)
+    return np.where(kept[:, :, None], paint, b), kept
+
+
+def fit_spills(kept, covered, kind):
+    """Where the part itself runs off its fitted cell and is cut there: what was kept, on the edge of
+    what the cell covers (a bust's own arm and chest always run off it, but they're not kept)."""
+    edge = ic.grow(~covered, 1) & covered
+    rows, cols = np.nonzero(edge & kept)
+    if len(rows) < 12:
+        return []
+    ys, xs = np.nonzero(covered)
+    sides = []
+    for side, near in (("top", rows <= ys.min() + 1), ("bottom", rows >= ys.max() - 1),
+                       ("left", cols <= xs.min() + 1), ("right", cols >= xs.max() - 1)):
+        if near.sum() >= 12:
+            sides.append(side)
+    return ["runs off the %s of its cell and is cut there" % side for side in sides]
+
+
+def fit_picture(out, b, kind):
+    """A fitted part put back, cropped round what it shows, with the base's outline over it in cyan:
+    where they don't line up, the cyan shows beside the painted outline."""
+    lum = out.astype(np.float64) @ np.array([0.299, 0.587, 0.114])
+    base_lum = b.astype(np.float64) @ np.array([0.299, 0.587, 0.114])
+    lines = (base_lum < 45) & (ic.grow(base_lum > 45, 2))
+    shown = out.copy()
+    shown[lines] = (0, 255, 255)
+    rows, cols = np.nonzero(lum > 20)
+    if not len(rows):
+        return shown[::2, ::2]
+    top = max(0, rows.min() - 10)
+    bottom = min(out.shape[0], (rows.max() + 10) if kind in ("armor", "cape", "weapon") else top + 700)
+    return shown[top:bottom:2, max(0, cols.min() - 10):cols.max() + 10:2]
+
+
+def drawn_from(base_name, kind):
+    """What a template's cells were drawn from, for ASSETS.md: the base, or till the body's painted,
+    its template's own pieces stood up (tools/body_parts.py's stand-in)."""
+    if os.path.exists(os.path.join(CHARS, base_file(base_name, kind) + ".png")):
+        return "tools/source/characters/%s.png" % base_file(base_name, kind)
+    return ("the pieces of tools/source/characters/body-parts-%s.png stood up at rest by tools/body_parts.py"
+            % ("man" if base_name == "base-male" else "woman"))
+
+
 def write_assets(table):
     lines = [A_BEGIN, "## Part sheets", "",
              "Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape or weapon into each cell of a "
              "sheet made from a base (Story/13-art-prompts.md §4.0, §4.9, §5.0 and §6.0), and `tools/part_sheet.py` puts each "
              "cell back on its base's canvas.", "",
              "tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair, armor, helm, cape "
-             "and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base", ""]
+             "and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base", "",
+             "tools/sheet_fit.py - written by Caleb Kiatoukaysi for Legend Quest, finds a base under each cell of a sheet ChatGPT "
+             "laid out its own way, at any scale and place (masked cross-correlation, coarse then fine), for part_sheet.py fit", ""]
     for kind in KINDS:
         for base_name in TEMPLATES.get(kind, BASES):
             tid = template_id(kind, base_name)
@@ -589,7 +1198,9 @@ def write_assets(table):
                     "weapon": "four copies of its two fists, each with a stub of forearm, where they are on the figure, at %g scale, "
                               "side by side, the rest of the figure left out" % GEAR_SCALE}.get(
                 kind, "four copies of the whole figure at %g scale, side by side" % KINDS[kind]["scale"])
-            source = " and ".join("tools/source/characters/%s.png" % base_file(b, kind) for b in (PAIR if base_name == "both" else (base_name,)))
+            if not os.path.exists(os.path.join(CHARS, tid + ".png")):
+                continue
+            source = " and ".join(drawn_from(b, kind) for b in (PAIR if base_name == "both" else (base_name,)))
             lines += ["tools/source/characters/%s.png - the blank %s sheet: %s, from %s, with grey "
                       "lines between them; built by tools/part_sheet.py" % (tid, kind, what, source), ""]
     for sid in sorted(table):
@@ -635,10 +1246,12 @@ def write_assets(table):
 
 
 def main(argv):
-    if not argv or argv[0] not in ("templates", "cut", "list"):
+    if not argv or argv[0] not in ("templates", "cut", "fit", "list", "check"):
         sys.exit(__doc__)
     if argv[0] == "templates":
         for kind in KINDS:
+            if kind == "armor":
+                continue  # painted in pieces now: tools/body_parts.py armor
             for base_name in TEMPLATES.get(kind, BASES):
                 tid = template_id(kind, base_name)
                 save(os.path.join(CHARS, tid + ".png"), template(kind, base_name))
@@ -647,6 +1260,19 @@ def main(argv):
     elif argv[0] == "list":
         for sid, (base_name, pri, ids) in sorted(sheets_table().items()):
             print("%s (%s, %s): %s" % (sid, base_name, pri, ", ".join("%d %s" % (k + 1, f) for k, _, f in cells(kind_of(sid), base_name, ids))))
+    elif argv[0] == "check":
+        args = [a for a in argv[1:] if not a.startswith("--")]
+        if len(args) != 2:
+            sys.exit("part_sheet: check <png> <sheet-id>")
+        verdict = fit_cut(args[0], args[1], write=False)
+        sys.exit(1 if verdict.startswith("REDO") else 0)
+    elif argv[0] == "fit":
+        check = argv[argv.index("--check") + 1] if "--check" in argv else None
+        record = argv[argv.index("--record") + 1] if "--record" in argv else None
+        args = [a for a in argv[1:] if not a.startswith("--") and a not in (check, record)]
+        if len(args) != 2:
+            sys.exit("part_sheet: fit <png> <sheet-id> [--force] [--check <png>] [--record <json>]")
+        fit_cut(args[0], args[1], force="--force" in argv, check=check, record=record)
     else:
         args = [a for a in argv[1:] if not a.startswith("--")]
         if len(args) != 2:

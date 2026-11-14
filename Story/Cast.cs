@@ -136,6 +136,9 @@ public static class Cast
         }
     }
 
+    /// <summary>Everyone in the cast.</summary>
+    public static IEnumerable<CastMember> All => ById.Values;
+
     /// <summary>One of the cast, or null if there's nobody by that id.</summary>
     /// <param name="id">Who.</param>
     public static CastMember Get(string id) => ById.GetValueOrDefault(id ?? string.Empty);

@@ -38,12 +38,12 @@ public readonly record struct Paint(Vector3 SkinRatio, Color? First = null, Colo
 /// and scaled by the morph, coloured (Paint), and laid into the picture of the piece it moves with.
 /// A body or an armor comes in its bones' pieces, each into its bone's picture; the head, the face
 /// and the hair or helm into the head's; the cape into one behind everything that moves with the
-/// chest; and what each hand holds into one just under that hand. Each picture turns about its
+/// torso; and what each hand holds into one just under that hand. Each picture turns about its
 /// bone's joint (Skeleton), and the clips (ClipLibrary) move them.
 /// </summary>
 public static class RigComposer
 {
-    /// <summary>The cape's picture, behind everything, moving with the chest.</summary>
+    /// <summary>The cape's picture, behind everything, moving with the torso.</summary>
     public const string Cape = "cape";
 
     /// <summary>What the near hand holds, just under it, moving with it.</summary>
@@ -53,7 +53,7 @@ public static class RigComposer
     public const string Offhand = "offhand";
 
     /// <summary>The bone the cape moves with, and the hands that hold things.</summary>
-    private const string Chest = "chest", NearHand = "hand_near", FarHand = "hand_far", HeadBone = "head";
+    private const string Torso = "torso", NearHand = "hand_near", FarHand = "hand_far", HeadBone = "head";
 
     /// <summary>A figure put together: the whole picture (premultiplied), its size, the root, the head box, its pieces back to front, the near hand, and each bone's joint, all on the picture.</summary>
     /// <param name="Pixels">The whole figure, premultiplied, row by row.</param>
@@ -157,13 +157,13 @@ public static class RigComposer
         PartSlot.Weapon => Weapon,
         PartSlot.Offhand => Offhand,
         PartSlot.Head or PartSlot.Face or PartSlot.Facial or PartSlot.Helm or PartSlot.Marks => HeadBone,
-        _ => Chest,
+        _ => Torso,
     };
 
     /// <summary>The bone a piece moves with.</summary>
     public static string RidesOn(string key) => key switch
     {
-        Cape => Chest,
+        Cape => Torso,
         Weapon => NearHand,
         Offhand => FarHand,
         _ => key,

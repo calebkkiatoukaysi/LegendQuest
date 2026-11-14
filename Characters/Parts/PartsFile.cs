@@ -73,8 +73,9 @@ public sealed record PartsFile(
     /// <param name="Skin">For a face, its skin against the base's, red, green and blue; null otherwise.</param>
     /// <param name="Tones">The colour each dye channel was painted, 0 to 255, or null for a channel it hasn't; null for a part with no dye channels.</param>
     /// <param name="Pieces">A body's or an armor's pieces by bone, each where it is in the atlas: null for a part that's whole.</param>
+    /// <param name="Name">A library hair's or an extra's name, as the creation screen shows it; null for other parts.</param>
     public sealed record PartEntry(string Slot, string Base, string Socket, string Page, int[] Rect, float[] Pivot, int[] MaskRect, float[] Skin, float[][] Tones,
-        Dictionary<string, PieceEntry> Pieces);
+        Dictionary<string, PieceEntry> Pieces, string Name = null);
 
     /// <summary>One bone's piece of a part: where it is in the atlas, its part's socket in its own pixels, and its mask.</summary>
     /// <param name="Page">The atlas page it's on.</param>

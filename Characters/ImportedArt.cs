@@ -125,8 +125,8 @@ public static class ImportedArt
     {
         if (id is null) return null;
         if (Figures.TryGetValue(id, out ImportedFigure figure)) return figure;
-        if (SharedPictures.TryGetValue(id, out string shared)) return Figures.GetValueOrDefault(shared) ?? PartCatalog.Figure(shared);
-        return PartCatalog.Figure(id);
+        if (SharedPictures.TryGetValue(id, out string shared)) return Figures.GetValueOrDefault(shared) ?? PartCatalog.Figure(shared) ?? PartCatalog.CrowdFigure(id);
+        return PartCatalog.Figure(id) ?? PartCatalog.CrowdFigure(id);
     }
 
     /// <summary>A party member's picture: put together with the painted face they picked on the creation screen if they picked one, or else whatever Get gives for them.</summary>

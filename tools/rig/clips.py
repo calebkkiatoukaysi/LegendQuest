@@ -125,8 +125,8 @@ def crouch(a, near=0.0, far=0.0):
 
 
 REST = {}
-BREATHE = {"chest.sy": 1.02}
-READY = P(crouch(12, near=7.0, far=-4.0), {"chest": 5, "spine": 3, "head": -3, "arm_near_up": -30, "arm_near_low": -72,
+BREATHE = {"torso.sy": 1.008}
+READY = P(crouch(12, near=7.0, far=-4.0), {"torso": 8, "head": -3, "arm_near_up": -30, "arm_near_low": -72,
                                            "arm_far_up": -22, "arm_far_low": -60})
 """The fight stance, over the rest pose: knees bent, the near arm up with the weapon, the far arm
 forward in guard, showing in front of the chest."""
@@ -168,25 +168,25 @@ def _sit(seat, feet):
     return legs_at(0.0, round(hips_y, 2), {"ankle": (feet + (near.hip[0] - near.ankle[0]), 0.0)}, {"ankle": (feet, 0.0)})
 
 
-KNEEL = P(_kneel(), {"chest": 6, "spine": 4, "arm_near_up": -10, "arm_far_up": 6})
+KNEEL = P(_kneel(), {"torso": 10, "arm_near_up": -10, "arm_far_up": 6})
 _AHEAD = LEGS["near"].hip[0] - LEGS["near"].ankle[0] + 26.0
 KNEEL_STEP = stand_on(-3.0, 6.0, near=(_AHEAD * 0.55, -9.0), far=(-6.0, -3.0), roll=(0.0, 25.0))
 """Going down on a knee or getting up from one: the near foot in the air, stepping."""
 KNEEL_RISE = stand_on(-2.0, 16.0, near=(_AHEAD, 0.0), far=(-14.0, -8.0), roll=(0.0, 40.0))
 """...and down ahead, the hips lowering between the feet, the far foot back on its toes."""
-SIT = P(_sit(52.0, 24.0), {"spine": -4, "arm_near_up": -18, "arm_near_low": -30, "arm_far_up": -14, "arm_far_low": -30})
-SIT_GROUND = P(_sit(9.0, 40.0), {"spine": 8, "chest": 6, "arm_near_up": -40, "arm_near_low": -20, "arm_far_up": -30,
+SIT = P(_sit(52.0, 24.0), {"torso": -4, "arm_near_up": -18, "arm_near_low": -30, "arm_far_up": -14, "arm_far_low": -30})
+SIT_GROUND = P(_sit(9.0, 40.0), {"torso": 14, "arm_near_up": -40, "arm_near_low": -20, "arm_far_up": -30,
                                  "arm_far_low": -20})
 LYING = {"root": -90, "root.y": round(-14 * K, 2), "root.x": round(30 * K, 2), "arm_near_up": -70, "arm_far_up": -100,
          "arm_near_low": -10, "arm_far_low": 10, "leg_near_up": -8, "leg_far_up": 6, "head": -10}
 LYING_FRONT = {"root": 90, "root.y": round(-14 * K, 2), "root.x": round(-40 * K, 2), "arm_near_up": -150, "arm_far_up": -160,
                "head": -30}
-HUNCH = P(crouch(28), {"chest": 18, "spine": 14, "head": -8, "arm_near_up": -30, "arm_near_low": -40,
+HUNCH = P(crouch(28), {"torso": 32, "head": -8, "arm_near_up": -30, "arm_near_low": -40,
                        "arm_far_up": -20, "arm_far_low": -50})
 ARMS_FORWARD = {"arm_near_up": -55, "arm_near_low": -25, "arm_far_up": -45, "arm_far_low": -30}
 PALM_UP = {"arm_near_up": -25, "arm_near_low": -75, "hand_near": -20, "head": 10}
-REACH_UP = {"arm_near_up": -150, "arm_near_low": -10, "chest": -6, "head": -12}
-POINT = {"arm_near_up": -82, "arm_near_low": -4, "chest": -2, "head": -2}
+REACH_UP = {"arm_near_up": -150, "arm_near_low": -10, "torso": -6, "head": -12}
+POINT = {"arm_near_up": -82, "arm_near_low": -4, "torso": -2, "head": -2}
 
 
 def channels(poses):
@@ -383,11 +383,11 @@ def plant(name, c):
 
 
 #: What follows what, and how long after (seconds): each forearm its upper arm, each hand its
-#: forearm, the head the chest.
+#: forearm, the head the torso.
 DRAG = (("arm_near_low", "arm_near_up", 0.045), ("hand_near", "arm_near_low", 0.035),
-        ("arm_far_low", "arm_far_up", 0.045), ("hand_far", "arm_far_low", 0.035), ("head", "chest", 0.06))
-CHAIN = {"hips": "root", "spine": "hips", "chest": "spine", "head": "chest", "arm_near_up": "chest",
-         "arm_near_low": "arm_near_up", "hand_near": "arm_near_low", "arm_far_up": "chest",
+        ("arm_far_low", "arm_far_up", 0.045), ("hand_far", "arm_far_low", 0.035), ("head", "torso", 0.06))
+CHAIN = {"hips": "root", "torso": "hips", "head": "torso", "arm_near_up": "torso",
+         "arm_near_low": "arm_near_up", "hand_near": "arm_near_low", "arm_far_up": "torso",
          "arm_far_low": "arm_far_up", "hand_far": "arm_far_low"}
 DRAG_FPS = 30
 
@@ -401,7 +401,7 @@ def drag(name, c):
     """Lays drag over a clip: each bone in DRAG turns so that where it points follows, a beat late,
     where it pointed as keyed, against the bone it hangs from as it now is. A limb so leads from the
     shoulder, its forearm and hand trailing and catching up as it stops; the head settles after the
-    chest. An elbow is never straightened past the rest arm's, a wrist or the head never turned more
+    torso. An elbow is never straightened past the rest arm's, a wrist or the head never turned more
     than 30 degrees from the keyed pose. A clip that doesn't loop is lengthened by the longest beat,
     so the last bone settles before it holds."""
     length, loop = c["length"], c["loop"]
@@ -466,8 +466,8 @@ def drag(name, c):
 def idle():
     """Standing at ease, six seconds round: two slow breaths (the chest filling and the shoulders
     lifting with it), and the weight drifting onto the near leg and back to the far with the feet
-    staying put, the spine and the chest answering it a beat late and the head later still, the arms
-    hanging and swaying after the chest."""
+    staying put, the torso answering it a beat late and the head later still, the arms hanging and
+    swaying after the torso."""
     length, n = 6.0, 60
     keys = []
     for k in range(n):
@@ -476,8 +476,8 @@ def idle():
         breath = 0.5 - 0.5 * math.cos(4 * math.pi * t / length)
         shift = wave(0.0)
         pose = stand_on(round(1.3 * shift, 3), round(0.45 * shift * shift, 3))
-        pose.update({"spine": -0.9 * wave(0.35), "chest": -0.6 * wave(0.6) - 0.8 * breath,
-                     "chest.sy": 1.0 + 0.016 * breath, "head": 0.7 * wave(1.0) + 0.5 * breath - 0.6 * wave(0.3, 2),
+        pose.update({"torso": -0.9 * wave(0.35) - 0.6 * wave(0.6) - 0.8 * breath,
+                     "torso.sy": 1.0 + 0.0064 * breath, "head": 0.7 * wave(1.0) + 0.5 * breath - 0.6 * wave(0.3, 2),
                      "arm_near_up": 1.4 * wave(0.9) - 1.0 * breath, "arm_far_up": 1.2 * wave(1.1) - 0.8 * breath,
                      "arm_near_low": -2.0 - 1.2 * wave(1.3), "arm_far_low": -2.0 - 1.0 * wave(1.5)})
         keys.append((t, pose))
@@ -512,59 +512,59 @@ def standing():
                                (0.7, P(stand_on(12.0, 0.0, near=(12.0, 0.0), far=(12.0, 0.0))))],
          events=[(0.45, "step")])
     # Sitting down: the weight goes back over the heels and the arms come forward to balance, then down.
-    clip("sit", 0.8, [(0, REST), (0.3, P(crouch(22), {"spine": 10, "chest": 8, "arm_near_up": -20, "arm_far_up": -16})),
+    clip("sit", 0.8, [(0, REST), (0.3, P(crouch(22), {"torso": 18, "arm_near_up": -20, "arm_far_up": -16})),
                       (0.8, SIT)])
-    clip("sit-fire", 1.0, [(0, REST), (0.35, P(crouch(30), {"spine": 12, "chest": 10, "arm_near_up": -24, "arm_far_up": -18})),
-                           (0.65, P(SIT_GROUND, {"hips.y": SIT_GROUND["hips.y"] - 6, "spine": 12})), (1.0, SIT_GROUND)])
-    clip("sit-up", 0.8, [(0, LYING), (0.35, P(LYING, {"root": -60, "head": -20, "chest": 10})), (0.8, SIT_GROUND)])
+    clip("sit-fire", 1.0, [(0, REST), (0.35, P(crouch(30), {"torso": 22, "arm_near_up": -24, "arm_far_up": -18})),
+                           (0.65, P(SIT_GROUND, {"hips.y": SIT_GROUND["hips.y"] - 6, "torso": 18})), (1.0, SIT_GROUND)])
+    clip("sit-up", 0.8, [(0, LYING), (0.35, P(LYING, {"root": -60, "head": -20, "torso": 10})), (0.8, SIT_GROUND)])
     # Up off a knee: lean forward over the front foot, push, straighten, the head last.
-    clip("stand", 0.85, [(0, KNEEL), (0.22, P(KNEEL, {"chest": 18, "spine": 10, "head": 6, "arm_near_up": -10})),
-                         (0.45, P(KNEEL_RISE, {"chest": 10, "spine": 5})), (0.65, P(KNEEL_STEP, {"chest": 3})), (0.85, REST)])
+    clip("stand", 0.85, [(0, KNEEL), (0.22, P(KNEEL, {"torso": 28, "head": 6, "arm_near_up": -10})),
+                         (0.45, P(KNEEL_RISE, {"torso": 15})), (0.65, P(KNEEL_STEP, {"torso": 3})), (0.85, REST)])
     alias("stand", "rise")
     # Down onto a knee: the near foot steps out ahead and lands, the far heel lifts as the hips
     # lower between them, the far knee comes down, and it settles.
-    clip("kneel", 0.8, [(0, REST), (0.2, P(KNEEL_STEP, {"chest": 3})), (0.4, P(KNEEL_RISE, {"chest": 8, "spine": 4})),
-                        (0.62, P(KNEEL, {"hips.y": KNEEL["hips.y"] + 1.5, "chest": 9})), (0.8, KNEEL)])
-    pose_clip("fall-kneel", P(KNEEL, {"chest": 14, "head": 12}), 0.18, ease="linear")
+    clip("kneel", 0.8, [(0, REST), (0.2, P(KNEEL_STEP, {"torso": 3})), (0.4, P(KNEEL_RISE, {"torso": 12})),
+                        (0.62, P(KNEEL, {"hips.y": KNEEL["hips.y"] + 1.5, "torso": 13})), (0.8, KNEEL)])
+    pose_clip("fall-kneel", P(KNEEL, {"torso": 18, "head": 12}), 0.18, ease="linear")
     pose_clip("kneel-smoking", KNEEL, 0.5, fx=[(0.3, "smoke", "hips")])
-    pose_clip("lean", {"spine": -6, "chest": -4, "hips.x": -3, "leg_far_up": 10, "leg_near_up": -8,
+    pose_clip("lean", {"torso": -10, "hips.x": -3, "leg_far_up": 10, "leg_near_up": -8,
                        "arm_near_up": -20, "arm_near_low": -60})
-    pose_clip("lean-rail", {"spine": 12, "chest": 10, "head": -10, "arm_near_up": -60, "arm_near_low": -30,
+    pose_clip("lean-rail", {"torso": 22, "head": -10, "arm_near_up": -60, "arm_near_low": -30,
                             "arm_far_up": -50, "arm_far_low": -40, "leg_far_up": 6})
-    clip("turn", 0.15, [(0, REST), (0.075, {"hips.y": 3, "chest.sx": 0.6, "hips.sx": 0.6, "head.sx": 0.7}), (0.15, REST)],
+    clip("turn", 0.15, [(0, REST), (0.075, {"hips.y": 3, "torso.sx": 0.6, "hips.sx": 0.6, "head.sx": 0.7}), (0.15, REST)],
          ease="linear", notes="the runtime flips facing at the halfway point, where the figure is squashed thinnest")
-    there_and_back("bow", P({"spine": 18, "chest": 22, "head": 18, "arm_near_up": 8, "arm_far_up": 4}), 1.4, 0.5)
-    there_and_back("bow-head", {"head": 20, "chest": 4}, 0.9, 0.3)
-    pose_clip("look-up", {"head": -24, "chest": -6})
-    pose_clip("face-sun", {"head": -32, "chest": -8, "spine": -4}, 0.6, face={"eyes": "closed"})
+    there_and_back("bow", P({"torso": 40, "head": 18, "arm_near_up": 8, "arm_far_up": 4}), 1.4, 0.5)
+    there_and_back("bow-head", {"head": 20, "torso": 4}, 0.9, 0.3)
+    pose_clip("look-up", {"head": -24, "torso": -6})
+    pose_clip("face-sun", {"head": -32, "torso": -12}, 0.6, face={"eyes": "closed"})
     alias("face-sun", "stand-sun")
-    pose_clip("look-back", {"head": -6, "chest": -10, "head.sx": -1.0, "hair_back.sx": -1.0, "hair_back.x": 36}, 0.4,
+    pose_clip("look-back", {"head": -6, "torso": -10, "head.sx": -1.0, "hair_back.sx": -1.0, "hair_back.x": 36}, 0.4,
               notes="the head's parts flip to look behind; hair_back moves across to the other side")
     pose_clip("hide", HUNCH, 0.3)
     clip("leap", 0.55, [(0, REST), (0.15, P(crouch(24), {"arm_near_up": 30, "arm_far_up": 30})),
                         (0.35, {"root.y": -30, "root.x": 20, "leg_near_up": -40, "leg_near_low": 60,
                                 "arm_near_up": -120, "arm_far_up": -110}),
                         (0.55, {"root.x": 44})])
-    clip("dive", 0.5, [(0, REST), (0.15, P(crouch(20), {"chest": 20})),
+    clip("dive", 0.5, [(0, REST), (0.15, P(crouch(20), {"torso": 20})),
                        (0.5, P(LYING_FRONT, {"root.x": 30}))])
     clip("land", 0.35, [(0, {"root.y": -24, "leg_near_up": -20, "leg_near_low": 30}),
                         (0.15, P(crouch(30), {"arm_near_up": -40, "arm_far_up": -30})), (0.35, REST)],
          events=[(0.15, "step")])
     alias("land", "drop-in")
-    clip("stagger", 0.7, [(0, REST), (0.15, {"hips.x": -8, "chest": -12, "head": -10, "arm_near_up": -30,
+    clip("stagger", 0.7, [(0, REST), (0.15, {"hips.x": -8, "torso": -12, "head": -10, "arm_near_up": -30,
                                              "arm_far_up": 20, "leg_near_up": -14}),
-                          (0.4, {"hips.x": -14, "chest": 6, "leg_far_up": 12}), (0.7, {"hips.x": -14})],
+                          (0.4, {"hips.x": -14, "torso": 6, "leg_far_up": 12}), (0.7, {"hips.x": -14})],
          events=[(0.4, "step")])
-    clip("fall", 0.6, [(0, REST), (0.2, P(crouch(16), {"chest": -14, "arm_near_up": -50, "arm_far_up": -40})),
+    clip("fall", 0.6, [(0, REST), (0.2, P(crouch(16), {"torso": -14, "arm_near_up": -50, "arm_far_up": -40})),
                        (0.6, LYING)])
     alias("fall", "slip")
-    pose_clip("slump", P(SIT_GROUND, {"chest": 24, "head": 30, "spine": 14, "arm_near_up": 6, "arm_far_up": 4}), 0.8)
+    pose_clip("slump", P(SIT_GROUND, {"torso": 38, "head": 30, "arm_near_up": 6, "arm_far_up": 4}), 0.8)
     clip("slide-to", 0.8, [(0, LYING), (0.8, P(LYING, {"root.x": 60, "arm_near_up": -160, "arm_far_up": -170}))],
          notes="pulled toward the cue's target; the runtime moves the root there")
     pose_clip("hold-throne", P(LYING_FRONT, {"arm_near_up": -170, "arm_near_low": -10}), 0.6)
-    there_and_back("scream", {"head": -34, "chest": -10, "arm_near_up": -150, "arm_near_low": -100,
+    there_and_back("scream", {"head": -34, "torso": -10, "arm_near_up": -150, "arm_near_low": -100,
                               "arm_far_up": -140, "arm_far_low": -100}, 1.6, 1.0, expr="shock")
-    clip("wake-gasp", 0.35, [(0, LYING), (0.35, P(SIT_GROUND, {"head": -14, "chest": -6}))], expr="shock")
+    clip("wake-gasp", 0.35, [(0, LYING), (0.35, P(SIT_GROUND, {"head": -14, "torso": 2}))], expr="shock")
     clip("march-in-place", 0.8, [(0, {"leg_near_up": -30, "leg_near_low": 40, "arm_far_up": -20, "arm_near_up": 10}),
                                  (0.4, {"leg_far_up": -30, "leg_far_low": 40, "arm_near_up": -20, "arm_far_up": 10}),
                                  (0.8, {"leg_near_up": -30, "leg_near_low": 40, "arm_far_up": -20, "arm_near_up": 10})],
@@ -573,7 +573,7 @@ def standing():
          notes="holds whatever pose the actor is in, stops the blink, tints violet; the runtime doesn't blend out of the last pose")
     CHAIN = {"arm_near_up": -150, "arm_near_low": 30, "arm_far_up": -140, "arm_far_low": 30, "head": 14}
     pose_clip("chained", CHAIN, 0.4)
-    clip("break-chains", 0.7, [(0, CHAIN), (0.3, P(CHAIN, {"chest": -8})), (0.7, {"arm_near_up": -20, "arm_far_up": 10})],
+    clip("break-chains", 0.7, [(0, CHAIN), (0.3, P(CHAIN, {"torso": -8})), (0.7, {"arm_near_up": -20, "arm_far_up": 10})],
          fx=[(0.3, "shatter", "hand_near")])
     pose_clip("arm-sling", {"arm_near_up": -10, "arm_near_low": -95}, 0.3,
               swaps=[(0, "arm_near_low", "sling")], notes="the look's kit draws the sling as part 'sling'")
@@ -621,14 +621,14 @@ def moves():
     # In three-quarter view the hands meet in front of the body, out past the chest, where the far
     # hand (painted in shadow, behind the chest) shows; the near arm reaches across in front.
     apart = P(reach("near", 650, 478), reach("far", 790, 470), {"head": -2})
-    together = P(reach("near", 712, 474), reach("far", 728, 470), {"head": 2, "chest": 3})
+    together = P(reach("near", 712, 474), reach("far", 728, 470), {"head": 2, "torso": 3})
     clip("clap", 0.5, [(0, apart), (0.25, together), (0.5, apart)], loop=True, events=[(0.25, "clap")],
          notes="the hands meet in front of the body")
     alias("clap", "applaud")
 
     def groove(side):
         arms = P(reach("near", 320, 130), reach("far", 700, 740)) if side > 0 else             P(reach("near", 360, 740), reach("far", 770, 130))
-        return P(crouch(10), arms, {"hips.x": 3 * side, "chest": -6 * side, "spine": -3 * side, "head": 6 * side,
+        return P(crouch(10), arms, {"hips.x": 3 * side, "torso": -9 * side, "head": 6 * side,
                                     "leg_near_up": -12 * side, "leg_near_low": 14, "leg_far_up": 12 * side, "leg_far_low": 14})
     dip = P(crouch(18), reach("near", 600, 470), reach("far", 760, 480))
     clip("dance", 1.2, [(0, groove(1)), (0.3, dip), (0.6, groove(-1)), (0.9, dip), (1.2, groove(1))], loop=True,
@@ -637,12 +637,12 @@ def moves():
     up = P(reach("near", 330, 90), reach("far", 760, 100))
     # Down into the crouch with the arms swung back (anticipation), up through the toes as the arms
     # throw up, the knees tucking at the top, a landing that gives deep and comes back up.
-    clip("jump", 1.0, [(0, REST), (0.24, P(crouch(30), reach("near", 300, 720), reach("far", 590, 730), {"chest": 12, "spine": 6})),
-                       (0.34, P(up, stand_on(0, -6, roll=(16, 30)), {"chest": -2})),
+    clip("jump", 1.0, [(0, REST), (0.24, P(crouch(30), reach("near", 300, 720), reach("far", 590, 730), {"torso": 18})),
+                       (0.34, P(up, stand_on(0, -6, roll=(16, 30)), {"torso": -2})),
                        (0.5, P(up, {"root.y": -30, "leg_near_up": -34, "leg_near_low": 56, "foot_near": -20,
                                     "leg_far_up": -22, "leg_far_low": 64, "foot_far": -24})),
                        (0.66, P(reach("near", 360, 520), reach("far", 760, 520), {"root.y": -4})),
-                       (0.76, P(crouch(26), reach("near", 330, 640), reach("far", 700, 640), {"chest": 10})), (1.0, REST)],
+                       (0.76, P(crouch(26), reach("near", 330, 640), reach("far", 700, 640), {"torso": 10})), (1.0, REST)],
          events=[(0.24, "step"), (0.76, "step")], notes="straight up and down where they stand")
     alias("jump", "hop")
     hello = P(reach("near", 300, 150), {"head": -4})
@@ -663,43 +663,43 @@ def moves():
 def hands():
     there_and_back("point", POINT, 1.4, 0.8)
     there_and_back("raise-hand", {"arm_near_up": -120, "arm_near_low": -30, "hand_near": -20}, 1.2, 0.6)
-    there_and_back("stop", {"arm_near_up": -75, "arm_near_low": -20, "hand_near": -70, "chest": -3}, 1.0, 0.5)
+    there_and_back("stop", {"arm_near_up": -75, "arm_near_low": -20, "hand_near": -70, "torso": -3}, 1.0, 0.5)
     pose_clip("show-palm", PALM_UP, 0.4, swaps=[(0.2, "hand_near", "open")])
     alias("show-palm", "look-palm")
-    there_and_back("close-fist", {"arm_near_up": -20, "arm_near_low": -80, "chest": 3}, 1.0, 0.5,
+    there_and_back("close-fist", {"arm_near_up": -20, "arm_near_low": -80, "torso": 3}, 1.0, 0.5,
                    swaps=[(0.25, "hand_near", "fist")])
-    reach_out = {"arm_near_up": -62, "arm_near_low": -28, "hand_near": -20, "chest": 6, "spine": 3, "head": 6,
+    reach_out = {"arm_near_up": -62, "arm_near_low": -28, "hand_near": -20, "torso": 9, "head": 6,
                  "leg_near_up": -10}
     clip("interact", 0.8, [(0, REST), (0.3, reach_out), (0.5, P(reach_out, {"arm_near_low": -36, "hand_near": 10})),
                            (0.8, REST)], loop=True, events=[(0.4, "pass")],
          notes="using what's in front: a door, a lever, a counter, a chest (the art guide's Interact cycle)")
-    pose_clip("offer-hand", {"arm_near_up": -55, "arm_near_low": -15, "hand_near": -40, "chest": 4},
+    pose_clip("offer-hand", {"arm_near_up": -55, "arm_near_low": -15, "hand_near": -40, "torso": 4},
               swaps=[(0.2, "hand_near", "open")])
     there_and_back("reach", P(REACH_UP, {"leg_far_up": 8}), 1.2, 0.5)
     alias("reach", "reach-crown", "touch-crown")
     clip("crown-self", 1.6, [(0, REST), (0.5, P(REACH_UP, {"arm_far_up": -150, "arm_far_low": -10})),
                              (0.9, {"arm_near_up": -160, "arm_near_low": -70, "arm_far_up": -160, "arm_far_low": -70}),
                              (1.6, REST)])
-    clip("give-item", 1.0, [(0, REST), (0.4, {"arm_near_up": -60, "arm_near_low": -20, "chest": 6}),
-                            (0.7, {"arm_near_up": -60, "arm_near_low": -20, "chest": 6}), (1.0, REST)],
+    clip("give-item", 1.0, [(0, REST), (0.4, {"arm_near_up": -60, "arm_near_low": -20, "torso": 6}),
+                            (0.7, {"arm_near_up": -60, "arm_near_low": -20, "torso": 6}), (1.0, REST)],
          events=[(0.55, "pass")], partner={"offset": [34, 0], "clip": "receive-item"})
     clip("receive-item", 1.0, [(0, REST), (0.45, {"arm_near_up": -55, "arm_near_low": -25}),
                                (0.7, {"arm_near_up": -45, "arm_near_low": -50}), (1.0, {"arm_near_low": -30})],
          events=[(0.55, "pass")])
     alias("give-item", "hand-over")
-    clip("pick-up", 0.9, [(0, REST), (0.4, P(crouch(34), {"chest": 30, "spine": 20, "arm_near_up": -30})),
+    clip("pick-up", 0.9, [(0, REST), (0.4, P(crouch(34), {"torso": 50, "arm_near_up": -30})),
                           (0.9, {"arm_near_up": -10, "arm_near_low": -40})], events=[(0.4, "pass")])
-    clip("snatch", 0.35, [(0, REST), (0.15, {"arm_near_up": -70, "arm_near_low": -10, "chest": 10}),
+    clip("snatch", 0.35, [(0, REST), (0.15, {"arm_near_up": -70, "arm_near_low": -10, "torso": 10}),
                           (0.35, {"arm_near_up": -10, "arm_near_low": -70})], events=[(0.15, "pass")], ease="linear")
     alias("pick-up", "grab-item")
-    clip("place-item", 1.0, [(0, {"arm_near_low": -40}), (0.5, P(crouch(16), {"chest": 18, "arm_near_up": -50})),
+    clip("place-item", 1.0, [(0, {"arm_near_low": -40}), (0.5, P(crouch(16), {"torso": 18, "arm_near_up": -50})),
                              (1.0, REST)], events=[(0.5, "pass")])
     alias("place-item", "lift-into")
     pose_clip("lift-item", {"arm_near_up": -95, "arm_near_low": -40, "head": -8}, 0.5)
     alias("lift-item", "raise-item", "lift-ledger", "hold-out")
     pose_clip("lift-both", {"arm_near_up": -100, "arm_near_low": -30, "arm_far_up": -95, "arm_far_low": -30, "head": -10}, 0.5)
-    clip("throw", 0.6, [(0, REST), (0.25, {"arm_near_up": 40, "arm_near_low": -90, "chest": -10, "leg_near_up": -10}),
-                        (0.35, {"arm_near_up": -110, "arm_near_low": -10, "chest": 12}), (0.6, {"arm_near_up": -30})],
+    clip("throw", 0.6, [(0, REST), (0.25, {"arm_near_up": 40, "arm_near_low": -90, "torso": -10, "leg_near_up": -10}),
+                        (0.35, {"arm_near_up": -110, "arm_near_low": -10, "torso": 12}), (0.6, {"arm_near_up": -30})],
          events=[(0.33, "release")])
     alias("throw", "throw-fire", "burn-book")
     clip("uncork", 1.2, [(0, REST), (0.4, {"arm_near_up": -20, "arm_near_low": -90, "arm_far_up": -20, "arm_far_low": -95}),
@@ -712,10 +712,10 @@ def hands():
     clip("drink-flask", 1.4, [(0, REST), (0.4, {"arm_near_up": -60, "arm_near_low": -110, "head": -20}),
                               (1.0, {"arm_near_up": -65, "arm_near_low": -115, "head": -28}), (1.4, {"arm_near_low": -40})])
     alias("drink-flask", "pour-wine")
-    read_pose = {"arm_near_up": -20, "arm_near_low": -85, "arm_far_up": -15, "arm_far_low": -80, "head": 16, "chest": 4}
+    read_pose = {"arm_near_up": -20, "arm_near_low": -85, "arm_far_up": -15, "arm_far_low": -80, "head": 16, "torso": 4}
     clip("read", 2.0, [(0, read_pose), (1.0, P(read_pose, {"head": 20})), (2.0, read_pose)], loop=True)
     alias("read", "read-roll", "inspect", "look-at-shrine")
-    sign_pose = P(crouch(6), {"chest": 20, "spine": 8, "head": 20, "arm_near_up": -30, "arm_near_low": -60})
+    sign_pose = P(crouch(6), {"torso": 28, "head": 20, "arm_near_up": -30, "arm_near_low": -60})
     clip("sign", 0.8, [(0, sign_pose), (0.4, P(sign_pose, {"arm_near_low": -70, "hand_near": 10})), (0.8, sign_pose)], loop=True)
     alias("sign", "writing")
     clip("bind-book", 1.2, [(0, read_pose), (0.6, P(read_pose, {"arm_near_low": -100, "arm_far_low": -60})), (1.2, read_pose)],
@@ -728,34 +728,34 @@ def hands():
          events=[(0.2, "release"), (0.7, "pass")], fx=[(0.2, "coin-arc", "hand_near")])
     clip("open-parcel", 1.4, [(0, read_pose), (0.7, P(read_pose, {"arm_near_up": -40, "arm_near_low": -50, "arm_far_low": -100})),
                               (1.4, read_pose)])
-    clip("unlock", 1.2, [(0, REST), (0.4, {"arm_near_up": -70, "arm_near_low": -20, "chest": 6}),
-                         (0.8, {"arm_near_up": -70, "arm_near_low": -20, "hand_near": 60, "chest": 6}), (1.2, REST)])
-    clip("pickpocket", 0.8, [(0, P(crouch(10), {"chest": 10})), (0.35, P(crouch(10), {"chest": 12, "arm_near_up": -40, "arm_near_low": -10})),
-                             (0.8, P(crouch(10), {"chest": 10, "arm_near_low": -60}))], events=[(0.4, "pass")],
+    clip("unlock", 1.2, [(0, REST), (0.4, {"arm_near_up": -70, "arm_near_low": -20, "torso": 6}),
+                         (0.8, {"arm_near_up": -70, "arm_near_low": -20, "hand_near": 60, "torso": 6}), (1.2, REST)])
+    clip("pickpocket", 0.8, [(0, P(crouch(10), {"torso": 10})), (0.35, P(crouch(10), {"torso": 12, "arm_near_up": -40, "arm_near_low": -10})),
+                             (0.8, P(crouch(10), {"torso": 10, "arm_near_low": -60}))], events=[(0.4, "pass")],
          partner={"offset": [26, 0], "clip": "idle"})
     clip("hood-back", 1.0, [(0, REST), (0.45, {"arm_near_up": -150, "arm_near_low": -80, "arm_far_up": -150, "arm_far_low": -80}),
                             (1.0, REST)], swaps=[(0.5, "headwear", "hood-down")])
-    there_and_back("touch-burn", {"arm_near_up": -40, "arm_near_low": -120, "head": 10, "chest": 6}, 1.4, 0.7)
+    there_and_back("touch-burn", {"arm_near_up": -40, "arm_near_low": -120, "head": 10, "torso": 6}, 1.4, 0.7)
     alias("touch-burn", "cough", "breathe-in")
-    heal_pose = P(ARMS_FORWARD, {"hand_near": -30, "chest": 4})
+    heal_pose = P(ARMS_FORWARD, {"hand_near": -30, "torso": 4})
     clip("heal", 1.2, [(0, REST), (0.4, heal_pose), (1.2, heal_pose)], fx=[(0.3, "glow-gold", "hand_front"), (0.3, "glow-gold", "hand_back")])
-    clip("drain", 1.2, [(0, heal_pose), (0.6, P(heal_pose, {"chest": -4})), (1.2, heal_pose)], loop=True,
+    clip("drain", 1.2, [(0, heal_pose), (0.6, P(heal_pose, {"torso": -4})), (1.2, heal_pose)], loop=True,
          fx=[(0, "particles-red-in", "hand_front")])
     chant_pose = {"arm_near_up": -40, "arm_near_low": -70, "arm_far_up": -35, "arm_far_low": -70, "head": 12}
-    clip("chant", 2.0, [(0, chant_pose), (1.0, P(chant_pose, {"head": 18, "chest": 4})), (2.0, chant_pose)], loop=True)
+    clip("chant", 2.0, [(0, chant_pose), (1.0, P(chant_pose, {"head": 18, "torso": 4})), (2.0, chant_pose)], loop=True)
     pose_clip("address-crowd", {"arm_near_up": -110, "arm_near_low": -20, "arm_far_up": -100, "arm_far_low": -20,
-                                "head": -12, "chest": -5}, 0.6)
+                                "head": -12, "torso": -5}, 0.6)
     alias("address-crowd", "climb-cart")
-    hit_wall = {"arm_near_up": -100, "arm_near_low": -10, "arm_far_up": -95, "arm_far_low": -10, "chest": 12}
+    hit_wall = {"arm_near_up": -100, "arm_near_low": -10, "arm_far_up": -95, "arm_far_low": -10, "torso": 12}
     clip("pound-wall", 0.6, [(0, P(hit_wall, {"arm_near_up": -130, "arm_far_up": -125})), (0.3, hit_wall),
                              (0.6, P(hit_wall, {"arm_near_up": -130, "arm_far_up": -125}))], loop=True, events=[(0.3, "hit")])
-    pose_clip("bar-door", P(crouch(14), {"chest": 18, "spine": 8, "arm_near_up": -70, "arm_near_low": -70,
+    pose_clip("bar-door", P(crouch(14), {"torso": 26, "arm_near_up": -70, "arm_near_low": -70,
                                          "arm_far_up": -60, "arm_far_low": -60, "leg_far_up": 20}), 0.4)
     alias("bar-door", "set-shield", "shield-cover")
-    pose_clip("blade-at-throat", {"arm_near_up": -70, "arm_near_low": -30, "chest": 6, "head": 8}, 0.5,
+    pose_clip("blade-at-throat", {"arm_near_up": -70, "arm_near_low": -30, "torso": 6, "head": 8}, 0.5,
               partner={"offset": [24, 0], "clip": "kneel"})
     clip("pommel-strike", 0.5, [(0, REST), (0.2, {"arm_near_up": -150, "arm_near_low": -20}),
-                                (0.32, {"arm_near_up": -40, "arm_near_low": -10, "chest": 14}), (0.5, {"arm_near_up": -30})],
+                                (0.32, {"arm_near_up": -40, "arm_near_low": -10, "torso": 14}), (0.5, {"arm_near_up": -30})],
          events=[(0.32, "hit")])
     alias("pommel-strike", "strike")
     clip("draw", 0.6, [(0, REST), (0.25, {"arm_near_up": -160, "arm_near_low": -60, "head": -6}),
@@ -767,9 +767,9 @@ def hands():
                       (1.0, {"arm_near_up": -80, "arm_near_low": -10}), (1.4, {"arm_near_up": -100, "arm_near_low": -20}),
                       (1.8, {"arm_near_up": -70, "arm_near_low": -10}), (2.4, {"arm_near_up": -20})],
          events=[(1.0, "hit"), (1.8, "hit")], partner={"offset": [40, 0], "clip": "kneel"})
-    clip("burn", 1.0, [(0, REST), (0.2, {"chest": -14, "head": -16, "arm_near_up": -60, "arm_far_up": -50, "hips.x": -6}),
-                       (1.0, P(crouch(20), {"chest": 20, "arm_near_low": -100, "arm_far_low": -100}))],
-         fx=[(0, "fire", "chest")], expr="afraid")
+    clip("burn", 1.0, [(0, REST), (0.2, {"torso": -14, "head": -16, "arm_near_up": -60, "arm_far_up": -50, "hips.x": -6}),
+                       (1.0, P(crouch(20), {"torso": 20, "arm_near_low": -100, "arm_far_low": -100}))],
+         fx=[(0, "fire", "torso")], expr="afraid")
     clip("ash", 1.6, [(0, REST), (0.9, LYING), (1.6, LYING)], fx=[(0.9, "ash", "root")],
          notes="die, then the parts dissolve upward as ash (or toward the target for consumed)")
     alias("ash", "consumed")
@@ -787,21 +787,21 @@ def two_actors():
     clip("take-hand", 0.8, [(0, REST), (0.6, {"arm_near_up": -40, "arm_near_low": -20})],
          partner={"offset": [36, 0], "clip": "take-hand"}, swaps=[(0.5, "hand_near", "open")])
     alias("take-hand", "catch-hand", "touch-fingers", "touch-hand")
-    clip("clasp-hands", 1.0, [(0, REST), (0.5, {"arm_near_up": -70, "arm_near_low": -50, "chest": 4})],
+    clip("clasp-hands", 1.0, [(0, REST), (0.5, {"arm_near_up": -70, "arm_near_low": -50, "torso": 4})],
          partner={"offset": [40, 0], "clip": "clasp-hands"}, fx=[(0.5, "sigil-glow", "hand_near")])
     clip("hand-on-shoulder", 0.8, [(0, REST), (0.6, {"arm_near_up": -95, "arm_near_low": -10})],
          partner={"offset": [30, 0], "clip": "idle"})
     alias("hand-on-shoulder", "hand-on-bark")
-    hug = {"arm_near_up": -80, "arm_near_low": -70, "arm_far_up": -70, "arm_far_low": -80, "chest": 8, "head": 10}
+    hug = {"arm_near_up": -80, "arm_near_low": -70, "arm_far_up": -70, "arm_far_low": -80, "torso": 8, "head": 10}
     clip("hug", 1.2, [(0, REST), (0.5, hug), (1.2, hug)], partner={"offset": [22, 0], "clip": "hug"})
-    clip("grab-arm", 0.4, [(0, REST), (0.2, {"arm_near_up": -70, "arm_near_low": -10, "chest": 8}),
+    clip("grab-arm", 0.4, [(0, REST), (0.2, {"arm_near_up": -70, "arm_near_low": -10, "torso": 8}),
                            (0.4, {"arm_near_up": -55, "arm_near_low": -30})], ease="linear",
          partner={"offset": [30, 0], "clip": "grabbed"}, swaps=[(0.2, "hand_near", "fist")])
-    clip("grabbed", 0.4, [(0, REST), (0.4, {"chest": -8, "head": -10, "hips.x": -4, "arm_near_up": -30})], expr="shock")
+    clip("grabbed", 0.4, [(0, REST), (0.4, {"torso": -8, "head": -10, "hips.x": -4, "arm_near_up": -30})], expr="shock")
     alias("grab-arm", "grab-wrist")
-    clip("tackle", 0.6, [(0, REST), (0.15, P(crouch(20), {"chest": 30})), (0.6, P(LYING_FRONT, {"root.x": 50}))],
+    clip("tackle", 0.6, [(0, REST), (0.15, P(crouch(20), {"torso": 30})), (0.6, P(LYING_FRONT, {"root.x": 50}))],
          partner={"offset": [20, 0], "clip": "tackled"}, events=[(0.3, "hit")])
-    clip("tackled", 0.6, [(0, REST), (0.3, {"chest": -20, "hips.x": -10}), (0.6, P(LYING, {"root.x": 10}))])
+    clip("tackled", 0.6, [(0, REST), (0.3, {"torso": -20, "hips.x": -10}), (0.6, P(LYING, {"root.x": 10}))])
     clip("cloak-around", 1.4, [(0, REST), (0.7, {"arm_near_up": -100, "arm_near_low": -60, "cape_1": -40, "cape_2": -30,
                                                  "cape_3": -20}), (1.4, {"arm_near_up": -70, "arm_near_low": -80, "cape_1": -30})],
          partner={"offset": [18, 0], "clip": "idle"}, fx=[(0.9, "fade-both", "root")])
@@ -818,24 +818,24 @@ def two_actors():
 # --------------------------------------------------------------------------- #
 
 WIND = {
-    "one-hand": {"arm_near_up": -150, "arm_near_low": -40, "chest": -8, "head": -4},
-    "two-hand": {"arm_near_up": -165, "arm_near_low": -30, "arm_far_up": -160, "arm_far_low": -30, "chest": -12, "spine": -6},
-    "polearm": {"arm_near_up": 10, "arm_near_low": -80, "arm_far_up": -40, "arm_far_low": -60, "chest": -10, "hips.x": -4},
-    "dagger": {"arm_near_up": 20, "arm_near_low": -110, "chest": -6},
-    "unarmed": {"arm_near_up": 25, "arm_near_low": -120, "chest": -10, "hips.x": -3},
-    "hook": {"arm_far_up": -130, "arm_far_low": -50, "chest": -10},
+    "one-hand": {"arm_near_up": -150, "arm_near_low": -40, "torso": -5, "head": -4},
+    "two-hand": {"arm_near_up": -165, "arm_near_low": -30, "arm_far_up": -160, "arm_far_low": -30, "torso": -18},
+    "polearm": {"arm_near_up": 10, "arm_near_low": -80, "arm_far_up": -40, "arm_far_low": -60, "torso": -7, "hips.x": -4},
+    "dagger": {"arm_near_up": 20, "arm_near_low": -110, "torso": -3},
+    "unarmed": {"arm_near_up": 25, "arm_near_low": -120, "torso": -7, "hips.x": -3},
+    "hook": {"arm_far_up": -130, "arm_far_low": -50, "torso": -7},
 }
 BLOW = {
-    "one-hand": {"arm_near_up": -40, "arm_near_low": -6, "chest": 14, "spine": 6, "hips.x": 6, "leg_near_up": -24},
-    "two-hand": {"arm_near_up": -30, "arm_near_low": -4, "arm_far_up": -36, "arm_far_low": -6, "chest": 18, "spine": 8, "hips.x": 6},
-    "polearm": {"arm_near_up": -80, "arm_near_low": -4, "arm_far_up": -70, "arm_far_low": -10, "chest": 8, "hips.x": 10, "leg_near_up": -26},
-    "dagger": {"arm_near_up": -82, "arm_near_low": -2, "chest": 10, "hips.x": 8, "leg_near_up": -20},
-    "unarmed": {"arm_near_up": -84, "arm_near_low": -2, "chest": 12, "hips.x": 6, "leg_near_up": -18},
-    "hook": {"arm_far_up": -50, "arm_far_low": -10, "chest": 16, "hips.x": 6, "leg_near_up": -18},
+    "one-hand": {"arm_near_up": -40, "arm_near_low": -6, "torso": 20, "hips.x": 6, "leg_near_up": -24},
+    "two-hand": {"arm_near_up": -30, "arm_near_low": -4, "arm_far_up": -36, "arm_far_low": -6, "torso": 26, "hips.x": 6},
+    "polearm": {"arm_near_up": -80, "arm_near_low": -4, "arm_far_up": -70, "arm_far_low": -10, "torso": 11, "hips.x": 10, "leg_near_up": -26},
+    "dagger": {"arm_near_up": -82, "arm_near_low": -2, "torso": 13, "hips.x": 8, "leg_near_up": -20},
+    "unarmed": {"arm_near_up": -84, "arm_near_low": -2, "torso": 15, "hips.x": 6, "leg_near_up": -18},
+    "hook": {"arm_far_up": -50, "arm_far_low": -10, "torso": 19, "hips.x": 6, "leg_near_up": -18},
 }
 VICTORY = {
     "one-hand": {"arm_near_up": -160, "arm_near_low": -10, "head": -10},
-    "two-hand": {"arm_near_up": -20, "arm_near_low": -20, "arm_far_up": -30, "arm_far_low": -40, "chest": -4},
+    "two-hand": {"arm_near_up": -20, "arm_near_low": -20, "arm_far_up": -30, "arm_far_low": -40, "torso": -4},
     "polearm": {"arm_near_up": -20, "arm_near_low": -90, "head": -8},
     "dagger": {"arm_near_up": -40, "arm_near_low": -110, "hand_near": 40, "head": -6},
     "unarmed": {"arm_near_up": -150, "arm_near_low": -60, "head": -12},
@@ -852,7 +852,7 @@ def combat():
     # The fight stance breathes and bounces lightly on the knees, the feet planted, the chest and
     # the guard a beat behind the hips.
     low = P(crouch(15, near=7.0, far=-4.0), {k: v for k, v in READY.items() if not k.startswith(("leg_", "foot_", "hips"))})
-    clip("ready", 1.2, [(0, READY), (0.6, P(low, {"chest": READY["chest"] + 1.0, "chest.sy": 1.015,
+    clip("ready", 1.2, [(0, READY), (0.6, P(low, {"torso": READY["torso"] + 1.0, "torso.sy": 1.006,
                                                   "arm_near_up": READY["arm_near_up"] + 2, "arm_far_up": READY["arm_far_up"] + 2}))],
          loop=True)
     for k in CLASSES:
@@ -864,41 +864,41 @@ def combat():
                                    (0.12, P(READY, BLOW[k])), (0.19, P(READY, follow(BLOW[k]))), (0.30, READY)],
              events=[(0.12, "hit")], drag=False)
         clip("victory-" + k, 1.0, [(0, READY), (0.3, P(VICTORY[k], {"hips.y": -1.5})), (0.5, VICTORY[k]), (1.0, VICTORY[k])])
-    bow = {"arm_near_up": -84, "arm_near_low": 0, "arm_far_up": -86, "arm_far_low": -150, "chest": -4, "head": -2}
+    bow = {"arm_near_up": -84, "arm_near_low": 0, "arm_far_up": -86, "arm_far_low": -150, "torso": -4, "head": -2}
     for k in RANGED:
         clip("draw-" + k, 0.5, [(0, READY), (0.25, {"arm_far_up": -150, "arm_far_low": -40}), (0.5, bow)],
              layer={"arm_near_up": 6, "arm_near_low": 6, "hand_near": 6} if k == "bow" else None,
              notes="takes an arrow from the back socket's quiver")
         clip("loose-" + k, 0.3, [(0, bow), (0.06, P(bow, {"arm_far_low": -170, "arm_far_up": -100})), (0.3, READY)],
              events=[(0.06, "release")])
-    cast = P(READY, ARMS_FORWARD, {"hand_near": -40, "chest": 6})
-    clip("cast", 0.45, [(0, READY), (0.2, P(READY, {"arm_near_up": -20, "arm_near_low": -100, "arm_far_up": -20, "arm_far_low": -100, "chest": -6})),
+    cast = P(READY, ARMS_FORWARD, {"hand_near": -40, "torso": 9})
+    clip("cast", 0.45, [(0, READY), (0.2, P(READY, {"arm_near_up": -20, "arm_near_low": -100, "arm_far_up": -20, "arm_far_low": -100, "torso": -3})),
                         (0.25, cast), (0.45, cast)], events=[(0.25, "release")], fx=[(0.25, "glow", "hand_front")])
-    clip("channel", 1.0, [(0, cast), (0.5, P(cast, {"chest": 3, "arm_near_low": -32})), (1.0, cast)], loop=True,
+    clip("channel", 1.0, [(0, cast), (0.5, P(cast, {"torso": 6, "arm_near_low": -32})), (1.0, cast)], loop=True,
          fx=[(0, "glow", "hand_front")])
-    clip("throw-combat", 0.5, [(0, READY), (0.2, P(READY, {"arm_near_up": 50, "arm_near_low": -90, "chest": -10})),
-                               (0.3, P(READY, {"arm_near_up": -110, "arm_near_low": -10, "chest": 14})), (0.5, READY)],
+    clip("throw-combat", 0.5, [(0, READY), (0.2, P(READY, {"arm_near_up": 50, "arm_near_low": -90, "torso": -7})),
+                               (0.3, P(READY, {"arm_near_up": -110, "arm_near_low": -10, "torso": 17})), (0.5, READY)],
          events=[(0.28, "release")])
     clip("block", 0.4, [(0, READY), (0.12, P(READY, {"arm_far_up": -70, "arm_far_low": -80, "arm_near_up": -60, "arm_near_low": -90,
-                                                    "chest": -6, "hips.x": -3})), (0.4, READY)], events=[(0.12, "hit")])
-    clip("dodge", 0.4, [(0, READY), (0.15, P(crouch(22), {"hips.x": -16, "chest": 18, "head": 10})), (0.4, READY)])
+                                                    "torso": -3, "hips.x": -3})), (0.4, READY)], events=[(0.12, "hit")])
+    clip("dodge", 0.4, [(0, READY), (0.15, P(crouch(22), {"hips.x": -16, "torso": 18, "head": 10})), (0.4, READY)])
     # A flinch: thrown back at once, the head snapping a beat after the chest, then easing forward
     # past guard a touch before it settles.
-    hit = P(READY, {"hips.x": -6, "chest": -16, "spine": -4, "head": -18, "arm_near_up": -20, "arm_far_up": -30})
-    clip("hurt", 0.4, [(0, READY), (0.06, hit), (0.2, P(READY, {"hips.x": -3, "chest": 2, "head": 2})), (0.4, READY)],
+    hit = P(READY, {"hips.x": -6, "torso": -20, "head": -18, "arm_near_up": -20, "arm_far_up": -30})
+    clip("hurt", 0.4, [(0, READY), (0.06, hit), (0.2, P(READY, {"hips.x": -3, "torso": 5, "head": 2})), (0.4, READY)],
          expr="angry", drag=False)
-    clip("hurt-big", 0.45, [(0, READY), (0.1, P(crouch(10), {"hips.x": -14, "chest": -26, "head": -24, "arm_near_up": -50, "arm_far_up": -60})),
-                            (0.3, P(READY, {"hips.x": -7, "chest": 4})), (0.45, P(READY, {"hips.x": -6}))], expr="shock", drag=False)
-    clip("catch", 0.35, [(0, READY), (0.08, P(READY, {"hips.x": -4, "chest": -8, "arm_near_up": -70, "arm_far_up": -65})), (0.35, READY)])
+    clip("hurt-big", 0.45, [(0, READY), (0.1, P(crouch(10), {"hips.x": -14, "torso": -26, "head": -24, "arm_near_up": -50, "arm_far_up": -60})),
+                            (0.3, P(READY, {"hips.x": -7, "torso": 7})), (0.45, P(READY, {"hips.x": -6}))], expr="shock", drag=False)
+    clip("catch", 0.35, [(0, READY), (0.08, P(READY, {"hips.x": -4, "torso": -5, "arm_near_up": -70, "arm_far_up": -65})), (0.35, READY)])
     # Falling: the knees go first, the torso tips back after them, the arms fling up late, a small
     # bounce as the back meets the floor.
-    buckle = P(crouch(30), {"chest": -14, "spine": -6, "head": 8, "arm_near_up": -40, "arm_far_up": -20})
+    buckle = P(crouch(30), {"torso": -20, "head": 8, "arm_near_up": -40, "arm_far_up": -20})
     bounce = P(LYING, {"root": LYING["root"] + 4, "head": -16, "arm_near_up": -84, "arm_far_up": -112})
     clip("downed", 0.95, [(0, READY), (0.3, buckle), (0.72, LYING), (0.82, bounce), (0.95, LYING)])
     clip("die", 1.0, [(0, READY), (0.3, buckle), (0.72, LYING), (0.82, bounce), (0.95, LYING), (1.0, LYING)],
          fx=[(0.9, "fade", "root")])
     clip("revive", 0.6, [(0, LYING), (0.3, KNEEL), (0.6, READY)])
-    clip("yield", 0.6, [(0, READY), (0.6, P(KNEEL, {"arm_near_up": 8, "arm_near_low": 0, "head": 18, "chest": 10}))])
+    clip("yield", 0.6, [(0, READY), (0.6, P(KNEEL, {"arm_near_up": 8, "arm_near_low": 0, "head": 18, "torso": 14}))])
 
 
 COMBAT_MAP = {
@@ -1016,7 +1016,7 @@ def check():
                 sink = max(sink, lowest - leg.ankle[1])
                 if c.get("speed") and lowest - leg.ankle[1] > -0.3:
                     planted.setdefault(side, []).append(ax + c["speed"] * t)
-            carried = sum(pose.get(b, 0.0) for b in ("root", "hips", "spine", "chest"))
+            carried = sum(pose.get(b, 0.0) for b in ("root", "hips", "torso"))
             for side, arm in arms.items():
                 # An elbow can only be judged when the arm hangs below the shoulder: raised, which
                 # way it bends in the picture depends on how the arm's turned.

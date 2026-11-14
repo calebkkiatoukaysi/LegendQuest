@@ -36,7 +36,9 @@ for pixel, on the base's 1024 x 1536 canvas on solid black. This:
     the jaw down, like the base's body. Its mask has its skin, where the outfit leaves the base's
     skin showing, so the game tints it to the face's; and its Base and Trim, the two biggest
     materials it's made of by colour (materials), with the tone each was painted, so the game can
-    dye them to the colours the player picks;
+    dye them to the colours the player picks. An armor painted in pieces (armors/<id>/<bone>.png,
+    cut by tools/body_parts.py, each already on its bone at rest) is taken as it is, a piece a bone,
+    its skin and its Base and Trim found the same way over all its pieces at once (pieced_armor);
   - cuts each cape (capes/cape-<x>.png) into what it painted in the black behind and round the
     figure, grown a few pixels in under the body's edge, with its Base and Trim to dye; and each
     weapon and off-hand item (weapons/weapon-<x>.png, weapons/offhand-<x>.png) into the changed
@@ -68,8 +70,10 @@ and nothing in it is random, so the same sources always give the same bytes.
 import argparse
 import copy
 import glob
+import hashlib
 import json
 import os
+import pickle
 import re
 import sys
 
@@ -161,10 +165,23 @@ EDGE_FLOOR = 24
 #: grows back along its thin ends, and the biggest gap between strands that's filled.
 CHANGED = 48
 THIN = 2
+#: A hair's, a helm's or an extra's opening (head_piece): lighter, as tools/part_sheet.py cuts them
+#: clean already, so a wisp of hair a few pixels wide stays.
+PIECE_THIN = 1
 #: The width of a shade of skin, in green and blue against red, when looking for a face's commonest.
 CHROMA = 0.03
 REGROW = 8
 GAP = 400
+#: A hair painted over the bald head's outline leaves a thin gap along it (the hair's dark there is
+#: the outline's, so it looks unchanged), and the sheet's cut takes a hair's pale highlights beside
+#: the head for ChatGPT's head drawn bigger, leaving a hole. A hair's gaps up to HAIR_CLOSE pixels
+#: wide are closed, and its holes up to HAIR_HOLE pixels within HAIR_NEAR of the head's outline,
+#: with HAIR_RING of their edge on the hair, are filled, both in the hair's own colour round them.
+HAIR_CLOSE, HAIR_HOLE, HAIR_NEAR, HAIR_RING = 3, 3000, 30, 0.85
+#: Specks of near black (brightest channel HAIR_SPECK_DARK or less, HAIR_SPECK pixels or fewer)
+#: with the hair all round them are ChatGPT's bigger head showing through, never the hair (its
+#: lines are a deep brown): they take the hair's colour round them too.
+HAIR_SPECK_DARK, HAIR_SPECK = 24, 40
 #: How far up from the bottom of a sheet's cell hair fades out, where the cell cut it off, and how
 #: much of its top and sides is left out, where its grey lines can be.
 FADE = 28
@@ -269,6 +286,11 @@ def basis(text):
     out = {}
     for m in re.finditer(r"^#### `([a-z0-9.-]+)` ·[^\n]*\n+\*\*Basis:\*\* Edits `([a-z0-9.-]+)`", text, re.M):
         out[m.group(1)] = m.group(2)
+    # The cut-out rig's templates (tools/body_parts.py) are each one base's: a body or an armor
+    # painted in pieces is that base's.
+    for who, name in (("man", "base-male"), ("woman", "base-female")):
+        out.setdefault("body-parts-" + who, name)
+        out.setdefault("armor-parts-" + who, name)
     for pid, edited in list(out.items()):
         if edited == "base-male-blank" and re.match(r"(hair-\d\d|(?:jewel|skin|ears|horns)-[a-z0-9-]+)$", pid) and not pid.endswith("-f"):
             out.setdefault(pid + "-f", "base-female-blank")
@@ -539,6 +561,48 @@ def shrink(colour, alpha, mask=None):
     return Layer(rgba, (ox0 + sx0, oy0 + sy0), channels)
 
 
+#: Where a body painted in pieces is (tools/body_parts.py), under SOURCE: <BODIES>/<base>/<bone>.png.
+BODIES = "bodies"
+
+
+def piece_picture(path):
+    """A piece cut by tools/body_parts.py, at rest on its base's canvas: (straight colour 0 to 255,
+    alpha 0 to 1). It carries its own alpha; one on black (cut before it did) is keyed off it."""
+    rgba, own = ic.read_png(path)
+    if own:
+        alpha = rgba[:, :, 3].astype(np.float64) / 255.0
+        colour = rgba[:, :, :3].astype(np.float64)
+        colour[alpha == 0] = 0
+        return colour, alpha
+    return key_black(rgba[:, :, :3].astype(np.int32))
+
+
+def painted_pieces(base):
+    """A body painted in pieces (tools/body_parts.py), each on the base's canvas at rest: (the body
+    without its head as one Layer, for the previews; the head's Layer; {bone: Layer} at PART_SCALE,
+    as cut_pieces gives; and each bone's labels at PART_SCALE, as cut_pieces gives an armor's cut)."""
+    import body_parts
+    folder = os.path.join(SOURCE, BODIES, base)
+    w, h = int(round(CANVAS[0] * PART_SCALE)), int(round(CANVAS[1] * PART_SCALE))
+    pieces, labels = {}, {b: np.zeros((h, w), bool) for b, _, _ in K.BONES}
+    colour_all, alpha_all, skin_all = np.zeros(CANVAS[::-1] + (3,)), np.zeros(CANVAS[::-1]), np.zeros(CANVAS[::-1])
+    head = None
+    for bone in body_parts.DRAW:
+        colour, alpha = piece_picture(os.path.join(folder, bone + ".png"))
+        skin = skin_weight(colour) * (alpha > 0.99)
+        if bone == "head":
+            head = shrink(colour, alpha, skin)
+            continue
+        pieces[bone] = shrink(colour, alpha, skin)
+        a = ic.resample(np.repeat(alpha[:, :, None], 4, axis=2), (0, 0, CANVAS[0], CANVAS[1]), (w, h))[:, :, 0]
+        labels[bone] = a > 0.5
+        colour_all = colour * alpha[:, :, None] + colour_all * (1.0 - alpha[:, :, None])
+        skin_all = skin * alpha + skin_all * (1.0 - alpha)
+        alpha_all = alpha + alpha_all * (1.0 - alpha)
+    straight = colour_all / np.maximum(alpha_all, 1e-6)[:, :, None]
+    return shrink(straight, alpha_all, skin_all), head, pieces, labels
+
+
 def cut_pieces(base, colour, alpha, mask=None, prior=None):
     """A figure on its base's canvas (colour 0 to 255, alpha 0 to 1, and its mask, 0 to 1, if it has
     one) shrunk to PART_SCALE as shrink does and cut into the skeleton's pieces there:
@@ -580,7 +644,14 @@ class Base:
 
     def __init__(self, name):
         self.name = name
-        self.rgb = load(os.path.join(SOURCE, name + ".png"))
+        path = os.path.join(SOURCE, name + ".png")
+        if os.path.exists(path):
+            self.rgb = load(path)
+        else:
+            # Till the body's painted: its template's own pieces stood up (tools/body_parts.py), for
+            # the part sheets' templates and fits; build() never gets here without the bases.
+            import body_parts
+            self.rgb = body_parts.standing(name).astype(np.int32)
         self.colour, self.alpha = key_black(self.rgb)
         self.skin = skin_weight(self.rgb) * (self.alpha > 0.99)
         self.seam = seam_line(name)
@@ -830,7 +901,7 @@ def head_piece(base, rgb, hair):
     figure = alpha > 0.5
     distance = np.abs(rgb.astype(np.float64) - base.rgb).max(axis=2)
     raw = figure & ((distance > CHANGED) | (base.alpha < 0.5))
-    opened = ic.grow(erode(raw, THIN), THIN) & raw
+    opened = ic.grow(erode(raw, PIECE_THIN), PIECE_THIN) & raw
     labels, _ = ic.components(opened)
     touching = np.unique(labels[ic.grow(base.above & (base.alpha > 0.5), HEAD_REACH) & opened])
     kept = np.isin(labels, touching[touching > 0])
@@ -842,6 +913,8 @@ def head_piece(base, rgb, hair):
         edge = np.unique(np.concatenate([holes[0], holes[-1], holes[:, 0], holes[:, -1]]))
         small = np.nonzero(sizes <= GAP)[0]
         kept |= np.isin(holes, small[(small > 0) & ~np.isin(small, edge)])
+    if hair is True:
+        colour, alpha, kept = hair_mend(base, rgb, colour, alpha, kept)
     alpha = keep_near_main(alpha * kept)
     there = alpha > 0.5
     nothing = np.zeros(alpha.shape)
@@ -862,23 +935,147 @@ def head_piece(base, rgb, hair):
     return colour, alpha, np.stack([nothing, base_mask, trim_mask], axis=2), tones
 
 
+def hair_mend(base, rgb, colour, alpha, kept):
+    """A hair's gaps and holes filled (HAIR_CLOSE, HAIR_HOLE): the gap along the bald head's outline
+    where the hair is painted over it, and a hole beside the head where the sheet's cut took a
+    highlight away. Each pixel filled takes the mean of the hair's own colours round it (not its
+    lines), solid. Returns (colour, alpha, kept)."""
+    closed = erode(ic.grow(kept, HAIR_CLOSE), HAIR_CLOSE)
+    holes, count = ic.components(~closed)
+    if count:
+        h, w = holes.shape
+        sizes = np.bincount(holes.ravel(), minlength=count + 1)
+        edge = np.unique(np.concatenate([holes[0], holes[-1], holes[:, 0], holes[:, -1]]))
+        head = base.above & (base.alpha > 0.5)
+        rim = ic.grow(head, HAIR_NEAR) & ic.grow(~head, HAIR_NEAR)
+        for lab_ in np.nonzero((sizes > 0) & (sizes <= HAIR_HOLE))[0]:
+            if lab_ == 0 or lab_ in edge:
+                continue
+            ys, xs = np.nonzero(holes == lab_)
+            y0, y1, x0, x1 = max(0, ys.min() - 2), min(h, ys.max() + 3), max(0, xs.min() - 2), min(w, xs.max() + 3)
+            hole = holes[y0:y1, x0:x1] == lab_
+            ring = ic.grow(hole, 1) & ~hole
+            if not rim[y0:y1, x0:x1][hole].any() or closed[y0:y1, x0:x1][ring].mean() < HAIR_RING:
+                continue
+            closed[y0:y1, x0:x1] |= hole
+    filled = closed & ~kept
+    lines = outline(lab(rgb))
+    body_px = kept & (alpha > 0.99) & ~lines
+    # Specks of near black inside the hair.
+    dark = kept & (rgb.max(axis=2) <= HAIR_SPECK_DARK)
+    specks, n = ic.components(dark)
+    if n:
+        sizes = np.bincount(specks.ravel(), minlength=n + 1)
+        small = specks * (sizes[specks] <= HAIR_SPECK)
+        ring = ic.grow(small > 0, 1) & ~(small > 0)
+        # Each speck's edge, as a share that's the hair's body (not a line, not the black).
+        share = np.zeros(n + 1)
+        near_lab = np.zeros(small.shape, np.int64)
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            near_lab = np.maximum(near_lab, np.roll(np.roll(small, dy, 0), dx, 1))
+        edge_ids = near_lab[ring]
+        if edge_ids.size:
+            total = np.bincount(edge_ids, minlength=n + 1).astype(np.float64)
+            on_body = np.bincount(edge_ids, weights=body_px[ring].astype(np.float64), minlength=n + 1)
+            share = on_body / np.maximum(total, 1)
+        speck = (small > 0) & (share[small] >= HAIR_RING)
+        filled |= speck
+    if not filled.any():
+        return colour, alpha, kept
+    body = body_px.astype(np.float64)
+    near = ic.local_mean(colour, body, (2, 4, 8, 16))
+    fill = filled & ~np.isnan(near[:, :, 0])
+    colour = colour.copy()
+    colour[fill] = near[fill]
+    alpha = alpha.copy()
+    alpha[fill] = 1.0
+    return colour, alpha, kept | fill
+
+
+def card_names(text):
+    """Each card's name in Story/13 by its id, as the creation screen shows it: "Hair 1, the buzz"
+    is "THE BUZZ", "The spectacles" is "SPECTACLES", "Wolf's ears" is "WOLF'S EARS"."""
+    names = {}
+    for m in re.finditer(r"^#### `([a-z0-9.-]+)` · ([^·\n]+?)(?: · P\d)?\s*$", text, re.M):
+        title = m.group(2).strip()
+        title = re.sub(r"^Hair \d+, ", "", title)
+        title = re.sub(r"^(the|a|an) ", "", title, flags=re.I)
+        names[m.group(1)] = title.upper()
+    return names
+
+
+#: Where each part's import is kept (remembered), by what it was made from and the code that made
+#: it, so an import that's cut short (a machine short of memory) loses nothing, and one run again
+#: redoes only what changed. Not in git.
+PART_CACHE = os.path.join(HERE, ".cache", "parts")
+_CODE_KEY = []
+
+
+def remembered(what, sources, make):
+    """make()'s result for a part: from PART_CACHE if it was made from these same files (`sources`,
+    and `what` saying how) by this same code (this script, import_character.py and the skeleton), else
+    made and kept there."""
+    if not _CODE_KEY:
+        code = hashlib.sha1()
+        for path in (os.path.abspath(__file__), os.path.join(HERE, "import_character.py"), os.path.join(HERE, "rig", "skeleton.py")):
+            with open(path, "rb") as f:
+                code.update(f.read())
+        _CODE_KEY.append(code.hexdigest())
+    key = hashlib.sha1((_CODE_KEY[0] + "|" + what).encode("utf-8"))
+    for path in sources:
+        with open(path, "rb") as f:
+            key.update(f.read())
+    path = os.path.join(PART_CACHE, key.hexdigest() + ".pkl")
+    if os.path.exists(path):
+        try:
+            with open(path, "rb") as f:
+                return pickle.load(f)
+        except (OSError, pickle.UnpicklingError, EOFError):
+            pass
+    result = make()
+    os.makedirs(PART_CACHE, exist_ok=True)
+    with open(path + ".tmp", "wb") as f:
+        pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL)
+    os.replace(path + ".tmp", path)
+    return result
+
+
+def base_files(name):
+    """The pictures a base is made from: itself and its blank, if there is one."""
+    files = [os.path.join(SOURCE, name + ".png")]
+    if os.path.exists(os.path.join(SOURCE, BLANK % name)):
+        files.append(os.path.join(SOURCE, BLANK % name))
+    return files
+
+
 def part_ids(slot):
+    """The ids of a slot's pictures; an armor's is a picture of the whole figure, or a folder of its
+    pieces cut by tools/body_parts.py (pieced_armor)."""
     folder = os.path.join(SOURCE, FOLDERS[slot])
-    return sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(folder, slot + "-*.png")))
+    ids = {os.path.basename(p)[:-4] for p in glob.glob(os.path.join(folder, slot + "-*.png"))}
+    if slot == "armor":
+        ids |= {os.path.basename(p) for p in glob.glob(os.path.join(folder, slot + "-*")) if os.path.isdir(p)}
+    return sorted(ids)
 
 
-def extra_layers(blanks, edits, layers, report, drawn):
+def extra_layers(blanks, edits, layers, report, drawn, vectored):
     """The extras (§4.10) painted on the blank bases: each beard, piece of jewellery, scar, pair of
-    ears or horns, in its slot (EXTRAS); `drawn` is build's, which redraws a part as vector art when that's on."""
+    ears or horns, in its slot (EXTRAS); `drawn` is build's, which redraws a part as vector art when
+    that's on (`vectored` says which way), and each is remembered (remembered)."""
     for kind, (slot, dyes) in EXTRAS.items():
         for pid in part_ids(kind):
             base = base_of(pid, edits)
             if base is None:
                 fail("tools/source/characters/extras/%s.png isn't an extra in Story/13-art-prompts.md §4.10, or what it edits isn't" % pid)
-            colour, alpha, mask, tones = head_piece(blanks[base], load(os.path.join(SOURCE, FOLDERS[kind], pid + ".png")),
-                                                    True if dyes == "hair" else dyes)
-            colour, alpha = drawn(pid, colour, alpha)
-            layers[pid] = (slot, base, shrink(colour, alpha, mask), {"tones": tones} if tones else {})
+            source = os.path.join(SOURCE, FOLDERS[kind], pid + ".png")
+
+            def make(source=source, base=base, pid=pid, dyes=dyes):
+                colour, alpha, mask, tones = head_piece(blanks[base], load(source), True if dyes == "hair" else dyes)
+                colour, alpha = drawn(pid, colour, alpha)
+                return shrink(colour, alpha, mask), tones
+
+            layer, tones = remembered("%s|%s|%s|%s|%s" % (slot, pid, base, dyes, vectored(pid)), [source] + base_files(base), make)
+            layers[pid] = (slot, base, layer, {"tones": tones} if tones else {})
             report.append("  %-24s %s, %s" % (pid, base, slot))
 
 
@@ -894,6 +1091,98 @@ def armor_layer(base, rgb):
     alpha = keep_near_main(alpha * under)
     (base_mask, trim_mask), tones = armor_dyes(rgb, alpha, skin)
     return colour, alpha, np.stack([skin, base_mask, trim_mask], axis=2), tones
+
+
+def pieced_armor(base, folder):
+    """An armor painted in pieces (tools/body_parts.py: folder/<bone>.png, each at rest on the base's
+    canvas): ({bone: Layer} at PART_SCALE, the whole outfit at rest as one Layer for the previews,
+    its tones). Its skin is where a piece is still the body's own skin, as warm as skin and close
+    to the body's piece there (armor_layer's rule, piece by piece). Its Base and Trim are found over
+    all its pieces at once, laid side by side so none hides another, so both sleeves are one
+    material."""
+    import body_parts
+    own = os.path.join(SOURCE, BODIES, base.name)
+    bones = [b for b in body_parts.DRAW if b != "head" and os.path.exists(os.path.join(folder, b + ".png"))]
+    if not bones:
+        fail("%s has none of the pieces tools/body_parts.py cuts" % rel(folder))
+    pictures, skins = {}, {}
+    for bone in bones:
+        colour, alpha = piece_picture(os.path.join(folder, bone + ".png"))
+        body = os.path.join(own, bone + ".png")
+        if os.path.exists(body):
+            body_colour, body_alpha = piece_picture(body)
+            body_skin = skin_weight(body_colour) * (body_alpha > 0.99)
+        else:
+            body_colour, body_skin = base.colour, base.skin
+        distance = np.abs(colour - body_colour).max(axis=2)
+        close = np.clip(1.0 - (distance - SKIN_SAME) / SKIN_FADE, 0.0, 1.0)
+        skins[bone] = skin_weight(colour) * close * (body_skin > 0.5) * (alpha > 0.99)
+        pictures[bone] = (colour, alpha)
+    # The far arm and leg are painted in shadow, so for finding the materials each far piece is lit
+    # as its near twin is (far_light, from the two as this outfit paints them): a sleeve in the
+    # shadow is then the same material as the sleeve in the light, and dyes with it.
+    lit = {bone: pictures[bone][0] for bone in bones}
+    for bone in bones:
+        near = bone.replace("_far", "_near")
+        if near == bone or near not in pictures:
+            continue
+        light = far_light(pictures[near], pictures[bone])
+        if light is not None:
+            lit[bone] = np.clip(pictures[bone][0] * light[None, None, :], 0, 255)
+    # Every piece's box side by side, a gap between, for the materials.
+    boxes = {b: bbox(pictures[b][1] > 0) for b in bones}
+    gap = 8
+    width = sum(x1 - x0 + gap for x0, _, x1, _ in boxes.values())
+    height = max(y1 - y0 for _, y0, _, y1 in boxes.values())
+    strip_rgb, strip_alpha, strip_skin = np.zeros((height, width, 3)), np.zeros((height, width)), np.zeros((height, width))
+    at, x = {}, 0
+    for bone in bones:
+        x0, y0, x1, y1 = boxes[bone]
+        alpha = pictures[bone][1]
+        strip_rgb[:y1 - y0, x:x + x1 - x0] = lit[bone][y0:y1, x0:x1]
+        strip_alpha[:y1 - y0, x:x + x1 - x0] = alpha[y0:y1, x0:x1]
+        strip_skin[:y1 - y0, x:x + x1 - x0] = skins[bone][y0:y1, x0:x1]
+        at[bone] = x
+        x += x1 - x0 + gap
+    (base_mask, trim_mask), tones = armor_dyes(strip_rgb, strip_alpha, strip_skin)
+    layers = {}
+    colour_all, alpha_all = np.zeros(CANVAS[::-1] + (3,)), np.zeros(CANVAS[::-1])
+    mask_all = np.zeros(CANVAS[::-1] + (3,))
+    for bone in bones:
+        x0, y0, x1, y1 = boxes[bone]
+        colour, alpha = pictures[bone]
+        mask = np.zeros(CANVAS[::-1] + (3,))
+        mask[:, :, 0] = skins[bone]
+        mask[y0:y1, x0:x1, 1] = base_mask[:y1 - y0, at[bone]:at[bone] + x1 - x0]
+        mask[y0:y1, x0:x1, 2] = trim_mask[:y1 - y0, at[bone]:at[bone] + x1 - x0]
+        layers[bone] = shrink(colour, alpha, mask)
+        colour_all = colour * alpha[:, :, None] + colour_all * (1.0 - alpha[:, :, None])
+        mask_all = mask * alpha[:, :, None] + mask_all * (1.0 - alpha[:, :, None])
+        alpha_all = alpha + alpha_all * (1.0 - alpha)
+    held = np.maximum(alpha_all, 1e-6)[:, :, None]
+    return layers, shrink(colour_all / held, alpha_all, mask_all / held), tones
+
+
+#: How much brighter a far piece may be lit than painted, at most, channel by channel.
+FAR_LIGHT = 3.0
+
+
+def far_light(near, far):
+    """How much brighter a near piece is painted than its far twin (each a (colour, alpha)), channel
+    by channel, each from 1 to FAR_LIGHT: the median of what's solid and isn't outline on each, or
+    None if either has too little. Twins are dressed alike (both sleeves, both boots), so the
+    difference is the shadow."""
+    medians = []
+    for colour, alpha in (near, far):
+        solid = (alpha > 0.99) & ~outline(lab(colour))
+        if solid.sum() < 50:
+            return None
+        medians.append(np.median(colour[solid], axis=0))
+    return np.clip(medians[0] / np.maximum(medians[1], 1.0), 1.0, FAR_LIGHT)
+
+
+def piece_files(folder):
+    return sorted(glob.glob(os.path.join(folder, "*.png")))
 
 
 def changed_pieces(base, rgb, where):
@@ -1449,10 +1738,32 @@ def as_vector(pid, colour, alpha):
     return vectorize.straight(drawn)
 
 
+def no_bases(check):
+    """With no mannequin in tools/source/characters (it's being redrawn) there's nothing to cut: the
+    game's parts go, and its sections say so, so the game draws everyone as the paperdoll. With
+    `check`, says whether that's done."""
+    there = sorted(glob.glob(os.path.join(PARTS, "*")))
+    if check:
+        if there:
+            print("import_parts: out of date; run python tools/import_parts.py (no bases, so these go):\n  "
+                  + "\n  ".join(rel(p) for p in there))
+            return 1
+        print("import_parts: up to date (no bases in tools/source/characters yet, so no parts)")
+        return 0
+    for path in there:
+        os.remove(path)
+    ic.rewrite(ic.MGCB, M_BEGIN, M_END, mgcb_section([], empty=True), None)
+    ic.rewrite(ic.ASSETS, A_BEGIN, A_END, assets_section([], {}, {}, empty=True), A_ANCHOR)
+    print("import_parts: no bases in tools/source/characters yet, so no parts; took out %d files" % len(there))
+    return 0
+
+
 def build(check, vector=VECTOR):
     """Imports every part, or says what's out of date with `check`. `vector` redraws them as vector
     art: True for all of them, or a set of part ids (a base's id for its body and bald head) for just
-    those, to see how they'd look."""
+    those, to see how they'd look. With no bases yet, clears them (no_bases)."""
+    if not all(os.path.exists(os.path.join(SOURCE, name + ".png")) for name in BASES):
+        return no_bases(check)
     text = story()
     edits = basis(text)
     book = recipes(text)
@@ -1464,10 +1775,20 @@ def build(check, vector=VECTOR):
     layers = {}         # part id -> (slot, base, Layer, extra fields)
     pieced = {}         # part id -> {bone: Layer}, a body's or an armor's pieces
     prior = {}          # base -> its body's labels, which its armors are cut by
+    def vectored(pid):
+        return "vector" if vector is True or (vector and pid in vector) else "painted"
+
     def drawn(pid, colour, alpha):
-        return as_vector(pid, colour, alpha) if vector is True or (vector and pid in vector) else (colour, alpha)
+        return as_vector(pid, colour, alpha) if vectored(pid) == "vector" else (colour, alpha)
 
     for name, b in bases.items():
+        if os.path.isdir(os.path.join(SOURCE, BODIES, name)):
+            # Painted in pieces (tools/body_parts.py): each piece is a bone's, as it was painted.
+            body, head, pieces, labels = painted_pieces(name)
+            layers[name + ".body"] = ("body", name, body, {})
+            layers[name + ".head"] = ("head", name, head, {})
+            pieced[name + ".body"], prior[name] = pieces, labels
+            continue
         under = rows() >= (b.seam - SKIRT)[None, :]
         colour, alpha = drawn(name, b.colour, b.alpha)
         layers[name + ".body"] = ("body", name, shrink(colour, alpha * under, b.skin * under), {})
@@ -1518,19 +1839,43 @@ def build(check, vector=VECTOR):
             base = base_of(pid, edits)
             if base is None:
                 fail("tools/source/characters/%s/%s.png isn't a %s in Story/13-art-prompts.md, or what it edits isn't" % (FOLDERS[slot], pid, slot))
-            colour, alpha, mask, tones = head_piece(blanks[base], load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png")), slot == "hair")
-            colour, alpha = drawn(pid, colour, alpha)
-            layers[pid] = ("helm", base, shrink(colour, alpha, mask), {"tones": tones})
+            source = os.path.join(SOURCE, FOLDERS[slot], pid + ".png")
+
+            def make(source=source, base=base, pid=pid, slot=slot):
+                colour, alpha, mask, tones = head_piece(blanks[base], load(source), slot == "hair")
+                colour, alpha = drawn(pid, colour, alpha)
+                return shrink(colour, alpha, mask), tones
+
+            layer, tones = remembered("helm|%s|%s|%s" % (pid, base, vectored(pid)), [source] + base_files(base), make)
+            layers[pid] = ("helm", base, layer, {"tones": tones})
             report.append("  %-24s %s" % (pid, base))
-    extra_layers(blanks, edits, layers, report, drawn)
+    extra_layers(blanks, edits, layers, report, drawn, vectored)
     for aid in part_ids("armor"):
         base = base_of(aid, edits)
         if base is None:
-            fail("tools/source/characters/armors/%s.png isn't an armor in Story/13-art-prompts.md §5, or what it edits isn't" % aid)
-        colour, alpha, mask, tones = armor_layer(bases[base], load(os.path.join(SOURCE, FOLDERS["armor"], aid + ".png")))
-        colour, alpha = drawn(aid, colour, alpha)
-        layers[aid] = ("armor", base, shrink(colour, alpha, mask), {"tones": tones})
-        pieced[aid] = cut_pieces(base, colour, alpha, mask, prior[base])[0]
+            fail("tools/source/characters/armors/%s isn't an armor in Story/13-art-prompts.md §5, or what it edits isn't" % aid)
+        folder = os.path.join(SOURCE, FOLDERS["armor"], aid)
+        if os.path.isdir(folder):
+            # Painted in pieces (tools/body_parts.py): each piece is a bone's, as it was cut.
+            def make(folder=folder, base=base):
+                return pieced_armor(bases[base], folder)
+
+            sources = piece_files(folder) + piece_files(os.path.join(SOURCE, BODIES, base)) + base_files(base)
+            pieces, layer, tones = remembered("armor-pieces|%s|%s" % (aid, base), sources, make)
+            layers[aid] = ("armor", base, layer, {"tones": tones})
+            pieced[aid] = pieces
+            report.append("  %-24s %s, in pieces, dyes %s" % (aid, base, ", ".join("none" if t is None else "#%02x%02x%02x" % tuple(int(round(v)) for v in t) for t in tones)))
+            continue
+        source = os.path.join(SOURCE, FOLDERS["armor"], aid + ".png")
+
+        def make(source=source, base=base, aid=aid):
+            colour, alpha, mask, tones = armor_layer(bases[base], load(source))
+            colour, alpha = drawn(aid, colour, alpha)
+            return shrink(colour, alpha, mask), cut_pieces(base, colour, alpha, mask, prior[base])[0], tones
+
+        layer, pieces, tones = remembered("armor|%s|%s|%s" % (aid, base, vectored(aid)), [source] + base_files(base), make)
+        layers[aid] = ("armor", base, layer, {"tones": tones})
+        pieced[aid] = pieces
         report.append("  %-24s %s, dyes %s" % (aid, base, ", ".join("none" if t is None else "#%02x%02x%02x" % tuple(int(round(v)) for v in t) for t in tones)))
     # The capes, painted in the black behind the figure, and what the hands hold.
     for slot in ("cape", "weapon", "offhand"):
@@ -1587,10 +1932,15 @@ def build(check, vector=VECTOR):
             entry["maskRect"] = where[key + "#mask"][1]
         return entry
 
+    titles = card_names(text)
     for pid in sorted(layers):
         slot, base, layer, extra = layers[pid]
         socket = SLOT_SOCKET[slot]
         entry = {"slot": slot, "base": base, "socket": socket}
+        # A library hair's and an extra's name, from its card, for the creation screen to show.
+        name = titles.get(pid[:-2] if pid.endswith("-f") else pid)
+        if name and re.match(r"(hair|beard|jewel|skin|ears|horns)-\d\d", pid):
+            entry["name"] = name
         if pid in pieced:
             entry["pieces"] = {bone: placed(pid + "@" + bone, p, socket, base) for bone, p in pieced[pid].items()}
         else:
@@ -1793,7 +2143,65 @@ def pad_to(img, height, back):
     return out
 
 
-def mgcb_section(names):
+def body_credits():
+    """ASSETS.md's lines for the bodies painted in pieces: tools/body_parts.py, each template it made
+    and its layout, and each body's pieces and the base stood up from them, as many as are there."""
+    lines = ["tools/body_parts.py - written by Caleb Kiatoukaysi for Legend Quest, pulls a mannequin apart into its "
+             "fourteen pieces (the torso one piece, from the neck to the shorts) as a template to paint them on, and puts "
+             "a painted template's pieces back on the skeleton at rest, each found where it was painted and fitted to its "
+             "own bone (its size, turn and place), one picture per piece, standing the figure up from them as its base", "",
+             "tools/rig/scissors.py - written by Caleb Kiatoukaysi for Legend Quest, cuts a whole mannequin into its "
+             "fourteen pieces exactly along its drawn lines (the jawline, each joint's seam), each line going with the "
+             "piece in front and each piece carried on, in its own colours, under the ones that hide it; put back "
+             "together the pieces are the picture again, pixel for pixel", ""]
+    for base, who in (("base-male", "man"), ("base-female", "woman")):
+        png = os.path.join(SOURCE, "body-parts-%s.png" % who)
+        if os.path.exists(png):
+            lines += ["tools/source/characters/body-parts-%s.png - the %s's mannequin pulled apart into its fourteen pieces "
+                      "on black, the template ChatGPT paints the %s's body on (Story/13 §3.0); made by tools/body_parts.py "
+                      "from the jointed mannequin of 2026-11-09, cut by tools/rig/scissors.py" % (who, who, who), "",
+                      "tools/source/characters/body-parts-%s.json - where each piece is on body-parts-%s.png and how far "
+                      "it's pulled from its place at rest; written by tools/body_parts.py" % (who, who), ""]
+        armor = os.path.join(SOURCE, "armor-parts-%s.png" % who)
+        folder = os.path.join(SOURCE, BODIES, base)
+        if os.path.exists(armor):
+            made = ("the painted %s's own pieces, less the head, pulled apart again in body-parts-%s.png's places" % (who, who)
+                    if os.path.isdir(folder) else "body-parts-%s.png less the head" % who)
+            lines += ["tools/source/characters/armor-parts-%s.png - %s: the %s's thirteen pieces an outfit dresses, the "
+                      "template ChatGPT paints each armor on in pieces (Story/13 §5.0); written by tools/body_parts.py"
+                      % (who, made, who), ""]
+        painted = os.path.join(SOURCE, "sheets", "body-%s.png" % who)
+        if os.path.exists(painted):
+            lines += ["tools/source/characters/sheets/body-%s.png - the %s's body as ChatGPT painted it on body-parts-%s.png "
+                      "(Story/13 §3.0), kept as it came; tools/body_parts.py cuts it into the pieces in %s/%s; %s"
+                      % (who, who, who, BODIES, base, CREDIT), ""]
+        for path in sorted(glob.glob(os.path.join(folder, "*.png"))):
+            bone = os.path.basename(path)[:-4]
+            lines += ["tools/source/characters/%s/%s/%s.png - the %s's %s piece at rest on the canvas, cut by "
+                      "tools/body_parts.py from the body ChatGPT painted on body-parts-%s.png; %s"
+                      % (BODIES, base, bone, who, bone.replace("_", " "), who, CREDIT), ""]
+        if os.path.isdir(folder) and os.path.exists(os.path.join(SOURCE, base + ".png")):
+            lines += ["tools/source/characters/%s.png - the %s stood up from his or her painted pieces, drawn together "
+                      "in their order by tools/body_parts.py: the base every other part is painted on; %s"
+                      % (base, who, CREDIT), ""]
+    for folder in sorted(p for p in glob.glob(os.path.join(SOURCE, FOLDERS["armor"], "armor-*")) if os.path.isdir(p)):
+        aid = os.path.basename(folder)
+        if os.path.exists(os.path.join(SOURCE, "sheets", aid + ".png")):
+            lines += ["tools/source/characters/sheets/%s.png - %s as ChatGPT painted it on its armor template (Story/13 §5), "
+                      "kept as it came; tools/body_parts.py cuts it into the pieces in %s/%s; %s"
+                      % (aid, aid, FOLDERS["armor"], aid, CREDIT), ""]
+        for path in piece_files(folder):
+            bone = os.path.basename(path)[:-4]
+            lines += ["tools/source/characters/%s/%s/%s.png - %s's %s piece at rest on the canvas, cut by tools/body_parts.py "
+                      "from the outfit ChatGPT painted on its armor template; %s"
+                      % (FOLDERS["armor"], aid, bone, aid, bone.replace("_", " "), CREDIT), ""]
+    return lines
+
+
+def mgcb_section(names, empty=False):
+    """Content.mgcb's section: each page, parts.json and clips.json; nothing at all with no parts (`empty`)."""
+    if empty:
+        return [M_BEGIN, "", M_END]
     lines = [M_BEGIN, ""]
     for name in names:
         png = "Characters/Parts/" + name
@@ -1803,10 +2211,11 @@ def mgcb_section(names):
     return lines + [M_END]
 
 
-def assets_section(names, layers, where):
+def assets_section(names, layers, where, empty=False):
+    """ASSETS.md's section: the tools, and each file the game has (none with no parts, `empty`)."""
     lines = [A_BEGIN, "## Characters (parts)", "",
              "The characters' parts made in ChatGPT from Story/13-art-prompts.md, each an edit of one of the two bases "
-             "(tools/source/characters/base-male.png and base-female.png), cut by `tools/import_parts.py` from the pictures "
+             "(base-male.png and base-female.png in tools/source/characters), cut by `tools/import_parts.py` from the pictures "
              "it keeps in tools/source/characters: keyed off the black, a base split at the jaw seam into its body and its "
              "bald head, a face cut to its head and the hair below its jaw, a body and every armor cut into the skeleton's "
              "pieces, one per bone, shrunk to half size and packed into atlas pages. The game puts each character together "
@@ -1817,6 +2226,7 @@ def assets_section(names, layers, where):
              "tools/split_bases.py - written by Caleb Kiatoukaysi for Legend Quest, stands the two jointed mannequins from one "
              "picture of them side by side each on its own 1024 by 1536 canvas, as base-male.png and base-female.png and "
              "their blank versions", "",
+             ] + body_credits() + [
              "tools/rig/skeleton.py - written by Caleb Kiatoukaysi for Legend Quest, the mannequins' skeleton (each joint at "
              "the middle of its painted ball) and the cut of a figure into its bones' pieces along the painted seams, with "
              "what each piece hides filled in; and the forward kinematics the game's own follow", "",
@@ -1827,14 +2237,17 @@ def assets_section(names, layers, where):
              "tools/rig/gait.py - written by Caleb Kiatoukaysi for Legend Quest, the jog, the walk and the run worked out "
              "on the skeleton: planted feet rolling heel to toe at the pace the figure moves, the legs reaching them by "
              "IK, the hips riding on the planted knee, the arms swinging against the legs", "",
+             ] + ([] if empty else [
              "Content/Characters/Parts/clips.json - every clip from tools/rig/clips.py, its other names and which clip each "
-             "fighting move plays for each kind of weapon; written by tools/import_parts.py", "",
+             "fighting move plays for each kind of weapon; written by tools/import_parts.py", ""]) + [
              "tools/vectorize.py - written by Caleb Kiatoukaysi for Legend Quest, redraws a picture as vector art (flat cel "
              "colours, smooth lines, Bezier outlines) and draws it back at any size; the importer runs the parts through it "
              "when VECTOR is on", "",
+             ] + (["No parts yet: the mannequins are being redrawn, and the game draws everyone as the paperdoll till "
+                   "they're back in tools/source/characters.", ""] if empty else [
              "Content/Characters/Parts/parts.json - the sockets and joints of each base, the skeleton, where every part "
              "(or each of its pieces) is on its page and which socket it hangs from, and every recipe from "
-             "Story/13-art-prompts.md §7; written by tools/import_parts.py", ""]
+             "Story/13-art-prompts.md §7; written by tools/import_parts.py", ""])
     for name in names:
         page = name[:-4]
         held = sorted(pid for pid, (p, _) in where.items() if p == page and not pid.endswith("#mask"))

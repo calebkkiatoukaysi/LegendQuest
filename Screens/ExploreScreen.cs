@@ -408,9 +408,11 @@ public partial class ExploreScreen : GameScreen
         _nearDoor = null;
         _nearMember = null;
 
+        var clock = System.Diagnostics.Stopwatch.StartNew();
         _scene?.Unload();
         _scene = new RoomScene(_room);
         _scene.LoadContent(ScreenManager.Game.Services, ScreenManager.GraphicsDevice);
+        LegendQuestGame.Note("room pictures (" + _room.Id + ")", clock.Elapsed.TotalMilliseconds);
         _walk = new RoomWalker(_room);
         _camera.LockTo(_scene.Bounds, (int)ZoneCatalog.RoomScale);
 
@@ -450,7 +452,10 @@ public partial class ExploreScreen : GameScreen
         _brought.Clear();
         _remembered.Clear();
         _campers.Clear();
+        clock.Restart();
         foreach (MapNpc placed in _room.Npcs) _everyNpc.Add(Dressed(new Npc(placed, _walk)));
+        LegendQuestGame.Note("people dressed (" + _room.Npcs.Count + ")", clock.Elapsed.TotalMilliseconds);
+        clock.Restart();
         SeatCampers();
 
         _props.Clear();
@@ -462,6 +467,7 @@ public partial class ExploreScreen : GameScreen
         MatchSave();
         BuildNav();
         Board();
+        LegendQuestGame.Note("campers, presence, paths", clock.Elapsed.TotalMilliseconds);
     }
 
     /// <summary>Starts the fade out of this room into another of the zone: you come in on a spawn there, the others behind you, and the game's autosaved once you're in.</summary>

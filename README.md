@@ -41,6 +41,18 @@ The project's requirements, and where each one is met:
   autosave, written safely (a temporary file, then swapped in, the old one kept as a backup) and
   upgraded from older versions; a broken file shows as UNREADABLE rather than crashing. NEW GAME
   writes one, and LOAD and CONTINUE read one. [Saving](#saving) has the details.
+- **At least one rendered 3D object, with the 2D.** The d20 a check rolls is a real 3D model, drawn
+  among the 2D. `Components/DieModel.cs` builds it in code, nothing loaded: an icosahedron, twenty
+  triangles from twelve corners, each face flat with its own normal, numbered so opposite faces add
+  up to 21 like a real one, and the numbers painted onto a texture of twenty triangles as it loads.
+  It's drawn with a `BasicEffect`: a perspective camera, a lamp at the top left with a shine on it,
+  a cool fill light, and a depth buffer. `Components/DiceTable.cs` throws it. It floats over the
+  panel slowly turning till you press, then goes up towards the camera (so it grows), tumbles,
+  bounces and rolls to a stop with the number the rules rolled on top: the throw is worked out
+  backwards from the turn that puts that face towards you. It's drawn on a target of its own at
+  twice the size and shrunk onto the 2D canvas, with an ink outline and a shadow under it, so it sits
+  in the painted panel. With advantage two are thrown and the lower one fades. The first check is
+  at Saltwind Docks, talking the Red Gulls round (`DiceRollOverlay`).
 
 ## Running it
 
@@ -184,7 +196,7 @@ own `TransitionOnTime` and `TransitionOffTime`, so everything fades instead of c
 | `SaveSlotScreen` | The save slots, for a new game or for loading one, with ERASE beside each slot that has something in it |
 | `CharacterCreationScreen` | Making you, then the Soul-Bound: rows for a name, a people, a class and every part of a look, on three tabs, with them walking on the spot and turning round beside the rows, and their face blown up over that. RANDOM, BEGIN and BACK. The Prologue's first lines play between the two |
 | `DialogueScreen` | Popup. A conversation a line at a time, over the dimmed map or a painting: the speaker's face and name, the line typing out at the text speed, and a question's options numbered under it, with an icon for a check, a flirt or a locked one. Approval, gold and items come up as toasts |
-| `DiceRollOverlay` | Popup, over a conversation. A check: the d20 with the DC and every modifier, a press to roll, the tumble, then the total and SUCCESS or FAILURE |
+| `DiceRollOverlay` | Popup, over a conversation. A check: the d20 (in 3D, `DiceTable`) with the DC and every modifier, a press to throw it, the tumble, then the total and SUCCESS or FAILURE |
 | `ExploreScreen` | A zone's room being walked along: its painted layers and tile strip, the props, the things you can use, the people, the party, and the dark if it's a dark room. The party's cards are along the bottom left, toasts come up near the top (what was in a chest, what a sign says), and whatever the mouse is on gets a tooltip and its own cursor |
 | `ZoneMapScreen` | Popup, from **M** or a waypoint. The zone you're in as its rooms, laid out as they join, with their badges and markers, and the world: every place you've been and the roads between them. Any room you've walked into can be jumped to outside a fight or a scene; opened from a waypoint, it's where you pick somewhere to travel to |
 | `InventoryScreen` | Popup, from **I**, **C** or the pause menu. The party's faces down the left, whoever's picked turning on the spot in what they're wearing with their nine slots round them, and the bag, the gold and the key items or their character sheet on the right (see [Items and inventory](#items-and-inventory)) |
@@ -1307,7 +1319,6 @@ fades the old one out and the new one in.
 | `gear-palettes.png` | `Paperdoll` | Five pixels by ten: metal's keys and its four tints, then leather's keys and its four, one ramp a row, dark to light |
 | `cursors.png` | `CursorSprite` | 5 cursors, 16x16, at 2x: an arrow, a ring to walk, a hand to use something, a speech bubble to talk, a crossed circle for no way |
 | `keycaps.png` | `KeyCaps` | 4 frames, 14x14, at 3x: an ivory key cap with a deeper lip along its bottom, nine-sliced so it's as wide as what's written on it, then the mouse with its left button, its right button and its wheel lit in torchlight |
-| `dice.png` | `DiceRollOverlay` | The d20, 9 frames of 40x40 at 4x: eight tumbling, then the face it lands on with the number drawn over it |
 | `dialogue-icons.png` | `DialogueScreen` | 6 icons, 12x12, at 2x, beside an option: a die for a check, a heart for a flirt, a lock, and the three voices |
 | `markers.png` | `ExploreScreen`, `ZoneMapScreen` | Two rows of 14x14 cells at 3x, gold then red: the "!" that bobs over someone with work for you (gold) or an event (red), and the arrows at the edge of the screen pointing to one that's off it, which the game turns a quarter at a time for every direction |
 | `Paintings/*.png` | `PaintingSprite` | The story's paintings, each three to five layers on the title's 416x277 canvas at 4x, swaying against each other like the title: the pier in the storm the day you met, the oath under the red moon, and Questeria at dawn from the ship's rail. `weather.png`, `bolts.png`, `sigil.png`, `glint.png` and `lantern.png` are what moves over them: the rain and the lightning, the Soul-Bond's glow, glints on the water, and the pier's lantern swinging. Under the red moon the two figures are your own sheet and the Soul-Bound's, drawn black with the moon on their edges |
@@ -1326,7 +1337,7 @@ and `spectral-detail` (Spectral Light, 17pt), letterspaced, the same faces as Th
 Every PNG in `Content/` is made by a script:
 
 ```
-python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dice.png, dialogue-icons.png, markers.png and keycaps.png
+python tools/generate_ui.py           # button.png, panel.png, map-marks.png, cursors.png, dialogue-icons.png, markers.png and keycaps.png
 python tools/generate_world.py        # the crypt tileset (and the forest one, which no map uses now), their props (cut or drawn), the torch flame, glow.png and mote.png
 python tools/generate_harbour.py      # Questeria's and the harbour's tiles, the ship and its deck, its gangplank, mast, lanterns, wheel and rope, and the rowing boat
 python tools/generate_interiors.py    # the inside of the buildings: the interior tileset, the bed, and the taverns' tables and booth
@@ -1444,7 +1455,7 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
 - `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the rows it all happens in (`Formation`, `Slot`, `FightRoster`), the rules a fight's played by (`FightRules`, `DifficultyRules`, `IKitSource`), the catalogs (`AbilityCatalog`, `EnemyCatalog`, `EncounterCatalog`, with the encounters' `EncounterGuest`s and `EncounterSupport`s), `EnemyMind` for the AI, and `CombatSimulator` and `StallWatch` for `--simulate`.
 - `Items/` is everything that can be carried, worn or sold: `ItemDefinition` and `ItemCatalog`, the bag (`Inventory` over the save's `ItemStack`s), the shops (`ShopDefinition`, `ShopCatalog`) and what foes drop (`LootTable`, `LootResult`, `LootTableCatalog`). The inventory's and the shops' rules are here too, drawing nothing: `Wardrobe`, `Trade`, `GearComparison`, `ItemReadout` and `BagOrder`.
-- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
+- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, the 3D d20 (`DieModel`) and the panel it's thrown on (`DiceTable`), and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
 - `Collisions/` is the collision tutorial's rectangle and helper.
 - `Particles/` is the particle engine, and the title's petals and motes built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.

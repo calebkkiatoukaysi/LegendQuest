@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using LegendQuest.Characters;
@@ -254,6 +255,7 @@ public partial class LegendQuestGame
 
             default:
                 File.WriteAllText(Path.Combine(ProofDirectory, "audio.log"), _proofAudio.ToString());
+                WriteFrameTimes();
                 Exit();
                 break;
         }
@@ -348,7 +350,8 @@ public partial class LegendQuestGame
 
             case 91:
                 creation?.ProofType("Caleb");
-                creation?.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2, Portrait = "face-m03", BaseTint = 12, TrimTint = 5 }, ClassId.Rogue);
+                creation?.ProofLook(new CharacterLook { Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2, Portrait = "face-m03", BaseTint = 12, TrimTint = 5, HairPart = "hair-17",
+                    Extras = new Dictionary<string, string> { ["beard"] = "beard-01" } }, ClassId.Rogue);
                 return null;
 
             case 110:
@@ -378,9 +381,18 @@ public partial class LegendQuestGame
             case 140:
                 return "create-height.png";
 
+            // FEATURES: the BEARD row's grid, him with each beard.
             case 141:
                 creation?.ProofShape(0, 0, row: 0);
                 creation?.ProofPage(2);
+                creation?.ProofShape(0, 0, row: 0);
+                return null;
+
+            case 145:
+                return "create-features.png";
+
+            case 146:
+                creation?.ProofPage(3);
                 creation?.ProofPreview(3);
                 return null;
 

@@ -30,17 +30,18 @@ ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 CHARS = os.path.join(ROOT, "tools", "source", "characters")
 
 #: The bones, parents first: (bone, parent, the joint it turns about). The joint names are the
-#: JOINTS keys. The names are the old cut-out rig's, so its clips (tools/rig/clips.py) play on it.
+#: JOINTS keys. The torso is one piece, from the neck to the shorts: it turns about the hips joint
+#: and carries the head and both arms. The hips bone is the pelvis: it has no piece of its own, it
+#: only moves (up and down, with a step), and carries the torso and both legs.
 BONES = (
     ("root", None, "root"),
     ("hips", "root", "hips"),
-    ("spine", "hips", "spine"),
-    ("chest", "spine", "chest"),
-    ("head", "chest", "neck"),
-    ("arm_far_up", "chest", "shoulder_far"),
+    ("torso", "hips", "hips"),
+    ("head", "torso", "neck"),
+    ("arm_far_up", "torso", "shoulder_far"),
     ("arm_far_low", "arm_far_up", "elbow_far"),
     ("hand_far", "arm_far_low", "wrist_far"),
-    ("arm_near_up", "chest", "shoulder_near"),
+    ("arm_near_up", "torso", "shoulder_near"),
     ("arm_near_low", "arm_near_up", "elbow_near"),
     ("hand_near", "arm_near_low", "wrist_near"),
     ("leg_far_up", "hips", "hip_far"),
@@ -52,7 +53,8 @@ BONES = (
 )
 
 #: Every joint on each base, (x, y) on the canvas: the middle of each painted ball (the jointed
-#: mannequins of 2026-11-09), the hips inside the pelvis over each thigh, the trunk's down its middle.
+#: mannequins of 2026-11-09), the hips inside the pelvis over each thigh, the trunk's down its middle
+#: ("spine" and "chest" are no bone's joint now: they mark the waist and the breastbone).
 JOINTS = {
     "base-male": {
         "root": (483, 1466), "hips": (540, 700), "spine": (540, 590), "chest": (545, 460), "neck": (548, 325),
@@ -101,7 +103,7 @@ def bone_line(base, bone):
     joints = JOINTS[base]
     start = joints[BONE_OF[bone][1]]
     child = next((b for b, p, _ in BONES if p == bone and b not in ("head",) and not b.startswith(("arm_", "leg_"))), None)
-    ends = {"hips": "spine", "spine": "chest", "chest": "neck", "arm_near_up": "elbow_near", "arm_near_low": "wrist_near",
+    ends = {"torso": "neck", "arm_near_up": "elbow_near", "arm_near_low": "wrist_near",
             "arm_far_up": "elbow_far", "arm_far_low": "wrist_far", "leg_near_up": "knee_near", "leg_near_low": "ankle_near",
             "leg_far_up": "knee_far", "leg_far_low": "ankle_far"}
     if bone in ends:
@@ -112,11 +114,17 @@ def bone_line(base, bone):
 
 
 # --------------------------------------------------------------------------- #
-# Cutting a figure into its pieces
+# Cutting a figure into its pieces (the rough cut, by reach: a painted body is cut along its own
+# lines by tools/rig/scissors.py; this one is for a figure with no lines to follow, an armor painted
+# whole over a body)
 # --------------------------------------------------------------------------- #
 
+#: The torso is worked in three bands here, each about its own line (from joint to joint), and the
+#: bands are joined into the one torso piece at the end (pieces()).
+BANDS = {"chest": ("chest", "neck"), "spine": ("spine", "chest"), "hips": ("hips", "spine")}
 #: The pieces, in the groups that are in front of one another, front first: the near arm over
-#: everything, then the near leg, the trunk, the far leg, and the far arm behind it all.
+#: everything, then the near leg, the trunk (its three bands), the far leg, and the far arm behind
+#: it all.
 GROUPS = (
     ("hand_near", "arm_near_low", "arm_near_up"),
     ("chest", "spine", "hips"),
@@ -126,9 +134,9 @@ GROUPS = (
 )
 TRUNK = GROUPS[1]
 #: Back to front, the order the pieces are drawn in at rest. The head (the face, the hair or helm)
-#: goes with the chest; what the hands hold goes under the hand that holds it.
+#: goes with the torso; what the hands hold goes under the hand that holds it.
 DRAW = ("arm_far_up", "arm_far_low", "hand_far", "leg_far_up", "leg_far_low", "foot_far", "leg_near_up", "leg_near_low",
-        "foot_near", "hips", "spine", "chest", "head", "arm_near_up", "arm_near_low", "hand_near")
+        "foot_near", "torso", "head", "arm_near_up", "arm_near_low", "hand_near")
 #: The trunk keeps the figure down to here (y on the canvas), the hem of the shorts: the pelvis is
 #: drawn over the tops of both legs, the way the shorts are over the thighs, and a leg's top slides
 #: under it as the leg turns.
@@ -170,6 +178,8 @@ class Cut:
         for bone in [b for g in GROUPS for b in g] + ["trunk"]:
             if bone == "trunk":
                 (x0, y0), (x1, y1) = JOINTS[base]["hips"], JOINTS[base]["neck"]
+            elif bone in BANDS:
+                (x0, y0), (x1, y1) = (JOINTS[base][j] for j in BANDS[bone])
             else:
                 (x0, y0), (x1, y1) = bone_line(base, bone)
             x0, y0, x1, y1 = x0 * scale, y0 * scale, x1 * scale, y1 * scale
@@ -545,10 +555,13 @@ def pieces(base, colour, alpha, scale=1.0, prior=None, with_labels=False):
     figure = alpha > 0.5
     cut = Cut.of(base, scale, figure.shape)
     own = labels(cut, figure, colour)
+    nearest_trunk = np.argmin([cut.dist[t] for t in TRUNK], axis=0)
     if prior is not None:
-        # Where the base's body is, its pieces; past it (a pauldron, a skirt), the figure's own cut.
+        # Where the base's body is, its pieces (its torso in the three bands); past it (a pauldron, a
+        # skirt), the figure's own cut.
         known = np.any(list(prior.values()), axis=0)
-        own = {b: (prior[b] & figure) | (own[b] & ~known) for b in own}
+        was = {b: prior["torso"] & (nearest_trunk == TRUNK.index(b)) if b in TRUNK else prior[b] for b in own}
+        own = {b: (was[b] & figure) | (own[b] & ~known) for b in own}
     # The soft edge, to the piece beside it.
     soft = (alpha > 0) & ~figure
     claimed = np.any(list(own.values()), axis=0)
@@ -559,7 +572,6 @@ def pieces(base, colour, alpha, scale=1.0, prior=None, with_labels=False):
             claimed |= ring
     figure = figure | claimed
     front = np.zeros(figure.shape, bool)
-    nearest_trunk = np.argmin([cut.dist[t] for t in TRUNK], axis=0)
     out = {}
     h, w = figure.shape
     yy, xx = np.mgrid[0:h, 0:w]
@@ -612,21 +624,15 @@ def pieces(base, colour, alpha, scale=1.0, prior=None, with_labels=False):
         disc &= own[parent] | own[bone]
         c, a = out[bone]
         out[bone] = (np.where(disc[:, :, None], colour, c), np.where(disc, np.maximum(a, alpha), a))
-    # The trunk's pieces overlap a little where they meet, the one drawn over carrying a strip of the
-    # one under, so the seam doesn't open into a crack as they turn against each other.
-    seam = max(1, int(round(TRUNK_OVERLAP * cut.scale)))
-    for k, t in enumerate(TRUNK):
-        solid = out[t][1] > 0.5
-        for u in TRUNK[k + 1:]:
-            cu, au = out[u]
-            strip = ic.grow(solid, seam) & (au > 0.5) & ~solid
-            c, a = out[t]
-            out[t] = (np.where(strip[:, :, None], cu, c), np.where(strip, au, a))
+    # The trunk's three bands are one piece, the torso: each laid over the one under it.
+    torso, mine = out.pop(TRUNK[-1]), own.pop(TRUNK[-1])
+    for t in TRUNK[-2::-1]:
+        (ct, at), (cu, au) = out.pop(t), torso
+        a = at + au * (1.0 - at)
+        c = (ct * at[:, :, None] + cu * (au * (1.0 - at))[:, :, None]) / np.maximum(a, 1e-6)[:, :, None]
+        torso, mine = (np.where((a > 0)[:, :, None], c, ct), a), mine | own.pop(t)
+    out["torso"], own["torso"] = torso, mine
     return (out, own) if with_labels else out
-
-
-#: How far (pixels at full size) each trunk piece reaches over the one drawn under it.
-TRUNK_OVERLAP = 3
 
 
 # --------------------------------------------------------------------------- #
@@ -664,7 +670,7 @@ def render(base, layers, pose, size=None, origin=(0, 0), scale=1.0, front=()):
     out = np.zeros((h, w, 4))
     transforms = world(base, pose, scale)
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float64)
-    # A clip can bring pieces in front of the chest (its `front`): they're drawn after the head.
+    # A clip can bring pieces in front of the torso (its `front`): they're drawn after the head.
     order = [b for b in DRAW if b not in front]
     at = order.index("head") + 1
     order[at:at] = [b for b in DRAW if b in front]

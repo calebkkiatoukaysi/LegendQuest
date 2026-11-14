@@ -112,10 +112,16 @@ public partial class LegendQuestGame : Game
     {
         LoadAndCheckData();
 
-        if (ProofDirectory is not null) BeginProof();
+        if (ProofDirectory is not null)
+        {
+            PartCatalog.Synchronous = true;
+            BeginProof();
+        }
 
         ImportedArt.LoadContent(Services, GraphicsDevice);
         PartCatalog.LoadContent(Services, GraphicsDevice);
+        RegisterCrowds();
+        PartCatalog.Prewarm();
         _audio.LoadContent(Content);
         _cursor.LoadContent(Content);
         _canvas.LoadContent(GraphicsDevice);
@@ -124,11 +130,34 @@ public partial class LegendQuestGame : Game
         _screenManager.AddScreen(new TitleScreen());
     }
 
+    /// <summary>
+    /// Gives everyone in the rooms and the cast who has no recipe of their own a look from the shared
+    /// parts (PartCatalog.Crowd), by the id the rooms ask for their picture by: so nobody is drawn as
+    /// the old pixel figures once the painted parts are there. Creatures keep their own pictures.
+    /// </summary>
+    private static void RegisterCrowds()
+    {
+        foreach (Story.CastMember member in Story.Cast.All) PartCatalog.Crowd(member.Id, member.Name, member.Look?.Ancestry);
+        foreach (ZoneDefinition zone in ZoneCatalog.All)
+        {
+            foreach (RoomDefinition room in zone.Rooms)
+            {
+                foreach (MapNpc npc in room.Npcs)
+                {
+                    if (npc.Creature is not null || npc.Cast is not null) continue;
+                    PartCatalog.Crowd(npc.Look is not null ? npc.Id : npc.Sheet, npc.Name, npc.Look?.Ancestry);
+                }
+            }
+        }
+    }
+
     /// <summary>Moves the proof run along if there is one, then updates the components (which is the screens and the sound), then F11 for full screen.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     protected override void Update(GameTime gameTime)
     {
+        StartFrameTime();
         UpdateProof();
+        PartCatalog.Update();
         base.Update(gameTime);
 
         if (_screenManager.Input.IsNewKeyPress(Keys.F11))
@@ -149,6 +178,7 @@ public partial class LegendQuestGame : Game
         base.Draw(gameTime);
         _cursor.Draw(gameTime, _screenManager.SpriteBatch, _screenManager.Input.MousePosition);
 
+        EndFrameTime();
         EndProofCapture();
         _canvas.Present(GraphicsDevice);
     }

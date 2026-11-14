@@ -435,11 +435,1771 @@ Content/Creatures/vault-construct.png - created by Caleb Kiatoukaysi for Legend 
 <!-- character parts: written by tools/import_parts.py; don't edit between these two lines -->
 ## Characters (parts)
 
-The characters' parts made in ChatGPT from Story/13-art-prompts.md, each an edit of one of the two bases (tools/source/characters/base-male.png and base-female.png), cut by `tools/import_parts.py` from the pictures it keeps in tools/source/characters: keyed off the black, a base split at the jaw seam into its body and its bald head, a face cut to its head and the hair below its jaw, a body and every armor cut into the skeleton's pieces, one per bone, shrunk to half size and packed into atlas pages. The game puts each character together from their recipe at the base's sockets and plays the clips on its skeleton (Characters/Parts).
+The characters' parts made in ChatGPT from Story/13-art-prompts.md, each an edit of one of the two bases (base-male.png and base-female.png in tools/source/characters), cut by `tools/import_parts.py` from the pictures it keeps in tools/source/characters: keyed off the black, a base split at the jaw seam into its body and its bald head, a face cut to its head and the hair below its jaw, a body and every armor cut into the skeleton's pieces, one per bone, shrunk to half size and packed into atlas pages. The game puts each character together from their recipe at the base's sockets and plays the clips on its skeleton (Characters/Parts).
 
 tools/import_parts.py - written by Caleb Kiatoukaysi for Legend Quest, cuts the parts into layers at the bases' sockets and the bodies and armors into the skeleton's pieces, packs them into atlas pages and writes parts.json and clips.json
 
 tools/split_bases.py - written by Caleb Kiatoukaysi for Legend Quest, stands the two jointed mannequins from one picture of them side by side each on its own 1024 by 1536 canvas, as base-male.png and base-female.png and their blank versions
+
+tools/body_parts.py - written by Caleb Kiatoukaysi for Legend Quest, pulls a mannequin apart into its fourteen pieces (the torso one piece, from the neck to the shorts) as a template to paint them on, and puts a painted template's pieces back on the skeleton at rest, each found where it was painted and fitted to its own bone (its size, turn and place), one picture per piece, standing the figure up from them as its base
+
+tools/rig/scissors.py - written by Caleb Kiatoukaysi for Legend Quest, cuts a whole mannequin into its fourteen pieces exactly along its drawn lines (the jawline, each joint's seam), each line going with the piece in front and each piece carried on, in its own colours, under the ones that hide it; put back together the pieces are the picture again, pixel for pixel
+
+tools/source/characters/body-parts-man.png - the man's mannequin pulled apart into its fourteen pieces on black, the template ChatGPT paints the man's body on (Story/13 §3.0); made by tools/body_parts.py from the jointed mannequin of 2026-11-09, cut by tools/rig/scissors.py
+
+tools/source/characters/body-parts-man.json - where each piece is on body-parts-man.png and how far it's pulled from its place at rest; written by tools/body_parts.py
+
+tools/source/characters/armor-parts-man.png - the painted man's own pieces, less the head, pulled apart again in body-parts-man.png's places: the man's thirteen pieces an outfit dresses, the template ChatGPT paints each armor on in pieces (Story/13 §5.0); written by tools/body_parts.py
+
+tools/source/characters/sheets/body-man.png - the man's body as ChatGPT painted it on body-parts-man.png (Story/13 §3.0), kept as it came; tools/body_parts.py cuts it into the pieces in bodies/base-male; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/arm_far_low.png - the man's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/arm_far_up.png - the man's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/arm_near_low.png - the man's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/arm_near_up.png - the man's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/foot_far.png - the man's foot far piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/foot_near.png - the man's foot near piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/hand_far.png - the man's hand far piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/hand_near.png - the man's hand near piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/head.png - the man's head piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/leg_far_low.png - the man's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/leg_far_up.png - the man's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/leg_near_low.png - the man's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/leg_near_up.png - the man's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-male/torso.png - the man's torso piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-man.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/base-male.png - the man stood up from his or her painted pieces, drawn together in their order by tools/body_parts.py: the base every other part is painted on; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/body-parts-woman.png - the woman's mannequin pulled apart into its fourteen pieces on black, the template ChatGPT paints the woman's body on (Story/13 §3.0); made by tools/body_parts.py from the jointed mannequin of 2026-11-09, cut by tools/rig/scissors.py
+
+tools/source/characters/body-parts-woman.json - where each piece is on body-parts-woman.png and how far it's pulled from its place at rest; written by tools/body_parts.py
+
+tools/source/characters/armor-parts-woman.png - the painted woman's own pieces, less the head, pulled apart again in body-parts-woman.png's places: the woman's thirteen pieces an outfit dresses, the template ChatGPT paints each armor on in pieces (Story/13 §5.0); written by tools/body_parts.py
+
+tools/source/characters/sheets/body-woman.png - the woman's body as ChatGPT painted it on body-parts-woman.png (Story/13 §3.0), kept as it came; tools/body_parts.py cuts it into the pieces in bodies/base-female; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/arm_far_low.png - the woman's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/arm_far_up.png - the woman's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/arm_near_low.png - the woman's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/arm_near_up.png - the woman's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/foot_far.png - the woman's foot far piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/foot_near.png - the woman's foot near piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/hand_far.png - the woman's hand far piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/hand_near.png - the woman's hand near piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/head.png - the woman's head piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/leg_far_low.png - the woman's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/leg_far_up.png - the woman's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/leg_near_low.png - the woman's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/leg_near_up.png - the woman's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/bodies/base-female/torso.png - the woman's torso piece at rest on the canvas, cut by tools/body_parts.py from the body ChatGPT painted on body-parts-woman.png; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/base-female.png - the woman stood up from his or her painted pieces, drawn together in their order by tools/body_parts.py: the base every other part is painted on; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-brannock.png - armor-brannock as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-brannock; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/arm_far_low.png - armor-brannock's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/arm_far_up.png - armor-brannock's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/arm_near_low.png - armor-brannock's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/arm_near_up.png - armor-brannock's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/foot_far.png - armor-brannock's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/foot_near.png - armor-brannock's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/hand_far.png - armor-brannock's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/hand_near.png - armor-brannock's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/leg_far_low.png - armor-brannock's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/leg_far_up.png - armor-brannock's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/leg_near_low.png - armor-brannock's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/leg_near_up.png - armor-brannock's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-brannock/torso.png - armor-brannock's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-busker.png - armor-busker as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-busker; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/arm_far_low.png - armor-busker's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/arm_far_up.png - armor-busker's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/arm_near_low.png - armor-busker's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/arm_near_up.png - armor-busker's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/foot_far.png - armor-busker's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/foot_near.png - armor-busker's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/hand_far.png - armor-busker's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/hand_near.png - armor-busker's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/leg_far_low.png - armor-busker's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/leg_far_up.png - armor-busker's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/leg_near_low.png - armor-busker's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/leg_near_up.png - armor-busker's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-busker/torso.png - armor-busker's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-chain-mail.png - armor-chain-mail as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-chain-mail; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/arm_far_low.png - armor-chain-mail's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/arm_far_up.png - armor-chain-mail's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/arm_near_low.png - armor-chain-mail's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/arm_near_up.png - armor-chain-mail's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/foot_far.png - armor-chain-mail's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/foot_near.png - armor-chain-mail's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/hand_far.png - armor-chain-mail's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/hand_near.png - armor-chain-mail's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/leg_far_low.png - armor-chain-mail's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/leg_far_up.png - armor-chain-mail's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/leg_near_low.png - armor-chain-mail's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/leg_near_up.png - armor-chain-mail's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail/torso.png - armor-chain-mail's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-chain-mail-f.png - armor-chain-mail-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-chain-mail-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/arm_far_low.png - armor-chain-mail-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/arm_far_up.png - armor-chain-mail-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/arm_near_low.png - armor-chain-mail-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/arm_near_up.png - armor-chain-mail-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/foot_far.png - armor-chain-mail-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/foot_near.png - armor-chain-mail-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/hand_far.png - armor-chain-mail-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/hand_near.png - armor-chain-mail-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/leg_far_low.png - armor-chain-mail-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/leg_far_up.png - armor-chain-mail-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/leg_near_low.png - armor-chain-mail-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/leg_near_up.png - armor-chain-mail-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-mail-f/torso.png - armor-chain-mail-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-chain-shirt.png - armor-chain-shirt as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-chain-shirt; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/arm_far_low.png - armor-chain-shirt's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/arm_far_up.png - armor-chain-shirt's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/arm_near_low.png - armor-chain-shirt's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/arm_near_up.png - armor-chain-shirt's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/foot_far.png - armor-chain-shirt's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/foot_near.png - armor-chain-shirt's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/hand_far.png - armor-chain-shirt's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/hand_near.png - armor-chain-shirt's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/leg_far_low.png - armor-chain-shirt's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/leg_far_up.png - armor-chain-shirt's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/leg_near_low.png - armor-chain-shirt's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/leg_near_up.png - armor-chain-shirt's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt/torso.png - armor-chain-shirt's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-chain-shirt-f.png - armor-chain-shirt-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-chain-shirt-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/arm_far_low.png - armor-chain-shirt-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/arm_far_up.png - armor-chain-shirt-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/arm_near_low.png - armor-chain-shirt-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/arm_near_up.png - armor-chain-shirt-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/foot_far.png - armor-chain-shirt-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/foot_near.png - armor-chain-shirt-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/hand_far.png - armor-chain-shirt-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/hand_near.png - armor-chain-shirt-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/leg_far_low.png - armor-chain-shirt-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/leg_far_up.png - armor-chain-shirt-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/leg_near_low.png - armor-chain-shirt-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/leg_near_up.png - armor-chain-shirt-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-chain-shirt-f/torso.png - armor-chain-shirt-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-child-cove-f.png - armor-child-cove-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-child-cove-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/arm_far_low.png - armor-child-cove-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/arm_far_up.png - armor-child-cove-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/arm_near_low.png - armor-child-cove-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/arm_near_up.png - armor-child-cove-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/foot_far.png - armor-child-cove-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/foot_near.png - armor-child-cove-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/hand_far.png - armor-child-cove-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/hand_near.png - armor-child-cove-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/leg_far_low.png - armor-child-cove-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/leg_far_up.png - armor-child-cove-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/leg_near_low.png - armor-child-cove-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/leg_near_up.png - armor-child-cove-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-child-cove-f/torso.png - armor-child-cove-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-clerk-f.png - armor-clerk-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-clerk-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/arm_far_low.png - armor-clerk-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/arm_far_up.png - armor-clerk-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/arm_near_low.png - armor-clerk-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/arm_near_up.png - armor-clerk-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/foot_far.png - armor-clerk-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/foot_near.png - armor-clerk-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/hand_far.png - armor-clerk-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/hand_near.png - armor-clerk-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/leg_far_low.png - armor-clerk-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/leg_far_up.png - armor-clerk-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/leg_near_low.png - armor-clerk-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/leg_near_up.png - armor-clerk-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-clerk-f/torso.png - armor-clerk-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-construct-stone.png - armor-construct-stone as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-construct-stone; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/arm_far_low.png - armor-construct-stone's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/arm_far_up.png - armor-construct-stone's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/arm_near_low.png - armor-construct-stone's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/arm_near_up.png - armor-construct-stone's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/foot_far.png - armor-construct-stone's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/foot_near.png - armor-construct-stone's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/hand_far.png - armor-construct-stone's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/hand_near.png - armor-construct-stone's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/leg_far_low.png - armor-construct-stone's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/leg_far_up.png - armor-construct-stone's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/leg_near_low.png - armor-construct-stone's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/leg_near_up.png - armor-construct-stone's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-construct-stone/torso.png - armor-construct-stone's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-corra.png - armor-corra as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-corra; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/arm_far_low.png - armor-corra's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/arm_far_up.png - armor-corra's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/arm_near_low.png - armor-corra's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/arm_near_up.png - armor-corra's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/foot_far.png - armor-corra's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/foot_near.png - armor-corra's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/hand_far.png - armor-corra's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/hand_near.png - armor-corra's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/leg_far_low.png - armor-corra's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/leg_far_up.png - armor-corra's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/leg_near_low.png - armor-corra's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/leg_near_up.png - armor-corra's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-corra/torso.png - armor-corra's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-courier.png - armor-courier as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-courier; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/arm_far_low.png - armor-courier's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/arm_far_up.png - armor-courier's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/arm_near_low.png - armor-courier's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/arm_near_up.png - armor-courier's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/foot_far.png - armor-courier's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/foot_near.png - armor-courier's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/hand_far.png - armor-courier's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/hand_near.png - armor-courier's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/leg_far_low.png - armor-courier's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/leg_far_up.png - armor-courier's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/leg_near_low.png - armor-courier's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/leg_near_up.png - armor-courier's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-courier/torso.png - armor-courier's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-crane-f.png - armor-crane-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-crane-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/arm_far_low.png - armor-crane-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/arm_far_up.png - armor-crane-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/arm_near_low.png - armor-crane-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/arm_near_up.png - armor-crane-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/foot_far.png - armor-crane-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/foot_near.png - armor-crane-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/hand_far.png - armor-crane-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/hand_near.png - armor-crane-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/leg_far_low.png - armor-crane-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/leg_far_up.png - armor-crane-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/leg_near_low.png - armor-crane-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/leg_near_up.png - armor-crane-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-crane-f/torso.png - armor-crane-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-elara.png - armor-elara as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-elara; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/arm_far_low.png - armor-elara's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/arm_far_up.png - armor-elara's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/arm_near_low.png - armor-elara's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/arm_near_up.png - armor-elara's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/foot_far.png - armor-elara's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/foot_near.png - armor-elara's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/hand_far.png - armor-elara's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/hand_near.png - armor-elara's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/leg_far_low.png - armor-elara's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/leg_far_up.png - armor-elara's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/leg_near_low.png - armor-elara's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/leg_near_up.png - armor-elara's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elara/torso.png - armor-elara's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-elder-coat.png - armor-elder-coat as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-elder-coat; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/arm_far_low.png - armor-elder-coat's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/arm_far_up.png - armor-elder-coat's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/arm_near_low.png - armor-elder-coat's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/arm_near_up.png - armor-elder-coat's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/foot_far.png - armor-elder-coat's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/foot_near.png - armor-elder-coat's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/hand_far.png - armor-elder-coat's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/hand_near.png - armor-elder-coat's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/leg_far_low.png - armor-elder-coat's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/leg_far_up.png - armor-elder-coat's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/leg_near_low.png - armor-elder-coat's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/leg_near_up.png - armor-elder-coat's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-coat/torso.png - armor-elder-coat's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-elder-woman.png - armor-elder-woman as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-elder-woman; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/arm_far_low.png - armor-elder-woman's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/arm_far_up.png - armor-elder-woman's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/arm_near_low.png - armor-elder-woman's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/arm_near_up.png - armor-elder-woman's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/foot_far.png - armor-elder-woman's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/foot_near.png - armor-elder-woman's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/hand_far.png - armor-elder-woman's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/hand_near.png - armor-elder-woman's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/leg_far_low.png - armor-elder-woman's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/leg_far_up.png - armor-elder-woman's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/leg_near_low.png - armor-elder-woman's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/leg_near_up.png - armor-elder-woman's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-elder-woman/torso.png - armor-elder-woman's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-fencer.png - armor-fencer as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-fencer; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/arm_far_low.png - armor-fencer's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/arm_far_up.png - armor-fencer's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/arm_near_low.png - armor-fencer's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/arm_near_up.png - armor-fencer's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/foot_far.png - armor-fencer's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/foot_near.png - armor-fencer's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/hand_far.png - armor-fencer's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/hand_near.png - armor-fencer's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/leg_far_low.png - armor-fencer's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/leg_far_up.png - armor-fencer's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/leg_near_low.png - armor-fencer's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/leg_near_up.png - armor-fencer's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-fencer/torso.png - armor-fencer's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-glassblower.png - armor-glassblower as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-glassblower; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/arm_far_low.png - armor-glassblower's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/arm_far_up.png - armor-glassblower's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/arm_near_low.png - armor-glassblower's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/arm_near_up.png - armor-glassblower's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/foot_far.png - armor-glassblower's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/foot_near.png - armor-glassblower's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/hand_far.png - armor-glassblower's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/hand_near.png - armor-glassblower's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/leg_far_low.png - armor-glassblower's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/leg_far_up.png - armor-glassblower's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/leg_near_low.png - armor-glassblower's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/leg_near_up.png - armor-glassblower's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-glassblower/torso.png - armor-glassblower's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-hide.png - armor-hide as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-hide; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/arm_far_low.png - armor-hide's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/arm_far_up.png - armor-hide's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/arm_near_low.png - armor-hide's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/arm_near_up.png - armor-hide's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/foot_far.png - armor-hide's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/foot_near.png - armor-hide's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/hand_far.png - armor-hide's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/hand_near.png - armor-hide's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/leg_far_low.png - armor-hide's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/leg_far_up.png - armor-hide's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/leg_near_low.png - armor-hide's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/leg_near_up.png - armor-hide's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide/torso.png - armor-hide's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-hide-f.png - armor-hide-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-hide-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/arm_far_low.png - armor-hide-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/arm_far_up.png - armor-hide-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/arm_near_low.png - armor-hide-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/arm_near_up.png - armor-hide-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/foot_far.png - armor-hide-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/foot_near.png - armor-hide-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/hand_far.png - armor-hide-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/hand_near.png - armor-hide-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/leg_far_low.png - armor-hide-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/leg_far_up.png - armor-hide-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/leg_near_low.png - armor-hide-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/leg_near_up.png - armor-hide-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hide-f/torso.png - armor-hide-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-hollowed-chief.png - armor-hollowed-chief as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-hollowed-chief; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/arm_far_low.png - armor-hollowed-chief's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/arm_far_up.png - armor-hollowed-chief's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/arm_near_low.png - armor-hollowed-chief's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/arm_near_up.png - armor-hollowed-chief's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/foot_far.png - armor-hollowed-chief's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/foot_near.png - armor-hollowed-chief's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/hand_far.png - armor-hollowed-chief's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/hand_near.png - armor-hollowed-chief's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/leg_far_low.png - armor-hollowed-chief's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/leg_far_up.png - armor-hollowed-chief's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/leg_near_low.png - armor-hollowed-chief's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/leg_near_up.png - armor-hollowed-chief's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-chief/torso.png - armor-hollowed-chief's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-hollowed-footman.png - armor-hollowed-footman as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-hollowed-footman; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/arm_far_low.png - armor-hollowed-footman's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/arm_far_up.png - armor-hollowed-footman's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/arm_near_low.png - armor-hollowed-footman's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/arm_near_up.png - armor-hollowed-footman's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/foot_far.png - armor-hollowed-footman's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/foot_near.png - armor-hollowed-footman's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/hand_far.png - armor-hollowed-footman's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/hand_near.png - armor-hollowed-footman's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/leg_far_low.png - armor-hollowed-footman's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/leg_far_up.png - armor-hollowed-footman's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/leg_near_low.png - armor-hollowed-footman's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/leg_near_up.png - armor-hollowed-footman's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-footman/torso.png - armor-hollowed-footman's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-hollowed-hexer.png - armor-hollowed-hexer as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-hollowed-hexer; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/arm_far_low.png - armor-hollowed-hexer's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/arm_far_up.png - armor-hollowed-hexer's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/arm_near_low.png - armor-hollowed-hexer's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/arm_near_up.png - armor-hollowed-hexer's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/foot_far.png - armor-hollowed-hexer's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/foot_near.png - armor-hollowed-hexer's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/hand_far.png - armor-hollowed-hexer's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/hand_near.png - armor-hollowed-hexer's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/leg_far_low.png - armor-hollowed-hexer's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/leg_far_up.png - armor-hollowed-hexer's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/leg_near_low.png - armor-hollowed-hexer's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/leg_near_up.png - armor-hollowed-hexer's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-hexer/torso.png - armor-hollowed-hexer's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-hollowed-sapper.png - armor-hollowed-sapper as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-hollowed-sapper; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/arm_far_low.png - armor-hollowed-sapper's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/arm_far_up.png - armor-hollowed-sapper's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/arm_near_low.png - armor-hollowed-sapper's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/arm_near_up.png - armor-hollowed-sapper's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/foot_far.png - armor-hollowed-sapper's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/foot_near.png - armor-hollowed-sapper's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/hand_far.png - armor-hollowed-sapper's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/hand_near.png - armor-hollowed-sapper's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/leg_far_low.png - armor-hollowed-sapper's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/leg_far_up.png - armor-hollowed-sapper's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/leg_near_low.png - armor-hollowed-sapper's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/leg_near_up.png - armor-hollowed-sapper's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-hollowed-sapper/torso.png - armor-hollowed-sapper's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-kael.png - armor-kael as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-kael; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/arm_far_low.png - armor-kael's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/arm_far_up.png - armor-kael's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/arm_near_low.png - armor-kael's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/arm_near_up.png - armor-kael's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/foot_far.png - armor-kael's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/foot_near.png - armor-kael's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/hand_far.png - armor-kael's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/hand_near.png - armor-kael's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/leg_far_low.png - armor-kael's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/leg_far_up.png - armor-kael's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/leg_near_low.png - armor-kael's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/leg_near_up.png - armor-kael's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-kael/torso.png - armor-kael's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-leather.png - armor-leather as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-leather; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/arm_far_low.png - armor-leather's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/arm_far_up.png - armor-leather's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/arm_near_low.png - armor-leather's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/arm_near_up.png - armor-leather's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/foot_far.png - armor-leather's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/foot_near.png - armor-leather's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/hand_far.png - armor-leather's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/hand_near.png - armor-leather's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/leg_far_low.png - armor-leather's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/leg_far_up.png - armor-leather's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/leg_near_low.png - armor-leather's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/leg_near_up.png - armor-leather's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather/torso.png - armor-leather's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-leather-f.png - armor-leather-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-leather-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/arm_far_low.png - armor-leather-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/arm_far_up.png - armor-leather-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/arm_near_low.png - armor-leather-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/arm_near_up.png - armor-leather-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/foot_far.png - armor-leather-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/foot_near.png - armor-leather-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/hand_far.png - armor-leather-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/hand_near.png - armor-leather-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/leg_far_low.png - armor-leather-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/leg_far_up.png - armor-leather-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/leg_near_low.png - armor-leather-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/leg_near_up.png - armor-leather-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leather-f/torso.png - armor-leather-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-leon.png - armor-leon as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-leon; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/arm_far_low.png - armor-leon's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/arm_far_up.png - armor-leon's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/arm_near_low.png - armor-leon's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/arm_near_up.png - armor-leon's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/foot_far.png - armor-leon's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/foot_near.png - armor-leon's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/hand_far.png - armor-leon's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/hand_near.png - armor-leon's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/leg_far_low.png - armor-leon's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/leg_far_up.png - armor-leon's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/leg_near_low.png - armor-leon's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/leg_near_up.png - armor-leon's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-leon/torso.png - armor-leon's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-lodge-ranger.png - armor-lodge-ranger as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-lodge-ranger; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/arm_far_low.png - armor-lodge-ranger's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/arm_far_up.png - armor-lodge-ranger's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/arm_near_low.png - armor-lodge-ranger's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/arm_near_up.png - armor-lodge-ranger's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/foot_far.png - armor-lodge-ranger's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/foot_near.png - armor-lodge-ranger's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/hand_far.png - armor-lodge-ranger's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/hand_near.png - armor-lodge-ranger's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/leg_far_low.png - armor-lodge-ranger's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/leg_far_up.png - armor-lodge-ranger's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/leg_near_low.png - armor-lodge-ranger's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/leg_near_up.png - armor-lodge-ranger's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-lodge-ranger/torso.png - armor-lodge-ranger's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-mage-robes-f.png - armor-mage-robes-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-mage-robes-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/arm_far_low.png - armor-mage-robes-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/arm_far_up.png - armor-mage-robes-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/arm_near_low.png - armor-mage-robes-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/arm_near_up.png - armor-mage-robes-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/foot_far.png - armor-mage-robes-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/foot_near.png - armor-mage-robes-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/hand_far.png - armor-mage-robes-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/hand_near.png - armor-mage-robes-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/leg_far_low.png - armor-mage-robes-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/leg_far_up.png - armor-mage-robes-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/leg_near_low.png - armor-mage-robes-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/leg_near_up.png - armor-mage-robes-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-mage-robes-f/torso.png - armor-mage-robes-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-maid.png - armor-maid as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-maid; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/arm_far_low.png - armor-maid's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/arm_far_up.png - armor-maid's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/arm_near_low.png - armor-maid's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/arm_near_up.png - armor-maid's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/foot_far.png - armor-maid's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/foot_near.png - armor-maid's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/hand_far.png - armor-maid's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/hand_near.png - armor-maid's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/leg_far_low.png - armor-maid's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/leg_far_up.png - armor-maid's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/leg_near_low.png - armor-maid's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/leg_near_up.png - armor-maid's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-maid/torso.png - armor-maid's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-merchant.png - armor-merchant as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-merchant; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/arm_far_low.png - armor-merchant's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/arm_far_up.png - armor-merchant's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/arm_near_low.png - armor-merchant's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/arm_near_up.png - armor-merchant's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/foot_far.png - armor-merchant's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/foot_near.png - armor-merchant's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/hand_far.png - armor-merchant's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/hand_near.png - armor-merchant's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/leg_far_low.png - armor-merchant's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/leg_far_up.png - armor-merchant's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/leg_near_low.png - armor-merchant's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/leg_near_up.png - armor-merchant's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-merchant/torso.png - armor-merchant's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-noble.png - armor-noble as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-noble; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/arm_far_low.png - armor-noble's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/arm_far_up.png - armor-noble's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/arm_near_low.png - armor-noble's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/arm_near_up.png - armor-noble's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/foot_far.png - armor-noble's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/foot_near.png - armor-noble's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/hand_far.png - armor-noble's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/hand_near.png - armor-noble's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/leg_far_low.png - armor-noble's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/leg_far_up.png - armor-noble's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/leg_near_low.png - armor-noble's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/leg_near_up.png - armor-noble's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble/torso.png - armor-noble's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-noble-gown.png - armor-noble-gown as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-noble-gown; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/arm_far_low.png - armor-noble-gown's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/arm_far_up.png - armor-noble-gown's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/arm_near_low.png - armor-noble-gown's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/arm_near_up.png - armor-noble-gown's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/foot_far.png - armor-noble-gown's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/foot_near.png - armor-noble-gown's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/hand_far.png - armor-noble-gown's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/hand_near.png - armor-noble-gown's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/leg_far_low.png - armor-noble-gown's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/leg_far_up.png - armor-noble-gown's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/leg_near_low.png - armor-noble-gown's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/leg_near_up.png - armor-noble-gown's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-noble-gown/torso.png - armor-noble-gown's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-padded.png - armor-padded as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-padded; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/arm_far_low.png - armor-padded's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/arm_far_up.png - armor-padded's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/arm_near_low.png - armor-padded's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/arm_near_up.png - armor-padded's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/foot_far.png - armor-padded's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/foot_near.png - armor-padded's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/hand_far.png - armor-padded's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/hand_near.png - armor-padded's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/leg_far_low.png - armor-padded's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/leg_far_up.png - armor-padded's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/leg_near_low.png - armor-padded's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/leg_near_up.png - armor-padded's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded/torso.png - armor-padded's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-padded-f.png - armor-padded-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-padded-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/arm_far_low.png - armor-padded-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/arm_far_up.png - armor-padded-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/arm_near_low.png - armor-padded-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/arm_near_up.png - armor-padded-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/foot_far.png - armor-padded-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/foot_near.png - armor-padded-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/hand_far.png - armor-padded-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/hand_near.png - armor-padded-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/leg_far_low.png - armor-padded-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/leg_far_up.png - armor-padded-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/leg_near_low.png - armor-padded-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/leg_near_up.png - armor-padded-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-padded-f/torso.png - armor-padded-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-pilgrim.png - armor-pilgrim as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-pilgrim; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/arm_far_low.png - armor-pilgrim's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/arm_far_up.png - armor-pilgrim's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/arm_near_low.png - armor-pilgrim's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/arm_near_up.png - armor-pilgrim's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/foot_far.png - armor-pilgrim's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/foot_near.png - armor-pilgrim's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/hand_far.png - armor-pilgrim's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/hand_near.png - armor-pilgrim's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/leg_far_low.png - armor-pilgrim's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/leg_far_up.png - armor-pilgrim's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/leg_near_low.png - armor-pilgrim's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/leg_near_up.png - armor-pilgrim's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-pilgrim/torso.png - armor-pilgrim's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-plate-f.png - armor-plate-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-plate-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/arm_far_low.png - armor-plate-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/arm_far_up.png - armor-plate-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/arm_near_low.png - armor-plate-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/arm_near_up.png - armor-plate-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/foot_far.png - armor-plate-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/foot_near.png - armor-plate-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/hand_far.png - armor-plate-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/hand_near.png - armor-plate-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/leg_far_low.png - armor-plate-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/leg_far_up.png - armor-plate-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/leg_near_low.png - armor-plate-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/leg_near_up.png - armor-plate-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-plate-f/torso.png - armor-plate-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-refugee-child.png - armor-refugee-child as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-refugee-child; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/arm_far_low.png - armor-refugee-child's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/arm_far_up.png - armor-refugee-child's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/arm_near_low.png - armor-refugee-child's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/arm_near_up.png - armor-refugee-child's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/foot_far.png - armor-refugee-child's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/foot_near.png - armor-refugee-child's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/hand_far.png - armor-refugee-child's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/hand_near.png - armor-refugee-child's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/leg_far_low.png - armor-refugee-child's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/leg_far_up.png - armor-refugee-child's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/leg_near_low.png - armor-refugee-child's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/leg_near_up.png - armor-refugee-child's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-child/torso.png - armor-refugee-child's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-refugee-man-f.png - armor-refugee-man-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-refugee-man-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/arm_far_low.png - armor-refugee-man-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/arm_far_up.png - armor-refugee-man-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/arm_near_low.png - armor-refugee-man-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/arm_near_up.png - armor-refugee-man-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/foot_far.png - armor-refugee-man-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/foot_near.png - armor-refugee-man-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/hand_far.png - armor-refugee-man-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/hand_near.png - armor-refugee-man-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/leg_far_low.png - armor-refugee-man-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/leg_far_up.png - armor-refugee-man-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/leg_near_low.png - armor-refugee-man-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/leg_near_up.png - armor-refugee-man-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-man-f/torso.png - armor-refugee-man-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-refugee-woman.png - armor-refugee-woman as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-refugee-woman; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/arm_far_low.png - armor-refugee-woman's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/arm_far_up.png - armor-refugee-woman's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/arm_near_low.png - armor-refugee-woman's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/arm_near_up.png - armor-refugee-woman's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/foot_far.png - armor-refugee-woman's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/foot_near.png - armor-refugee-woman's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/hand_far.png - armor-refugee-woman's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/hand_near.png - armor-refugee-woman's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/leg_far_low.png - armor-refugee-woman's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/leg_far_up.png - armor-refugee-woman's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/leg_near_low.png - armor-refugee-woman's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/leg_near_up.png - armor-refugee-woman's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-refugee-woman/torso.png - armor-refugee-woman's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-road.png - armor-road as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-road; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/arm_far_low.png - armor-road's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/arm_far_up.png - armor-road's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/arm_near_low.png - armor-road's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/arm_near_up.png - armor-road's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/foot_far.png - armor-road's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/foot_near.png - armor-road's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/hand_far.png - armor-road's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/hand_near.png - armor-road's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/leg_far_low.png - armor-road's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/leg_far_up.png - armor-road's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/leg_near_low.png - armor-road's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/leg_near_up.png - armor-road's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-road/torso.png - armor-road's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-royal-guard.png - armor-royal-guard as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-royal-guard; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/arm_far_low.png - armor-royal-guard's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/arm_far_up.png - armor-royal-guard's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/arm_near_low.png - armor-royal-guard's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/arm_near_up.png - armor-royal-guard's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/foot_far.png - armor-royal-guard's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/foot_near.png - armor-royal-guard's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/hand_far.png - armor-royal-guard's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/hand_near.png - armor-royal-guard's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/leg_far_low.png - armor-royal-guard's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/leg_far_up.png - armor-royal-guard's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/leg_near_low.png - armor-royal-guard's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/leg_near_up.png - armor-royal-guard's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-guard/torso.png - armor-royal-guard's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-royal-livery.png - armor-royal-livery as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-royal-livery; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/arm_far_low.png - armor-royal-livery's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/arm_far_up.png - armor-royal-livery's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/arm_near_low.png - armor-royal-livery's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/arm_near_up.png - armor-royal-livery's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/foot_far.png - armor-royal-livery's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/foot_near.png - armor-royal-livery's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/hand_far.png - armor-royal-livery's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/hand_near.png - armor-royal-livery's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/leg_far_low.png - armor-royal-livery's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/leg_far_up.png - armor-royal-livery's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/leg_near_low.png - armor-royal-livery's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/leg_near_up.png - armor-royal-livery's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-royal-livery/torso.png - armor-royal-livery's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-sailor.png - armor-sailor as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-sailor; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/arm_far_low.png - armor-sailor's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/arm_far_up.png - armor-sailor's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/arm_near_low.png - armor-sailor's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/arm_near_up.png - armor-sailor's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/foot_far.png - armor-sailor's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/foot_near.png - armor-sailor's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/hand_far.png - armor-sailor's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/hand_near.png - armor-sailor's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/leg_far_low.png - armor-sailor's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/leg_far_up.png - armor-sailor's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/leg_near_low.png - armor-sailor's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/leg_near_up.png - armor-sailor's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sailor/torso.png - armor-sailor's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-sb-traveller.png - armor-sb-traveller as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-sb-traveller; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/arm_far_low.png - armor-sb-traveller's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/arm_far_up.png - armor-sb-traveller's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/arm_near_low.png - armor-sb-traveller's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/arm_near_up.png - armor-sb-traveller's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/foot_far.png - armor-sb-traveller's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/foot_near.png - armor-sb-traveller's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/hand_far.png - armor-sb-traveller's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/hand_near.png - armor-sb-traveller's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/leg_far_low.png - armor-sb-traveller's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/leg_far_up.png - armor-sb-traveller's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/leg_near_low.png - armor-sb-traveller's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/leg_near_up.png - armor-sb-traveller's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sb-traveller/torso.png - armor-sb-traveller's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-scale-f.png - armor-scale-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-scale-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/arm_far_low.png - armor-scale-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/arm_far_up.png - armor-scale-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/arm_near_low.png - armor-scale-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/arm_near_up.png - armor-scale-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/foot_far.png - armor-scale-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/foot_near.png - armor-scale-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/hand_far.png - armor-scale-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/hand_near.png - armor-scale-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/leg_far_low.png - armor-scale-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/leg_far_up.png - armor-scale-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/leg_near_low.png - armor-scale-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/leg_near_up.png - armor-scale-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-scale-f/torso.png - armor-scale-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-sera.png - armor-sera as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-sera; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/arm_far_low.png - armor-sera's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/arm_far_up.png - armor-sera's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/arm_near_low.png - armor-sera's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/arm_near_up.png - armor-sera's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/foot_far.png - armor-sera's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/foot_near.png - armor-sera's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/hand_far.png - armor-sera's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/hand_near.png - armor-sera's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/leg_far_low.png - armor-sera's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/leg_far_up.png - armor-sera's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/leg_near_low.png - armor-sera's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/leg_near_up.png - armor-sera's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-sera/torso.png - armor-sera's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-smith.png - armor-smith as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-smith; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/arm_far_low.png - armor-smith's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/arm_far_up.png - armor-smith's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/arm_near_low.png - armor-smith's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/arm_near_up.png - armor-smith's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/foot_far.png - armor-smith's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/foot_near.png - armor-smith's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/hand_far.png - armor-smith's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/hand_near.png - armor-smith's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/leg_far_low.png - armor-smith's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/leg_far_up.png - armor-smith's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/leg_near_low.png - armor-smith's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/leg_near_up.png - armor-smith's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-smith/torso.png - armor-smith's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-studded.png - armor-studded as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-studded; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/arm_far_low.png - armor-studded's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/arm_far_up.png - armor-studded's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/arm_near_low.png - armor-studded's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/arm_near_up.png - armor-studded's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/foot_far.png - armor-studded's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/foot_near.png - armor-studded's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/hand_far.png - armor-studded's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/hand_near.png - armor-studded's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/leg_far_low.png - armor-studded's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/leg_far_up.png - armor-studded's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/leg_near_low.png - armor-studded's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/leg_near_up.png - armor-studded's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-studded/torso.png - armor-studded's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-tavern-m.png - armor-tavern-m as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-tavern-m; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/arm_far_low.png - armor-tavern-m's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/arm_far_up.png - armor-tavern-m's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/arm_near_low.png - armor-tavern-m's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/arm_near_up.png - armor-tavern-m's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/foot_far.png - armor-tavern-m's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/foot_near.png - armor-tavern-m's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/hand_far.png - armor-tavern-m's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/hand_near.png - armor-tavern-m's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/leg_far_low.png - armor-tavern-m's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/leg_far_up.png - armor-tavern-m's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/leg_near_low.png - armor-tavern-m's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/leg_near_up.png - armor-tavern-m's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-tavern-m/torso.png - armor-tavern-m's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-temple.png - armor-temple as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-temple; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/arm_far_low.png - armor-temple's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/arm_far_up.png - armor-temple's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/arm_near_low.png - armor-temple's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/arm_near_up.png - armor-temple's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/foot_far.png - armor-temple's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/foot_near.png - armor-temple's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/hand_far.png - armor-temple's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/hand_near.png - armor-temple's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/leg_far_low.png - armor-temple's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/leg_far_up.png - armor-temple's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/leg_near_low.png - armor-temple's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/leg_near_up.png - armor-temple's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-temple/torso.png - armor-temple's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-trader.png - armor-trader as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-trader; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/arm_far_low.png - armor-trader's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/arm_far_up.png - armor-trader's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/arm_near_low.png - armor-trader's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/arm_near_up.png - armor-trader's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/foot_far.png - armor-trader's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/foot_near.png - armor-trader's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/hand_far.png - armor-trader's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/hand_near.png - armor-trader's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/leg_far_low.png - armor-trader's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/leg_far_up.png - armor-trader's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/leg_near_low.png - armor-trader's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/leg_near_up.png - armor-trader's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-trader/torso.png - armor-trader's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-traveller.png - armor-traveller as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-traveller; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/arm_far_low.png - armor-traveller's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/arm_far_up.png - armor-traveller's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/arm_near_low.png - armor-traveller's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/arm_near_up.png - armor-traveller's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/foot_far.png - armor-traveller's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/foot_near.png - armor-traveller's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/hand_far.png - armor-traveller's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/hand_near.png - armor-traveller's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/leg_far_low.png - armor-traveller's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/leg_far_up.png - armor-traveller's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/leg_near_low.png - armor-traveller's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/leg_near_up.png - armor-traveller's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller/torso.png - armor-traveller's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-traveller-f.png - armor-traveller-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-traveller-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/arm_far_low.png - armor-traveller-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/arm_far_up.png - armor-traveller-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/arm_near_low.png - armor-traveller-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/arm_near_up.png - armor-traveller-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/foot_far.png - armor-traveller-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/foot_near.png - armor-traveller-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/hand_far.png - armor-traveller-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/hand_near.png - armor-traveller-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/leg_far_low.png - armor-traveller-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/leg_far_up.png - armor-traveller-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/leg_near_low.png - armor-traveller-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/leg_near_up.png - armor-traveller-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-traveller-f/torso.png - armor-traveller-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-urchin.png - armor-urchin as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-urchin; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/arm_far_low.png - armor-urchin's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/arm_far_up.png - armor-urchin's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/arm_near_low.png - armor-urchin's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/arm_near_up.png - armor-urchin's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/foot_far.png - armor-urchin's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/foot_near.png - armor-urchin's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/hand_far.png - armor-urchin's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/hand_near.png - armor-urchin's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/leg_far_low.png - armor-urchin's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/leg_far_up.png - armor-urchin's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/leg_near_low.png - armor-urchin's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/leg_near_up.png - armor-urchin's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin/torso.png - armor-urchin's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-urchin-f.png - armor-urchin-f as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-urchin-f; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/arm_far_low.png - armor-urchin-f's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/arm_far_up.png - armor-urchin-f's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/arm_near_low.png - armor-urchin-f's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/arm_near_up.png - armor-urchin-f's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/foot_far.png - armor-urchin-f's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/foot_near.png - armor-urchin-f's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/hand_far.png - armor-urchin-f's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/hand_near.png - armor-urchin-f's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/leg_far_low.png - armor-urchin-f's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/leg_far_up.png - armor-urchin-f's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/leg_near_low.png - armor-urchin-f's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/leg_near_up.png - armor-urchin-f's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-urchin-f/torso.png - armor-urchin-f's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-villager-man.png - armor-villager-man as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-villager-man; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/arm_far_low.png - armor-villager-man's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/arm_far_up.png - armor-villager-man's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/arm_near_low.png - armor-villager-man's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/arm_near_up.png - armor-villager-man's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/foot_far.png - armor-villager-man's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/foot_near.png - armor-villager-man's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/hand_far.png - armor-villager-man's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/hand_near.png - armor-villager-man's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/leg_far_low.png - armor-villager-man's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/leg_far_up.png - armor-villager-man's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/leg_near_low.png - armor-villager-man's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/leg_near_up.png - armor-villager-man's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-man/torso.png - armor-villager-man's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-villager-woman.png - armor-villager-woman as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-villager-woman; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/arm_far_low.png - armor-villager-woman's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/arm_far_up.png - armor-villager-woman's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/arm_near_low.png - armor-villager-woman's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/arm_near_up.png - armor-villager-woman's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/foot_far.png - armor-villager-woman's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/foot_near.png - armor-villager-woman's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/hand_far.png - armor-villager-woman's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/hand_near.png - armor-villager-woman's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/leg_far_low.png - armor-villager-woman's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/leg_far_up.png - armor-villager-woman's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/leg_near_low.png - armor-villager-woman's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/leg_near_up.png - armor-villager-woman's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-villager-woman/torso.png - armor-villager-woman's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-watch.png - armor-watch as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-watch; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/arm_far_low.png - armor-watch's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/arm_far_up.png - armor-watch's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/arm_near_low.png - armor-watch's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/arm_near_up.png - armor-watch's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/foot_far.png - armor-watch's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/foot_near.png - armor-watch's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/hand_far.png - armor-watch's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/hand_near.png - armor-watch's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/leg_far_low.png - armor-watch's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/leg_far_up.png - armor-watch's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/leg_near_low.png - armor-watch's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/leg_near_up.png - armor-watch's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch/torso.png - armor-watch's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/sheets/armor-watch-captain.png - armor-watch-captain as ChatGPT painted it on its armor template (Story/13 §5), kept as it came; tools/body_parts.py cuts it into the pieces in armors/armor-watch-captain; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/arm_far_low.png - armor-watch-captain's arm far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/arm_far_up.png - armor-watch-captain's arm far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/arm_near_low.png - armor-watch-captain's arm near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/arm_near_up.png - armor-watch-captain's arm near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/foot_far.png - armor-watch-captain's foot far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/foot_near.png - armor-watch-captain's foot near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/hand_far.png - armor-watch-captain's hand far piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/hand_near.png - armor-watch-captain's hand near piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/leg_far_low.png - armor-watch-captain's leg far low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/leg_far_up.png - armor-watch-captain's leg far up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/leg_near_low.png - armor-watch-captain's leg near low piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/leg_near_up.png - armor-watch-captain's leg near up piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+tools/source/characters/armors/armor-watch-captain/torso.png - armor-watch-captain's torso piece at rest on the canvas, cut by tools/body_parts.py from the outfit ChatGPT painted on its armor template; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
 
 tools/rig/skeleton.py - written by Caleb Kiatoukaysi for Legend Quest, the mannequins' skeleton (each joint at the middle of its painted ball) and the cut of a figure into its bones' pieces along the painted seams, with what each piece hides filled in; and the forward kinematics the game's own follow
 
@@ -453,9 +2213,25 @@ tools/vectorize.py - written by Caleb Kiatoukaysi for Legend Quest, redraws a pi
 
 Content/Characters/Parts/parts.json - the sockets and joints of each base, the skeleton, where every part (or each of its pieces) is on its page and which socket it hangs from, and every recipe from Story/13-art-prompts.md §7; written by tools/import_parts.py
 
-Content/Characters/Parts/base-0.png - an atlas page of 32 parts (base-female.body@arm_far_low, base-female.body@arm_far_up, base-female.body@arm_near_low, base-female.body@arm_near_up, base-female.body@chest, base-female.body@foot_far, base-female.body@foot_near, base-female.body@hand_far, base-female.body@hand_near, base-female.body@hips, base-female.body@leg_far_low, base-female.body@leg_far_up, base-female.body@leg_near_low, base-female.body@leg_near_up, base-female.body@spine, base-female.head, base-male.body@arm_far_low, base-male.body@arm_far_up, base-male.body@arm_near_low, base-male.body@arm_near_up, base-male.body@chest, base-male.body@foot_far, base-male.body@foot_near, base-male.body@hand_far, base-male.body@hand_near, base-male.body@hips, base-male.body@leg_far_low, base-male.body@leg_far_up, base-male.body@leg_near_low, base-male.body@leg_near_up, base-male.body@spine, base-male.head) and 32 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+Content/Characters/Parts/armor-0.png - an atlas page of 36 parts (armor-brannock@torso, armor-busker@torso, armor-chain-mail-f@torso, armor-chain-mail@torso, armor-chain-shirt-f@torso, armor-chain-shirt@torso, armor-construct-stone@torso, armor-courier@torso, armor-elder-coat@torso, armor-hide-f@torso, armor-hide@torso, armor-hollowed-chief@torso, armor-hollowed-footman@torso, armor-hollowed-hexer@torso, armor-hollowed-sapper@torso, armor-kael@torso, armor-leather-f@torso, armor-leather@torso, armor-leon@torso, armor-mage-robes-f@torso, armor-merchant@torso, armor-noble@torso, armor-padded-f@torso, armor-padded@torso, armor-plate-f@torso, armor-road@torso, armor-royal-guard@torso, armor-royal-livery@torso, armor-sailor@torso, armor-smith@torso, armor-studded@torso, armor-tavern-m@torso, armor-traveller@torso, armor-urchin@torso, armor-watch-captain@torso, armor-watch@torso) and 36 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-1.png - an atlas page of 68 parts (armor-brannock@leg_near_low, armor-chain-mail-f@leg_far_low, armor-chain-mail-f@leg_near_low, armor-chain-mail@leg_far_low, armor-chain-mail@leg_near_low, armor-chain-mail@leg_near_up, armor-chain-shirt-f@leg_near_up, armor-child-cove-f@torso, armor-clerk-f@leg_near_low, armor-clerk-f@torso, armor-construct-stone@leg_near_low, armor-corra@torso, armor-crane-f@leg_far_low, armor-crane-f@leg_near_low, armor-crane-f@torso, armor-elara@torso, armor-elder-woman@torso, armor-fencer@torso, armor-glassblower@leg_near_low, armor-glassblower@torso, armor-hide-f@leg_near_up, armor-hollowed-chief@leg_near_low, armor-hollowed-footman@leg_far_up, armor-hollowed-footman@leg_near_low, armor-hollowed-footman@leg_near_up, armor-hollowed-hexer@leg_near_up, armor-hollowed-sapper@leg_near_low, armor-kael@leg_near_up, armor-leather-f@leg_near_up, armor-leather@leg_far_low, armor-leather@leg_near_low, armor-lodge-ranger@torso, armor-mage-robes-f@leg_far_up, armor-mage-robes-f@leg_near_up, armor-maid@torso, armor-noble-gown@torso, armor-padded-f@leg_near_up, armor-padded@leg_far_low, armor-padded@leg_near_low, armor-pilgrim@leg_far_up, armor-pilgrim@leg_near_up, armor-pilgrim@torso, armor-plate-f@leg_near_low, armor-refugee-child@leg_near_low, armor-refugee-child@torso, armor-refugee-man-f@torso, armor-refugee-woman@torso, armor-road@leg_far_low, armor-road@leg_near_low, armor-royal-guard@leg_near_low, armor-sb-traveller@torso, armor-scale-f@leg_near_up, armor-scale-f@torso, armor-sera@torso, armor-tavern-m@leg_far_up, armor-tavern-m@leg_near_low, armor-tavern-m@leg_near_up, armor-temple@torso, armor-trader@leg_far_low, armor-trader@leg_near_low, armor-trader@torso, armor-traveller-f@torso, armor-traveller@leg_near_low, armor-urchin-f@torso, armor-villager-man@torso, armor-villager-woman@torso, armor-watch-captain@leg_near_low, armor-watch@leg_near_low) and 68 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-2.png - an atlas page of 105 parts (armor-brannock@leg_far_low, armor-brannock@leg_far_up, armor-brannock@leg_near_up, armor-busker@leg_near_low, armor-chain-mail-f@leg_far_up, armor-chain-mail-f@leg_near_up, armor-chain-mail@leg_far_up, armor-chain-shirt-f@leg_far_up, armor-chain-shirt@leg_near_low, armor-construct-stone@leg_far_low, armor-construct-stone@leg_far_up, armor-construct-stone@leg_near_up, armor-corra@leg_near_low, armor-courier@leg_far_low, armor-courier@leg_far_up, armor-courier@leg_near_low, armor-courier@leg_near_up, armor-crane-f@leg_far_up, armor-crane-f@leg_near_up, armor-elder-coat@leg_far_low, armor-elder-coat@leg_far_up, armor-elder-coat@leg_near_low, armor-elder-coat@leg_near_up, armor-elder-woman@leg_near_up, armor-fencer@leg_near_up, armor-glassblower@leg_far_low, armor-hide-f@leg_far_low, armor-hide-f@leg_far_up, armor-hide-f@leg_near_low, armor-hide@leg_near_low, armor-hollowed-chief@leg_far_low, armor-hollowed-chief@leg_far_up, armor-hollowed-chief@leg_near_up, armor-hollowed-footman@leg_far_low, armor-hollowed-hexer@leg_far_low, armor-hollowed-hexer@leg_far_up, armor-hollowed-hexer@leg_near_low, armor-hollowed-sapper@leg_far_low, armor-hollowed-sapper@leg_far_up, armor-hollowed-sapper@leg_near_up, armor-kael@leg_far_low, armor-kael@leg_far_up, armor-kael@leg_near_low, armor-leather-f@leg_far_up, armor-leather-f@leg_near_low, armor-leather@leg_far_up, armor-leather@leg_near_up, armor-leon@leg_far_low, armor-leon@leg_far_up, armor-leon@leg_near_low, armor-leon@leg_near_up, armor-mage-robes-f@leg_far_low, armor-mage-robes-f@leg_near_low, armor-maid@leg_far_up, armor-maid@leg_near_up, armor-merchant@leg_far_low, armor-merchant@leg_far_up, armor-merchant@leg_near_low, armor-merchant@leg_near_up, armor-noble-gown@leg_far_low, armor-noble-gown@leg_far_up, armor-noble-gown@leg_near_low, armor-noble-gown@leg_near_up, armor-noble@leg_near_low, armor-noble@leg_near_up, armor-padded-f@leg_far_up, armor-padded@leg_far_up, armor-padded@leg_near_up, armor-plate-f@leg_far_low, armor-plate-f@leg_far_up, armor-plate-f@leg_near_up, armor-refugee-child@leg_far_low, armor-refugee-woman@leg_far_up, armor-refugee-woman@leg_near_up, armor-road@leg_far_up, armor-road@leg_near_up, armor-royal-guard@leg_far_low, armor-royal-guard@leg_far_up, armor-royal-guard@leg_near_up, armor-royal-livery@leg_near_low, armor-sailor@leg_near_low, armor-sailor@leg_near_up, armor-sb-traveller@leg_far_up, armor-sb-traveller@leg_near_up, armor-scale-f@leg_far_up, armor-smith@leg_far_low, armor-smith@leg_far_up, armor-smith@leg_near_low, armor-smith@leg_near_up, armor-studded@leg_near_low, armor-tavern-m@leg_far_low, armor-traveller-f@leg_far_low, armor-traveller-f@leg_near_low, armor-traveller@leg_far_low, armor-traveller@leg_far_up, armor-traveller@leg_near_up, armor-urchin@leg_near_low, armor-villager-man@leg_near_low, armor-villager-woman@leg_far_up, armor-villager-woman@leg_near_up, armor-watch-captain@leg_far_low, armor-watch-captain@leg_far_up, armor-watch-captain@leg_near_up, armor-watch@leg_far_low, armor-watch@leg_near_up) and 105 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-3.png - an atlas page of 140 parts (armor-brannock@arm_near_up, armor-busker@arm_near_up, armor-busker@leg_far_low, armor-busker@leg_far_up, armor-busker@leg_near_up, armor-chain-mail-f@arm_near_low, armor-chain-mail@arm_far_up, armor-chain-mail@arm_near_up, armor-chain-shirt-f@leg_far_low, armor-chain-shirt-f@leg_near_low, armor-chain-shirt@arm_near_up, armor-chain-shirt@leg_far_low, armor-chain-shirt@leg_far_up, armor-chain-shirt@leg_near_up, armor-child-cove-f@leg_far_low, armor-child-cove-f@leg_far_up, armor-child-cove-f@leg_near_low, armor-child-cove-f@leg_near_up, armor-clerk-f@leg_far_low, armor-clerk-f@leg_far_up, armor-clerk-f@leg_near_up, armor-construct-stone@arm_near_low, armor-construct-stone@arm_near_up, armor-corra@leg_far_low, armor-corra@leg_far_up, armor-corra@leg_near_up, armor-courier@arm_near_up, armor-elara@leg_far_low, armor-elara@leg_far_up, armor-elara@leg_near_low, armor-elara@leg_near_up, armor-elder-coat@arm_near_up, armor-elder-woman@leg_far_low, armor-elder-woman@leg_far_up, armor-elder-woman@leg_near_low, armor-fencer@leg_far_low, armor-fencer@leg_far_up, armor-fencer@leg_near_low, armor-glassblower@leg_far_up, armor-glassblower@leg_near_up, armor-hide-f@arm_far_up, armor-hide-f@arm_near_up, armor-hide@arm_near_up, armor-hide@leg_far_low, armor-hide@leg_far_up, armor-hide@leg_near_up, armor-hollowed-chief@arm_near_up, armor-hollowed-footman@arm_far_up, armor-hollowed-footman@arm_near_up, armor-hollowed-hexer@arm_near_up, armor-hollowed-sapper@arm_near_up, armor-kael@arm_far_up, armor-kael@arm_near_up, armor-leather-f@arm_near_up, armor-leather-f@leg_far_low, armor-leather@arm_far_up, armor-leather@arm_near_up, armor-leon@arm_near_up, armor-lodge-ranger@leg_far_low, armor-lodge-ranger@leg_far_up, armor-lodge-ranger@leg_near_low, armor-lodge-ranger@leg_near_up, armor-mage-robes-f@arm_far_up, armor-mage-robes-f@arm_near_up, armor-maid@leg_far_low, armor-maid@leg_near_low, armor-merchant@arm_near_up, armor-noble@arm_near_up, armor-noble@leg_far_low, armor-noble@leg_far_up, armor-padded-f@arm_near_up, armor-padded-f@leg_far_low, armor-padded-f@leg_near_low, armor-padded@arm_near_up, armor-pilgrim@arm_near_up, armor-pilgrim@leg_far_low, armor-pilgrim@leg_near_low, armor-plate-f@arm_near_up, armor-refugee-child@leg_far_up, armor-refugee-child@leg_near_up, armor-refugee-man-f@leg_far_low, armor-refugee-man-f@leg_far_up, armor-refugee-man-f@leg_near_low, armor-refugee-man-f@leg_near_up, armor-refugee-woman@leg_far_low, armor-refugee-woman@leg_near_low, armor-road@arm_near_low, armor-road@arm_near_up, armor-royal-guard@arm_far_up, armor-royal-guard@arm_near_up, armor-royal-livery@arm_near_up, armor-royal-livery@leg_far_low, armor-royal-livery@leg_far_up, armor-royal-livery@leg_near_up, armor-sailor@arm_near_up, armor-sailor@leg_far_low, armor-sailor@leg_far_up, armor-sb-traveller@leg_far_low, armor-sb-traveller@leg_near_low, armor-scale-f@leg_far_low, armor-scale-f@leg_near_low, armor-sera@leg_far_low, armor-sera@leg_far_up, armor-sera@leg_near_low, armor-sera@leg_near_up, armor-smith@arm_near_up, armor-studded@arm_near_up, armor-studded@leg_far_low, armor-studded@leg_far_up, armor-studded@leg_near_up, armor-tavern-m@arm_far_up, armor-tavern-m@arm_near_up, armor-temple@leg_far_low, armor-temple@leg_far_up, armor-temple@leg_near_low, armor-temple@leg_near_up, armor-trader@leg_far_up, armor-trader@leg_near_up, armor-traveller-f@leg_far_up, armor-traveller-f@leg_near_up, armor-traveller@arm_near_up, armor-urchin-f@leg_far_low, armor-urchin-f@leg_far_up, armor-urchin-f@leg_near_low, armor-urchin-f@leg_near_up, armor-urchin@arm_near_up, armor-urchin@leg_far_low, armor-urchin@leg_far_up, armor-urchin@leg_near_up, armor-villager-man@arm_near_up, armor-villager-man@leg_far_low, armor-villager-man@leg_far_up, armor-villager-man@leg_near_up, armor-villager-woman@leg_far_low, armor-villager-woman@leg_near_low, armor-watch-captain@arm_far_up, armor-watch-captain@arm_near_up, armor-watch@arm_far_up, armor-watch@arm_near_up, armor-watch@leg_far_up) and 140 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-4.png - an atlas page of 241 parts (armor-brannock@arm_far_low, armor-brannock@arm_far_up, armor-brannock@arm_near_low, armor-brannock@foot_far, armor-brannock@foot_near, armor-busker@arm_far_low, armor-busker@arm_far_up, armor-busker@arm_near_low, armor-chain-mail-f@arm_far_low, armor-chain-mail-f@arm_far_up, armor-chain-mail-f@arm_near_up, armor-chain-mail-f@foot_near, armor-chain-mail@arm_far_low, armor-chain-mail@arm_near_low, armor-chain-mail@foot_far, armor-chain-mail@foot_near, armor-chain-shirt-f@arm_far_low, armor-chain-shirt-f@arm_far_up, armor-chain-shirt-f@arm_near_low, armor-chain-shirt-f@arm_near_up, armor-chain-shirt-f@foot_near, armor-chain-shirt@arm_far_low, armor-chain-shirt@arm_far_up, armor-chain-shirt@arm_near_low, armor-child-cove-f@arm_far_low, armor-child-cove-f@arm_far_up, armor-child-cove-f@arm_near_low, armor-child-cove-f@arm_near_up, armor-clerk-f@arm_far_low, armor-clerk-f@arm_far_up, armor-clerk-f@arm_near_low, armor-clerk-f@arm_near_up, armor-construct-stone@arm_far_low, armor-construct-stone@arm_far_up, armor-construct-stone@foot_far, armor-construct-stone@foot_near, armor-construct-stone@hand_far, armor-construct-stone@hand_near, armor-corra@arm_far_low, armor-corra@arm_far_up, armor-corra@arm_near_low, armor-corra@arm_near_up, armor-corra@foot_near, armor-courier@arm_far_low, armor-courier@arm_far_up, armor-courier@arm_near_low, armor-courier@foot_far, armor-courier@foot_near, armor-crane-f@arm_far_low, armor-crane-f@arm_far_up, armor-crane-f@arm_near_low, armor-crane-f@arm_near_up, armor-elara@arm_far_low, armor-elara@arm_far_up, armor-elara@arm_near_low, armor-elara@arm_near_up, armor-elara@foot_near, armor-elder-coat@arm_far_low, armor-elder-coat@arm_far_up, armor-elder-coat@arm_near_low, armor-elder-woman@arm_far_low, armor-elder-woman@arm_far_up, armor-elder-woman@arm_near_low, armor-elder-woman@arm_near_up, armor-fencer@arm_far_low, armor-fencer@arm_far_up, armor-fencer@arm_near_low, armor-fencer@arm_near_up, armor-glassblower@arm_far_low, armor-glassblower@arm_far_up, armor-glassblower@arm_near_low, armor-glassblower@arm_near_up, armor-glassblower@foot_near, armor-hide-f@arm_far_low, armor-hide-f@arm_near_low, armor-hide-f@foot_near, armor-hide@arm_far_low, armor-hide@arm_far_up, armor-hide@arm_near_low, armor-hollowed-chief@arm_far_low, armor-hollowed-chief@arm_far_up, armor-hollowed-chief@arm_near_low, armor-hollowed-chief@foot_far, armor-hollowed-chief@foot_near, armor-hollowed-footman@arm_far_low, armor-hollowed-footman@arm_near_low, armor-hollowed-footman@foot_far, armor-hollowed-footman@foot_near, armor-hollowed-hexer@arm_far_low, armor-hollowed-hexer@arm_far_up, armor-hollowed-hexer@arm_near_low, armor-hollowed-hexer@foot_near, armor-hollowed-sapper@arm_far_low, armor-hollowed-sapper@arm_far_up, armor-hollowed-sapper@arm_near_low, armor-hollowed-sapper@foot_far, armor-hollowed-sapper@foot_near, armor-kael@arm_far_low, armor-kael@arm_near_low, armor-kael@foot_near, armor-leather-f@arm_far_low, armor-leather-f@arm_far_up, armor-leather-f@arm_near_low, armor-leather-f@foot_near, armor-leather@arm_far_low, armor-leather@arm_near_low, armor-leather@foot_far, armor-leather@foot_near, armor-leon@arm_far_low, armor-leon@arm_far_up, armor-leon@arm_near_low, armor-leon@foot_far, armor-leon@foot_near, armor-lodge-ranger@arm_far_low, armor-lodge-ranger@arm_far_up, armor-lodge-ranger@arm_near_low, armor-lodge-ranger@arm_near_up, armor-mage-robes-f@arm_far_low, armor-mage-robes-f@arm_near_low, armor-maid@arm_far_low, armor-maid@arm_far_up, armor-maid@arm_near_low, armor-maid@arm_near_up, armor-maid@foot_near, armor-merchant@arm_far_low, armor-merchant@arm_far_up, armor-merchant@arm_near_low, armor-noble-gown@arm_far_low, armor-noble-gown@arm_far_up, armor-noble-gown@arm_near_low, armor-noble-gown@arm_near_up, armor-noble-gown@foot_near, armor-noble@arm_far_low, armor-noble@arm_far_up, armor-noble@arm_near_low, armor-padded-f@arm_far_low, armor-padded-f@arm_far_up, armor-padded-f@arm_near_low, armor-padded-f@foot_near, armor-padded@arm_far_low, armor-padded@arm_far_up, armor-padded@arm_near_low, armor-padded@foot_far, armor-padded@foot_near, armor-pilgrim@arm_far_low, armor-pilgrim@arm_far_up, armor-pilgrim@arm_near_low, armor-pilgrim@foot_near, armor-plate-f@arm_far_low, armor-plate-f@arm_far_up, armor-plate-f@arm_near_low, armor-plate-f@foot_near, armor-refugee-child@arm_far_low, armor-refugee-child@arm_far_up, armor-refugee-child@arm_near_low, armor-refugee-child@arm_near_up, armor-refugee-child@foot_near, armor-refugee-man-f@arm_far_low, armor-refugee-man-f@arm_far_up, armor-refugee-man-f@arm_near_low, armor-refugee-man-f@arm_near_up, armor-refugee-man-f@foot_near, armor-refugee-woman@arm_far_low, armor-refugee-woman@arm_far_up, armor-refugee-woman@arm_near_low, armor-refugee-woman@arm_near_up, armor-road@arm_far_low, armor-road@arm_far_up, armor-road@foot_far, armor-road@foot_near, armor-royal-guard@arm_far_low, armor-royal-guard@arm_near_low, armor-royal-guard@foot_near, armor-royal-livery@arm_far_low, armor-royal-livery@arm_far_up, armor-royal-livery@arm_near_low, armor-royal-livery@foot_near, armor-sailor@arm_far_low, armor-sailor@arm_far_up, armor-sailor@arm_near_low, armor-sb-traveller@arm_far_low, armor-sb-traveller@arm_far_up, armor-sb-traveller@arm_near_low, armor-sb-traveller@arm_near_up, armor-scale-f@arm_far_low, armor-scale-f@arm_far_up, armor-scale-f@arm_near_low, armor-scale-f@arm_near_up, armor-sera@arm_far_low, armor-sera@arm_far_up, armor-sera@arm_near_low, armor-sera@arm_near_up, armor-smith@arm_far_low, armor-smith@arm_far_up, armor-smith@arm_near_low, armor-smith@foot_far, armor-smith@foot_near, armor-studded@arm_far_low, armor-studded@arm_far_up, armor-studded@arm_near_low, armor-tavern-m@arm_far_low, armor-tavern-m@arm_near_low, armor-tavern-m@foot_far, armor-tavern-m@foot_near, armor-temple@arm_far_up, armor-temple@arm_near_low, armor-temple@arm_near_up, armor-trader@arm_far_up, armor-trader@arm_near_low, armor-trader@arm_near_up, armor-traveller-f@arm_far_low, armor-traveller-f@arm_far_up, armor-traveller-f@arm_near_low, armor-traveller-f@arm_near_up, armor-traveller-f@foot_near, armor-traveller@arm_far_low, armor-traveller@arm_far_up, armor-traveller@arm_near_low, armor-traveller@foot_near, armor-urchin-f@arm_far_low, armor-urchin-f@arm_far_up, armor-urchin-f@arm_near_low, armor-urchin-f@arm_near_up, armor-urchin@arm_far_low, armor-urchin@arm_far_up, armor-urchin@arm_near_low, armor-villager-man@arm_far_low, armor-villager-man@arm_far_up, armor-villager-man@arm_near_low, armor-villager-woman@arm_far_low, armor-villager-woman@arm_far_up, armor-villager-woman@arm_near_low, armor-villager-woman@arm_near_up, armor-watch-captain@arm_far_low, armor-watch-captain@arm_near_low, armor-watch-captain@foot_far, armor-watch-captain@foot_near, armor-watch@arm_far_low, armor-watch@arm_near_low, armor-watch@foot_far, armor-watch@foot_near) and 241 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/armor-5.png - an atlas page of 190 parts (armor-brannock@hand_far, armor-brannock@hand_near, armor-busker@foot_far, armor-busker@foot_near, armor-busker@hand_far, armor-busker@hand_near, armor-chain-mail-f@foot_far, armor-chain-mail-f@hand_far, armor-chain-mail-f@hand_near, armor-chain-mail@hand_far, armor-chain-mail@hand_near, armor-chain-shirt-f@foot_far, armor-chain-shirt-f@hand_far, armor-chain-shirt-f@hand_near, armor-chain-shirt@foot_far, armor-chain-shirt@foot_near, armor-chain-shirt@hand_far, armor-chain-shirt@hand_near, armor-child-cove-f@foot_far, armor-child-cove-f@foot_near, armor-child-cove-f@hand_far, armor-child-cove-f@hand_near, armor-clerk-f@foot_far, armor-clerk-f@foot_near, armor-clerk-f@hand_far, armor-clerk-f@hand_near, armor-corra@foot_far, armor-corra@hand_far, armor-corra@hand_near, armor-courier@hand_far, armor-courier@hand_near, armor-crane-f@foot_far, armor-crane-f@foot_near, armor-crane-f@hand_far, armor-crane-f@hand_near, armor-elara@foot_far, armor-elara@hand_far, armor-elara@hand_near, armor-elder-coat@foot_far, armor-elder-coat@foot_near, armor-elder-coat@hand_far, armor-elder-coat@hand_near, armor-elder-woman@foot_far, armor-elder-woman@foot_near, armor-elder-woman@hand_far, armor-elder-woman@hand_near, armor-fencer@foot_far, armor-fencer@foot_near, armor-fencer@hand_far, armor-fencer@hand_near, armor-glassblower@foot_far, armor-glassblower@hand_far, armor-glassblower@hand_near, armor-hide-f@foot_far, armor-hide-f@hand_far, armor-hide-f@hand_near, armor-hide@foot_far, armor-hide@foot_near, armor-hide@hand_far, armor-hide@hand_near, armor-hollowed-chief@hand_far, armor-hollowed-chief@hand_near, armor-hollowed-footman@hand_far, armor-hollowed-footman@hand_near, armor-hollowed-hexer@foot_far, armor-hollowed-hexer@hand_far, armor-hollowed-hexer@hand_near, armor-hollowed-sapper@hand_far, armor-hollowed-sapper@hand_near, armor-kael@foot_far, armor-kael@hand_far, armor-kael@hand_near, armor-leather-f@foot_far, armor-leather-f@hand_far, armor-leather-f@hand_near, armor-leather@hand_far, armor-leather@hand_near, armor-leon@hand_far, armor-leon@hand_near, armor-lodge-ranger@foot_far, armor-lodge-ranger@foot_near, armor-lodge-ranger@hand_far, armor-lodge-ranger@hand_near, armor-mage-robes-f@foot_far, armor-mage-robes-f@foot_near, armor-mage-robes-f@hand_far, armor-mage-robes-f@hand_near, armor-maid@foot_far, armor-maid@hand_far, armor-maid@hand_near, armor-merchant@foot_far, armor-merchant@foot_near, armor-merchant@hand_far, armor-merchant@hand_near, armor-noble-gown@foot_far, armor-noble-gown@hand_far, armor-noble-gown@hand_near, armor-noble@foot_far, armor-noble@foot_near, armor-noble@hand_far, armor-noble@hand_near, armor-padded-f@foot_far, armor-padded-f@hand_far, armor-padded-f@hand_near, armor-padded@hand_far, armor-padded@hand_near, armor-pilgrim@foot_far, armor-pilgrim@hand_far, armor-pilgrim@hand_near, armor-plate-f@foot_far, armor-plate-f@hand_far, armor-plate-f@hand_near, armor-refugee-child@foot_far, armor-refugee-child@hand_far, armor-refugee-child@hand_near, armor-refugee-man-f@foot_far, armor-refugee-man-f@hand_far, armor-refugee-man-f@hand_near, armor-refugee-woman@foot_far, armor-refugee-woman@foot_near, armor-refugee-woman@hand_far, armor-refugee-woman@hand_near, armor-road@hand_far, armor-road@hand_near, armor-royal-guard@foot_far, armor-royal-guard@hand_far, armor-royal-guard@hand_near, armor-royal-livery@foot_far, armor-royal-livery@hand_far, armor-royal-livery@hand_near, armor-sailor@foot_far, armor-sailor@foot_near, armor-sailor@hand_far, armor-sailor@hand_near, armor-sb-traveller@foot_far, armor-sb-traveller@foot_near, armor-sb-traveller@hand_far, armor-sb-traveller@hand_near, armor-scale-f@foot_far, armor-scale-f@foot_near, armor-scale-f@hand_far, armor-scale-f@hand_near, armor-sera@foot_far, armor-sera@foot_near, armor-sera@hand_far, armor-sera@hand_near, armor-smith@hand_far, armor-smith@hand_near, armor-studded@foot_far, armor-studded@foot_near, armor-studded@hand_far, armor-studded@hand_near, armor-tavern-m@hand_far, armor-tavern-m@hand_near, armor-temple@arm_far_low, armor-temple@foot_far, armor-temple@foot_near, armor-temple@hand_far, armor-temple@hand_near, armor-trader@arm_far_low, armor-trader@foot_far, armor-trader@foot_near, armor-trader@hand_far, armor-trader@hand_near, armor-traveller-f@foot_far, armor-traveller-f@hand_far, armor-traveller-f@hand_near, armor-traveller@foot_far, armor-traveller@hand_far, armor-traveller@hand_near, armor-urchin-f@foot_far, armor-urchin-f@foot_near, armor-urchin-f@hand_far, armor-urchin-f@hand_near, armor-urchin@foot_far, armor-urchin@foot_near, armor-urchin@hand_far, armor-urchin@hand_near, armor-villager-man@foot_far, armor-villager-man@foot_near, armor-villager-man@hand_far, armor-villager-man@hand_near, armor-villager-woman@foot_far, armor-villager-woman@foot_near, armor-villager-woman@hand_far, armor-villager-woman@hand_near, armor-watch-captain@hand_far, armor-watch-captain@hand_near, armor-watch@hand_far, armor-watch@hand_near) and 190 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/base-0.png - an atlas page of 28 parts (base-female.body@arm_far_low, base-female.body@arm_far_up, base-female.body@arm_near_low, base-female.body@arm_near_up, base-female.body@foot_far, base-female.body@foot_near, base-female.body@hand_far, base-female.body@hand_near, base-female.body@leg_far_low, base-female.body@leg_far_up, base-female.body@leg_near_low, base-female.body@leg_near_up, base-female.body@torso, base-female.head, base-male.body@arm_far_low, base-male.body@arm_far_up, base-male.body@arm_near_low, base-male.body@arm_near_up, base-male.body@foot_far, base-male.body@foot_near, base-male.body@hand_far, base-male.body@hand_near, base-male.body@leg_far_low, base-male.body@leg_far_up, base-male.body@leg_near_low, base-male.body@leg_near_up, base-male.body@torso, base-male.head) and 28 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
 
 Content/Characters/Parts/face-0.png - an atlas page of 20 parts (face-f01, face-f02, face-f03, face-f04, face-f05, face-f06, face-f07, face-f08, face-f09, face-f10, face-m01, face-m02, face-m03, face-m04, face-m05, face-m06, face-m07, face-m08, face-m09, face-m10) and 20 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/helm-0.png - an atlas page of 95 parts (hair-01, hair-01-f, hair-02, hair-02-f, hair-03, hair-03-f, hair-04, hair-04-f, hair-05, hair-05-f, hair-06, hair-06-f, hair-07, hair-07-f, hair-08, hair-08-f, hair-09-f, hair-10, hair-10-f, hair-11, hair-11-f, hair-12, hair-12-f, hair-13, hair-13-f, hair-14, hair-14-f, hair-15, hair-15-f, hair-16, hair-16-f, hair-17, hair-17-f, hair-18, hair-18-f, hair-19, hair-19-f, hair-20, hair-20-f, hair-21, hair-21-f, hair-22, hair-22-f, hair-23, hair-23-f, hair-24, hair-24-f, hair-25, hair-25-f, hair-26, hair-26-f, hair-27, hair-27-f, hair-28, hair-28-f, hair-29, hair-29-f, hair-30, hair-30-f, hair-31, hair-31-f, hair-32, hair-32-f, hair-33, hair-33-f, hair-34, hair-34-f, hair-35, hair-35-f, hair-36, hair-36-f, hair-37, hair-37-f, hair-38, hair-38-f, hair-39, hair-39-f, hair-40, hair-40-f, hair-41, hair-41-f, hair-42, hair-42-f, hair-43, hair-43-f, hair-44, hair-44-f, hair-45, hair-45-f, hair-46, hair-46-f, hair-47, hair-47-f, hair-48, hair-48-f) and 95 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+
+Content/Characters/Parts/helm-1.png - an atlas page of 1 part (hair-09) and 1 mask, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
 
 <!-- end character parts -->
 
@@ -466,23 +2242,21 @@ Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape 
 
 tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair, armor, helm, cape and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base
 
-tools/source/characters/face-sheet-female.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-female-blank.png, with grey lines between them; built by tools/part_sheet.py
+tools/sheet_fit.py - written by Caleb Kiatoukaysi for Legend Quest, finds a base under each cell of a sheet ChatGPT laid out its own way, at any scale and place (masked cross-correlation, coarse then fine), for part_sheet.py fit
 
-tools/source/characters/face-sheet-male.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-male-blank.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/face-sheet-female.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/hair-sheet.png - the blank hair sheet: the blank man eight times along the top and the blank woman eight times along the bottom, each from the top of the head to the hips at half size, from tools/source/characters/base-male-blank.png and tools/source/characters/base-female-blank.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/face-sheet-male.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/extra-sheet.png - the blank extra sheet: the blank man six times along the top and the blank woman six times along the bottom, each the head, neck and chest at 0.75 scale, from tools/source/characters/base-male-blank.png and tools/source/characters/base-female-blank.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/hair-sheet.png - the blank hair sheet: the blank man eight times along the top and the blank woman eight times along the bottom, each from the top of the head to the hips at half size, from tools/source/characters/base-male.png and tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/extra-sheet-male.png - the blank extra sheet: twelve copies of the blank man, six across and two down, each the head, neck and chest at 0.75 scale, from tools/source/characters/base-male-blank.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/extra-sheet.png - the blank extra sheet: the blank man six times along the top and the blank woman six times along the bottom, each the head, neck and chest at 0.75 scale, from tools/source/characters/base-male.png and tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/armor-sheet-female.png - the blank armor sheet: four copies of the whole figure at 0.625 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/extra-sheet-male.png - the blank extra sheet: twelve copies of the blank man, six across and two down, each the head, neck and chest at 0.75 scale, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/armor-sheet-male.png - the blank armor sheet: four copies of the whole figure at 0.625 scale, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/helm-sheet-female.png - the blank helm sheet: four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
-tools/source/characters/helm-sheet-female.png - the blank helm sheet: four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side, from tools/source/characters/base-female-blank.png, with grey lines between them; built by tools/part_sheet.py
-
-tools/source/characters/helm-sheet-male.png - the blank helm sheet: four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side, from tools/source/characters/base-male-blank.png, with grey lines between them; built by tools/part_sheet.py
+tools/source/characters/helm-sheet-male.png - the blank helm sheet: four copies of it from the top of the canvas, room for a crown, to the hips, at full size, side by side, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
 tools/source/characters/cape-sheet-female.png - the blank cape sheet: four copies of the whole figure at 0.56 scale, side by side, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
 
@@ -495,6 +2269,18 @@ tools/source/characters/weapon-sheet-male.png - the blank weapon sheet: four cop
 tools/source/characters/sheets/face-sheet-f01.png - face sheet face-sheet-f01 (face-f01, face-f02, face-f03, face-f04, face-f05, face-f06, face-f07, face-f08, face-f09, face-f10), painted on tools/source/characters/face-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 tools/source/characters/sheets/face-sheet-m01.png - face sheet face-sheet-m01 (face-m01, face-m02, face-m03, face-m04, face-m05, face-m06, face-m07, face-m08, face-m09, face-m10), painted on tools/source/characters/face-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/hair-sheet-01.png - hair sheet hair-sheet-01 (hair-01, hair-02, hair-03, hair-04, hair-05, hair-06, hair-07, hair-08), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/hair-sheet-02.png - hair sheet hair-sheet-02 (hair-09, hair-10, hair-11, hair-12, hair-13, hair-14, hair-15, hair-16), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/hair-sheet-03.png - hair sheet hair-sheet-03 (hair-17, hair-18, hair-19, hair-20, hair-21, hair-22, hair-23, hair-24), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/hair-sheet-04.png - hair sheet hair-sheet-04 (hair-25, hair-26, hair-27, hair-28, hair-29, hair-30, hair-31, hair-32), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/hair-sheet-05.png - hair sheet hair-sheet-05 (hair-33, hair-34, hair-35, hair-36, hair-37, hair-38, hair-39, hair-40), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/sheets/hair-sheet-06.png - hair sheet hair-sheet-06 (hair-41, hair-42, hair-43, hair-44, hair-45, hair-46, hair-47, hair-48), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 tools/source/characters/faces/face-f01.png - face-f01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/face-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
@@ -535,6 +2321,198 @@ tools/source/characters/faces/face-m08.png - face-m08 on its base's canvas, cut 
 tools/source/characters/faces/face-m09.png - face-m09 on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/face-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 tools/source/characters/faces/face-m10.png - face-m10 on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/face-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-01.png - hair-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-02.png - hair-02 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-03.png - hair-03 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-04.png - hair-04 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-05.png - hair-05 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-06.png - hair-06 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-07.png - hair-07 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-08.png - hair-08 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-01-f.png - hair-01-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-02-f.png - hair-02-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-03-f.png - hair-03-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-04-f.png - hair-04-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-05-f.png - hair-05-f on its base's canvas, cut by tools/part_sheet.py from cell 13 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-06-f.png - hair-06-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-07-f.png - hair-07-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-08-f.png - hair-08-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-09.png - hair-09 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-10.png - hair-10 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-11.png - hair-11 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-12.png - hair-12 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-13.png - hair-13 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-14.png - hair-14 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-15.png - hair-15 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-16.png - hair-16 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-09-f.png - hair-09-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-10-f.png - hair-10-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-11-f.png - hair-11-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-12-f.png - hair-12-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-13-f.png - hair-13-f on its base's canvas, cut by tools/part_sheet.py from cell 13 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-14-f.png - hair-14-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-15-f.png - hair-15-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-16-f.png - hair-16-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-17.png - hair-17 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-18.png - hair-18 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-19.png - hair-19 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-20.png - hair-20 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-21.png - hair-21 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-22.png - hair-22 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-23.png - hair-23 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-24.png - hair-24 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-17-f.png - hair-17-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-18-f.png - hair-18-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-19-f.png - hair-19-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-20-f.png - hair-20-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-21-f.png - hair-21-f on its base's canvas, cut by tools/part_sheet.py from cell 13 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-22-f.png - hair-22-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-23-f.png - hair-23-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-24-f.png - hair-24-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-25.png - hair-25 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-26.png - hair-26 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-27.png - hair-27 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-28.png - hair-28 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-29.png - hair-29 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-30.png - hair-30 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-31.png - hair-31 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-32.png - hair-32 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-25-f.png - hair-25-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-26-f.png - hair-26-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-27-f.png - hair-27-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-28-f.png - hair-28-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-29-f.png - hair-29-f on its base's canvas, cut by tools/part_sheet.py from cell 13 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-30-f.png - hair-30-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-31-f.png - hair-31-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-32-f.png - hair-32-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-33.png - hair-33 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-34.png - hair-34 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-35.png - hair-35 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-36.png - hair-36 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-37.png - hair-37 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-38.png - hair-38 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-39.png - hair-39 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-40.png - hair-40 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-33-f.png - hair-33-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-34-f.png - hair-34-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-35-f.png - hair-35-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-36-f.png - hair-36-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-37-f.png - hair-37-f on its base's canvas, cut by tools/part_sheet.py from cell 13 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-38-f.png - hair-38-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-39-f.png - hair-39-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-40-f.png - hair-40-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-41.png - hair-41 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-42.png - hair-42 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-43.png - hair-43 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-44.png - hair-44 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-45.png - hair-45 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-46.png - hair-46 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-47.png - hair-47 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-48.png - hair-48 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-41-f.png - hair-41-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-42-f.png - hair-42-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-43-f.png - hair-43-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-44-f.png - hair-44-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-45-f.png - hair-45-f on its base's canvas, cut by tools/part_sheet.py from cell 13 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-46-f.png - hair-46-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-47-f.png - hair-47-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/hairs/hair-48-f.png - hair-48-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 <!-- end part sheets -->
 
@@ -784,7 +2762,6 @@ Content/map-marks.png - created by Caleb Kiatoukaysi for Legend Quest, the marks
 
 Content/markers.png - created by Caleb Kiatoukaysi for Legend Quest, the gold and red "!" markers over people with a quest or an event and the arrows to them at the screen's edge, drawn procedurally by tools/generate_ui.py, released under public domain
 
-Content/dice.png - created by Caleb Kiatoukaysi for Legend Quest, the d20 for checks, eight frames tumbling and one landed, drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/dialogue-icons.png - created by Caleb Kiatoukaysi for Legend Quest, the icons beside options in a conversation (a die, a heart, a lock, and the three voices), drawn procedurally by tools/generate_ui.py, released under public domain
 
@@ -1529,10 +3506,6 @@ Content/People/child.png - built by tools/cut_supplied.py from tools/source/npc-
 Content/People/youth.png - built by tools/cut_supplied.py from tools/source/npc-townsperson.png: a youth, standing and four steps each way, sampled to 32x48 frames with the feet on the same row (the first five columns of the 10x4 layout); the picture was supplied by Caleb Kiatoukaysi for Legend Quest
 
 tools/source/art-guide.png - the 2D art style and generation guide the characters and creatures are drawn to (proportions, line, cel shading, light, palette, modular parts, the creatures), supplied by Caleb Kiatoukaysi; nothing's cut from it, but tools/rig/theme.py samples its palette
-tools/source/characters/base-male.png - the base man every male armor, cape, helm, weapon and face is painted onto as an edit: a bald, cel-shaded figure in a three-quarter stance facing right, fists clenched, in dark shorts, on solid black, 1024x1536; cut from the owner's pair picture (scaled 1.345x with Lanczos3, centred, feet at y 1466); supplied by Caleb Kiatoukaysi for Legend Quest, made in ChatGPT
-tools/source/characters/base-female.png - the base woman every female armor, cape, helm, weapon and face is painted onto as an edit: a bald, cel-shaded figure in a three-quarter stance facing right, fists clenched, in dark underwear, on solid black, 1024x1536; cut from the owner's pair picture (scaled 1.345x with Lanczos3, centred, feet at y 1466); supplied by Caleb Kiatoukaysi for Legend Quest, made in ChatGPT
-tools/source/characters/base-male-blank.png - the blank-faced base man every male face, hair and helm is painted onto: tools/source/characters/base-male.png with its eyes, brows and mouth taken off, the head's outline, ears and jaw left where they were, and the head everyone's drawn with; supplied by Caleb Kiatoukaysi for Legend Quest, made in ChatGPT as an edit of the base
-tools/source/characters/base-female-blank.png - the blank-faced base woman every female face, hair and helm is painted onto: tools/source/characters/base-female.png with its eyes, brows and mouth taken off, the head's outline, ears and jaw left where they were, and the head everyone's drawn with; supplied by Caleb Kiatoukaysi for Legend Quest, made in ChatGPT as an edit of the base
 tools/source/style-sheet.png - the palette and a mock-up of Questeria's plaza, the look the rest were made to match, supplied by Caleb Kiatoukaysi for Legend Quest; nothing's cut from it, but the sizes in tools/cut_supplied.py come from it
 
 tools/source/questeria-ground.png - Questeria's ground: paving, flagstones, cobbles, grass, sand and water, a cell each, supplied by Caleb Kiatoukaysi for Legend Quest; tools/cut_supplied.py cuts the tileset and the title's petal from it

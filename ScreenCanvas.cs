@@ -63,7 +63,10 @@ public class ScreenCanvas
     /// <param name="device">The graphics device.</param>
     public void LoadContent(GraphicsDevice device)
     {
-        _canvas = new RenderTarget2D(device, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight);
+        // Kept when something else is drawn on for a moment, so a screen can draw on a target of its
+        // own (the 3D dice do) and come back to the canvas as it was.
+        _canvas = new RenderTarget2D(device, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight, false,
+            SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
         _spriteBatch = new SpriteBatch(device);
     }
 

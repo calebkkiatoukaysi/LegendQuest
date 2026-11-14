@@ -1,0 +1,167 @@
+{
+ "base": "base-male",
+ "scale": 0.792754,
+ "origin": [
+  105.713,
+  38.27
+ ],
+ "gap": 130,
+ "pieces": {
+  "head": {
+   "pull": [
+    0.0,
+    -130.0
+   ],
+   "centre": [
+    522.0,
+    96.0
+   ]
+  },
+  "torso": {
+   "pull": [
+    0.0,
+    0.0
+   ],
+   "centre": [
+    519.0,
+    468.0
+   ]
+  },
+  "arm_far_up": {
+   "pull": [
+    143.0,
+    0.0
+   ],
+   "centre": [
+    714.0,
+    414.0
+   ]
+  },
+  "arm_far_low": {
+   "pull": [
+    182.0,
+    130.0
+   ],
+   "centre": [
+    782.0,
+    666.0
+   ]
+  },
+  "hand_far": {
+   "pull": [
+    182.0,
+    260.0
+   ],
+   "centre": [
+    820.0,
+    884.0
+   ]
+  },
+  "arm_near_up": {
+   "pull": [
+    -143.0,
+    0.0
+   ],
+   "centre": [
+    276.0,
+    417.0
+   ]
+  },
+  "arm_near_low": {
+   "pull": [
+    -182.0,
+    130.0
+   ],
+   "centre": [
+    200.0,
+    664.0
+   ]
+  },
+  "hand_near": {
+   "pull": [
+    -182.0,
+    260.0
+   ],
+   "centre": [
+    207.0,
+    883.0
+   ]
+  },
+  "leg_far_up": {
+   "pull": [
+    117.0,
+    130.0
+   ],
+   "centre": [
+    669.0,
+    811.0
+   ]
+  },
+  "leg_far_low": {
+   "pull": [
+    143.0,
+    260.0
+   ],
+   "centre": [
+    680.0,
+    1159.0
+   ]
+  },
+  "foot_far": {
+   "pull": [
+    169.0,
+    390.0
+   ],
+   "centre": [
+    741.0,
+    1436.0
+   ]
+  },
+  "leg_near_up": {
+   "pull": [
+    -117.0,
+    130.0
+   ],
+   "centre": [
+    371.0,
+    803.0
+   ]
+  },
+  "leg_near_low": {
+   "pull": [
+    -143.0,
+    260.0
+   ],
+   "centre": [
+    267.0,
+    1157.0
+   ]
+  },
+  "foot_near": {
+   "pull": [
+    -169.0,
+    390.0
+   ],
+   "centre": [
+    224.0,
+    1461.0
+   ]
+  }
+ },
+ "draw": [
+  "arm_far_up",
+  "arm_far_low",
+  "hand_far",
+  "leg_far_up",
+  "leg_far_low",
+  "foot_far",
+  "leg_near_up",
+  "leg_near_low",
+  "foot_near",
+  "torso",
+  "head",
+  "arm_near_up",
+  "arm_near_low",
+  "hand_near"
+ ]
+}

@@ -208,8 +208,8 @@ class Gait:
     arms        {"swing": (middle, size), "bend": (middle, size), "wrist": (middle, size), "lag": share}:
                 the upper arm's swing forward of straight down, the elbow's bend and the wrist's,
                 each following the one before it by `lag` of the cycle
-    lean        (spine, chest, give): the torso's lean forward, and how much more it leans as the
-                weight comes down on each foot
+    lean        (forward, give): the torso's lean forward, and how much more it leans as the weight
+                comes down on each foot
     """
 
     def __init__(self, base=None, **kw):
@@ -345,13 +345,12 @@ class Gait:
 
     def pose(self, q):
         pose = {"hips.y": self.hips(q)}
-        spine, chest, give = self.lean
-        # The torso gives a little as the weight comes down on each foot, the spine a beat after the
-        # hips and the chest a beat after that; the head stays level, nodding with them later still.
-        pose["spine"] = spine + 0.4 * give * self.sink(q - 0.03)
-        pose["chest"] = chest + 0.6 * give * self.sink(q - 0.06)
-        pose["head"] = -(spine + chest) - 1.0 + 0.5 * give * self.sink(q - 0.1)
-        carried = pose["spine"] + pose["chest"]
+        forward, give = self.lean
+        # The torso gives a little as the weight comes down on each foot, a beat after the hips and
+        # most of it a beat after that; the head stays level, nodding with it later still.
+        pose["torso"] = forward + give * (0.4 * self.sink(q - 0.03) + 0.6 * self.sink(q - 0.06))
+        pose["head"] = -forward - 1.0 + 0.5 * give * self.sink(q - 0.1)
+        carried = pose["torso"]
         sw_mid, sw_size = self.arms["swing"]
         bd_mid, bd_size = self.arms["bend"]
         wr_mid, wr_size = self.arms["wrist"]
@@ -413,7 +412,7 @@ def jog(base=None):
                        "bend": [(0.18, 52.0), (0.42, 92.0), (0.66, 70.0), (0.86, 34.0)],
                        "foot": [(0.3, 22.0), (0.62, 6.0), (0.85, -4.0)]},
                 arms={"swing": (-10.0, 24.0), "bend": (80.0, 10.0), "wrist": (-6.0, 6.0), "lag": 0.06},
-                lean=(3.0, 3.0, 1.2))
+                lean=(6.0, 1.2))
 
 
 def walk(base=None):
@@ -426,7 +425,7 @@ def walk(base=None):
                        "bend": [(0.3, 60.0), (0.6, 38.0), (0.85, 10.0)],
                        "foot": [(0.3, 12.0), (0.6, 0.0), (0.88, -10.0)]},
                 arms={"swing": (-4.0, 13.0), "bend": (16.0, 8.0), "wrist": (-2.0, 4.0), "lag": 0.07},
-                lean=(1.0, 1.0, 0.6))
+                lean=(2.0, 0.6))
 
 
 def run(base=None):
@@ -437,7 +436,7 @@ def run(base=None):
                        "bend": [(0.2, 70.0), (0.42, 118.0), (0.66, 92.0), (0.86, 40.0)],
                        "foot": [(0.3, 30.0), (0.62, 8.0), (0.85, -4.0)]},
                 arms={"swing": (-12.0, 34.0), "bend": (84.0, 14.0), "wrist": (-8.0, 8.0), "lag": 0.06},
-                lean=(6.0, 5.0, 1.6))
+                lean=(11.0, 1.6))
 
 
 CYCLES = {"jog": jog, "walk": walk, "run": run}

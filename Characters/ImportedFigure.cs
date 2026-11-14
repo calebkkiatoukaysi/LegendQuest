@@ -213,6 +213,39 @@ public sealed class ImportedFigure
         return portrait;
     }
 
+    /// <summary>
+    /// A portrait cut straight from a picture put together from parts, without making a figure of it:
+    /// the same box Portrait cuts, round the head box, `size` big. For the menus' thumbnails
+    /// (PartCatalog.ThumbnailWhenReady).
+    /// </summary>
+    /// <param name="device">The device to make the texture on.</param>
+    /// <param name="pixels">The picture, premultiplied, row by row.</param>
+    /// <param name="width">Its width.</param>
+    /// <param name="height">Its height.</param>
+    /// <param name="head">The head box on it.</param>
+    /// <param name="size">The portrait's size.</param>
+    internal static Texture2D PortraitOf(GraphicsDevice device, Color[] pixels, int width, int height, Rectangle head, Point size)
+    {
+        float side = Math.Max(head.Width, head.Height);
+        float middle = head.X + head.Width / 2f, top = head.Y - side * FaceLift;
+        float tall = side * FaceReach, wide = tall * size.X / size.Y;
+        var box = new Rectangle((int)MathF.Round(middle - wide / 2f), (int)MathF.Round(top), Math.Max(1, (int)MathF.Round(wide)), Math.Max(1, (int)MathF.Round(tall)));
+        var crop = new Color[box.Width * box.Height];
+        for (int y = 0; y < box.Height; y++)
+        {
+            int py = box.Y + y;
+            if (py < 0 || py >= height) continue;
+            for (int x = 0; x < box.Width; x++)
+            {
+                int px = box.X + x;
+                if (px >= 0 && px < width) crop[y * box.Width + x] = pixels[py * width + px];
+            }
+        }
+        var portrait = new Texture2D(device, size.X, size.Y);
+        portrait.SetData(Scaled(crop, box.Width, box.Height, size.X, size.Y));
+        return portrait;
+    }
+
     /// <summary>A premultiplied picture at a new size, across and then down: each new pixel the average of the area it covers where it's shrinking, or a blend of the nearest two where it's growing.</summary>
     internal static Color[] Scaled(Color[] pixels, int width, int height, int toWidth, int toHeight)
     {
