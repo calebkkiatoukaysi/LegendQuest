@@ -2186,15 +2186,25 @@ def body_credits():
                       % (base, who, CREDIT), ""]
     for folder in sorted(p for p in glob.glob(os.path.join(SOURCE, FOLDERS["armor"], "armor-*")) if os.path.isdir(p)):
         aid = os.path.basename(folder)
+        # An armor painted whole on its dressing-pose template (tools/dress_pose.py) since 2026-11-18;
+        # one painted in pieces on the armor template before that (tools/body_parts.py), whose sheet
+        # is kept for the record when the armor's been painted again whole.
+        whole = os.path.exists(os.path.join(SOURCE, "whole", aid + ".png"))
+        if whole:
+            lines += ["tools/source/characters/whole/%s.png - %s as ChatGPT painted it whole on its dressing-pose template "
+                      "(the armor brief of 2026-11-18), kept as it came; tools/dress_pose.py cuts it into the pieces in %s/%s; %s"
+                      % (aid, aid, FOLDERS["armor"], aid, CREDIT), ""]
         if os.path.exists(os.path.join(SOURCE, "sheets", aid + ".png")):
             lines += ["tools/source/characters/sheets/%s.png - %s as ChatGPT painted it on its armor template (Story/13 §5), "
-                      "kept as it came; tools/body_parts.py cuts it into the pieces in %s/%s; %s"
-                      % (aid, aid, FOLDERS["armor"], aid, CREDIT), ""]
+                      "kept as it came; %s; %s"
+                      % (aid, aid, "painted again whole since, and kept for the record" if whole
+                         else "tools/body_parts.py cuts it into the pieces in %s/%s" % (FOLDERS["armor"], aid), CREDIT), ""]
         for path in piece_files(folder):
             bone = os.path.basename(path)[:-4]
-            lines += ["tools/source/characters/%s/%s/%s.png - %s's %s piece at rest on the canvas, cut by tools/body_parts.py "
-                      "from the outfit ChatGPT painted on its armor template; %s"
-                      % (FOLDERS["armor"], aid, bone, aid, bone.replace("_", " "), CREDIT), ""]
+            lines += ["tools/source/characters/%s/%s/%s.png - %s's %s piece at rest on the canvas, cut by %s; %s"
+                      % (FOLDERS["armor"], aid, bone, aid, bone.replace("_", " "),
+                         "tools/dress_pose.py from the outfit ChatGPT painted whole on its dressing-pose template" if whole
+                         else "tools/body_parts.py from the outfit ChatGPT painted on its armor template", CREDIT), ""]
     return lines
 
 

@@ -88,8 +88,14 @@ LIKE_TONE = 2.2
 THICK_MOST = 26
 #: The line round a piece's hidden end.
 RIM = 3
-#: What's carried on under is painted from the piece's nearest colours, smoothed this far.
-FILL_SOFT = 3.0
+#: What's carried on under is painted the middle colour of the piece's own paint within this far of it.
+FILL_NEAR = 36
+#: A piece that's all hidden, with nothing of its own to go by, is what covers it this much darker.
+UNDER_SHADE = 0.55
+#: A skirt's rows: the gap between the legs painted at least SKIRT_ACROSS across, the paint standing
+#: SKIRT_FLARE pixels out past the legs on a side; SKIRT_BREAK rows that aren't end it, and fewer
+#: than SKIRT_LEAST rows in all isn't a skirt.
+SKIRT_ACROSS, SKIRT_FLARE, SKIRT_BREAK, SKIRT_LEAST = 0.9, 14, 12, 40
 LEGS = ("leg_near_up", "leg_near_low", "leg_far_up", "leg_far_low")
 
 
@@ -283,6 +289,35 @@ def owners(colour, alpha, masks, seen, near, shoulder=None, neck=None):
             hangs[0] = False
         hangs &= ~on_shoulder
         own[hangs[areas]] = RANK["torso"]
+    # A full skirt, a robe, a long coat: down from where the legs part, every row whose gap between
+    # the legs is painted across and whose paint stands out past the legs' own outline (a bell, not
+    # a trouser leg) is the garment's, all of it, legs' place and all; it ends at the first run of
+    # rows that aren't. A tabard between trousered legs has the gap but not the flare, and stays as
+    # the areas above left it.
+    legs_mask = np.any([masks[b] for b in LEGS], axis=0)
+    cols = np.arange(figure.shape[1])
+    leg_left = np.where(legs_mask, cols[None, :], figure.shape[1]).min(axis=1)
+    leg_right = np.where(legs_mask, cols[None, :], -1).max(axis=1)
+    paint_left = np.where(figure, cols[None, :], figure.shape[1]).min(axis=1)
+    paint_right = np.where(figure, cols[None, :], -1).max(axis=1)
+    gap_rows = gap.sum(axis=1)
+    across = (gap_rows > 0) & ((gap & figure).sum(axis=1) >= SKIRT_ACROSS * np.maximum(gap_rows, 1))
+    flare = (leg_left - paint_left >= SKIRT_FLARE) | (paint_right - leg_right >= SKIRT_FLARE)
+    skirt_rows = np.zeros(figure.shape[0], bool)
+    miss = 0
+    for y in range(crotch, figure.shape[0]):
+        if across[y] and flare[y]:
+            skirt_rows[y] = True
+            miss = 0
+        else:
+            miss += 1
+            if miss > SKIRT_BREAK:
+                break
+    skirted = int(skirt_rows.sum())
+    if skirted >= SKIRT_LEAST:
+        leg_ranks = [RANK[b] for b in LEGS]
+        take = skirt_rows[:, None] & there & np.isin(own, leg_ranks)
+        own[take] = RANK["torso"]
     # The lines and the soft edge go with the area beside them.
     _, (iy, ix) = ndi.distance_transform_edt(~there, return_indices=True)
     own = np.where(alpha > 0, own[iy, ix], -1)
@@ -323,17 +358,35 @@ def cut(painted, base, out_dir, quiet=False):
                 seeds = (own == RANK[other]) & figure & ~ink
                 if seeds.sum() >= 40:
                     break
+        shade = 1.0
+        if under.any() and seeds.sum() < 40:
+            # Nothing of it or of the pieces beside it shows (a leg under a robe to the ground):
+            # it's the inside of what covers it, in shade, so a stride shows cloth and not bare skin.
+            seeds, shade = under & ~ink, UNDER_SHADE
         if under.any() and seeds.any():
+            # Each hidden patch in one flat colour, as a cel's is: the middle colour of the piece's
+            # own paint round it (or, with none near, of its nearest).
             _, (iy, ix) = ndi.distance_transform_edt(~seeds, return_indices=True)
-            fill = colour[iy, ix] * under[:, :, None]
-            weight = np.maximum(ndi.gaussian_filter(under.astype(np.float64), FILL_SOFT), 1e-6)
-            fill = np.stack([ndi.gaussian_filter(fill[:, :, i], FILL_SOFT) for i in range(3)], axis=2) / weight[:, :, None]
+            fill = colour[iy, ix] * shade
+            patches, count = ndi.label(under)
+            for number, patch in enumerate(ndi.find_objects(patches), 1):
+                y0, y1 = max(0, patch[0].start - FILL_NEAR), patch[0].stop + FILL_NEAR
+                x0, x1 = max(0, patch[1].start - FILL_NEAR), patch[1].stop + FILL_NEAR
+                here = patches[y0:y1, x0:x1] == number
+                round_it = seeds[y0:y1, x0:x1] & ndi.binary_dilation(here, iterations=FILL_NEAR)
+                if round_it.sum() >= 40:
+                    fill[y0:y1, x0:x1][here] = np.median(colour[y0:y1, x0:x1][round_it], axis=0) * shade
             c = np.where(under[:, :, None], fill, c)
             rim = under & ~ndi.binary_erosion(mine | under, iterations=RIM)
             c[rim] = dark
             a = np.where(under, 1.0, a)
         else:
             under[:] = False
+        if not (a > 0.5).any():
+            if os.path.exists(os.path.join(out_dir, bone + ".png")):
+                os.remove(os.path.join(out_dir, bone + ".png"))
+            report.append("  %-13s nothing painted, and nothing over it: left out" % bone)
+            continue
         rest = np.clip(warp(premul(c, a), np.linalg.inv(np.vstack([mats[bone], [0, 0, 1]]))[:2], (h, w)), 0.0, 1.0)
         ic.write_png(os.path.join(out_dir, bone + ".png"), ic.straight(rest))
         report.append("  %-13s %6d painted, %6d carried on under the pieces over it" % (bone, int(solid.sum()), int(under.sum())))

@@ -26,7 +26,7 @@ Every block below already contains these. They're here to edit: change one, and 
 ### 2.1 The prop style block
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 ```
 
 ### 2.2 The prop avoid list
@@ -38,7 +38,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 ### 2.3 The icon style block
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
 ```
 
 ### 2.4 The icon avoid list
@@ -50,7 +50,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 ### 2.5 The painting style block
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 ```
 
 ### 2.6 The painting avoid list
@@ -73,7 +73,7 @@ The 223 things the game stands in its rooms, six to a picture, in 8 groups. The 
 - **Holds:** `bakery`, `chapel`, `city-gate`, `city-wall`, `cottage`, `door`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. bakery: the baker's: a shop window under a pink striped awning, a loaf on its hanging sign.
@@ -94,7 +94,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `east-gate`, `farmhouse`, `forge`, `fountain`, `garden-wall`, `gate`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. east gate: Questeria's east gate, the city gate with the road through it cleared so whoever walks it shows at Thornbridge.
@@ -115,7 +115,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `gilded-flagon-sign`, `gilded-flagon`, `guildhall`, `healer-station`, `house-awning`, `house-ivy`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. gilded flagon sign: the Gilded Flagon's hanging sign on its own post: a gold flagon.
@@ -136,7 +136,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `house-rose`, `house-shop`, `inn`, `keep-arch`, `palace`, `pillar-marble`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. house rose: a house with roses round it.
@@ -157,7 +157,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `quarry-mouth`, `rusty-anvil`, `shop-counter`, `statue`, `stone-bridge`, `temple`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. quarry mouth: the timbered way into the old quarry.
@@ -178,7 +178,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `townhouse`, `turret-house`, `warehouse`, `watch-post`, `well-flowers`, `well-roofed`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. townhouse: a tall narrow townhouse: a gabled garret, a floor of flower boxes, a door beside a slit window.
@@ -199,7 +199,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `windmill`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. windmill: the farm's windmill, its sails across its front.
@@ -217,7 +217,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `bollard`, `cargo-barrel`, `cargo-crate`, `fish-stall`, `fishmonger`, `gangplank`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. bollard: a mooring post.
@@ -238,7 +238,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `harbour-bell`, `mast`, `net-rack`, `rope-coil`, `rope-posts`, `ship-wheel`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. harbour bell: the harbour bell on its gallows post.
@@ -259,7 +259,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `ship`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. ship: the ship you arrive on, side on, its cabin at the stern and its sail full.
@@ -277,7 +277,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `banner-blue`, `banner-pink`, `barrel-flowers`, `barrel-salt`, `barrel-water`, `barrel`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. banner blue: a blue banner on its pole.
@@ -298,7 +298,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `bench-iron`, `bench-plain`, `bench`, `booth`, `cask`, `crate-apples`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. bench iron: a bench with iron arms.
@@ -319,7 +319,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `crate-onions`, `crate-open`, `crate-stack`, `crate`, `flower-cart`, `handcart`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. crate onions: a crate of onions.
@@ -340,7 +340,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `hay-bale`, `haystack`, `keg-stack`, `lamp-arm`, `lamp-double`, `lamp`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. hay bale: a bale of hay.
@@ -361,7 +361,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `lantern-hanging`, `lantern-post`, `lantern-small`, `notice-board`, `planter-long`, `planter-pink`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. lantern hanging: a ship's lantern on a post.
@@ -382,7 +382,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `planter-stone`, `planter`, `potted-plant`, `sack-pile`, `sacks`, `sign`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. planter stone: a round stone planter.
@@ -403,7 +403,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `signpost-arrows`, `signpost`, `stall-blue`, `stall-cloth`, `stall-pink`, `stall-teal`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. signpost arrows: a signpost with painted arrows.
@@ -424,7 +424,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `sun-banner`, `topiary`, `urn-blue`, `urn`, `washing-line`, `waypoint`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. sun banner: a banner of the Aurelian sun hanging on a wall.
@@ -447,7 +447,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `blossom-tree`, `bush-deep`, `bush-flowers`, `bush-pink`, `bush-small`, `bush`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. blossom tree: a tree in white blossom.
@@ -468,7 +468,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `cherry-tree-small`, `cherry-tree`, `cypress-pot`, `cypress`, `dead-tree`, `fallen-tree`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. cherry tree small: a small cherry tree.
@@ -489,7 +489,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `fence-iron`, `fence-wood-post`, `fence-wood-side`, `fence-wood`, `fern`, `fir-deep`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. fence iron: an iron railing, blue and gold.
@@ -510,7 +510,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `fir`, `flowers-mixed`, `flowers-pink`, `flowers-white`, `gloom-mushroom-small`, `gloom-mushroom`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. fir: a fir.
@@ -531,7 +531,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `grass-tall`, `log`, `mushrooms-pale`, `mushrooms`, `oak-amber`, `oak-deep`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. grass tall: a tuft of long grass.
@@ -552,7 +552,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `oak-light`, `oak-pale`, `oak-turning`, `oak`, `rocks-mossy`, `rocks`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. oak light: a green oak.
@@ -573,7 +573,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `root-wall`, `snag`, `stump`, `tree-blackvein-bare`, `tree-blackvein-pale`, `tree-blackvein`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. root wall: roots grown across a way through, tangled and then parted, what the quarry's root walls look like.
@@ -594,7 +594,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `wildflowers-blue`, `wildflowers-yellow`, `wildflowers`, `woodcutter-stump`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. wildflowers blue: a clump of blue flowers in the meadows.
@@ -615,7 +615,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `anvil`, `armchair`, `bar-counter`, `bed`, `bedroll`, `book-crate`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. anvil: an anvil on its block.
@@ -636,7 +636,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `bookshelf`, `candle-stand`, `chair`, `chalkboard`, `chest`, `cot`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. bookshelf: a shelf of jars and bottles.
@@ -657,7 +657,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `desk`, `hearth`, `relic-case-orb`, `relic-case`, `relic-shelf`, `round-table`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. desk: a desk with a map and a candle.
@@ -678,7 +678,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `royal-desk`, `sconce`, `side-table`, `stool`, `sun-mosaic`, `sun-throne`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. royal desk: a gilded walnut writing desk with letters, a book and an inkwell on it.
@@ -699,7 +699,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `table`, `tankard-table`, `tapestry`, `tool-rack`, `utensil-rack`, `war-table`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. table: a table.
@@ -720,7 +720,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `wardrobe`, `wine-table`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. wardrobe: a cupboard of jars with flowers on top.
@@ -739,7 +739,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `bones`, `brazier`, `campfire`, `cookfire`, `courier-body`, `ranger-bridge`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. bones: an animal's skull and bones.
@@ -760,7 +760,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `ranger-sign`, `refugee-bundle`, `rubble-heap`, `sapper-hole`, `satchel`, `tar-pool`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. ranger sign: the rangers' waymark: a post with antlers and a green ribbon.
@@ -781,7 +781,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `tent-ragged-2`, `tent-ragged`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. tent ragged 2: a lower patched tent with a blanket over its door.
@@ -800,7 +800,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `black-crystal-purified`, `black-crystal-shattered`, `black-crystal`, `crystal-pillar`, `crystal-stone`, `dart-trap`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. black crystal purified: the black crystal made clean, white and gold.
@@ -821,7 +821,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `gold-pile-small`, `gold-pile`, `guard-statue`, `lever`, `sarcophagus`, `sunheart-pedestal`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. gold pile small: a small heap of gold coins.
@@ -842,7 +842,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `vault-brazier`, `vault-chest`, `vault-door`, `vault-lever`, `vault-sconce`, `vault-stair-shut`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. vault brazier: a gold brazier of glowing coals on three legs (the game draws the flame on it).
@@ -863,7 +863,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `vault-stair`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. vault stair: the stair down to the Old Crown Vault with its gate standing open.
@@ -881,7 +881,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `flower-arch`, `flower-box`, `great-oak`, `light-shaft`, `quest-board`, `rowboat`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. flower arch: an arch of flowers to walk through.
@@ -902,7 +902,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `scarecrow`, `sewer-grate`, `sun-inlay`, `trough`, `washtub`, `water-barrel`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. scarecrow: a scarecrow, with a crow on his arm.
@@ -923,7 +923,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Holds:** `water-pump`, `wheat`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, standing on the bottom of its cell.
 
 PROPS, in this order:
 1. water pump: a water pump with a bucket.
@@ -993,7 +993,7 @@ An icon for each of the 49 items, in the catalog's order, sixteen to a picture. 
 - **Send to Claude as:** `item-icons-1.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
 
 ICONS, in this order (the words after each name only say what it is: draw the object, write nothing):
 1. Dagger (weapon): A short, sharp blade that fits a boot, a sleeve or a palm. Quick in the hand, and true when it's thrown.
@@ -1023,7 +1023,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `item-icons-2.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
 
 ICONS, in this order (the words after each name only say what it is: draw the object, write nothing):
 1. Thornwood Bow (weapon): Cut from the briar that grew through the Thornmother's den, with the rot burned out of it. Its string hums when you nock an arrow.
@@ -1053,7 +1053,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `item-icons-3.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
 
 ICONS, in this order (the words after each name only say what it is: draw the object, write nothing):
 1. Iron Helm (head): A full iron helm with a hinged visor. It hides your hair and most of your face, which some people prefer.
@@ -1083,7 +1083,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `item-icons-4.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text.
 
 ICONS, in this order (the words after each name only say what it is: draw the object, write nothing):
 1. Black Crystal Shard (material): A splinter of the black crystal that grows wherever the land's gone wrong. It's cold, it hums, and somebody always wants to buy it.
@@ -1104,7 +1104,7 @@ An icon for each of the 36, in the game's order, sixteen to a picture. Each abil
 - **Send to Claude as:** `ability-icons-1.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each ability's icon is a white or pale symbol with a dark outline, with no tile behind it: the game puts it on a tile the colour of its kind.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each ability's icon is a white or pale symbol with a dark outline, with no tile behind it: the game puts it on a tile the colour of its kind.
 
 ICONS, in this order (the words after each name say what it does in a fight, to pick a symbol by: write nothing):
 1. Attack: One attack with the weapon in the main hand, or a foe's attacks.
@@ -1134,7 +1134,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ability-icons-2.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each ability's icon is a white or pale symbol with a dark outline, with no tile behind it: the game puts it on a tile the colour of its kind.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each ability's icon is a white or pale symbol with a dark outline, with no tile behind it: the game puts it on a tile the colour of its kind.
 
 ICONS, in this order (the words after each name say what it does in a fight, to pick a symbol by: write nothing):
 1. Cure Wounds: A bigger heal, by touch.
@@ -1164,7 +1164,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ability-icons-3.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each ability's icon is a white or pale symbol with a dark outline, with no tile behind it: the game puts it on a tile the colour of its kind.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each ability's icon is a white or pale symbol with a dark outline, with no tile behind it: the game puts it on a tile the colour of its kind.
 
 ICONS, in this order (the words after each name say what it does in a fight, to pick a symbol by: write nothing):
 1. Blasting Charge: A lit charge of blasting powder thrown into a crowd: fire on everyone near where it lands.
@@ -1188,7 +1188,7 @@ An icon for each of the 21, in the game's order, sixteen to a picture. Each cond
 - **Send to Claude as:** `condition-icons-1.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each condition's icon is a small, bold symbol in one or two colours.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each condition's icon is a small, bold symbol in one or two colours.
 
 ICONS, in this order (the words after each name say what it does in a fight, to pick a symbol by: write nothing):
 1. Downed: At 0 hit points and out of the fight: a party member rolls death saves until they're healed, helped up, stable or dead.
@@ -1218,7 +1218,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `condition-icons-2.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each condition's icon is a small, bold symbol in one or two colours.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads at 24 pixels: big shapes, no tiny detail, no text. Each condition's icon is a small, bold symbol in one or two colours.
 
 ICONS, in this order (the words after each name say what it does in a fight, to pick a symbol by: write nothing):
 1. Poisoned: The condition's die in poison damage at the start of each of their turns, and disadvantage on their attacks.
@@ -1244,7 +1244,7 @@ The menus' plates, the cursors and the marks, one picture each. The colour ramps
 - **Send to Claude as:** `ui-panel.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: a square panel to stretch behind menus: a dark iron plate with a thin bevelled rim, small rivets at the four corners and a plain, even middle, so its corners, edges and middle can be cut apart and stretched (nine slices). 1024 by 1024, the panel filling the picture. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1257,7 +1257,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-button.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: two buttons side by side, each a wide iron plate with a groove along its middle: the left one at rest, the right one lit, a warm gold light in its groove. Plain, even middles so they can be stretched. 1536 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1270,7 +1270,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-cursors.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: six mouse cursors in a row of six cells, each pointing up and to the left: an arrow; a ring to walk to; a hand to use something; a speech bubble to talk; a crossed circle for no; and a small door for a room's doors. 1536 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1283,7 +1283,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-dialogue-icons.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: six small icons in a row for the options in a conversation: a twenty-sided die; a heart; a padlock; and three voices as three different speech marks (a calm one, a bold one, a sly one). 1536 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1296,7 +1296,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-indicators.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: sixteen badges in a 4 by 4 grid, each a round gold-rimmed token with one symbol on it, for what's behind a door: a coin purse (a shop), an anvil (a smith), a bottle (potions), a tankard (an inn), crossed swords (a fight), a scroll (a quest), a shield (the Watch), a sun (the temple), a crown (the keep), a plain door, a gate, stairs going up, stairs going down, an arrow pointing left, an arrow pointing right, and a sparkle for something to look at. 1024 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1309,7 +1309,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-keycaps.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: a blank keyboard key cap seen from the front, pale with a darker rim, to write a key's letter on; and beside it four computer mice seen from above: plain, with the left button lit gold, with the right button lit, and with the wheel lit. 1536 by 1024, five cells in a row. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1322,7 +1322,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-map-marks.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: eight marks for a parchment map in a row: a town (a cluster of roofs), a camp (a tent), a ruin (a broken arch), a wood (three trees), a cave mouth, a 'you are here' marker (a gold pin), a waypoint (a small diamond) and a short piece of dotted road. 1536 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1335,7 +1335,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-markers.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: four markers in a row: a gold exclamation-mark-shaped flame for someone with a quest, a red one for an event, and a gold and a red arrow that point to them from the screen's edge. Draw the marks as bold shapes, not as letters. 1536 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1348,7 +1348,7 @@ AVOID. Text, letters, numbers, labels, watermarks. Frames, borders, tiles or bac
 - **Send to Claude as:** `ui-combat-hud.png`
 
 ```text
-STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; flat colour fills with two cel tones and one small highlight; light from the upper left. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
+STYLE. Original icons for a 2D fantasy role-playing game's interface, in a clean, outlined, vector-like style: bold outlines in deep brown to near-black, never pure black; colour fills with two or three cel tones and one small highlight; light from the upper left. Weapons and armour are heroic high-fantasy pieces. Each icon is one simple, bold object or symbol that still reads small: big shapes, no tiny detail, no text.
 
 DRAW: the pieces of a fight's screen, laid out in a tidy grid with space between them: a square hotbar slot, empty, and the same slot lit; a round portrait frame for the turn order, plain, and one with a gold rim for whose turn it is; four small pips (a sword for the action, a spark for the bonus action, a shield for the reaction, a boot for the Shift), each lit and unlit; an empty bar with a blue fill for Focus; three small skulls and three small hearts for death saves; a five-pointed linked sigil in five states from dim to blazing gold; a target ring in red and one in gold; a flat oval plate for where someone stands in a row and a chevron to float over it; a ribbon banner. 1536 by 1024. On perfectly flat magenta #FF00FF, each thing centred in its cell with clear magenta round it.
 
@@ -1366,7 +1366,7 @@ The title is layers that drift at different speeds: the sky at the back, the far
 - **Send to Claude as:** `title-sky.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: the sky, edge to edge: deep blue at the top going to soft pink at a level horizon, a scatter of faint stars and two pale moons high up, one large and one small. No clouds, no land. 1536 by 1024, the whole picture. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1378,7 +1378,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-far.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: the far distance on flat magenta: a long range of pale, hazy blue mountains across the bottom third, and above them three floating islands of rock and green, the biggest in the middle with a waterfall pouring off its edge into mist. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1390,7 +1390,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-city.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: the middle distance on flat magenta: the city of Questeria on its cliffs above a calm lake, seen from far off: cream stone walls and towers, roofs of azure, rose, teal and plum, a tall keep with gold-capped spires, bridges between the cliffs, the lake below reflecting it. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1402,7 +1402,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-foreground.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: the near foreground on flat magenta: a stone terrace with a carved balustrade across the bottom of the picture, and a blossom tree at each side leaning in, heavy with pink blossom. The middle of the picture is empty. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1414,7 +1414,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-clouds.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: six separate clouds in a grid of 3 columns and 2 rows on flat magenta: big, soft, rounded white clouds with flat pale-pink undersides, each a different shape, none touching. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1426,7 +1426,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-banner.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: eight frames of one long pennant blowing in the wind, in a grid of 4 columns and 2 rows on flat magenta: navy with a gold sun, on the tip of a pole, the pole's tip in the same place in every cell and the cloth rippling a little further in each. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1438,7 +1438,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-spire.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: eight frames of the light at the top of a crystal spire, in a grid of 4 columns and 2 rows on flat magenta: a tall, slim crystal on a gold foot, its glow swelling and fading from one cell to the next, the foot in the same place in every cell. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1450,7 +1450,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-waterfall.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: six frames of a thin waterfall falling from the edge of a floating island, in a grid of 3 columns and 2 rows on flat magenta: the water's streaks moving down a little further in each cell, ending in mist, the top of the fall in the same place in every cell. 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1462,7 +1462,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `title-petal.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 LAYER. One layer of a title screen, to be laid over the others. Draw: four single pink blossom petals on flat magenta, each at a different turn, big and simple. 1024 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1482,7 +1482,7 @@ The three painted scenes the story shows, each in layers that drift, like the ti
 - **Send to Claude as:** `questeria-dawn-sky.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. Questeria at dawn, from the ship. This picture is one layer of it, to be laid over the others. Draw: a sunrise sky, edge to edge: gold at a level horizon going to rose and then pale blue, the sun just coming up over far mountains at the right, the last stars and two pale moons fading high up. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1494,7 +1494,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `questeria-dawn-city.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. Questeria at dawn, from the ship. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: the city of Questeria on its cliffs across the water, warmed by the sunrise: cream walls gone gold, long shadows, roofs of azure, rose and plum, the lake below it gold and pink. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1506,7 +1506,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `questeria-dawn-clouds.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. Questeria at dawn, from the ship. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: two long, low clouds lit gold underneath by the dawn. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1518,7 +1518,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `questeria-dawn-rail.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. Questeria at dawn, from the ship. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: a ship's rail across the bottom of the picture, seen from on deck: varnished wood with brass caps, a coil of rope, a small pennant and a hanging lantern at the left. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1532,7 +1532,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `pier-memory-sky.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The pier in the storm, the day you met. This picture is one layer of it, to be laid over the others. Draw: a storm sky, edge to edge: slate-grey and heavy, darker at the top, with big torn clouds. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1544,7 +1544,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `pier-memory-sea.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The pier in the storm, the day you met. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: a rough grey-green sea with white-capped waves, a small capsized boat far out, and a dark coast along the horizon. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1556,7 +1556,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `pier-memory-pier.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The pier in the storm, the day you met. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: a long wooden pier running in from the left edge across the lower part of the picture, wet planks and leaning posts, a lantern on a pole at its end; and a small child seen from behind, running down it. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1570,7 +1570,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `red-moon-sky.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The red moon, where the bond was made. This picture is one layer of it, to be laid over the others. Draw: a crimson night sky, edge to edge: deep red-black at the top going to dark rose at a level horizon, a few stars. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1582,7 +1582,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `red-moon-moon.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The red moon, where the bond was made. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: one very large blood-red full moon with a soft halo round it. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1594,7 +1594,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `red-moon-shore.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The red moon, where the bond was made. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: dark mountains and a still lake at night, the moon's red reflection in a long path on the water, mist along the far shore. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1606,7 +1606,7 @@ AVOID. People or animals unless the prompt asks for them. Text, letters, numbers
 - **Send to Claude as:** `red-moon-headland.png`
 
 ```text
-STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black; flat colour fills with two or three cel tones and hard-edged shadow shapes; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
+STYLE. An original painting for a 2D fantasy role-playing game, drawn by hand in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black; colour fills with three or four cel tones and crisp shadow shapes, with fine detail; soft gradients only in the sky and the far distance. A bright, mystical fantasy palette: blue skies warming to pink at the horizon, warm cream and honey stone, roofs of azure, rose, teal and plum, navy and gold for anything royal. Light from the upper left.
 
 SCENE. The red moon, where the bond was made. This picture is one layer of it, to be laid over the others. Draw: on flat magenta: a rocky headland across the bottom of the picture as a near-black silhouette, with a few wind-bent pines, flat on top in the middle where two people will stand. One landscape PNG, 1536 by 1024. Where it says flat magenta, everything that isn't the layer's own is perfectly flat magenta #FF00FF with no shading.
 
@@ -1626,7 +1626,7 @@ The clouds, gulls, flags, flames, smoke and leaves that move in the rooms. Two p
 - **Send to Claude as:** `room-life-1.png`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, centred in its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, centred in its cell.
 
 ROWS, four cells each, left to right:
 Row 1: four soft white clouds with flat pale undersides, each a different shape.
@@ -1644,7 +1644,7 @@ AVOID. People, animals, text, letters, numbers, labels, watermarks. A floor, gro
 - **Send to Claude as:** `room-life-2.png`
 
 ```text
-STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined, vector-like style: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; flat colour fills with two or three cel tones and hard-edged shadow shapes; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, centred in its cell.
+STYLE. Original props for a side-on 2D fantasy role-playing game, drawn in a clean, outlined style, detailed and semi-realistic rather than cartoonish: crisp outlines in deep brown to near-black, never pure black, heavier round the outer shape and finer inside; colour fills with three or four cel tones and crisp shadow shapes, with fine surface detail; light from the upper left. Charming, stylised and well made, with a little wear. A bright fantasy palette: warm cream and honey stone, timber browns, roofs and cloth of azure, rose, teal and plum, navy and gold for anything royal. Each prop is seen side-on at a standing person's eye level, flat to us, with no perspective, centred in its cell.
 
 ROWS, four cells each, left to right:
 Row 1: a candle flame in four frames, small and steady.
