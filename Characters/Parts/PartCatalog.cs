@@ -230,7 +230,7 @@ public static partial class PartCatalog
             {
                 (Color[] page, int stride) = pages[pageName];
                 Color[] mask = maskRect is null ? null : Cut(page, stride, maskRect);
-                return new PartImage(key, slot, entry.Base, rect[2], rect[3], Cut(page, stride, rect), mask, new Vector2(pivot[0], pivot[1]), ratio, tones, bone);
+                return new PartImage(key, slot, entry.Base, rect[2], rect[3], Cut(page, stride, rect), mask, new Vector2(pivot[0], pivot[1]), ratio, tones, bone, entry.LegsOver);
             }
             if (entry.Pieces is null)
             {

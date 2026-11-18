@@ -3,7 +3,7 @@ The mannequins as a cut-out rig: each body painted in pieces, pulled apart, not 
 
     python tools/body_parts.py template <old-base.png> <base>   # the exploded template, from a figure
     python tools/body_parts.py armor                            # the armor templates, from the body's
-    python tools/body_parts.py check <painted.png> <id> [--show <png>]   # is it the template's size and layout?
+    python tools/body_parts.py check <painted.png> <id> [--show <png>] [--legs-over]   # is it the template's size and layout?
     python tools/body_parts.py cut <painted.png> <id>           # a painted template back into its pieces
 
 <id> is body-man or body-woman (or the base, base-male or base-female) for a body, or an armor's id
@@ -232,6 +232,28 @@ def who_is(who):
         sys.exit("body_parts: %s isn't body-man, body-woman or an armor whose Story/13 card edits armor-parts-man or "
                  "armor-parts-woman" % who)
     return ("base-male" if m.group(1) == "man" else "base-female"), who
+
+
+#: Set by a tool that's trying an armor with its legs over its torso before its card says so (tools/gemini_armor.py).
+LEGS_OVER_ALL = False
+#: What an armor's card says in its Basis line when its legs are drawn over its torso.
+LEGS_OVER = "Thighs over the torso."
+
+
+def legs_over(armor):
+    """Whether an armor's Story/13 card says its thighs are drawn over its torso (the game's RigComposer.LegsOverTorso)."""
+    import re
+    text = open(STORY, encoding="utf-8").read()
+    m = re.search(r"^#### `%s` · [^\n]*\n\n\*\*Basis:\*\* ([^\n]*)" % re.escape(armor or ""), text, re.M)
+    return bool(m and LEGS_OVER in m.group(1))
+
+
+def legs_over_torso(draw):
+    """The pieces back to front with the legs moved to just in front of the torso."""
+    legs = [b for b in draw if b.startswith(("leg_", "foot_"))]
+    rest = [b for b in draw if b not in legs]
+    at = rest.index("torso") + 1
+    return tuple(rest[:at] + legs + rest[at:])
 
 
 def key(rgb):
@@ -753,7 +775,7 @@ def cut(painted, who, out_dir=None, write=True, quiet=False, show=None):
             ic.write_png(os.path.join(out_dir, bone + ".png"), full)
         report.append("  %-13s %6d pixels; %s" % (bone, int((mine > 0.5).sum()), note))
     figure = np.zeros((h, w, 3))
-    for bone in DRAW:
+    for bone in (legs_over_torso(DRAW) if LEGS_OVER_ALL or legs_over(armor) else DRAW):
         if bone in rests:
             x0, y0, crop = rests[bone]
             ch, cw = crop.shape[:2]
@@ -819,7 +841,9 @@ def ic_resample_rgb(rgb, box, size):
 
 def main(argv):
     show = argv[argv.index("--show") + 1] if "--show" in argv else None
-    args = [a for a in argv if a not in ("--show", show)]
+    global LEGS_OVER_ALL
+    LEGS_OVER_ALL = "--legs-over" in argv
+    args = [a for a in argv if a not in ("--show", show, "--legs-over")]
     if len(args) == 3 and args[0] == "template":
         template(args[1], args[2])
     elif args == ["armor"]:

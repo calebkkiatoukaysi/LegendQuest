@@ -20,8 +20,9 @@ namespace LegendQuest.Characters;
 /// <param name="SkinRatio">For a face, its skin against the base's; one for anything else.</param>
 /// <param name="Tones">The colour each of its two dye channels was painted, 0 to 1, or null for one it hasn't.</param>
 /// <param name="Bone">For one bone's piece of a body or an armor, the bone; null for a part that's whole.</param>
+/// <param name="LegsOver">For an armor's piece, whether the armor's legs are drawn over its torso.</param>
 public sealed record PartImage(string Id, PartSlot Slot, string Base, int Width, int Height, Color[] Pixels, Color[] Mask, Vector2 Pivot, Vector3 SkinRatio, Vector3?[] Tones,
-    string Bone = null);
+    string Bone = null, bool LegsOver = false);
 
 /// <summary>How one part's coloured as it's put together: its skin multiplied by a ratio, and its two dye channels dyed to swatches.</summary>
 /// <param name="SkinRatio">What its skin's multiplied by, red, green and blue: one for as it is.</param>
@@ -124,8 +125,11 @@ public static class RigComposer
             jointAt[skeleton.Names[i]] = morph.Move(joints[skeleton.Joints[i]], root) - at0;
 
         // Back to front: the cape, then the bones as they're drawn, what each hand holds just under it.
+        // An armor painted with its thighs in front of its hips has the legs drawn straight after the torso.
+        bool legsOver = false;
+        foreach (PartImage part in parts) legsOver |= part.Slot == PartSlot.Armor && part.LegsOver;
         var order = new List<string> { Cape };
-        foreach (string bone in skeleton.Draw)
+        foreach (string bone in legsOver ? LegsOverTorso(skeleton.Draw) : skeleton.Draw)
         {
             if (bone == NearHand) order.Add(Weapon);
             if (bone == FarHand) order.Add(Offhand);
@@ -148,6 +152,23 @@ public static class RigComposer
         var box = new Rectangle((int)MathF.Floor(headLeft), (int)MathF.Floor(headTop), (int)MathF.Ceiling(head[2] * s), (int)MathF.Ceiling(head[3] * s));
         box = Rectangle.Intersect(box, new Rectangle(0, 0, canvasWidth, canvasHeight));
         return new Result(canvas, canvasWidth, canvasHeight, root - at0, box, layers, morph.Move(sockets[Sockets.NearHand], root) - at0, jointAt);
+    }
+
+    /// <summary>The bones back to front with the legs moved to just in front of the torso: thighs, shins and feet in their own order.</summary>
+    /// <param name="draw">The skeleton's own order.</param>
+    internal static IReadOnlyList<string> LegsOverTorso(IReadOnlyList<string> draw)
+    {
+        static bool IsLeg(string bone) => bone.StartsWith("leg_", StringComparison.Ordinal) || bone.StartsWith("foot_", StringComparison.Ordinal);
+        var order = new List<string>(draw.Count);
+        foreach (string bone in draw)
+        {
+            if (IsLeg(bone)) continue;
+            order.Add(bone);
+            if (bone != Torso) continue;
+            foreach (string leg in draw)
+                if (IsLeg(leg)) order.Add(leg);
+        }
+        return order;
     }
 
     /// <summary>Which piece a part goes into: its bone for a body's or an armor's piece; the head for what's on the head; the cape's, or the held things' own.</summary>

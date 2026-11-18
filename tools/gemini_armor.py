@@ -1,9 +1,10 @@
 """Paints an armor from Story/13-art-prompts.md §5 with Gemini, and gives it back as a sheet in the template's layout.
 
-    python tools/gemini_armor.py <armor-id> [--tries 4] [--out <folder>] [--keep] [--fantasy] [--like <armor-id>]
+    python tools/gemini_armor.py <armor-id> [--tries 4] [--out <folder>] [--keep] [--fantasy] [--like <armor-id>] [--thighs-over]
     python tools/gemini_armor.py <armor-id> --prompt      # only print the whole prompt, to paste by hand
 
---fantasy asks for a heroic high-fantasy version of the outfit in a flat vector cel style (the FANTASY and VECTOR blocks below). --like attaches an
+--thighs-over paints an armor whose thighs the game draws over its torso (a card whose Basis line says "Thighs over
+the torso." is painted that way without it, and imported that way by tools/import_parts.py). --fantasy asks for a heroic high-fantasy version of the outfit in a flat vector cel style (the FANTASY and VECTOR blocks below). --like attaches an
 armor that's already painted (its sheet in tools/source/characters/sheets, on the same wide layout) as the
 style to match: its line, its shading and its finish, not its outfit.
 
@@ -39,6 +40,8 @@ from PIL import Image
 from scipy import ndimage as ndi
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import body_parts  # noqa: E402  (which armors have their legs over their torso)
 CHARS = os.path.join(ROOT, "tools", "source", "characters")
 STORY = os.path.join(ROOT, "Story", "13-art-prompts.md")
 API = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent"
@@ -105,6 +108,14 @@ VECTOR = ("VECTOR CEL STYLE (this replaces the shading in LOOK). Draw it as clea
     "plates and limbs and inside overlaps: use a deep blue-black ink (about #1c1826), NEVER pure black #000000, which is only "
     "for the background. Shiny metal carries crisp white or light-tinted streaks of highlight along its top edges; leather and "
     "stone carry small clusters of dark nicks and cracks instead.")
+#: Said without a word about what's drawn over what: told the thighs go in front of the torso, Gemini paints them
+#: on top of it in the picture, joined to it.
+ORDER = ("THIGH TOPS AND HIPS. On this outfit the top end of each thigh piece will be seen whole, so finish it as a solid, closed, "
+    "rounded hip cap (a hip plate, the top of a cuisse, the gathered top of a trouser leg), outlined all the way round and shaded "
+    "like the rest of the piece: never an open tube, a hollow, a dark opening, a lining showing inside or an unfinished edge. The "
+    "lower sides of the torso's hip piece will be hidden, so keep its brief plain and put the torso's artwork (buckles, gems, "
+    "engraving) on the belt line and the centre front only. This changes nothing in the LAYOUT: the thighs stay separate "
+    "pieces below the torso, exactly where they are, with the same clear black gap between each thigh and the torso.")
 STYLE_OF = ("IMAGE 2 is a finished sheet for a DIFFERENT outfit, painted earlier for the same game. Match its art style exactly: the "
     "weight and colour of its outlines, its flat cel shading and how many tones it uses, its level of detail and its finish, so "
     "the two look like one artist's work. Do not copy its outfit, its colours or its shapes, and paint only on IMAGE 1's pieces.")
@@ -285,8 +296,8 @@ def by_piece(outfit, cache):
     sys.exit("gemini_armor: the outfit didn't come back as seven lines:\n" + text)
 
 
-def prompt(outfit, pieces, fantasy=False, like=False):
-    first = [TASK, LAYOUT, EACH, FIT, JOINTS, LOOK] + ([FANTASY, VECTOR] if fantasy else []) + ([STYLE_OF] if like else [])
+def prompt(outfit, pieces, fantasy=False, like=False, over=False):
+    first = [TASK, LAYOUT, EACH, FIT, JOINTS] + ([ORDER] if over else []) + [LOOK] + ([FANTASY, VECTOR] if fantasy else []) + ([STYLE_OF] if like else [])
     text = "\n\n".join(first + ["OUTFIT, as a whole (for its look, colours and materials): " + outfit,
                                   "OUTFIT, piece by piece (this is what to paint on each piece; where the two differ, this wins):\n" + pieces])
     return text.replace("the attached image's", "IMAGE 1's").replace("the attached image", "IMAGE 1") if like else text
@@ -329,6 +340,7 @@ def main(argv):
     ap.add_argument("--prompt", action="store_true")
     ap.add_argument("--fantasy", action="store_true")
     ap.add_argument("--like")
+    ap.add_argument("--thighs-over", action="store_true")
     o = ap.parse_args(argv)
     armor, tries, out, flags = o.armor, o.tries, o.out, (["--keep"] if o.keep else [])
     os.makedirs(out, exist_ok=True)
@@ -337,7 +349,11 @@ def main(argv):
     wide = make_wide(tpl, os.path.join(out, "wide-" + edits + ".png"), WIDE)
     like = make_wide(os.path.join(CHARS, "sheets", o.like + ".png"), os.path.join(out, "wide-" + o.like + ".png"), WIDE) if o.like else None
     said = outfit + (" Design direction: " + FANTASY.split(": ", 1)[1].split(" Clean and readable")[0] if o.fantasy else "")
-    text = prompt(outfit, by_piece(said, out), o.fantasy, bool(like))
+    over = o.thighs_over or body_parts.legs_over(armor)       # the card says so once the armor's kept (body_parts.LEGS_OVER)
+    if over:
+        said += (" Each thigh's top end is a solid, closed, rounded hip cap, finished and outlined all the way round; the torso's "
+                 "brief is plain at its lower sides, with its artwork on the belt line and the centre front.")
+    text = prompt(outfit, by_piece(said, out), o.fantasy, bool(like), over)
     if o.prompt:
         print("[attach %s]%s\n\n%s" % (wide, "\n[attach %s]" % like if like else "", text))
         return
@@ -367,6 +383,9 @@ def main(argv):
         sys.exit("gemini_armor: nothing came back")
     final = os.path.join(out, armor + ".png")
     Image.open(best[1]).save(final)
+    # The figure stood up in it, beside the bare body, to look at: the legs over the torso where the armor's are.
+    subprocess.run([sys.executable, os.path.join(ROOT, "tools", "body_parts.py"), "check", final, armor, "--show",
+                    os.path.join(out, armor + ".standing.png")] + (["--legs-over"] if over else []), capture_output=True, cwd=ROOT)
     print("gemini_armor: %s is %s" % (final, "GOOD" if best[2].startswith("GOOD") else "the best of %d tries, but not good: %s" % (tries, best[2][:200])))
     if "--keep" in flags and best[2].startswith("GOOD"):
         Image.open(final).save(os.path.join(CHARS, "sheets", armor + ".png"))

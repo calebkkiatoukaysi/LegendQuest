@@ -1941,6 +1941,8 @@ def build(check, vector=VECTOR):
         name = titles.get(pid[:-2] if pid.endswith("-f") else pid)
         if name and re.match(r"(hair|beard|jewel|skin|ears|horns)-\d\d", pid):
             entry["name"] = name
+        if slot == "armor" and body_parts.legs_over(pid):
+            entry["legsOver"] = True
         if pid in pieced:
             entry["pieces"] = {bone: placed(pid + "@" + bone, p, socket, base) for bone, p in pieced[pid].items()}
         else:
