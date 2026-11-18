@@ -45,6 +45,9 @@ API = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateConten
 PAINTER, WRITER = "gemini-3-pro-image", "gemini-3.8-flash"
 #: Darker than this (brightest channel) is the black background, as in tools/body_parts.py.
 BLACK = 14
+#: A painted piece is tried at its own size and SIZE_STEPS sizes down, SIZE_STEP apart, and takes the smallest that
+#: still covers COVERS of its body piece.
+SIZE_STEP, SIZE_STEPS, COVERS = 0.025, 19, 0.96
 #: The darkest a piece's own shadow is kept: off the background's black, so the cut doesn't key it out.
 INK = (28, 24, 38)
 #: The wide template's pieces, against the armor template's.
@@ -93,7 +96,7 @@ FANTASY = ("FANTASY DIRECTION. Make this a heroic high-fantasy version of the ou
     "shoulder guards, the knees and the backs of the hands; engraved runes or filigree that glow faintly; a few deliberate fins or "
     "points on the shoulder guards, elbows and knees. Clean and readable, never cluttered: big simple shapes first, detail "
     "second, and no skulls. All of it stays inside the FIT rule: the flair comes from shape language, trim, colour and glow, not "
-    "from making any piece bigger or longer.")
+    "from making any piece bigger or longer: a shoulder guard is no wider than one and a half times its upper arm, with no wings.")
 VECTOR = ("VECTOR CEL STYLE (this replaces the shading in LOOK). Draw it as clean 2D vector art, as if built from flat filled shapes: "
     "a thick, even outer line round each piece and thinner lines for the detail inside it; hard cel shading only, in sharp, "
     "unblended shadow shapes, with no gradients, no airbrush and no texture noise. Three flat colour roles, each kept as its own "
@@ -191,28 +194,35 @@ def recompose(painted_path, tpl_path, wide_path, out_path, a=(0.0, 0.0), b=1.0, 
         allowed[:8] = allowed[-8:] = False; allowed[:, :8] = allowed[:, -8:] = False
         guide = tl == ti; ga = float(guide.sum())
         gx0, gy0, gx1, gy1 = p['box']; gcx, gcy = (gx0 + gx1) / 2.0, (gy0 + gy1) / 2.0
-        f0 = 1.0 / (s * k); cands = []; shifts = range(-36, 37, 6)
-        for step in range(0, 13):                    # as big as it was painted, or as big as its place has room for
-            f = f0 * (1.0 - 0.03 * step)
+        f0 = 1.0 / (s * k); sized = None; near, far = range(-18, 19, 6), range(-36, 37, 6)
+
+        def tries(step, shifts):
+            f = f0 * (1.0 - SIZE_STEP * step)
             pim = Image.fromarray(crop).resize((max(1, round((x1 - x0) * f)), max(1, round((y1 - y0) * f))), Image.LANCZOS)
             pa = np.asarray(pim); pm = pa.max(2) > BLACK; h, w = pm.shape; n = float(max(1, pm.sum())); here = []
             for dy in shifts:
                 for dx in shifts:
                     ox, oy = int(round(gcx - w / 2.0)) + dx, int(round(gcy - h / 2.0)) + dy
                     if ox < 0 or oy < 0 or ox + w > W or oy + h > H: continue
-                    cover = (pm & guide[oy:oy + h, ox:ox + w]).sum() / ga
-                    cut = (pm & ~allowed[oy:oy + h, ox:ox + w]).sum() / n
-                    here.append((cover, cut, step, abs(dx) + abs(dy), ox, oy, pa, pm))
-            if not here: continue
-            fits = max(c[0] for c in here)           # how well it covers its body piece, at this size, wherever it sits best
-            cands += [c + (fits,) for c in here]
-        if not cands: report.append('no room for the piece at %d,%d' % (cx, cy)); continue
-        top = max(c[8] for c in cands)
-        ok = [c for c in cands if c[8] >= min(0.93, top - 0.01)]      # big enough to cover the body piece it dresses,
-        low = min(c[1] for c in ok)                                   # then where it loses least to its neighbours: it may
-        cover, cut, step, _, ox, oy, pa, pm, _ = min([c for c in ok if c[1] <= low + 0.004], key=lambda c: (c[2], c[3]))   # slide off them
+                    here.append(((pm & guide[oy:oy + h, ox:ox + w]).sum() / ga, (pm & ~allowed[oy:oy + h, ox:ox + w]).sum() / n,
+                                 abs(dx) + abs(dy), ox, oy, pa))
+            return here
+
+        # Its size: the smallest at which it still covers the body piece it dresses, so the armor is the body and a
+        # layer over it, not a bigger body. (Gemini paints the wide template's pieces bigger than they were.)
+        covers = {}
+        for step in range(0, SIZE_STEPS):
+            here = tries(step, near)
+            if here: covers[step] = max(c[0] for c in here)
+        if not covers: report.append('no room for the piece at %d,%d' % (cx, cy)); continue
+        need = min(COVERS, max(covers.values()) - 0.01)
+        step = max(st for st, c in covers.items() if c >= need)
+        # Its place: on its body piece, or slid off its neighbours where that trims less of it.
+        here = [c for c in tries(step, far)]
+        low = min(c[1] for c in here)
+        cover, cut, _, ox, oy, pa = min([c for c in here if c[1] <= low + 0.004], key=lambda c: (-round(c[0], 2), c[2]))
         layers.append((pa, ox, oy, int(ti)))
-        report.append((round(1.0 - 0.03 * step, 2), round(float(cut), 3), round(float(cover), 2)))
+        report.append((round(1.0 - SIZE_STEP * step, 2), round(float(cut), 3), round(float(cover), 2)))
     place(layers, own_t, edge, (W, H), out_path, a, b)
     return report, layers
 def place(layers, own_t, edge, size, out_path, a, b):
