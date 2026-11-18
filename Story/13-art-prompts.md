@@ -2373,7 +2373,7 @@ I'll save it as armor-scale.png.
 
 #### `armor-plate` · Plate armour · P0
 
-**Basis:** Edits `armor-parts-man`. From `Items/ItemCatalog.cs` (`plate-armour`); the art plan's §1.8 (rolled rims, rivets, lames; a reflection of the sky).
+**Basis:** Edits `armor-parts-man`. Thighs over the torso. Painted with Gemini by `tools/gemini_armor.py` (`--fantasy --like armor-royal-guard --thighs-over`), as a heroic fantasy version of the outfit below. From `Items/ItemCatalog.cs` (`plate-armour`); the art plan's §1.8 (rolled rims, rivets, lames; a reflection of the sky).
 
 Dress the pieces in full plate armour of well-fitted steel: a breastplate, a gorget, wide pauldrons, articulated arms with three lames at the elbows, gauntlets, tassets, cuisses, poleyns and greaves, sabatons; rolled rims, small rivets, a padded arming jacket showing at the joints; the steel reflects a band of the sky (navy to soft pink to cream) across each plate, with one small bright glint and one small engraved border on the breastplate. Any bare skin keeps the body's warm tan; the game tints it to the wearer's skin.
 I'll save it as armor-plate.png.
