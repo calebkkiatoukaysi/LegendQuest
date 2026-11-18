@@ -3,7 +3,7 @@ An armor painted whole, on a figure, and cut into the skeleton's pieces by the b
 
     python tools/dress_pose.py template <base>                     # the figure to paint an outfit on
     python tools/dress_pose.py cut <painted.png> <base> <folder>   # a painted figure into its pieces
-    python tools/dress_pose.py preview <base> <out.png> <folder> [<folder> ...]   # pieces posed, side by side
+    python tools/dress_pose.py preview <base> <out.png> <folder> [<folder> ...] [--moving] [--side-foot]   # pieces posed
 
 A trial of another way to make an armor than tools/body_parts.py's (thirteen pieces painted apart):
 the outfit is painted once, whole, on the body stood in a "dressing pose", and the cut takes it
@@ -33,7 +33,9 @@ else: only the joints, the shoulders and the tops of the thighs.
   - and each piece is put back on its bone at rest, on the base's canvas, as body_parts.py's are:
     <folder>/<bone>.png.
 
-`preview` draws each folder's pieces (over the body's own) at rest and in a few of the game's poses.
+`preview` draws each folder's pieces (over the body's own) at rest and in a few of the game's poses;
+--moving shows the walk and the run instead, and --side-foot tries the near foot drawn side on (the
+far foot's picture at the near ankle), toes the way the figure's going.
 
 Needs CPython, numpy and scipy.
 
@@ -75,6 +77,8 @@ SMALL, WHOLE, LOSER = 500, 0.6, 0.06
 HANG, HANG_LEAST, GAP_FULL, GAP_ROWS, LIKE, HEM_SLACK = 0.12, 60, 0.6, 50, 0.08, 14
 #: It hangs from the trunk: at least this share of it is in the torso's place (trousers seen
 #: between a skirt's panels aren't).
+#: Off the body: at least this share of an area is outside the body's outline.
+OFF_BODY = 0.4
 FROM_TRUNK = 0.03
 #: "Beside": within this many pixels (a line and its soft edges lie between two areas).
 BESIDE = 12
@@ -202,7 +206,7 @@ def like(these, one):
     return (hue < LIKE) & (tone_a / tone_b < LIKE_TONE) & (tone_b / tone_a < LIKE_TONE)
 
 
-def owners(colour, alpha, masks, seen, near):
+def owners(colour, alpha, masks, seen, near, shoulder=None, neck=None):
     """The bone each painted pixel goes with (-1 none), and the painting's lines."""
     figure = alpha > 0.5
     light = luma(colour)
@@ -224,6 +228,32 @@ def owners(colour, alpha, masks, seen, near):
     # On the body, a pixel is never a piece's that's drawn under the piece seen there: every piece
     # covers its own body piece, itself or under what's over it.
     own = np.where(there & (seen >= 0) & (own < seen), seen, own)
+    # The whole shoulder: what stands off the body beside the near arm's own (a pauldron's upper
+    # plate, its rim), above the shoulder and nearer it than the neck, goes with the arm, which is drawn over
+    # the trunk, so the pauldron is one thing and turns with the arm.
+    worn, on_shoulder = 0, np.zeros(n + 1, bool)
+    if shoulder is not None:
+        index = np.arange(1, n + 1)
+        ys, xs = np.mgrid[0:areas.shape[0], 0:areas.shape[1]]
+        cy = np.concatenate([[0.0], ndi.mean(ys, areas, index)])
+        cx = np.concatenate([[0.0], ndi.mean(xs, areas, index)])
+        off_body = np.bincount(areas[there & (seen < 0)], minlength=n + 1) >= OFF_BODY * size
+        by_shoulder = np.hypot(cx - shoulder[0], cy - shoulder[1]) < np.hypot(cx - neck[0], cy - neck[1])
+        arm, trunk = RANK["arm_near_up"], RANK["torso"]
+        could = off_body & by_shoulder & (cy <= shoulder[1])
+        could[0] = False
+        on_arm = (own == arm) & there
+        while True:
+            beside = np.unique(areas[ndi.binary_dilation(on_arm, iterations=BESIDE) & there & (own == trunk)])
+            new = [a for a in beside if could[a]]
+            if not new:
+                break
+            took = np.isin(areas, new) & (own == trunk)
+            own[took] = arm
+            on_arm |= took
+            could[new] = False
+            on_shoulder[new] = True
+            worn += len(new)
     # What hangs from the trunk over the legs.
     gap, crotch = gap_between_legs(masks)
     first = gap & (np.arange(gap.shape[0])[:, None] < crotch + GAP_ROWS)
@@ -251,11 +281,12 @@ def owners(colour, alpha, masks, seen, near):
             inside = np.bincount(areas[closed], minlength=n + 1)
             hangs |= leggy & (inside >= 0.6 * size) & (bottom <= bottom[hangs].max() + HEM_SLACK)
             hangs[0] = False
+        hangs &= ~on_shoulder
         own[hangs[areas]] = RANK["torso"]
     # The lines and the soft edge go with the area beside them.
     _, (iy, ix) = ndi.distance_transform_edt(~there, return_indices=True)
     own = np.where(alpha > 0, own[iy, ix], -1)
-    return own, ink, int(hangs.sum())
+    return own, ink, int(hangs.sum()), worn
 
 
 def cut(painted, base, out_dir, quiet=False):
@@ -269,7 +300,8 @@ def cut(painted, base, out_dir, quiet=False):
         got = np.rint(np.clip(ic.resample(pm, (0, 0, got.shape[1], got.shape[0]), (w, h))[:, :, :3], 0, 1) * 255)
     colour, alpha = key(got.astype(np.uint8))
     masks, seen, near, mats = places(base, data, (h, w))
-    own, ink, hanging = owners(colour, alpha, masks, seen, near)
+    spot = lambda joint: mats["torso"] @ np.array([K.JOINTS[base][joint][0], K.JOINTS[base][joint][1], 1.0])  # noqa: E731
+    own, ink, hanging, worn = owners(colour, alpha, masks, seen, near, spot("shoulder_near"), spot("neck"))
     figure = alpha > 0.5
     dark = np.median(colour[ink], axis=0) if ink.any() else np.array([40.0, 25.0, 20.0])
     os.makedirs(out_dir, exist_ok=True)
@@ -307,12 +339,15 @@ def cut(painted, base, out_dir, quiet=False):
         report.append("  %-13s %6d painted, %6d carried on under the pieces over it" % (bone, int(solid.sum()), int(under.sum())))
     if not quiet:
         print("dress_pose: cut %s into %s%s" % (painted, os.path.relpath(out_dir, ROOT),
-                                                 "; %d areas hang from the trunk over the legs" % hanging if hanging else ""))
+                                                 ("; %d areas hang from the trunk over the legs" % hanging if hanging else "")
+                                               + ("; %d areas off the near shoulder go with the arm" % worn if worn else "")))
         print("\n".join(report))
 
 
-def layers_of(base, folder, bodies):
-    """A folder's pieces at rest, each over the body's own; the head is the body's."""
+def layers_of(base, folder, bodies, side_foot=False):
+    """A folder's pieces at rest, each over the body's own; the head is the body's. With
+    `side_foot`, the near foot is the far foot's picture (the one drawn side on, toes the way the
+    figure faces) moved to the near ankle, a little bigger for being nearer."""
     out = {}
     for bone in K.DRAW:
         c, a = bodies[bone]
@@ -324,15 +359,27 @@ def layers_of(base, folder, bodies):
             c = (ca * aa[:, :, None] + c * (a * (1.0 - aa))[:, :, None]) / np.maximum(both, 1e-6)[:, :, None]
             a = both
         out[bone] = (c, a)
+    if side_foot:
+        (nx, ny), (fx, fy) = K.JOINTS[base]["ankle_near"], K.JOINTS[base]["ankle_far"]
+        m = np.array([[SIDE_FOOT, 0.0, nx - SIDE_FOOT * fx], [0.0, SIDE_FOOT, ny - SIDE_FOOT * fy]])
+        c, a = out["foot_far"]
+        pm = np.clip(warp(premul(c, a), m, a.shape), 0.0, 1.0)
+        out["foot_near"] = (pm[:, :, :3] / np.maximum(pm[:, :, 3:], 1e-6) * 255.0, pm[:, :, 3])
     return out
 
 
+#: The side-on near foot's size against the far foot's.
+SIDE_FOOT = 1.08
 #: The poses a preview shows: (the label, the clip, the time in it), or a pose itself.
 SHOTS = (("rest", None, 0.0), ("walk", "walk@%s", 0.25), ("walk", "walk@%s", 0.8), ("run", "run@%s", 0.2),
          ("strike", "strike-one-hand", 0.12), ("cast", "cast", 0.25), ("kneel", "kneel", 0.8), ("cheer", "cheer", 0.5))
 
+#: The walk and the run, for looking at the feet.
+MOVING = (("walk", "walk@%s", 0.0), ("walk", "walk@%s", 0.3), ("walk", "walk@%s", 0.6), ("walk", "walk@%s", 0.85),
+          ("run", "run@%s", 0.0), ("run", "run@%s", 0.15), ("run", "run@%s", 0.3), ("run", "run@%s", 0.45))
 
-def preview(base, out, folders):
+
+def preview(base, out, folders, shots=SHOTS, side_foot=False):
     import clips as C
     doc = json.load(open(os.path.join(ROOT, "Content", "Characters", "Parts", "clips.json"), encoding="utf-8"))
     known = doc["rigs"]["humanoid"]["clips"]
@@ -340,9 +387,9 @@ def preview(base, out, folders):
     w, h = CANVAS
     rows = []
     for folder in folders:
-        layers = layers_of(base, folder, bodies)
+        layers = layers_of(base, folder, bodies, side_foot)
         row = []
-        for _, name, t in SHOTS:
+        for _, name, t in shots:
             pose = C.sample(known[name % base if name and "%s" in name else name], t) if name else {}
             shot = K.render(base, layers, pose, size=(w + 240, h), origin=(120, 0))
             row.append(shot[::2, ::2, :3])
@@ -359,7 +406,9 @@ def main(argv):
     elif len(argv) == 4 and argv[0] == "cut":
         cut(argv[1], argv[2], argv[3])
     elif len(argv) >= 4 and argv[0] == "preview":
-        preview(argv[1], argv[2], argv[3:])
+        side = "--side-foot" in argv
+        moving = "--moving" in argv
+        preview(argv[1], argv[2], [a for a in argv[3:] if not a.startswith("--")], MOVING if moving else SHOTS, side)
     else:
         sys.exit(__doc__)
 
