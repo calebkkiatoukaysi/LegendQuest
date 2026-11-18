@@ -1943,6 +1943,7 @@ def build(check, vector=VECTOR):
         name = titles.get(pid[:-2] if pid.endswith("-f") else pid)
         if name and re.match(r"(hair|beard|jewel|skin|ears|horns)-\d\d", pid):
             entry["name"] = name
+        import body_parts  # which armors have their near leg over their torso (their cards say so)
         if slot == "armor" and body_parts.legs_over(pid):
             entry["legsOver"] = True
         if pid in pieced:
@@ -2191,6 +2192,7 @@ def body_credits():
     for folder in sorted(p for p in glob.glob(os.path.join(SOURCE, FOLDERS["armor"], "armor-*")) if os.path.isdir(p)):
         aid = os.path.basename(folder)
         # Who painted it: ChatGPT, or Gemini where the armor's card says so (tools/gemini_armor.py).
+        import body_parts  # who painted an armor (its card says when it was Gemini)
         gemini = body_parts.painted_with_gemini(aid)
         painter = "Gemini" if gemini else "ChatGPT"
         credit = GEMINI_CREDIT if gemini else CREDIT
