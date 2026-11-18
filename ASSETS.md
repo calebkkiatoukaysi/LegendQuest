@@ -3586,3 +3586,58 @@ Icon.ico - MonoGame project icon, unmodified from the MonoGame DesktopGL project
 Icon.bmp - MonoGame project icon, unmodified from the MonoGame DesktopGL project template, created by the MonoGame Team (https://www.monogame.net/) and distributed under the Microsoft Public License (https://licenses.nuget.org/MS-PL)
 
 app.manifest - the Windows application manifest, unmodified from the MonoGame DesktopGL project template, created by the MonoGame Team (https://www.monogame.net/) and distributed under the Microsoft Public License (https://licenses.nuget.org/MS-PL)
+
+## Room background source illustrations (November 2026)
+
+Original artwork made with ChatGPT built-in image generation from the room brief, supplied by Caleb Kiatoukaysi for Legend Quest. Source candidates awaiting layout fitting; see art/rooms/README.md for progress and review notes.
+
+- `art/rooms/generated/gulls-wager/deck/bg-1.png` - gulls-wager/deck/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gulls-wager/deck/bg-2.png` - gulls-wager/deck/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gulls-wager/deck/bg-3.png` - gulls-wager/deck/bg-3.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/bg-1.png` - docks/harbourside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/bg-2.png` - docks/harbourside/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/bg-3.png` - docks/harbourside/bg-3.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/fish-market/bg-1.png` - docks/fish-market/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/fish-market/bg-2.png` - docks/fish-market/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/fish-market/bg-3.png` - docks/fish-market/bg-3.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/pier/bg-1.png` - docks/pier/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/bg-1.png` - questeria/gate-plaza/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/bg-2.png` - questeria/gate-plaza/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/bg-3.png` - questeria/gate-plaza/bg-3.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/bg-1.png` - questeria/festival-square/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/bg-2.png` - questeria/festival-square/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/bg-3.png` - questeria/festival-square/bg-3.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/lantern-market/bg-1.png` - questeria/lantern-market/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/lantern-market/bg-2.png` - questeria/lantern-market/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/sunspire-steps/bg-1.png` - questeria/sunspire-steps/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/thornbridge-gate/bg-1.png` - questeria/thornbridge-gate/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gilded-flagon/taproom/bg-1.png` - gilded-flagon/taproom/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gilded-flagon/taproom/bg-2.png` - gilded-flagon/taproom/bg-2.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/shop/inside/bg-1.png` - shop/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/forge/inside/bg-1.png` - forge/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/bakery/inside/bg-1.png` - bakery/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/chapel/inside/bg-1.png` - chapel/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/cottage-a/inside/bg-1.png` - cottage-a/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/cottage-b/inside/bg-1.png` - cottage-b/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/warehouse/inside/bg-1.png` - warehouse/inside/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/bg-1.png` - road/farmland/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/bg-2.png` - road/farmland/bg-2.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/bg-3.png` - road/farmland/bg-3.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/bg-1.png` - road/fork/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/bg-2.png` - road/fork/bg-2.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/bg-3.png` - road/fork/bg-3.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/steps/bg-1.png` - barrow/steps/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/hall/bg-1.png` - barrow/hall/bg-1.png, initial illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/hall/bg-2.png` - barrow/hall/bg-2.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/hall/bg-3.png` - barrow/hall/bg-3.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/side-room/bg-1.png` - barrow/side-room/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/bg-1.png` - mirewood/edge/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/bg-2.png` - mirewood/edge/bg-2.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/bg-3.png` - mirewood/edge/bg-3.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/bg-1.png` - mirewood/deep/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/bg-2.png` - mirewood/deep/bg-2.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/bg-3.png` - mirewood/deep/bg-3.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/camp/bg-1.png` - mirewood/camp/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/lip/bg-1.png` - mirewood-quarry/lip/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/lip/bg-2.png` - mirewood-quarry/lip/bg-2.png, detailed revision; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/cut/bg-1.png` - mirewood-quarry/cut/bg-1.png, detailed revision; supplied by Caleb Kiatoukaysi.
