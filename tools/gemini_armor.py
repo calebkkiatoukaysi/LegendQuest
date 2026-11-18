@@ -3,7 +3,7 @@
     python tools/gemini_armor.py <armor-id> [--tries 4] [--out <folder>] [--keep] [--fantasy] [--like <armor-id>]
     python tools/gemini_armor.py <armor-id> --prompt      # only print the whole prompt, to paste by hand
 
---fantasy asks for a heroic high-fantasy version of the outfit (the FANTASY block below). --like attaches an
+--fantasy asks for a heroic high-fantasy version of the outfit in a flat vector cel style (the FANTASY and VECTOR blocks below). --like attaches an
 armor that's already painted (its sheet in tools/source/characters/sheets, on the same wide layout) as the
 style to match: its line, its shading and its finish, not its outfit.
 
@@ -45,6 +45,8 @@ API = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateConten
 PAINTER, WRITER = "gemini-3-pro-image", "gemini-3.8-flash"
 #: Darker than this (brightest channel) is the black background, as in tools/body_parts.py.
 BLACK = 14
+#: The darkest a piece's own shadow is kept: off the background's black, so the cut doesn't key it out.
+INK = (28, 24, 38)
 #: The wide template's pieces, against the armor template's.
 WIDE = 0.75
 
@@ -69,21 +71,37 @@ EACH = ('EACH PIECE. Dress each piece on its own, as if nothing were in front of
 FIT = ('FIT. Every piece keeps the silhouette it has in the attached image: the same length, the same angle and the same '
     "position, with the outfit adding only a thin layer round it (about a tenth of the piece's width at most). Draw bulky "
     "parts compact: a shoulder guard hugs the shoulder, and a cuff, a boot top, a sleeve end or a skirt hem doesn't flare. "
-    'No piece is drawn longer than it is, and the fists stay at the angle they are. The torso piece ends where its shorts '
-    'end: whatever the outfit, its clothing stops in a clean hem at the bottom edge of the shorts, and no skirt, sash end, '
-    'coat front or tail hangs below it.  If in doubt, draw the piece a little smaller and leave more black round it.')
+    'No piece is drawn longer than it is, and the fists stay at the angle they are. The torso piece includes the hips and '
+    'the crotch: its clothing covers the WHOLE of the shorts, both leg openings and the crotch between them, following the '
+    "shorts' own outline all the way down (a fauld and a mail or plate brief, a codpiece, the seat of the trousers, the top "
+    'of a skirt), so that when the thighs are put back under it there is no hole between the legs and no underwear shows. '
+    'It stops there, in a clean hem along the bottom edge of the shorts: no skirt, sash end, coat front or tail hangs lower. '
+    'If in doubt, draw the piece a little smaller and leave more black round it.')
+JOINTS = ('JOINTS. Cut the outfit at the joints the way a professional 2D cut-out (paper-doll) rig is cut. Every limb piece ends '
+    'in a clean, rounded cap at each of its joints, fully painted and outlined, like a ball the next piece turns over: no '
+    'ragged, torn, hollow or half-drawn ends, and no straight sawn-off edges. Each piece is a complete, self-contained shape '
+    'that reads on its own. Keep its important artwork (gems, emblems, trim patterns, buckles, engraving) in the middle of '
+    'the piece and clear of its two ends, because the ends are overlapped by the next piece when the figure is put together: '
+    'most of the artwork must stay visible on the assembled figure.')
 LOOK = ("LOOK. Match the attached image's own art style exactly: bold, clean deep-brown outlines (never pure black), heavier on "
     "each piece's outer edge; flat cel shading with two or three tones per material, hard-edged shadows and one soft "
     'highlight; light from the upper left. Grounded, well-made costume detail: seams, straps, buckles, rivets, stitching, a '
     'little wear. Original design; no pixel art, no 3D render, no gradients or painterly blur.')
 FANTASY = ("FANTASY DIRECTION. Make this a heroic high-fantasy version of the outfit, the kind a legendary armour set has in a "
-    "classic 2D fantasy online role-playing game, as an original design: bold, iconic shapes and a strong three-part colour scheme "
-    "of one deep base colour, one bright trim metal and one glowing accent colour; layered, sculpted plates or panels with swept, "
-    "pointed edges and raised trim along every rim; one large glowing gem set in the chest and smaller ones on the shoulder guards, "
-    "the knees and the backs of the hands; engraved runes or filigree that glow faintly in the accent colour; a few deliberate fins "
-    "or points on the shoulder guards, elbows and knees. Clean and readable, never cluttered: big simple shapes first, detail "
+    "classic 2D fantasy online role-playing game, as an original design: bold, iconic shapes; layered, sculpted plates or panels "
+    "with swept, pointed edges and raised trim along every rim; one large glowing gem set in the chest and smaller ones on the "
+    "shoulder guards, the knees and the backs of the hands; engraved runes or filigree that glow faintly; a few deliberate fins or "
+    "points on the shoulder guards, elbows and knees. Clean and readable, never cluttered: big simple shapes first, detail "
     "second, and no skulls. All of it stays inside the FIT rule: the flair comes from shape language, trim, colour and glow, not "
     "from making any piece bigger or longer.")
+VECTOR = ("VECTOR CEL STYLE (this replaces the shading in LOOK). Draw it as clean 2D vector art, as if built from flat filled shapes: "
+    "a thick, even outer line round each piece and thinner lines for the detail inside it; hard cel shading only, in sharp, "
+    "unblended shadow shapes, with no gradients, no airbrush and no texture noise. Three flat colour roles, each kept as its own "
+    "clean areas so it could be re-tinted: a BASE colour for the main plates or cloth, a TRIM colour for rims, edges and straps, "
+    "and an ACCENT colour for gems, runes and glow. Depth comes from bold, solid patches of very dark ink on the underside of "
+    "plates and limbs and inside overlaps: use a deep blue-black ink (about #1c1826), NEVER pure black #000000, which is only "
+    "for the background. Shiny metal carries crisp white or light-tinted streaks of highlight along its top edges; leather and "
+    "stone carry small clusters of dark nicks and cracks instead.")
 STYLE_OF = ("IMAGE 2 is a finished sheet for a DIFFERENT outfit, painted earlier for the same game. Match its art style exactly: the "
     "weight and colour of its outlines, its flat cel shading and how many tones it uses, its level of detail and its finish, so "
     "the two look like one artist's work. Do not copy its outfit, its colours or its shapes, and paint only on IMAGE 1's pieces.")
@@ -92,7 +110,7 @@ RULES = """You are preparing a brief for an illustrator who paints an outfit ont
 Rewrite the outfit below as exactly seven lines, one per kind of piece, in this order and with these labels: TORSO, EACH UPPER ARM, EACH FOREARM, EACH FIST, EACH THIGH, EACH SHIN, EACH FOOT. Rules:
 - Say only what is painted ON that piece. Keep every colour, material, pattern and detail of the outfit, and give each detail to the one piece it sits on.
 - Nothing hangs across a gap. A garment that covers a joint is divided there: the part above goes on the upper piece, the part below on the lower piece, each wrapped round its own piece like a sleeve. So a robe, gown, skirt, long coat or long mail coat is: its body on the TORSO, ending at the bottom edge of the shorts; then on EACH THIGH a panel of the same cloth wrapped all the way round that thigh; then, if it is long enough, on EACH SHIN a panel wrapped round that shin, carrying the hem and its trim. Never describe one skirt spanning both legs. A long or wide sleeve is divided at the elbow the same way, and it hugs the arm: say that it does not flare.
-- The TORSO line always says what covers the shorts (belt, trouser top, skirt top, tassets drawn short), so no underwear shows, and that the torso's clothing ends in a clean hem level with the bottom edge of the shorts: nothing on it hangs lower, so sash ends, belt ends, tabard tails and coat fronts are tucked in or cut off at that hem.
+- The TORSO line always says what covers the hips and the crotch: the whole of the shorts, both leg openings and the crotch between them (a fauld and a mail or plate brief, a codpiece, the seat of the trousers, a skirt top), so no underwear shows and there is no hole between the legs, and that it ends in a clean hem along the bottom edge of the shorts: nothing on it hangs lower, so sash ends, belt ends, tabard tails and coat fronts are tucked in or cut off at that hem.
 - Plates and guards go on one piece each: a shoulder guard on the upper arm, an elbow guard on the top of the forearm, a knee guard on the top of the shin, a tasset on the upper front of the thigh.
 - If a piece is bare, say "bare skin, the body's warm tan". Fists are gloved or bare and closed.
 - Plain words, one or two sentences per line, no preamble and nothing after the seventh line.
@@ -166,27 +184,33 @@ def recompose(painted_path, tpl_path, wide_path, out_path, a=(0.0, 0.0), b=1.0, 
         ys, xs = np.nonzero(keep)
         x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
         crop = big[y0:y1, x0:x1].copy(); crop[~keep[y0:y1, x0:x1]] = 0
+        inside = ndi.binary_fill_holes(ndi.binary_closing(keep[y0:y1, x0:x1], iterations=2)) & (own_big[y0:y1, x0:x1] == wi)
+        dark = inside & (crop.max(2) <= BLACK + 6)               # a black shadow painted inside the piece is ink, not background
+        crop[dark] = np.maximum(crop[dark], INK)
         allowed = (own_t == ti) & ~edge
         allowed[:8] = allowed[-8:] = False; allowed[:, :8] = allowed[:, -8:] = False
         guide = tl == ti; ga = float(guide.sum())
         gx0, gy0, gx1, gy1 = p['box']; gcx, gcy = (gx0 + gx1) / 2.0, (gy0 + gy1) / 2.0
-        f0 = 1.0 / (s * k); cands = []
+        f0 = 1.0 / (s * k); cands = []; shifts = range(-36, 37, 6)
         for step in range(0, 13):                    # as big as it was painted, or as big as its place has room for
             f = f0 * (1.0 - 0.03 * step)
             pim = Image.fromarray(crop).resize((max(1, round((x1 - x0) * f)), max(1, round((y1 - y0) * f))), Image.LANCZOS)
-            pa = np.asarray(pim); pm = pa.max(2) > BLACK; h, w = pm.shape
-            for dy in (-18, -12, -6, 0, 6, 12, 18):
-                for dx in (-18, -12, -6, 0, 6, 12, 18):
+            pa = np.asarray(pim); pm = pa.max(2) > BLACK; h, w = pm.shape; n = float(max(1, pm.sum())); here = []
+            for dy in shifts:
+                for dx in shifts:
                     ox, oy = int(round(gcx - w / 2.0)) + dx, int(round(gcy - h / 2.0)) + dy
                     if ox < 0 or oy < 0 or ox + w > W or oy + h > H: continue
                     cover = (pm & guide[oy:oy + h, ox:ox + w]).sum() / ga
-                    cut = (pm & ~allowed[oy:oy + h, ox:ox + w]).sum() / float(max(1, pm.sum()))
-                    cands.append((cover, cut, step, abs(dx) + abs(dy), ox, oy, pa, pm))
+                    cut = (pm & ~allowed[oy:oy + h, ox:ox + w]).sum() / n
+                    here.append((cover, cut, step, abs(dx) + abs(dy), ox, oy, pa, pm))
+            if not here: continue
+            fits = max(c[0] for c in here)           # how well it covers its body piece, at this size, wherever it sits best
+            cands += [c + (fits,) for c in here]
         if not cands: report.append('no room for the piece at %d,%d' % (cx, cy)); continue
-        top = max(c[0] for c in cands)
-        ok = [c for c in cands if c[0] >= min(0.93, top - 0.01)]      # it has to cover the body piece it dresses
-        low = min(c[1] for c in ok)                                   # and then lose as little as it can to its neighbours
-        cover, cut, step, _, ox, oy, pa, pm = min([c for c in ok if c[1] <= low + 0.004], key=lambda c: (c[2], c[3]))
+        top = max(c[8] for c in cands)
+        ok = [c for c in cands if c[8] >= min(0.93, top - 0.01)]      # big enough to cover the body piece it dresses,
+        low = min(c[1] for c in ok)                                   # then where it loses least to its neighbours: it may
+        cover, cut, step, _, ox, oy, pa, pm, _ = min([c for c in ok if c[1] <= low + 0.004], key=lambda c: (c[2], c[3]))   # slide off them
         layers.append((pa, ox, oy, int(ti)))
         report.append((round(1.0 - 0.03 * step, 2), round(float(cut), 3), round(float(cover), 2)))
     place(layers, own_t, edge, (W, H), out_path, a, b)
@@ -252,7 +276,7 @@ def by_piece(outfit, cache):
 
 
 def prompt(outfit, pieces, fantasy=False, like=False):
-    first = [TASK, LAYOUT, EACH, FIT, LOOK] + ([FANTASY] if fantasy else []) + ([STYLE_OF] if like else [])
+    first = [TASK, LAYOUT, EACH, FIT, JOINTS, LOOK] + ([FANTASY, VECTOR] if fantasy else []) + ([STYLE_OF] if like else [])
     text = "\n\n".join(first + ["OUTFIT, as a whole (for its look, colours and materials): " + outfit,
                                   "OUTFIT, piece by piece (this is what to paint on each piece; where the two differ, this wins):\n" + pieces])
     return text.replace("the attached image's", "IMAGE 1's").replace("the attached image", "IMAGE 1") if like else text
