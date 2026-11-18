@@ -34,7 +34,7 @@ else: only the joints, the shoulders and the tops of the thighs.
     <folder>/<bone>.png.
 
 `preview` draws each folder's pieces (over the body's own) at rest and in a few of the game's poses;
---moving shows the walk and the run instead, and --side-foot tries the near foot drawn side on (the
+--moving shows the jog and the run instead, and --side-foot tries the near foot drawn side on (the
 far foot's picture at the near ankle), toes the way the figure's going.
 
 Needs CPython, numpy and scipy.
@@ -374,8 +374,8 @@ SIDE_FOOT = 1.08
 SHOTS = (("rest", None, 0.0), ("walk", "walk@%s", 0.25), ("walk", "walk@%s", 0.8), ("run", "run@%s", 0.2),
          ("strike", "strike-one-hand", 0.12), ("cast", "cast", 0.25), ("kneel", "kneel", 0.8), ("cheer", "cheer", 0.5))
 
-#: The walk and the run, for looking at the feet.
-MOVING = (("walk", "walk@%s", 0.0), ("walk", "walk@%s", 0.3), ("walk", "walk@%s", 0.6), ("walk", "walk@%s", 0.85),
+#: The jog and the run, for looking at the lean and the feet.
+MOVING = (("jog", "jog@%s", 0.0), ("jog", "jog@%s", 0.18), ("jog", "jog@%s", 0.35), ("jog", "jog@%s", 0.53),
           ("run", "run@%s", 0.0), ("run", "run@%s", 0.15), ("run", "run@%s", 0.3), ("run", "run@%s", 0.45))
 
 

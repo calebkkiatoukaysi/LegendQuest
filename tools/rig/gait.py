@@ -210,10 +210,13 @@ class Gait:
                 each following the one before it by `lag` of the cycle
     lean        (forward, give): the torso's lean forward, and how much more it leans as the weight
                 comes down on each foot
+    head_level  how much of the lean the head takes back out: 1 keeps it level, less and it goes
+                forward with the body, chin down, as a runner's does
     """
 
     def __init__(self, base=None, **kw):
         self.near_roll = 0.6
+        self.head_level = 1.0
         self.__dict__.update(kw)
         self.base = base
         self.legs = {"near": Leg("near", base), "far": Leg("far", base)}
@@ -349,7 +352,7 @@ class Gait:
         # The torso gives a little as the weight comes down on each foot, a beat after the hips and
         # most of it a beat after that; the head stays level, nodding with it later still.
         pose["torso"] = forward + give * (0.4 * self.sink(q - 0.03) + 0.6 * self.sink(q - 0.06))
-        pose["head"] = -forward - 1.0 + 0.5 * give * self.sink(q - 0.1)
+        pose["head"] = -self.head_level * forward - 1.0 + 0.5 * give * self.sink(q - 0.1)
         carried = pose["torso"]
         sw_mid, sw_size = self.arms["swing"]
         bd_mid, bd_size = self.arms["bend"]
@@ -404,15 +407,15 @@ class Gait:
 # --------------------------------------------------------------------------- #
 
 def jog(base=None):
-    """The party's pace: an upright, steady jog, a short flight between steps, the elbows bent near
-    square and pumping, the torso leaning a little into it."""
+    """The party's pace: a runner's jog, the body leaning well into it from the hips and the head
+    going with it, a short flight between steps, the elbows bent near square and pumping."""
     return Gait(base, period=0.7, speed=world_speed(GAME_WALK_SPEED), duty=0.38, ahead=0.4,
                 knee=[(0.0, 18.0), (0.45, 40.0), (1.0, 16.0)], land=-8.0, flat=0.22, peel=0.55, off=28.0,
                 swing={"lean": [(0.25, -10.0), (0.55, 16.0), (0.78, 28.0)],
                        "bend": [(0.18, 52.0), (0.42, 92.0), (0.66, 70.0), (0.86, 34.0)],
                        "foot": [(0.3, 22.0), (0.62, 6.0), (0.85, -4.0)]},
-                arms={"swing": (-10.0, 24.0), "bend": (80.0, 10.0), "wrist": (-6.0, 6.0), "lag": 0.06},
-                lean=(6.0, 1.2))
+                arms={"swing": (-8.0, 32.0), "bend": (84.0, 12.0), "wrist": (-6.0, 6.0), "lag": 0.06},
+                lean=(14.0, 1.8), head_level=0.7)
 
 
 def walk(base=None):
@@ -429,14 +432,15 @@ def walk(base=None):
 
 
 def run(base=None):
-    """A cutscene's run: a longer flight, a deeper lean, the knees and arms driving harder."""
+    """A cutscene's run, a sprint: a longer flight, the body pitched right forward over the driving
+    leg, chin down, the knees and arms driving hard."""
     return Gait(base, period=0.56, speed=world_speed(GAME_WALK_SPEED * 1.6), duty=0.31, ahead=0.4,
                 knee=[(0.0, 20.0), (0.45, 46.0), (1.0, 18.0)], land=-6.0, flat=0.2, peel=0.5, off=34.0,
                 swing={"lean": [(0.22, -16.0), (0.55, 24.0), (0.78, 40.0)],
                        "bend": [(0.2, 70.0), (0.42, 118.0), (0.66, 92.0), (0.86, 40.0)],
                        "foot": [(0.3, 30.0), (0.62, 8.0), (0.85, -4.0)]},
-                arms={"swing": (-12.0, 34.0), "bend": (84.0, 14.0), "wrist": (-8.0, 8.0), "lag": 0.06},
-                lean=(11.0, 1.6))
+                arms={"swing": (-8.0, 40.0), "bend": (92.0, 16.0), "wrist": (-8.0, 8.0), "lag": 0.06},
+                lean=(24.0, 2.4), head_level=0.55)
 
 
 CYCLES = {"jog": jog, "walk": walk, "run": run}
