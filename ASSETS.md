@@ -443,6 +443,8 @@ tools/split_bases.py - written by Caleb Kiatoukaysi for Legend Quest, stands the
 
 tools/body_parts.py - written by Caleb Kiatoukaysi for Legend Quest, pulls a mannequin apart into its fourteen pieces (the torso one piece, from the neck to the shorts) as a template to paint them on, and puts a painted template's pieces back on the skeleton at rest, each found where it was painted and fitted to its own bone (its size, turn and place), one picture per piece, standing the figure up from them as its base
 
+tools/gemini_armor.py - written for Legend Quest with Claude Code, paints an armor from Story/13-art-prompts.md §5 with Google's Gemini on a wide-gap copy of its armor template, the outfit said piece by piece, puts each piece back on its body piece on the template and tries again till tools/body_parts.py's check says GOOD
+
 tools/rig/scissors.py - written by Caleb Kiatoukaysi for Legend Quest, cuts a whole mannequin into its fourteen pieces exactly along its drawn lines (the jawline, each joint's seam), each line going with the piece in front and each piece carried on, in its own colours, under the ones that hide it; put back together the pieces are the picture again, pixel for pixel
 
 tools/source/characters/body-parts-man.png - the man's mannequin pulled apart into its fourteen pieces on black, the template ChatGPT paints the man's body on (Story/13 §3.0); made by tools/body_parts.py from the jointed mannequin of 2026-11-09, cut by tools/rig/scissors.py
