@@ -2158,7 +2158,11 @@ def body_credits():
              "tools/rig/scissors.py - written by Caleb Kiatoukaysi for Legend Quest, cuts a whole mannequin into its "
              "fourteen pieces exactly along its drawn lines (the jawline, each joint's seam), each line going with the "
              "piece in front and each piece carried on, in its own colours, under the ones that hide it; put back "
-             "together the pieces are the picture again, pixel for pixel", ""]
+             "together the pieces are the picture again, pixel for pixel", "",
+             "tools/gemini_armor.py - written for Legend Quest with Claude Code, paints an armor from "
+             "Story/13-art-prompts.md §5 with Google's Gemini on a wide-gap copy of its armor template, the outfit said "
+             "piece by piece, puts each piece back on its body piece on the template at the smallest size that covers it, "
+             "and tries again till tools/body_parts.py's check says GOOD", ""]
     for base, who in (("base-male", "man"), ("base-female", "woman")):
         png = os.path.join(SOURCE, "body-parts-%s.png" % who)
         if os.path.exists(png):
