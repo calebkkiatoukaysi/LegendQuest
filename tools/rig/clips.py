@@ -485,6 +485,11 @@ def idle():
          notes="breathing twice and easing the weight across and back, the feet planted")
 
 
+#: Running, the near foot is drawn side on, toes the way the figure's going (the far foot's picture
+#: at the near ankle: RigComposer's "foot_near.side"), not three-quarters on as it stands.
+SIDE_FOOT = ("jog", "run")
+
+
 def locomotion():
     """The jog, the walk and the run from gait.py: one on the bases averaged, and one for each
     base's own proportions so its planted feet don't slide."""
@@ -493,7 +498,8 @@ def locomotion():
         for base in [None] + sorted(skeleton.JOINTS):
             g = make(base)
             clip(name if base is None else name + "@" + base, g.period, g.keys(), loop=True, events=g.events(),
-                 speed=g.speed, drag=False, notes=None if base else (make.__doc__ or "").split("\n")[0].strip())
+                 speed=g.speed, drag=False, notes=None if base else (make.__doc__ or "").split("\n")[0].strip(),
+                 swaps=[(0, "foot_near", "side")] if name in SIDE_FOOT else ())
     alias("jog", "jog-in", "hurry")
     alias("walk", "walk-slow", "stroll")
     alias("run", "run-in")

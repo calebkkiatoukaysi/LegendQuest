@@ -52,6 +52,19 @@ public static class RigComposer
     /// <summary>What the far hand holds, just under it, moving with it.</summary>
     public const string Offhand = "offhand";
 
+    /// <summary>
+    /// The near foot drawn side on, toes the way the figure faces: the far foot's picture (which is
+    /// painted that way) at the near ankle, a little bigger for being nearer. The near foot's own is
+    /// three-quarters on, toes to the camera, which is right standing and wrong running; a clip that
+    /// swaps foot_near for "side" (the jog and the run) is drawn with this one instead.
+    /// </summary>
+    public const string SideFoot = NearFoot + ".side";
+
+    /// <summary>How much bigger the side-on near foot is than the far foot it's made from.</summary>
+    private const float SideFootScale = 1.08f;
+
+    private const string NearFoot = "foot_near", FarFoot = "foot_far";
+
     /// <summary>The bone the cape moves with, and the hands that hold things.</summary>
     private const string Torso = "torso", NearHand = "hand_near", FarHand = "hand_far", HeadBone = "head";
 
@@ -139,6 +152,9 @@ public static class RigComposer
             string bone = RidesOn(key);
             layers.Add(new Layer(key, bone, layer, jointAt[bone]));
             Over(canvas, canvasWidth, layer, canvasWidth, canvasHeight, 0, 0);
+            // The near foot's other picture goes with it, in its place in the order; it isn't on the whole picture.
+            if (key == NearFoot && pieces.TryGetValue(FarFoot, out Color[] far) && jointAt.ContainsKey(FarFoot))
+                layers.Add(new Layer(SideFoot, bone, Moved(far, canvasWidth, canvasHeight, jointAt[FarFoot], jointAt[NearFoot], SideFootScale), jointAt[bone]));
         }
 
         // The head box goes where the head did: on the neck where the morph moved it, at the head's size.
@@ -148,6 +164,33 @@ public static class RigComposer
         var box = new Rectangle((int)MathF.Floor(headLeft), (int)MathF.Floor(headTop), (int)MathF.Ceiling(head[2] * s), (int)MathF.Ceiling(head[3] * s));
         box = Rectangle.Intersect(box, new Rectangle(0, 0, canvasWidth, canvasHeight));
         return new Result(canvas, canvasWidth, canvasHeight, root - at0, box, layers, morph.Move(sockets[Sockets.NearHand], root) - at0, jointAt);
+    }
+
+    /// <summary>A premultiplied picture on the canvas drawn again about another point and bigger or smaller: what was at `from` is at `to`, blended from the nearest four.</summary>
+    private static Color[] Moved(Color[] pixels, int width, int height, Vector2 from, Vector2 to, float scale)
+    {
+        var moved = new Color[pixels.Length];
+        for (int y = 0; y < height; y++)
+        {
+            float sy = from.Y + (y - to.Y) / scale;
+            int y0 = (int)MathF.Floor(sy);
+            if (y0 < 0 || y0 >= height - 1) continue;
+            float fy = sy - y0;
+            for (int x = 0; x < width; x++)
+            {
+                float sx = from.X + (x - to.X) / scale;
+                int x0 = (int)MathF.Floor(sx);
+                if (x0 < 0 || x0 >= width - 1) continue;
+                float fx = sx - x0;
+                Color a = pixels[y0 * width + x0], b = pixels[y0 * width + x0 + 1], c = pixels[(y0 + 1) * width + x0], d = pixels[(y0 + 1) * width + x0 + 1];
+                if ((a.A | b.A | c.A | d.A) == 0) continue;
+                float wa = (1f - fx) * (1f - fy), wb = fx * (1f - fy), wc = (1f - fx) * fy, wd = fx * fy;
+                moved[y * width + x] = new Color(
+                    (int)MathF.Round(a.R * wa + b.R * wb + c.R * wc + d.R * wd), (int)MathF.Round(a.G * wa + b.G * wb + c.G * wc + d.G * wd),
+                    (int)MathF.Round(a.B * wa + b.B * wb + c.B * wc + d.B * wd), (int)MathF.Round(a.A * wa + b.A * wb + c.A * wc + d.A * wd));
+            }
+        }
+        return moved;
     }
 
     /// <summary>Which piece a part goes into: its bone for a body's or an armor's piece; the head for what's on the head; the cape's, or the held things' own.</summary>
@@ -166,6 +209,7 @@ public static class RigComposer
         Cape => Torso,
         Weapon => NearHand,
         Offhand => FarHand,
+        SideFoot => NearFoot,
         _ => key,
     };
 

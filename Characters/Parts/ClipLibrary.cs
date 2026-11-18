@@ -34,9 +34,21 @@ public enum ClipEase
 /// <param name="Front">The bones it draws in front of the chest, by name; empty for none.</param>
 /// <param name="Speed">How fast its planted feet are left behind, in the clips' units a second; 0 for a clip that doesn't go anywhere.</param>
 /// <param name="Steps">When each foot lands, in seconds into it; empty for none.</param>
+/// <param name="Swaps">The pieces it draws another picture of, and from when: a bone's piece swapped for its "bone.part" (RigComposer's variants); empty for none.</param>
 public sealed record Clip(string Name, float Length, bool Loop, ClipEase Ease, IReadOnlyList<ClipTrack> Tracks, IReadOnlyList<string> Front,
-    float Speed, IReadOnlyList<float> Steps)
+    float Speed, IReadOnlyList<float> Steps, IReadOnlyList<ClipSwap> Swaps)
 {
+    /// <summary>The other picture a bone's piece is drawn as at a time into it (its last swap by then), or null for its own.</summary>
+    /// <param name="bone">The bone.</param>
+    /// <param name="time">Seconds into it.</param>
+    public string PartOf(string bone, float time)
+    {
+        string part = null;
+        for (int i = 0; i < Swaps.Count; i++)
+            if (Swaps[i].Bone == bone && Swaps[i].Time <= time) part = Swaps[i].Part;
+        return part;
+    }
+
     /// <summary>Every bone's pose at a time into it, held at its ends: what it doesn't move, at rest.</summary>
     /// <param name="time">Seconds into it.</param>
     /// <param name="into">Each bone's pose, by its place in the skeleton, filled in.</param>
@@ -250,9 +262,19 @@ public static class ClipLibrary
         if (json.TryGetProperty("events", out JsonElement events) && events.ValueKind == JsonValueKind.Array)
             foreach (JsonElement ev in events.EnumerateArray())
                 if (ev.GetArrayLength() >= 2 && ev[1].GetString() == "step") steps.Add(ev[0].GetSingle());
-        return new Clip(name, MathF.Max(0.01f, length), loop, ease, tracks, front, speed, steps);
+        var swaps = new List<ClipSwap>();
+        if (json.TryGetProperty("swaps", out JsonElement sw) && sw.ValueKind == JsonValueKind.Array)
+            foreach (JsonElement s in sw.EnumerateArray())
+                if (s.GetArrayLength() >= 3) swaps.Add(new ClipSwap(s[0].GetSingle(), s[1].GetString(), s[2].GetString()));
+        return new Clip(name, MathF.Max(0.01f, length), loop, ease, tracks, front, speed, steps, swaps);
     }
 }
+
+/// <summary>A clip drawing a bone's piece as another picture of it from a time on.</summary>
+/// <param name="Time">From when, in seconds into the clip.</param>
+/// <param name="Bone">The bone whose piece it is.</param>
+/// <param name="Part">Which other picture: the piece "bone.part".</param>
+public readonly record struct ClipSwap(float Time, string Bone, string Part);
 
 /// <summary>
 /// A figure's clip playing: how far into it, how fast, and the pose it's blending from, so going

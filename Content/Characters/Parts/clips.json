@@ -2260,6 +2260,13 @@
        "step"
       ]
      ],
+     "swaps": [
+      [
+       0,
+       "foot_near",
+       "side"
+      ]
+     ],
      "notes": "The party's pace: an upright, steady jog, a short flight between steps, the elbows bent near"
     },
     "jog@base-female": {
@@ -2323,6 +2330,13 @@
        0.35,
        "step"
       ]
+     ],
+     "swaps": [
+      [
+       0,
+       "foot_near",
+       "side"
+      ]
      ]
     },
     "jog@base-male": {
@@ -2385,6 +2399,13 @@
       [
        0.35,
        "step"
+      ]
+     ],
+     "swaps": [
+      [
+       0,
+       "foot_near",
+       "side"
       ]
      ]
     },
@@ -3790,6 +3811,13 @@
        "step"
       ]
      ],
+     "swaps": [
+      [
+       0,
+       "foot_near",
+       "side"
+      ]
+     ],
      "notes": "A cutscene's run: a longer flight, a deeper lean, the knees and arms driving harder."
     },
     "run@base-female": {
@@ -3853,6 +3881,13 @@
        0.28,
        "step"
       ]
+     ],
+     "swaps": [
+      [
+       0,
+       "foot_near",
+       "side"
+      ]
      ]
     },
     "run@base-male": {
@@ -3915,6 +3950,13 @@
       [
        0.28,
        "step"
+      ]
+     ],
+     "swaps": [
+      [
+       0,
+       "foot_near",
+       "side"
       ]
      ]
     },

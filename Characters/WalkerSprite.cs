@@ -436,8 +436,11 @@ public class WalkerSprite
         _order.Clear();
         IReadOnlyList<string> front = _player.Clip?.Front ?? Array.Empty<string>();
         int afterHead = -1;
+        // Running, the near foot is its side-on picture (the clip swaps it); else its own.
+        bool sideFoot = _player.Clip?.PartOf("foot_near", _player.Time) == "side" && HasPiece(body, RigComposer.SideFoot);
         foreach (ImportedFigure.Piece piece in body.Rig)
         {
+            if (piece.Key == (sideFoot ? "foot_near" : RigComposer.SideFoot)) continue;
             if (front.Count > 0 && Contains(front, piece.Bone)) continue;
             _order.Add(piece);
             if (piece.Key == "head") afterHead = _order.Count;
@@ -446,7 +449,7 @@ public class WalkerSprite
         {
             int at0 = afterHead < 0 ? _order.Count : afterHead;
             foreach (ImportedFigure.Piece piece in body.Rig)
-                if (Contains(front, piece.Bone)) _order.Insert(at0++, piece);
+                if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && Contains(front, piece.Bone)) _order.Insert(at0++, piece);
         }
 
         for (int k = 0; k < _order.Count; k++)
@@ -468,6 +471,13 @@ public class WalkerSprite
         float size = body.Size.Y * CastGlowSize * (0.85f + 0.15f * MathF.Sin(_breath * 9f));
         spriteBatch.Draw(_shadow, Place(_at[hand]), null, CastGlow * (_glow * 0.75f * Opacity), 0f, new Vector2(_shadow.Width, _shadow.Height) / 2f,
             size / _shadow.Width, SpriteEffects.None, MathF.Max(0f, layerDepth - PieceStep));
+    }
+
+    private static bool HasPiece(ImportedFigure body, string key)
+    {
+        foreach (ImportedFigure.Piece piece in body.Rig)
+            if (piece.Key == key) return true;
+        return false;
     }
 
     private static bool Contains(IReadOnlyList<string> names, string name)
