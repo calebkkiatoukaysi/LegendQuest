@@ -1,0 +1,14 @@
+{
+ "base": "base-male",
+ "pose": {
+  "arm_near_up": 30.0,
+  "arm_far_up": -40.0,
+  "leg_near_up": 4.0,
+  "leg_far_up": -7.0
+ },
+ "scale": 1.0,
+ "origin": [
+  -22.0,
+  -75.5
+ ]
+}

@@ -2242,6 +2242,12 @@ Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape 
 
 tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair, armor, helm, cape and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base
 
+tools/dress_pose.py - written by Caleb Kiatoukaysi for Legend Quest, a trial of armors painted whole: stands the painted body in a dressing pose (arms out, legs apart) as a template to paint one outfit on, and cuts the painted figure into the skeleton's pieces by the body under it, a skirt kept whole on the torso and each piece carried on under the ones over it
+
+tools/source/characters/dress-pose-man.png - the painted man, less his head, stood in the dressing pose on black: the template an outfit is painted whole on; made by tools/dress_pose.py from the pieces in bodies/base-male
+
+tools/source/characters/dress-pose-man.json - where tools/dress_pose.py put the figure on dress-pose-man.png, and the pose; written by tools/dress_pose.py
+
 tools/sheet_fit.py - written by Caleb Kiatoukaysi for Legend Quest, finds a base under each cell of a sheet ChatGPT laid out its own way, at any scale and place (masked cross-correlation, coarse then fine), for part_sheet.py fit
 
 tools/source/characters/face-sheet-female.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
