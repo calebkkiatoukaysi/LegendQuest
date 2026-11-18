@@ -241,16 +241,25 @@ LEGS_OVER = "Thighs over the torso."
 
 
 def legs_over(armor):
-    """Whether an armor's Story/13 card says its thighs are drawn over its torso (the game's RigComposer.LegsOverTorso)."""
+    """Whether an armor's Story/13 card says its near thigh is drawn over its torso (the game's RigComposer.LegsOverTorso)."""
     import re
     text = open(STORY, encoding="utf-8").read()
     m = re.search(r"^#### `%s` · [^\n]*\n\n\*\*Basis:\*\* ([^\n]*)" % re.escape(armor or ""), text, re.M)
     return bool(m and LEGS_OVER in m.group(1))
 
 
+def painted_with_gemini(armor):
+    """Whether an armor's Story/13 card says it was painted with Gemini (tools/gemini_armor.py), not in ChatGPT."""
+    import re
+    text = open(STORY, encoding="utf-8").read()
+    m = re.search(r"^#### `%s` · [^\n]*\n\n\*\*Basis:\*\* ([^\n]*)" % re.escape(armor or ""), text, re.M)
+    return bool(m and "Painted with Gemini" in m.group(1))
+
+
 def legs_over_torso(draw):
-    """The pieces back to front with the legs moved to just in front of the torso."""
-    legs = [b for b in draw if b.startswith(("leg_", "foot_"))]
+    """The pieces back to front with the near leg moved to just in front of the torso; the far leg stays behind it,
+    where the hips hide the top of its thigh."""
+    legs = [b for b in draw if b in ("leg_near_up", "leg_near_low", "foot_near")]
     rest = [b for b in draw if b not in legs]
     at = rest.index("torso") + 1
     return tuple(rest[:at] + legs + rest[at:])

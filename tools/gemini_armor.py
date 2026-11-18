@@ -3,7 +3,7 @@
     python tools/gemini_armor.py <armor-id> [--tries 4] [--out <folder>] [--keep] [--fantasy] [--like <armor-id>] [--thighs-over]
     python tools/gemini_armor.py <armor-id> --prompt      # only print the whole prompt, to paste by hand
 
---thighs-over paints an armor whose thighs the game draws over its torso (a card whose Basis line says "Thighs over
+--thighs-over paints an armor whose near thigh the game draws over its torso (the far leg stays behind it) (a card whose Basis line says "Thighs over
 the torso." is painted that way without it, and imported that way by tools/import_parts.py). --fantasy asks for a heroic high-fantasy version of the outfit in a flat vector cel style (the FANTASY and VECTOR blocks below). --like attaches an
 armor that's already painted (its sheet in tools/source/characters/sheets, on the same wide layout) as the
 style to match: its line, its shading and its finish, not its outfit.
@@ -110,9 +110,11 @@ VECTOR = ("VECTOR CEL STYLE (this replaces the shading in LOOK). Draw it as clea
     "stone carry small clusters of dark nicks and cracks instead.")
 #: Said without a word about what's drawn over what: told the thighs go in front of the torso, Gemini paints them
 #: on top of it in the picture, joined to it.
-ORDER = ("THIGH TOPS AND HIPS. On this outfit the top end of each thigh piece will be seen whole, so finish it as a solid, closed, "
+ORDER = ("THIGH TOPS AND HIPS. On this outfit the top end of the near thigh (on the left) will be seen whole, so finish each thigh's top as a solid, closed, "
     "rounded hip cap (a hip plate, the top of a cuisse, the gathered top of a trouser leg), outlined all the way round and shaded "
-    "like the rest of the piece: never an open tube, a hollow, a dark opening, a lining showing inside or an unfinished edge. The "
+    "like the rest of the piece: never an open tube, a hollow, a dark opening, a lining showing inside or an unfinished edge. "
+    "That goes for BOTH thighs alike: the far thigh, on the right of the picture, is capped with the same solid plate as the near "
+    "one, seen from the same side, and we never look down into it. The "
     "lower sides of the torso's hip piece will be hidden, so keep its brief plain and put the torso's artwork (buckles, gems, "
     "engraving) on the belt line and the centre front only. This changes nothing in the LAYOUT: the thighs stay separate "
     "pieces below the torso, exactly where they are, with the same clear black gap between each thigh and the torso.")

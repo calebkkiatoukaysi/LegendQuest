@@ -20,7 +20,7 @@ namespace LegendQuest.Characters;
 /// <param name="SkinRatio">For a face, its skin against the base's; one for anything else.</param>
 /// <param name="Tones">The colour each of its two dye channels was painted, 0 to 1, or null for one it hasn't.</param>
 /// <param name="Bone">For one bone's piece of a body or an armor, the bone; null for a part that's whole.</param>
-/// <param name="LegsOver">For an armor's piece, whether the armor's legs are drawn over its torso.</param>
+/// <param name="LegsOver">For an armor's piece, whether the armor's near leg is drawn over its torso.</param>
 public sealed record PartImage(string Id, PartSlot Slot, string Base, int Width, int Height, Color[] Pixels, Color[] Mask, Vector2 Pivot, Vector3 SkinRatio, Vector3?[] Tones,
     string Bone = null, bool LegsOver = false);
 
@@ -125,7 +125,7 @@ public static class RigComposer
             jointAt[skeleton.Names[i]] = morph.Move(joints[skeleton.Joints[i]], root) - at0;
 
         // Back to front: the cape, then the bones as they're drawn, what each hand holds just under it.
-        // An armor painted with its thighs in front of its hips has the legs drawn straight after the torso.
+        // An armor painted with its near thigh in front of its hips has the near leg drawn straight after the torso.
         bool legsOver = false;
         foreach (PartImage part in parts) legsOver |= part.Slot == PartSlot.Armor && part.LegsOver;
         var order = new List<string> { Cape };
@@ -154,11 +154,11 @@ public static class RigComposer
         return new Result(canvas, canvasWidth, canvasHeight, root - at0, box, layers, morph.Move(sockets[Sockets.NearHand], root) - at0, jointAt);
     }
 
-    /// <summary>The bones back to front with the legs moved to just in front of the torso: thighs, shins and feet in their own order.</summary>
+    /// <summary>The bones back to front with the near leg (its thigh, shin and foot, in their own order) moved to just in front of the torso. The far leg stays behind the torso, whose hips hide the top of its thigh.</summary>
     /// <param name="draw">The skeleton's own order.</param>
     internal static IReadOnlyList<string> LegsOverTorso(IReadOnlyList<string> draw)
     {
-        static bool IsLeg(string bone) => bone.StartsWith("leg_", StringComparison.Ordinal) || bone.StartsWith("foot_", StringComparison.Ordinal);
+        static bool IsLeg(string bone) => bone is "leg_near_up" or "leg_near_low" or "foot_near";
         var order = new List<string>(draw.Count);
         foreach (string bone in draw)
         {

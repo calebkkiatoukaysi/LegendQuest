@@ -260,6 +260,8 @@ A_ANCHOR = "## Tiles and props"
 M_BEGIN = "#------------ Characters/Parts: written by tools/import_parts.py ------------#"
 M_END = "#---------------------------- end Characters/Parts ----------------------------#"
 CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py"
+#: And an armor painted with Gemini (its card's Basis says so).
+GEMINI_CREDIT = "made for Legend Quest with Google's Gemini by tools/gemini_armor.py, on Caleb Kiatoukaysi's key; cut by tools/import_parts.py"
 
 
 def fail(message):
@@ -2188,15 +2190,20 @@ def body_credits():
                       % (base, who, CREDIT), ""]
     for folder in sorted(p for p in glob.glob(os.path.join(SOURCE, FOLDERS["armor"], "armor-*")) if os.path.isdir(p)):
         aid = os.path.basename(folder)
+        # Who painted it: ChatGPT, or Gemini where the armor's card says so (tools/gemini_armor.py).
+        gemini = body_parts.painted_with_gemini(aid)
+        painter = "Gemini" if gemini else "ChatGPT"
+        credit = GEMINI_CREDIT if gemini else CREDIT
         if os.path.exists(os.path.join(SOURCE, "sheets", aid + ".png")):
-            lines += ["tools/source/characters/sheets/%s.png - %s as ChatGPT painted it on its armor template (Story/13 §5), "
-                      "kept as it came; tools/body_parts.py cuts it into the pieces in %s/%s; %s"
-                      % (aid, aid, FOLDERS["armor"], aid, CREDIT), ""]
+            lines += ["tools/source/characters/sheets/%s.png - %s as %s painted it on its armor template (Story/13 §5), %s; "
+                      "tools/body_parts.py cuts it into the pieces in %s/%s; %s"
+                      % (aid, aid, painter, "each piece put back on the template by tools/gemini_armor.py" if gemini else "kept as it came",
+                         FOLDERS["armor"], aid, credit), ""]
         for path in piece_files(folder):
             bone = os.path.basename(path)[:-4]
             lines += ["tools/source/characters/%s/%s/%s.png - %s's %s piece at rest on the canvas, cut by tools/body_parts.py "
-                      "from the outfit ChatGPT painted on its armor template; %s"
-                      % (FOLDERS["armor"], aid, bone, aid, bone.replace("_", " "), CREDIT), ""]
+                      "from the outfit %s painted on its armor template; %s"
+                      % (FOLDERS["armor"], aid, bone, aid, bone.replace("_", " "), painter, credit), ""]
     return lines
 
 

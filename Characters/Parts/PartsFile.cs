@@ -74,7 +74,7 @@ public sealed record PartsFile(
     /// <param name="Tones">The colour each dye channel was painted, 0 to 255, or null for a channel it hasn't; null for a part with no dye channels.</param>
     /// <param name="Pieces">A body's or an armor's pieces by bone, each where it is in the atlas: null for a part that's whole.</param>
     /// <param name="Name">A library hair's or an extra's name, as the creation screen shows it; null for other parts.</param>
-    /// <param name="LegsOver">For an armor, whether its legs are drawn over its torso (thighs in front of the hips) and not under it; false for other parts.</param>
+    /// <param name="LegsOver">For an armor, whether its near leg is drawn over its torso (the near thigh in front of the hips) and not under it; false for other parts.</param>
     public sealed record PartEntry(string Slot, string Base, string Socket, string Page, int[] Rect, float[] Pivot, int[] MaskRect, float[] Skin, float[][] Tones,
         Dictionary<string, PieceEntry> Pieces, string Name = null, bool LegsOver = false);
 
