@@ -2248,6 +2248,10 @@ tools/source/characters/dress-pose-man.png - the painted man, less his head, sto
 
 tools/source/characters/dress-pose-man.json - where tools/dress_pose.py put the figure on dress-pose-man.png, and the pose; written by tools/dress_pose.py
 
+tools/source/characters/dress-pose-woman.png - the painted woman, less her head, stood in the dressing pose on black: the template an outfit is painted whole on; made by tools/dress_pose.py from the pieces in bodies/base-female
+
+tools/source/characters/dress-pose-woman.json - where tools/dress_pose.py put the figure on dress-pose-woman.png, and the pose; written by tools/dress_pose.py
+
 tools/sheet_fit.py - written by Caleb Kiatoukaysi for Legend Quest, finds a base under each cell of a sheet ChatGPT laid out its own way, at any scale and place (masked cross-correlation, coarse then fine), for part_sheet.py fit
 
 tools/source/characters/face-sheet-female.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
