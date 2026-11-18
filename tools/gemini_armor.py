@@ -1,7 +1,11 @@
 """Paints an armor from Story/13-art-prompts.md §5 with Gemini, and gives it back as a sheet in the template's layout.
 
-    python tools/gemini_armor.py <armor-id> [--tries 4] [--out <folder>] [--keep]
+    python tools/gemini_armor.py <armor-id> [--tries 4] [--out <folder>] [--keep] [--fantasy] [--like <armor-id>]
     python tools/gemini_armor.py <armor-id> --prompt      # only print the whole prompt, to paste by hand
+
+--fantasy asks for a heroic high-fantasy version of the outfit (the FANTASY block below). --like attaches an
+armor that's already painted (its sheet in tools/source/characters/sheets, on the same wide layout) as the
+style to match: its line, its shading and its finish, not its outfit.
 
 What makes it come back right, found by trying it (2026-11-18):
 
@@ -72,6 +76,17 @@ LOOK = ("LOOK. Match the attached image's own art style exactly: bold, clean dee
     "each piece's outer edge; flat cel shading with two or three tones per material, hard-edged shadows and one soft "
     'highlight; light from the upper left. Grounded, well-made costume detail: seams, straps, buckles, rivets, stitching, a '
     'little wear. Original design; no pixel art, no 3D render, no gradients or painterly blur.')
+FANTASY = ("FANTASY DIRECTION. Make this a heroic high-fantasy version of the outfit, the kind a legendary armour set has in a "
+    "classic 2D fantasy online role-playing game, as an original design: bold, iconic shapes and a strong three-part colour scheme "
+    "of one deep base colour, one bright trim metal and one glowing accent colour; layered, sculpted plates or panels with swept, "
+    "pointed edges and raised trim along every rim; one large glowing gem set in the chest and smaller ones on the shoulder guards, "
+    "the knees and the backs of the hands; engraved runes or filigree that glow faintly in the accent colour; a few deliberate fins "
+    "or points on the shoulder guards, elbows and knees. Clean and readable, never cluttered: big simple shapes first, detail "
+    "second, and no skulls. All of it stays inside the FIT rule: the flair comes from shape language, trim, colour and glow, not "
+    "from making any piece bigger or longer.")
+STYLE_OF = ("IMAGE 2 is a finished sheet for a DIFFERENT outfit, painted earlier for the same game. Match its art style exactly: the "
+    "weight and colour of its outlines, its flat cel shading and how many tones it uses, its level of detail and its finish, so "
+    "the two look like one artist's work. Do not copy its outfit, its colours or its shapes, and paint only on IMAGE 1's pieces.")
 RULES = """You are preparing a brief for an illustrator who paints an outfit onto a 2D cut-out character rig. The body is pulled apart into thirteen separate pieces with black gaps between them: the TORSO (from the neck stub down to the bottom of a pair of shorts), and for each side an UPPER ARM, a FOREARM, a closed FIST, a THIGH, a SHIN and a FOOT. Each piece is painted on its own and the game overlaps them at the joints.
 
 Rewrite the outfit below as exactly seven lines, one per kind of piece, in this order and with these labels: TORSO, EACH UPPER ARM, EACH FOREARM, EACH FIST, EACH THIGH, EACH SHIN, EACH FOOT. Rules:
@@ -236,10 +251,11 @@ def by_piece(outfit, cache):
     sys.exit("gemini_armor: the outfit didn't come back as seven lines:\n" + text)
 
 
-def prompt(outfit, pieces):
-    return "\n\n".join([TASK, LAYOUT, EACH, FIT, LOOK,
-                        "OUTFIT, as a whole (for its look, colours and materials): " + outfit,
-                        "OUTFIT, piece by piece (this is what to paint on each piece; where the two differ, this wins):\n" + pieces])
+def prompt(outfit, pieces, fantasy=False, like=False):
+    first = [TASK, LAYOUT, EACH, FIT, LOOK] + ([FANTASY] if fantasy else []) + ([STYLE_OF] if like else [])
+    text = "\n\n".join(first + ["OUTFIT, as a whole (for its look, colours and materials): " + outfit,
+                                  "OUTFIT, piece by piece (this is what to paint on each piece; where the two differ, this wins):\n" + pieces])
+    return text.replace("the attached image's", "IMAGE 1's").replace("the attached image", "IMAGE 1") if like else text
 
 
 def whole(armor, png):
@@ -264,27 +280,36 @@ def fit(armor, raw, tpl, wide, out):
     return verdict, [r for r in report if isinstance(r, str)]
 
 
+def picture(path):
+    with open(path, "rb") as f:
+        return {"inline_data": {"mime_type": "image/png", "data": base64.b64encode(f.read()).decode()}}
+
+
 def main(argv):
-    flags = [a for a in argv if a.startswith("--")]
-    args = [a for a in argv if not a.startswith("--")]
-    tries, out = 4, os.path.join(ROOT, "tools", ".cache", "gemini-armor")
-    if "--tries" in argv:
-        tries = int(argv[argv.index("--tries") + 1]); args.remove(argv[argv.index("--tries") + 1])
-    if "--out" in argv:
-        out = argv[argv.index("--out") + 1]; args.remove(out)
-    if len(args) != 1 or set(flags) - {"--tries", "--out", "--keep", "--prompt"}:
-        sys.exit(__doc__)
-    armor = args[0]
+    import argparse
+    ap = argparse.ArgumentParser(usage=__doc__)
+    ap.add_argument("armor")
+    ap.add_argument("--tries", type=int, default=4)
+    ap.add_argument("--out", default=os.path.join(ROOT, "tools", ".cache", "gemini-armor"))
+    ap.add_argument("--keep", action="store_true")
+    ap.add_argument("--prompt", action="store_true")
+    ap.add_argument("--fantasy", action="store_true")
+    ap.add_argument("--like")
+    o = ap.parse_args(argv)
+    armor, tries, out, flags = o.armor, o.tries, o.out, (["--keep"] if o.keep else [])
     os.makedirs(out, exist_ok=True)
     edits, outfit = card(armor)
     tpl = os.path.join(CHARS, edits + ".png")
     wide = make_wide(tpl, os.path.join(out, "wide-" + edits + ".png"), WIDE)
-    text = prompt(outfit, by_piece(outfit, out))
-    if "--prompt" in flags:
-        print("[attach %s]\n\n%s" % (wide, text))
+    like = make_wide(os.path.join(CHARS, "sheets", o.like + ".png"), os.path.join(out, "wide-" + o.like + ".png"), WIDE) if o.like else None
+    said = outfit + (" Design direction: " + FANTASY.split(": ", 1)[1].split(" Clean and readable")[0] if o.fantasy else "")
+    text = prompt(outfit, by_piece(said, out), o.fantasy, bool(like))
+    if o.prompt:
+        print("[attach %s]%s\n\n%s" % (wide, "\n[attach %s]" % like if like else "", text))
         return
-    with open(wide, "rb") as f:
-        parts = [{"inline_data": {"mime_type": "image/png", "data": base64.b64encode(f.read()).decode()}}, {"text": text}]
+    parts = [picture(wide), {"text": text}] if not like else [
+        {"text": "IMAGE 1, the parts sheet to repaint:"}, picture(wide),
+        {"text": "IMAGE 2, the style to match:"}, picture(like), {"text": text}]
     config = {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": "2:3", "imageSize": "2K"}}
     best = None
     for turn in range(1, tries + 1):
