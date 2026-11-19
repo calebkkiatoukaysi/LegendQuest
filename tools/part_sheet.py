@@ -964,9 +964,9 @@ EAR_HUE = (0.42, 0.82, 0.25, 0.66)
 EAR_LINE = 95.0
 #: An ear's skin is EAR_LEAST pixels or more that are EAR_THICK from its edge.
 EAR_THICK, EAR_LEAST = 2, 60
-#: The jewellery that's piercings (§4.10's sheets 7 and 8), and how saturated a dark line is that's
+#: The jewellery that's piercings (the septum ring, and §4.10's sheets 7 and 8), and how saturated a dark line is that's
 #: a brow's or a lip's brown rather than metal's edge.
-PIERCINGS = range(13, 25)
+PIERCINGS = (7,) + tuple(range(13, 25))
 PIERCING_BROWN = 0.3
 #: Gold is the skin's hue but yellower: at least this much of its red in green, and less than this in blue.
 PIERCING_GOLD = (0.7, 0.37)

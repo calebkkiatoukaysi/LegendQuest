@@ -49,8 +49,8 @@ public class CharacterCreationScreen : MenuScreen
     private const string SoulBoundHeading = "WHO WALKS BESIDE YOU?";
     private const string SoulBoundLine = "No one walks into legend alone.";
 
-    /// <summary>Where that line's written: in from the name card's left, and below it, clear of the flag and the rigging.</summary>
-    private const float SoulBoundInset = 14f, SoulBoundBelow = 12f;
+    /// <summary>How far in from the name card's left what's written under it starts: their scores, and that line.</summary>
+    private const float SoulBoundInset = 14f;
     private const string Note = "LEFT / RIGHT TO CHANGE  ·  Q / E FOR TABS  ·  TAB TO NAME";
     private const string TypingNote = "TYPE THE NAME  ·  ENTER WHEN IT'S DONE";
     private const string NeedsNameNote = "THEY NEED A NAME  ·  CLICK THE NAME BOX TO TYPE IT";
@@ -95,7 +95,7 @@ public class CharacterCreationScreen : MenuScreen
 
     /// <summary>The paperdoll, full length: how much bigger than art pixels. And where their feet go on the deck, either way.</summary>
     private const float FigureScale = 11f;
-    private static readonly Vector2 FigureFeet = new(500f, 800f);
+    private static readonly Vector2 FigureFeet = new(770f, 800f);
 
     /// <summary>The paperdoll's face, blown up for the card: the head and shoulders of the frame facing down, and how big.</summary>
     private static readonly Rectangle Bust = new(4, 4, 24, 24);
@@ -133,9 +133,13 @@ public class CharacterCreationScreen : MenuScreen
     private const int WindowArrows = 56;
     private static readonly Point ChipCell = new(44, 44), FaceCell = new(64, 64), NotchCell = new(56, 22);
 
-    /// <summary>Where the keys for the preview and their scores are written, under them, and the soft dark behind them so they read on the deck.</summary>
-    private const float ScoresY = 832f, PreviewKeysY = 862f;
-    private static readonly Rectangle UnderThem = new(210, 828, 580, 64);
+    /// <summary>
+    /// They stand in the open deck between the name card and the panel, so nothing on their head (horns,
+    /// antlers, tall ears) goes behind the card. Their scores are written under the card, with who they
+    /// are; the preview's keys under their feet, no wider than the gap; each on a soft dark so it reads.
+    /// </summary>
+    private const float ScoresBelow = 12f, PreviewKeysY = 846f, PreviewKeysWidth = 400f;
+    private static readonly Rectangle UnderThem = new(590, 842, 360, 34);
     private const int UnderThemEnds = 40;
 
     /// <summary>A colour row's swatch: its size, the gap after it, and its frame.</summary>
@@ -172,6 +176,9 @@ public class CharacterCreationScreen : MenuScreen
     private readonly Random _random = new();
     private readonly StringBuilder _name = new();
     private readonly List<(MenuEntry Row, string Label, Func<string> Value)> _rows = new();
+
+    /// <summary>What each row says is picked, written again whenever something changes (Refresh).</summary>
+    private readonly Dictionary<MenuEntry, string> _rowValue = new();
     private readonly List<List<MenuEntry>> _pages = new() { new(), new(), new(), new() };
 
     /// <summary>Rows shown only sometimes, and when: the painted figure's with a painted face, the paperdoll's without.</summary>
@@ -217,7 +224,11 @@ public class CharacterCreationScreen : MenuScreen
     /// Size and drawn by DrawItem (its box, its number, the alpha), Current framed, and any clicked
     /// picked (Pick); Name is an item's name, for the note while the mouse is on it.
     /// </summary>
-    private sealed record Detail(int Count, Func<int> Current, Action<int> Pick, Point Size, Action<SpriteBatch, Rectangle, int, float> DrawItem, Func<int, string> Name);
+    private sealed record Detail(int Count, Func<int> Current, Action<int> Pick, Point Size, Action<SpriteBatch, Rectangle, int, float> DrawItem, Func<int, string> Name)
+    {
+        /// <summary>Whether its items are one bar (a slider's notches): all on one line, narrowed to fit, never wrapped or windowed.</summary>
+        public bool OneLine { get; init; }
+    }
     private readonly List<MenuEntry> _tabs = new();
     private readonly List<MenuEntry> _buttons = new();
     private readonly MenuEntry _peopleRow;
@@ -480,6 +491,15 @@ public class CharacterCreationScreen : MenuScreen
         // As many as fit at LeastScale, if not all of them: a window round the one picked.
         int shown = detail.Count, first = 0;
         (int Lines, float Scale) layout = Layout(shown);
+        if (detail.OneLine)
+        {
+            // A slider's notches: one bar across, each as wide as there's room for and as tall as it is.
+            int wide = Math.Max(4, Math.Min(detail.Size.X, (RowSize.X - (shown - 1) * DetailGap) / shown));
+            var bar = new Rectangle[detail.Count];
+            float across = shown * wide + (shown - 1) * DetailGap, start = OptionsPanel.Center.X - across / 2f;
+            for (int k = 0; k < shown; k++) bar[k] = new Rectangle((int)(start + k * (wide + DetailGap)), (int)top, wide, detail.Size.Y);
+            return (bar, 0, 0);
+        }
         if (layout.Scale < LeastScale)
         {
             int lines = Math.Max(1, (int)((room + DetailGap) / (detail.Size.Y * LeastScale + DetailGap)));
@@ -623,25 +643,29 @@ public class CharacterCreationScreen : MenuScreen
 
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        Text.DrawBacking(spriteBatch, _glow, UnderThem, UnderThemEnds, Palette.Ink * (0.82f * alpha));
+        if (_preview.DrawsArt) Text.DrawBacking(spriteBatch, _glow, UnderThem, UnderThemEnds, Palette.Ink * (0.82f * alpha));
+        // Under the card: their scores, and under those the Soul-Bound's line.
+        float scoresY = NameCard.Bottom + ScoresBelow, lineY = scoresY + _detailFont.LineSpacing + 6f;
+        float scoresWidth = MathF.Min(NameCard.Width - SoulBoundInset * 2f, _detailFont.MeasureString(Scores()).X);
+        Text.DrawBacking(spriteBatch, _glow, new Rectangle((int)(NameCard.Left + SoulBoundInset) - 6, (int)scoresY - 4, (int)scoresWidth + 12, _detailFont.LineSpacing + 8),
+            UnderThemEnds, Palette.Ink * (0.7f * alpha));
         if (_soulBound)
         {
             float width = _detailFont.MeasureString(SoulBoundLine).X;
-            Text.DrawBacking(spriteBatch, _glow, new Rectangle((int)(NameCard.Left + SoulBoundInset) - 6, (int)(NameCard.Bottom + SoulBoundBelow) - 4, (int)width + 12, _detailFont.LineSpacing + 8),
+            Text.DrawBacking(spriteBatch, _glow, new Rectangle((int)(NameCard.Left + SoulBoundInset) - 6, (int)lineY - 4, (int)width + 12, _detailFont.LineSpacing + 8),
                 UnderThemEnds, Palette.Ink * (0.7f * alpha));
         }
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
 
-        // Over the deck between the card and the panel: the Soul-Bound's line. Under them, their scores and the preview's keys.
         if (_soulBound)
-            Text.Draw(spriteBatch, _detailFont, SoulBoundLine, NameCard.Left + SoulBoundInset, NameCard.Bottom + SoulBoundBelow,
+            Text.Draw(spriteBatch, _detailFont, SoulBoundLine, NameCard.Left + SoulBoundInset, lineY,
                 Palette.Narration * alpha, Palette.FormShadow * alpha);
-        Text.Draw(spriteBatch, _detailFont, Scores(), FigureFeet.X, ScoresY,
-            Palette.Bone * alpha, Palette.FormShadow * alpha, centred: true);
+        Text.Draw(spriteBatch, _detailFont, Scores(), NameCard.Left + SoulBoundInset, scoresY,
+            Palette.Bone * alpha, Palette.FormShadow * alpha, width: NameCard.Width - SoulBoundInset * 2f);
         if (_preview.DrawsArt)
             Text.Draw(spriteBatch, _detailFont, PreviewKeys(), FigureFeet.X, PreviewKeysY,
-                Palette.Bone * (0.8f * alpha), Palette.FormShadow * alpha, centred: true);
+                Palette.Bone * (0.8f * alpha), Palette.FormShadow * alpha, centred: true, width: PreviewKeysWidth);
         Text.Draw(spriteBatch, _detailFont, About(), OptionsPanel.Center.X, ButtonsY - ButtonSize.Y / 2f - 18f - _detailFont.LineSpacing,
             Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true, width: RowSize.X);
 
@@ -802,7 +826,17 @@ public class CharacterCreationScreen : MenuScreen
         if (extras.Count == 0) return;
         var names = new List<string> { "NONE" };
         foreach (string id in extras) names.Add(PartCatalog.NameOf(id) ?? id.ToUpperInvariant());
-        int Get() => _member.Look.Extras?.GetValueOrDefault(kind) is { Length: > 0 } id ? 1 + Math.Max(0, IndexOf(extras, id)) : 0;
+        // What they have of this kind: the one picked, or with none picked the one their recipe gives
+        // them (the default woman's freckles), so the row never says NONE over something that's worn.
+        int Get()
+        {
+            if (_member.Look.Extras is { } picked && picked.TryGetValue(kind, out string id))
+                return string.IsNullOrEmpty(id) ? 0 : 1 + Math.Max(0, IndexOf(extras, id));
+            foreach (string worn in PartCatalog.OutfitOf(_member)?.Extras ?? Array.Empty<string>())
+                if (PartCatalog.ExtraKind(worn) == kind)
+                    return 1 + Math.Max(0, IndexOf(extras, worn.EndsWith("-f", StringComparison.Ordinal) ? worn[..^2] : worn));
+            return 0;
+        }
         void Set(int v) => (_member.Look.Extras ??= new Dictionary<string, string>())[kind] = v == 0 ? string.Empty : extras[v - 1];
         Func<bool> shown = manOnly ? () => painted() && OnMan : painted;
         MenuEntry row = Adjustable(2, label, Get, Set, names, shown);
@@ -883,7 +917,7 @@ public class CharacterCreationScreen : MenuScreen
                 DrawSwatch(spriteBatch, inside, chip(), fade);
                 from += ChipSize.X + ChipGap;
             }
-            RowText(spriteBatch, value(), (from + to) / 2f, middle, to - from, RowValueSize, shown, fade, 0);
+            RowText(spriteBatch, _rowValue.TryGetValue(row, out string says) ? says : value(), (from + to) / 2f, middle, to - from, RowValueSize, shown, fade, 0);
         }
     }
 
@@ -1075,7 +1109,7 @@ public class CharacterCreationScreen : MenuScreen
                 bool lit = index >= Math.Min(on, middle) && index <= Math.Max(on, middle);
                 batch.Draw(ScreenManager.BlankTexture, box, (lit ? Palette.Torch * 0.75f : Palette.Note * 0.2f) * alpha);
                 if (index == middle) batch.Draw(ScreenManager.BlankTexture, new Rectangle(box.Center.X - 1, box.Y, 2, box.Height), Palette.Bone * alpha);
-            }, index => Name(least + index));
+            }, index => Name(least + index)) { OneLine = true };
     }
 
     /// <summary>One of the buttons along the bottom.</summary>
@@ -1298,6 +1332,8 @@ public class CharacterCreationScreen : MenuScreen
     /// <summary>Bakes them again and writes every row's value onto its plate.</summary>
     private void Refresh()
     {
+        foreach ((MenuEntry row, string _, Func<string> value) in _rows) _rowValue[row] = value();
+
         if (ScreenManager is null || _font is null) return;
         _sheet?.Dispose();
         _sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, _member.Look, Paperdoll.GearOf(_member));
