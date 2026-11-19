@@ -210,6 +210,8 @@ def cut(painted, base, ids):
         for bone in K.DRAW:
             if bone == HANDS[side]:
                 figure = pm + figure * (1.0 - pm[:, :, 3:])
+            if bone not in bodies:
+                continue
             layer = D.premul(*bodies[bone])
             figure = layer + figure * (1.0 - layer[:, :, 3:])
         rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)

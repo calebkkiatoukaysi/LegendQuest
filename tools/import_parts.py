@@ -1102,7 +1102,7 @@ def pieced_armor(base, folder):
     material."""
     import body_parts
     own = os.path.join(SOURCE, BODIES, base.name)
-    bones = [b for b in body_parts.DRAW if b != "head" and os.path.exists(os.path.join(folder, b + ".png"))]
+    bones = [b for b in K.DRAW if b != "head" and os.path.exists(os.path.join(folder, b + ".png"))]
     if not bones:
         fail("%s has none of the pieces tools/body_parts.py cuts" % rel(folder))
     pictures, skins = {}, {}

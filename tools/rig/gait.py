@@ -210,6 +210,8 @@ class Gait:
                 each following the one before it by `lag` of the cycle
     lean        (forward, give): the torso's lean forward, and how much more it leans as the weight
                 comes down on each foot
+    skirt       (trail, swing): how far a skirt or a coat's tails trail behind (degrees), and how
+                much they swing with each step
     head_level  how much of the lean the head takes back out: 1 keeps it level, less and it goes
                 forward with the body, chin down, as a runner's does
     """
@@ -217,6 +219,7 @@ class Gait:
     def __init__(self, base=None, **kw):
         self.near_roll = 0.6
         self.head_level = 1.0
+        self.skirt = (0.0, 0.0)
         self.__dict__.update(kw)
         self.base = base
         self.legs = {"near": Leg("near", base), "far": Leg("far", base)}
@@ -353,6 +356,10 @@ class Gait:
         # most of it a beat after that; the head stays level, nodding with it later still.
         pose["torso"] = forward + give * (0.4 * self.sink(q - 0.03) + 0.6 * self.sink(q - 0.06))
         pose["head"] = -self.head_level * forward - 1.0 + 0.5 * give * self.sink(q - 0.1)
+        # What hangs over the legs trails behind and swings with each step, a beat after the hips.
+        trail, swing = self.skirt
+        if trail or swing:
+            pose["skirt"] = trail + swing * math.sin(4 * math.pi * (q - 0.08))
         carried = pose["torso"]
         sw_mid, sw_size = self.arms["swing"]
         bd_mid, bd_size = self.arms["bend"]
@@ -415,7 +422,7 @@ def jog(base=None):
                        "bend": [(0.18, 52.0), (0.42, 92.0), (0.66, 70.0), (0.86, 34.0)],
                        "foot": [(0.3, 22.0), (0.62, 6.0), (0.85, -4.0)]},
                 arms={"swing": (-8.0, 32.0), "bend": (84.0, 12.0), "wrist": (-6.0, 6.0), "lag": 0.06},
-                lean=(14.0, 1.8), head_level=0.7)
+                lean=(14.0, 1.8), head_level=0.7, skirt=(5.0, 2.5))
 
 
 def walk(base=None):
@@ -428,7 +435,7 @@ def walk(base=None):
                        "bend": [(0.3, 60.0), (0.6, 38.0), (0.85, 10.0)],
                        "foot": [(0.3, 12.0), (0.6, 0.0), (0.88, -10.0)]},
                 arms={"swing": (-4.0, 13.0), "bend": (16.0, 8.0), "wrist": (-2.0, 4.0), "lag": 0.07},
-                lean=(2.0, 0.6))
+                lean=(2.0, 0.6), skirt=(1.5, 1.5))
 
 
 def run(base=None):
@@ -440,7 +447,7 @@ def run(base=None):
                        "bend": [(0.2, 70.0), (0.42, 118.0), (0.66, 92.0), (0.86, 40.0)],
                        "foot": [(0.3, 30.0), (0.62, 8.0), (0.85, -4.0)]},
                 arms={"swing": (-8.0, 40.0), "bend": (92.0, 16.0), "wrist": (-8.0, 8.0), "lag": 0.06},
-                lean=(24.0, 2.4), head_level=0.55)
+                lean=(24.0, 2.4), head_level=0.55, skirt=(9.0, 3.5))
 
 
 CYCLES = {"jog": jog, "walk": walk, "run": run}

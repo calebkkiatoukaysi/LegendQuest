@@ -32,10 +32,14 @@ CHARS = os.path.join(ROOT, "tools", "source", "characters")
 #: The bones, parents first: (bone, parent, the joint it turns about). The joint names are the
 #: JOINTS keys. The torso is one piece, from the neck to the shorts: it turns about the hips joint
 #: and carries the head and both arms. The hips bone is the pelvis: it has no piece of its own, it
-#: only moves (up and down, with a step), and carries the torso and both legs.
+#: only moves (up and down, with a step), and carries the torso and both legs. The skirt hangs from
+#: the hips too, beside the torso, not from it: what an outfit hangs over the legs (a skirt, a robe,
+#: a coat's tails; tools/dress_pose.py cuts it) stays plumb when the torso leans into a run, and
+#: the clips sway it with the stride. A body has no skirt piece; only an outfit that hangs has one.
 BONES = (
     ("root", None, "root"),
     ("hips", "root", "hips"),
+    ("skirt", "hips", "hips"),
     ("torso", "hips", "hips"),
     ("head", "torso", "neck"),
     ("arm_far_up", "torso", "shoulder_far"),
@@ -134,9 +138,10 @@ GROUPS = (
 )
 TRUNK = GROUPS[1]
 #: Back to front, the order the pieces are drawn in at rest. The head (the face, the hair or helm)
-#: goes with the torso; what the hands hold goes under the hand that holds it.
+#: goes with the torso; what the hands hold goes under the hand that holds it. The skirt is over
+#: the torso (and so over the body's own hips, which it hides): the torso leans down into its top.
 DRAW = ("arm_far_up", "arm_far_low", "hand_far", "leg_far_up", "leg_far_low", "foot_far", "leg_near_up", "leg_near_low",
-        "foot_near", "torso", "head", "arm_near_up", "arm_near_low", "hand_near")
+        "foot_near", "torso", "skirt", "head", "arm_near_up", "arm_near_low", "hand_near")
 #: The trunk keeps the figure down to here (y on the canvas), the hem of the shorts: the pelvis is
 #: drawn over the tops of both legs, the way the shorts are over the thighs, and a leg's top slides
 #: under it as the leg turns.

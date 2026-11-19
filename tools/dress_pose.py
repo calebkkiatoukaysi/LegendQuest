@@ -96,6 +96,9 @@ UNDER_SHADE = 0.55
 #: SKIRT_FLARE pixels out past the legs on a side; SKIRT_BREAK rows that aren't end it, and fewer
 #: than SKIRT_LEAST rows in all isn't a skirt.
 SKIRT_ACROSS, SKIRT_FLARE, SKIRT_BREAK, SKIRT_LEAST = 0.9, 14, 12, 40
+#: The skirt's piece starts this far over the hips' joint (the belt's line), and carries on under the
+#: torso this far above that.
+WAIST_OVER, SKIRT_UNDER = 6, 48
 LEGS = ("leg_near_up", "leg_near_low", "leg_far_up", "leg_far_low")
 
 
@@ -108,7 +111,10 @@ def body(base):
     """The painted body's pieces at rest: {bone: (colour 0-255, alpha 0-1)}."""
     out = {}
     for bone in K.DRAW:
-        rgba = ic.read_png(os.path.join(CHARS, "bodies", base, bone + ".png"))[0].astype(np.float64)
+        path = os.path.join(CHARS, "bodies", base, bone + ".png")
+        if not os.path.exists(path):
+            continue  # the skirt: a body has none
+        rgba = ic.read_png(path)[0].astype(np.float64)
         out[bone] = (rgba[:, :, :3], rgba[:, :, 3] / 255.0)
     return out
 
@@ -182,10 +188,15 @@ def places(base, data, shape):
     (-1 off the body), the piece each pixel is nearest, and the matrices."""
     mats = posed(base, data["scale"], data["origin"])
     pieces = body(base)
-    masks = {b: warp(pieces[b][1], mats[b], shape) > 0.5 for b in PIECES}
+    masks = {b: warp(pieces[b][1], mats[b], shape) > 0.5 for b in PIECES if b in pieces}
     seen = np.full(shape, -1, np.int64)
     for b in PIECES:
-        seen[masks[b]] = RANK[b]
+        if b in masks:
+            seen[masks[b]] = RANK[b]
+    # The skirt has no body piece of its own: its place is the trunk from a little over the waist
+    # down. It's drawn over the torso, which carries on under it there and leans down into its top.
+    waist = (mats["torso"] @ np.array([K.JOINTS[base]["hips"][0], K.JOINTS[base]["hips"][1], 1.0]))[1]
+    masks["skirt"] = masks["torso"] & (np.arange(shape[0])[:, None] >= waist - SKIRT_UNDER)
     _, (iy, ix) = ndi.distance_transform_edt(seen < 0, return_indices=True)
     return masks, seen, seen[iy, ix], mats
 
@@ -200,7 +211,7 @@ def gap_between_legs(masks):
     left_of_far = np.where(far, xs[None, :], w).min(axis=1)
     rows = (right_of_near >= 0) & (left_of_far < w) & (left_of_far - right_of_near > 4)
     gap = rows[:, None] & (xs[None, :] > right_of_near[:, None]) & (xs[None, :] < left_of_far[:, None])
-    gap &= ~np.any(list(masks.values()), axis=0)
+    gap &= ~np.any([m for b, m in masks.items() if b != "skirt"], axis=0)
     ys = np.nonzero(gap.any(axis=1))[0]
     return gap, (int(ys.min()) if len(ys) else h)
 
@@ -212,7 +223,7 @@ def like(these, one):
     return (hue < LIKE) & (tone_a / tone_b < LIKE_TONE) & (tone_b / tone_a < LIKE_TONE)
 
 
-def owners(colour, alpha, masks, seen, near, shoulder=None, neck=None):
+def owners(colour, alpha, masks, seen, near, shoulder=None, neck=None, waist=None):
     """The bone each painted pixel goes with (-1 none), and the painting's lines."""
     figure = alpha > 0.5
     light = luma(colour)
@@ -314,10 +325,16 @@ def owners(colour, alpha, masks, seen, near, shoulder=None, neck=None):
             if miss > SKIRT_BREAK:
                 break
     skirted = int(skirt_rows.sum())
+    hung = hangs[areas] & there
     if skirted >= SKIRT_LEAST:
         leg_ranks = [RANK[b] for b in LEGS]
         take = skirt_rows[:, None] & there & np.isin(own, leg_ranks)
         own[take] = RANK["torso"]
+        hung |= take
+    # What hangs, from the waist down, is the skirt's piece, which hangs from the hips beside the
+    # torso: it stays plumb when the torso leans, and sways with the stride.
+    if waist is not None:
+        own[hung & (np.arange(figure.shape[0])[:, None] >= waist)] = RANK["skirt"]
     # The lines and the soft edge go with the area beside them.
     _, (iy, ix) = ndi.distance_transform_edt(~there, return_indices=True)
     own = np.where(alpha > 0, own[iy, ix], -1)
@@ -336,7 +353,8 @@ def cut(painted, base, out_dir, quiet=False):
     colour, alpha = key(got.astype(np.uint8))
     masks, seen, near, mats = places(base, data, (h, w))
     spot = lambda joint: mats["torso"] @ np.array([K.JOINTS[base][joint][0], K.JOINTS[base][joint][1], 1.0])  # noqa: E731
-    own, ink, hanging, worn = owners(colour, alpha, masks, seen, near, spot("shoulder_near"), spot("neck"))
+    own, ink, hanging, worn = owners(colour, alpha, masks, seen, near, spot("shoulder_near"), spot("neck"),
+                                     spot("hips")[1] - WAIST_OVER)
     figure = alpha > 0.5
     dark = np.median(colour[ink], axis=0) if ink.any() else np.array([40.0, 25.0, 20.0])
     os.makedirs(out_dir, exist_ok=True)
@@ -347,6 +365,11 @@ def cut(painted, base, out_dir, quiet=False):
         a = np.where(mine, alpha, 0.0)
         c = colour.copy()
         under = np.zeros((h, w), bool)
+        if bone == "skirt" and solid.sum() < 40:
+            # Nothing hangs: the outfit has no skirt piece.
+            if os.path.exists(os.path.join(out_dir, bone + ".png")):
+                os.remove(os.path.join(out_dir, bone + ".png"))
+            continue
         off = ndi.distance_transform_edt(~masks[bone])
         outside = off[solid & ~masks[bone]]
         thick = min(THICK_MOST, float(np.percentile(outside, 90))) if len(outside) > 50 else 0.0
@@ -402,8 +425,9 @@ def layers_of(base, folder, bodies, side_foot=False):
     `side_foot`, the near foot is the far foot's picture (the one drawn side on, toes the way the
     figure faces) moved to the near ankle, a little bigger for being nearer."""
     out = {}
+    blank = np.zeros(CANVAS[::-1])
     for bone in K.DRAW:
-        c, a = bodies[bone]
+        c, a = bodies.get(bone, (np.zeros(CANVAS[::-1] + (3,)), blank))
         path = os.path.join(folder, bone + ".png")
         if bone != "head" and os.path.exists(path):
             rgba = ic.read_png(path)[0].astype(np.float64)
