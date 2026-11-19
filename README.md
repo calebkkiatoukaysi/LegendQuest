@@ -1240,27 +1240,44 @@ since turning the music down shouldn't depend on which game is loaded.
 
 ## Music and sound
 
-None of it was recorded or downloaded. `tools/generate_audio.py` builds every song and sound from
-sines, wavetables, noise and a few filters, in CPython (3.12 or newer) and nothing else. The
-oscillators, filters, reverb and song mixer are The Black Box's.
+The sound effects are built by `tools/generate_audio.py` from sines, wavetables, noise and a few
+filters, in CPython (3.12 or newer); the oscillators, filters, reverb and song mixer are The Black
+Box's. Five of the real-time fight's sounds also have a recording layered under the synthesis, from
+the Versilian Community Sample Library below (ASSETS.md names each one). The music is composed in `tools/score/` and played on recordings of real
+instruments, from two sample libraries by Versilian Studios released under CC0 1.0 (VSCO 2 Community
+Edition and the Versilian Community Sample Library). `tools/score/fetch_samples.py` fetches only the
+instrument folders the score plays, pinned to one commit of each, into a cache outside the repo
+(`%LOCALAPPDATA%/LegendQuest-samples`, or `LQ_SAMPLES`); the recordings are never committed or
+shipped, and `compose.py` stops and says how to fetch them if they're missing. The rest is
+`tools/score`'s own, in numpy: a reader for the libraries' SFZ files, a sampler (re-pitching by
+resampling, velocity layers, round robin, an envelope, each part's timing and dynamics humanised
+from a seed), a synthesised choir for the voices the libraries don't have, a mixer with a synthetic
+hall, and mastering to a loudness with a limiter that never lets a peak past -1 dBFS. Every piece is
+written note by note on one theme, LegendQuest's: up a fifth, a step down and back, lifting to the
+sixth, and home through the flat seventh and the flat sixth.
 
 ```
-python tools/generate_audio.py                 # everything (about five minutes)
-python tools/generate_audio.py music           # the songs
 python tools/generate_audio.py sfx             # every sound effect
-python tools/generate_audio.py embers pause    # just these
+python tools/generate_audio.py pause           # just these
+python tools/score/fetch_samples.py            # once: the sample libraries (about 1.6 GB to download, 4 GB on disk)
+python tools/score/compose.py                  # every song and jingle (about five minutes)
+python tools/score/compose.py steel engage     # just these
+python tools/score/check.py                    # their length, loudness, true peak and loop seams
 ```
 
 | Song | Where | What it is |
 | --- | --- | --- |
-| *Embers* | Title, options, save slots | 56 BPM in A minor, 12 bars. A lute picking slow broken chords over a bowed drone (Am, F, Dm, Em, then F, G and an E major that pulls back round to the A), a melody on the lute an octave up for the second half, a quiet choir, a frame drum on the downbeats, wind, and a fire crackling close by |
-| *Hearthsmoke* | Lit maps | 66 BPM in D Dorian, 16 bars. Folk rather than dread: the lute rolls through the chords in eighths, a wooden flute plays a tune over the second half, and the frame drum keeps a slow walk. The major IV is what makes it Dorian, and keeps it from sounding as sad as the title |
-| *Cold Stone* | Underground | 48 BPM in C Phrygian, 10 bars. Hardly a tune: a low drone on C and G, a choir that leans on the flat second, a few low lute notes far apart, one deep boom, cold air, and water dripping somewhere in a long reverb |
-| *Meadowlark* | The Old Road and the fields round Questeria | 136 BPM in G major, in three, 48 bars. The only waltz: the lute goes low-strum-strum under a flute tune that leaps up a sixth and skips back down like a lark going up, the middle climbs to the high E over held strings, and the last time round chimes ring an octave over the tune with a tambourine. A frame drum on the downbeats, small birds either side and a breeze |
-| *Sunspire* | Sunspire Keep | 72 BPM in D major leaning Mixolydian, 18 bars. Far-off bells and two horns calling while the timpani roll in, then a trumpet plays a stately tune in dotted steps over held horn chords with a harp running up every chord; the second time the violins take it to the high D over a choir, chimes and a field drum walking it like a procession. Ends C to A, back round to D |
-| *Salt and Lanterns* | The Gull's Wager | 60 BPM in E minor with every beat in three, so it rocks like a hull, 16 bars. The lute picks low, high, middle in each beat, a flute tune that keeps lifting to the G comes in at bar 5, a frame drum knocks like the hull on a swell, and the sea rolls in and out under it all, four long waves to a loop |
-| *Steel* | Fights | 136 BPM in D minor, 32 bars. The low strings drive eighths on the bass in octaves the whole way, leaning on a 3+3+2 with the timpani, and the horns play Steel's call in octaves: D, the A a fifth up, the D an octave up. The trumpet takes it an octave higher with a choir and a field drum, the middle turns to E flat against the D with the violins climbing over stabbing horns and the lute picking sixteenths, and the trumpet and the horns throw the call out once more before the field drum rolls it round. A cymbal crashes in every section |
-| *The Hunger* | Boss fights | 96 BPM in A Phrygian, 24 bars. Steel turned inside out: the black crystal's hum throbbing under it all, the strings grinding sixteenths that catch on the semitone above, a great bell and the war drum pounding. The low brass play Steel's call bent (the fifth a tritone, and it falls onto the semitone above home instead of home), the trumpet tries Steel's theme as it was and its last note is dragged flat under them, then the choir, the violins shrieking a semitone apart, the trumpet bending the call too and the crystal's glass ringing it high |
+| *Embers* | Title, options, save slots | The theme stated in full: 80 BPM in D major, 32 bars. The harp spreads D, B flat and C over a held D while a flute calls the theme's head from far off; the horns play the theme over the strings, then the violins take it an octave up with a choir, the trumpet joining for the flat-six, flat-seven, one cadence. A bridge calls the head in B flat, G minor and E flat and climbs to the dominant over the timpani, everyone plays the theme's second half with a cymbal, and it falls quiet over the D again |
+| *Hearthsmoke* | Towns, lit maps and houses | The theme as a country dance: 116 BPM in G Mixolydian (the F natural makes it old and homely), in three, 48 bars. A strumstick strums oom-pah-pah over plucked cellos and a frame drum; an alto recorder plays the theme, the folk harp and the violins join it, a solo violin and then a clarinet play a second tune in E minor, and everyone plays the theme with a tambourine |
+| *Meadowlark* | The Old Road and the fields | The theme as a journey: 108 BPM in A major with a Lydian lift (B major in place of D), 40 bars. The violas run eighths and the basses walk in pizzicato under a light snare march; two horns play the theme, the flute has a tune of its own over the oboe, then flute and violins take the theme an octave up, the cellos and horns turn the head over, and everyone plays the theme's second half |
+| *Cold Stone* | Underground | Hardly a tune: 60 BPM in C Phrygian, 24 bars. The basses and cellos hold C under a low choir moving between C minor and the flat second; cold air, water dripping far off in a long hall. The theme's head turns up in pieces: a far horn, a low harp and the violas, the bells over tremolo cellos, a low flute coming down to C |
+| *Salt and Lanterns* | The Gull's Wager | The theme as a shanty: E Dorian in 6/8, a dotted quarter at 56, 40 bars. The folk harp rocks through each chord, the basses pluck the big beats and a frame drum knocks like the hull, with the sea rolling in and out under it, ten waves a loop. The clarinet plays the theme, the recorder takes it an octave up over clarinet and bassoon chords like a squeezebox, the cellos sing a second tune in G, and violins and recorder end it together |
+| *Sunspire* | Sunspire Keep | The theme as a royal chorale: 76 BPM in B flat major with the old modal chords (A flat and G flat), 28 bars. A fanfare of trumpets and horns over a timpani roll, then a trumpet plays the theme over the brass in chorale with the organ and the harp; the violins take it, darker, with a choir; and everyone plays it with the full organ and a cymbal |
+| *Steel* | Fights | The theme in D minor, driven: 150 BPM, 64 bars. Spiccato cellos and basses hammer eighths on each root, leaping the octave in a 3+3+2 that the bass drum and the timpani lean on. The horns play the theme, the trumpets take it an octave up over violins in sixteenths and a snare, the violins sing it long in G minor over trombone stabs, a build calls the head a step higher every two bars over tremolo strings and a snare roll, everyone plays it with cymbals, the low brass throw the head down and the violins answer in runs, and the horns play it once more under a high violin line |
+| *The Hunger* | Boss fights | The theme bent: 132 BPM in D Phrygian with the tritone (A flat where the fifth should be), 56 bars, in Steel's D so the stinger serves both. The strings grind eighths on D that catch on the E flat above, the bass drum and toms pound in half time, the timpani answer D with A flat. The low brass play the theme bent in octaves, the trumpets join over a gong, the organ and choir move through chords a third apart that shouldn't follow each other, the bass falls a semitone at a time from D to A while bells toll D and A flat, everyone plays it, and a trumpet tries the theme as it should be, in D major, and is answered bent |
+| *Victory* (`Music/victory`, once) | A fight won | About 6.5 s at 112 BPM: the brass throw the theme's head out in D major, then climb B flat, C, D (the flat six and seven home, Steel's minor turned major) to a held chord with the timpani rolling, a cymbal, a harp sweep and the glockenspiel |
+| *Defeat* (`Music/defeat`, once) | A fight lost | About 7.7 s at 72 BPM in D minor: a solo cello sings the theme's head falling instead of rising over low horns and a choir, the harmony sinking D minor, B flat, G minor to a bare D |
+| *Engage* (`Music/engage`, once) | A fight starting | About 2.7 s, in Steel's key and tempo: the strings rip up an octave and a half over a timpani roll and a tom ruff, and on the next downbeat (1.6 s in) the brass hit D minor with the timpani, the bass drum and a cymbal |
 
 Each song is an exact number of bars long and wraps its own echoes round to the start, so it loops
 under `MediaPlayer.IsRepeating` without a seam. A map's file says which song plays on it. The sound
@@ -1293,6 +1310,67 @@ shop counter.
 `SoundEffect.Play` calls as the audio tutorial, in one game service any screen can reach, with a
 master, a music and a sound volume. Each screen asks for its song as it comes on, and the manager
 fades the old one out and the new one in.
+
+### The real-time fight's sound
+
+The real-time fight (`Story/11-combat.md` §8) has its own sounds, 65 of them, each built three times
+from three seeds, in `Content/Sfx/Combat/<key>-<take>.wav`: `python tools/generate_audio.py combat`
+builds them all (under a minute), `combat/hit-axe` one of them. A blow is three layers, the click of
+contact (over in 5 ms), a body between 80 and 200 Hz, and the tail of what it's made of; a critical
+hit is a separate layer played over the blow, louder and longer, with a sub dropping under it. Five
+of them have a real recording layered under the synthesis: an anvil in `hit-heavy-blade`, `block` and
+`crit`, a gong in `boss-phase` and a bass drum in `impact-thunder`, from the CC0 Versilian Community
+Sample Library that `tools/score/fetch_samples.py` keeps outside the repo (each line in `ASSETS.md`
+names the recordings). Without that cache those five are left as they are and the rest still build.
+
+The fight drives the music and the sounds through four calls on `AudioManager`:
+
+| Call | What it does |
+| --- | --- |
+| `BeginBattle(Track battle)` | The fight's starting. Plays the engage stinger (`Music/engage`), fades the map's song out in 0.4 s and brings the fight's song (`encounter.Music`: `Battle` or `Boss`) in under the stinger, dipped until the stinger's done. Remembers which map song was on and how far it had got. A second call before `EndBattle` (a retry) keeps the first one's map song |
+| `EndBattle(bool won)` | The fight's over. The fight's song goes in 0.3 s, the victory or defeat jingle (`Music/victory`, `Music/defeat`) plays once, and when it ends the map's song fades back in from where it was. Without the jingle files it plays the old `Victory` or `GameOver` sound instead. A `PlaySong` for that map's song while the jingle plays doesn't cut it off |
+| `PlayCombat(string key, float pan = 0, float volume = 1)` | One combat sound. Turns through the key's three takes, nudges the pitch at random (up to 0.08 of an octave for swings and hits, 0.05 for the rest, 0.02 for the bar's clicks, none for the sounds tuned to the battle song), and pans it (-1 left to 1 right, from where it happened on screen). It drops the sound if the same key has played twice in the last 40 ms, or ten combat sounds have, and the big ones dip the music for 0.2 s so they land. Returns whether it played |
+| `Duck(float level, float hold)` | Dips the music to `level` (0.65 is about 4 dB down) for `hold` seconds, for anything else that has to land |
+
+`Audio/CombatSounds` has the keys and the helpers to pick one: `FamilyOfWeapon(item.Base ?? item.Id)`
+and `FamilyOfKind(weaponKind)` give a weapon family, `SchoolOf(damageType)` a spell school (cold is
+frost, acid is poison, and the three weapon damage types have none), and `Swing`, `Hit`, `Cast` and
+`Impact` make the key. `SwingLeadMs(family)` is how long before the blow lands to start the swing, so
+its whoosh peaks on the impact. When the proof run has the game silent, every call is written to
+`audio.log` (`battle begin Boss`, `combat hit-axe take 2 pitch +0.03 pan -0.40`, `jingle Victory`,
+`song Exploring from 41.2 s`).
+
+| Key | When it plays |
+| --- | --- |
+| `swing-<family>` | A weapon swung: `SwingLeadMs` before the `hit` event of an auto or a weapon skill (at once if the clip's `hit` comes sooner). For `bow` and `crossbow` it's the shot itself, played on the `release` event |
+| `hit-<family>` | That weapon's blow landing, on the `hit` event, when the roll hits (every hit of a multi-hit skill; the voice limit thins them) |
+| | Families: `light-blade` (dagger, shortsword, rapier, scimitar), `heavy-blade` (longsword, greatsword), `axe` (handaxe, battleaxe), `blunt` (mace, warhammer, quarterstaff), `polearm` (spear), `bow`, `crossbow`, `unarmed`, and for creatures `claw` and `bite` |
+| `crit` | Over the hit or impact sound, on the same frame, when the hit is a critical one |
+| `block` | Instead of the hit, when a blow is blocked (the shield's share of AC turned it) |
+| `dodge` | Instead of the hit, when a blow is dodged |
+| `miss` | Instead of the hit, when a blow simply misses |
+| `cast-<school>` | A spell's wind-up: at the start of its clip or cast bar |
+| `impact-<school>` | The spell landing on its target, on the `hit` event (a projectile's arrival); also a damage-over-time's first bite |
+| | Schools: `fire`, `frost`, `lightning`, `radiant`, `necrotic`, `force`, `psychic`, `nature`, `thunder`, `poison`, `blood` |
+| `heal` | Someone healed by a skill (not a tick) |
+| `buff` | A beneficial aura put on someone (a blessing, a stance, haste) |
+| `debuff` | A harmful aura put on someone (a curse, slowed, marked, poisoned) |
+| `aura-tick` | An aura ticking every 3 s (a burn, a bleed, a mending). Very quiet, meant for the leader and their target only |
+| `telegraph` | A foe starting a telegraphed wind-up, with its warning marker |
+| `boss-phase` | A boss changing phase |
+| `knockdown` | Someone knocked down, on the clip's `land` event |
+| `body-fall` | A body hitting the floor on a death clip's `land` event, after `death` |
+| `death` | A foe or an ally dying |
+| `downed` | A party member going down (down, not dead) |
+| `revive` | A downed party member brought back up |
+| `potion` | A potion drunk |
+| `soul-link` | The Soul-Link strike |
+| `ui-press` | A skill pressed on the bar and accepted |
+| `ui-denied` | A skill pressed that can't be used yet (cooldown, Focus, reach) |
+| `cooldown-ready` | The leader's skill coming off cooldown (not the global cooldown) |
+| `level-up` | A level gained, on the fight's result panel |
+| `victory` | The last foe falling, just before `EndBattle(true)` |
+| `defeat` | The last of the party falling, just before `EndBattle(false)` |
 
 ## What is on screen
 

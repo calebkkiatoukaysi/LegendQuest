@@ -1,11 +1,13 @@
 # Assets
 
-Every file the game ships or reads, and where it came from. Nothing here was downloaded or recorded:
-the art is drawn by `tools/generate_ui.py`, `tools/generate_world.py` and
+Every file the game ships or reads, and where it came from. The art is drawn by `tools/generate_ui.py`, `tools/generate_world.py` and
 `tools/generate_paperdoll.py`, `tools/generate_harbour.py`, or cut by `tools/cut_supplied.py` from pictures I made (the title,
-Questeria and its people), the music and sound effects are synthesised by `tools/generate_audio.py`,
-the maps are written by hand, and the only outside work is the font, the MonoGame template files,
-and a few rules from the SRD 5.1 (credited at the end).
+Questeria and its people), the sound effects are synthesised by `tools/generate_audio.py`, the music is
+composed by `tools/score/compose.py`, and the maps are written by hand. The only outside work is the
+font, the MonoGame template files, a few rules from the SRD 5.1 (credited at the end), and the
+instrument recordings the music is played on and a few sound effects are layered with: two sample
+libraries by Versilian Studios, released under CC0 1.0, which `tools/score/fetch_samples.py` fetches to a
+cache outside the repo and which are never committed or shipped (see Music and Sound effects).
 `python tools/check_assets.py` fails if this list and the files on disk ever disagree.
 
 ## Sprites
@@ -4399,23 +4401,35 @@ Content/Rooms/Life/clouds.png, Content/Rooms/Life/gull.png, Content/Rooms/Life/f
 
 ## Music
 
-Content/Music/embers.wav - created by Caleb Kiatoukaysi for Legend Quest, "Embers", the title theme, composed and synthesised by tools/generate_audio.py, released under public domain
+The score is composed by tools/score/compose.py: every piece is written out note by note in tools/score/pieces, all of them on one theme, and played through tools/score's own sampler on instrument recordings from two sample libraries by Versilian Studios LLC, VSCO 2 Community Edition (https://github.com/sgossner/VSCO-2-CE, branch SFZ, commit 6dd651d55dde97fd4028699be9d4481f26917891) and the Versilian Community Sample Library (https://github.com/sgossner/VCSL, branch sfz, commit dfcf4a4918771eee884b96ad4493de82ef84daf6). Both are released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), checked on each repository's page and LICENSE file (VCSL's LICENSE is on its master branch; the README of the sfz branch used here says the same). tools/score/fetch_samples.py downloads only the instrument folders the score plays into a cache outside the repo; the recordings are never committed or shipped, only the music rendered from them. The choir, the wind, the sea and the dripping water are synthesised (tools/score/synth.py), and the hall is a synthetic impulse response (tools/score/mix.py), so nothing else is borrowed. Every line below is the same in that respect.
 
-Content/Music/hearthsmoke.wav - created by Caleb Kiatoukaysi for Legend Quest, "Hearthsmoke", for walking about on a lit map, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/embers.wav - created by Caleb Kiatoukaysi for Legend Quest, "Embers", the title theme (the theme stated in full, D major), composed by tools/score/compose.py (tools/score/pieces/title.py), played on strings, horns, trumpet, trombones, flute, harp, glockenspiel, timpani and suspended cymbal recorded in VSCO 2 CE and VCSL (CC0 1.0, not shipped) with a synthesised choir, released under public domain
 
-Content/Music/cold-stone.wav - created by Caleb Kiatoukaysi for Legend Quest, "Cold Stone", for walking about underground, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/hearthsmoke.wav - created by Caleb Kiatoukaysi for Legend Quest, "Hearthsmoke", for towns, lit maps and houses (the theme as a country dance, G Mixolydian in three), composed by tools/score/compose.py (tools/score/pieces/town.py), played on strumstick, alto recorder, frame drum, tambourine and folk harp recorded in VCSL and solo violin, clarinet, bassoon and strings recorded in VSCO 2 CE (CC0 1.0, not shipped), released under public domain
 
-Content/Music/salt-and-lanterns.wav - created by Caleb Kiatoukaysi for Legend Quest, "Salt and Lanterns", for the Gull's Wager at sea, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/meadowlark.wav - created by Caleb Kiatoukaysi for Legend Quest, "Meadowlark", for the road and the fields (the theme as a journey, A major with a Lydian lift), composed by tools/score/compose.py (tools/score/pieces/field.py), played on strings, horns, trumpet, flute, oboe, harp, glockenspiel and timpani recorded in VSCO 2 CE and snare drum and suspended cymbal recorded in VCSL (CC0 1.0, not shipped), released under public domain
 
-Content/Music/meadowlark.wav - created by Caleb Kiatoukaysi for Legend Quest, "Meadowlark", for the sunny green fields round Questeria, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/cold-stone.wav - created by Caleb Kiatoukaysi for Legend Quest, "Cold Stone", for walking about underground (the theme's head in pieces, C Phrygian), composed by tools/score/compose.py (tools/score/pieces/dungeon.py), played on low strings, horn, violas, harp, flute and timpani recorded in VSCO 2 CE and tubular bells, gong and bass drum recorded in VCSL (CC0 1.0, not shipped) with a synthesised choir, wind and dripping water, released under public domain
 
-Content/Music/sunspire.wav - created by Caleb Kiatoukaysi for Legend Quest, "Sunspire", for the royal keep, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/salt-and-lanterns.wav - created by Caleb Kiatoukaysi for Legend Quest, "Salt and Lanterns", for the Gull's Wager at sea (the theme as a shanty, E Dorian in 6/8), composed by tools/score/compose.py (tools/score/pieces/sea.py), played on folk harp, alto recorder, frame drum and hand chimes recorded in VCSL and clarinet, bassoon, horn and strings recorded in VSCO 2 CE (CC0 1.0, not shipped) with a synthesised sea, released under public domain
 
-Content/Music/steel.wav - created by Caleb Kiatoukaysi for Legend Quest, "Steel", for fights, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/sunspire.wav - created by Caleb Kiatoukaysi for Legend Quest, "Sunspire", for the royal keep (the theme as a brass chorale, B flat major), composed by tools/score/compose.py (tools/score/pieces/keep.py), played on trumpets, horns, trombones, tuba, organ, harp, strings and timpani recorded in VSCO 2 CE and tubular bells and suspended cymbal recorded in VCSL (CC0 1.0, not shipped) with a synthesised choir, released under public domain
 
-Content/Music/the-hunger.wav - created by Caleb Kiatoukaysi for Legend Quest, "The Hunger", for boss fights, composed and synthesised by tools/generate_audio.py, released under public domain
+Content/Music/steel.wav - created by Caleb Kiatoukaysi for Legend Quest, "Steel", for fights (the theme in D minor over a spiccato string drive, 150 BPM), composed by tools/score/compose.py (tools/score/pieces/battle.py), played on strings, horns, trumpets, trombones, tuba and timpani recorded in VSCO 2 CE and bass drum, snare, toms and cymbals recorded in VCSL (CC0 1.0, not shipped), released under public domain
+
+Content/Music/the-hunger.wav - created by Caleb Kiatoukaysi for Legend Quest, "The Hunger", for boss fights (the theme bent, D Phrygian with the tritone), composed by tools/score/compose.py (tools/score/pieces/boss.py), played on strings, horns, trumpets, trombones, tuba, organ and timpani recorded in VSCO 2 CE and bass drum, toms, gong, cymbals and tubular bells recorded in VCSL (CC0 1.0, not shipped) with a synthesised choir, released under public domain
+
+Content/Music/victory.wav - created by Caleb Kiatoukaysi for Legend Quest, the victory jingle, played once when a fight is won (the theme's head and the flat-six, flat-seven, one cadence to D major, about 6.5 s), composed by tools/score/compose.py (tools/score/pieces/jingles.py), played on brass, strings, harp, glockenspiel and timpani recorded in VSCO 2 CE and suspended cymbal recorded in VCSL (CC0 1.0, not shipped), released under public domain
+
+Content/Music/defeat.wav - created by Caleb Kiatoukaysi for Legend Quest, the defeat jingle, played once when a fight is lost (the theme's head falling, D minor, about 7.7 s), composed by tools/score/compose.py (tools/score/pieces/jingles.py), played on cello, basses, horns, harp and timpani recorded in VSCO 2 CE (CC0 1.0, not shipped) with a synthesised choir, released under public domain
+
+Content/Music/engage.wav - created by Caleb Kiatoukaysi for Legend Quest, the stinger as a fight starts (a string run and a brass hit in D minor, Steel's key and tempo, about 2.7 s), composed by tools/score/compose.py (tools/score/pieces/jingles.py), played on strings, brass and timpani recorded in VSCO 2 CE and bass drum, toms and cymbal recorded in VCSL (CC0 1.0, not shipped), released under public domain
+
+tools/score/compose.py, tools/score/fetch_samples.py, tools/score/sfz.py, tools/score/sampler.py, tools/score/mix.py, tools/score/synth.py, tools/score/score.py, tools/score/theory.py, tools/score/instruments.py, tools/score/check.py, tools/score/pieces/common.py, tools/score/pieces/title.py, tools/score/pieces/town.py, tools/score/pieces/field.py, tools/score/pieces/dungeon.py, tools/score/pieces/sea.py, tools/score/pieces/keep.py, tools/score/pieces/battle.py, tools/score/pieces/boss.py, tools/score/pieces/jingles.py - written by Caleb Kiatoukaysi for Legend Quest, the score and the tools that play it: fetch_samples.py fetches the two CC0 sample libraries into a cache outside the repo, sfz.py reads their instrument files, sampler.py plays a note on them (re-pitched by resampling, velocity layers, round robin, an envelope), synth.py is the choir and the scenery, mix.py the mixing desk (equalisers, a synthetic hall, loudness and a limiter, all worked round the loop so the songs join without a seam), score.py and theory.py are what the pieces are written in, instruments.py names the orchestra, the pieces are the music, compose.py renders them and check.py measures what it rendered (length, loudness, true peak and the loop seam). They need CPython 3.12 with numpy and scipy, and everything random in them is seeded, so a rerun from the same samples gives the same files, byte for byte
 
 ## Sound effects
+
+The real-time fight's sounds are under Content/Sfx/Combat, three takes of each. Five of them have a real recording layered under the synthesis, taken from the Versilian Community Sample Library (CC0 1.0), which is never shipped or committed; their lines below name every recording that went into them.
 
 Content/Sfx/menu-move.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
 
@@ -4504,6 +4518,136 @@ Content/Sfx/game-over.wav - created by Caleb Kiatoukaysi for Legend Quest, a sou
 Content/Sfx/equip.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
 
 Content/Sfx/buy.wav - created by Caleb Kiatoukaysi for Legend Quest, a sound effect, synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-light-blade-1.wav, Content/Sfx/Combat/swing-light-blade-2.wav, Content/Sfx/Combat/swing-light-blade-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-light-blade" (a dagger or a short blade), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-heavy-blade-1.wav, Content/Sfx/Combat/swing-heavy-blade-2.wav, Content/Sfx/Combat/swing-heavy-blade-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-heavy-blade" (a long or great sword), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-axe-1.wav, Content/Sfx/Combat/swing-axe-2.wav, Content/Sfx/Combat/swing-axe-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-axe" (an axe), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-blunt-1.wav, Content/Sfx/Combat/swing-blunt-2.wav, Content/Sfx/Combat/swing-blunt-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-blunt" (a mace, a hammer or a staff), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-polearm-1.wav, Content/Sfx/Combat/swing-polearm-2.wav, Content/Sfx/Combat/swing-polearm-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-polearm" (a spear thrust), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-bow-1.wav, Content/Sfx/Combat/swing-bow-2.wav, Content/Sfx/Combat/swing-bow-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-bow" (a bow loosed), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-crossbow-1.wav, Content/Sfx/Combat/swing-crossbow-2.wav, Content/Sfx/Combat/swing-crossbow-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-crossbow" (a crossbow loosed), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-unarmed-1.wav, Content/Sfx/Combat/swing-unarmed-2.wav, Content/Sfx/Combat/swing-unarmed-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-unarmed" (a punch or a kick thrown), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-claw-1.wav, Content/Sfx/Combat/swing-claw-2.wav, Content/Sfx/Combat/swing-claw-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-claw" (claws raking the air), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/swing-bite-1.wav, Content/Sfx/Combat/swing-bite-2.wav, Content/Sfx/Combat/swing-bite-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "swing-bite" (a beast lunging to bite), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-light-blade-1.wav, Content/Sfx/Combat/hit-light-blade-2.wav, Content/Sfx/Combat/hit-light-blade-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-light-blade" (a light blade landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-heavy-blade-1.wav, Content/Sfx/Combat/hit-heavy-blade-2.wav, Content/Sfx/Combat/hit-heavy-blade-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-heavy-blade" (a long or great sword landing), synthesised by tools/generate_audio.py and layered with recordings from the Versilian Community Sample Library by Versilian Studios LLC (https://github.com/sgossner/VCSL, folder "Idiophones/Struck Idiophones/Anvil" at commit dfcf4a4918771eee884b96ad4493de82ef84daf6: take 1 Anvil_Hit1_v1_rr1_Mid.wav, take 2 Anvil_Hit2_v1_rr1_Mid.wav, take 3 Anvil_Hit3_v1_rr1_Mid.wav), released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), which are not shipped; the sound itself is released under public domain
+
+Content/Sfx/Combat/hit-axe-1.wav, Content/Sfx/Combat/hit-axe-2.wav, Content/Sfx/Combat/hit-axe-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-axe" (an axe biting in), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-blunt-1.wav, Content/Sfx/Combat/hit-blunt-2.wav, Content/Sfx/Combat/hit-blunt-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-blunt" (a mace, a hammer or a staff coming down), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-polearm-1.wav, Content/Sfx/Combat/hit-polearm-2.wav, Content/Sfx/Combat/hit-polearm-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-polearm" (a spear going in), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-bow-1.wav, Content/Sfx/Combat/hit-bow-2.wav, Content/Sfx/Combat/hit-bow-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-bow" (an arrow striking home), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-crossbow-1.wav, Content/Sfx/Combat/hit-crossbow-2.wav, Content/Sfx/Combat/hit-crossbow-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-crossbow" (a crossbow bolt slamming in), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-unarmed-1.wav, Content/Sfx/Combat/hit-unarmed-2.wav, Content/Sfx/Combat/hit-unarmed-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-unarmed" (a fist or a boot landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-claw-1.wav, Content/Sfx/Combat/hit-claw-2.wav, Content/Sfx/Combat/hit-claw-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-claw" (claws tearing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/hit-bite-1.wav, Content/Sfx/Combat/hit-bite-2.wav, Content/Sfx/Combat/hit-bite-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "hit-bite" (jaws closing on something), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/crit-1.wav, Content/Sfx/Combat/crit-2.wav, Content/Sfx/Combat/crit-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "crit" (a critical hit, played over the blow), synthesised by tools/generate_audio.py and layered with recordings from the Versilian Community Sample Library by Versilian Studios LLC (https://github.com/sgossner/VCSL, folder "Idiophones/Struck Idiophones/Anvil" at commit dfcf4a4918771eee884b96ad4493de82ef84daf6: take 1 Anvil_Hit1_v3_rr1_Mid.wav, take 2 Anvil_Hit2_v3_rr1_Mid.wav, take 3 Anvil_Hit3_v3_rr1_Mid.wav), released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), which are not shipped; the sound itself is released under public domain
+
+Content/Sfx/Combat/block-1.wav, Content/Sfx/Combat/block-2.wav, Content/Sfx/Combat/block-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "block" (a blow taken on a shield or a parrying blade), synthesised by tools/generate_audio.py and layered with recordings from the Versilian Community Sample Library by Versilian Studios LLC (https://github.com/sgossner/VCSL, folder "Idiophones/Struck Idiophones/Anvil" at commit dfcf4a4918771eee884b96ad4493de82ef84daf6: take 1 Anvil_Hit1_v2_rr1_Mid.wav, take 2 Anvil_Hit2_v2_rr1_Mid.wav, take 3 Anvil_Hit3_v2_rr1_Mid.wav), released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), which are not shipped; the sound itself is released under public domain
+
+Content/Sfx/Combat/dodge-1.wav, Content/Sfx/Combat/dodge-2.wav, Content/Sfx/Combat/dodge-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "dodge" (stepping out of the way), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/miss-1.wav, Content/Sfx/Combat/miss-2.wav, Content/Sfx/Combat/miss-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "miss" (a blow that misses), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-fire-1.wav, Content/Sfx/Combat/cast-fire-2.wav, Content/Sfx/Combat/cast-fire-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-fire" (fire gathering in a hand), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-fire-1.wav, Content/Sfx/Combat/impact-fire-2.wav, Content/Sfx/Combat/impact-fire-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-fire" (fire landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-frost-1.wav, Content/Sfx/Combat/cast-frost-2.wav, Content/Sfx/Combat/cast-frost-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-frost" (cold gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-frost-1.wav, Content/Sfx/Combat/impact-frost-2.wav, Content/Sfx/Combat/impact-frost-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-frost" (ice shattering on its target), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-lightning-1.wav, Content/Sfx/Combat/cast-lightning-2.wav, Content/Sfx/Combat/cast-lightning-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-lightning" (lightning gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-lightning-1.wav, Content/Sfx/Combat/impact-lightning-2.wav, Content/Sfx/Combat/impact-lightning-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-lightning" (lightning striking), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-radiant-1.wav, Content/Sfx/Combat/cast-radiant-2.wav, Content/Sfx/Combat/cast-radiant-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-radiant" (holy light gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-radiant-1.wav, Content/Sfx/Combat/impact-radiant-2.wav, Content/Sfx/Combat/impact-radiant-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-radiant" (light landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-necrotic-1.wav, Content/Sfx/Combat/cast-necrotic-2.wav, Content/Sfx/Combat/cast-necrotic-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-necrotic" (death's power gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-necrotic-1.wav, Content/Sfx/Combat/impact-necrotic-2.wav, Content/Sfx/Combat/impact-necrotic-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-necrotic" (death's power landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-force-1.wav, Content/Sfx/Combat/cast-force-2.wav, Content/Sfx/Combat/cast-force-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-force" (raw force gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-force-1.wav, Content/Sfx/Combat/impact-force-2.wav, Content/Sfx/Combat/impact-force-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-force" (force landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-psychic-1.wav, Content/Sfx/Combat/cast-psychic-2.wav, Content/Sfx/Combat/cast-psychic-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-psychic" (a mind reaching out), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-psychic-1.wav, Content/Sfx/Combat/impact-psychic-2.wav, Content/Sfx/Combat/impact-psychic-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-psychic" (a mind struck), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-nature-1.wav, Content/Sfx/Combat/cast-nature-2.wav, Content/Sfx/Combat/cast-nature-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-nature" (the wild answering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-nature-1.wav, Content/Sfx/Combat/impact-nature-2.wav, Content/Sfx/Combat/impact-nature-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-nature" (thorns and roots lashing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-thunder-1.wav, Content/Sfx/Combat/cast-thunder-2.wav, Content/Sfx/Combat/cast-thunder-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-thunder" (thunder gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-thunder-1.wav, Content/Sfx/Combat/impact-thunder-2.wav, Content/Sfx/Combat/impact-thunder-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-thunder" (thunder breaking), synthesised by tools/generate_audio.py and layered with recordings from the Versilian Community Sample Library by Versilian Studios LLC (https://github.com/sgossner/VCSL, folder "Membranophones/Struck Membranophones/Bass Drum 2" at commit dfcf4a4918771eee884b96ad4493de82ef84daf6: take 1 bassdrum_hit_ff.wav, take 2 bassdrum_hit_f.wav, take 3 bassdrum_hit_mf1.wav), released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), which are not shipped; the sound itself is released under public domain
+
+Content/Sfx/Combat/cast-poison-1.wav, Content/Sfx/Combat/cast-poison-2.wav, Content/Sfx/Combat/cast-poison-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-poison" (poison brewing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-poison-1.wav, Content/Sfx/Combat/impact-poison-2.wav, Content/Sfx/Combat/impact-poison-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-poison" (poison landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cast-blood-1.wav, Content/Sfx/Combat/cast-blood-2.wav, Content/Sfx/Combat/cast-blood-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cast-blood" (blood magic gathering), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/impact-blood-1.wav, Content/Sfx/Combat/impact-blood-2.wav, Content/Sfx/Combat/impact-blood-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "impact-blood" (blood magic landing), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/heal-1.wav, Content/Sfx/Combat/heal-2.wav, Content/Sfx/Combat/heal-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "heal" (someone healed), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/buff-1.wav, Content/Sfx/Combat/buff-2.wav, Content/Sfx/Combat/buff-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "buff" (a blessing or a stance taking hold), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/debuff-1.wav, Content/Sfx/Combat/debuff-2.wav, Content/Sfx/Combat/debuff-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "debuff" (a curse or a weakness taking hold), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/aura-tick-1.wav, Content/Sfx/Combat/aura-tick-2.wav, Content/Sfx/Combat/aura-tick-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "aura-tick" (an aura ticking over), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/telegraph-1.wav, Content/Sfx/Combat/telegraph-2.wav, Content/Sfx/Combat/telegraph-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "telegraph" (a foe winding up something big), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/boss-phase-1.wav, Content/Sfx/Combat/boss-phase-2.wav, Content/Sfx/Combat/boss-phase-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "boss-phase" (a boss changing as it's hurt), synthesised by tools/generate_audio.py and layered with recordings from the Versilian Community Sample Library by Versilian Studios LLC (https://github.com/sgossner/VCSL, folder "Idiophones/Struck Idiophones/Gong 1" at commit dfcf4a4918771eee884b96ad4493de82ef84daf6: take 1 gong_f.wav, take 2 gong_fff.wav, take 3 gong_2_f.wav), released under CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), which are not shipped; the sound itself is released under public domain
+
+Content/Sfx/Combat/knockdown-1.wav, Content/Sfx/Combat/knockdown-2.wav, Content/Sfx/Combat/knockdown-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "knockdown" (someone knocked off their feet), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/body-fall-1.wav, Content/Sfx/Combat/body-fall-2.wav, Content/Sfx/Combat/body-fall-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "body-fall" (a body going down), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/death-1.wav, Content/Sfx/Combat/death-2.wav, Content/Sfx/Combat/death-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "death" (something dying), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/downed-1.wav, Content/Sfx/Combat/downed-2.wav, Content/Sfx/Combat/downed-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "downed" (someone in the party going down), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/revive-1.wav, Content/Sfx/Combat/revive-2.wav, Content/Sfx/Combat/revive-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "revive" (someone brought back up), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/potion-1.wav, Content/Sfx/Combat/potion-2.wav, Content/Sfx/Combat/potion-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "potion" (a potion drunk), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/soul-link-1.wav, Content/Sfx/Combat/soul-link-2.wav, Content/Sfx/Combat/soul-link-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "soul-link" (the Soul-Link strike), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/ui-press-1.wav, Content/Sfx/Combat/ui-press-2.wav, Content/Sfx/Combat/ui-press-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "ui-press" (a skill pressed on the bar), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/ui-denied-1.wav, Content/Sfx/Combat/ui-denied-2.wav, Content/Sfx/Combat/ui-denied-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "ui-denied" (a skill that can't be used yet), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/cooldown-ready-1.wav, Content/Sfx/Combat/cooldown-ready-2.wav, Content/Sfx/Combat/cooldown-ready-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "cooldown-ready" (a skill ready again), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/level-up-1.wav, Content/Sfx/Combat/level-up-2.wav, Content/Sfx/Combat/level-up-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "level-up" (a level gained), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/victory-1.wav, Content/Sfx/Combat/victory-2.wav, Content/Sfx/Combat/victory-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "victory" (the last foe falling, before the victory jingle), synthesised by tools/generate_audio.py, released under public domain
+
+Content/Sfx/Combat/defeat-1.wav, Content/Sfx/Combat/defeat-2.wav, Content/Sfx/Combat/defeat-3.wav - created by Caleb Kiatoukaysi for Legend Quest, three takes of the combat sound "defeat" (the last of the party falling, before the defeat jingle), synthesised by tools/generate_audio.py, released under public domain
 
 ## Text
 

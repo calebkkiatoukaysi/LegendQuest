@@ -9365,6 +9365,27 @@
 /processorParam:Version=3.8.5.1
 /build:Music/the-hunger.wav
 
+#begin Music/victory.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Music/victory.wav
+
+#begin Music/defeat.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Music/defeat.wav
+
+#begin Music/engage.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Music/engage.wav
+
 #begin Sfx/sword-hit.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -9497,6 +9518,1371 @@
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.1
 /build:Sfx/buy.wav
+
+#begin Sfx/Combat/swing-light-blade-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-light-blade-1.wav
+
+#begin Sfx/Combat/swing-light-blade-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-light-blade-2.wav
+
+#begin Sfx/Combat/swing-light-blade-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-light-blade-3.wav
+
+#begin Sfx/Combat/swing-heavy-blade-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-heavy-blade-1.wav
+
+#begin Sfx/Combat/swing-heavy-blade-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-heavy-blade-2.wav
+
+#begin Sfx/Combat/swing-heavy-blade-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-heavy-blade-3.wav
+
+#begin Sfx/Combat/swing-axe-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-axe-1.wav
+
+#begin Sfx/Combat/swing-axe-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-axe-2.wav
+
+#begin Sfx/Combat/swing-axe-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-axe-3.wav
+
+#begin Sfx/Combat/swing-blunt-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-blunt-1.wav
+
+#begin Sfx/Combat/swing-blunt-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-blunt-2.wav
+
+#begin Sfx/Combat/swing-blunt-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-blunt-3.wav
+
+#begin Sfx/Combat/swing-polearm-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-polearm-1.wav
+
+#begin Sfx/Combat/swing-polearm-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-polearm-2.wav
+
+#begin Sfx/Combat/swing-polearm-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-polearm-3.wav
+
+#begin Sfx/Combat/swing-bow-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-bow-1.wav
+
+#begin Sfx/Combat/swing-bow-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-bow-2.wav
+
+#begin Sfx/Combat/swing-bow-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-bow-3.wav
+
+#begin Sfx/Combat/swing-crossbow-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-crossbow-1.wav
+
+#begin Sfx/Combat/swing-crossbow-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-crossbow-2.wav
+
+#begin Sfx/Combat/swing-crossbow-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-crossbow-3.wav
+
+#begin Sfx/Combat/swing-unarmed-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-unarmed-1.wav
+
+#begin Sfx/Combat/swing-unarmed-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-unarmed-2.wav
+
+#begin Sfx/Combat/swing-unarmed-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-unarmed-3.wav
+
+#begin Sfx/Combat/swing-claw-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-claw-1.wav
+
+#begin Sfx/Combat/swing-claw-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-claw-2.wav
+
+#begin Sfx/Combat/swing-claw-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-claw-3.wav
+
+#begin Sfx/Combat/swing-bite-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-bite-1.wav
+
+#begin Sfx/Combat/swing-bite-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-bite-2.wav
+
+#begin Sfx/Combat/swing-bite-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/swing-bite-3.wav
+
+#begin Sfx/Combat/hit-light-blade-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-light-blade-1.wav
+
+#begin Sfx/Combat/hit-light-blade-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-light-blade-2.wav
+
+#begin Sfx/Combat/hit-light-blade-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-light-blade-3.wav
+
+#begin Sfx/Combat/hit-heavy-blade-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-heavy-blade-1.wav
+
+#begin Sfx/Combat/hit-heavy-blade-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-heavy-blade-2.wav
+
+#begin Sfx/Combat/hit-heavy-blade-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-heavy-blade-3.wav
+
+#begin Sfx/Combat/hit-axe-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-axe-1.wav
+
+#begin Sfx/Combat/hit-axe-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-axe-2.wav
+
+#begin Sfx/Combat/hit-axe-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-axe-3.wav
+
+#begin Sfx/Combat/hit-blunt-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-blunt-1.wav
+
+#begin Sfx/Combat/hit-blunt-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-blunt-2.wav
+
+#begin Sfx/Combat/hit-blunt-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-blunt-3.wav
+
+#begin Sfx/Combat/hit-polearm-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-polearm-1.wav
+
+#begin Sfx/Combat/hit-polearm-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-polearm-2.wav
+
+#begin Sfx/Combat/hit-polearm-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-polearm-3.wav
+
+#begin Sfx/Combat/hit-bow-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-bow-1.wav
+
+#begin Sfx/Combat/hit-bow-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-bow-2.wav
+
+#begin Sfx/Combat/hit-bow-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-bow-3.wav
+
+#begin Sfx/Combat/hit-crossbow-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-crossbow-1.wav
+
+#begin Sfx/Combat/hit-crossbow-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-crossbow-2.wav
+
+#begin Sfx/Combat/hit-crossbow-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-crossbow-3.wav
+
+#begin Sfx/Combat/hit-unarmed-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-unarmed-1.wav
+
+#begin Sfx/Combat/hit-unarmed-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-unarmed-2.wav
+
+#begin Sfx/Combat/hit-unarmed-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-unarmed-3.wav
+
+#begin Sfx/Combat/hit-claw-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-claw-1.wav
+
+#begin Sfx/Combat/hit-claw-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-claw-2.wav
+
+#begin Sfx/Combat/hit-claw-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-claw-3.wav
+
+#begin Sfx/Combat/hit-bite-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-bite-1.wav
+
+#begin Sfx/Combat/hit-bite-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-bite-2.wav
+
+#begin Sfx/Combat/hit-bite-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/hit-bite-3.wav
+
+#begin Sfx/Combat/crit-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/crit-1.wav
+
+#begin Sfx/Combat/crit-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/crit-2.wav
+
+#begin Sfx/Combat/crit-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/crit-3.wav
+
+#begin Sfx/Combat/block-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/block-1.wav
+
+#begin Sfx/Combat/block-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/block-2.wav
+
+#begin Sfx/Combat/block-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/block-3.wav
+
+#begin Sfx/Combat/dodge-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/dodge-1.wav
+
+#begin Sfx/Combat/dodge-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/dodge-2.wav
+
+#begin Sfx/Combat/dodge-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/dodge-3.wav
+
+#begin Sfx/Combat/miss-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/miss-1.wav
+
+#begin Sfx/Combat/miss-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/miss-2.wav
+
+#begin Sfx/Combat/miss-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/miss-3.wav
+
+#begin Sfx/Combat/cast-fire-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-fire-1.wav
+
+#begin Sfx/Combat/cast-fire-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-fire-2.wav
+
+#begin Sfx/Combat/cast-fire-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-fire-3.wav
+
+#begin Sfx/Combat/impact-fire-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-fire-1.wav
+
+#begin Sfx/Combat/impact-fire-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-fire-2.wav
+
+#begin Sfx/Combat/impact-fire-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-fire-3.wav
+
+#begin Sfx/Combat/cast-frost-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-frost-1.wav
+
+#begin Sfx/Combat/cast-frost-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-frost-2.wav
+
+#begin Sfx/Combat/cast-frost-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-frost-3.wav
+
+#begin Sfx/Combat/impact-frost-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-frost-1.wav
+
+#begin Sfx/Combat/impact-frost-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-frost-2.wav
+
+#begin Sfx/Combat/impact-frost-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-frost-3.wav
+
+#begin Sfx/Combat/cast-lightning-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-lightning-1.wav
+
+#begin Sfx/Combat/cast-lightning-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-lightning-2.wav
+
+#begin Sfx/Combat/cast-lightning-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-lightning-3.wav
+
+#begin Sfx/Combat/impact-lightning-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-lightning-1.wav
+
+#begin Sfx/Combat/impact-lightning-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-lightning-2.wav
+
+#begin Sfx/Combat/impact-lightning-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-lightning-3.wav
+
+#begin Sfx/Combat/cast-radiant-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-radiant-1.wav
+
+#begin Sfx/Combat/cast-radiant-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-radiant-2.wav
+
+#begin Sfx/Combat/cast-radiant-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-radiant-3.wav
+
+#begin Sfx/Combat/impact-radiant-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-radiant-1.wav
+
+#begin Sfx/Combat/impact-radiant-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-radiant-2.wav
+
+#begin Sfx/Combat/impact-radiant-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-radiant-3.wav
+
+#begin Sfx/Combat/cast-necrotic-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-necrotic-1.wav
+
+#begin Sfx/Combat/cast-necrotic-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-necrotic-2.wav
+
+#begin Sfx/Combat/cast-necrotic-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-necrotic-3.wav
+
+#begin Sfx/Combat/impact-necrotic-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-necrotic-1.wav
+
+#begin Sfx/Combat/impact-necrotic-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-necrotic-2.wav
+
+#begin Sfx/Combat/impact-necrotic-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-necrotic-3.wav
+
+#begin Sfx/Combat/cast-force-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-force-1.wav
+
+#begin Sfx/Combat/cast-force-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-force-2.wav
+
+#begin Sfx/Combat/cast-force-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-force-3.wav
+
+#begin Sfx/Combat/impact-force-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-force-1.wav
+
+#begin Sfx/Combat/impact-force-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-force-2.wav
+
+#begin Sfx/Combat/impact-force-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-force-3.wav
+
+#begin Sfx/Combat/cast-psychic-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-psychic-1.wav
+
+#begin Sfx/Combat/cast-psychic-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-psychic-2.wav
+
+#begin Sfx/Combat/cast-psychic-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-psychic-3.wav
+
+#begin Sfx/Combat/impact-psychic-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-psychic-1.wav
+
+#begin Sfx/Combat/impact-psychic-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-psychic-2.wav
+
+#begin Sfx/Combat/impact-psychic-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-psychic-3.wav
+
+#begin Sfx/Combat/cast-nature-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-nature-1.wav
+
+#begin Sfx/Combat/cast-nature-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-nature-2.wav
+
+#begin Sfx/Combat/cast-nature-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-nature-3.wav
+
+#begin Sfx/Combat/impact-nature-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-nature-1.wav
+
+#begin Sfx/Combat/impact-nature-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-nature-2.wav
+
+#begin Sfx/Combat/impact-nature-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-nature-3.wav
+
+#begin Sfx/Combat/cast-thunder-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-thunder-1.wav
+
+#begin Sfx/Combat/cast-thunder-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-thunder-2.wav
+
+#begin Sfx/Combat/cast-thunder-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-thunder-3.wav
+
+#begin Sfx/Combat/impact-thunder-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-thunder-1.wav
+
+#begin Sfx/Combat/impact-thunder-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-thunder-2.wav
+
+#begin Sfx/Combat/impact-thunder-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-thunder-3.wav
+
+#begin Sfx/Combat/cast-poison-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-poison-1.wav
+
+#begin Sfx/Combat/cast-poison-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-poison-2.wav
+
+#begin Sfx/Combat/cast-poison-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-poison-3.wav
+
+#begin Sfx/Combat/impact-poison-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-poison-1.wav
+
+#begin Sfx/Combat/impact-poison-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-poison-2.wav
+
+#begin Sfx/Combat/impact-poison-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-poison-3.wav
+
+#begin Sfx/Combat/cast-blood-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-blood-1.wav
+
+#begin Sfx/Combat/cast-blood-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-blood-2.wav
+
+#begin Sfx/Combat/cast-blood-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cast-blood-3.wav
+
+#begin Sfx/Combat/impact-blood-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-blood-1.wav
+
+#begin Sfx/Combat/impact-blood-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-blood-2.wav
+
+#begin Sfx/Combat/impact-blood-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/impact-blood-3.wav
+
+#begin Sfx/Combat/heal-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/heal-1.wav
+
+#begin Sfx/Combat/heal-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/heal-2.wav
+
+#begin Sfx/Combat/heal-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/heal-3.wav
+
+#begin Sfx/Combat/buff-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/buff-1.wav
+
+#begin Sfx/Combat/buff-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/buff-2.wav
+
+#begin Sfx/Combat/buff-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/buff-3.wav
+
+#begin Sfx/Combat/debuff-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/debuff-1.wav
+
+#begin Sfx/Combat/debuff-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/debuff-2.wav
+
+#begin Sfx/Combat/debuff-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/debuff-3.wav
+
+#begin Sfx/Combat/aura-tick-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/aura-tick-1.wav
+
+#begin Sfx/Combat/aura-tick-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/aura-tick-2.wav
+
+#begin Sfx/Combat/aura-tick-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/aura-tick-3.wav
+
+#begin Sfx/Combat/telegraph-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/telegraph-1.wav
+
+#begin Sfx/Combat/telegraph-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/telegraph-2.wav
+
+#begin Sfx/Combat/telegraph-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/telegraph-3.wav
+
+#begin Sfx/Combat/boss-phase-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/boss-phase-1.wav
+
+#begin Sfx/Combat/boss-phase-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/boss-phase-2.wav
+
+#begin Sfx/Combat/boss-phase-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/boss-phase-3.wav
+
+#begin Sfx/Combat/knockdown-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/knockdown-1.wav
+
+#begin Sfx/Combat/knockdown-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/knockdown-2.wav
+
+#begin Sfx/Combat/knockdown-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/knockdown-3.wav
+
+#begin Sfx/Combat/body-fall-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/body-fall-1.wav
+
+#begin Sfx/Combat/body-fall-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/body-fall-2.wav
+
+#begin Sfx/Combat/body-fall-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/body-fall-3.wav
+
+#begin Sfx/Combat/death-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/death-1.wav
+
+#begin Sfx/Combat/death-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/death-2.wav
+
+#begin Sfx/Combat/death-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/death-3.wav
+
+#begin Sfx/Combat/downed-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/downed-1.wav
+
+#begin Sfx/Combat/downed-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/downed-2.wav
+
+#begin Sfx/Combat/downed-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/downed-3.wav
+
+#begin Sfx/Combat/revive-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/revive-1.wav
+
+#begin Sfx/Combat/revive-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/revive-2.wav
+
+#begin Sfx/Combat/revive-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/revive-3.wav
+
+#begin Sfx/Combat/potion-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/potion-1.wav
+
+#begin Sfx/Combat/potion-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/potion-2.wav
+
+#begin Sfx/Combat/potion-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/potion-3.wav
+
+#begin Sfx/Combat/soul-link-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/soul-link-1.wav
+
+#begin Sfx/Combat/soul-link-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/soul-link-2.wav
+
+#begin Sfx/Combat/soul-link-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/soul-link-3.wav
+
+#begin Sfx/Combat/ui-press-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/ui-press-1.wav
+
+#begin Sfx/Combat/ui-press-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/ui-press-2.wav
+
+#begin Sfx/Combat/ui-press-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/ui-press-3.wav
+
+#begin Sfx/Combat/ui-denied-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/ui-denied-1.wav
+
+#begin Sfx/Combat/ui-denied-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/ui-denied-2.wav
+
+#begin Sfx/Combat/ui-denied-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/ui-denied-3.wav
+
+#begin Sfx/Combat/cooldown-ready-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cooldown-ready-1.wav
+
+#begin Sfx/Combat/cooldown-ready-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cooldown-ready-2.wav
+
+#begin Sfx/Combat/cooldown-ready-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/cooldown-ready-3.wav
+
+#begin Sfx/Combat/level-up-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/level-up-1.wav
+
+#begin Sfx/Combat/level-up-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/level-up-2.wav
+
+#begin Sfx/Combat/level-up-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/level-up-3.wav
+
+#begin Sfx/Combat/victory-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/victory-1.wav
+
+#begin Sfx/Combat/victory-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/victory-2.wav
+
+#begin Sfx/Combat/victory-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/victory-3.wav
+
+#begin Sfx/Combat/defeat-1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/defeat-1.wav
+
+#begin Sfx/Combat/defeat-2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/defeat-2.wav
+
+#begin Sfx/Combat/defeat-3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.1
+/build:Sfx/Combat/defeat-3.wav
 
 #begin keycaps.png
 /importer:TextureImporter

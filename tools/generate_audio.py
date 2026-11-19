@@ -1,22 +1,29 @@
 """
-Audio generator for Legend Quest. Every WAV in Content/Music and Content/Sfx comes out of this
-script. Run it from the repo root:
+Audio generator for Legend Quest. Every WAV in Content/Sfx comes out of this script. Run it from
+the repo root:
 
-    python tools/generate_audio.py                     # everything
-    python tools/generate_audio.py music               # the songs
-    python tools/generate_audio.py sfx                 # every sound effect
-    python tools/generate_audio.py embers menu-move    # just these, by file name
-    python tools/generate_audio.py -v embers           # also print each layer's level
+    python tools/generate_audio.py                     # every sound effect
+    python tools/generate_audio.py sfx                 # the same: every sound effect, the combat ones too
+    python tools/generate_audio.py combat              # the combat sounds (Content/Sfx/Combat)
+    python tools/generate_audio.py combat/hit-axe      # every take of one combat sound
+    python tools/generate_audio.py menu-move buy       # just these, by file name
+    python tools/generate_audio.py -v menu-move        # also print each layer's level
 
-Only needs CPython (3.12 or newer, for math.sumprod). No samples are used: everything is built from
-sines, wavetables, noise and a few filters, and every random number is seeded, so a rerun writes
-the exact same files. The oscillators, filters, reverb and song mixer are The Black Box's, copied
+The songs in Content/Music are no longer made here: tools/score/compose.py scores them. The
+synthesised songs below (SONGS) are the ones the score replaced. They are kept for reference, and
+this script refuses to build them, since they would be written over the score's files.
+
+Only needs CPython (3.12 or newer, for math.sumprod). Nearly everything is built from sines,
+wavetables, noise and a few filters, and every random number is seeded, so a rerun writes the exact
+same files. The exceptions are five combat sounds (COMBAT_RECORDINGS) with a real anvil, gong or
+bass drum layered in, read from the CC0 Versilian Community Sample Library in the cache that
+tools/score/fetch_samples.py fills; without that cache those five are left as they are and
+everything else still builds. The oscillators, filters, reverb and song mixer are The Black Box's, copied
 over. The lute, the frame drum, the brass, the timpani, the chimes, the birds, the war drum, the
 cymbals and the great bell are new.
 
-Music is 16-bit stereo at 32 kHz and loops cleanly with MediaPlayer.IsRepeating. Sound effects are
-16-bit mono at 44.1 kHz and already balanced against each other, so the game can play them all at
-the same volume.
+Sound effects are 16-bit mono at 44.1 kHz and already balanced against each other, so the game can
+play them all at the same volume.
 """
 
 import cmath
@@ -2774,11 +2781,11 @@ def punch(x, drive):
     return [th(drive * v) / top for v in norm(x)]
 
 
-def swish(dur, top_hz, rng, low_hz=500.0):
+def swish(dur, top_hz, rng, low_hz=500.0, peak=SWISH_PEAK):
     """Something swung hard through the air: noise that gets brighter and louder as it comes past,
-    then falls away."""
+    then falls away. peak is how far through it's loudest, as a fraction of its length."""
     n = sec(dur)
-    top_at = SWISH_PEAK * dur
+    top_at = peak * dur
     cut = lines(((0.0, low_hz), (top_at, top_hz), (dur, low_hz)), n, R)
     air = swept_lowpass(swept_lowpass(highpass(noise(n, rng), low_hz, R), cut, R), cut, R)
     swell = lines(((0.0, 0.0), (top_at, 1.0), (dur, 0.0)), n, R)
@@ -3105,6 +3112,1156 @@ def sfx_buy(rng):
 
 
 # --------------------------------------------------------------------------- #
+# Real-time combat
+# --------------------------------------------------------------------------- #
+# The fights went real time (Story/11-combat.md), and every blow now sounds like its weapon's
+# family or its spell's school. Each sound is built three times, as takes 1 to 3 from three seeds,
+# so the same blow landing twice in a row isn't the same recording; the game turns through the
+# takes and nudges the pitch as well. A blow is three layers: a click for the moment of contact
+# (over in 5 ms), a body (a thump between 80 and 200 Hz, about a tenth of a second long) and the
+# tail of what it's made of (steel ringing, wood knocking, flesh, ice). A critical hit is a layer of
+# its own played over the blow: louder, longer, and with a sub drop under it.
+#
+# The files are Content/Sfx/Combat/<key>-<take>.wav, and the game asks for them by key (hit-axe,
+# cast-fire, ...) through AudioManager.PlayCombat. README "Music and sound" says when each plays.
+
+#: How many takes of every combat sound there are.
+COMBAT_TAKES = 3
+
+#: Where they go.
+COMBAT_FOLDER = "Content/Sfx/Combat"
+
+PEAK_SWING = -9.0       # swings come with every auto attack, so they sit well under the blows
+PEAK_CRIT = -4.0        # a critical hit goes over the blow it lands with
+PEAK_CAST = -7.0        # a spell gathering, under its impact
+PEAK_SOFT = -10.0       # the bar's clicks, a dodge
+PEAK_TICK = -13.0       # an aura ticking every 3 s, and a cooldown coming back: heard, never in the way
+
+#: How far into a swing its loudest moment comes, in seconds, by weapon family. The game starts
+#: the swing that long before the blow lands, so the whoosh peaks as it hits. AudioManager's
+#: CombatSounds.SwingLead has the same numbers.
+SWING_LEAD = {
+    "light-blade": 0.08, "heavy-blade": 0.14, "axe": 0.14, "blunt": 0.16, "polearm": 0.10,
+    "bow": 0.0, "crossbow": 0.0, "unarmed": 0.07, "claw": 0.07, "bite": 0.10,
+}
+
+
+#: Five combat sounds are layered with a recording of real metal or a real drum under the synthesis:
+#: an anvil for the shield and the big blade, a gong for the boss, a bass drum under thunder. The
+#: recordings come from the Versilian Community Sample Library (Versilian Studios, CC0 1.0), kept
+#: in a cache outside the repo by tools/score/fetch_samples.py and pinned to this commit, so a
+#: rerun reads the same samples. Nothing from it is shipped except what's mixed into these WAVs.
+SAMPLES_ROOT = os.environ.get("LQ_SAMPLES") or os.path.join(
+    os.environ.get("LOCALAPPDATA") or os.path.expanduser("~/.local/share"), "LegendQuest-samples")
+VCSL_URL = "https://github.com/sgossner/VCSL"
+VCSL_COMMIT = "dfcf4a4918771eee884b96ad4493de82ef84daf6"
+ANVIL = "VCSL/Idiophones/Struck Idiophones/Anvil/"
+GONG = "VCSL/Idiophones/Struck Idiophones/Gong 1/"
+BASS_DRUM = "VCSL/Membranophones/Struck Membranophones/Bass Drum 2/"
+
+#: Which recording goes into each take of the sounds that use one: key: (take 1, take 2, take 3).
+COMBAT_RECORDINGS = {
+    "hit-heavy-blade": (ANVIL + "Anvil_Hit1_v1_rr1_Mid.wav", ANVIL + "Anvil_Hit2_v1_rr1_Mid.wav", ANVIL + "Anvil_Hit3_v1_rr1_Mid.wav"),
+    "crit": (ANVIL + "Anvil_Hit1_v3_rr1_Mid.wav", ANVIL + "Anvil_Hit2_v3_rr1_Mid.wav", ANVIL + "Anvil_Hit3_v3_rr1_Mid.wav"),
+    "block": (ANVIL + "Anvil_Hit1_v2_rr1_Mid.wav", ANVIL + "Anvil_Hit2_v2_rr1_Mid.wav", ANVIL + "Anvil_Hit3_v2_rr1_Mid.wav"),
+    "boss-phase": (GONG + "gong_f.wav", GONG + "gong_fff.wav", GONG + "gong_2_f.wav"),
+    "impact-thunder": (BASS_DRUM + "bassdrum_hit_ff.wav", BASS_DRUM + "bassdrum_hit_f.wav", BASS_DRUM + "bassdrum_hit_mf1.wav"),
+}
+
+_RECORDINGS = {}
+
+
+def recording(rel, length):
+    """One recording from the sample cache, mixed down to mono, its silent lead-in cut off and its
+    first `length` seconds kept (faded at the end), scaled so its peak is 1. None if the cache
+    doesn't have it."""
+    if rel not in _RECORDINGS:
+        path = os.path.join(SAMPLES_ROOT, rel)
+        if not os.path.isfile(path):
+            return None
+        with wave.open(path, "rb") as w:
+            if w.getsampwidth() != 2 or w.getframerate() != R:
+                sys.exit("%s isn't 16-bit at %d Hz." % (rel, R))
+            ch = w.getnchannels()
+            pcm = array("h", w.readframes(w.getnframes()))
+        if sys.byteorder == "big":
+            pcm.byteswap()
+        mono = [sum(pcm[i:i + ch]) / (32768.0 * ch) for i in range(0, len(pcm), ch)]
+        top = max(map(abs, mono))
+        start = next(i for i, v in enumerate(mono) if abs(v) > 0.003 * top)
+        _RECORDINGS[rel] = mono[max(0, start - sec(0.002)):]
+    x = _RECORDINGS[rel][:sec(length)]
+    return fade(norm(list(x)), R, 0.001, min(0.3, 0.3 * length))
+
+
+def combat_sources(key):
+    """What went into a combat sound besides the synthesis, for its ASSETS.md line, or None."""
+    files = COMBAT_RECORDINGS.get(key)
+    if not files:
+        return None
+    takes = ", ".join("take %d %s" % (t, os.path.basename(f)) for t, f in enumerate(files, 1))
+    folder = os.path.dirname(files[0])[len("VCSL/"):]
+    return ("recordings from the Versilian Community Sample Library by Versilian Studios LLC (%s, folder "
+            "\"%s\" at commit %s: %s), released under CC0 1.0 "
+            "(https://creativecommons.org/publicdomain/zero/1.0/), which are not shipped"
+            % (VCSL_URL, folder, VCSL_COMMIT, takes))
+
+
+def jitter(rng, amount=0.06):
+    """A factor a little either side of 1, so each take's pitches and timings come out different."""
+    return rng.uniform(1.0 - amount, 1.0 + amount)
+
+
+def contact(rng, fc=3000.0, kind="hp", q=0.7, length=0.005):
+    """The moment of contact: a click of noise, over in 5 ms."""
+    return burst(length, length / 6.0, rng, kind, fc, q, attack=0.0002)
+
+
+def whoom(dur, f, rng, peak_at):
+    """The low end of something heavy swung: a hum that swells and falls with the swish, as the
+    weight of it pushes the air."""
+    n = sec(dur)
+    tone = glide(1.3 * f, 0.8 * f, 0.5 * dur, n, R)
+    mix(tone, norm(lowpass(lowpass(noise(n, rng), 1.5 * f, R), 1.5 * f, R)), 0, 0.5)
+    swell = lines(((0.0, 0.0), (peak_at, 1.0), (dur, 0.0)), n, R)
+    return shaped(norm(tone), shaped(swell, swell))
+
+
+def swing(rng, family, dur, top_hz, low_hz, body_hz=0.0, body_gain=0.0, whistle=0.0):
+    """A melee swing: a swish that's loudest SWING_LEAD seconds in, a low whoom for the heavy ones,
+    and a thin whistle off the edge for the blades."""
+    lead = SWING_LEAD[family] * jitter(rng, 0.05)
+    dur *= jitter(rng)
+    x = silence(sec(dur + 0.05))
+    place(x, swish(dur, top_hz * jitter(rng), rng, low_hz, peak=lead / dur), 0.0, 1.0)
+    if body_hz:
+        place(x, whoom(dur, body_hz * jitter(rng), rng, lead), 0.0, body_gain)
+    if whistle:
+        n = sec(0.7 * dur)
+        f = rng.uniform(1300.0, 1700.0)
+        tone = shaped(sweep(f, 0.6 * f, n, R), lines(((0.0, 0.0), (0.7 * lead, 1.0), (0.7 * dur, 0.0)), n, R))
+        place(x, tone, 0.3 * lead, whistle)
+    return x
+
+
+def clatter(x, t, rng, count, lo, hi, gain, spread=0.03, partials=IRON_LATCH):
+    """Gear knocking together as something lands: a few small iron strikes, each quieter."""
+    for i in range(count):
+        ring = strike(partials, rng.uniform(lo, hi), 0.12, rng, decay_scale=0.4, click=0.4)
+        place(x, ring, t + spread * i + rng.uniform(0.0, 0.5 * spread), gain * (1.0 - 0.6 * i / max(1, count)))
+
+
+def thrum(f, dur, rate_hz, rng):
+    """A shaft shuddering after it's struck home: a low note beating fast as it dies."""
+    n = sec(dur)
+    tone = shaped(sine(f * jitter(rng, 0.04), n, R), envelope(n, R, attack=0.001, tau=dur / 4.0))
+    return tremolo(tone, R, rate_hz, 0.8)
+
+
+def growl(dur, f, rng):
+    """A beast's throat: a low buzz through an open vowel, rough with a fast flutter."""
+    n = sec(dur)
+    times = list(range(n))
+    buzz = saw_at(f * jitter(rng), times, R, 1.0, rng.random())
+    mix(buzz, noise(n, rng), 0, 0.4)
+    out = silence(n)
+    for fc, g in ((550.0, 1.0), (1100.0, 0.5), (2400.0, 0.2)):
+        mix(out, biquad(buzz, "bp", fc, 4.0, R), 0, g)
+    flutter = [0.6 + 0.4 * v for v in sine(rng.uniform(26.0, 34.0), n, R)]
+    return shaped(shaped(norm(out), flutter), envelope(n, R, attack=0.03, gate=0.6 * dur, release=0.05))
+
+
+def wet(dur, rng, fc=900.0):
+    """Something wet giving way: low noise broken up into lumps."""
+    n = sec(dur)
+    lumps = [max(0.0, v) for v in norm(lowpass(noise(n, rng), 60.0, R))]
+    body = norm(lowpass(lowpass(noise(n, rng), fc, R), fc, R))
+    return shaped(shaped(body, lumps), envelope(n, R, attack=0.002, tau=dur / 3.0))
+
+
+def crackle_pops(x, t0, length, count, rng, gain, lo=1500.0, hi=5000.0):
+    """Small sharp pops scattered over a stretch, bunched at the front: fire, or sparks."""
+    for _ in range(count):
+        t = t0 + length * rng.random() ** 1.6
+        m = int(rng.uniform(0.001, 0.004) * R)
+        pop = shaped(norm(biquad(noise(m, rng), "bp", rng.uniform(lo, hi), 1.2, R)), envelope(m, R, 0.0002, m / R * 0.3))
+        place(x, pop, t, rng.uniform(0.4, 1.0) * gain * (1.0 - 0.6 * (t - t0) / (length + 0.05)))
+
+
+def rising_air(dur, lo_hz, hi_hz, rng, hp=500.0):
+    """Air rushing up as something gathers: noise opening from lo_hz to hi_hz and swelling, then cut."""
+    n = sec(dur)
+    air = swept_lowpass(highpass(noise(n, rng), hp, R), lines(((0.0, lo_hz), (dur, hi_hz)), n, R), R)
+    rise = lines(((0.0, 0.0), (0.85 * dur, 1.0), (dur, 0.0)), n, R)
+    return shaped(norm(air), rise)
+
+
+def fm_tone(f, dur, mod_hz, depth_hz, rng, glide_to=None):
+    """A wavering tone: its pitch wobbling mod_hz times a second, depth_hz either way, optionally
+    sliding to glide_to as it goes."""
+    n = sec(dur)
+    target = f if glide_to is None else glide_to
+    w = TAU / R
+    s = math.sin
+    ph0 = rng.random() * TAU
+    freqs = [f + (target - f) * i / n + depth_hz * s(w * mod_hz * i + ph0) for i in range(n)]
+    phase = list(accumulate(w * v for v in freqs))
+    return [s(p) + 0.3 * s(2.0 * p) for p in phase]
+
+
+# --- Swings ---------------------------------------------------------------- #
+
+def cx_swing_light_blade(rng):
+    """A dagger or a short blade: a quick, thin swish with the edge whistling."""
+    return room(swing(rng, "light-blade", 0.2, 7000.0, 900.0, whistle=0.05), 0.25, 5000.0, 0.06)
+
+
+def cx_swing_heavy_blade(rng):
+    """A long or great sword: a longer swish, lower, with the weight of the blade humming under it."""
+    return room(swing(rng, "heavy-blade", 0.34, 4200.0, 400.0, 115.0, 0.35, whistle=0.04), 0.3, 4000.0, 0.08)
+
+
+def cx_swing_axe(rng):
+    """An axe: the head's weight pulling the swish low and round, and the haft creaking in the grip."""
+    x = swing(rng, "axe", 0.32, 3200.0, 350.0, 95.0, 0.45)
+    place(x, creak(0.06, 140.0, 180.0, rng, 700.0), 0.0, 0.12)
+    return room(x, 0.3, 3500.0, 0.08)
+
+
+def cx_swing_blunt(rng):
+    """A mace, a hammer or a staff: a slow heavy whoosh, mostly low."""
+    return room(swing(rng, "blunt", 0.36, 2300.0, 250.0, 80.0, 0.6), 0.3, 3000.0, 0.08)
+
+
+def cx_swing_polearm(rng):
+    """A spear thrust: a short, sharp rush of air that peaks late, and the shaft knocking in the hands."""
+    x = swing(rng, "polearm", 0.16, 5200.0, 600.0, whistle=0.03)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.06), R, 560.0 * jitter(rng))), 0.0, 0.15)
+    return room(x, 0.25, 4500.0, 0.06)
+
+
+def cx_swing_bow(rng):
+    """A bow loosed: the string's snap and twang, the limbs knocking, and the arrow whipping away
+    with its whistle dropping. Played as the arrow leaves, so the snap is right at the front."""
+    x = silence(sec(0.5))
+    j = jitter(rng)
+    n = sec(0.22)
+    twang = shaped(glide(340.0 * j, 260.0 * j, 0.02, n, R), envelope(n, R, attack=0.0004, tau=0.045))
+    mix(twang, shaped(glide(680.0 * j, 520.0 * j, 0.02, n, R), envelope(n, R, attack=0.0004, tau=0.025)), 0, 0.35)
+    place(x, twang, 0.0, 0.7)
+    place(x, contact(rng, 3000.0), 0.0, 0.7)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.06), R, 700.0 * j)), 0.0, 0.35)
+    n = sec(0.3)
+    whip = shaped(sweep(3300.0 * j, 1700.0 * j, n, R), lines(((0.0, 0.0), (0.1, 1.0), (0.3, 0.0)), n, R))
+    place(x, whip, 0.025, 0.1)
+    place(x, swish(0.3, 6000.0, rng, 1000.0, peak=0.3), 0.02, 0.5)
+    return room(x, 0.35, 4000.0, 0.08)
+
+
+def cx_swing_crossbow(rng):
+    """A crossbow loosed: the trigger's iron click, the heavy string slapping forward, and the bolt
+    going off with a low whirr."""
+    x = silence(sec(0.5))
+    j = jitter(rng)
+    place(x, strike(IRON_LATCH, 1500.0 * j, 0.1, rng, decay_scale=0.4, click=0.8), 0.0, 0.5)
+    slap = 0.012
+    place(x, thump(320.0 * j, 190.0, 0.12, 0.025), slap, 0.8)
+    place(x, contact(rng, 2200.0, "bp", 0.8), slap, 0.8)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.08), R, 480.0 * j)), slap, 0.4)
+    n = sec(0.28)
+    whirr = shaped(sweep(2600.0 * j, 1300.0 * j, n, R), lines(((0.0, 0.0), (0.06, 1.0), (0.28, 0.0)), n, R))
+    place(x, tremolo(whirr, R, 70.0, 0.5), slap + 0.01, 0.1)
+    place(x, swish(0.26, 4500.0, rng, 700.0, peak=0.25), slap, 0.55)
+    return room(x, 0.35, 3500.0, 0.08)
+
+
+def cx_swing_unarmed(rng):
+    """A punch or a kick thrown: a short low rush of air and a sleeve snapping with it."""
+    x = swing(rng, "unarmed", 0.15, 2200.0, 300.0)
+    place(x, burst(0.05, 0.012, rng, "bp", 1500.0 * jitter(rng), 0.9, attack=0.01), 0.03, 0.3)
+    return room(x, 0.2, 3500.0, 0.05)
+
+
+def cx_swing_claw(rng):
+    """Claws raking the air: two quick swishes, one hard on the other."""
+    x = silence(sec(0.3))
+    place(x, swing(rng, "claw", 0.12, 5500.0, 700.0), 0.0, 0.8)
+    place(x, swing(rng, "claw", 0.12, 6200.0, 800.0), 0.045 * jitter(rng), 0.6)
+    return room(x, 0.2, 4500.0, 0.05)
+
+
+def cx_swing_bite(rng):
+    """A beast lunging to bite: a snarl in the throat and the rush of it coming forward."""
+    x = swing(rng, "bite", 0.22, 2600.0, 350.0)
+    place(x, growl(0.2, rng.uniform(85.0, 110.0), rng), 0.0, 0.6)
+    return room(x, 0.25, 3000.0, 0.06)
+
+
+# --- Blows landing ----------------------------------------------------------- #
+
+def cx_hit_light_blade(rng):
+    """A light blade landing: a sharp bright click, a small body, the edge slicing through cloth,
+    and the thin blade ringing for a moment."""
+    x = silence(sec(0.45))
+    j = jitter(rng)
+    place(x, contact(rng, 3500.0), 0.0, 0.9)
+    place(x, thump(195.0 * j, 95.0, 0.15, 0.035), 0.0, 0.8)
+    place(x, burst(0.06, 0.014, rng, "bp", 3800.0 * j, 1.0), 0.002, 0.6)
+    place(x, strike(BLADE, 2100.0 * j, 0.35, rng, decay_scale=0.7, click=0.0), 0.0, 0.18)
+    return room(punch(x, HIT_DRIVE), 0.3, 4000.0, 0.1)
+
+
+def cx_hit_heavy_blade(rng, metal):
+    """A long or great sword landing: the edge biting, the weight of the blow behind it, a chunk of
+    what it cut into, and the long blade ringing low, with a moment of a real anvil's clang in it
+    for the steel."""
+    x = silence(sec(0.75))
+    n = sec(0.25)
+    place(x, shaped(lowpass(metal[:n], 5000.0, R), envelope(n, R, attack=0.0005, tau=0.05)), 0.0, 0.22)
+    j = jitter(rng)
+    place(x, contact(rng, 2600.0, "bp", 0.8), 0.0, 1.0)
+    place(x, burst(0.04, 0.008, rng, "bp", 2800.0 * j, 0.8), 0.001, 0.6)
+    place(x, thump(175.0 * j, 80.0, 0.28, 0.06, sweep_tau=0.04), 0.0, 1.0)
+    place(x, norm(lowpass(burst(0.09, 0.022, rng), 1100.0, R)), 0.0, 0.5)
+    place(x, strike(BLADE, 1250.0 * j, 0.6, rng, decay_scale=1.2, click=0.0), 0.0, 0.25)
+    return room(punch(x, HIT_DRIVE), 0.4, 3500.0, 0.12)
+
+
+def cx_hit_axe(rng):
+    """An axe biting in: a hard chop with a crunch to it, splinters knocking, the iron head ringing dull."""
+    x = silence(sec(0.65))
+    j = jitter(rng)
+    place(x, contact(rng, 2000.0, "bp", 0.8), 0.0, 1.0)
+    place(x, thump(160.0 * j, 78.0, 0.3, 0.07, sweep_tau=0.04), 0.0, 1.0)
+    place(x, burst(0.08, 0.02, rng, "bp", 1300.0 * j, 1.2), 0.0, 0.7)
+    for _ in range(4):
+        place(x, norm(modes(WOOD_KNOCK, sec(0.04), R, rng.uniform(500.0, 950.0))), rng.uniform(0.005, 0.05), 0.15)
+    place(x, strike(IRON_LATCH, 700.0 * j, 0.4, rng, decay_scale=1.5, click=0.0), 0.0, 0.15)
+    return room(punch(x, HIT_DRIVE), 0.35, 3000.0, 0.1)
+
+
+def cx_hit_blunt(rng):
+    """A mace, a hammer or a staff coming down: a deep dull thump with no ring to it, the crunch of
+    what it lands on, and a knock from the haft."""
+    x = silence(sec(0.65))
+    j = jitter(rng)
+    place(x, contact(rng, 1500.0, "bp", 1.0), 0.0, 0.5)
+    place(x, thump(150.0 * j, 72.0, 0.45, 0.09, sweep_tau=0.04), 0.0, 1.0)
+    place(x, norm(lowpass(lowpass(burst(0.1, 0.025, rng), 900.0, R), 900.0, R)), 0.0, 0.6)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.1), R, 310.0 * j)), 0.0, 0.3)
+    return room(punch(x, HIT_DRIVE), 0.35, 2000.0, 0.1)
+
+
+def cx_hit_polearm(rng):
+    """A spear going in: a quick pierce, a short punch of weight, and the shaft shuddering in the hands."""
+    x = silence(sec(0.55))
+    j = jitter(rng)
+    place(x, contact(rng, 3000.0), 0.0, 0.9)
+    place(x, burst(0.035, 0.008, rng, "bp", 2800.0 * j, 1.0), 0.0, 0.7)
+    place(x, thump(175.0 * j, 85.0, 0.2, 0.045), 0.0, 0.9)
+    place(x, thrum(140.0, 0.35, 28.0, rng), 0.01, 0.25)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.08), R, 430.0 * j)), 0.0, 0.25)
+    return room(punch(x, HIT_DRIVE), 0.3, 3500.0, 0.1)
+
+
+def cx_hit_bow(rng):
+    """An arrow striking home: a sharp thock, a little weight, and the shaft thrumming as it sticks."""
+    x = silence(sec(0.5))
+    j = jitter(rng)
+    place(x, contact(rng, 2500.0), 0.0, 0.8)
+    place(x, thump(220.0 * j, 120.0, 0.1, 0.025), 0.0, 0.7)
+    place(x, norm(modes(WOOD_KNOCK, sec(0.08), R, 900.0 * j)), 0.0, 0.5)
+    place(x, thrum(165.0, 0.3, 34.0, rng), 0.005, 0.25)
+    return room(punch(x, HIT_DRIVE), 0.25, 4000.0, 0.08)
+
+
+def cx_hit_crossbow(rng):
+    """A crossbow bolt slamming in: heavier than an arrow, with a crunch, and the bolt shuddering."""
+    x = silence(sec(0.55))
+    j = jitter(rng)
+    place(x, contact(rng, 2000.0), 0.0, 1.0)
+    place(x, thump(180.0 * j, 75.0, 0.2, 0.045), 0.0, 1.0)
+    place(x, burst(0.05, 0.012, rng, "bp", 1500.0 * j, 1.0), 0.0, 0.6)
+    place(x, thrum(210.0, 0.25, 45.0, rng), 0.005, 0.25)
+    return room(punch(x, HIT_DRIVE), 0.3, 3500.0, 0.1)
+
+
+def cx_hit_unarmed(rng):
+    """A fist or a boot landing: a soft low thump, the slap of it, and clothes rustling."""
+    x = silence(sec(0.4))
+    j = jitter(rng)
+    place(x, contact(rng, 1800.0, "bp", 0.8), 0.0, 0.45)
+    place(x, thump(130.0 * j, 62.0, 0.18, 0.045), 0.0, 1.0)
+    place(x, burst(0.04, 0.01, rng, "bp", 1100.0 * j, 0.8), 0.0, 0.7)
+    place(x, norm(lowpass(burst(0.06, 0.015, rng), 600.0, R)), 0.0, 0.4)
+    place(x, burst(0.05, 0.015, rng, "bp", 4000.0, 0.9, attack=0.005), 0.01, 0.12)
+    return room(punch(x, HIT_DRIVE), 0.25, 2500.0, 0.08)
+
+
+def cx_hit_claw(rng):
+    """Claws tearing: three scratches raked across in quick succession over a small thump, and a rip."""
+    x = silence(sec(0.45))
+    j = jitter(rng)
+    place(x, thump(160.0 * j, 80.0, 0.15, 0.04), 0.0, 0.8)
+    for k in range(3):
+        place(x, burst(0.04, 0.01, rng, "bp", (2800.0 + 500.0 * k) * j, 1.5), 0.016 * k, 0.6)
+        place(x, contact(rng, 3500.0), 0.016 * k, 0.3)
+    place(x, norm(lowpass(burst(0.1, 0.03, rng, "bp", 1800.0, 0.7), 2500.0, R)), 0.03, 0.3)
+    return room(punch(x, HIT_DRIVE), 0.25, 3500.0, 0.08)
+
+
+def cx_hit_bite(rng):
+    """Jaws closing on something: two teeth clacks hard on each other, a wet crunch, and the weight
+    of the beast behind it."""
+    x = silence(sec(0.5))
+    j = jitter(rng)
+    place(x, strike(BONE, 1800.0 * j, 0.06, rng, click=0.6, click_hp=3000.0), 0.0, 0.7)
+    place(x, strike(BONE, 1500.0 * j, 0.06, rng, click=0.6, click_hp=3000.0), 0.012, 0.5)
+    place(x, thump(140.0 * j, 68.0, 0.2, 0.05), 0.0, 0.85)
+    place(x, wet(0.16, rng, 1000.0), 0.01, 0.6)
+    return room(punch(x, HIT_DRIVE), 0.25, 3000.0, 0.08)
+
+
+# --- How a blow went ------------------------------------------------------- #
+
+def cx_crit(rng, metal):
+    """A critical hit, played over the blow: a harder crack, a real anvil struck hard ringing over
+    a synthesised shing, a deep boom dropping into a sub under it, and Steel's call flaring high on
+    chimes, so you know it was something. Longer than any blow."""
+    x = silence(sec(1.5))
+    n = sec(0.9)
+    place(x, shaped(metal[:n], envelope(n, R, attack=0.0005, tau=0.3)), 0.0, 0.35)
+    j = jitter(rng, 0.04)
+    place(x, contact(rng, 2500.0), 0.0, 1.0)
+    place(x, burst(0.05, 0.01, rng, "bp", 2400.0 * j, 0.7), 0.0, 0.8)
+    place(x, thump(210.0 * j, 70.0, 0.25, 0.05), 0.0, 0.9)
+    sub = shaped(glide(95.0 * j, 32.0, 0.12, sec(1.45), R), envelope(sec(1.45), R, attack=0.002, tau=0.35))
+    place(x, sub, 0.0, 1.0)
+    place(x, norm(lowpass(lowpass(burst(0.3, 0.08, rng), 300.0, R), 300.0, R)), 0.0, 0.35)
+    place(x, strike(BLADE, 2600.0 * j, 1.0, rng, decay_scale=1.8, click=0.0), 0.0, 0.22)
+    x = punch(x, CRIT_DRIVE)
+    for i, m in enumerate(CALL_NOTES):
+        place(x, chime(midi_hz(m + 12), R, rng, 0.8, 1.2), 0.03 + 0.03 * i, 0.16)
+    return room(x, 1.0, 4000.0, 0.22)
+
+
+def cx_block(rng, metal):
+    """A blow taken on a shield or a parrying blade: a deep boom from the boards, the iron rim
+    ringing (a real anvil, struck mid-hard, and a synthesised rim), and the weapon scraping as it
+    glances off."""
+    x = silence(sec(0.8))
+    n = sec(0.6)
+    place(x, shaped(lowpass(metal[:n], 6000.0, R), envelope(n, R, attack=0.0005, tau=0.14)), 0.0, 0.4)
+    j = jitter(rng)
+    place(x, contact(rng, 2200.0, "bp", 0.7), 0.0, 0.8)
+    place(x, thump(135.0 * j, 70.0, 0.4, 0.07), 0.0, 1.0)
+    place(x, norm(modes(SHIELD_BOARDS, sec(0.3), R, 190.0 * j)), 0.0, 0.8)
+    place(x, strike(IRON_LATCH, 520.0 * j, 0.6, rng, decay_scale=3.0, click=0.5), 0.0, 0.3)
+    n = sec(0.14)
+    scrape = shaped(norm(biquad(noise(n, rng), "bp", 2600.0 * j, 1.5, R)), envelope(n, R, attack=0.01, tau=0.045))
+    place(x, scrape, 0.02, 0.3)
+    return room(punch(x, HIT_DRIVE), 0.5, 3000.0, 0.15)
+
+
+def cx_dodge(rng):
+    """Stepping out of the way: a body whooshing aside, a scuff of a foot, and cloth flapping."""
+    x = silence(sec(0.35))
+    place(x, swish(0.2 * jitter(rng), 2600.0, rng, 300.0, peak=0.35), 0.0, 0.8)
+    place(x, norm(lowpass(burst(0.07, 0.025, rng, "bp", 2000.0, 0.7, attack=0.01), 3000.0, R)), 0.08, 0.5)
+    place(x, burst(0.04, 0.012, rng, "bp", 1400.0 * jitter(rng), 1.0, attack=0.004), 0.03, 0.3)
+    return room(x, 0.2, 3500.0, 0.05)
+
+
+def cx_miss(rng):
+    """A blow that misses: the weapon whooshing past with its edge whistling, and nothing to stop it."""
+    x = silence(sec(0.45))
+    place(x, swish(0.26 * jitter(rng), 4500.0 * jitter(rng), rng, 400.0), 0.0, 1.0)
+    n = sec(0.22)
+    f = rng.uniform(1150.0, 1450.0)
+    whistle = shaped(sweep(f, 0.62 * f, n, R), lines(((0.0, 0.0), (0.12, 1.0), (0.22, 0.0)), n, R))
+    place(x, whistle, 0.02, 0.06)
+    return room(x, 0.3, 4000.0, 0.08)
+
+
+# --- Spells: cast and impact, by school ------------------------------------ #
+
+def cx_cast_fire(rng):
+    """Fire gathering in a hand: air rushing up into a roar, a few sparks, and the whump as it catches."""
+    x = silence(sec(0.7))
+    gather = 0.42 * jitter(rng)
+    place(x, rising_air(gather, 300.0, 3500.0, rng, 200.0), 0.0, 0.8)
+    crackle_pops(x, 0.1, gather, 8, rng, 0.25)
+    place(x, thump(170.0 * jitter(rng), 70.0, 0.25, 0.05), gather, 0.5)
+    place(x, norm(lowpass(burst(0.25, 0.07, rng), 1500.0, R)), gather, 0.4)
+    return room(x, 0.5, 3000.0, 0.15)
+
+
+def cx_impact_fire(rng):
+    """Fire landing: the whump of it catching, a roar of flame rushing out and dying back with a
+    hiss, and the crackle of it burning down."""
+    x = silence(sec(1.0))
+    burn = 0.7 * jitter(rng)
+    n = sec(burn)
+    place(x, contact(rng, 1200.0, "bp", 0.7), 0.0, 0.6)
+    place(x, thump(155.0 * jitter(rng), 76.0, 0.4, 0.08, sweep_tau=0.04), 0.0, 0.9)
+    roar = norm(lowpass(lowpass(noise(n, rng), 1300.0, R), 1300.0, R))
+    flicker = [1.0 + 0.35 * v for v in norm(lowpass(lowpass(noise(n, rng), 30.0, R), 30.0, R))]
+    place(x, shaped(shaped(roar, envelope(n, R, attack=0.02, tau=0.25)), flicker), 0.0, 0.9)
+    place(x, burst(0.45, 0.12, rng, "bp", 3500.0, 0.6, attack=0.01), 0.0, 0.25)
+    crackle_pops(x, 0.04, burn, 14, rng, 0.3)
+    return room(punch(x, HIT_DRIVE), 0.6, 3000.0, 0.15)
+
+
+def cx_cast_frost(rng):
+    """Cold gathering: a thin icy hiss coming up, and glass notes ringing up out of tune with each other."""
+    x = silence(sec(0.9))
+    gather = 0.45 * jitter(rng)
+    place(x, rising_air(gather, 2500.0, 9000.0, rng, 3000.0), 0.0, 0.6)
+    for i in range(3):
+        place(x, strike(ICE, rng.uniform(2600.0, 3400.0) * (1.25 ** i), 0.5, rng, decay_scale=0.6, click=0.2), 0.08 + 0.12 * i, 0.22)
+    place(x, burst(0.05, 0.015, rng, "hp", 4000.0), gather, 0.3)
+    return room(x, 0.7, 5000.0, 0.25)
+
+
+def cx_impact_frost(rng):
+    """Ice shattering on its target: a hard crack, shards ringing out of tune, a crunch as it sets,
+    and cold air spilling off it."""
+    x = silence(sec(1.0))
+    place(x, contact(rng, 4000.0), 0.0, 1.0)
+    place(x, thump(250.0 * jitter(rng), 130.0, 0.14, 0.035), 0.0, 0.6)
+    place(x, burst(0.07, 0.018, rng, "bp", 1800.0, 0.9), 0.0, 0.5)
+    for _ in range(9):
+        t = 0.15 * rng.random() ** 1.5
+        place(x, strike(ICE, rng.uniform(2400.0, 5600.0), 0.5, rng, decay_scale=rng.uniform(0.2, 0.7), click=0.3), t, rng.uniform(0.12, 0.3))
+    place(x, burst(0.5, 0.15, rng, "hp", 4500.0, 0.7, attack=0.02), 0.02, 0.3)
+    return room(punch(x, HIT_DRIVE), 0.8, 5000.0, 0.22)
+
+
+def cx_cast_lightning(rng):
+    """Lightning gathering: a buzz coming up with sparks snapping round it faster and faster."""
+    x = silence(sec(0.7))
+    gather = 0.5 * jitter(rng)
+    n = sec(gather)
+    buzz = saw_at(rng.uniform(95.0, 125.0), list(range(n)), R)
+    buzz = swept_lowpass(buzz, lines(((0.0, 300.0), (gather, 4000.0)), n, R), R)
+    place(x, shaped(norm(buzz), lines(((0.0, 0.0), (0.9 * gather, 1.0), (gather, 0.0)), n, R)), 0.0, 0.35)
+    t = 0.0
+    while t < gather:
+        place(x, contact(rng, rng.uniform(2500.0, 6000.0)), t, rng.uniform(0.3, 0.7) * (0.3 + 0.7 * t / gather))
+        t += 0.06 * (1.0 - 0.8 * t / gather) * rng.uniform(0.6, 1.4)
+    return room(x, 0.5, 5000.0, 0.15)
+
+
+def cx_impact_lightning(rng):
+    """Lightning striking: a split-second crack, a zap dropping out of the air with a buzz on it,
+    sparks spitting, and a small rumble rolling off."""
+    x = silence(sec(1.1))
+    place(x, burst(0.012, 0.003, rng, "hp", 1800.0, attack=0.0002), 0.0, 1.0)
+    n = sec(0.12)
+    zap = shaped(sweep(rng.uniform(2600.0, 3400.0), 260.0, n, R), envelope(n, R, attack=0.0005, tau=0.04))
+    place(x, tremolo(zap, R, 120.0, 0.7), 0.0, 0.5)
+    place(x, thump(120.0 * jitter(rng), 45.0, 0.5, 0.12), 0.0, 0.7)
+    n = sec(0.8)
+    rumble = shaped(norm(lowpass(lowpass(noise(n, rng), 220.0, R), 220.0, R)), envelope(n, R, attack=0.02, tau=0.25))
+    place(x, rumble, 0.02, 0.5)
+    crackle_pops(x, 0.02, 0.4, 12, rng, 0.35, 3000.0, 7000.0)
+    return room(punch(x, HIT_DRIVE), 0.7, 4000.0, 0.2)
+
+
+def cx_cast_radiant(rng):
+    """Holy light gathering: a choir swelling on a bright D major chord and small bells running up it."""
+    x = silence(sec(1.0))
+    hum = choir([midi_hz(m) for m in (62, 66, 69, 74)], 0.4, R, rng, "oo", attack=0.25, release=0.2)
+    place(x, norm(hum), 0.0, 0.5)
+    for i, m in enumerate(rng.choice(((74, 78, 81, 86), (78, 81, 86, 90), (69, 74, 78, 81)))):
+        place(x, chime(midi_hz(m), R, rng, 0.6, 0.9), 0.04 + 0.08 * i, 0.18)
+    place(x, rising_air(0.45, 2000.0, 9000.0, rng, 2000.0), 0.0, 0.2)
+    return room(x, 0.9, 5000.0, 0.3)
+
+
+def cx_impact_radiant(rng):
+    """Light landing: a bright bloom of bells struck all at once on the chord, a rush of air like a
+    flash going off, and a soft weight under it."""
+    x = silence(sec(1.2))
+    place(x, contact(rng, 5000.0), 0.0, 0.5)
+    place(x, thump(200.0 * jitter(rng), 90.0, 0.3, 0.06), 0.0, 0.7)
+    for m in rng.choice(((74, 78, 81, 86, 90), (69, 74, 78, 81, 86), (78, 81, 86, 90, 93))):
+        place(x, chime(midi_hz(m), R, rng, 0.8, 1.1), rng.uniform(0.0, 0.015), 0.16)
+    place(x, burst(0.5, 0.12, rng, "hp", 3000.0, attack=0.002), 0.0, 0.4)
+    return room(x, 1.0, 6000.0, 0.3)
+
+
+def cx_cast_necrotic(rng):
+    """Death's power gathering: a dark whisper sucking in, and two low notes a semitone apart
+    grinding under it."""
+    x = silence(sec(0.9))
+    gather = 0.55 * jitter(rng)
+    n = sec(gather)
+    breath = noise(n, rng)
+    whisper = silence(n)
+    for fc, g in VOWELS["oh"]:
+        mix(whisper, biquad(breath, "bp", fc * 0.8, 5.0, R), 0, g)
+    swell = lines(((0.0, 0.0), (0.9 * gather, 1.0), (gather, 0.0)), n, R)
+    place(x, shaped(norm(whisper), shaped(swell, swell)), 0.0, 0.7)
+    for m in (38, 39):
+        place(x, shaped(sine(midi_hz(m), n, R), swell), 0.0, 0.3)
+    return room(x, 0.8, 1800.0, 0.3)
+
+
+def cx_impact_necrotic(rng):
+    """Death's power landing: a hollow, dark thump, something withering with a dry crackle, and a
+    low choir sinking a semitone."""
+    x = silence(sec(1.2))
+    place(x, contact(rng, 900.0, "bp", 1.0), 0.0, 0.6)
+    place(x, thump(125.0 * jitter(rng), 70.0, 0.5, 0.12, sweep_tau=0.05), 0.0, 1.0)
+    crackle_pops(x, 0.02, 0.4, 10, rng, 0.2, 800.0, 2500.0)
+    n = sec(0.9)
+    for start, end in ((midi_hz(50), midi_hz(49)), (midi_hz(53), midi_hz(52))):
+        tone = glide(start, end, 0.3, n, R)
+        place(x, shaped(lowpass(tone, 900.0, R), envelope(n, R, attack=0.04, tau=0.3)), 0.03, 0.25)
+    place(x, norm(lowpass(burst(0.3, 0.1, rng), 500.0, R)), 0.0, 0.4)
+    return room(punch(x, HIT_DRIVE), 0.9, 1800.0, 0.3)
+
+
+def cx_cast_force(rng):
+    """Raw force gathering: pressure building as a low hum climbing, and a small pop as it's thrown."""
+    x = silence(sec(0.65))
+    gather = 0.4 * jitter(rng)
+    n = sec(gather)
+    hum = glide(70.0, 150.0, gather, n, R)
+    mix(hum, glide(140.0, 300.0, gather, n, R), 0, 0.4)
+    place(x, shaped(hum, lines(((0.0, 0.0), (0.9 * gather, 1.0), (gather, 0.0)), n, R)), 0.0, 0.7)
+    place(x, rising_air(gather, 400.0, 2500.0, rng, 300.0), 0.0, 0.35)
+    place(x, thump(260.0 * jitter(rng), 140.0, 0.1, 0.02), gather, 0.5)
+    return room(x, 0.4, 3000.0, 0.15)
+
+
+def cx_impact_force(rng):
+    """Force landing: a hard whomp of air with nothing solid in it, and the air ringing for a moment after."""
+    x = silence(sec(0.7))
+    j = jitter(rng)
+    place(x, contact(rng, 1500.0, "bp", 0.6), 0.0, 0.6)
+    place(x, thump(230.0 * j, 78.0, 0.32, 0.07, sweep_tau=0.03), 0.0, 1.0)
+    place(x, norm(lowpass(burst(0.15, 0.04, rng), 1500.0, R)), 0.0, 0.5)
+    n = sec(0.45)
+    ring = sine(410.0 * j, n, R, 1.0, 0.12)
+    mix(ring, sine(417.0 * j, n, R, 1.0, 0.12))
+    place(x, ring, 0.0, 0.12)
+    return room(punch(x, HIT_DRIVE), 0.4, 3000.0, 0.12)
+
+
+def cx_cast_psychic(rng):
+    """A mind reaching out: a tone that wavers and climbs, glassy over a low hum."""
+    x = silence(sec(0.8))
+    gather = 0.5 * jitter(rng)
+    n = sec(gather)
+    tone = fm_tone(rng.uniform(500.0, 620.0), gather, 7.0, 40.0, rng, glide_to=900.0)
+    place(x, shaped(tone, lines(((0.0, 0.0), (0.8 * gather, 1.0), (gather, 0.0)), n, R)), 0.0, 0.35)
+    place(x, shaped(sine(110.0, n, R), lines(((0.0, 0.0), (gather, 1.0)), n, R)), 0.0, 0.2)
+    place(x, rising_air(gather, 1500.0, 6000.0, rng, 1500.0), 0.0, 0.2)
+    return room(x, 0.8, 5000.0, 0.35)
+
+
+def cx_impact_psychic(rng):
+    """A mind struck: a sharp snap, a tone bending down and wobbling as it goes, and a glassy ring
+    left hanging."""
+    x = silence(sec(1.0))
+    place(x, contact(rng, 4500.0), 0.0, 0.6)
+    place(x, thump(190.0 * jitter(rng), 100.0, 0.2, 0.05), 0.0, 0.6)
+    n = sec(0.6)
+    tone = fm_tone(rng.uniform(900.0, 1100.0), 0.6, 11.0, 70.0, rng, glide_to=300.0)
+    place(x, shaped(tone, envelope(n, R, attack=0.003, tau=0.2)), 0.0, 0.4)
+    place(x, strike(ICE, rng.uniform(1800.0, 2400.0), 0.8, rng, decay_scale=1.2, click=0.0), 0.02, 0.2)
+    return room(x, 0.9, 5000.0, 0.35)
+
+
+def cx_cast_nature(rng):
+    """The wild answering: leaves rustling up, a branch creaking, and a few soft wooden notes."""
+    x = silence(sec(0.8))
+    gather = 0.5 * jitter(rng)
+    n = sec(gather)
+    rustle = norm(biquad(noise(n, rng), "bp", 3500.0, 0.6, R))
+    flutter = [max(0.0, v) for v in norm(lowpass(noise(n, rng), 40.0, R))]
+    place(x, shaped(shaped(rustle, flutter), lines(((0.0, 0.0), (0.8 * gather, 1.0), (gather, 0.0)), n, R)), 0.0, 0.6)
+    place(x, creak(0.2, 50.0, 90.0, rng, 380.0), 0.1, 0.3)
+    for i, m in enumerate(rng.sample((62, 64, 69, 71, 74), 3)):
+        place(x, norm(modes(((1.0, 1.0, 0.25), (3.9, 0.3, 0.06)), sec(0.5), R, midi_hz(m + 12))), 0.12 + 0.1 * i, 0.15)
+    return room(x, 0.6, 3500.0, 0.2)
+
+
+def cx_impact_nature(rng):
+    """Thorns and roots lashing: a whip crack of green wood, twigs snapping, an earthy thud, and the
+    leaves settling."""
+    x = silence(sec(0.9))
+    place(x, contact(rng, 2500.0), 0.0, 0.8)
+    place(x, thump(140.0 * jitter(rng), 60.0, 0.3, 0.07), 0.0, 0.9)
+    for _ in range(5):
+        place(x, norm(modes(WOOD_KNOCK, sec(0.04), R, rng.uniform(900.0, 1800.0))), rng.uniform(0.0, 0.12), rng.uniform(0.15, 0.35))
+    place(x, creak(0.15, 90.0, 50.0, rng, 300.0), 0.02, 0.3)
+    n = sec(0.5)
+    leaves = shaped(norm(biquad(noise(n, rng), "bp", 4000.0, 0.7, R)), envelope(n, R, attack=0.02, tau=0.15))
+    place(x, leaves, 0.05, 0.2)
+    return room(punch(x, HIT_DRIVE), 0.5, 3000.0, 0.15)
+
+
+def cx_cast_thunder(rng):
+    """Thunder gathering: a rumble rising out of the ground and the air tightening over it."""
+    x = silence(sec(0.75))
+    gather = 0.5 * jitter(rng)
+    n = sec(gather)
+    rumble = norm(lowpass(lowpass(noise(n, rng), 180.0, R), 180.0, R))
+    swell = lines(((0.0, 0.0), (0.9 * gather, 1.0), (gather, 0.0)), n, R)
+    place(x, shaped(rumble, swell), 0.0, 1.0)
+    place(x, shaped(glide(45.0, 70.0, gather, n, R), swell), 0.0, 0.5)
+    place(x, rising_air(gather, 300.0, 1800.0, rng, 200.0), 0.0, 0.25)
+    return room(x, 0.6, 1500.0, 0.2)
+
+
+def cx_impact_thunder(rng, drum):
+    """Thunder breaking: a boom with a crack on top over a real bass drum struck hard, dropping
+    deep, and a rumble rolling away after it."""
+    x = silence(sec(2.3))
+    place(x, lowpass(drum, 1200.0, R), 0.0, 0.6)
+    place(x, burst(0.02, 0.005, rng, "lp", 2500.0, attack=0.0003), 0.0, 0.8)
+    place(x, thump(95.0 * jitter(rng), 30.0, 0.9, 0.22, sweep_tau=0.04), 0.0, 1.0)
+    place(x, thump(160.0, 80.0, 0.25, 0.06), 0.0, 0.5)
+    n = sec(2.2)
+    roll = norm(lowpass(lowpass(noise(n, rng), 260.0, R), 260.0, R))
+    rolling = [0.7 + 0.3 * v for v in norm(lowpass(noise(n, rng), 8.0, R))]
+    place(x, shaped(shaped(roll, rolling), envelope(n, R, attack=0.03, tau=0.5)), 0.01, 0.7)
+    return room(punch(x, HIT_DRIVE), 1.0, 1500.0, 0.3)
+
+
+def cx_cast_poison(rng):
+    """Poison brewing: bubbles rising in something thick, and a thin hiss."""
+    x = silence(sec(0.75))
+    gather = 0.5 * jitter(rng)
+    m = sec(0.03)
+    for _ in range(10):
+        f = rng.uniform(300.0, 700.0)
+        bubble = shaped(sweep(f, 2.0 * f, m, R), envelope(m, R, attack=0.001, tau=0.008))
+        place(x, bubble, gather * rng.random() ** 0.7, rng.uniform(0.2, 0.45))
+    n = sec(gather)
+    place(x, shaped(norm(highpass(noise(n, rng), 5000.0, R)), lines(((0.0, 0.0), (gather, 1.0)), n, R)), 0.0, 0.2)
+    return room(x, 0.4, 3000.0, 0.15)
+
+
+def cx_impact_poison(rng):
+    """Poison landing: a wet splat, and a sizzle as it eats in, bubbling."""
+    x = silence(sec(0.9))
+    place(x, thump(170.0 * jitter(rng), 80.0, 0.18, 0.04), 0.0, 0.7)
+    place(x, wet(0.14, rng, 1400.0), 0.0, 0.9)
+    n = sec(0.7)
+    hiss = norm(highpass(noise(n, rng), 4500.0, R))
+    pops = [0.5 + 0.5 * max(0.0, v) for v in norm(lowpass(noise(n, rng), 25.0, R))]
+    place(x, shaped(shaped(hiss, pops), envelope(n, R, attack=0.03, tau=0.25)), 0.02, 0.35)
+    m = sec(0.03)
+    for _ in range(5):
+        f = rng.uniform(250.0, 500.0)
+        place(x, shaped(sweep(f, 1.8 * f, m, R), envelope(m, R, attack=0.001, tau=0.008)), rng.uniform(0.08, 0.5), 0.2)
+    return room(punch(x, HIT_DRIVE), 0.5, 3000.0, 0.12)
+
+
+def cx_cast_blood(rng):
+    """Blood magic gathering: a heartbeat, and something thick swelling with it."""
+    x = silence(sec(0.9))
+    place(x, heartbeat(), 0.0, 0.9)
+    gather = 0.55 * jitter(rng)
+    n = sec(gather)
+    surge = shaped(wet(gather, rng, 700.0), lines(((0.0, 0.2), (0.9 * gather, 1.0), (gather, 0.0)), n, R))
+    place(x, norm(surge), 0.0, 0.5)
+    place(x, shaped(sine(55.0, n, R), lines(((0.0, 0.0), (gather, 1.0)), n, R)), 0.0, 0.3)
+    return room(x, 0.6, 1500.0, 0.2)
+
+
+def cx_impact_blood(rng):
+    """Blood magic landing: a wet cut, a heavy pulse under it, and a low throb fading out."""
+    x = silence(sec(0.9))
+    place(x, burst(0.05, 0.012, rng, "bp", 2600.0 * jitter(rng), 1.0), 0.0, 0.6)
+    place(x, wet(0.2, rng, 900.0), 0.0, 0.7)
+    place(x, thump(150.0 * jitter(rng), 80.0, 0.2, 0.05), 0.0, 0.7)
+    place(x, heartbeat(), 0.0, 1.0)
+    n = sec(0.7)
+    place(x, tremolo(shaped(sine(52.0, n, R), envelope(n, R, attack=0.01, tau=0.25)), R, 6.0, 0.6), 0.0, 0.4)
+    return room(punch(x, HIT_DRIVE), 0.5, 1800.0, 0.15)
+
+
+# --- Healing, auras and warnings -------------------------------------------- #
+
+def cx_heal(rng):
+    """Someone healed: a warm swell like a held breath let out, and soft bells going up the major
+    chord and ringing on together at the top."""
+    x = silence(sec(1.6))
+    hum = choir([midi_hz(m) for m in (62, 66, 69)], 0.35, R, rng, "oo", attack=0.15, release=0.4)
+    place(x, norm(hum), 0.0, 0.4)
+    run = rng.choice(((74, 78, 81, 86), (69, 74, 78, 81), (78, 81, 86, 90)))
+    for i, m in enumerate(run):
+        place(x, chime(midi_hz(m), R, rng, 0.7, 1.3), 0.04 + 0.075 * i, 0.3)
+    return room(x, 1.1, 5000.0, 0.3)
+
+
+def cx_buff(rng):
+    """A blessing or a stance taking hold: a bright rush coming up, two notes a fifth apart, and a
+    soft weight as it settles on you."""
+    x = silence(sec(1.0))
+    place(x, rising_air(0.35 * jitter(rng), 1500.0, 7000.0, rng, 1200.0), 0.0, 0.4)
+    base = rng.choice((69, 74, 76))
+    for i, m in enumerate((base, base + 7, base + 12)):
+        place(x, chime(midi_hz(m), R, rng, 0.6, 0.8), 0.18 + 0.06 * i, 0.25)
+    place(x, thump(200.0, 120.0, 0.2, 0.05), 0.33, 0.35)
+    return room(x, 0.7, 5000.0, 0.25)
+
+
+def cx_debuff(rng):
+    """A curse or a weakness taking hold: two notes rubbing a semitone apart, sliding down, over a
+    dark breath."""
+    x = silence(sec(1.0))
+    top = rng.choice((69, 70, 72))
+    for m in (top, top + 1):
+        n = sec(0.7)
+        tone = glide(midi_hz(m), midi_hz(m - 5), 0.25, n, R)
+        place(x, shaped(lowpass(tone, 1500.0, R), envelope(n, R, attack=0.02, tau=0.25)), 0.0, 0.3)
+    n = sec(0.6)
+    place(x, shaped(norm(lowpass(noise(n, rng), 700.0, R)), envelope(n, R, attack=0.05, tau=0.2)), 0.0, 0.3)
+    place(x, thump(150.0, 70.0, 0.2, 0.05), 0.0, 0.3)
+    return room(x, 0.7, 2500.0, 0.25)
+
+
+def cx_aura_tick(rng):
+    """An aura ticking over: a small muted pulse for a burn, a bleed or a mending, quiet enough to
+    fire every few seconds for every fighter without crowding the blows."""
+    x = silence(sec(0.25))
+    place(x, thump(190.0 * jitter(rng), 120.0, 0.1, 0.025), 0.0, 0.8)
+    place(x, burst(0.03, 0.008, rng, "bp", 1600.0 * jitter(rng), 1.0), 0.0, 0.35)
+    place(x, norm(modes(((1.0, 1.0, 0.05), (2.7, 0.3, 0.02)), sec(0.15), R, 520.0 * jitter(rng))), 0.0, 0.25)
+    return room(x, 0.2, 3000.0, 0.08)
+
+
+def cx_telegraph(rng):
+    """A foe winding up something big: metal grinding up in pitch, a two-note ping a tritone apart
+    going up, and the low end swelling under it. Meant to make you move."""
+    x = silence(sec(0.9))
+    n = sec(0.6)
+    grind = biquad(noise(n, rng), "bp", 1200.0, 2.0, R)
+    grind = swept_lowpass(grind, lines(((0.0, 800.0), (0.6, 4000.0)), n, R), R)
+    place(x, shaped(norm(grind), lines(((0.0, 0.0), (0.5, 1.0), (0.6, 0.0)), n, R)), 0.0, 0.35)
+    base = rng.choice((81, 82, 83))
+    for i, m in enumerate((base, base + 6)):
+        place(x, strike(IRON_LATCH, midi_hz(m), 0.5, rng, decay_scale=4.0, click=0.3), 0.04 + 0.16 * i, 0.4)
+    place(x, shaped(glide(55.0, 85.0, 0.6, n, R), lines(((0.0, 0.0), (0.55, 1.0), (0.6, 0.0)), n, R)), 0.0, 0.4)
+    return room(x, 0.6, 4000.0, 0.2)
+
+
+def cx_boss_phase(rng, gong):
+    """A boss changing as it's hurt: the war drum twice, low brass blasting a bent version of
+    Steel's call (the fifth a semitone short), a cymbal swelling into a crash, and a real gong
+    struck under the crash."""
+    x = silence(sec(2.6))
+    drum = war_drum(R, rng)
+    place(x, drum, 0.0, 1.0)
+    place(x, drum, 0.22, 0.8)
+    n = sec(0.6)
+    swell = cymbal(R, rng, 0.6)[::-1]
+    place(x, shaped(swell, lines(((0.0, 0.0), (0.6, 1.0)), n, R)), 0.0, 0.2)
+    land = 0.6
+    for (t, held), m in zip(((0.0, 0.18), (0.2, 0.18), (land, 1.0)), (50, 56, 62)):
+        place(x, horn_blast(midi_hz(m - 12 + rng.choice((0, 0, 1))), held, rng, 40.0 if t == land else 0.0), t, 0.5)
+    place(x, drum, land, 1.0)
+    place(x, cymbal(R, rng, 2.0), land, 0.2)
+    place(x, gong, land, 0.45)
+    return room(x, 1.6, 2500.0, 0.3)
+
+
+# --- Bodies ---------------------------------------------------------------- #
+
+def cx_knockdown(rng):
+    """Someone knocked off their feet: the body slamming flat, gear clattering, a bounce, and dust."""
+    x = silence(sec(0.8))
+    j = jitter(rng)
+    place(x, thump(115.0 * j, 40.0, 0.45, 0.1), 0.0, 1.0)
+    place(x, norm(lowpass(burst(0.15, 0.04, rng), 800.0, R)), 0.0, 0.5)
+    clatter(x, 0.01, rng, 4, 900.0, 1600.0, 0.18)
+    place(x, thump(95.0 * j, 45.0, 0.2, 0.05), 0.12 * j, 0.4)
+    n = sec(0.4)
+    dust = shaped(norm(biquad(noise(n, rng), "bp", 2500.0, 0.5, R)), envelope(n, R, attack=0.03, tau=0.12))
+    place(x, dust, 0.03, 0.15)
+    return room(punch(x, HIT_DRIVE), 0.5, 2000.0, 0.15)
+
+
+def cx_body_fall(rng):
+    """A body going down: the knees, then the rest of it, softer than being knocked down."""
+    x = silence(sec(0.8))
+    j = jitter(rng)
+    place(x, thump(120.0 * j, 50.0, 0.3, 0.06), 0.0, 0.55)
+    fall = rng.uniform(0.14, 0.2)
+    place(x, thump(95.0 * j, 38.0, 0.5, 0.12), fall, 1.0)
+    place(x, norm(lowpass(burst(0.15, 0.04, rng), 700.0, R)), fall, 0.45)
+    clatter(x, fall + 0.01, rng, 3, 900.0, 1500.0, 0.12)
+    return room(x, 0.7, 2000.0, 0.2)
+
+
+def cx_death(rng):
+    """Something dying: the last breath going out of it, the body dropping, and a dark low note
+    sinking away under it."""
+    x = silence(sec(1.7))
+    n = sec(0.6)
+    breath = noise(n, rng)
+    sigh = silence(n)
+    for fc, g in VOWELS[rng.choice(("oh", "oo"))]:
+        mix(sigh, biquad(breath, "bp", fc * jitter(rng), 4.0, R), 0, g)
+    place(x, shaped(norm(sigh), envelope(n, R, attack=0.04, tau=0.2)), 0.0, 0.4)
+    drop = 0.25 * jitter(rng)
+    place(x, thump(100.0, 36.0, 0.6, 0.15), drop, 1.0)
+    place(x, norm(lowpass(burst(0.2, 0.05, rng), 600.0, R)), drop, 0.4)
+    n = sec(1.1)
+    high, low = midi_hz(rng.choice((50, 49, 53))), midi_hz(38)
+    sink = glide(high, low, 0.35, n, R)
+    mix(sink, glide(2.0 * high, 2.0 * low, 0.35, n, R), 0, 0.3)
+    place(x, shaped(sink, envelope(n, R, attack=0.05, tau=0.35)), 0.08, 0.35)
+    return room(x, 1.3, 2000.0, 0.35)
+
+
+def cx_downed(rng):
+    """Someone in the party going down: their knees hitting the ground, then the rest of them with
+    their gear clattering, and after a moment one slow heartbeat. Down, not dead."""
+    x = silence(sec(1.7))
+    fall = 0.16 * jitter(rng)
+    place(x, thump(120.0, 50.0, 0.35, 0.07), 0.0, 0.6)
+    place(x, thump(95.0, 38.0, 0.6, 0.14), fall, 1.0)
+    place(x, norm(lowpass(burst(0.15, 0.04, rng), 800.0, R)), fall, 0.5)
+    clatter(x, fall + 0.01, rng, 5, 900.0, 1500.0, 0.18)
+    place(x, heartbeat(), 0.85 + rng.uniform(0.0, 0.1), 0.8)
+    return room(x, 1.1, 2000.0, 0.3)
+
+
+def cx_revive(rng):
+    """Someone brought back up: a sharp breath in, the heart starting again, and voices and bells
+    rising together into a bright fifth."""
+    x = silence(sec(2.0))
+    n = sec(0.35)
+    gasp = silence(n)
+    breath = noise(n, rng)
+    for fc, g in VOWELS["oo"]:
+        mix(gasp, biquad(breath, "bp", fc * 1.6, 4.0, R), 0, g)
+    place(x, shaped(norm(gasp), lines(((0.0, 0.0), (0.3, 1.0), (0.35, 0.0)), n, R)), 0.0, 0.35)
+    place(x, heartbeat(), 0.35, 0.9)
+    place(x, heartbeat(), 0.85, 0.7)
+    home = rng.choice((62, 64))
+    for start in (home - 5, home):
+        place(x, voice(((0.0, midi_hz(start)), (0.4, midi_hz(home + 7 if start == home else home)), (1.2, midi_hz(home + 7 if start == home else home)))), 0.3, 0.25)
+    for i, m in enumerate((home + 12, home + 19, home + 24)):
+        place(x, chime(midi_hz(m), R, rng, 0.6, 1.0), 0.45 + 0.1 * i, 0.2)
+    return room(x, 1.2, 4500.0, 0.3)
+
+
+# --- Items and the Soul-Link -------------------------------------------------- #
+
+def cx_potion(rng):
+    """A potion drunk: the cork pulled with a pop, two or three gulps, and a soft shimmer as it takes hold."""
+    x = silence(sec(1.2))
+    n = sec(0.05)
+    f = rng.uniform(1000.0, 1250.0)
+    place(x, shaped(sweep(f, 380.0, n, R), envelope(n, R, attack=0.0005, tau=0.012)), 0.0, 0.8)
+    place(x, burst(0.006, 0.0012, rng, "bp", 2500.0, 0.8), 0.0, 0.5)
+    n, m = sec(0.12), sec(0.025)
+    gulps = rng.choice((2, 3))
+    for i in range(gulps):
+        t = 0.18 + 0.17 * i
+        place(x, shaped(glide(170.0 * jitter(rng), 290.0, 0.04, n, R), envelope(n, R, attack=0.008, tau=0.035)), t, 0.7)
+        f = rng.uniform(500.0, 900.0)
+        place(x, shaped(sweep(f, 1.8 * f, m, R), envelope(m, R, attack=0.001, tau=0.006)), t + rng.uniform(0.02, 0.08), 0.15)
+    for i, note in enumerate((88, 93)):
+        place(x, chime(midi_hz(note), R, rng, 0.5, 0.9), 0.25 + 0.17 * gulps + 0.06 * i, 0.12)
+    return room(x, 0.5, 4000.0, 0.15)
+
+
+def cx_soul_link(rng):
+    """The Soul-Link strike: two heartbeats falling into step, two voices sliding onto one note and
+    opening into a fifth, and Steel's call ringing high as the two of you strike together."""
+    x = silence(sec(2.0))
+    beat = heartbeat()
+    place(x, beat, 0.0, 0.5)
+    place(x, beat, 0.08 * jitter(rng), 0.4)
+    strike_at = 0.45
+    place(x, beat, strike_at, 1.0)
+    home, fifth = midi_hz(62), midi_hz(69)
+    for start in (midi_hz(61), midi_hz(63)):
+        place(x, voice(((0.0, start), (0.35, home), (1.1, home))), 0.05, 0.3)
+    place(x, voice(((0.0, fifth), (0.8, fifth))), strike_at, 0.25)
+    place(x, thump(115.0 * jitter(rng), 50.0, 0.5, 0.12), strike_at, 0.7)
+    place(x, contact(rng, 3000.0), strike_at, 0.6)
+    place(x, burst(0.8, 0.25, rng, "hp", 5000.0, attack=0.01), strike_at, 0.15)
+    for i, m in enumerate(CALL_NOTES):
+        place(x, chime(midi_hz(m + 12), R, rng, 0.7, 1.2), strike_at + 0.04 * i, 0.15)
+    return room(x, 1.3, 4500.0, 0.3)
+
+
+# --- The bar and the fight's end ----------------------------------------------- #
+
+def cx_ui_press(rng):
+    """A skill pressed on the bar: a short, firm wooden click."""
+    x = silence(sec(0.08))
+    place(x, norm(modes(((1.0, 1.0, 0.012), (2.4, 0.4, 0.006), (4.3, 0.15, 0.003)), sec(0.08), R, 1050.0 * jitter(rng, 0.04))), 0, 0.7)
+    place(x, contact(rng, 2800.0, "bp", 0.9), 0, 0.5)
+    place(x, thump(180.0, 120.0, 0.05, 0.012), 0, 0.3)
+    return x
+
+
+def cx_ui_denied(rng):
+    """A skill that can't be used yet: two low dull knocks with a buzz in them."""
+    x = silence(sec(0.3))
+    j = jitter(rng, 0.03)
+    for t in (0.0, 0.09):
+        n = sec(0.08)
+        buzz = saw_at(150.0 * j, list(range(n)), R)
+        place(x, shaped(lowpass(lowpass(buzz, 900.0, R), 900.0, R), envelope(n, R, attack=0.002, tau=0.03)), t, 0.6)
+        place(x, thump(130.0 * j, 90.0, 0.08, 0.02), t, 0.5)
+    return x
+
+
+def cx_cooldown_ready(rng):
+    """A skill ready again: one small bright ping."""
+    x = silence(sec(0.5))
+    m = rng.choice((86, 88, 93))
+    place(x, chime(midi_hz(m), R, rng, 0.6, 0.45), 0.0, 0.8)
+    place(x, chime(midi_hz(m + 7), R, rng, 0.4, 0.3), 0.03, 0.3)
+    return room(x, 0.3, 6000.0, 0.15)
+
+
+def cx_level_up(rng):
+    """A level gained: the D major chord run up on plucked strings and chimes, horns swelling on
+    the chord under it, and a cymbal."""
+    x = silence(sec(2.4))
+    run = (62, 66, 69, 74, 78, 81, 86)
+    gap = 0.055 * jitter(rng, 0.05)
+    for i, m in enumerate(run):
+        place(x, norm(lute(midi_hz(m), R, rng, 0.8, 0.9)), gap * i, 0.35)
+        place(x, chime(midi_hz(m + 12), R, rng, 0.5, 0.9), gap * i, 0.1)
+    land = gap * len(run)
+    place(x, brass([midi_hz(m) for m in (50, 57, 62, 66)], 0.8, R, rng, 0.85, attack=0.06, release=0.4), land, 0.4)
+    place(x, cymbal(R, rng, 1.6), land, 0.18)
+    place(x, timpani(midi_hz(38), R, rng), land, 0.5)
+    return room(x, 1.4, 4500.0, 0.3)
+
+
+def cx_victory(rng):
+    """The last foe falling, before the victory jingle: Steel's call struck once on bright chimes
+    over a soft drum."""
+    x = silence(sec(1.4))
+    place(x, thump(150.0, 80.0, 0.3, 0.07), 0.0, 0.5)
+    gap = rng.choice((0.07, 0.08, 0.09))
+    for i, m in enumerate(CALL_NOTES):
+        place(x, chime(midi_hz(m + 12), R, rng, 0.75, 1.1), gap * i, 0.3)
+        place(x, norm(lute(midi_hz(m), R, rng, 0.8, 0.9)), gap * i, 0.3)
+    return room(x, 1.0, 5000.0, 0.3)
+
+
+def cx_defeat(rng):
+    """The last of the party falling, before the defeat jingle: a heavy low drop, and Steel's call
+    turned downwards onto the tritone on a dark horn."""
+    x = silence(sec(1.8))
+    place(x, thump(90.0, 32.0, 0.8, 0.2), 0.0, 1.0)
+    place(x, norm(lowpass(burst(0.3, 0.08, rng), 400.0, R)), 0.0, 0.4)
+    held = rng.choice((0.7, 0.8, 0.9))
+    for (t, d), m in zip(((0.1, 0.25), (0.4, held)), (50, 44)):
+        place(x, brass([midi_hz(m)], d, R, rng, 0.6, attack=0.06, release=0.4, vib_cents=0.0, fall_cents=30.0), t, 0.45)
+    return room(x, 1.4, 1800.0, 0.35)
+
+
+#: Every combat sound: key: (peak dBFS, builder). The keys are what the game asks for.
+COMBAT = {
+    "swing-light-blade": (PEAK_SWING, cx_swing_light_blade),
+    "swing-heavy-blade": (PEAK_SWING, cx_swing_heavy_blade),
+    "swing-axe": (PEAK_SWING, cx_swing_axe),
+    "swing-blunt": (PEAK_SWING, cx_swing_blunt),
+    "swing-polearm": (PEAK_SWING, cx_swing_polearm),
+    "swing-bow": (PEAK_MENU, cx_swing_bow),
+    "swing-crossbow": (PEAK_MENU, cx_swing_crossbow),
+    "swing-unarmed": (PEAK_SWING, cx_swing_unarmed),
+    "swing-claw": (PEAK_SWING, cx_swing_claw),
+    "swing-bite": (PEAK_SWING, cx_swing_bite),
+    "hit-light-blade": (PEAK_HIT, cx_hit_light_blade),
+    "hit-heavy-blade": (PEAK_HIT, cx_hit_heavy_blade),
+    "hit-axe": (PEAK_HIT, cx_hit_axe),
+    "hit-blunt": (PEAK_HIT, cx_hit_blunt),
+    "hit-polearm": (PEAK_HIT, cx_hit_polearm),
+    "hit-bow": (PEAK_HIT, cx_hit_bow),
+    "hit-crossbow": (PEAK_HIT, cx_hit_crossbow),
+    "hit-unarmed": (PEAK_HIT, cx_hit_unarmed),
+    "hit-claw": (PEAK_HIT, cx_hit_claw),
+    "hit-bite": (PEAK_HIT, cx_hit_bite),
+    "crit": (PEAK_CRIT, cx_crit),
+    "block": (PEAK_HIT, cx_block),
+    "dodge": (PEAK_SOFT, cx_dodge),
+    "miss": (PEAK_CLICK, cx_miss),
+    "cast-fire": (PEAK_CAST, cx_cast_fire),
+    "impact-fire": (PEAK_HIT, cx_impact_fire),
+    "cast-frost": (PEAK_CAST, cx_cast_frost),
+    "impact-frost": (PEAK_HIT, cx_impact_frost),
+    "cast-lightning": (PEAK_CAST, cx_cast_lightning),
+    "impact-lightning": (PEAK_HIT, cx_impact_lightning),
+    "cast-radiant": (PEAK_CAST, cx_cast_radiant),
+    "impact-radiant": (PEAK_HIT, cx_impact_radiant),
+    "cast-necrotic": (PEAK_CAST, cx_cast_necrotic),
+    "impact-necrotic": (PEAK_HIT, cx_impact_necrotic),
+    "cast-force": (PEAK_CAST, cx_cast_force),
+    "impact-force": (PEAK_HIT, cx_impact_force),
+    "cast-psychic": (PEAK_CAST, cx_cast_psychic),
+    "impact-psychic": (PEAK_HIT, cx_impact_psychic),
+    "cast-nature": (PEAK_CAST, cx_cast_nature),
+    "impact-nature": (PEAK_HIT, cx_impact_nature),
+    "cast-thunder": (PEAK_CAST, cx_cast_thunder),
+    "impact-thunder": (PEAK_HIT, cx_impact_thunder),
+    "cast-poison": (PEAK_CAST, cx_cast_poison),
+    "impact-poison": (PEAK_HIT, cx_impact_poison),
+    "cast-blood": (PEAK_CAST, cx_cast_blood),
+    "impact-blood": (PEAK_HIT, cx_impact_blood),
+    "heal": (PEAK_CAST, cx_heal),
+    "buff": (PEAK_CAST, cx_buff),
+    "debuff": (PEAK_CAST, cx_debuff),
+    "aura-tick": (PEAK_TICK, cx_aura_tick),
+    "telegraph": (PEAK_MENU, cx_telegraph),
+    "boss-phase": (PEAK_CRIT, cx_boss_phase),
+    "knockdown": (PEAK_HIT, cx_knockdown),
+    "body-fall": (PEAK_CAST, cx_body_fall),
+    "death": (PEAK_MENU, cx_death),
+    "downed": (PEAK_MENU, cx_downed),
+    "revive": (PEAK_MENU, cx_revive),
+    "potion": (PEAK_CAST, cx_potion),
+    "soul-link": (PEAK_HIT, cx_soul_link),
+    "ui-press": (PEAK_SOFT, cx_ui_press),
+    "ui-denied": (PEAK_SOFT, cx_ui_denied),
+    "cooldown-ready": (PEAK_TICK, cx_cooldown_ready),
+    "level-up": (PEAK_MENU, cx_level_up),
+    "victory": (PEAK_MENU, cx_victory),
+    "defeat": (PEAK_MENU, cx_defeat),
+}
+
+
+#: How much of each kind of recording a take keeps, in seconds.
+RECORDING_LENGTH = {"boss-phase": 2.2, "impact-thunder": 2.2}
+
+
+def build_combat(key):
+    """Writes every take of one combat sound, each from its own seed. A sound layered with a
+    recording is left as it is, with a note, if the sample cache isn't there to make it from."""
+    peak_db, builder = COMBAT[key]
+    files = COMBAT_RECORDINGS.get(key)
+    if files and any(recording(f, 0.1) is None for f in files):
+        print("  %s/%s-*.wav  skipped: it's layered with recordings that aren't in %s "
+              "(python tools/score/fetch_samples.py fetches them)" % (COMBAT_FOLDER, key, SAMPLES_ROOT))
+        return
+    for take in range(1, COMBAT_TAKES + 1):
+        name = "%s-%d" % (key, take)
+        rng = random.Random(zlib.crc32(("combat/" + name).encode()))
+        if files:
+            x = builder(rng, recording(files[take - 1], RECORDING_LENGTH.get(key, 1.2)))
+        else:
+            x = builder(rng)
+        finish_sfx(COMBAT_FOLDER + "/" + name + ".wav", x, peak_db)
+
+
+# --------------------------------------------------------------------------- #
 # Build
 # --------------------------------------------------------------------------- #
 
@@ -3178,14 +4335,26 @@ if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if a != "-v"]
     VERBOSE = len(args) != len(sys.argv) - 1
     wanted = []
-    for a in args or ["music", "sfx"]:
+    for a in args or ["sfx"]:
+        # A combat sound is named combat/<key> (or by one of its files), since a few keys, like
+        # miss and death, are also the names of the turn-based fight's sounds.
+        combat = a.replace("\\", "/").lower().startswith("combat/") or "/Combat/" in a.replace("\\", "/")
         a = os.path.splitext(os.path.basename(a))[0]
-        if a == "music":
-            wanted += list(SONGS)
+        if combat and a not in COMBAT and a.rpartition("-")[0] in COMBAT:
+            a = a.rpartition("-")[0]
+        if a == "music" or (a in SONGS and not combat):
+            sys.exit("The songs are scored by tools/score/compose.py now: python tools/score/compose.py%s"
+                     % ("" if a == "music" else " " + a))
         elif a == "sfx":
-            wanted += list(SFX)
+            wanted += list(SFX) + ["combat/" + k for k in COMBAT]
+        elif a == "combat":
+            wanted += ["combat/" + k for k in COMBAT]
+        elif combat and a in COMBAT:
+            wanted.append("combat/" + a)
         elif a in SONGS or a in SFX:
             wanted.append(a)
+        elif a in COMBAT:
+            wanted.append("combat/" + a)
         else:
             sys.exit("No song or sound called '%s'." % a)
     started = time.perf_counter()
@@ -3193,6 +4362,8 @@ if __name__ == "__main__":
     for name in dict.fromkeys(wanted):
         if name in SONGS:
             SONGS[name]()
+        elif name.startswith("combat/"):
+            build_combat(name[len("combat/"):])
         else:
             build_sfx(name)
     print("Done in %.1f s." % (time.perf_counter() - started))

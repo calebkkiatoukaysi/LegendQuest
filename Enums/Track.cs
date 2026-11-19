@@ -29,4 +29,10 @@ public enum Track
 
     /// <summary>"The Hunger": a boss fight. Steel's call bent out of shape over the black crystal's hum.</summary>
     Boss,
+
+    /// <summary>The victory jingle: a fight won. Plays once and never loops; AudioManager.EndBattle then brings the map's song back.</summary>
+    Victory,
+
+    /// <summary>The defeat jingle: a fight lost. Plays once and never loops, like Victory.</summary>
+    Defeat,
 }
