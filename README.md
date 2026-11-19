@@ -82,6 +82,7 @@ One switch exists for working on the game, and it isn't the game:
 ```
 dotnet run -- --proof shots       # play through the screens, save a picture of each to shots/, and quit
 dotnet run -- --proof shots Docks # the same, but stop after that part of the run (a ProofStage)
+dotnet run -- --proof shots Hud   # only the real-time HUD, drawn from made-up views, and its icons (see The real-time HUD)
 ```
 
 The story has four checks of its own, run before every commit with `dotnet build` and
@@ -1372,6 +1373,56 @@ its whoosh peaks on the impact. When the proof run has the game silent, every ca
 | `victory` | The last foe falling, just before `EndBattle(true)` |
 | `defeat` | The last of the party falling, just before `EndBattle(false)` |
 
+## The real-time HUD
+
+The real-time fight's HUD is in `Components/Realtime/`, and it draws nothing but plain view records
+(`Views.cs`): `FighterHudView` for someone in the fight, `AuraView`, `CastView`, `SlotView` for a
+hotbar slot, `SoulLinkView` for the sigil on 7, `BossView`, `NameplateView`, and `HudView` for the
+lot. The fight screen builds a `HudView` from the battle each frame, so the HUD never sees the
+engine; every time in them is in seconds and every share is 0 to 1. `CombatHud` lays the pieces out
+and draws them together: `Update` once a frame, `DrawRing` in a point sampled batch before the
+figures (the target's ring is on the floor), `DrawArt` in a point sampled batch after them, and
+`DrawWords` in a linear sampled batch last. `At(mouse, view)` says what the mouse is on (a slot, the
+sigil, an aura, a party row) for clicks, and the card for it is drawn by `DrawWords`.
+
+- **`PlayerFrame`** (top left): the face, the name and class, health with temporary hit points as a
+  pale shield on its end and a lag that drains after a hit, Focus (lit paler for what the slot under
+  the mouse would spend), and the aura row under it.
+- **`PartyFrames`**: a row each under your auras, with their auras beside it; a downed one greys,
+  says DOWN, and shows its death saves.
+- **`TargetFrame`** (top centre): the same for your target, with its armour class and its cast bar
+  (grey with a lock when it can't be stopped). With a boss up it drops under the boss's frame.
+- **`BossFrame`**: wide, across the top, with the boss's title, a tick on the bar and a pip for each
+  phase, its cast bar under it and its auras.
+- **`Hotbar`**: slots 1 to 6 and the Soul-Link sigil on 7, each clickable. A cooldown is a dark veil
+  sweeping round clockwise with a pale hand on its edge and the seconds left; the global cooldown is
+  a lighter one over every slot on it. Out of reach is tinted red, too little Focus is grey with the
+  cost in red, a press flashes, a slot coming off its cooldown catches a glint, and an armed
+  reaction glows gold. Your cast bar and the auto attack's swing sit over it.
+- **`AuraRow`**: each aura's icon in a green (good) or red (bad) edge, its stacks, its time left, the
+  share gone veiled, and a pulse in its last three seconds.
+- **`Nameplates`** and **`TargetMarker`**: a name and a thin health bar over each head, a foe's
+  telegraph as its move's icon and a warning bar that fills until it lands, and the ring under the
+  target's feet with a chevron over its head.
+
+Its icons are `Content/Combat/skills.png` and `Content/Combat/auras.png`, 24x24, drawn by
+`tools/generate_combat_art.py`: one for every skill in `Story/10-classes.md` (a passive's with a gold
+rim), the bar's own, the foes' telegraphed moves, and every condition and aura the combat design
+names. Each is a glyph on a tile in its school's colour. `Content/Combat/icons.json` lists each
+sheet's ids in cell order, and `HudIcons` finds an icon by id, not by any enum's order, so adding one
+never moves the rest; an id with no icon falls back on the plain buff or debuff. Timers are written
+in `spectral-timer` (the cooldowns' seconds) and `spectral-small` (everything small); both carry the
+point, so "2.5" and "12s" can be drawn, and `spectral-number` has the point, the slash, the colon,
+the percent and m, s and x besides its digits.
+
+`--proof <dir> Hud` opens `HudPreviewScreen` over the farmland with a party and foes standing in it
+and saves `hud-fight.png` (cooldowns mid-sweep, an armed reaction, too little Focus, a foe winding
+up and casting), `hud-card.png` (a slot's card), `hud-reach.png` (out of reach, the global cooldown,
+a press, your cast, an aura's card), `hud-boss.png` (a boss in its second phase casting what can't
+be stopped, someone down with their death saves, the sigil lit, a glint), `hud-icons-1.png` and on
+(every icon at twice its size with its id), and `hud-checks.txt`, the sums a picture can't show:
+the hit-testing, the timers' wording, the fonts' marks and the sweep's frames.
+
 ## What is on screen
 
 | Sprite | Source | Motion |
@@ -1426,7 +1477,7 @@ python tools/generate_vault.py        # the Old Crown Vault's tileset, its doors
 python tools/generate_creatures.py    # the creatures' sheets: gloomfangs, the Thornmother, the Hollowed and the vault's constructs
 python tools/generate_paintings.py    # the story's paintings and what moves over them, out of the title's pictures
 python tools/generate_items.py        # the item icons and the inventory's slots
-python tools/generate_combat_art.py   # the fight's ability and condition icons, and the pieces of its screen
+python tools/generate_combat_art.py   # the fight's ability and condition icons, the pieces of its screen, and the real-time HUD's skill and aura icons
 python tools/cut_supplied.py          # the title, Questeria's and the harbour's props, the houses, the furniture and the townsfolk, out of tools/source/
 python tools/cut_supplied.py buildings  # just the houses (or name props to cut just those)
 python tools/generate_paperdoll.py    # the paperdoll sheets and the gear for all three builds, character-palettes.png and gear-palettes.png, off the youth (after cut_supplied.py's people)
@@ -1533,7 +1584,7 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
 - `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the rows it all happens in (`Formation`, `Slot`, `FightRoster`), the rules a fight's played by (`FightRules`, `DifficultyRules`, `IKitSource`), the catalogs (`AbilityCatalog`, `EnemyCatalog`, `EncounterCatalog`, with the encounters' `EncounterGuest`s and `EncounterSupport`s), `EnemyMind` for the AI, and `CombatSimulator` and `StallWatch` for `--simulate`.
 - `Items/` is everything that can be carried, worn or sold: `ItemDefinition` and `ItemCatalog`, the bag (`Inventory` over the save's `ItemStack`s), the shops (`ShopDefinition`, `ShopCatalog`) and what foes drop (`LootTable`, `LootResult`, `LootTableCatalog`). The inventory's and the shops' rules are here too, drawing nothing: `Wardrobe`, `Trade`, `GearComparison`, `ItemReadout` and `BagOrder`.
-- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, the 3D d20 (`DieModel`) and the panel it's thrown on (`DiceTable`), and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it.
+- `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, the 3D d20 (`DieModel`) and the panel it's thrown on (`DiceTable`), and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it. `Components/Realtime/` is the real-time fight's HUD (see [The real-time HUD](#the-real-time-hud)).
 - `Collisions/` is the collision tutorial's rectangle and helper.
 - `Particles/` is the particle engine, and the title's petals and motes built on it.
 - `Audio/` is the `AudioManager`. `Save/` is the save file, the slots, and the settings.
