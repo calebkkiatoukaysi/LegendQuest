@@ -110,7 +110,7 @@ public sealed partial class Battle
         f.Proficiency = LevelTable.Proficiency(f.Level);
 
         bool foe = side == Side.Foes;
-        int rolls = foe ? DifficultyRules.FoeRolls(Rules.Difficulty) : 0;
+        int rolls = foe ? DifficultyRules.FoeRolls(Rules.Difficulty) + enemy.RealtimeHitShift : 0;
         f.MaxHp = Math.Max(1, (int)Math.Round(enemy.HitDice.Average * enemy.RealtimeHpScale * (foe ? DifficultyRules.FoeHp(Rules.Difficulty) : 1f), MidpointRounding.AwayFromZero));
         f.Hp = f.MaxHp;
         f.BaseAc = enemy.ArmourClass;

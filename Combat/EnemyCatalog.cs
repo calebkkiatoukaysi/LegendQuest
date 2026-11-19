@@ -22,7 +22,12 @@ namespace LegendQuest.Combat;
 /// In real time (11-combat.md §5.1) each also has an auto attack's swing (2.5 s, 2.0 s for the quick
 /// beasts, 3.0 s for the big ones), its Multiattack struck as a combo on the one swing, and its
 /// telegraphed moves by SkillCatalog id (SkillCatalog.Foes.cs). A boss's phases (§5.2) are on its
-/// stat block. The turn-based engine reads none of the real-time fields.
+/// stat block. Three real-time levers set how each one plays against a party whose hit points stay as
+/// on the sheet: HpScale (its hit points as a multiple of its hit dice's average), DamageScale (the
+/// share of what its blows roll that they do) and HitShift (what it adds to its attack rolls; +10
+/// unless set, so blows land surer and lighter and armour counts for less against a stream of swings).
+/// The README's "Tuning" says what each was set to and why. The turn-based engine reads none of the
+/// real-time fields.
 /// </remarks>
 public static class EnemyCatalog
 {
@@ -39,7 +44,7 @@ public static class EnemyCatalog
             Scores = new AbilityScores { Strength = 10, Dexterity = 10, Constitution = 10, Intelligence = 6, Wisdom = 10, Charisma = 6 },
             Attacks = new[] { new EnemyAttack("Clammy Grasp", 2, Dice("1d2"), DamageType.Cold, Reach.Melee, WeaponProperty.None) },
             LootTable = "sea-wraith", Xp = 25,
-            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, Undead = true, HpScale = 5.5f,
+            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, Undead = true, HpScale = 9f,
         },
 
         // A1-C1-01: the Red Gulls shaking Tomas down, and their bosun. Still a brawl with cudgels, but in
@@ -51,7 +56,7 @@ public static class EnemyCatalog
             Scores = new AbilityScores { Strength = 11, Dexterity = 11, Constitution = 11, Intelligence = 9, Wisdom = 9, Charisma = 10 },
             Attacks = new[] { new EnemyAttack("Cudgel", 2, Dice("1d4"), DamageType.Bludgeoning, Reach.Melee, WeaponProperty.None) },
             LootTable = "red-gull-thug", Xp = 25,
-            Weapon = WeaponKind.OneHand,
+            Weapon = WeaponKind.OneHand, DamageScale = 0.24f, HitShift = 8, HpScale = 7.5f,
         },
         new()
         {
@@ -64,7 +69,7 @@ public static class EnemyCatalog
             },
             Abilities = new[] { AbilityId.Multiattack },
             LootTable = "bosun-grell", Xp = 100,
-            Weapon = WeaponKind.Hook, Skills = new[] { "foe-hook-pull" }, HpScale = 6f, DamageScale = 0.45f,
+            Weapon = WeaponKind.Hook, Skills = new[] { "foe-hook-pull" }, DamageScale = 0.25f, HitShift = 8, HpScale = 8f,
         },
 
         // A1-C2: the Mirewood's wolves, black smoke leaking from their eyes. A pack against a level-2
@@ -76,7 +81,7 @@ public static class EnemyCatalog
             Attacks = new[] { new EnemyAttack("Bite", 4, Dice("1d6"), DamageType.Piercing, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.PackTactics, AbilityId.Trip },
             LootTable = "gloomfang", Xp = 25,
-            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, Skills = new[] { "foe-trip" }, DamageScale = 0.46f, Beast = true,
+            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, Skills = new[] { "foe-trip" }, Beast = true, DamageScale = 0.25f, HpScale = 7f,
         },
 
         // The Thornmother's whelps, called out of the brush in her second phase: half-grown, a nip
@@ -88,7 +93,7 @@ public static class EnemyCatalog
             Attacks = new[] { new EnemyAttack("Nip", 3, Dice("1d4"), DamageType.Piercing, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.PackTactics },
             Xp = 10,
-            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, HpScale = 3f, DamageScale = 0.4f, Beast = true,
+            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, HpScale = 3f, Beast = true, DamageScale = 0.18f,
         },
 
         // A1-C2-02's boss: the she-bear the crystal took, two attacks a turn and thorns through her hide.
@@ -108,7 +113,7 @@ public static class EnemyCatalog
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.ThornBurst, AbilityId.Trip },
             LootTable = "thornmother", Xp = 450, Big = true,
-            Weapon = WeaponKind.Unarmed, Skills = new[] { "foe-trip" }, HpScale = 4.2f, DamageScale = 0.45f, Beast = true,
+            Weapon = WeaponKind.Unarmed, Skills = new[] { "foe-trip" }, Beast = true, HpScale = 10.5f, DamageScale = 0.22f,
             Phases = new[]
             {
                 new FoePhase(0.66, "Thorns")
@@ -133,7 +138,7 @@ public static class EnemyCatalog
             Scores = new AbilityScores { Strength = 13, Dexterity = 10, Constitution = 12, Intelligence = 5, Wisdom = 8, Charisma = 5 },
             Attacks = new[] { new EnemyAttack("Rusted Longsword", 3, Dice("1d10+1"), DamageType.Slashing, Reach.Melee, WeaponProperty.None) },
             LootTable = "hollowed-footman", Xp = 50,
-            Weapon = WeaponKind.OneHand, Undead = true, Skills = new[] { "foe-overhead-chop" }, HpScale = 5.5f, DamageScale = 0.4f,
+            Weapon = WeaponKind.OneHand, Undead = true, Skills = new[] { "foe-overhead-chop" }, HpScale = 7f, DamageScale = 0.36f, HitShift = 1,
         },
         new()
         {
@@ -146,7 +151,7 @@ public static class EnemyCatalog
             },
             Abilities = new[] { AbilityId.Hex },
             LootTable = "hollowed-hexer", Xp = 100, Ranged = true,
-            Weapon = WeaponKind.Staff, Undead = true, AutoSkill = "foe-ashen-bolt", Skills = new[] { "foe-hex" }, HpScale = 6f, DamageScale = 0.6f,
+            Weapon = WeaponKind.Staff, Undead = true, AutoSkill = "foe-ashen-bolt", Skills = new[] { "foe-hex" }, HpScale = 7f, DamageScale = 0.48f, HitShift = -2,
         },
 
         // A1-C4-02: the Hollowed who tunnelled into the vault, and the one who leads them. The sappers
@@ -160,7 +165,7 @@ public static class EnemyCatalog
             Attacks = new[] { new EnemyAttack("Pick", 3, Dice("1d8+2"), DamageType.Piercing, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.BlastingCharge },
             LootTable = "hollowed-sapper", Xp = 50,
-            Weapon = WeaponKind.OneHand, Undead = true, Skills = new[] { "foe-blasting-charge" }, HpScale = 6.5f, DamageScale = 0.4f,
+            Weapon = WeaponKind.OneHand, Undead = true, Skills = new[] { "foe-blasting-charge" }, HpScale = 9f, DamageScale = 0.8f, HitShift = 3,
         },
         new()
         {
@@ -173,7 +178,7 @@ public static class EnemyCatalog
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.BlastingCharge },
             LootTable = "sapper-chief", Xp = 200,
-            Weapon = WeaponKind.OneHand, Undead = true, Skills = new[] { "foe-blasting-charge" }, HpScale = 7f,
+            Weapon = WeaponKind.OneHand, Undead = true, Skills = new[] { "foe-blasting-charge" }, HpScale = 9f, DamageScale = 0.8f, HitShift = 2,
         },
 
         // The vault's guardians: stone and gold, slow, and very hard to put down.
@@ -204,7 +209,7 @@ public static class EnemyCatalog
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.SneakAttack, AbilityId.SmokeBomb, AbilityId.CunningDisengage },
             Xp = 200,
-            Weapon = WeaponKind.OneHand, Combo = 2, Skills = new[] { "foe-feint", "foe-cunning-disengage" }, HpScale = 8f, DamageScale = 0.6f,
+            Weapon = WeaponKind.OneHand, Combo = 2, Skills = new[] { "foe-feint", "foe-cunning-disengage" }, HpScale = 9f, HitShift = 8, DamageScale = 0.45f,
             Phases = new[]
             {
                 new FoePhase(0.6, "Smoke and Mirrors") { Bark = "KAEL: Enough fencing. Let's see how you fight blind.", Adds = new[] { "foe-smoke-bomb" } },

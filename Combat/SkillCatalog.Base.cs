@@ -28,12 +28,12 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "fighter-cleave", Name = "Cleave", Class = ClassId.Fighter, Focus = 20, CooldownMs = Cd2, Weapon = true, Range = SkillRange.Melee,
+            Id = "fighter-cleave", Name = "Cleave", Class = ClassId.Fighter, Focus = 20, CooldownMs = Cd1, Weapon = true, Range = SkillRange.Melee,
             Area = AreaShape.Neighbours, Effects = new[] { WeaponHit }, Description = "Weapon dice to the foe and every foe beside it.",
         };
         yield return new()
         {
-            Id = "fighter-second-wind", Name = "Second Wind", Class = ClassId.Fighter, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd4,
+            Id = "fighter-second-wind", Name = "Second Wind", Class = ClassId.Fighter, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = 16000,
             Range = SkillRange.Self, Target = SkillTarget.Self, Ai = AiUse.Heal,
             Effects = new[] { Heal("1d10", casting: false, levelTimes: 1) with { On = EffectOn.Self } }, Description = "Heal 1d10 + level.",
         };
@@ -52,7 +52,7 @@ public static partial class SkillCatalog
         yield return new()
         {
             Id = "fighter-action-surge", Name = "Action Surge", Class = ClassId.Fighter, Rank = 5, Kind = SkillKind.Bonus, Focus = 60, CooldownMs = OncePerFight,
-            Ultimate = true, Range = SkillRange.Self, Target = SkillTarget.Self, Ai = AiUse.Utility, AiValue = 8,
+            Ultimate = true, Range = SkillRange.Self, Target = SkillTarget.Self, Ai = AiUse.Utility, AiValue = 14,
             Effects = new[] { new Effect { Kind = EffectType.Reset, On = EffectOn.Self } },
             Description = "Take another action: the GCD resets, and the next action skill you use starts no cooldown.",
         };
@@ -68,24 +68,24 @@ public static partial class SkillCatalog
         {
             Id = "rogue-strike", Name = "Strike", Class = ClassId.Rogue, Kind = SkillKind.Auto, Weapon = true,
             Effects = new[] { WeaponHit with { Sneak = true } },
-            Description = "Weapon dice + Dex. Sneak Attack: +1d6⁺ if an ally hit the target in the last 3 s, or it's Marked or Prone; once every 3 s.",
+            Description = "Weapon dice + Dex. Sneak Attack: +2d6⁺ if an ally hit the target in the last 3 s, or it's Marked or Prone; once every 3 s.",
         };
         yield return new()
         {
-            Id = "rogue-backstab", Name = "Backstab", Class = ClassId.Rogue, Focus = 20, CooldownMs = Cd1, Weapon = true, Range = SkillRange.Short,
-            Effects = new[] { new Effect { Kind = EffectType.Teleport, On = EffectOn.Self, Once = true }, WeaponHit with { Sneak = true } },
-            Description = "Step behind a foe up to 100 px away and strike: weapon dice + Dex, with Sneak Attack.",
+            Id = "rogue-backstab", Name = "Backstab", Class = ClassId.Rogue, Focus = 15, CooldownMs = Cd1, Weapon = true, Range = SkillRange.Short,
+            Effects = new[] { new Effect { Kind = EffectType.Teleport, On = EffectOn.Self, Once = true }, WeaponHit with { Sneak = true, WeaponTimes = 2 } },
+            Description = "Step behind a foe up to 100 px away and strike: weapon dice twice + Dex, with Sneak Attack.",
         };
         yield return new()
         {
-            Id = "rogue-smoke-step", Name = "Smoke Step", Class = ClassId.Rogue, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd3,
-            Range = SkillRange.Self, Target = SkillTarget.Self, Ai = AiUse.Defensive, AiValue = 3,
+            Id = "rogue-smoke-step", Name = "Smoke Step", Class = ClassId.Rogue, Rank = 2, Kind = SkillKind.Bonus, Focus = 15, CooldownMs = Cd3,
+            Range = SkillRange.Self, Target = SkillTarget.Self, Ai = AiUse.Defensive, AiValue = 4,
             Effects = new[]
             {
                 new Effect { Kind = EffectType.Dash, On = EffectOn.Self, Distance = 60f },
-                Put(Buff("smoke-step", "Smoke Step", Turn, new StatMod(Stat.AttackersDisadvantage)), EffectOn.Self),
+                Put(Buff("smoke-step", "Smoke Step", 2 * Turn, new StatMod(Stat.AttackersDisadvantage)), EffectOn.Self),
             },
-            Description = "Dash 60 px clear; attacks on you have disadvantage for 3 s.",
+            Description = "Dash 60 px clear; attacks on you have disadvantage for 6 s.",
         };
         yield return new()
         {
@@ -127,7 +127,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "cleric-cure-wounds", Name = "Cure Wounds", Class = ClassId.Cleric, Focus = 25, CooldownMs = Cd1, Range = SkillRange.Short,
+            Id = "cleric-cure-wounds", Name = "Cure Wounds", Class = ClassId.Cleric, Focus = 30, CooldownMs = Cd2, Range = SkillRange.Short,
             Target = SkillTarget.Ally, Ai = AiUse.Heal, Effects = new[] { Heal("1d8", plus: true) }, Description = "Heal 1d8⁺ + Wis. Gets a Downed ally up.",
         };
         yield return new()
@@ -179,13 +179,13 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "wizard-magic-missile", Name = "Magic Missile", Class = ClassId.Wizard, Focus = 25, CooldownMs = Cd1, Range = SkillRange.Long,
+            Id = "wizard-magic-missile", Name = "Magic Missile", Class = ClassId.Wizard, Focus = 20, CooldownMs = Cd1, Range = SkillRange.Long,
             Area = AreaShape.Spread, Count = 3, Strikes = 3, Projectile = DamageType.Force,
-            Effects = new[] { SureHit("1d4+1", DamageType.Force) }, Description = "Three darts of 1d4 + 1 force, shared among up to 3 foes; they always hit.",
+            Effects = new[] { SureHit("1d4+2", DamageType.Force) }, Description = "Three darts of 1d4 + 2 force, shared among up to 3 foes; they always hit.",
         };
         yield return new()
         {
-            Id = "wizard-burning-hands", Name = "Burning Hands", Class = ClassId.Wizard, Rank = 2, Focus = 30, CooldownMs = Cd2, Range = SkillRange.Short,
+            Id = "wizard-burning-hands", Name = "Burning Hands", Class = ClassId.Wizard, Rank = 2, Focus = 20, CooldownMs = Cd2, Range = SkillRange.Short,
             Area = AreaShape.Row, Effects = new[] { SaveHit("3d6", DamageType.Fire, Ability.Dexterity, true) },
             Description = "3d6 fire to every foe within 48 px of the target, Dex save for half.",
         };
@@ -287,7 +287,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "druid-healing-word", Name = "Healing Word", Class = ClassId.Druid, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd1,
+            Id = "druid-healing-word", Name = "Healing Word", Class = ClassId.Druid, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2,
             Range = SkillRange.Long, Target = SkillTarget.Ally, Ai = AiUse.Heal, Effects = new[] { Heal("1d4", plus: true) },
             Description = "Heal 1d4⁺ + Wis. Gets a Downed ally up.",
         };
@@ -334,14 +334,14 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "warlock-hex", Name = "Hex", Class = ClassId.Warlock, Kind = SkillKind.Bonus, Focus = 20, Range = SkillRange.Long, Concentration = true,
+            Id = "warlock-hex", Name = "Hex", Class = ClassId.Warlock, Kind = SkillKind.Bonus, Focus = 15, Range = SkillRange.Long, Concentration = true,
             Ai = AiUse.Control, AiValue = 6,
-            Effects = new[] { Put(Debuff("hexed", "Hexed", 10 * Turn, new StatMod(Stat.TakenFromSource, Dice: D("1d6"), Type: DamageType.Necrotic)) with { Condition = ConditionId.Hexed }) },
-            Description = "Your hits on it do +1d6 necrotic for 30 s (concentration).",
+            Effects = new[] { Put(Debuff("hexed", "Hexed", 10 * Turn, new StatMod(Stat.TakenFromSource, Dice: D("1d8"), Type: DamageType.Necrotic)) with { Condition = ConditionId.Hexed }) },
+            Description = "Your hits on it do +1d8 necrotic for 30 s (concentration).",
         };
         yield return new()
         {
-            Id = "warlock-hellish-rebuke", Name = "Hellish Rebuke", Class = ClassId.Warlock, Rank = 2, Kind = SkillKind.Reaction, Focus = 25, CooldownMs = Cd2,
+            Id = "warlock-hellish-rebuke", Name = "Hellish Rebuke", Class = ClassId.Warlock, Rank = 2, Kind = SkillKind.Reaction, Focus = 20, CooldownMs = Cd2,
             Range = SkillRange.Self, Target = SkillTarget.Self, Trigger = ReactionTrigger.HitOnYou, Ai = AiUse.Defensive, AiValue = 6,
             Effects = new[] { Arm, SaveHit("2d10", DamageType.Fire, Ability.Dexterity, true) with { On = EffectOn.Attacker } },
             Description = "For 4 s, whoever next hits you takes 2d10 fire, Dex save for half.",
@@ -401,7 +401,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "bard-healing-word", Name = "Healing Word", Class = ClassId.Bard, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd1,
+            Id = "bard-healing-word", Name = "Healing Word", Class = ClassId.Bard, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2,
             Range = SkillRange.Long, Target = SkillTarget.Ally, Ai = AiUse.Heal, Effects = new[] { Heal("1d4", plus: true) },
             Description = "Heal 1d4⁺ + Cha. Gets a Downed ally up.",
         };

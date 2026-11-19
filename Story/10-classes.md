@@ -57,9 +57,9 @@ Hit points come from level and Constitution, not class: 10 + Con at level 1, the
 | Modifier | Classes |
 | --- | --- |
 | +20% | Warden, Ironvein Bulwark, Watchblade |
-| +10% | Blademaster, Gilded Knight, Ashwalker, Deckhand, Crownsworn |
+| +10% | Blademaster, Gilded Knight, Ashwalker, Deckhand, Crownsworn, Wayfarer |
 | 0 | Everyone else |
-| −10% | Arcanist, Guild Battlemage, Glasswright, Hemomancer |
+| −10% | Guild Battlemage, Glasswright, Hemomancer |
 
 ### 1.5 Skill dice
 
@@ -697,15 +697,19 @@ A companion fights best in their own class, and some story fights expect it: in 
 
 ## 8. Tuned numbers
 
-The real-time engine's first pass (`--simulate`, README "Tuning") moved no class skill's numbers:
-every kit plays as §2's tables read through `11-combat.md` §4.2 and §4.3 (A on the GCD, B off it, R
-armed for 4 s, CD 1 to 4 as 6, 8, 12 and 16 s, 1/fight as a 45 s cooldown ready at the start, a turn
-as 3 s). Where a table says something only turns could say, the engine reads it so:
+Every kit plays in real time as §2's and §3's tables read through `11-combat.md` §4.2 and §4.3 (A on
+the GCD, B off it, R armed for 4 s, 1/fight as a 45 s cooldown ready at the start, a turn as 3 s),
+then tuned by the simulator (README "Tuning"). The tuning read CD 1 to 4 as 3, 6, 9 and 12 s, a turn
+each, rather than §4.2's first 6, 8, 12 and 16, so a full bar has a skill to press every two or three
+seconds; it kept heals at 6 s; and it moved a few skills' costs, cooldowns, dice and durations where a
+class came out weak or overbearing. §8.1 has every number as the engine has it. The tables in §2 and
+§3 are the turn-based screen's, until it moves over. Where a table says something only turns could
+say, the engine reads it so:
 
 | Skill | In real time |
 | --- | --- |
 | Riposte (B) | Armed like a reaction: for 4 s, the next melee attack that misses you is answered with a Strike |
-| Smoke Step | A 60 px dash away from the nearest foe; attacks on you have disadvantage for 3 s |
+| Smoke Step | A 60 px dash away from the nearest foe; attacks on you have disadvantage for 6 s |
 | Poisoned Edge | Your next hit within 9 s Poisons: 1d4 poison every 3 s for 9 s |
 | Cunning | Move a quarter faster, and 5% haste (initiative and Shift are gone) |
 | Shadow Dance | Three blows, each on a random foe (they can repeat), each a step behind it with Sneak Attack |
@@ -797,3 +801,380 @@ the same way, with these where a table says something only turns, rows or a menu
 
 The foes' side of the first pass (their real-time hit points and damage) is in EnemyCatalog and
 the README's "Tuning".
+
+### 8.1 The real-time numbers
+
+Printed from the catalog by `--simulate numbers` (README "The simulator"), so these tables are the
+engine's own: run it again after changing a row and paste its output here. For each class: its Focus
+model and what fills it (everyone also gets 1 Focus a second, and a fight starts on the difficulty's
+40, 60 or 30, Tempo on 80), and its auto's swing before haste with the weapon it starts with (light
+and finesse weapons 1.8 s, heavy and two-handed 2.4, crossbows 2.6, the rest 2.0). For each skill: its
+kind (A on the 1.5 s GCD, B off it with a 0.5 s lockout, R armed for 4 s), the rank it opens at, its
+Focus (and hit points), its cooldown before haste (GCD for an A with none of its own), its cast time or
+wind-up, when its blows land in its clip (from `clips.json`'s `hit` and `release` events; a blow that
+flies lands after its flight), its reach in world pixels (weapon, 30 melee, 42 reach, 100 short, 220
+long, the room or yourself), its area (§4.3's shapes), and what it does (its dice with ⁺ for those
+that rise at levels 5 and 9, "casting" for the casting ability's modifier, an aura's name with how
+long it lasts). Passives say what they do.
+
+| Focus model | Fills Focus (everyone also gets 1 a second) |
+| --- | --- |
+| Momentum | +8 a hit, +14 a crit |
+| Opportunist | +8 a hit, +16 a crit, +12 a dodge |
+| Bulwark | +4 a hit, +6 when you're hit, +10 a block |
+| Wellspring | +5 a second |
+| Devotion | +3 a second, +4 a heal you land |
+| Wild | +3 a second, +2 a tick of your damage or healing over time |
+| Pact | +2 a second, +2 a hit, +8 a hit on your cursed target |
+| Tempo | +6 a hit |
+| Blood | +4 a second |
+
+#### Blademaster (`fighter`)
+
+Momentum: +8 a hit, +14 a crit. The auto swings every 2 s with a longsword (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Strike | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon |
+| Cleave | A | 1 | 20 | 3 s |  | 0.28 s | 30 | Neighbours | weapon |
+| Second Wind | B | 2 | 20 | 16 s |  | 0.20 s | self |  | heal 1d10 + level |
+| Riposte | R | 3 | 20 | 9 s |  | 0.20 s | self |  | strike |
+| Action Surge | B, ultimate | 5 | 60 | 45 s |  | 0.48 s | self |  | reset on you |
+| Fighting Style | passive | 4 | | | | | | | +2 to hit with melee. |
+| Indomitable | passive | 10 | | | | | | | Once a fight, reroll a failed save. |
+
+#### Shadowstep (`rogue`)
+
+Opportunist: +8 a hit, +16 a crit, +12 a dodge. The auto swings every 1.8 s with a shortsword (one-hand), before haste. Threat ×0.6.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Strike | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon |
+| Backstab | A | 1 | 15 | 3 s |  | 0.25 s | 100 |  | teleport; weapon ×2 |
+| Smoke Step | B | 2 | 15 | 9 s |  | 0.18 s | self |  | dash 60 px; Smoke Step 6 s on you |
+| Poisoned Edge | B | 3 | 20 | 9 s |  | 0.25 s | self |  | rider on you |
+| Shadow Dance | A, ultimate | 5 | 60 | 45 s |  | 0.25, 0.52, 0.82 s (3 blows) | room | RandomFoes ×3 | teleport; weapon |
+| Cunning | passive | 4 | | | | | | | Move a quarter faster, and 5% haste. |
+| Evasion | passive | 10 | | | | | | | Area skills do half to you, and none on a made save. |
+
+#### Lightbearer (`cleric`)
+
+Devotion: +3 a second, +4 a heal you land. The auto swings every 2 s with a mace (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Sacred Flame | auto | 1 |  |  |  | 0.27 s | 220 |  | 1d8⁺ radiant (Dex save) |
+| Cure Wounds | A | 1 | 30 | 6 s |  | 0.25 s | 100 |  | heal 1d8⁺ + casting |
+| Bless | B | 2 | 25 | 12 s |  | 0.30 s | 220 | Allies ×3 | Blessed 9 s |
+| Guiding Bolt | A | 3 | 30 | 6 s |  | 0.35 s | 220 |  | 4d6 radiant; Marked 6 s |
+| Dawnlight | A, ultimate | 5 | 60 | 45 s | cast 1 s | 0.68 s | room | AllFoes | 3d10 radiant (Con save, half); heal 2d6 |
+| Disciple of Life | passive | 4 | | | | | | | Your heals heal 3 more. |
+| Blessed Healer | passive | 10 | | | | | | | When you heal someone else, you heal 1d6. |
+
+#### Arcanist (`wizard`)
+
+Wellspring: +5 a second. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Fire Bolt | auto | 1 |  |  |  | 0.27 s | 220 |  | 1d10⁺ fire |
+| Magic Missile | A | 1 | 20 | 3 s |  | 0.22, 0.50, 0.62 s (3 blows) | 220 | Spread ×3 | 1d4+2 force |
+| Burning Hands | A | 2 | 20 | 6 s |  | 0.28 s | 100 | Row | 3d6 fire (Dex save, half) |
+| Shield | R | 3 | 20 | 6 s |  | 0.20 s | self |  | Shield 3 s on you |
+| Fireball | A, ultimate | 5 | 70 | 45 s | cast 1.2 s | 0.75 s | room | AllFoes | 8d6 fire (Dex save, half) |
+| Arcane Recovery | passive | 4 | | | | | | | +10 Focus every 3 s. |
+| Empowered | passive | 10 | | | | | | | Once every 3 s, add Int to a spell's damage. |
+
+#### Warden (`paladin`)
+
+Bulwark: +4 a hit, +6 when you're hit, +10 a block. The auto swings every 2 s with a longsword (one-hand), before haste. Threat ×2.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Strike | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon |
+| Divine Smite | B | 1 | 25 | 3 s |  | 0.23 s | self |  | rider on you |
+| Lay on Hands | A | 2 | 20 | GCD |  | 0.28 s | 100 |  | heal ; cleanse |
+| Raise Shield | B | 3 | 20 | 9 s |  | 0.20 s | self |  | Shield Raised 3 s on you; taunt |
+| Unbroken Oath | A, ultimate | 5 | 60 | 45 s |  | 0.57 s | room | AllAllies | shield 2d10 + level; Oathbound 9 s |
+| Aura of Protection | passive | 4 | | | | | | | Allies within 60 px add your Cha to saves. |
+| Radiant Strikes | passive | 10 | | | | | | | Melee hits do +1d8 radiant. |
+
+#### Wildcaller (`druid`)
+
+Wild: +3 a second, +2 a tick of your damage or healing over time. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Thorn Whip | auto | 1 |  |  |  | 0.27 s | 42 |  | 1d6⁺ piercing; pull |
+| Entangle | A | 1 | 30 | 9 s |  | 0.35 s | 220 | Row | Restrained 6 s |
+| Healing Word | B | 2 | 20 | 6 s |  | 0.18 s | 220 |  | heal 1d4⁺ + casting |
+| Moonbeam | A | 3 | 30 | 9 s |  | 0.32 s | 220 | Line | 2d10 radiant; Moonbeam 9 s (2d10 every 3 s) |
+| Wild Shape: Bear | A, ultimate | 5 | 60 | 45 s |  | 0.60 s | self |  | transform on you; shield + 3 × level10 on you |
+| Natural Recovery | passive | 4 | | | | | | | After a fight, the party heals 10%. |
+| Nature's Ward | passive | 10 | | | | | | | Immune to Poisoned. |
+
+#### Hexblade (`warlock`)
+
+Pact: +2 a second, +2 a hit, +8 a hit on your cursed target. The auto swings every 1.8 s with a shortsword (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Eldritch Blast | auto | 1 |  |  |  | 0.27 s | 220 |  | 1d10 force |
+| Hex | B | 1 | 15 |  |  | 0.20 s | 220 |  | Hexed 30 s |
+| Hellish Rebuke | R | 2 | 20 | 6 s |  | 0.13 s | self |  | 2d10 fire (Dex save, half) |
+| Armour of Shadows | B | 3 | 20 | 12 s |  | 0.20 s | self |  | shield 1d8 + Cha + level on you |
+| Void Maw | A, ultimate | 5 | 60 | 45 s |  | 0.72 s | room | AllFoes | Void Maw 6 s (2d6 every 3 s) |
+| Agonising Blast | passive | 4 | | | | | | | Add Cha to your spells' damage. |
+| Devil's Sight | passive | 10 | | | | | | | Ignore Blinded and darkness. |
+
+#### Skald (`bard`)
+
+Tempo: +6 a hit, and starts every fight on 80. The auto swings every 1.8 s with a rapier (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Vicious Mockery | auto | 1 |  |  |  | 0.20 s | 220 |  | 1d4⁺ psychic (Wis save); Mocked 6 s |
+| Inspiration | B | 1 | 20 | 3 s |  | 0.27 s | 220 |  | Inspired 15 s |
+| Healing Word | B | 2 | 20 | 6 s |  | 0.18 s | 220 |  | heal 1d4⁺ + casting |
+| Thunderwave | A | 3 | 30 | 6 s |  | 0.28 s | self | Front | 2d8 thunder (Con save, half); knockback 40 px |
+| Battle Hymn | A, ultimate | 5 | 60 | 45 s |  | 0.48 s | room | AllAllies | Battle Hymn 9 s |
+| Song of Rest | passive | 4 | | | | | | | After a fight, everyone heals your level. |
+| Countercharm | passive | 10 | | | | | | | Allies have advantage on saves against Frightened and Charmed. |
+
+#### Watchblade (`watchblade`)
+
+Momentum: +8 a hit, +14 a crit. The auto swings every 2 s with a longsword (one-hand), before haste. Threat ×2.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Cudgel Blow | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon; Knocked Down 1.5 s |
+| Hold the Line | B | 1 | 20 | 9 s |  | 0.20 s | self | Front | Hold the Line 3 s on you; taunt |
+| Arrest | A | 2 | 25 | 9 s |  | 0.15 s | 30 |  | Restrained 6 s; takeout |
+| Whistle for the Watch | B | 3 | 30 | 45 s |  | 0.40 s | self |  | summon on you |
+| Shield Wall | A, ultimate | 5 | 60 | 45 s |  | 0.37 s | room | AllAllies | Shield Wall 6 s |
+| Twenty Years on the Beat | passive | 4 | | | | | | | +2 to saves (and advantage on Insight in conversations). |
+| Keeper of the Peace | passive | 10 | | | | | | | Foes you've Restrained or knocked down take +1d6 from your side's hits. |
+
+#### Netcaster (`netcaster`)
+
+Wild: +3 a second, +2 a tick of your damage or healing over time. The auto swings every 2 s with a spear (polearm), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Gaff | auto | 1 |  |  |  | 0.15 s | 42 |  | 1d6⁺ piercing |
+| Cast the Net | A | 1 | 25 | 9 s |  | 0.28 s | 220 | Row | Netted 6 s |
+| Mend | B | 2 | 20 | 6 s |  | 0.25 s | 220 |  | heal 1d6⁺ + casting; cleanse |
+| Haul In | A | 3 | 25 | 6 s |  | 0.23, 0.37 s | 220 |  | pull; Knocked Down 1.5 s |
+| High Tide | A, ultimate | 5 | 60 | 45 s |  | 0.58 s | room | AllFoes | 3d8 cold; Knocked Down 1.5 s; High Tide 9 s |
+| Weather Eye | passive | 4 | | | | | | | The party starts every fight with 10 more Focus (it was +2 initiative). |
+| Knots Hold | passive | 10 | | | | | | | Restrained you put on lasts 3 s longer. |
+
+#### Deckhand (`deckhand`)
+
+Momentum: +8 a hit, +14 a crit. The auto swings every 1.8 s with a scimitar (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Cutlass | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon |
+| Belaying Pin | B | 1 | 20 | 9 s |  | 0.20 s | 30 |  | Stunned 3 s |
+| Rum Ration | B | 2 | 20 | 9 s |  | 0.25 s | 100 |  | heal 2d4⁺; Rum Ration 15 s |
+| Swing Across | A | 3 | 30 | 6 s |  | 0.40 s | 220 |  | teleport; weapon |
+| Broadside | A, ultimate | 5 | 60 | 45 s |  | 0.63, 0.78, 0.93 s | room | AllFoes | 4d10 fire (Dex save, half); 3d8 piercing |
+| Sea Legs | passive | 4 | | | | | | | Can't be knocked down; +1 AC. |
+| Captain's Share | passive | 10 | | | | | | | +20% gold from fights. |
+
+#### Lodge Ranger (`lodge-ranger`)
+
+Opportunist: +8 a hit, +16 a crit, +12 a dodge. The auto swings every 2.4 s with a longbow (bow), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Shot | auto | 1 |  |  |  | 0.35 s | weapon |  | weapon |
+| Hunter's Mark | B | 1 | 10 |  |  | 0.20 s | 220 |  | Hunter's Mark 30 s |
+| Hawk Strike | B | 2 |  | 3 s |  | 0.27 s | 220 |  | 2d6⁺ piercing; interrupt |
+| Volley | A | 3 | 30 | 9 s |  | 0.30, 0.47, 0.63 s | 220 | Row | weapon (Dex save, half) |
+| Rain of Arrows | A, ultimate | 5 | 60 | 45 s |  | 0.70 s | room | AllFoes | 4d8 piercing (Dex save, half) |
+| Count the Ground | passive | 4 | | | | | | | Nobody catches the party unready: everyone's first swing of a fight comes at once. |
+| Old Growth | passive | 10 | | | | | | | +2 to hit Marked foes. |
+
+#### Guild Battlemage (`battlemage`)
+
+Wellspring: +5 a second. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Force Bolt | auto | 1 |  |  |  | 0.23 s | 220 |  | 2d6⁺ force; knockback 40 px |
+| Ward | B | 1 | 30 | 12 s |  | 0.25 s | 220 |  | shield 1d6 + casting + level |
+| Counterspell | R | 2 | 30 | 9 s |  | 0.13 s | self |  | interrupt |
+| Chain Lightning | A | 3 | 35 | 9 s |  | 0.28 s | 220 | Chain ×2 | 3d8 lightning |
+| Spire Lance | A, ultimate | 5 | 70 | 45 s | cast 1 s | 0.55 s | 220 | Line | 10d6 force |
+| Spire Training | passive | 4 | | | | | | | Damage can't break your concentration. |
+| Archmage's Patience | passive | 10 | | | | | | | Your first skill each fight costs no Focus. |
+
+#### Ashwalker (`ashwalker`)
+
+Momentum: +8 a hit, +14 a crit. The auto swings every 2.4 s with a greatsword (two-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Ember Edge | auto | 1 |  |  |  | 0.23 s | weapon |  | weapon; 1d4 fire |
+| Ash Cloud | B | 1 | 25 | 9 s |  | 0.27 s | self | Front | Blinded 3 s |
+| Endure | B | 2 | 20 | 9 s |  | 0.20 s | self |  | Endure 3 s on you |
+| Burn the Fields | A | 3 | 30 | 9 s |  | 0.33 s | 100 | Row | 2d6 fire; Burning 9 s (1d6 every 3 s) |
+| Last Harvest | A, ultimate | 5 | 60 | 45 s |  | 0.28, 0.48, 0.77 s | 30 | Neighbours | weapon ×3; 3d6 fire |
+| Doomward Born | passive | 4 | | | | | | | Resistance to fire; advantage on saves against necrotic. |
+| Nothing Left to Lose | passive | 10 | | | | | | | Below half health, +2 to hit and +1d6 damage. |
+
+#### Ironvein Bulwark (`bulwark`)
+
+Bulwark: +4 a hit, +6 when you're hit, +10 a block. The auto swings every 2 s with a warhammer (one-hand), before haste. Threat ×2.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Shield Bash | auto | 1 |  |  |  | 0.18 s | 30 |  | 1d10⁺ + Str bludgeoning; knockback 40 px |
+| Cover | R | 1 | 15 | 3 s |  | 0.07 s | 220 |  |  |
+| Hold | B | 2 | 25 | 9 s |  | 0.20 s | self | AlliesBehind | Hold 3 s |
+| Stone Skin | B | 3 | 25 | 12 s |  | 0.20 s | self |  | Stone Skin 6 s on you |
+| Nobody Left Behind | A, ultimate | 5 | 60 | 45 s |  | 0.48 s | room | AllAllies | heal 25% of most HP; Covered 3 s |
+| Forty-One Names | passive | 4 | | | | | | | +1 AC for each ally who has gone Downed this fight, up to +3. |
+| Staying Behind | passive | 10 | | | | | | | Once a fight, drop to 1 hit point instead of 0. |
+
+#### Ember Mender (`ember-mender`)
+
+Devotion: +3 a second, +4 a heal you land. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Cinder | auto | 1 |  |  |  | 0.23 s | 220 |  | 1d8⁺ fire |
+| Cauterise | A | 1 | 30 | 6 s |  | 0.28 s | 100 |  | heal 2d4⁺ + casting; cleanse |
+| Read the Wound | B | 2 | 15 | 6 s |  | 0.20 s | 220 |  | Read 3 s |
+| Warm Hands | B | 3 | 25 | 9 s |  | 0.25 s | self | AlliesNear | heal 1d8 + casting |
+| Rekindle | A, ultimate | 5 | 60 | 45 s |  | 0.65 s | room | AllAllies | heal 4d8; Rekindled 6 s |
+| Index of Remedies | passive | 4 | | | | | | | Potions you drink heal 50% more. |
+| Notes in the Margin | passive | 10 | | | | | | | Your heals on someone below a quarter of their hit points are doubled. |
+
+#### Lanerunner (`lanerunner`)
+
+Opportunist: +8 a hit, +16 a crit, +12 a dodge. The auto swings every 1.8 s with a dagger (dagger), before haste. Threat ×0.9.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Twin Cuts | auto | 1 |  |  |  | 0.12 s (2 blows) | weapon |  | weapon |
+| Pick Pocket | B | 1 | 15 |  |  | 0.15 s | 30 |  | gold |
+| Rooftops | B | 2 | 10 | 6 s |  | 0.35 s | self |  | dash 60 px; Rooftops 6 s on you |
+| Low Blow | A | 3 | 25 | 6 s |  | 0.25 s | 100 |  | teleport; weapon; Winded 3 s |
+| Everyone's Pocket | A, ultimate | 5 | 60 | 45 s |  | 0.43, 0.62 s (2 blows) | room |  | gold; teleport; weapon |
+| Lane Rules | passive | 4 | | | | | | | Advantage on attacks against a foe that's attacking one of your allies. |
+| Name on the Door | passive | 10 | | | | | | | +1 to every attack and save for each ally still standing. |
+
+#### Wayfarer (`wayfarer`)
+
+Tempo: +6 a hit, and starts every fight on 80. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Walking Stick | auto | 1 |  |  |  | 0.18 s | 30 |  | 1d8⁺ + casting bludgeoning |
+| Throw Anything | A | 1 | 15 | 3 s |  | 0.23 s | 100 |  | throw |
+| Duchess Kicks | B | 2 | 20 | 6 s |  | 0.57 s | 30 |  | 2d6 bludgeoning; knockback 40 px |
+| Rummage | B | 3 | 20 | 9 s |  | 0.52 s | self |  | oneof on you |
+| Lucky Stone | A, ultimate | 5 | 60 | 45 s |  | 0.38 s | room | AllAllies | Lucky Stone 30 s |
+| Haggle | passive | 4 | | | | | | | Shops are a fifth cheaper. |
+| Seen It All | passive | 10 | | | | | | | +2 to every save. |
+
+#### Gilded Knight (`gilded-knight`)
+
+Bulwark: +4 a hit, +6 when you're hit, +10 a block. The auto swings every 2 s with a longsword (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Morning Strike | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon; 1d4 radiant |
+| Sunburst | B | 1 | 20 | 6 s |  | 0.30 s | 220 |  | 2d8⁺ radiant; Blinded 3 s |
+| Vigil | B | 2 | 20 | 9 s |  | 0.20 s | 100 |  | Vigil 3 s |
+| Call the Order | B | 3 | 35 | 45 s |  | 0.33 s | self |  | summon on you |
+| Gilded Dawn | A, ultimate | 5 | 60 | 45 s |  | 0.55 s | room | AllFoes | 6d8 radiant (Con save, half); Sunscorched 6 s |
+| Where the Dark Gathers | passive | 4 | | | | | | | +2 to hit and +1d6 against undead and vampires. |
+| Sorry Somewhere Useful | passive | 10 | | | | | | | Your heals and shields on others are 25% stronger. |
+
+#### Hemomancer (`hemomancer`)
+
+Blood: +4 a second. The auto swings every 1.8 s with a dagger (dagger), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Blood Lash | auto | 1 |  |  |  | 0.27 s | 220 |  | 1d10⁺ necrotic; heal 1 |
+| Drain | A | 1 | 30 | 6 s |  | 0.27 s | 220 |  | 2d8⁺ necrotic |
+| Blood Shield | B | 2 | 20 + 5 HP | 12 s |  | 0.25 s | 220 |  | shield 2d6 + level |
+| Given Freely | B | 3 |  + 10 HP | 9 s |  | 0.32 s | 100 |  | heal 2d10 + casting |
+| Crimson Tide | A, ultimate | 5 | 60 | 45 s |  | 0.68 s | room | AllFoes | 4d10 necrotic (Con save, half) |
+| The Old Enemy | passive | 4 | | | | | | | In daylight, -2 to hit; at night or underground, +2. |
+| Forty Years of Manners | passive | 10 | | | | | | | Charmed and Frightened have no effect on you. |
+
+#### Hivekeeper (`hivekeeper`)
+
+Devotion: +3 a second, +4 a heal you land. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Swarm | auto | 1 |  |  |  | 0.23 s | 220 |  | 1d6⁺ piercing; Swarming 3 s (1 every 3 s) |
+| Honey Salve | A | 1 | 30 | 6 s |  | 0.25 s | 100 |  | heal 1d8⁺ + casting; Honey Salve 9 s (heal 2 every 3 s) |
+| Smoke Pot | B | 2 | 20 | 9 s |  | 0.25 s | 220 | Row | Smoked 3 s |
+| Angry Hive | A | 3 | 30 | 9 s |  | 0.27 s | 220 | Row | 2d6⁺ piercing; Poisoned 6 s |
+| The Whole Hive | A, ultimate | 5 | 60 | 45 s |  | 0.62 s | room | AllFoes | 3d8 piercing; heal 1d8⁺ + casting; Honey Salve 9 s (heal 2 every 3 s) |
+| Thirty Summers | passive | 4 | | | | | | | Your healing over time can't be cleansed, and ticks twice as much on the Downed (and gets them up). |
+| They Know Me | passive | 10 | | | | | | | Beasts and swarms won't pick you out unless you've hurt them. |
+
+#### Glasswright (`glasswright`)
+
+Wellspring: +5 a second. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Prism Ray | auto | 1 |  |  |  | 0.27, 0.58 s | 220 |  | 1d8⁺ radiant; 1d4⁺ radiant |
+| Mirror Image | B | 1 | 20 | 9 s |  | 0.35 s | self |  | Mirror Image, 3 uses on you |
+| Refract | R | 2 | 20 | 6 s |  | 0.12 s | self |  |  |
+| Glasshouse | A | 3 | 30 | 9 s |  | 0.32 s | 220 | Row | Blinded 3 s; 2d6 radiant |
+| Given in Love | A, ultimate | 5 | 60 | 45 s |  | 0.55 s | room | AllAllies | rider |
+| Night-Flowers | passive | 4 | | | | | | | Your hits do +2 in dark places. |
+| Choose It Yourself | passive | 10 | | | | | | | Immune to Charmed; once a fight, the first control a foe puts on an ally (a stun, a freeze, a hold, a knockdown...) is shaken off at once. |
+
+#### Lamplighter (`lamplighter`)
+
+Devotion: +3 a second, +4 a heal you land. The auto swings every 2 s with a mace (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Lantern Swing | auto | 1 |  |  |  | 0.18 s | 30 |  | 1d6⁺ + casting radiant |
+| Sanctuary | B | 1 | 20 | 9 s |  | 0.30 s | 220 |  | Sanctuary 6 s |
+| Vespers | A | 2 | 20 | 6 s |  | 0.37 s | self | AlliesBehind | heal 1d8⁺ + casting |
+| Reveal | B | 3 | 15 | 6 s |  | 0.20 s | room | AllFoes | dispel; Marked 6 s |
+| The Bell | A, ultimate | 5 | 60 | 45 s |  | 0.30 s | room | AllAllies | heal 3d8; cleanse |
+| Everyone Who Knocks | passive | 4 | | | | | | | The first time anyone of yours would be Downed each fight, they stay on 1 hit point instead. |
+| Bees Guard the Honey | passive | 10 | | | | | | | Allies under your Sanctuary heal 1d6 whenever they're attacked. |
+
+#### Crownsworn (`crownsworn`)
+
+Momentum: +8 a hit, +14 a crit. The auto swings every 1.8 s with a rapier (one-hand), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Riposte Strike | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon; On Guard 3 s on you |
+| Command | B | 1 | 15 | 6 s |  | 0.20 s | 220 |  | reset |
+| Told Rudely | B | 2 | 15 | 9 s |  | 0.20 s | 220 |  | taunt; Marked 3 s |
+| Rally | A | 3 | 30 | 9 s |  | 0.33 s | room | AllAllies | heal 1d8⁺; heal 1 |
+| My Father's Sword | A, ultimate | 5 | 60 | 45 s |  | 0.30, 0.50, 0.70, 1.00 s | 30 |  | weapon ×4; 4d8 radiant; strike |
+| No Procedure | passive | 4 | | | | | | | The party starts every fight with 10 more Focus, and your first swing comes at once (it was initiative). |
+| Somebody Allowed to Say No | passive | 10 | | | | | | | Once a fight, the first big move a foe winds up (a wind-up of 1 s or more) is stopped before it lands. |
+
+#### Hourwarden (`hourwarden`)
+
+Wellspring: +5 a second. The auto swings every 2 s with a quarterstaff (staff), before haste.
+
+| Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Second Hand | auto | 1 |  |  |  | 0.35 s | 220 |  | 1d10⁺ force |
+| Rewind | B | 1 | 25 | 9 s |  | 0.40 s | 220 |  | rewind |
+| Haste | B | 2 | 25 | 9 s |  | 0.20 s | 220 |  | Haste 9 s |
+| Stop | A | 3 | 30 | 9 s |  | 0.28 s | 220 |  | Stopped 3 s |
+| Bleed the Clock | A, ultimate | 5 | 70 | 45 s |  | 0.72 s | room | AllFoes | Stopped 4 s; Slowed 6 s |
+| Echo Strike | passive | 4 | | | | | | | A skill you use has a one-in-five chance to happen again at half strength, 0.4 s after. |
+| Stolen Minute | passive | 10 | | | | | | | Your cooldowns run 10% faster. |

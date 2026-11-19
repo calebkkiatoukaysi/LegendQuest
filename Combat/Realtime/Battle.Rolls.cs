@@ -269,7 +269,7 @@ public sealed partial class Battle
     internal int SpellAttack(Fighter f, SkillDefinition skill)
     {
         if (f.Enemy is not null)
-            return skill is not null && skill.AttackBonus > 0 ? skill.AttackBonus + (f.Side == Side.Foes ? DifficultyRules.FoeRolls(Rules.Difficulty) : 0) : f.MainAttack.Bonus;
+            return skill is not null && skill.AttackBonus > 0 ? skill.AttackBonus + (f.Side == Side.Foes ? DifficultyRules.FoeRolls(Rules.Difficulty) + (f.Enemy?.RealtimeHitShift ?? 0) : 0) : f.MainAttack.Bonus;
         return f.Proficiency + f.Scores.Modifier(f.CastingAbility) + f.SpellAttackExtra;
     }
 

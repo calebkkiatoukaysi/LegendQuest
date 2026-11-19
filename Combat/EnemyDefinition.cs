@@ -114,8 +114,22 @@ public sealed class EnemyDefinition
     public float DamageScale { get; init; }
 
     /// <summary>The real-time damage scale of a stat block that doesn't set its own.</summary>
-    public const float DefaultDamageScale = 0.5f;
+    public const float DefaultDamageScale = 0.23f;
 
     /// <summary>Its real-time damage scale: DamageScale, or the default.</summary>
     public float RealtimeDamageScale => DamageScale > 0f ? DamageScale : DefaultDamageScale;
+
+    /// <summary>What it adds to its attack rolls in real time, on top of the stat block's: DefaultHitShift unless set.</summary>
+    /// <remarks>
+    /// 11-combat.md §9.2's foe to-hit lever, for how often people go down. A surer, lighter blow narrows
+    /// what armour is worth against a stream of swings, so a fight a plate-wearer finds fair isn't a
+    /// rout for someone in leather. The turn-based engine doesn't read it.
+    /// </remarks>
+    public int? HitShift { get; init; }
+
+    /// <summary>The real-time to-hit shift of a stat block that doesn't set its own.</summary>
+    public const int DefaultHitShift = 10;
+
+    /// <summary>Its real-time to-hit shift: HitShift, or the default.</summary>
+    public int RealtimeHitShift => HitShift ?? DefaultHitShift;
 }

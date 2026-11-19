@@ -19,12 +19,12 @@ public static class FocusModels
     private static readonly Dictionary<FocusModel, FocusRules> Table = new()
     {
         [FocusModel.Momentum] = new FocusRules { PerHit = 8, PerCrit = 14 },
-        [FocusModel.Opportunist] = new FocusRules { PerHit = 5, PerCrit = 16, PerDodge = 12 },
+        [FocusModel.Opportunist] = new FocusRules { PerHit = 8, PerCrit = 16, PerDodge = 12 },
         [FocusModel.Bulwark] = new FocusRules { WhenHit = 6, PerBlock = 10, PerHit = 4, PerCrit = 4 },
         [FocusModel.Wellspring] = new FocusRules { PerSecond = 5 },
         [FocusModel.Devotion] = new FocusRules { PerSecond = 3, PerHeal = 4 },
         [FocusModel.Wild] = new FocusRules { PerSecond = 3, PerTick = 2 },
-        [FocusModel.Pact] = new FocusRules { PerSecond = 1, PerHit = 2, PerCrit = 2, PerCursedHit = 6 },
+        [FocusModel.Pact] = new FocusRules { PerSecond = 2, PerHit = 2, PerCrit = 2, PerCursedHit = 8 },
         [FocusModel.Tempo] = new FocusRules { PerHit = 6, PerCrit = 6 },
         [FocusModel.Blood] = new FocusRules { PerSecond = 4 },
     };

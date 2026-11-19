@@ -15,7 +15,7 @@ namespace LegendQuest.Combat.Realtime;
 /// </summary>
 /// <remarks>
 /// <para>
-/// `--simulate &lt;id|all|classes|selftest|trace:id|skill:id&gt; [runs] [story|balanced|tactician]`. A
+/// `--simulate &lt;id|all|classes|selftest|numbers|trace:id|skill:id&gt; [runs] [story|balanced|tactician]`. A
 /// fight's report has its win rate, mean length in seconds, who went down most, and each member's
 /// damage and healing a second and how long they held a foe's attention; then the verdict against
 /// §9.2's targets (win rate, length, most downed, nothing unfinished). Tactician's verdicts are only
@@ -32,7 +32,7 @@ namespace LegendQuest.Combat.Realtime;
 /// with two healing potions in the bag.
 /// </para>
 /// </remarks>
-public static class BattleSimulator
+public static partial class BattleSimulator
 {
     /// <summary>How many runs --simulate does when it isn't told.</summary>
     public const int DefaultRuns = 200;
@@ -91,7 +91,9 @@ public static class BattleSimulator
     {
         runs = Math.Max(1, runs);
         if (what == SelfTest) return RunSelfTest();
+        if (what == Numbers) return RunNumbers();
         if (what == EveryClass) return RunClasses(runs, difficulty);
+        if (what.StartsWith(EveryClass + ":", StringComparison.Ordinal)) return RunClasses(runs, difficulty, what.Substring(EveryClass.Length + 1).Split(','));
         if (what.StartsWith(SkillTrace, StringComparison.Ordinal) && SkillCatalog.Exists(what.Substring(SkillTrace.Length)))
             return SelfTests.TraceSkill(SkillCatalog.Get(what.Substring(SkillTrace.Length)));
         if (what.StartsWith(Trace, StringComparison.Ordinal))
@@ -110,7 +112,7 @@ public static class BattleSimulator
         {
             Console.WriteLine($"There's no encounter called \"{what}\". There's:");
             foreach (EncounterDefinition encounter in EncounterCatalog.All) Console.WriteLine("  " + encounter.Id);
-            Console.WriteLine($"  {Everything}\n  {EveryClass}\n  {SelfTest}\n  {Trace}<encounter id>\n  {SkillTrace}<skill id>");
+            Console.WriteLine($"  {Everything}\n  {EveryClass}\n  {SelfTest}\n  {Numbers}\n  {Trace}<encounter id>\n  {SkillTrace}<skill id>");
             return false;
         }
 
@@ -186,7 +188,7 @@ public static class BattleSimulator
     }
 
     /// <summary>One fight from a seed, to its end or the cap, with the AI on both sides; the event stream's hash if asked for.</summary>
-    internal static Battle Fight(EncounterDefinition encounter, IReadOnlyList<PartyMember> party, Difficulty difficulty, bool flagged, ulong seed, out ulong hash)
+    internal static Battle Fight(EncounterDefinition encounter, IReadOnlyList<PartyMember> party, Difficulty difficulty, bool flagged, ulong seed, out ulong hash, Pace pace = null)
     {
         SortedSet<string> conditional = Conditional(encounter);
         bool Flag(string id) => flagged && conditional.Contains(id);
@@ -196,7 +198,11 @@ public static class BattleSimulator
         var battle = new Battle(encounter, BattleRoster.Build(encounter, party, Flag), rules, seed);
         hash = 14695981039346656037UL;
         while (battle.Outcome == FightOutcome.Ongoing && battle.NowMs < CapMs)
-            foreach (BattleEvent happened in battle.Step()) hash = Mix(hash, happened.Signature());
+        {
+            IReadOnlyList<BattleEvent> events = battle.Step();
+            foreach (BattleEvent happened in events) hash = Mix(hash, happened.Signature());
+            pace?.Observe(battle, events);
+        }
         return battle;
     }
 
@@ -223,8 +229,10 @@ public static class BattleSimulator
         for (int run = 0; run < runs; run++)
         {
             List<PartyMember> party = Party(encounter, youAs);
-            Battle battle = Fight(encounter, party, difficulty, flagged, RunSeed(encounter, run, flagged), out _);
-            tally.Add(battle);
+            var pace = new Pace();
+            Battle battle = Fight(encounter, party, difficulty, flagged, RunSeed(encounter, run, flagged), out _, pace);
+            pace.Finish(battle);
+            tally.Add(battle, pace);
         }
         return tally;
     }
@@ -282,7 +290,7 @@ public static class BattleSimulator
         string band = most >= 1.0 ? $"{Pct(least)}+" : $"{Pct(least)}-{Pct(most)}";
         return new Verdict(encounter.Id, encounter.Kind.ToString(), LevelTable.Expected(encounter), tally.WinRate, band, tally.MeanSeconds, $"{shortest}-{longest}",
             tally.MostDowned, tally.MostDownedShare, tally.Unfinished, problems.Count == 0 ? "PASS" : string.Join(", ", problems),
-            problems.Count == 0, difficulty == Difficulty.Tactician);
+            problems.Count == 0, difficulty == Difficulty.Tactician, tally.Pace);
     }
 
     /// <summary>Prints one fight's detail: the header, the result, and each member's numbers.</summary>
@@ -291,9 +299,27 @@ public static class BattleSimulator
         Console.WriteLine();
         Console.WriteLine($"== {encounter.Id}: {encounter.Name} ({encounter.Kind}, level {LevelTable.Expected(encounter)}) ==");
         Console.WriteLine($"   won {Pct(tally.WinRate)} (target {verdict.Band}), mean {tally.MeanSeconds:F1} s (target {verdict.Length} s), unfinished {tally.Unfinished}, most downed {verdict.MostDowned} {Pct(verdict.MostDownedShare)}: {verdict.Result}");
-        Console.WriteLine($"   {"MEMBER",-26}{"DOWNED",8}{"DMG/S",8}{"HEAL/S",8}{"THREAT",8}{"HP LEFT",9}");
+        Console.WriteLine($"   {"MEMBER",-30}{"DOWNED",8}{"DMG/S",8}{"HEAL/S",8}{"THREAT",8}{"CTRL",7}{"HP LEFT",9}");
         foreach (MemberTally member in tally.Members.Values.OrderBy(m => m.Order))
-            Console.WriteLine($"   {member.Name,-26}{Pct(member.DownedShare(tally.Runs)),8}{member.DamagePerSecond,8:F1}{member.HealingPerSecond,8:F1}{Pct(member.ThreatShare),8}{member.HpLeft(tally.Runs),9:F0}%");
+            Console.WriteLine($"   {member.Name,-30}{Pct(member.DownedShare(tally.Runs)),8}{member.DamagePerSecond,8:F1}{member.HealingPerSecond,8:F1}{Pct(member.ThreatShare),8}{Pct(tally.Pace.ControlShare(member.Id)),7}{member.HpLeft(tally.Runs),9:F0}%");
+        PaceTally pace = tally.Pace;
+        string boss = pace.HadBoss
+            ? $"; the boss lasts {pace.BossLasts:F0} s from its first wound ({string.Join(" + ", pace.PhaseSeconds.Select(s => s.ToString("F0", CultureInfo.InvariantCulture)))} s a phase), every phase seen in {Pct(pace.AllPhasesSeen)} of its falls"
+            : string.Empty;
+        Console.WriteLine($"   pace: your auto every {pace.AutoEvery:F1} s, a skill to press every {pace.AvailableEvery:F1} s and one pressed every {pace.PressEvery:F1} s (one ready {Pct(pace.ReadyShare)} of the time); a foe lasts {pace.FoeLasts:F1} s from its first wound, {pace.FoeUnderFire:F1} s of the whole party's fire{boss}.");
+    }
+
+    /// <summary>What 11-combat.md asks of a fight's pace: an auto about every 2 s, a skill to press every 1.5 to 3 s, an ordinary foe down in 8 to 15 s of the party's fire, a boss as long as its kind's band (75 to 180 s for a boss) with every phase seen.</summary>
+    private static string PaceVerdict(PaceTally pace, EncounterKind kind)
+    {
+        var (_, _, shortest, longest, _) = Targets(kind);
+        var notes = new List<string>();
+        if (pace.AutoEvery is > 0 and (< 1.6 or > 2.7)) notes.Add("autos off 2 s");
+        if (pace.AvailableEvery is > 3.0 or (> 0 and < 1.5)) notes.Add(pace.AvailableEvery > 3.0 ? "few presses" : "presses crowd");
+        if (pace.FoeUnderFire > 0 && (pace.FoeUnderFire < 8 || pace.FoeUnderFire > 15)) notes.Add(pace.FoeUnderFire < 8 ? "foes fall fast" : "foes last long");
+        if (pace.HadBoss && (pace.BossLasts < shortest || pace.BossLasts > longest)) notes.Add(pace.BossLasts < shortest ? "boss short" : "boss long");
+        if (pace.HadBoss && pace.AllPhasesSeen < 0.95) notes.Add("phases skipped");
+        return notes.Count == 0 ? "ok" : string.Join(", ", notes);
     }
 
     /// <summary>Prints the report: a line a fight, then how many passed.</summary>
@@ -301,12 +327,23 @@ public static class BattleSimulator
     {
         Console.WriteLine();
         Console.WriteLine("REPORT");
-        Console.WriteLine($"{"FIGHT",-26}{"KIND",-10}{"LV",4}{"WON",7}{"TARGET",10}{"SECS",7}{"TARGET",9}{"MOST DOWNED",22}{"UNFIN",7}  VERDICT");
+        Console.WriteLine($"{"FIGHT",-26}{"KIND",-10}{"LV",4}{"WON",7}{"TARGET",10}{"SECS",7}{"TARGET",9}  {"MOST DOWNED",-34}{"UNFIN",6}  VERDICT");
         foreach (Verdict row in rows)
-            Console.WriteLine($"{row.Fight,-26}{row.Kind,-10}{row.Level,4}{Pct(row.WinRate),7}{row.Band,10}{row.Seconds,7:F0}{row.Length,9}{(row.MostDowned + " " + Pct(row.MostDownedShare)),22}{row.Unfinished,7}  {(row.Info ? "(info) " : "")}{row.Result}");
+            Console.WriteLine($"{row.Fight,-26}{row.Kind,-10}{row.Level,4}{Pct(row.WinRate),7}{row.Band,10}{row.Seconds,7:F0}{row.Length,9}  {(row.MostDowned + " " + Pct(row.MostDownedShare)),-34}{row.Unfinished,6}  {(row.Info ? "(info) " : "")}{row.Result}");
         int judged = rows.Count(row => !row.Info);
         int passed = rows.Count(row => !row.Info && row.Passed);
         Console.WriteLine($"{passed}/{judged} PASS on {difficulty}{(difficulty == Difficulty.Tactician ? " (information only)" : "")}");
+
+        // The pace (information: 11-combat.md's feel, not §9.2's targets).
+        Console.WriteLine();
+        Console.WriteLine("PACE (your auto, how often your bar lets you press a skill and how often you did, a skill ready, your mean Focus and how often it's full, an ordinary foe's life from its first wound and under the whole party's fire, the boss's life and phases)");
+        Console.WriteLine($"{"FIGHT",-26}{"AUTO S",8}{"AVAIL S",9}{"PRESS S",9}{"READY",7}{"FOCUS",7}{"FULL",6}{"FOE S",7}{"FIRE S",7}{"BOSS S",8}  {"PHASES S",-16}{"SEEN",6}  PACE");
+        foreach (Verdict row in rows.Where(r => !r.Fight.StartsWith("  ", StringComparison.Ordinal)))
+        {
+            PaceTally pace = row.Pace;
+            string phases = pace.HadBoss ? string.Join("+", pace.PhaseSeconds.Select(s => s.ToString("F0", CultureInfo.InvariantCulture))) : "-";
+            Console.WriteLine($"{row.Fight,-26}{pace.AutoEvery,8:F1}{pace.AvailableEvery,9:F1}{pace.PressEvery,9:F1}{Pct(pace.ReadyShare),7}{pace.MeanFocus,7:F0}{Pct(pace.FocusFullShare),6}{pace.FoeLasts,7:F1}{pace.FoeUnderFire,7:F1}{(pace.HadBoss ? pace.BossLasts.ToString("F0", CultureInfo.InvariantCulture) : "-"),8}  {phases,-16}{(pace.HadBoss ? Pct(pace.AllPhasesSeen) : "-"),6}  {PaceVerdict(pace, row.EncounterKind)}");
+        }
     }
 
     /// <summary>A share as a whole percentage.</summary>
@@ -314,60 +351,87 @@ public static class BattleSimulator
 
     // Classes.
 
-    /// <summary>`--simulate classes`: each class in your place in every built fight; its win rate, length, damage and healing a second and threat held; and whether it's within 5 points of the median class and leads its role somewhere.</summary>
-    private static bool RunClasses(int runs, Difficulty difficulty)
+    /// <summary>`--simulate classes`: each class in your place in every built fight; its win rate, length, damage and healing a second, threat held and control; whether it's within 5 points of the median class either way; and whether it leads its party at something.</summary>
+    /// <remarks>
+    /// 11-combat.md §9.2: no class is useless. Each must win its share of the fights within 5 points of
+    /// the median class's, and lead its role at something: in at least half the fights it's the best
+    /// of everyone on its side at one of damage a second, healing a second (by its skills: a potion is
+    /// nobody's role), holding the foes' attention, or holding them under control (Pace.Control).
+    /// </remarks>
+    /// <param name="runs">The runs a fight, of which each class gets a quarter.</param>
+    /// <param name="difficulty">The difficulty.</param>
+    /// <param name="only">The class codes to run (classes:fighter,rogue), or null for every class; the median is then of these alone.</param>
+    private static bool RunClasses(int runs, Difficulty difficulty, IReadOnlyCollection<string> only = null)
     {
         runs = Math.Max(1, runs / 4);
         Console.WriteLine($"Every class in your place: {runs} runs a fight on {difficulty}. A class without its own kit yet fights with its base class's (interim).");
-        var lines = new List<(ClassId Id, string Name, bool Own, double Win, double Seconds, double Dps, double Hps, double Threat)>();
+        var lines = new List<ClassLine>();
         var usage = new List<(string Name, int TopRank, Dictionary<string, long> Used, List<string> Unused)>();
-        foreach (ClassDefinition cls in ClassCatalog.All)
+        foreach (ClassDefinition cls in ClassCatalog.All.Where(c => only is null || only.Contains(c.Code)))
         {
-            double wins = 0, seconds = 0, dps = 0, hps = 0, threat = 0;
-            int fights = 0, topRank = 0;
+            var line = new ClassLine { Id = cls.Id, Name = cls.Name, Own = SkillCatalog.HasKit(cls.Id) };
+            int topRank = 0;
             var used = new Dictionary<string, long>(StringComparer.Ordinal);
             foreach (EncounterDefinition encounter in EncounterCatalog.All)
             {
                 Tally tally = Fights(encounter, runs, difficulty, flagged: false, cls.Id);
                 MemberTally you = tally.Members.TryGetValue(Origins.You, out MemberTally found) ? found : null;
-                wins += tally.WinRate;
-                seconds += tally.MeanSeconds;
-                dps += you?.DamagePerSecond ?? 0;
-                hps += you?.HealingPerSecond ?? 0;
-                threat += you?.ThreatShare ?? 0;
-                fights++;
+                line.Fights++;
+                line.Win += tally.WinRate;
+                line.ByFight.Add(tally.WinRate);
+                line.Seconds += tally.MeanSeconds;
                 if (you is null) continue;
+                double control = tally.Pace.ControlShare(you.Id);
+                line.Dps += you.DamagePerSecond;
+                line.Hps += you.HealingPerSecond;
+                line.Threat += you.ThreatShare;
+                line.Control += control;
+                line.PressEvery += tally.Pace.PressEvery;
+                line.Available += tally.Pace.AvailableEvery;
+                line.Ready += tally.Pace.ReadyShare;
+                line.Focus += tally.Pace.MeanFocus;
+                List<MemberTally> others = tally.Members.Values.Where(m => m.Id != you.Id).ToList();
+                if (others.Count == 0 || you.DamagePerSecond >= others.Max(m => m.DamagePerSecond)) line.LeadsDamage++;
+                long healed = tally.Pace.SkillHealing(you.Id);
+                if (healed > 0 && (others.Count == 0 || healed >= others.Max(m => tally.Pace.SkillHealing(m.Id)))) line.LeadsHealing++;
+                if (you.ThreatShare > 0 && (others.Count == 0 || you.ThreatShare >= others.Max(m => m.ThreatShare))) line.LeadsThreat++;
+                if (control > 0 && (others.Count == 0 || control >= others.Max(m => tally.Pace.ControlShare(m.Id)))) line.LeadsControl++;
                 topRank = Math.Max(topRank, you.TopRank);
                 foreach ((string id, long count) in you.Uses) used[id] = (used.TryGetValue(id, out long sum) ? sum : 0) + count;
             }
-            usage.Add((cls.Name, topRank, used, SkillCatalog.HasKit(cls.Id)
+            usage.Add((cls.Name, topRank, used, line.Own
                 ? SkillCatalog.Kit(cls.Id).All.Where(skill => skill.Kind != SkillKind.Passive && skill.Rank <= topRank && !used.ContainsKey(skill.Id)).Select(skill => skill.Id).ToList()
                 : new List<string>()));
             Console.Error.WriteLine($"  {cls.Name}: done.");
-            lines.Add((cls.Id, cls.Name, SkillCatalog.HasKit(cls.Id), wins / fights, seconds / fights, dps / fights, hps / fights, threat / fights));
+            lines.Add(line);
         }
 
-        List<double> own = lines.Where(l => l.Own).Select(l => l.Win).OrderBy(w => w).ToList();
+        List<double> own = lines.Where(l => l.Own).Select(l => l.MeanWin).OrderBy(w => w).ToList();
         double median = own.Count == 0 ? 0 : own.Count % 2 == 1 ? own[own.Count / 2] : (own[own.Count / 2 - 1] + own[own.Count / 2]) / 2;
-        double topDps = lines.Where(l => l.Own).Max(l => l.Dps), topHps = lines.Where(l => l.Own).Max(l => l.Hps), topThreat = lines.Where(l => l.Own).Max(l => l.Threat);
 
         Console.WriteLine();
-        Console.WriteLine($"{"CLASS",-20}{"KIT",-9}{"WON",7}{"SECS",7}{"DMG/S",8}{"HEAL/S",8}{"THREAT",8}  VERDICT");
+        Console.WriteLine($"{"CLASS",-20}{"KIT",-9}{"WON",7}{"SECS",7}{"DMG/S",8}{"HEAL/S",8}{"THREAT",8}{"CTRL",7}{"AVAIL S",8}{"PRESS S",8}{"READY",7}{"FOCUS",6}  {"LEADS ITS PARTY IN (FIGHTS)",-40}VERDICT");
         bool passed = true;
-        foreach (var line in lines)
+        foreach (ClassLine line in lines)
         {
             var notes = new List<string>();
-            if (line.Win < median - ClassSpread) notes.Add($"over {Pct(ClassSpread)} under the median ({Pct(median)})");
+            if (line.MeanWin < median - ClassSpread - 1e-9) notes.Add($"over {Pct(ClassSpread)} under the median ({Pct(median)})");
+            if (line.MeanWin > median + ClassSpread + 1e-9) notes.Add($"over {Pct(ClassSpread)} over the median ({Pct(median)})");
+            int half = (line.Fights + 1) / 2;
+            if (Math.Max(Math.Max(line.LeadsDamage, line.LeadsHealing), Math.Max(line.LeadsThreat, line.LeadsControl)) < half) notes.Add("leads nothing");
             var leads = new List<string>();
-            if (line.Dps >= topDps * 0.97) leads.Add("damage");
-            if (line.Hps >= topHps * 0.97 && topHps > 0) leads.Add("healing");
-            if (line.Threat >= topThreat * 0.97 && topThreat > 0) leads.Add("threat");
+            if (line.LeadsDamage > 0) leads.Add($"damage {line.LeadsDamage}");
+            if (line.LeadsHealing > 0) leads.Add($"healing {line.LeadsHealing}");
+            if (line.LeadsThreat > 0) leads.Add($"threat {line.LeadsThreat}");
+            if (line.LeadsControl > 0) leads.Add($"control {line.LeadsControl}");
             bool ok = notes.Count == 0;
             if (line.Own) passed &= ok;
-            string verdict = (ok ? "PASS" : string.Join(", ", notes)) + (leads.Count > 0 ? $" (leads {string.Join(", ", leads)})" : string.Empty);
-            Console.WriteLine($"{line.Name,-20}{(line.Own ? "own" : "interim"),-9}{Pct(line.Win),7}{line.Seconds,7:F0}{line.Dps,8:F1}{line.Hps,8:F1}{Pct(line.Threat),8}  {(line.Own ? "" : "(info) ")}{verdict}");
+            Console.WriteLine($"{line.Name,-20}{(line.Own ? "own" : "interim"),-9}{Pct(line.MeanWin),7}{line.Seconds / line.Fights,7:F0}{line.Dps / line.Fights,8:F1}{line.Hps / line.Fights,8:F1}{Pct(line.Threat / line.Fights),8}{Pct(line.Control / line.Fights),7}{line.Available / line.Fights,8:F1}{line.PressEvery / line.Fights,8:F1}{Pct(line.Ready / line.Fights),7}{line.Focus / line.Fights,6:F0}  {string.Join(", ", leads),-40}{(line.Own ? "" : "(info) ")}{(ok ? "PASS" : string.Join(", ", notes))}");
         }
-        Console.WriteLine($"Median class (own kits): {Pct(median)}. {(passed ? "Every class with a kit is within 5 points of it." : "Some class falls more than 5 points under it.")}");
+        Console.WriteLine();
+        Console.WriteLine($"{"WON BY FIGHT",-20}{string.Join("", EncounterCatalog.All.Select(e => $"{e.Id.Split('-').Last(),12}"))}");
+        foreach (ClassLine line in lines) Console.WriteLine($"{line.Name,-20}{string.Join("", line.ByFight.Select(w => $"{Pct(w),12}"))}");
+        Console.WriteLine($"Median class (own kits): {Pct(median)}. {(passed ? "Every class with a kit is within 5 points of it, and leads its party at something in half the fights or more." : "Some class is more than 5 points from it, or leads nothing.")}");
 
         // What the AI did with each kit in your place: every skill it used, and any it had and never used.
         Console.WriteLine();
@@ -378,6 +442,20 @@ public static class BattleSimulator
             if (unused.Count > 0) Console.WriteLine($"  {"",-18}          never used: {string.Join(", ", unused)}");
         }
         return passed;
+    }
+
+    /// <summary>One class's numbers in your place, summed over the fights.</summary>
+    private sealed class ClassLine
+    {
+        public ClassId Id;
+        public string Name;
+        public bool Own;
+        public int Fights;
+        public double Win, Seconds, Dps, Hps, Threat, Control, PressEvery, Ready, Focus, Available;
+        public readonly List<double> ByFight = new();
+        public int LeadsDamage, LeadsHealing, LeadsThreat, LeadsControl;
+
+        public double MeanWin => Fights == 0 ? 0 : Win / Fights;
     }
 
     // The self-test.
@@ -398,7 +476,11 @@ public static class BattleSimulator
 
     /// <summary>One fight's verdict, for the report.</summary>
     private sealed record Verdict(string Fight, string Kind, int Level, double WinRate, string Band, double Seconds, string Length, string MostDowned,
-        double MostDownedShare, int Unfinished, string Result, bool Passed, bool Info);
+        double MostDownedShare, int Unfinished, string Result, bool Passed, bool Info, PaceTally Pace)
+    {
+        /// <summary>The kind of fight, for the pace's boss band.</summary>
+        public EncounterKind EncounterKind => Enum.Parse<EncounterKind>(Kind);
+    }
 
     /// <summary>Many runs of one fight, added up.</summary>
     private sealed class Tally
@@ -408,6 +490,7 @@ public static class BattleSimulator
         public int Unfinished;
         public long WonMs;
         public readonly Dictionary<string, MemberTally> Members = new(StringComparer.Ordinal);
+        public readonly PaceTally Pace = new();
 
         public double WinRate => Runs == 0 ? 0 : Won / (double)Runs;
 
@@ -417,9 +500,10 @@ public static class BattleSimulator
 
         public double MostDownedShare => Runs == 0 ? 0 : Members.Values.Where(m => m.Member).Select(m => m.DownedRuns).DefaultIfEmpty(0).Max() / (double)Runs;
 
-        public void Add(Battle battle)
+        public void Add(Battle battle, Pace pace)
         {
             Runs++;
+            Pace.Add(pace);
             if (battle.Outcome == FightOutcome.Won)
             {
                 Won++;
@@ -433,7 +517,7 @@ public static class BattleSimulator
                 if (f.Side != Side.Party || f.Kind == FighterKind.Summon) continue;
                 if (!Members.TryGetValue(f.Id, out MemberTally member))
                 {
-                    member = new MemberTally { Name = $"{f.Name} ({(f.ClassId is ClassId c ? ClassCatalog.Get(c).Name : f.EnemyId)}{(f.Kind == FighterKind.Guest ? ", guest" : "")})", Order = order, Member = f.Kind == FighterKind.Member };
+                    member = new MemberTally { Id = f.Id, Name = $"{f.Name} ({(f.ClassId is ClassId c ? ClassCatalog.Get(c).Name : f.EnemyId)}{(f.Kind == FighterKind.Guest ? ", guest" : "")})", Order = order, Member = f.Kind == FighterKind.Member };
                     Members[f.Id] = member;
                 }
                 order++;
@@ -452,6 +536,7 @@ public static class BattleSimulator
     /// <summary>One member's numbers over many runs.</summary>
     private sealed class MemberTally
     {
+        public string Id;
         public string Name;
         public int Order;
         public bool Member;

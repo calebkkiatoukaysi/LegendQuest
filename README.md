@@ -683,7 +683,9 @@ flight), and its events carry that tick, so the number shows on the frame the bl
   2.4, crossbows 2.6; foes 2.5, quick beasts 2.0, big ones 3.0), and only lands if you're in reach
   when it comes round. An action skill puts every action skill on a 1.5 s GCD; a bonus skill is off
   it, with a 0.5 s lockout of its own; a reaction is armed for 4 s and fires on its trigger
-  (Riposte, Shield, Hellish Rebuke). Each skill has its own cooldown in seconds. Haste (3% a point of
+  (Riposte, Shield, Hellish Rebuke). Each skill has its own cooldown in seconds: the class tables' CD
+  1 to 4 are 3, 6, 9 and 12 s, a turn each, but a heal comes round no faster than every 6 s and a few
+  skills are tuned off the rule ("Tuning" below; `10-classes.md` §8 has every one). Haste (3% a point of
   Dexterity, or the casting ability, plus what you carry, to 50%) shortens swings, cooldowns, casts
   and the GCD, to 1.0 s at the least. A cast roots you, and moving, a Stun, a knockdown or failing
   the Con save a hit forces stops it.
@@ -694,7 +696,8 @@ flight), and its events carry that tick, so the number shows on the frame the bl
   points (a shield aura hits come off first) are 5e's; ⁺ dice go up at levels 5 and 9.
 - **Auras.** Every condition, buff, debuff, and damage or healing over time is an aura with a
   duration, stacks, a source and, if it ticks, a tick every 3 s; the same aura from the same source
-  refreshes; cleansing takes the named conditions off; concentration breaks on a failed Con save.
+  refreshes; cleansing takes the named conditions off; concentration breaks on a failed Con save,
+  which being hurt forces at most once a turn (3 s), as often as a round at the table would.
 - **Focus.** 0 to 100, 1 a second for everyone and each class's model on top (`FocusModels`:
   Momentum, Opportunist, Bulwark, Wellspring, Devotion, Wild, Pact, Tempo, Blood); a fight starts on
   the difficulty's (Story 60, Balanced 40, Tactician 30; Tempo 80).
@@ -725,15 +728,19 @@ flight), and its events carry that tick, so the number shows on the frame the bl
   telegraphed moves (Trip, Hook Pull, Thorn Burst, Uprooting Charge, Blasting Charge, Ashen Bolt's
   cast, Hex, Feint, Smoke Bomb, Cunning Disengage, Overhead Chop), each with a cooldown and a wind-up
   everyone can see, an area's ground marker filling until it lands. A threat table picks its target
-  (damage a point, healing half a point shared out, double for the defenders' classes, a taunt on
-  top; it switches at 110%, 130% for a ranged foe). A boss changes at shares of its health
+  (damage a point, healing half a point shared out, double for the defenders' classes, 60% for the
+  Shadowstep and 85% for the Lanerunner, a taunt on top; it switches at 110%, 130% for a ranged foe).
+  In real time a foe's blow lands surer and lighter than on its sheet (`HitShift`, `DamageScale`, and
+  more hit points, `HpScale`: "Tuning" below). A boss changes at shares of its health
   (`FoePhase`): the Thornmother calls whelps and brings in Thorn Burst at two thirds, then enrages
   with the Uprooting Charge at a third; Kael brings out his smoke at 60%.
 - **The party.** You drive the leader; everyone else, guests and summons too, is the party AI
   (`Battle.Brains`): every 0.3 s a free fighter scores every skill on every target worth thinking
   about, healers heal first, defenders taunt what's hitting someone else, everyone assists the
   leader's target, ranged fighters step away from melee, a hurt fighter backs off behind someone
-  sturdier, and anyone steps out of a ground marker. Like a player, it saves its Focus for its
+  sturdier, and anyone steps out of a ground marker. A defence is worth more the more foes are on
+  whoever it guards (and half again under half health), so Smoke Step or a Shield goes up when it's
+  needed and not before. Like a player, it saves its Focus for its
   ultimate while that's off cooldown and would be worth pressing (it still heals, guards and taunts
   in the meantime), and it picks pockets when there's a pocket left to pick. Down at 0 is Downed, with death saves every 3 s;
   healing or Help (a 2 s channel beside them) gets them up. The Soul-Link charges when you and the
@@ -888,6 +895,8 @@ dotnet run -- --simulate a1-c1-01-gulls 2000      # fight it 2000 times headless
 dotnet run -- --simulate all 200                  # every encounter, 200 times each, on Balanced
 dotnet run -- --simulate all 200 story            # the same on Story (or tactician)
 dotnet run -- --simulate classes 200              # every class in your place in every fight
+dotnet run -- --simulate classes:rogue,wizard 200 # only those classes
+dotnet run -- --simulate numbers                  # every class's real-time numbers, as Markdown
 dotnet run -- --simulate selftest                 # the engine's own checks
 dotnet run -- --simulate trace:a1-c3-02-raid 3    # run 3 of a fight, its whole log
 dotnet run -- --simulate trace:a1-c4-02-sappers@hourwarden   # the same with a class in your place
@@ -906,10 +915,11 @@ fight's id and r (`Pcg32.Mix`), so it prints the same whether it's fought alone 
 `trace:` replays any one run line by line. An ally who only comes on a story flag is fought both
 ways: the verdict is on the fight without them. A fight still going at 600 s is unfinished.
 
-Each fight prints how it went (win rate, mean seconds to win, unfinished, who went down most) and a
-line a member (how often they went down, damage and healing a second, the share of the fight a foe
-was on them, hit points left), then the report, one line a fight, with its verdict against §9.2's
-targets, and exits 1 if anything fails:
+Each fight prints how it went (win rate, mean seconds to win, unfinished, who went down most), a line
+a member (how often they went down, damage and healing a second, the share of the fight a foe was on
+them, the share of the standing foes' time they held one under control, hit points left) and a line
+of pace; then the report, one line a fight, with its verdict against §9.2's targets, and exits 1 if
+anything fails:
 
 | Kind | Won, on Balanced | Length | Most downed may be |
 | --- | --- | --- | --- |
@@ -920,45 +930,109 @@ targets, and exits 1 if anything fails:
 | Bosses | 82 to 90% | 75 to 180 s | 70% |
 | The Sovereign | 78 to 88% | 120 to 240 s | 70% |
 
-On Story every fight has to be won 99% of the time; Tactician's verdicts are information. `classes`
-puts each class in your place (with its starting kit and recommended scores) in every fight, and
-reports its win rate, length, damage and healing a second and threat held, and whether it's within 5
-points of the median class with a kit of its own, and then, class by class, every skill the AI used
-in your place and any skill open at the ranks reached that it never used. `selftest` checks that every fight replays exactly
-from its seed (the same seed gives the same hash of every event's every field, another seed a
-different one), that every skill of every class with a kit, its form's too, fires in a scripted fight
-at level 5 and rank 10 and does what its kind says (damage, healing, an aura, an armed reaction, a
-transform...), that the advanced kits' own kinds of effect do the right thing in fights set up for
+On Story every fight has to be won 99% of the time; Tactician's verdicts are information. Under the
+report comes the pace (`BattleSimulator.Pace`, information, never a failure), for how a fight feels
+against 11-combat.md's AQW-style rhythm: your auto's heartbeat (about every 2 s); how often your bar
+lets you press a skill (each skill but the auto and the ultimate as often as its cooldown or the GCD
+allows, or as the Focus you actually earn pays for, whichever is slower; 1.5 to 3 s is the aim) and
+how often you did; the share of your time a skill was ready, and your mean Focus and how often it sat
+full (full means cooldowns, not Focus, hold you back); how long an ordinary foe lasts from its first
+wound and how long the whole party's fire takes to drop one (its hit points over the party's damage
+a second: 8 to 15 s is the aim); and a boss's life from its first wound, its seconds in each phase,
+and the share of its falls in which every phase lasted 8 s or more.
+
+`classes` puts each class in your place (with its starting kit and recommended scores) in every
+fight, a quarter of the runs each, and reports its win rate, length, damage and healing a second,
+threat held, control held, how often its bar lets you press a skill and how often it did, its mean
+Focus, and in how many fights it led everyone on its side at damage, healing by its skills (potions
+are nobody's role), threat or control. The verdict asks that it's within 5 points of the median class
+either way and leads its party at something in at least half the fights. Then come each class's win
+rate fight by fight, and every skill the AI used in your place and any skill open at the ranks reached
+that it never used. `classes:watchblade,rogue` runs only those classes (the median is then of those
+alone), which is how the tuning ran it in eight processes at once. `numbers` prints every class's
+real-time numbers from the catalog as Markdown (`10-classes.md` §8.1 is its output).
+
+`selftest` checks that every fight replays exactly from its seed (the same seed gives the same hash
+of every event's every field, another seed a different one), that every skill of every class with a
+kit, its form's too, fires in a scripted fight at level 5 and rank 10 and does what its kind says
+(damage, healing, an aura, an armed reaction, a transform...; a skill that was used but whose effect
+the dice kept from landing, a rider on a hit missed three times running, gets two more fights on
+fresh seeds), that the advanced kits' own kinds of effect do the right thing in fights set up for
 them (`SelfTests.Mechanics`: Broadside outdoors and in, both summons fighting, Arrest's taking out,
 Pick Pocket once a foe, Captain's Share, Throw Anything using up the flask, Lucky Stone's natural
 20, Cover, Hold, Counterspell, Mirror Image's three images, Refract, Sanctuary, Reveal, Rewind,
 Bleed the Clock and Echo Strike), that every foe's move fires and lands, and that no fight stalls on
 any difficulty. `skill:` prints the scripted fight the every-skill check uses for one skill.
 
-The first rough pass, `--simulate all 200` on Balanced, with the advanced kits in and the party AI
-saving for its ultimates (3 of 8 pass: the rest are too easy; on Story all 8 pass, every one won
-every time):
+The tuned pass, `--simulate all 200` on Balanced with the anim stream's clips (5 of 8 pass; on Story
+all 8 pass, every one won every time):
 
 | Encounter | Kind | Lv | Won | Seconds | Who goes down most | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
-| `p-05-wraiths` | Tutorial | 1 | 100% | 26 | nobody | pass |
-| `a1-c1-01-gulls` | Story | 1 | 99% | 29 | the Soul-Bound, 39% | too easy |
-| `a1-c2-01-gloomfangs` | Story | 2 | 97% | 31 | the Soul-Bound, 16% | pass |
-| `a1-c2-02-thornmother` | MiniBoss | 2 | 91% (98% with the wardens) | 51 | the Soul-Bound, 51% | pass |
-| `a1-c2-02-guard-wave` | Story | 2 | 100% | 42 | the Soul-Bound, 20% | too easy |
-| `a1-c3-02-raid` | Story | 2 | 100% | 59 | Sera, 31% | too easy |
-| `a1-c4-02-kael` | MiniBoss | 3 | 100% | 48 | the Soul-Bound, 53% | too easy |
-| `a1-c4-02-sappers` | Story | 3 | 100% | 47 | Sera, 4% | too easy |
+| `p-05-wraiths` | Tutorial | 1 | 100% | 26 | you, 10% | pass |
+| `a1-c1-01-gulls` | Story | 1 | 96% | 25 | you, 29% | pass |
+| `a1-c2-01-gloomfangs` | Story | 2 | 93% | 31 | you, 30% | pass |
+| `a1-c2-02-thornmother` | Boss | 2 | 89% (92% with the wardens) | 88 | the Soul-Bound, 44% | pass |
+| `a1-c2-02-guard-wave` | Story | 2 | 96% | 42 | the Soul-Bound, 12% | pass |
+| `a1-c3-02-raid` | Story | 2 | 100% | 52 | Sera, 24% | too easy |
+| `a1-c4-02-kael` | MiniBoss | 3 | 100% | 47 | you, 45% | too easy |
+| `a1-c4-02-sappers` | Story | 3 | 100% | 49 | you, 34% | too easy |
+
+On 600 runs the Thornmother comes out at 91%, a point over her band: that's the price of keeping her
+at 99% or more on Story, since her Balanced and Story bands only just overlap. Its pace, the same run:
+
+| Encounter | Your auto | A skill to press | Pressed | Focus | A foe under the party's fire | The boss |
+| --- | --- | --- | --- | --- | --- | --- |
+| `p-05-wraiths` | 2.1 s | 3.0 s (rank 1) | 3.7 s | 78 | 8.8 s | |
+| `a1-c1-01-gulls` | 2.1 s | 2.5 s | 2.9 s | 72 | 6.0 s | |
+| `a1-c2-01-gloomfangs` | 2.1 s | 2.5 s | 3.0 s | 67 | 8.0 s | |
+| `a1-c2-02-thornmother` | 2.3 s | 4.0 s | 3.9 s | 26 | (whelps) | 87 s: 26 + 28 + 33, every phase seen |
+| `a1-c2-02-guard-wave` | 2.1 s | 2.3 s | 2.4 s | 45 | 8.3 s | |
+| `a1-c3-02-raid` | 2.2 s | 2.4 s | 2.6 s | 66 | 7.5 s | |
+| `a1-c4-02-kael` | 2.2 s | 3.7 s | 3.4 s | 21 | | 46 s: 25 + 21 (he yields) |
+| `a1-c4-02-sappers` | 2.2 s | 2.4 s | 2.6 s | 36 | 12.0 s | |
+
+Against a single big foe the Blademaster's Focus runs low (Cleave catches only one), so the bar's
+4 s there is Focus, not cooldowns: what to spend it on is the player's choice.
 
 `--simulate classes 200` (50 runs a fight, each class in your place at the story's levels, ranks 1
-to 5): the median class wins 88% of the Act 1 fights. Within 5 points of it or above: Blademaster
-97, Lightbearer 94, Warden 95, Wildcaller 93, Skald 85, Watchblade 93, Netcaster 84, Deckhand 88,
-Guild Battlemage 94, Ashwalker 92, Ironvein Bulwark 85, Ember Mender 96, Gilded Knight 96, Hemomancer
-98, Hivekeeper 99, Lamplighter 86, Crownsworn 90. Under it, all ranged or light-armoured picks paired
-with the Soul-Bound and no front-liner in the two-person fights: Shadowstep 68, Arcanist 77, Hexblade
-80, Lodge Ranger 68, Lanerunner 81, Wayfarer 68, Glasswright 78, Hourwarden 78. The Ashwalker leads
-damage, the Hemomancer healing and the Warden and Watchblade threat. Every advanced skill open at rank
-5 was used by the AI, but for The Bell (nobody's hurt enough when it's ready).
+to 5). The median class wins 88% of the Act 1 fights; the Blademaster, the story's own pick, 96%:
+
+| Class | Won | Dmg/s | Heal/s | Threat | Control | A skill every | Leads its party (of 8 fights) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Blademaster | 96% | 5.4 | 0.4 | 80% | 0% | 2.9 s | threat 8 |
+| Shadowstep | 81% | 6.0 | 0.1 | 60% | 0% | 2.6 s | damage 5 |
+| Lightbearer | 88% | 1.9 | 0.7 | 53% | 0% | 6.6 s | healing 5 |
+| Arcanist | 79% | 5.4 | 0.2 | 75% | 0% | 2.7 s | threat 6 |
+| Warden | 89% | 4.0 | 0.4 | 83% | 0% | 2.9 s | threat 8 |
+| Wildcaller | 89% | 2.9 | 0.5 | 63% | 9% | 6.4 s | control 7 |
+| Hexblade | 81% | 5.1 | 0.1 | 75% | 1% | 2.8 s | threat 6 |
+| Skald | 90% | 1.9 | 0.6 | 55% | 0% | 10.1 s | healing 4 |
+| Watchblade | 83% | 2.4 | 0.2 | 79% | 16% | 5.8 s | threat 8, control 8 |
+| Netcaster | 91% | 2.0 | 0.6 | 50% | 20% | 6.1 s | control 8 |
+| Deckhand | 93% | 3.1 | 0.5 | 60% | 6% | 5.1 s | control 8 |
+| Lodge Ranger | 79% | 5.4 | 0.2 | 73% | 0% | 3.5 s | threat 5 |
+| Guild Battlemage | 96% | 3.8 | 0.1 | 66% | 0% | 6.2 s | threat 4 |
+| Ashwalker | 90% | 5.4 | 0.2 | 77% | 10% | 4.5 s | control 8 |
+| Ironvein Bulwark | 82% | 2.5 | 0.1 | 79% | 0% | 3.3 s | threat 7 |
+| Ember Mender | 96% | 2.2 | 0.9 | 58% | 0% | 5.2 s | healing 7 |
+| Lanerunner | 73% | 5.5 | 0.1 | 79% | 0% | 2.5 s | threat 7 |
+| Wayfarer | 83% | 4.8 | 0.2 | 69% | 0% | 3.3 s | threat 3 (nothing in half) |
+| Gilded Knight | 82% | 4.9 | 0.1 | 67% | 4% | 4.1 s | control 4 |
+| Hemomancer | 94% | 3.3 | 1.1 | 70% | 0% | 4.4 s | healing 8 |
+| Hivekeeper | 91% | 2.3 | 0.8 | 60% | 0% | 6.3 s | healing 6 |
+| Glasswright | 81% | 3.8 | 0.1 | 78% | 7% | 4.5 s | threat 8, control 5 |
+| Lamplighter | 92% | 2.2 | 0.8 | 54% | 0% | 4.6 s | healing 5 |
+| Crownsworn | 79% | 3.0 | 0.5 | 79% | 0% | 4.2 s | threat 7 |
+| Hourwarden | 88% | 2.6 | 0.1 | 45% | 5% | 5.0 s | control 5 |
+
+Eight classes are within 5 points of the median; the rest are 6 to 10 points off (the Lanerunner 15).
+Almost all of the gap comes from the three fights you and the Soul-Bound fight alone at rank 2: the
+gulls, the gloomfangs and the guard wave. There the Blademaster's plate, Cleave across the pack and
+Second Wind carry the duo at 90 to 96%, while a light class without an area skill yet wins 20 to 60%.
+Every class wins the four-member fights. The damage classes now out-damage the front line (5 to 6 a
+second against the Blademaster's 5.4), and every class but the Wayfarer leads its party at something
+in at least half the fights. The AI used every skill open at rank 5 except the Skald's Inspiration.
 
 The turn-based engine's own simulator (`Combat/CombatSimulator`) is still in the code for the screen's
 engine, but `--simulate` no longer runs it.
@@ -968,35 +1042,92 @@ engine, but `--simulate` no longer runs it.
 How to tune one that's off, in this order (§9.2): the supports (their dice, their start and how
 often); foe hit points, for how long a fight lasts; foe to-hit, for how often anyone goes down;
 telegraph lengths, for how fair the big hits are; damage; and waves and time limits last. Tune on 600
-runs or more, since 200 is about three points either way, and confirm on 200.
+runs or more, since 200 is about three points either way, and confirm on 200. The tuning ran with the
+anim stream's `clips.json` copied into the build's output, so blows landed when the real clips say.
 
 In real time a party lands several blows for every one it landed in a turn, and a foe swings two or
 three times a round, while the party's hit points stay what the sheet says. So every stat block has
-two real-time scales, read by nothing turn-based: `EnemyDefinition.HpScale`, its hit points as a
-multiple of its hit dice's average (4.5 by default), and `DamageScale`, the share of what its blows
-roll that they do (0.5 by default). The first pass set them per foe:
+three real-time levers, read by nothing turn-based:
+- `EnemyDefinition.HpScale`: its hit points as a multiple of its hit dice's average (4.5 by default).
+- `DamageScale`: the share of what its blows roll that they do (0.23 by default).
+- `HitShift`: what it adds to its attack rolls (+10 by default).
 
-| Foe | Hit points × | Damage × |
-| --- | --- | --- |
-| Sea-wraith | 5.5 | 0.5 |
-| Red Gull thug | 4.5 | 0.5 |
-| Bosun Grell | 6 | 0.45 |
-| Gloomfang wolf | 4.5 | 0.46 |
-| Gloomfang whelp (new: the Thornmother's) | 3 | 0.4 |
-| The Thornmother | 4.2 | 0.45 |
-| Hollowed footman | 5.5 | 0.4 |
-| Hollowed hexer | 6 | 0.6 |
-| Hollowed sapper | 6.5 | 0.4 |
-| Sapper chief | 7 | 0.5 |
-| Kael | 8 | 0.6 |
+A surer, lighter blow is the point of the last two. Against a stream of swings, armour decides almost
+everything: at +4 a wolf hits AC 13 1.7 times as often as the Blademaster's AC 19, but at +14 only 1.2
+times as often. So a fight a plate-wearer finds fair is no longer a rout for someone in leather. Blows
+that light mostly do 1 (the least a hit does), so at these levels hit points and to-hit are the levers
+that move a fight; the damage scale only starts to matter above about a third.
 
-The supports' real-time timings are 11-combat.md §5.4's (Tomas from 8 s every 8 s, his net 3 s;
-Sera's arrows from 8 s; the Watch from 12 s); the guard wave's waves come at 12 and 24 s and it's
-held for 45; the raid's second wave comes at 18 s. No class skill's numbers have moved from
-`10-classes.md`'s tables as §4.2 converts them. What's left for the next pass: the four-member
-fights are won every time even with Sera going down in half of the raids (nobody in the early party
-holds a foe's attention, and her opening Moonbeam puts her on top of every threat table it catches),
-and Kael, who knocks people out rather than killing, almost never takes the whole party down.
+| Foe | Hit points × | Damage × | To-hit + |
+| --- | --- | --- | --- |
+| Sea-wraith | 9 | 0.23 | 10 |
+| Red Gull thug | 7.5 | 0.24 | 8 |
+| Bosun Grell | 8 | 0.25 | 8 |
+| Gloomfang wolf | 7 | 0.25 | 10 |
+| Gloomfang whelp | 3 | 0.18 | 10 |
+| The Thornmother | 10.5 | 0.22 | 10 |
+| Hollowed footman | 7 | 0.36 | 1 |
+| Hollowed hexer | 7 | 0.48 | -2 |
+| Hollowed sapper | 9 | 0.8 | 3 |
+| Sapper chief | 9 | 0.8 | 2 |
+| Kael | 9 | 0.45 | 8 |
+
+This second pass started from engine-core's first:
+- 2 of 8 fights were in band on Balanced; the rest were won 98 to 100% of the time.
+- The Soul-Bound went down in half the fights.
+- You pressed a skill every 4 to 8 s, though one was ready only 10 to 70% of the time.
+- A foe lasted 14 to 27 s from its first wound to its fall.
+- The classes spread from 68 to 100%, and the damage classes dealt less a second than the front line.
+
+What moved, and why:
+
+- **The conversion.** The tables' CD 1 to 4 are now 3, 6, 9 and 12 s, a turn each (`SkillCatalog.Cd1`
+  to `Cd4`), not 6, 8, 12 and 16. AQW's fillers come round every 2 to 6 s and its big skills every 10
+  to 20, and at the old numbers a full bar offered a press only every 4 to 6 s.
+  - Heals stayed at 6 s (Cure Wounds, both Healing Words, Mend, Cauterise, Honey Salve) and Second
+    Wind at 16; otherwise the healers in your place won everything.
+  - The Blademaster's Cleave became a 3 s filler (CD 1), so the story's own class has a skill to
+    press every 2.5 to 3 s from rank 1.
+- **Concentration** is saved against at most once a turn. Hit two or three times as often as at the
+  table, Hex, Hunter's Mark and Moonbeam lasted seconds, and the AI paid for them again and again.
+- **The party AI** values a defence by how many foes are on whoever it guards, and half again under
+  half health. Smoke Step had been worth less than its price, so it was never used; Action Surge's
+  worth went up to 14 for the same reason.
+- **Threat.** The Shadowstep makes 60% and the Lanerunner 85%. At the front with Sneak Attack, the
+  Soul-Bound took every boss's attention and went down in 76 to 90% of the Thornmother's and Kael's
+  fights; now the Blademaster holds them.
+- **Focus.** Opportunist pays +8 a hit (from +5), and Pact +2 a second and +8 a cursed hit (from +1
+  and +6). The Shadowstep, Lodge Ranger, Lanerunner and Hexblade sat at 16 to 25 Focus with skills
+  ready and nothing to pay for them.
+- **The glass cannons** hit harder, so they kill before they're worn down:
+  - Shadowstep: Sneak Attack 2d6⁺ (from 1d6⁺, as 5e has it by third level); Backstab strikes with
+    its weapon dice twice for 15 Focus; Smoke Step's disadvantage lasts 6 s for 15 Focus.
+  - Arcanist: Magic Missile's darts 1d4 + 2 for 20 Focus, Burning Hands 20; its hit points are no
+    longer 10% under.
+  - Hexblade: Hex adds 1d8 for 15 Focus; Hellish Rebuke costs 20.
+  - Lodge Ranger: Hunter's Mark adds 2d4 for 10 Focus; Hawk Strike is free, every 3 s, 2d6⁺.
+  - Wayfarer: the empty-handed throw is 2d10; Duchess Kicks costs 20 Focus every 6 s; +10% hit points.
+  - Others: Second Hand 1d10⁺, Shield Bash 1d10⁺, Mirror Image 20 Focus every 9 s; Rooftops costs 10,
+    Command 15, Sunburst 20, Vespers 20.
+- **The sturdy and the self-healing** came down a little:
+  - Guild Battlemage: Ward is 1d6 + Int + level for 30 Focus every 12 s; Force Bolt is 2d6⁺ instead,
+    so it leads at damage rather than at not dying.
+  - Hemomancer: Blood Lash heals 1, Drain costs 30 Focus, Blood Shield is 2d6 + level every 12 s.
+  - Cauterise is 2d4⁺ for 30 Focus; Honey Salve and Cure Wounds cost 30.
+- **The fights.** The table above, from 4.5 to 10.5 times their hit dice and blows at about a quarter
+  of what they roll.
+  - The Thornmother is a Boss now, as 11-combat.md §6.1 calls her ("the first"). Her class points
+    were already a boss's, and she lasts 85 to 95 s through all three phases.
+  - The sappers' Blasting Charge fills for 2 s (from 1.5), so the back row can step out of it.
+
+What's left: the raid, the sappers and Kael are won every time.
+- With four or five of you, two healers and Help, a wipe is rare however hard the foes hit.
+- Pushing harder only puts whoever heals on the floor: healing's threat (§5.1) draws the melee foes to
+  Sera and Mira.
+- Kael's duel is nonlethal, so he'd have to down all four at once.
+
+Either a taunt in the early party or a lighter healing threat would change that; both are design
+decisions. The class spread comes from the duo fights (above).
 
 The turn-based retune, for the screen's engine, started from every story fight won 100% of the time
 and the Soul-Bound, the AC 13 Shadowstep, going down in up to 99% of the Thornmother's. Three things

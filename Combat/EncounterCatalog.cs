@@ -108,7 +108,7 @@ public static class EncounterCatalog
         // way through it is the guard wave.
         new()
         {
-            Id = "a1-c2-02-thornmother", Name = "The Thornmother", Kind = EncounterKind.MiniBoss, Music = Track.Boss,
+            Id = "a1-c2-02-thornmother", Name = "The Thornmother", Kind = EncounterKind.Boss, Music = Track.Boss,
             Victory = Act1Chapter2.ThornmotherBeaten, Then = "a1-c2-02-thornmother-after",
             Foes = new[] { Npc("thornmother", "thornmother", F(1)) },
             Supports = new[]

@@ -375,7 +375,7 @@ public sealed partial class Battle
                         if (!HasAura(who, e.Aura.Id, e.Aura.Beneficial ? null : f)) fresh++;
                     if (fresh == 0) return 0;
                     double worth = skill.AiValue > 0 ? skill.AiValue : e.Aura.TickDice.IsNone ? 2 : e.Aura.TickDice.Average * Math.Max(1, e.Aura.DurationMs / Math.Max(1, e.Aura.TickMs));
-                    if (skill.Ai == AiUse.Defensive && !Attacked(skill.Target == SkillTarget.Ally && t is not null ? t : f)) worth *= 0.3;
+                    if (skill.Ai == AiUse.Defensive) worth *= Pressed(skill.Target == SkillTarget.Ally && t is not null ? t : f);
                     value += worth * fresh;
                     break;
                 }
@@ -594,6 +594,20 @@ public sealed partial class Battle
         foreach (Fighter foe in _fighters)
             if (Hostile(who, foe) && foe.IsStanding && foe.Target == who) return true;
         return false;
+    }
+
+    /// <summary>
+    /// How much a defence on someone is worth now, as a multiple of what it's worth to one foe at them:
+    /// 0.3 with nobody at them, one more for each foe at them past the first (to three), and half as much
+    /// again under half health, so a defence goes up when it's needed and stays down when it isn't.
+    /// </summary>
+    private double Pressed(Fighter who)
+    {
+        int at = 0;
+        foreach (Fighter foe in _fighters)
+            if (Hostile(who, foe) && foe.IsStanding && foe.Target == who) at++;
+        if (at == 0) return 0.3;
+        return Math.Min(3, at) * (who.HpShare < 0.5 ? 1.5 : 1.0);
     }
 
     // The foes.

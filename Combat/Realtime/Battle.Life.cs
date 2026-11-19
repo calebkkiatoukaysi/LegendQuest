@@ -108,7 +108,14 @@ public sealed partial class Battle
             return amount;
         }
 
-        if (t.Concentrating is not null && !Any(t, Stat.KeepConcentration, context) && !Save(t, Ability.Constitution, Math.Max(10, amount / 2), null, source)) EndConcentration(t);
+        // Concentration: a Con save when hurt, as 5e has it, but at most one a turn (3 s), since a fighter
+        // in real time is hit two or three times as often as once a round, and a concentration spell held
+        // for a round or two at the table would otherwise last seconds.
+        if (t.Concentrating is not null && !Any(t, Stat.KeepConcentration, context) && NowMs - t.LastConcentrationSaveMs >= TurnMs)
+        {
+            t.LastConcentrationSaveMs = NowMs;
+            if (!Save(t, Ability.Constitution, Math.Max(10, amount / 2), null, source)) EndConcentration(t);
+        }
         if (!tick && t.Action is { InMotion: false, CastUntilMs: > 0 } cast && cast.Skill.Interruptible
             && !Save(t, Ability.Constitution, Math.Max(10, amount / 2), null, source)) Interrupt(t, "hit");
         if (t.Side == Side.Foes && Encounter.YieldsAt > 0f && t.HpShare <= Encounter.YieldsAt) Leave(t, $"{t.Name} yields!");
