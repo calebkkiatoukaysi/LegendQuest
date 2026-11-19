@@ -40,7 +40,7 @@ public static class SaveSystem
 
     /// <summary>The shape of save file this build writes.</summary>
     /// <remarks>Bump it when an existing field changes meaning or goes away, and add a step to Upgrade. A new field with a default does not need a bump.</remarks>
-    public const int CurrentVersion = 9;
+    public const int CurrentVersion = 10;
 
     /// <summary>Written to disk indented, so a save can be read and edited while the game is built.</summary>
     /// <remarks>Enums go in by name, so reordering one is safe and renaming one breaks saves. A number where a name should be counts as unreadable.</remarks>
@@ -218,7 +218,8 @@ public static class SaveSystem
     /// doesn't read Spent any more, so it's dropped as it's read). A fight that was going when it was
     /// saved starts again from the beginning, as every loaded fight does (SaveData.Fight). The old fields
     /// only survive the read because of SaveData.Extra, and the tile maps' because Read reads them on
-    /// their own.
+    /// their own. Version 10 is when classes had ranks: everyone knows the class they have, at the rank
+    /// they joined at (10-classes.md §6), with its class points written down (IntoClassRanks).
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <param name="tiles">The tile maps' fields from the same file, for a save older than version 8; otherwise null.</param>
@@ -321,6 +322,8 @@ public static class SaveSystem
 
         if (data.Version < 9) IntoLevels(data);
 
+        if (data.Version < 10) IntoClassRanks(data);
+
         data.Version = CurrentVersion;
         return data;
     }
@@ -338,6 +341,19 @@ public static class SaveSystem
             member.Level = level;
             member.Xp = 0;
             member.Hp = int.MaxValue;
+        }
+    }
+
+    /// <summary>Gives everyone in the party, at camp and away the class they have as a class they know, at the class points of the rank they joined at.</summary>
+    /// <remarks>Mend hasn't been at it yet, so a list or anyone in it can be null.</remarks>
+    /// <param name="data">The save.</param>
+    private static void IntoClassRanks(SaveData data)
+    {
+        foreach (PartyMember member in (data.Party ?? Enumerable.Empty<PartyMember>()).Concat(data.Camp ?? Enumerable.Empty<PartyMember>()).Concat(data.Away ?? Enumerable.Empty<PartyMember>()))
+        {
+            if (member is null) continue;
+            member.ClassPoints ??= new Dictionary<ClassId, int>();
+            member.Learn(member.Class);
         }
     }
 
@@ -513,6 +529,12 @@ public static class SaveSystem
             member.Look ??= new();
             member.Xp = Math.Max(0, member.Xp);
             member.Level = Math.Clamp(member.Level, 1, LevelTable.MaxLevel);
+            member.ClassPoints ??= new();
+            foreach (ClassId known in new List<ClassId>(member.ClassPoints.Keys))
+            {
+                if (!Enum.IsDefined(known)) member.ClassPoints.Remove(known);
+                else member.ClassPoints[known] = Math.Max(0, member.ClassPoints[known]);
+            }
             MendEquipment(member, data.Bag);
             member.Hp = Math.Clamp(member.Hp, 0, member.MaxHp);
         }

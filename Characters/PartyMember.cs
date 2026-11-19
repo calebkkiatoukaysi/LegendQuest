@@ -34,6 +34,14 @@ public class PartyMember
     /// <summary>Their class.</summary>
     public ClassId Class { get; set; }
 
+    /// <summary>Every class they know, with the class points (CP) they've earned in it (10-classes.md §1.3). Their own class needn't be here: without an entry it's at the rank they joined at (ClassRanks.JoiningRank).</summary>
+    /// <remarks>Kept by the class's name in the save, like Class.</remarks>
+    public Dictionary<ClassId, int> ClassPoints { get; set; } = new();
+
+    /// <summary>Their rank in the class they have equipped, 1 to 10.</summary>
+    [JsonIgnore]
+    public int Rank => RankIn(Class);
+
     /// <summary>Their level, 1 to LevelTable.MaxLevel. Leveling changes it, by experience or outright.</summary>
     public int Level { get; set; } = 1;
 
@@ -165,6 +173,30 @@ public class PartyMember
     {
         if (Equipment.Remove(slot, out string id)) off.Add(id);
     }
+
+    /// <summary>Whether they know a class: their own, or one they've learned.</summary>
+    /// <param name="id">The class.</param>
+    public bool Knows(ClassId id) => id == Class || ClassPoints.ContainsKey(id);
+
+    /// <summary>Their class points in a class: what's written for it, or for their own class with nothing written, the points of the rank they joined at; 0 for one they don't know.</summary>
+    /// <param name="id">The class.</param>
+    public int PointsIn(ClassId id) =>
+        ClassPoints.TryGetValue(id, out int points) ? points : id == Class ? Combat.ClassRanks.PointsFor(Combat.ClassRanks.JoiningRank(Id)) : 0;
+
+    /// <summary>Their rank in a class, 1 to 10 (1 for one they don't know).</summary>
+    /// <param name="id">The class.</param>
+    public int RankIn(ClassId id) => Combat.ClassRanks.RankOf(PointsIn(id));
+
+    /// <summary>Learns a class at rank 1, if they don't know it already (a trainer's, or a book's).</summary>
+    /// <param name="id">The class.</param>
+    public void Learn(ClassId id)
+    {
+        if (!ClassPoints.ContainsKey(id)) ClassPoints[id] = id == Class ? PointsIn(id) : 0;
+    }
+
+    /// <summary>Adds class points to the class they have equipped (a fight's, a trial's, a script's cp +n).</summary>
+    /// <param name="points">How many.</param>
+    public void AddClassPoints(int points) => ClassPoints[Class] = Math.Max(0, PointsIn(Class) + points);
 
     /// <summary>Brings their hit points down to the most they can have, if taking something off lowered it.</summary>
     private void KeepHpInRange() => Hp = Math.Min(Hp, MaxHp);

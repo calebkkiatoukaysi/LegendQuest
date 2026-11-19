@@ -655,8 +655,102 @@ says I and C.
 
 ## Combat
 
-Fights are turn-based 5e from the SRD 5.1, in side-view rows inside the room you're in, the way
-`Story/11-combat.md` lays them out. `Combat/` is the rules and draws nothing: `CombatEngine` takes the
+Fights are moving to real time, the way `Story/11-combat.md` lays it out: you trade blows where you
+stand, your auto attack swings on its own timer, and four class skills and a potion sit on the bar.
+The real-time engine is built and simulated (`Combat/Realtime/`, below); the fight screen still plays
+the turn-based engine described after it, until the screen moves over.
+
+### The real-time engine
+
+`Combat/Realtime/Battle` is the fight, and draws nothing. It takes the encounter, who's in it
+(`CombatantSetup`s, which `BattleRoster` builds from the party, the guests and the starting foes), a
+`BattleRules` (the difficulty, the story's flags, the leader the player drives, the bag) and a seed,
+and an optional `BattleArena` (the room's floor band, where each side starts, where waves walk in;
+`BattleArena.Default` is a 400-pixel room like the game's). Everyone has a position in world pixels
+on the floor; there are no rows. Time is whole milliseconds, moved on by `Step()` one 20 ms tick at a
+time, and every roll comes from the fight's own `Pcg32`, never `System.Random`, so the game (which
+calls `Step` from `Update` with an accumulator) and the simulator play the same fight from the same
+seed and the same commands. `Command(BattleCommand)` queues an order (Target, MoveTo, Use a skill on
+someone, Potion, SoulLink, AutoAttack on or off, Help, Stop, Concede) for the next tick; `Step()`
+hands back that tick's `BattleEvent`s: a clip starting (with when its blows land), a telegraph and
+its ground marker, a cast, a projectile, hits, misses, dodges, blocks, damage, healing, auras,
+movement, downs, death saves, joins, supports acting, phases, barks, the Soul-Link, and the fight
+won or lost. Damage lands on the tick of its clip's `hit` (or arrives after its `release` and
+flight), and its events carry that tick, so the number shows on the frame the blow lands.
+
+- **Timers.** The auto attack swings every 2.0 s (light and finesse weapons 1.8, heavy and two-handed
+  2.4, crossbows 2.6; foes 2.5, quick beasts 2.0, big ones 3.0), and only lands if you're in reach
+  when it comes round. An action skill puts every action skill on a 1.5 s GCD; a bonus skill is off
+  it, with a 0.5 s lockout of its own; a reaction is armed for 4 s and fires on its trigger
+  (Riposte, Shield, Hellish Rebuke). Each skill has its own cooldown in seconds. Haste (3% a point of
+  Dexterity, or the casting ability, plus what you carry, to 50%) shortens swings, cooldowns, casts
+  and the GCD, to 1.0 s at the least. A cast roots you, and moving, a Stun, a knockdown or failing
+  the Con save a hit forces stops it.
+- **The sheet underneath.** Every attack is still d20 + to-hit against AC with advantage and
+  disadvantage; a miss that would have hit without the target's Dexterity is a dodge, one that would
+  have hit without their shield a block. Crit chance is 5% (the 20) plus 2% a point of the attack's
+  ability, to 40%, and doubles the dice. Saves, DCs, resistance, vulnerability and temporary hit
+  points (a shield aura hits come off first) are 5e's; ⁺ dice go up at levels 5 and 9.
+- **Auras.** Every condition, buff, debuff, and damage or healing over time is an aura with a
+  duration, stacks, a source and, if it ticks, a tick every 3 s; the same aura from the same source
+  refreshes; cleansing takes the named conditions off; concentration breaks on a failed Con save.
+- **Focus.** 0 to 100, 1 a second for everyone and each class's model on top (`FocusModels`:
+  Momentum, Opportunist, Bulwark, Wellspring, Devotion, Wild, Pact, Tempo, Blood); a fight starts on
+  the difficulty's (Story 60, Balanced 40, Tactician 30; Tempo 80).
+- **Kits.** `SkillCatalog` has every class's seven skills by id (`<class code>-<kebab name>`) as data
+  (`SkillDefinition`: kind, Focus, cooldown, cast or telegraph, reach, target, §4.3's area shape, and
+  `Effect`s in order); the eight base classes' are in `SkillCatalog.Base.cs`, the sixteen advanced
+  classes' and the Hourwarden's in `SkillCatalog.ActOne.cs` and `SkillCatalog.ActTwo.cs` (gathered,
+  with what they share, in `SkillCatalog.Advanced.cs`), the foes' moves in `SkillCatalog.Foes.cs`,
+  and the guide at the top of `SkillCatalog.cs` says how to add a class. Every class has its own kit
+  now; the turn-based screen still gives an advanced class its base class's interim kit. The
+  advanced kits brought their own kinds of effect: summons that fight on your side for the rest of
+  the fight (the Watchman, a knight of the Order), Broadside's guns outdoors and Grapeshot indoors
+  (`BattleRules.Outdoors`), gold taken as data for the result panel (`Battle.Stolen`,
+  `Battle.GoldBonusPct`), decoys (Mirror Image, Rooftops), redirected attacks (Cover, Refract,
+  Nobody Left Behind), Sanctuary's save to pick a target, Reveal's dispel, Rewind's hit points from a
+  few seconds back (`Fighter.HpHistory`), Stop's Frozen, a random draught (Rummage), a thrown flask
+  from the bag (Throw Anything), a free Strike from every ally, Echo Strike's repeat, and passives
+  that keep someone up, stop a foe's big wind-up or shake off a foe's control. `10-classes.md` §8
+  says how each table line reads in real time. A class's rank (1 to 10, from its
+  class points, kept per person per class in the save) opens its slots: skill 2 at 2, skill 3 at 3,
+  the passives at 4 and 10, the ultimate at 5 (`ClassRanks`).
+- **Clips.** Each move plays a clip (`auto-<kind>-n` for a weapon auto, `skill-<id>` for a class
+  skill, `foe-<enemy>-<move>` for a rigged foe's move), and `MotionTimings` reads when its blows land
+  from `Content/Characters/Parts/clips.json`'s `hit` and `release` events, with fallbacks (an auto
+  0.30 s, a melee skill 0.45 s, a cast 0.40 s, an ultimate 0.70 s) where a clip's missing;
+  `--validate` warns about each missing one.
+- **Foes.** Each stat block has an auto attack (a Multiattack is a combo on the one swing) and its
+  telegraphed moves (Trip, Hook Pull, Thorn Burst, Uprooting Charge, Blasting Charge, Ashen Bolt's
+  cast, Hex, Feint, Smoke Bomb, Cunning Disengage, Overhead Chop), each with a cooldown and a wind-up
+  everyone can see, an area's ground marker filling until it lands. A threat table picks its target
+  (damage a point, healing half a point shared out, double for the defenders' classes, a taunt on
+  top; it switches at 110%, 130% for a ranged foe). A boss changes at shares of its health
+  (`FoePhase`): the Thornmother calls whelps and brings in Thorn Burst at two thirds, then enrages
+  with the Uprooting Charge at a third; Kael brings out his smoke at 60%.
+- **The party.** You drive the leader; everyone else, guests and summons too, is the party AI
+  (`Battle.Brains`): every 0.3 s a free fighter scores every skill on every target worth thinking
+  about, healers heal first, defenders taunt what's hitting someone else, everyone assists the
+  leader's target, ranged fighters step away from melee, a hurt fighter backs off behind someone
+  sturdier, and anyone steps out of a ground marker. Like a player, it saves its Focus for its
+  ultimate while that's off cooldown and would be worth pressing (it still heals, guards and taunts
+  in the meantime), and it picks pockets when there's a pocket left to pick. Down at 0 is Downed, with death saves every 3 s;
+  healing or Help (a 2 s channel beside them) gets them up. The Soul-Link charges when you and the
+  Soul-Bound hit the same foe within 3 s.
+- **The encounter.** Supports act every few seconds from their start (`EncounterSupport.FromSeconds`,
+  `EverySeconds`), waves walk in from the room's edge at their second (`EncounterWave.AtSeconds`) or
+  sooner if the field's clear, guests join at theirs, and a fight you only have to last ends at
+  `EndsAfterSeconds`. The rounds the turn-based engine reads are kept beside them.
+- **For the HUD.** `Battle.Bar(fighter)` (the seven slots with cooldowns, the GCD, costs, reach and
+  why not), `WhyNot`, `InReach`, `Threat(foe)`, `Phase(boss)`, `Supports`, `SurviveShare`,
+  `SoulLinkCharge`; every `Fighter` has its position, facing, hit points, temporary hit points,
+  Focus, auras, cast, swing, target, weapon kind and current clip. `ApplyToParty()` writes the
+  party's hit points back when it's over.
+
+### The turn-based engine (the screen's, until it moves over)
+
+The fight screen still plays turn-based 5e from the SRD 5.1, in side-view rows inside the room
+you're in. `Combat/` is the rules and draws nothing: `CombatEngine` takes the
 encounter, who's in it (`CombatantSetup`s), a `Random` and the `FightRules` (the difficulty, the
 story's flags, and where the kits come from), and every command (`Begin`, `Shift`, `Use`, `EndTurn`,
 `RunAiTurn`, `Apply`, `Concede`) hands back the `CombatEvent`s it caused, in order, each with its
@@ -792,68 +886,123 @@ no randomness of its own, so a seed replays a fight exactly.
 dotnet run -- --simulate a1-c1-01-gulls 2000      # fight it 2000 times headless, AI on both sides
 dotnet run -- --simulate all 200                  # every encounter, 200 times each, on Balanced
 dotnet run -- --simulate all 200 story            # the same on Story (or tactician)
+dotnet run -- --simulate classes 200              # every class in your place in every fight
+dotnet run -- --simulate selftest                 # the engine's own checks
+dotnet run -- --simulate trace:a1-c3-02-raid 3    # run 3 of a fight, its whole log
+dotnet run -- --simulate trace:a1-c4-02-sappers@hourwarden   # the same with a class in your place
+dotnet run -- --simulate skill:glasswright-refract # the self-test's scripted fight for one skill, its whole log
 ```
 
-`--simulate` opens no window. Each run lines up the party the story would have there (you as a
-Blademaster, the Soul-Bound as a Shadowstep, and the companions who'd be with you) at
-`LevelTable.Expected`, fresh, in the interim kits, with the two potions a party sets out with,
-through `FightRoster` as the game does, with the fight's guests and supports and the foes in their
-slots, on the difficulty asked for. An ally who only comes on a story flag is fought both ways: the
-verdict is on the fight without them, the harder one, and the fight with them is printed beside it.
-Every fight starts again from the seed, so it prints the same whether it's fought alone or with the
-rest, and two runs print the same thing. A fight still going after 30 rounds is unfinished, and
-`StallWatch` says why from its last five: a revive treadmill, a stand-off, one side unable to hurt
-the other, or just a slow fight.
+`--simulate` opens no window and drives the real-time engine (`Combat/Realtime/BattleSimulator`).
+Each run lines up the party the story would have there (you as a Blademaster, the Soul-Bound as a
+Shadowstep, and the companions who'd be with you) at `LevelTable.Expected` and the class rank the
+story would have them at (`ClassRanks.ExpectedRank`), fresh, with two healing potions, through
+`BattleRoster` as the game does, with the fight's guests, supports and waves, on the difficulty asked
+for, and plays it on the fixed 20 ms step with the AI driving everyone, you included, with the human
+handicap (`BattleRules.HumanHandicap`: every party decision 0.4 s late, and its second-best choice
+15% of the time, drawn from the fight's own dice). Run r of a fight is seeded from the base seed, the
+fight's id and r (`Pcg32.Mix`), so it prints the same whether it's fought alone or with the rest, and
+`trace:` replays any one run line by line. An ally who only comes on a story flag is fought both
+ways: the verdict is on the fight without them. A fight still going at 600 s is unfinished.
 
-Each fight prints its own tables (how it went, and each member's hit points left, how often they
-went down or a guest fell back, and died), then the report, one line a fight: FIGHT, KIND, LV,
-ALLIES, WON, TARGET, ROUNDS, MOST DOWNED (the one of the party who went down in the most runs), CAP,
-UNFINISHED and VERDICT. It exits 1 if anything fails. The targets are §6.2's, constants in
-`CombatSimulator`:
+Each fight prints how it went (win rate, mean seconds to win, unfinished, who went down most) and a
+line a member (how often they went down, damage and healing a second, the share of the fight a foe
+was on them, hit points left), then the report, one line a fight, with its verdict against §9.2's
+targets, and exits 1 if anything fails:
 
-| Kind | Won, on Balanced | Most downed may be |
-| --- | --- | --- |
-| The tutorial | 99%+ | 40% |
-| Random fights | 97%+ | 40% |
-| Story fights | 92 to 97% | 40% |
-| Mini-bosses (the Thornmother, Kael's duel) | 88 to 94% | 70% |
-| Bosses | 82 to 90% | 70% |
-| The Sovereign | 78 to 88% | 70% |
+| Kind | Won, on Balanced | Length | Most downed may be |
+| --- | --- | --- | --- |
+| The tutorial | 99%+ | 20 to 50 s | 40% |
+| Random fights | 97%+ | 15 to 45 s | 40% |
+| Story fights | 92 to 97% | 25 to 75 s | 40% |
+| Mini-bosses | 88 to 94% | 45 to 120 s | 70% |
+| Bosses | 82 to 90% | 75 to 180 s | 70% |
+| The Sovereign | 78 to 88% | 120 to 240 s | 70% |
 
-On Story every fight has to be won 99% of the time or more; Tactician's verdicts are for
-information, about 15 points under Balanced's. Nothing may be unfinished. These are the numbers
-after the retune, `--simulate all 200` with its seed, on Balanced (8 of 8 pass; on Story every fight
-is 99.5% or more):
+On Story every fight has to be won 99% of the time; Tactician's verdicts are information. `classes`
+puts each class in your place (with its starting kit and recommended scores) in every fight, and
+reports its win rate, length, damage and healing a second and threat held, and whether it's within 5
+points of the median class with a kit of its own, and then, class by class, every skill the AI used
+in your place and any skill open at the ranks reached that it never used. `selftest` checks that every fight replays exactly
+from its seed (the same seed gives the same hash of every event's every field, another seed a
+different one), that every skill of every class with a kit, its form's too, fires in a scripted fight
+at level 5 and rank 10 and does what its kind says (damage, healing, an aura, an armed reaction, a
+transform...), that the advanced kits' own kinds of effect do the right thing in fights set up for
+them (`SelfTests.Mechanics`: Broadside outdoors and in, both summons fighting, Arrest's taking out,
+Pick Pocket once a foe, Captain's Share, Throw Anything using up the flask, Lucky Stone's natural
+20, Cover, Hold, Counterspell, Mirror Image's three images, Refract, Sanctuary, Reveal, Rewind,
+Bleed the Clock and Echo Strike), that every foe's move fires and lands, and that no fight stalls on
+any difficulty. `skill:` prints the scripted fight the every-skill check uses for one skill.
 
-| Encounter | Kind | Lv | Allies | Won | Rounds | Who goes down most |
+The first rough pass, `--simulate all 200` on Balanced, with the advanced kits in and the party AI
+saving for its ultimates (3 of 8 pass: the rest are too easy; on Story all 8 pass, every one won
+every time):
+
+| Encounter | Kind | Lv | Won | Seconds | Who goes down most | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
-| `p-05-wraiths` | Tutorial | 1 | Odelle's crew | 100% | 4.1 | nobody |
-| `a1-c1-01-gulls` | Story | 1 | Tomas | 97.0% | 5.5 | the Soul-Bound, 20% |
-| `a1-c2-01-gloomfangs` | Story | 2 | Sera in the trees | 97.0% | 5.2 | the Soul-Bound, 12.5% |
-| `a1-c2-02-thornmother` | MiniBoss | 2 | (the wardens, if told) | 91.0% (99.5% with them) | 11.0 | the Soul-Bound, 52% |
-| `a1-c2-02-guard-wave` | Story | 2 | Sera at the crystal | 93.0% | 5.0 | the Soul-Bound, 30% |
-| `a1-c3-02-raid` | Story | 2 | Mira; the Watch | 96.0% | 10.1 | the Soul-Bound, 32.5% |
-| `a1-c4-02-kael` | MiniBoss | 3 | none | 89.0% | 9.1 | you, 66% |
-| `a1-c4-02-sappers` | Story | 3 | Kael | 93.5% | 9.5 | Mira, 37% |
+| `p-05-wraiths` | Tutorial | 1 | 100% | 26 | nobody | pass |
+| `a1-c1-01-gulls` | Story | 1 | 99% | 29 | the Soul-Bound, 39% | too easy |
+| `a1-c2-01-gloomfangs` | Story | 2 | 97% | 31 | the Soul-Bound, 16% | pass |
+| `a1-c2-02-thornmother` | MiniBoss | 2 | 91% (98% with the wardens) | 51 | the Soul-Bound, 51% | pass |
+| `a1-c2-02-guard-wave` | Story | 2 | 100% | 42 | the Soul-Bound, 20% | too easy |
+| `a1-c3-02-raid` | Story | 2 | 100% | 59 | Sera, 31% | too easy |
+| `a1-c4-02-kael` | MiniBoss | 3 | 100% | 48 | the Soul-Bound, 53% | too easy |
+| `a1-c4-02-sappers` | Story | 3 | 100% | 47 | Sera, 4% | too easy |
+
+`--simulate classes 200` (50 runs a fight, each class in your place at the story's levels, ranks 1
+to 5): the median class wins 88% of the Act 1 fights. Within 5 points of it or above: Blademaster
+97, Lightbearer 94, Warden 95, Wildcaller 93, Skald 85, Watchblade 93, Netcaster 84, Deckhand 88,
+Guild Battlemage 94, Ashwalker 92, Ironvein Bulwark 85, Ember Mender 96, Gilded Knight 96, Hemomancer
+98, Hivekeeper 99, Lamplighter 86, Crownsworn 90. Under it, all ranged or light-armoured picks paired
+with the Soul-Bound and no front-liner in the two-person fights: Shadowstep 68, Arcanist 77, Hexblade
+80, Lodge Ranger 68, Lanerunner 81, Wayfarer 68, Glasswright 78, Hourwarden 78. The Ashwalker leads
+damage, the Hemomancer healing and the Warden and Watchblade threat. Every advanced skill open at rank
+5 was used by the AI, but for The Bell (nobody's hurt enough when it's ready).
+
+The turn-based engine's own simulator (`Combat/CombatSimulator`) is still in the code for the screen's
+engine, but `--simulate` no longer runs it.
 
 ### Tuning
 
-How to tune one that's off, in this order (§7): the supports' dice and the round they start, since
-an ally is the gentlest way to change a fight without changing it; Focus (a foe's `FocusDrain`, then
-the kits' costs and cooldowns); foe hit points, which change how long a fight lasts without
-changing what each turn feels like; foe to-hit, which changes how often anyone goes down; damage,
-since one more point a hit is a lot at these levels; and waves and `EndsAfterRounds` last, since
-they change the shape of the fight. A boss gets its AC and hit points moved, not its attacks.
-`EnemyMind`'s weights are how everyone behaves, not how hard a fight is, so they move only when
-someone's doing something silly. Tune on 600 runs or more, since 200 is about three points either
-way, and confirm on 200.
+How to tune one that's off, in this order (§9.2): the supports (their dice, their start and how
+often); foe hit points, for how long a fight lasts; foe to-hit, for how often anyone goes down;
+telegraph lengths, for how fair the big hits are; damage; and waves and time limits last. Tune on 600
+runs or more, since 200 is about three points either way, and confirm on 200.
 
-The rows retune started from every story fight won 100% of the time and the Soul-Bound, the AC 13
-Shadowstep, going down in up to 99% of the Thornmother's. Three things were silly first, and are
-`EnemyMind`'s: nobody ever left the front row, so whoever had the least armour took every swing;
-a hurt rogue stepped back past a foe and then drank its potion, so the swing dropped it first; and
-the wraiths dodged rather than hit, since every foe in front counted as one beside you. With those
-fixed, the numbers that moved:
+In real time a party lands several blows for every one it landed in a turn, and a foe swings two or
+three times a round, while the party's hit points stay what the sheet says. So every stat block has
+two real-time scales, read by nothing turn-based: `EnemyDefinition.HpScale`, its hit points as a
+multiple of its hit dice's average (4.5 by default), and `DamageScale`, the share of what its blows
+roll that they do (0.5 by default). The first pass set them per foe:
+
+| Foe | Hit points × | Damage × |
+| --- | --- | --- |
+| Sea-wraith | 5.5 | 0.5 |
+| Red Gull thug | 4.5 | 0.5 |
+| Bosun Grell | 6 | 0.45 |
+| Gloomfang wolf | 4.5 | 0.46 |
+| Gloomfang whelp (new: the Thornmother's) | 3 | 0.4 |
+| The Thornmother | 4.2 | 0.45 |
+| Hollowed footman | 5.5 | 0.4 |
+| Hollowed hexer | 6 | 0.6 |
+| Hollowed sapper | 6.5 | 0.4 |
+| Sapper chief | 7 | 0.5 |
+| Kael | 8 | 0.6 |
+
+The supports' real-time timings are 11-combat.md §5.4's (Tomas from 8 s every 8 s, his net 3 s;
+Sera's arrows from 8 s; the Watch from 12 s); the guard wave's waves come at 12 and 24 s and it's
+held for 45; the raid's second wave comes at 18 s. No class skill's numbers have moved from
+`10-classes.md`'s tables as §4.2 converts them. What's left for the next pass: the four-member
+fights are won every time even with Sera going down in half of the raids (nobody in the early party
+holds a foe's attention, and her opening Moonbeam puts her on top of every threat table it catches),
+and Kael, who knocks people out rather than killing, almost never takes the whole party down.
+
+The turn-based retune, for the screen's engine, started from every story fight won 100% of the time
+and the Soul-Bound, the AC 13 Shadowstep, going down in up to 99% of the Thornmother's. Three things
+were silly first, and are `EnemyMind`'s: nobody ever left the front row, so whoever had the least
+armour took every swing; a hurt rogue stepped back past a foe and then drank its potion, so the swing
+dropped it first; and the wraiths dodged rather than hit, since every foe in front counted as one
+beside you. With those fixed, the numbers that moved:
 
 - **Supports:** Tomas's net and Sera's arrows from the trees from round 3, not 2, and the Watch from
   round 4, not 3.

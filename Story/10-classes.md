@@ -694,3 +694,106 @@ A companion fights best in their own class, and some story fights expect it: in 
 - New tables: `ClassCatalog` gets the sixteen advanced classes and Hourwarden; `TrainerCatalog` (trainer id, classes, price, needs, need text, trial fight); `SkillCatalog` replaces `AbilityCatalog`'s per-class kits with the tables above. `ResourceCatalog`'s spell slots and per-rest resources go; Focus and cooldowns replace them (`11-combat.md` §3). Second Wind, Lay on Hands and the rest stay as skills.
 - New cast: `imra-vell` (Master Imra Vell, a Stoneborn woman in her sixties with a broken nose and a teacher's patience; generic pool body, unique head and a sleeveless practice jerkin), `ruck` (Odelle's bosun), `lodge-hawk` (a creature, `03-art-overhaul.md` §9 flier rig).
 - New map: `proving-hall`, an AQW-style room in the Lantern Market (`12-rooms.md` §6).
+
+## 8. Tuned numbers
+
+The real-time engine's first pass (`--simulate`, README "Tuning") moved no class skill's numbers:
+every kit plays as §2's tables read through `11-combat.md` §4.2 and §4.3 (A on the GCD, B off it, R
+armed for 4 s, CD 1 to 4 as 6, 8, 12 and 16 s, 1/fight as a 45 s cooldown ready at the start, a turn
+as 3 s). Where a table says something only turns could say, the engine reads it so:
+
+| Skill | In real time |
+| --- | --- |
+| Riposte (B) | Armed like a reaction: for 4 s, the next melee attack that misses you is answered with a Strike |
+| Smoke Step | A 60 px dash away from the nearest foe; attacks on you have disadvantage for 3 s |
+| Poisoned Edge | Your next hit within 9 s Poisons: 1d4 poison every 3 s for 9 s |
+| Cunning | Move a quarter faster, and 5% haste (initiative and Shift are gone) |
+| Shadow Dance | Three blows, each on a random foe (they can repeat), each a step behind it with Sneak Attack |
+| Sneak Attack | +1d6⁺ when an ally hit the target in the last 3 s, or it's Marked, Prone or down, or you have advantage; once every 3 s |
+| Shield | For 4 s, the next attack on you meets +5 AC, which lasts 3 s |
+| Arcane Recovery | +10 Focus every 3 s |
+| Empowered | Once every 3 s, a spell's damage adds Int |
+| Divine Smite | Your next hit within 6 s does +2d8 radiant (+1d8 against undead and fiends) |
+| Raise Shield | +2 AC for 3 s, and every foe must attack you for 3 s |
+| Aura of Protection | Allies within 60 px add your Cha to saves |
+| Thorn Whip | Reach 42 px; a hit pulls the foe to your reach |
+| Entangle, Burning Hands | Every foe within 48 px of the target |
+| Moonbeam | A column 24 px wide from you through the target, 2d10 now and every 3 s for 9 s |
+| Thunderwave | Every foe within 60 px in front of you; a failed save knocks them 40 px back |
+| Wild Shape: Bear | 12 s; Claws 2d6⁺ as its auto, Maul (6 s cooldown) the foe and every foe within 36 px |
+| Hex | 30 s, concentration |
+| Inspiration | Lasts 15 s or until their next attack or save |
+| Rank 7's Focus | +5 Focus every 3 s |
+
+The advanced classes and the Hourwarden (`Combat/SkillCatalog.ActOne.cs` and `.ActTwo.cs`) are read
+the same way, with these where a table says something only turns, rows or a menu could say:
+
+| Skill | In real time |
+| --- | --- |
+| Cudgel Blow | "Already hit this round" is a foe one of your side hit in the last 3 s; the knockdown is the usual 1.5 s |
+| Hold the Line | Every foe within 60 px in front of you must attack you for 3 s |
+| Arrest | Restrained 6 s, a Str save every 3 s to end it; in a brawl or a nonlethal fight a foe at a quarter health or less leaves the fight |
+| Whistle for the Watch, Call the Order | A Watchman (`watchman`) or a knight of the Order (`gilded-order-knight`) runs in on your side for the rest of the fight, played by the party AI |
+| Shield Wall | Half damage for 6 s, not 3: a 45 s ultimate that lasted one swing did nothing |
+| Gaff | Reach 42 px |
+| Haul In | Hauls a foe up to 220 px away to your reach, and knocks it down |
+| Weather Eye | The party starts every fight with 10 more Focus (initiative is gone) |
+| High Tide | The party's next attacks in 9 s have advantage |
+| Knots Hold | Restrained you put on lasts 3 s longer |
+| Swing Across | Swings to a foe up to 220 px away and lands behind it for the blow; the swap with an ally is gone, since nobody stands in a row to swap with |
+| Broadside | Outdoors (`BattleRules.Outdoors`) every foe; indoors Grapeshot hits every foe within 60 px of you |
+| Captain's Share, Pick Pocket, Everyone's Pocket | The fight reports them (`Battle.GoldBonusPct`, `Battle.Stolen`, a percentage of each foe's loot) and the result panel pays them; Pick Pocket's "or a potion it carries" isn't modelled |
+| Hunter's Mark | 30 s, concentration |
+| Hawk Strike | Foes take no reactions in real time, so a hit stops whatever the foe is winding up instead |
+| Count the Ground | Nobody catches the party unready: everyone's first swing of a fight comes at once |
+| Force Bolt | A foe in melee with you is pushed 40 px back |
+| Counterspell | Armed 4 s: the next cast or wind-up a foe starts within 220 px fails, or the one under way when it's armed |
+| Chain Lightning | Jumps to 2 more foes, each the nearest to the last within 100 px |
+| Spire Lance | A 1 s cast, then a line 24 px wide from you through the target |
+| Ash Cloud | Con save as it lands, not at the end of the turn |
+| Doomward Born | Advantage on saves against necrotic (the Hollowing's saves are the story's) |
+| Shield Bash | A hit knocks the foe 40 px back |
+| Cover | Armed 4 s on one ally: the next attack on them comes at you |
+| Hold | For 3 s foes can't pick anyone of yours further from them than you |
+| Nobody Left Behind | The Downed get up on a quarter health; for 3 s every attack on an ally comes at you |
+| Read the Wound | +2 to hit it for 3 s from everyone; its frame shows its resistances and what it's winding up |
+| Warm Hands | Allies within 60 px of you, you included |
+| Twin Cuts | Two blows in one swing, Sneak Attack on one |
+| Rooftops | A 60 px dash clear; the next attack on you in 6 s misses |
+| Low Blow | Steps behind a foe up to 100 px away; "loses its bonus action" is Winded: 30% slower for 3 s |
+| Lane Rules | Advantage on a foe whose target is one of your allies |
+| Name on the Door | +1 to attacks and saves for each ally standing |
+| Throw Anything | Throws the bag's best thing for throwing (an Alchemist's Fire) at double dice and uses it up; with nothing, 2d6 bludgeoning. Potions aren't thrown |
+| Duchess Kicks | 2d6 bludgeoning and 40 px back |
+| Rummage | One of three draughts at random, drunk at once: 2d4 + 2 healing, 30 Focus, or 20% haste for 9 s. Nothing leaves the bag |
+| Haggle | Data for the shops (`PricePct`, −20) |
+| Lucky Stone | Each ally's next attack roll or save in 30 s is a natural 20 |
+| Vigil | +2 AC for 3 s (a shield's) |
+| Sunburst, Where the Dark Gathers, Gilded Dawn | "Vampires and undead" are the foes flagged undead |
+| The Old Enemy | Daylight is a fight outdoors and not dark (`BattleRules.Outdoors`, `Dark`); the screen sets them, and `eclipse-stage` with them |
+| Blood Shield, Given Freely | The hit points are paid when the skill starts; Given Freely never takes you below 1 |
+| Swarm | The 1 more lands 3 s later |
+| Thirty Summers | Your healing over time can't be cleansed, and ticks double on the Downed (and gets them up) |
+| They Know Me | Beasts won't pick you as a target until you've hurt them |
+| Prism Ray | The second ray is 1d4⁺ at another foe, at random |
+| Mirror Image | No time limit: three images, each attack on you an even chance to strike one, until all three are struck |
+| Refract | Armed 4 s: the next ranged attack or spell at you or an ally goes at a random foe |
+| Night-Flowers | +2 to your hits in a dark fight (`BattleRules.Dark`) |
+| Given in Love | Each ally's next hit in 15 s |
+| Choose It Yourself | Once a fight, the first control a foe puts on anyone of yours (Stunned, Frozen, Restrained, knocked down, Charmed, Frightened, Blinded) is shaken off at once |
+| Sanctuary | Each foe saves once against each Sanctuary; one that fails can't pick them as its target for the 6 s |
+| Vespers | You and every ally further from the foes than you |
+| Reveal | Every foe: its beneficial auras (images, wards) gone, dragged out of hiding where it stands, and Marked for 6 s |
+| Everyone Who Knocks | Once a fight, for the first of your side who'd be Downed |
+| Bees Guard the Honey | Allies under your Sanctuary heal 1d6 each time they're attacked |
+| Riposte Strike | +1 AC for 3 s |
+| Command | The ally's GCD ends now, and the next action skill they use starts no cooldown |
+| No Procedure | The party starts with 10 more Focus, and your first swing comes at once |
+| My Father's Sword | Every ally within reach of the foe gets a free Strike on it |
+| Somebody Allowed to Say No | Foes have no ultimates: once a fight, the first big move a foe winds up (a wind-up of 1 s or more) is stopped |
+| Second Hand | A bolt from the staff's head, at range |
+| Rewind | Hit points as they were 6 s ago, if that's more |
+| Echo Strike | 0.4 s after the skill, at half strength |
+
+The foes' side of the first pass (their real-time hit points and damage) is in EnemyCatalog and
+the README's "Tuning".

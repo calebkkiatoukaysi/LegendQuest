@@ -26,6 +26,11 @@ namespace LegendQuest.Combat;
 /// its flag, the one the story already reads, so the room changes, and then plays the conversation
 /// after it (Then), which is the rest of the scene. None of them can be lost and carried on from: a
 /// loss is the game over screen.
+///
+/// In real time (11-combat.md §5.4 and §6.1) the rounds become seconds: a support acts every 6 s
+/// from its FromSeconds (or from (FromRound - 1) × 6 s), a wave walks in from the room's edge at its
+/// AtSeconds (sooner if the field's clear), a guest joins at its FromSeconds, and the guard wave is
+/// held for EndsAfterSeconds. The turn-based screen still reads the rounds, which stay as they were.
 /// </remarks>
 public static class EncounterCatalog
 {
@@ -34,6 +39,9 @@ public static class EncounterCatalog
 
     /// <summary>How long the den has to be held while Sera draws the rot out of the crystal, in rounds.</summary>
     private const int CrystalRounds = 5;
+
+    /// <summary>The same in real time, in seconds (11-combat.md §6.1).</summary>
+    private const int CrystalSeconds = 45;
 
     /// <summary>The companions who help before they've joined, by origin id.</summary>
     private const string Sera = "sera";
@@ -75,8 +83,8 @@ public static class EncounterCatalog
             {
                 new EncounterSupport("tomas", "Old Tomas", "tomas",
                     new SupportAbility("A net over one Gull: Restrained a turn", SupportTarget.RandomFoe, DiceExpression.None, DamageType.Bludgeoning,
-                        ConditionId.Restrained, 1),
-                    FromRound: 3),
+                        ConditionId.Restrained, 1) { ConditionMs = 3000 },
+                    FromRound: 3) { FromSeconds = 8, EverySeconds = 8 },
             },
         },
 
@@ -91,7 +99,7 @@ public static class EncounterCatalog
             {
                 new EncounterSupport("sera-treeline", "Sera, in the trees", Sera,
                     new SupportAbility("An arrow from the trees: 1d8 to a wolf", SupportTarget.RandomFoe, Dice("1d8"), DamageType.Piercing),
-                    FromRound: 3),
+                    FromRound: 3) { FromSeconds = 8 },
             },
         },
 
@@ -120,12 +128,12 @@ public static class EncounterCatalog
         new()
         {
             Id = "a1-c2-02-guard-wave", Name = "Guarding the Crystal", Victory = Act1Chapter2.CrystalGuarded, Then = "a1-c2-02-guard-wave-after",
-            SitsOut = new[] { Sera }, EndsAfterRounds = CrystalRounds,
+            SitsOut = new[] { Sera }, EndsAfterRounds = CrystalRounds, EndsAfterSeconds = CrystalSeconds,
             Foes = new[] { Spawn("gloomfang", F(1)), Spawn("gloomfang", F(2)), Spawn("gloomfang", F(3)) },
             Waves = new[]
             {
-                new EncounterWave(2, new[] { Spawn("hollowed-footman", F(4)) }, null),
-                new EncounterWave(3, new[] { Spawn("gloomfang", F(1)) }, null),
+                new EncounterWave(2, new[] { Spawn("hollowed-footman", F(4)) }, null) { AtSeconds = 12 },
+                new EncounterWave(3, new[] { Spawn("gloomfang", F(1)) }, null) { AtSeconds = 24 },
             },
             Supports = new[] { new EncounterSupport("sera-crystal", "Sera, at the crystal", Sera, null, Progress: true) },
         },
@@ -144,14 +152,14 @@ public static class EncounterCatalog
             Waves = new[]
             {
                 new EncounterWave(3, new[] { Spawn("hollowed-footman", F(4)), Spawn("hollowed-hexer", B(6)), Spawn("hollowed-footman", F(1)) },
-                    "Where's the Watch?! Where's the king's army?!"),
+                    "Where's the Watch?! Where's the king's army?!") { AtSeconds = 18 },
             },
             Guests = new[] { new EncounterGuest(Mira, Row.Back) },
             Supports = new[]
             {
                 new EncounterSupport("thornbridge-watch", "Sergeant Brisk and the Watch", "brisk",
                     new SupportAbility("Watch crossbows: 1d6 to a raider", SupportTarget.RandomFoe, Dice("1d6"), DamageType.Piercing),
-                    FromRound: 4),
+                    FromRound: 4) { FromSeconds = 12 },
             },
         },
 
@@ -328,6 +336,16 @@ public static class EncounterCatalog
     private static void CheckEnding(string name, EncounterDefinition row)
     {
         if (row.EndsAfterRounds < 0) throw new InvalidOperationException($"{name} ends after {row.EndsAfterRounds} rounds.");
+        if (row.EndsAfterSeconds < 0) throw new InvalidOperationException($"{name} ends after {row.EndsAfterSeconds} seconds.");
+        int second = 0;
+        foreach (EncounterWave wave in row.Waves)
+        {
+            if (wave.ArrivesAtSeconds < second) throw new InvalidOperationException($"{name}'s waves arrive out of order in real time ({wave.ArrivesAtSeconds} s).");
+            second = wave.ArrivesAtSeconds;
+        }
+        foreach (EncounterSupport support in row.Supports)
+            if (support.EverySeconds < 1 || support.StartsAtSeconds < 0)
+                throw new InvalidOperationException($"{name}'s support {support.Id} acts every {support.EverySeconds} s from {support.StartsAtSeconds} s.");
         if (row.EndsAtHealthShare is < 0f or >= 1f) throw new InvalidOperationException($"{name} ends at {row.EndsAtHealthShare:P0} of a foe's hit points.");
         if (row.EndsAtFoe is not null && row.EndsAtHealthShare <= 0f)
             throw new InvalidOperationException($"{name} ends on {row.EndsAtFoe}, with no EndsAtHealthShare to end at.");

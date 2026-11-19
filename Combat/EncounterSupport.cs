@@ -1,3 +1,5 @@
+using System;
+
 namespace LegendQuest.Combat;
 
 /// <summary>
@@ -13,4 +15,17 @@ namespace LegendQuest.Combat;
 /// <param name="When">A story flag it only comes if it's set, or null for always.</param>
 /// <param name="Progress">Whether its banner shows, as a ring, how far the fight is through its EndsAfterRounds.</param>
 public sealed record EncounterSupport(string Id, string Name, string Figure, SupportAbility Ability,
-    int FromRound = 1, int UntilRound = 0, string When = null, bool Progress = false);
+    int FromRound = 1, int UntilRound = 0, string When = null, bool Progress = false)
+{
+    /// <summary>In real time, the second it first acts at; without one, (FromRound - 1) × 6, or 6 for a support there from the first round (11-combat.md §5.4).</summary>
+    public int FromSeconds { get; init; } = -1;
+
+    /// <summary>In real time, how often it acts, in seconds: every 6 unless it says otherwise.</summary>
+    public int EverySeconds { get; init; } = EncounterDefinition.SecondsPerRound;
+
+    /// <summary>The second it first acts at in real time.</summary>
+    public int StartsAtSeconds => FromSeconds >= 0 ? FromSeconds : Math.Max(1, FromRound - 1) * EncounterDefinition.SecondsPerRound;
+
+    /// <summary>The last second it acts at in real time, or 0 for every one on.</summary>
+    public int StopsAtSeconds => UntilRound == 0 ? 0 : UntilRound * EncounterDefinition.SecondsPerRound;
+}

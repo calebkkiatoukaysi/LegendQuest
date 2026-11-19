@@ -5,8 +5,9 @@ namespace LegendQuest;
 /// </summary>
 /// <remarks>
 /// Saves keep a character's class by name, so renaming one breaks saves and reordering them doesn't.
-/// The names are the SRD's; the story calls them something else, and ClassCatalog has that name.
-/// New ones go on the end.
+/// The first eight's names are the SRD's; the story calls them something else, and ClassCatalog has
+/// that name. The advanced classes after them are the code ids of 10-classes.md §3 in PascalCase. New
+/// ones go on the end.
 /// </remarks>
 public enum ClassId
 {
@@ -33,4 +34,55 @@ public enum ClassId
 
     /// <summary>Songs that lift the party and talk that wins arguments.</summary>
     Bard,
+
+    /// <summary>The Watch's way: a defender who holds the line and makes arrests.</summary>
+    Watchblade,
+
+    /// <summary>Old Tomas's nets and hooks: control and mending from the back.</summary>
+    Netcaster,
+
+    /// <summary>Captain Odelle's crew: a skirmisher with a cutlass and a ship's guns.</summary>
+    Deckhand,
+
+    /// <summary>The Rangers' Lodge: bow, hawk, and a count of everything.</summary>
+    LodgeRanger,
+
+    /// <summary>The Arcanum Spire's battlefield caster.</summary>
+    Battlemage,
+
+    /// <summary>Doomward's bruiser, who fights in ash.</summary>
+    Ashwalker,
+
+    /// <summary>Brannock's shield: the best defender there is.</summary>
+    Bulwark,
+
+    /// <summary>Mira's healing, which cauterises.</summary>
+    EmberMender,
+
+    /// <summary>Kael's thieving and twin cuts.</summary>
+    Lanerunner,
+
+    /// <summary>Pedlar Mags's jack of all trades.</summary>
+    Wayfarer,
+
+    /// <summary>The Gilded Order's sun knight.</summary>
+    GildedKnight,
+
+    /// <summary>Valencia's blood magic, paid for in hit points.</summary>
+    Hemomancer,
+
+    /// <summary>Sister Orla's healing, and her bees.</summary>
+    Hivekeeper,
+
+    /// <summary>Lady Isadora's illusions of light, out of her journal.</summary>
+    Glasswright,
+
+    /// <summary>Mother Anselle's protector-healers.</summary>
+    Lamplighter,
+
+    /// <summary>Elara's commander and duellist.</summary>
+    Crownsworn,
+
+    /// <summary>Thessaly's time magic, after the coronation.</summary>
+    Hourwarden,
 }

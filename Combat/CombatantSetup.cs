@@ -23,6 +23,12 @@ public sealed record CombatantSetup(string Id, Side Side, PartyMember Member, En
     /// <summary>The round they join at the start of: 1 to be there from the beginning, later for a guest who turns up.</summary>
     public int FromRound { get; init; } = 1;
 
+    /// <summary>In real time, where their feet are when it starts, in world pixels, or null for the arena to place them (their slot, or the party's next start).</summary>
+    public System.Numerics.Vector2? At { get; init; }
+
+    /// <summary>In real time, the second they join at: 0 to be there from the start.</summary>
+    public int FromSeconds { get; init; }
+
     /// <summary>A party member, on the party's side.</summary>
     /// <param name="member">Who.</param>
     /// <param name="slot">The slot they start in, or null for the engine to place them by their kit.</param>
@@ -43,6 +49,6 @@ public sealed record CombatantSetup(string Id, Side Side, PartyMember Member, En
         CombatantSetup setup = Origins.Exists(guest.Id) ? new(guest.Id, Side.Party, Origins.Create(guest.Id), null, true)
             : EnemyCatalog.Exists(guest.Id) ? new(guest.Id, Side.Party, null, EnemyCatalog.Get(guest.Id), true)
             : throw new ArgumentException($"Guest {guest.Id} is neither an origin nor an enemy.", nameof(guest));
-        return setup with { Row = guest.Row, FromRound = guest.FromRound };
+        return setup with { Row = guest.Row, FromRound = guest.FromRound, FromSeconds = guest.JoinsAtSeconds };
     }
 }

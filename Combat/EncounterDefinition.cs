@@ -73,6 +73,15 @@ public sealed class EncounterDefinition
     /// <summary>For a fight you only have to last: getting to the end of this round with anyone standing wins it. 0 for a fight that's won by beating the foes.</summary>
     public int EndsAfterRounds { get; init; }
 
+    /// <summary>How long a round was, in real time's seconds, for the rows' numbers that haven't been given seconds of their own (11-combat.md §5.4: "every 6 s").</summary>
+    public const int SecondsPerRound = 6;
+
+    /// <summary>In real time, for a fight you only have to last: holding out this many seconds with anyone standing wins it; 0 for none, or EndsAfterRounds × 6 if that's set.</summary>
+    public int EndsAfterSeconds { get; init; }
+
+    /// <summary>The seconds a fight you only have to last lasts in real time, or 0.</summary>
+    public int SurviveSeconds => EndsAfterSeconds > 0 ? EndsAfterSeconds : EndsAfterRounds * SecondsPerRound;
+
     /// <summary>The share of their hit points the fight's won at, the way a fight against something too big to kill ends: a fifth, for the Hungering. EndsAtFoe's, or with none, all the foes' together. 0 for none.</summary>
     public float EndsAtHealthShare { get; init; }
 

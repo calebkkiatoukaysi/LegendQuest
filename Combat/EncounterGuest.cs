@@ -11,6 +11,12 @@ namespace LegendQuest.Combat;
 /// <param name="When">A story flag they only come if it's set, or null for always.</param>
 public sealed record EncounterGuest(string Id, Row Row = Row.Front, int FromRound = 1, string When = null)
 {
+    /// <summary>In real time, the second they join at: (FromRound - 1) × 6 unless set.</summary>
+    public int FromSeconds { get; init; } = -1;
+
+    /// <summary>The second they join at in real time.</summary>
+    public int JoinsAtSeconds => FromSeconds >= 0 ? FromSeconds : (FromRound - 1) * EncounterDefinition.SecondsPerRound;
+
     /// <summary>The guest's id, for code from before guests were more than an id.</summary>
     /// <remarks>M4 transition only, so the grid's screen and simulator build until they read Id. Nothing new should lean on it.</remarks>
     /// <param name="guest">The guest.</param>
