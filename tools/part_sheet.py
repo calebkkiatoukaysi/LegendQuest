@@ -269,6 +269,13 @@ CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT"
 CREDIT_GENERATED = "made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt"
 
 
+def exact_heads():
+    """The parts painted again by a painter that keeps the template's head as it is (generated.json's "ids")."""
+    import json
+    path = os.path.join(CHARS, "generated.json")
+    return set(json.load(open(path, encoding="utf-8")).get("ids", [])) if os.path.exists(path) else set()
+
+
 def credit(sheet_id, part=None, parts=()):
     """Who made a sheet, or one part cut from it: ChatGPT, for Caleb, unless generated.json says
     otherwise (a whole sheet in its "sheets", or single cells painted again in its "ids")."""
@@ -872,6 +879,12 @@ def fit_cut(png, sheet_id, force=False, check=None, record=None, write=True):
         placed.append((k, cell_base, part, b, out, ref, covered, (x0, y0, x1, y1), score, s, tx, ty))
     for k, cell_base, part, b, out, ref, covered, (x0, y0, x1, y1), score, s, tx, ty in placed:
         if kind == "extra":
+            out, solid = extra_part(out, b, ref, covered, cell_base, part)
+            kept = solid > 0
+        elif kind == "hair" and part in exact_heads():
+            # A cell painted again on the template's own head, pixel for pixel: the hair is simply
+            # what's new on it, as an extra is. head_part sorts by colour, for a head drawn again,
+            # and takes a hair's pale highlight over the brow for skin.
             out, solid = extra_part(out, b, ref, covered, cell_base, part)
             kept = solid > 0
         elif kind == "hair":

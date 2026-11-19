@@ -181,6 +181,9 @@ HAIR_CLOSE, HAIR_HOLE, HAIR_NEAR, HAIR_RING = 3, 3000, 30, 0.85
 #: A gap between a hair and who it's on (hair_slivers): HAIR_SLIVER pixels or fewer enclosed by the
 #: two, or HAIR_CRACKED or fewer in a pocket between hair and head with a mouth narrower than twice HAIR_CRACK.
 HAIR_SLIVER, HAIR_CRACK, HAIR_CRACKED = 2500, 12, 2500
+#: A fleck of the head left in a hair (hair_flecks): this many pixels or fewer, this deep inside the
+#: hair, and within this of the blank head's own colour there in every channel.
+HAIR_FLECK, HAIR_FLECK_IN, HAIR_FLECK_SAME = 260, 3, 18
 #: How dark what fills such a gap is, against the hair's edge beside it.
 HAIR_UNDER = 0.88
 #: Specks of near black (brightest channel HAIR_SPECK_DARK or less, HAIR_SPECK pixels or fewer)
@@ -936,6 +939,7 @@ def head_piece(base, rgb, hair):
         kept |= np.isin(holes, small[(small > 0) & ~np.isin(small, edge)])
     if hair is True:
         colour, alpha, kept = hair_mend(base, rgb, colour, alpha, kept)
+        colour, alpha, kept = hair_flecks(base, rgb, colour, alpha, kept)
         colour, alpha, kept = hair_slivers(base, colour, alpha, kept)
     alpha = keep_near_main(alpha * kept)
     return piece_masks(rgb, colour, alpha, hair)
@@ -1027,6 +1031,36 @@ def hair_mend(base, rgb, colour, alpha, kept):
     alpha = alpha.copy()
     alpha[fill] = 1.0
     return colour, alpha, kept | fill
+
+
+def hair_flecks(base, rgb, colour, alpha, kept):
+    """A hair's flecks of the head painted out: where the hair covers the head, a scrap of the head's
+    own skin or outline can come through the cut with it (it's inside the hair, so nothing takes it
+    away), and a black speck where the sheet's cut keyed a bit of that outline. Deep inside the hair
+    (HAIR_FLECK_IN pixels from its edge), a piece of HAIR_FLECK pixels or fewer that's the blank
+    head's own colour there (within HAIR_FLECK_SAME), or near black, takes the mean of the hair's
+    colours round it. Returns (colour, alpha, kept)."""
+    there = kept & (alpha > 0.5)
+    inside = erode(there, HAIR_FLECK_IN)
+    head = base.above & (base.alpha > 0.5)
+    same = (np.abs(rgb.astype(np.float64) - base.rgb).max(axis=2) <= HAIR_FLECK_SAME) & head
+    black = rgb.max(axis=2) <= HAIR_SPECK_DARK
+    suspect = there & (same | black)
+    labels, count = ic.components(suspect)
+    if not count:
+        return colour, alpha, kept
+    sizes = np.bincount(labels.ravel(), minlength=count + 1)
+    deep = np.bincount(labels.ravel(), weights=inside.ravel().astype(np.float64), minlength=count + 1)
+    fleck = (sizes <= HAIR_FLECK) & (deep == sizes)
+    fleck[0] = False
+    fill = fleck[labels]
+    if not fill.any():
+        return colour, alpha, kept
+    near = ic.local_mean(colour, (there & ~ic.grow(suspect, 1)).astype(np.float64), (2, 4, 8, 16))
+    fill &= ~np.isnan(near[:, :, 0])
+    colour = colour.copy()
+    colour[fill] = near[fill]
+    return colour, alpha, kept
 
 
 def hair_slivers(base, colour, alpha, kept):
