@@ -1031,6 +1031,10 @@ EAR_THICK, EAR_LEAST = 2, 60
 #: a brow's or a lip's brown rather than metal's edge.
 PIERCINGS = (7,) + tuple(range(13, 25))
 PIERCING_BROWN = 0.3
+#: The piercings that are the ear's alone, and the box their pieces' middles keep to, as shares of the head's box
+#: (left of its left edge, right of it, and down from its top to the box's top and bottom).
+EAR_ONLY = (13, 14, 15, 19, 20)
+EAR_ONLY_ZONE = (0.25, 0.3, 0.25, 1.0)
 #: Gold is the skin's hue but yellower: at least this much of its red in green, and less than this in blue.
 PIERCING_GOLD = (0.7, 0.37)
 #: A gap along one of the base's lines this narrow (twice it), with the part on both sides, is the part's.
@@ -1091,6 +1095,19 @@ def extra_part(out, b, ref, covered, base_name, part):
             # A piercing is painted on a bare face, so the painter draws the brow, the nose and the
             # lips it goes through as well as the ear: all the skin's hues on the head go, and the
             # brown lines that aren't a stud's or a ring's own edge.
+            if int(part.split("-")[1]) in EAR_ONLY:
+                # What's worn on the ear is on the ear: a ring the painter put at the temple or on
+                # the scalp as well would stand clear of any hair, so it goes.
+                # Whole pieces, by where their middle is: none is cut in two at the box's edge.
+                pieces, n_ = ic.components(ic.grow(new, 2))
+                if n_:
+                    area = np.maximum(np.bincount(pieces.ravel(), minlength=n_ + 1), 1).astype(np.float64)
+                    mx = np.bincount(pieces.ravel(), weights=np.broadcast_to(across, pieces.shape).ravel().astype(np.float64), minlength=n_ + 1) / area
+                    my = np.bincount(pieces.ravel(), weights=np.broadcast_to(down, pieces.shape).ravel().astype(np.float64), minlength=n_ + 1) / area
+                    on_ear = ((mx >= hx - EAR_ONLY_ZONE[0] * hw) & (mx <= hx + EAR_ONLY_ZONE[1] * hw)
+                              & (my >= hy + EAR_ONLY_ZONE[2] * hh) & (my <= hy + EAR_ONLY_ZONE[3] * hh))
+                    on_ear[0] = False
+                    new &= on_ear[pieces]
             zone = ic.grow(on_head, 6)
             hued &= ~((c[..., 1] / red >= PIERCING_GOLD[0]) & (c[..., 2] / red < PIERCING_GOLD[1]))
             flesh = new & zone & hued & ~dark
