@@ -46,6 +46,9 @@ public partial class LegendQuestGame
     /// <summary>The most fights the run will lose and fight again before it decides one's too hard. The story's fights are tuned for 80 to 92 wins in a hundred, the boss's for 65 to 80, so a few losses in a run are the dice.</summary>
     private const int ProofMostLosses = 5;
 
+    /// <summary>How many times a fight has to be lost before the run retries it on Story, as a player would.</summary>
+    private const int ProofStoryAfter = 2;
+
     /// <summary>How many fights the run has lost so far.</summary>
     private int _proofLosses;
 
@@ -131,6 +134,7 @@ public partial class LegendQuestGame
         SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { ZoneId = "barrow", PlaytimeSeconds = 2840 });
         File.WriteAllText(SaveSystem.PathFor(ProofBrokenSlot), "{ this was never a save");
         BeginHudProof();
+        BeginArenaProof();
 
         // The Moves part is filmed on its own, so it starts at once rather than after the rest.
         if (ProofLast == ProofStage.Moves) _proofStage = ProofStage.Moves;
@@ -144,6 +148,7 @@ public partial class LegendQuestGame
 
         _proofDrawn = false;
         _proofFrame++;
+        ExploreScreen.ProofFrame = _proofFrame;
         RecordProofAudio();
 
         ProofStage was = _proofStage;
@@ -274,6 +279,12 @@ public partial class LegendQuestGame
 
             case ProofStage.Moves:
                 _proofPending = ProofMoves();
+                break;
+
+            case ProofStage.Arena:
+            case ProofStage.Boss:
+            case ProofStage.Classes:
+                _proofPending = ProofArena();
                 break;
 
             default:
@@ -469,7 +480,7 @@ public partial class LegendQuestGame
             c.ProofAdjust(c.ProofFindRow("PEOPLE"), 1);
             yield return $"people-{people:00}.png";
         }
-        for (int cls = 0; cls < Enum.GetValues<ClassId>().Length; cls++)
+        for (int cls = 0; cls < ClassCatalog.BaseClasses; cls++)
         {
             c.ProofAdjust(c.ProofFindRow("CLASS"), 1);
             yield return $"class-{cls:00}.png";
@@ -708,8 +719,10 @@ public partial class LegendQuestGame
     }
 
     /// <summary>
-    /// A fight the party lost, fought again the way a player would: LOAD LAST SAVE, which is the
-    /// autosave from just before it, on dice seeded one further along so it doesn't go the same way.
+    /// A fight the party lost, fought again the way a player would: RETRY THE FIGHT, which loads the
+    /// autosave from just before it, on dice seeded one further along so it doesn't go the same way;
+    /// and after losing it twice, RETRY ON STORY where the difficulty offers it, saying so on the
+    /// error stream (a party the fight's too hard for on Balanced still gets its shots).
     /// The part of the run picks up in the zone that's loaded, from the beat that was playing when the fight began.
     /// </summary>
     /// <exception cref="InvalidOperationException">If the run's lost more fights than it's allowed, which means a fight's too hard, not unlucky.</exception>
@@ -720,7 +733,8 @@ public partial class LegendQuestGame
 
         ExploreScreen.ProofSeed++;
         ExploreScreen.ProofResumeAt = ExploreScreen.ProofBeatsDone;
-        over.ProofLoadLastSave();
+        if (RetryState.LossesIn(over.ProofFight) < ProofStoryAfter) over.ProofLoadLastSave();
+        else if (over.ProofRetryOnStory()) Console.Error.WriteLine($"proof: {over.ProofFight} lost {RetryState.LossesIn(over.ProofFight)} times on Balanced; retried on Story.");
         _proofSubject = null;
         _proofWaitStart = _proofFrame;
     }
@@ -787,8 +801,9 @@ public partial class LegendQuestGame
 
         GraphicsDevice.SetRenderTarget(null);
 
-        Directory.CreateDirectory(ProofDirectory);
-        using (FileStream file = File.Create(Path.Combine(ProofDirectory, _proofPending)))
+        string path = Path.Combine(ProofDirectory, _proofPending);
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        using (FileStream file = File.Create(path))
             _canvas.Target.SaveAsPng(file, ScreenWidth, ScreenHeight);
 
         _proofPending = null;

@@ -2,7 +2,7 @@ namespace LegendQuest;
 
 /// <summary>
 /// Every ability in a fight: the actions anyone can take, each class's level-1 kit, and what the
-/// enemies can do. AbilityCatalog has what each one does.
+/// enemies can do. A stat block lists the ones it has (EnemyDefinition.Abilities); the real-time engine reads Multiattack, Pack Tactics and Sneak Attack off it, and SkillCatalog has the moves.
 /// </summary>
 /// <remarks>
 /// In hotbar order: the common actions first, then each class's kit in ClassId's order, then the

@@ -12,6 +12,6 @@ namespace LegendQuest.Dialogue;
 /// <param name="Check">The check that was rolled, for a Check event.</param>
 public sealed record DialogueEvent(DialogueEventKind Kind, string Id, int Amount = 0, CheckResult Check = null)
 {
-    /// <summary>For a FightOrder event, the change to hand CombatEngine.Apply; null for any other.</summary>
+    /// <summary>For a FightOrder event, the change to hand Battle.Apply; null for any other.</summary>
     public FightOrder Order { get; init; }
 }

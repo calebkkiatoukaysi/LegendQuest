@@ -17,9 +17,9 @@ namespace LegendQuest.World;
 /// <param name="ShowAll">Whether Alt is held, which shows every badge, name, label and glint at once.</param>
 /// <param name="Leader">Where whoever you're controlling is standing: an end's label shows once they're near it.</param>
 /// <param name="Mouse">The point in the room under the mouse.</param>
-/// <param name="Plates">Everyone with a name over their head: the name, the top of their head, their marker, the badge beside the name for anyone you can buy from or train with (or null), and whether they're named. Townsfolk aren't, and their names only show with the mouse on them, or with Alt.</param>
+/// <param name="Plates">Everyone with a name over their head: the name, the top of their head, their marker, the badge beside the name for anyone you can buy from or train with (or null), and whether they're named. Townsfolk aren't, and their names only show with the mouse on them, or with Alt. And whether they're a foe you can fight (a field's, EncounterCatalog.Field), whose name is red.</param>
 /// <param name="Glints">Where a glint goes on each thing that's still to be used: on its picture, a little above the middle reads best.</param>
 /// <param name="MarkerBehind">The marker for a room, by zone and room: what a badge or an end's chevrons show for the room through them. RoomMarkers.In, or a cache of it.</param>
 public sealed record IndicatorFrame(RoomDefinition Room, ISet<string> Flags, bool ShowAll, Vector2 Leader, Vector2 Mouse,
-    IReadOnlyList<(string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named)> Plates,
+    IReadOnlyList<(string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile)> Plates,
     IReadOnlyList<Vector2> Glints, Func<string, string, MarkerKind> MarkerBehind);

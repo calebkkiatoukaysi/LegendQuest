@@ -43,6 +43,13 @@ public sealed class Tutorials
     /// <summary>The tip that's up, or null.</summary>
     public TutorialTip Current { get; private set; }
 
+    /// <summary>What the game has to put in the tips' slots now, by slot name: your class's way of filling Focus, under "focus". A screen sets it before the tip comes up.</summary>
+    public Dictionary<string, string> Filling { get; } = new();
+
+    /// <summary>A tip's body with its slots filled from Filling, or its own defaults.</summary>
+    /// <param name="tip">The tip.</param>
+    public string Words(TutorialTip tip) => tip.Words(Filling);
+
     /// <summary>How many tips have been seen in this game, for the tip that says where they all are.</summary>
     public int SeenCount => _game.Tips.Count;
 

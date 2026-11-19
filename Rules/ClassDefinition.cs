@@ -35,7 +35,7 @@ public sealed class ClassDefinition
     /// <summary>The two saving throws it's proficient in, from the SRD for the base classes.</summary>
     public required IReadOnlyList<Ability> Saves { get; init; }
 
-    /// <summary>The base class whose interim kit the old turn-based engine gives it (AbilityCatalog) until that engine goes: its own, for a base class.</summary>
+    /// <summary>The base class it fights as until SkillCatalog has its own kit (SkillCatalog.Kit), and whose Defence fighting style it shares (CombatStats): its own, for a base class.</summary>
     public ClassId InterimKit { get; init; }
 
     /// <summary>What it's for, in a few words, for the creation screen.</summary>

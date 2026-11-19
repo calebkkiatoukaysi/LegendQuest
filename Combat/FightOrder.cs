@@ -2,7 +2,7 @@ namespace LegendQuest.Combat;
 
 /// <summary>
 /// A change to a fight that's going, from a conversation played in the middle of it: one for each
-/// support-off, fight-add and fight-guest, which the screen hands to CombatEngine.Apply once the
+/// support-off, fight-add and fight-guest, which the screen hands to Battle.Apply once the
 /// conversation's over.
 /// </summary>
 /// <param name="Kind">What changes.</param>

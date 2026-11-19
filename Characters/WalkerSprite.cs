@@ -297,6 +297,13 @@ public class WalkerSprite
     /// <summary>How far into the move playing they are, in seconds of the clip.</summary>
     public float MoveTime => PlaysClips ? (_player?.Clip == _move ? _player.Time : 0f) : _moveTime;
 
+    /// <summary>How fast the move playing goes against its own time: the fight nudges it a little faster for a moment when a hit-stop has left it behind the blow it's timed to.</summary>
+    public float MoveSpeed
+    {
+        get => _moveSpeed;
+        set => _moveSpeed = MathF.Max(0.05f, value);
+    }
+
     /// <summary>Whether they're frozen in a hit-stop now.</summary>
     public bool Frozen => _hitStop.Active;
 

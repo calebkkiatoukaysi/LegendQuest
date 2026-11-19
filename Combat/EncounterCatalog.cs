@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LegendQuest.Characters;
 using LegendQuest.Dialogue;
 using LegendQuest.Dialogue.Scripts;
@@ -32,7 +33,7 @@ namespace LegendQuest.Combat;
 /// AtSeconds (sooner if the field's clear), a guest joins at its FromSeconds, and the guard wave is
 /// held for EndsAfterSeconds. The turn-based screen still reads the rounds, which stay as they were.
 /// </remarks>
-public static class EncounterCatalog
+public static partial class EncounterCatalog
 {
     /// <summary>The share of his hit points Kael calls the duel off at: the story's 30%.</summary>
     private const float KaelYields = 0.3f;
@@ -82,7 +83,7 @@ public static class EncounterCatalog
             Supports = new[]
             {
                 new EncounterSupport("tomas", "Old Tomas", "tomas",
-                    new SupportAbility("A net over one Gull: Restrained a turn", SupportTarget.RandomFoe, DiceExpression.None, DamageType.Bludgeoning,
+                    new SupportAbility("A net over one Gull: Restrained 3 s", SupportTarget.RandomFoe, DiceExpression.None, DamageType.Bludgeoning,
                         ConditionId.Restrained, 1) { ConditionMs = 3000 },
                     FromRound: 3) { FromSeconds = 8, EverySeconds = 8 },
             },
@@ -193,7 +194,7 @@ public static class EncounterCatalog
     /// <remarks>Throws on purpose, so a fight that names a foe or a guest who isn't there, or that can't start, shows up when the game starts. Who's drawn for a support is checked once the zones are in (ValidateAfterZones).</remarks>
     static EncounterCatalog()
     {
-        foreach (EncounterDefinition row in Table)
+        foreach (EncounterDefinition row in Table.Concat(FieldTable))
         {
             Check(row);
             if (!ById.TryAdd(row.Id, row)) throw new InvalidOperationException($"Two encounters are called {row.Id}.");

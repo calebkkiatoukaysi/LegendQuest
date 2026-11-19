@@ -25,7 +25,7 @@ public class TurnBanner
     private const float Slide = 36f;
 
     /// <summary>Where the middle of the banner is, down the screen, in screen pixels: over the fight, under the turn order.</summary>
-    private const float MiddleY = 250f;
+    private const float MiddleY = 360f;
 
     /// <summary>How big the title is drawn, against the UI font's own size.</summary>
     private const float TitleScale = 1.35f;
@@ -75,6 +75,9 @@ public class TurnBanner
         _colour = colour;
         _clock = 0f;
     }
+
+    /// <summary>How much longer the banner that's up stays, in seconds, or 0 if none is.</summary>
+    public float Left => _heading is null || _clock == float.MaxValue ? 0f : MathF.Max(0f, InSeconds + HoldSeconds + OutSeconds - _clock);
 
     /// <summary>Takes the banner down at once.</summary>
     public void Clear() => _clock = float.MaxValue;

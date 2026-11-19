@@ -78,7 +78,7 @@ public class HelpScreen : MenuScreen
     };
 
     /// <summary>Every control: what it does, its keys and buttons as caps, and the pad's way of doing it (empty when a pad has none).</summary>
-    /// <remarks>The bag has its keys on its own tips, on its own page; a fight's keys are here as well as on its tips, since there are a few of them and they're the same every turn.</remarks>
+    /// <remarks>The bag has its keys on its own tips, on its own page; a fight's keys are here as well as on its tips, since there are a few of them and they're the same in every fight.</remarks>
     private static readonly (string What, string[] Keys, string Pad)[] Controls =
     {
         ("Walk", new[] { "W", "A", "S", "D", "ARROWS", KeyCaps.Click }, "Left stick or d-pad"),
@@ -89,8 +89,9 @@ public class HelpScreen : MenuScreen
         ("Put a tip away", new[] { "ENTER", KeyCaps.Click }, "X"),
         ("Go on, or roll the dice", new[] { "ENTER", "SPACE", KeyCaps.Click }, "A"),
         ("Answer a question", new[] { "1-4", KeyCaps.Click }, "D-pad, then A"),
-        ("Fight: Auto, skills and potion, then the strip", new[] { "1-6", "7-0", KeyCaps.Click }, string.Empty),
-        ("Fight: Shift a slot, end the turn, the log", new[] { "W", "A", "S", "D", "SPACE", "L" }, "D-pad, Y"),
+        ("Fight: target a foe or a friend, or walk", new[] { KeyCaps.Click, "W", "A", "S", "D" }, "Left stick"),
+        ("Fight: the auto attack, skills, potion, Soul-Link", new[] { "1-6", "7", KeyCaps.Click }, string.Empty),
+        ("Fight: next foe, assist, clear target, the log", new[] { "TAB", "T", "ESC", "L" }, "Right shoulder"),
         ("Pause, or go back", new[] { "ESC" }, "Start, or B"),
         ("Full screen", new[] { "F11" }, string.Empty),
     };
@@ -307,7 +308,7 @@ public class HelpScreen : MenuScreen
             if (tip.Topic != topic) continue;
 
             string title = tip.Title.ToUpperInvariant();
-            List<string> rows = Text.Wrap(tip.Body, _detailFont, width);
+            List<string> rows = Text.Wrap(tip.Words(), _detailFont, width);
             float keys = _keys.Measure(tip.Keys);
             bool beside = _detailFont.MeasureString(title).X + KeysBeside + keys <= width;
             float height = rowHeight + rows.Count * _detailFont.LineSpacing + (beside || keys == 0f ? 0f : KeyCaps.Height) + TipGap;

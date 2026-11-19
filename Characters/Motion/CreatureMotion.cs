@@ -162,7 +162,7 @@ public static class CreatureMotion
                 float sink = Ease(MathHelper.Clamp(time / 0.15f, 0f, 1f));
                 float pulse = 0.5f + 0.5f * MathF.Sin(time * MathHelper.TwoPi * 3f);
                 return new CreaturePose(WindUp, new Vector2(-2f * sink, 0f), new Vector2(1f + 0.1f * sink, 1f - 0.12f * sink), -0.06f * sink,
-                    Warning * ((0.1f + 0.22f * pulse) * sink), 1f);
+                    Warning * ((0.05f + 0.12f * pulse) * sink), 1f);
             }
             case Move.Attack:
             {

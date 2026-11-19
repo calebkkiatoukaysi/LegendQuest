@@ -66,7 +66,7 @@ public sealed partial class Battle
         for (int i = 0; i < _fighters.Count; i++)
         {
             Fighter f = _fighters[i];
-            if (!f.IsStanding || f == Leader) continue;
+            if (!f.IsStanding || DrivenByPlayer(f)) continue;
             if (f.Pending is BattleCommand pending)
             {
                 if (NowMs < f.PendingAtMs) continue;

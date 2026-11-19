@@ -9,13 +9,16 @@ using LegendQuest.StateManagement;
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// The three volumes, the text speed, the tutorial's tips and full screen, on a form over whatever opened it. Left and right change one.
+/// The three volumes, the text speed, the difficulty, the tutorial's tips, how a fight shows its blows
+/// (the screen's shake, the hit flashes, the damage numbers) and full screen, on a form over whatever
+/// opened it. Left and right change one.
 /// </summary>
 /// <remarks>
 /// You hear a volume change right away since AudioManager reads the settings every frame. The file
 /// only gets written when the form closes, not on every press. Same as The Black Box, plus the
 /// text speed for the dialogue, and the difficulty (Story, Balanced, Tactician), which can't be
-/// changed in the middle of a fight: opened from the pause menu in one, its row says so.
+/// changed in the middle of a fight: opened from the pause menu in one, its row says so. The fight's
+/// three (Story/11-combat.md §7.3) take effect at once, in a fight too.
 /// </remarks>
 public class OptionsScreen : MenuScreen
 {
@@ -28,6 +31,9 @@ public class OptionsScreen : MenuScreen
     private const string DifficultyLabel = "DIFFICULTY";
     private const string LockedNote = "THE DIFFICULTY CAN'T CHANGE MID-FIGHT";
     private const string TipsLabel = "TUTORIAL TIPS";
+    private const string ShakeLabel = "SCREEN SHAKE";
+    private const string FlashesLabel = "HIT FLASHES";
+    private const string NumbersLabel = "DAMAGE NUMBERS";
     private const string DisplayLabel = "DISPLAY";
     private const string BackLabel = "BACK";
 
@@ -35,9 +41,9 @@ public class OptionsScreen : MenuScreen
     private const float VolumeStep = 0.1f;
 
     private const int PanelWidth = 760;
-    private static readonly Point EntrySize = new(560, 64);
-    private const float EntryGap = 10f;
-    private const float HeadingGap = 30f;
+    private static readonly Point EntrySize = new(560, 52);
+    private const float EntryGap = 6f;
+    private const float HeadingGap = 20f;
 
     private static readonly TimeSpan FadeTime = TimeSpan.FromSeconds(0.25);
 
@@ -48,6 +54,9 @@ public class OptionsScreen : MenuScreen
     private readonly MenuEntry _textSpeed;
     private readonly MenuEntry _difficulty;
     private readonly MenuEntry _tips;
+    private readonly MenuEntry _shake;
+    private readonly MenuEntry _flashes;
+    private readonly MenuEntry _numbers;
     private readonly MenuEntry _display;
 
     private SpriteFont _font;
@@ -58,7 +67,7 @@ public class OptionsScreen : MenuScreen
     /// <summary>Whether the difficulty's held where it is, because a fight's on.</summary>
     private readonly bool _lockDifficulty;
 
-    /// <summary>Builds the seven adjustable entries and BACK.</summary>
+    /// <summary>Builds the ten adjustable entries and BACK.</summary>
     /// <param name="lockDifficulty">Whether a fight's on, so the difficulty can't be changed.</param>
     public OptionsScreen(bool lockDifficulty = false)
     {
@@ -73,6 +82,9 @@ public class OptionsScreen : MenuScreen
         _textSpeed = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _difficulty = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _tips = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _shake = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _flashes = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _numbers = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _display = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         var back = new MenuEntry(BackLabel, Palette.Bone);
 
@@ -82,6 +94,9 @@ public class OptionsScreen : MenuScreen
         _textSpeed.Adjusted += ChangeTextSpeed;
         _difficulty.Adjusted += ChangeDifficulty;
         _tips.Adjusted += _ => ToggleTips();
+        _shake.Adjusted += ChangeShake;
+        _flashes.Adjusted += _ => ToggleFlashes();
+        _numbers.Adjusted += _ => ToggleNumbers();
         _display.Adjusted += _ => ToggleFullScreen();
         back.Selected += Close;
 
@@ -91,6 +106,9 @@ public class OptionsScreen : MenuScreen
         MenuEntries.Add(_textSpeed);
         MenuEntries.Add(_difficulty);
         MenuEntries.Add(_tips);
+        MenuEntries.Add(_shake);
+        MenuEntries.Add(_flashes);
+        MenuEntries.Add(_numbers);
         MenuEntries.Add(_display);
         MenuEntries.Add(back);
     }
@@ -179,6 +197,30 @@ public class OptionsScreen : MenuScreen
         Relabel();
     }
 
+    /// <summary>Steps the screen's shake in a fight along (full, reduced, off), wrapping round at either end.</summary>
+    /// <param name="step">-1 or 1.</param>
+    private void ChangeShake(int step)
+    {
+        ShakeStrength[] strengths = Enum.GetValues<ShakeStrength>();
+        int next = (Array.IndexOf(strengths, Audio.Settings.Shake) + step + strengths.Length) % strengths.Length;
+        Audio.Settings.Shake = strengths[next];
+        Relabel();
+    }
+
+    /// <summary>Switches the white flash on a fighter who's hit on or off.</summary>
+    private void ToggleFlashes()
+    {
+        Audio.Settings.HitFlashes = !Audio.Settings.HitFlashes;
+        Relabel();
+    }
+
+    /// <summary>Switches the numbers over fighters in a fight on or off.</summary>
+    private void ToggleNumbers()
+    {
+        Audio.Settings.DamageNumbers = !Audio.Settings.DamageNumbers;
+        Relabel();
+    }
+
     /// <summary>Switches between full screen and a window, straight away.</summary>
     private void ToggleFullScreen()
     {
@@ -199,6 +241,9 @@ public class OptionsScreen : MenuScreen
         string mode = settings.Mode.ToString().ToUpperInvariant();
         _difficulty.Text = _lockDifficulty ? DifficultyLabel + "   " + mode : Row(DifficultyLabel, mode);
         _tips.Text = Row(TipsLabel, settings.TutorialTips ? "ON" : "OFF");
+        _shake.Text = Row(ShakeLabel, settings.Shake.ToString().ToUpperInvariant());
+        _flashes.Text = Row(FlashesLabel, settings.HitFlashes ? "ON" : "OFF");
+        _numbers.Text = Row(NumbersLabel, settings.DamageNumbers ? "ON" : "OFF");
         _display.Text = Row(DisplayLabel, settings.FullScreen ? "FULL SCREEN" : "WINDOW");
     }
 

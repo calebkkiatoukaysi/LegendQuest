@@ -72,34 +72,40 @@ public static class TutorialCatalog
     /// <summary>Swapping with whoever's waiting at the Gilded Flagon. The first time anyone's waiting there.</summary>
     public const string Camp = "explore-camp";
 
-    /// <summary>A fight's turns. The combat screen shows it when the first fight starts.</summary>
+    /// <summary>A fight in real time. The combat screen shows it when the first fight starts, and holds the fight while it's up.</summary>
     public const string CombatStart = "combat-start";
 
-    /// <summary>The rows, and what reaches which. The combat screen shows it in the first fight, as it starts.</summary>
-    public const string CombatRows = "combat-rows";
+    /// <summary>Targeting a foe. The tutorial fight's first lesson, while you've no target.</summary>
+    public const string CombatTarget = "combat-target";
 
-    /// <summary>Shifting: the once-a-turn swap or step between rows. The combat screen shows it on your first turn.</summary>
-    public const string CombatShift = "combat-shift";
+    /// <summary>The cooldown sweep and the global cooldown. The lesson after your first skill.</summary>
+    public const string CombatCooldown = "combat-cooldown";
 
-    /// <summary>Focus, what skills cost, and cooldowns. The combat screen shows it the first time you've a skill to use.</summary>
+    /// <summary>The potion on 6. The lesson for the first time you're hurt, or a while after Focus.</summary>
+    public const string CombatPotion = "combat-potion";
+
+    /// <summary>The slot in the Focus lesson's body that says how your class fills it.</summary>
+    public const string FocusSlot = "focus";
+
+    /// <summary>Walking in a fight, and stepping out of a marker. The combat screen shows it a little way into the first fight.</summary>
+    public const string CombatMove = "combat-move";
+
+    /// <summary>Focus, what skills cost, and your class's way of filling it. The lesson after the cooldowns.</summary>
     public const string CombatFocus = "combat-focus";
 
     /// <summary>Guests and supports. The combat screen shows it in the first fight with an ally.</summary>
     public const string CombatAllies = "combat-allies";
 
-    /// <summary>Attacking. The combat screen shows it the first time an enemy's in reach.</summary>
+    /// <summary>The auto attack and its swing. The lesson once you've a foe targeted.</summary>
     public const string CombatAttack = "combat-attack";
 
-    /// <summary>The hotbar. The combat screen shows it the first time you've an ability to use.</summary>
+    /// <summary>Your first skill, on 2. The lesson once your first swing has landed.</summary>
     public const string CombatAbility = "combat-ability";
 
-    /// <summary>The action and the bonus action. The combat screen shows it the first time you spend one.</summary>
-    public const string CombatBonus = "combat-bonus";
+    /// <summary>A foe's telegraph: its wind-up and the marker on the floor. The combat screen shows it the first time a foe winds up.</summary>
+    public const string CombatTelegraph = "combat-telegraph";
 
-    /// <summary>Ending your turn. The combat screen shows it once you've moved and acted.</summary>
-    public const string CombatEndTurn = "combat-end-turn";
-
-    /// <summary>The Soul-Link. The combat screen shows it the first time the sigil charges.</summary>
+    /// <summary>The Soul-Link. The combat screen shows it the first time the sigil's full.</summary>
     public const string CombatSoulLink = "combat-soul-link";
 
     /// <summary>Being Downed and helping someone up. The combat screen shows it the first time one of the party goes down.</summary>
@@ -134,8 +140,8 @@ public static class TutorialCatalog
     private static readonly string[] Called =
     {
         Move, ShowAll, Use, Enter, Map, Waypoint, Help, Talk, Choices, Checks, Event, Work, Objective, Board,
-        Party, Companion, Approval, Camp, CombatStart, CombatRows, CombatShift, CombatAttack, CombatAbility, CombatFocus,
-        CombatBonus, CombatEndTurn, CombatSoulLink, CombatAllies, CombatDowned, CombatVictory, InventoryOpen, InventoryEquip,
+        Party, Companion, Approval, Camp, CombatStart, CombatTarget, CombatMove, CombatAttack, CombatAbility, CombatCooldown,
+        CombatFocus, CombatPotion, CombatTelegraph, CombatSoulLink, CombatAllies, CombatDowned, CombatVictory, InventoryOpen, InventoryEquip,
         InventoryPotion, Loot,
     };
 
@@ -251,70 +257,80 @@ public static class TutorialCatalog
             Keys = new[] { "E" },
         },
 
-        // Fighting.
+        // Fighting: the tutorial fight's lessons in the order it teaches them (Story/11-combat.md §7.2),
+        // each holding the fight while it's up, then the ones any fight brings the first time.
         new()
         {
             Id = CombatStart, Topic = TipTopic.Combat, Title = "A fight", Anchor = TipAnchor.Centre, Blocking = true,
-            Body = "Everyone takes turns, in the order over the bar. On yours, shift if you like, act, then end your turn.",
+            Body = "Fights are in real time, where you stand. Your companions fight on their own; you lead. Click a foe to begin.",
         },
         new()
         {
-            Id = CombatRows, Topic = TipTopic.Combat, Title = "Front and back", Anchor = TipAnchor.Right,
-            Body = "Each side stands in two rows. Melee only reaches the front one; bows and spells reach anyone.",
+            Id = CombatTarget, Topic = TipTopic.Combat, Title = "Pick a foe", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Click a foe to target it: its frame comes up at the top and a ring marks it. Tab picks the nearest.",
+            Keys = new[] { KeyCaps.Click, "TAB" },
         },
         new()
         {
-            Id = CombatShift, Topic = TipTopic.Combat, Title = "Shifting", Anchor = TipAnchor.Right,
-            Body = "Once a turn, free: swap with a friend beside or behind you, or step to the other row. Leaving the front draws an attack.",
-            Keys = new[] { KeyCaps.Click, "W", "A", "S", "D" },
+            Id = CombatAttack, Topic = TipTopic.Combat, Title = "The auto attack", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Targeted, you walk into reach and swing on your own. The bar over slot 1 is the swing; 1 stops it.",
+            Keys = new[] { "1" },
         },
         new()
         {
-            Id = CombatAttack, Topic = TipTopic.Combat, Title = "Attacking", Anchor = TipAnchor.Right,
-            Body = "Click an enemy to attack. Point at one first to see your chance to hit and the damage you'd do.",
+            Id = CombatAbility, Topic = TipTopic.Combat, Title = "Your first skill", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Press 2 or click the slot to use your first skill on your target. 3 to 5 come as your class rank grows.",
+            Keys = new[] { "2", KeyCaps.Click },
+        },
+        new()
+        {
+            Id = CombatCooldown, Topic = TipTopic.Combat, Title = "Cooldowns", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "The dark sweep is the skill cooling down. Skills share a short global cooldown too, so they can't all go at once.",
+        },
+        new()
+        {
+            Id = CombatFocus, Topic = TipTopic.Combat, Title = "Focus", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Skills cost Focus, the blue bar under your health. {focus}",
+            Fill = new Dictionary<string, string> { [FocusSlot] = "Each class fills it its own way." },
+        },
+        new()
+        {
+            Id = CombatPotion, Topic = TipTopic.Combat, Title = "A potion", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Hurt? 6 drinks the bag's best healing potion. It takes half a minute to come round again, so keep it for need.",
+            Keys = new[] { "6" },
+        },
+        new()
+        {
+            Id = CombatTelegraph, Topic = TipTopic.Combat, Title = "Big moves", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "A foe winding up a big move marks the floor it will hit. Step out of the marker before it fills.",
+        },
+        new()
+        {
+            Id = CombatSoulLink, Topic = TipTopic.Combat, Title = "The Soul-Link", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Hit the same foe as the Soul-Bound and the sigil fills. Full, press 7 and the two of you strike as one.",
+            Keys = new[] { "7" },
+        },
+        new()
+        {
+            Id = CombatMove, Topic = TipTopic.Combat, Title = "On the move", Anchor = TipAnchor.Right,
+            Body = "Walk with the keys or click the floor. Moving doesn't stop your auto attack, but it breaks a cast.",
+            Keys = new[] { "W", "A", "S", "D", KeyCaps.Click },
+        },
+        new()
+        {
+            Id = CombatAllies, Topic = TipTopic.Combat, Title = "Help at hand", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "Some fights bring allies. A guest fights beside you; a support acts from behind on its own timer.",
+        },
+        new()
+        {
+            Id = CombatDowned, Topic = TipTopic.Combat, Title = "Downed", Anchor = TipAnchor.Right, HoldsFight = true,
+            Body = "At 0 hit points a friend goes down and rolls against death. Heal them, or click them to help them up.",
             Keys = new[] { KeyCaps.Click },
         },
         new()
         {
-            Id = CombatAbility, Topic = TipTopic.Combat, Title = "Abilities and spells", Anchor = TipAnchor.Right,
-            Body = "Your skills and spells are on the bar. Press 1 to 0 or click one, then a target. Right click cancels.",
-            Keys = new[] { "1-0", KeyCaps.Click, KeyCaps.RightClick },
-        },
-        new()
-        {
-            Id = CombatFocus, Topic = TipTopic.Combat, Title = "Focus", Anchor = TipAnchor.Right,
-            Body = "Skills cost Focus, the blue bar. It grows each turn and with every auto attack. A used skill may need turns to cool.",
-        },
-        new()
-        {
-            Id = CombatBonus, Topic = TipTopic.Combat, Title = "Action and bonus action", Anchor = TipAnchor.Right,
-            Body = "Each turn you get one action, the circle, and one bonus action, the triangle. Some things only need the bonus.",
-        },
-        new()
-        {
-            Id = CombatEndTurn, Topic = TipTopic.Combat, Title = "Ending your turn", Anchor = TipAnchor.Right,
-            Body = "Done? Space or END TURN passes to whoever's next. Whatever you didn't use, you lose.",
-            Keys = new[] { "SPACE" },
-        },
-        new()
-        {
-            Id = CombatSoulLink, Topic = TipTopic.Combat, Title = "The Soul-Link", Anchor = TipAnchor.Right,
-            Body = "Hit the same foe as the Soul-Bound between your turns and the sigil fills. Full, the two of you strike as one.",
-        },
-        new()
-        {
-            Id = CombatAllies, Topic = TipTopic.Combat, Title = "Help at hand", Anchor = TipAnchor.Right,
-            Body = "Some fights bring allies. A guest fights in your rows; a support acts from behind them at the end of each round.",
-        },
-        new()
-        {
-            Id = CombatDowned, Topic = TipTopic.Combat, Title = "Downed", Anchor = TipAnchor.Right,
-            Body = "At 0 hit points a friend goes down, and rolls against death each turn. Help them up, or heal them.",
-        },
-        new()
-        {
             Id = CombatVictory, Topic = TipTopic.Combat, Title = "The fight's won", Anchor = TipAnchor.Right,
-            Body = "Everyone who fought gets the experience, and whatever the fallen carried is yours to take.",
+            Body = "Everyone who fought gets the experience and class points, and whatever the fallen carried is yours to take.",
         },
 
         // Gear.
@@ -355,8 +371,8 @@ public static class TutorialCatalog
                 throw new InvalidOperationException($"Tutorial tip {tip.Id} has no title or no words.");
             if (tip.Title.Length > LongestTitle)
                 throw new InvalidOperationException($"Tutorial tip {tip.Id}'s title is {tip.Title.Length} letters, past the {LongestTitle} that fit on its card.");
-            if (tip.Body.Length > LongestBody)
-                throw new InvalidOperationException($"Tutorial tip {tip.Id} is {tip.Body.Length} letters long, past the {LongestBody} that read at a glance. Split it, or say it shorter.");
+            if (tip.Words().Length > LongestBody)
+                throw new InvalidOperationException($"Tutorial tip {tip.Id} is {tip.Words().Length} letters long, past the {LongestBody} that read at a glance. Split it, or say it shorter.");
             if (tip.Keys.Count > MostKeys)
                 throw new InvalidOperationException($"Tutorial tip {tip.Id} shows {tip.Keys.Count} keys, past the {MostKeys} that fit under it.");
             foreach (string key in tip.Keys)

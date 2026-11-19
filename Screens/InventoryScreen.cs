@@ -248,7 +248,7 @@ public class InventoryScreen : GameScreen
         _tooltip.LoadContent(_content, pixel);
         _rail.LoadContent(_content, pixel);
         _statTiles.LoadContent(_content);
-        _sheet.LoadContent(_content);
+        _sheet.LoadContent(_content, ScreenManager.GraphicsDevice);
         _tutorialPanel.LoadContent(_content, pixel);
         _grid.LoadContent(pixel);
         _font = _content.Load<SpriteFont>("spectral-ui");

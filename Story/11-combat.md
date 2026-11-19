@@ -49,6 +49,8 @@ A fight is an encounter (`EncounterCatalog`). It starts in one of three ways:
 
 When it starts, every foe of the encounter in the room engages, the battle music comes in, the fight's name goes across the screen, and the room's exits close until it's over. Townsfolk step back to the far edge of the band, or leave if the fight's lethal, as now. Foes who arrive later (waves) walk in from the room's edges, or fade in where the encounter says.
 
+**As built.** Clicking a foe starts its fight at once, where everyone stands, with that foe as your target; your auto attack then walks you into its reach, rather than the walk coming first. The foes you can click or that come at you are **fields** (`EncounterCatalog.Field`), which `08-random-encounters.md` doesn't have: a wild room keeps foes once the story's past them, and they're back a minute of play after they're beaten, or at once when you come into the room again, so you can fight what's there for experience and class points. There are three so far: three gloomfangs in the Mirewood's deep wood once `a1-c2-01` is set (they come at you), two Hollowed footmen at Thornbridge's river once the chapter's done, `a1-c3` (they come at you), and the Old Crown Vault's four constructs, each its own fight, which wait to be woken. They're `Random` encounters (15 CP, a random fight's experience) and a loss is the game-over screen, not `rnd-lost`, which isn't written yet. The danger meter and the written encounters of `08` aren't built.
+
 ### 2.2 Moving and reach
 
 You move as you do outside fights: click the floor, or WASD and the arrows. Everyone has a position on the floor band; there are no rows or slots.
@@ -339,6 +341,8 @@ Supports keep their banner, now with its timer ring filling to the next time it 
 ### 7.2 Teaching
 
 The tutorial fight (`p-05-wraiths`) teaches one thing at a time, pausing the fight while each card is up: targeting, the auto attack, your first skill, the cooldown sweep and the GCD, Focus and your class's way of filling it, the potion, a telegraph (the first wraith wind-up), and the Soul-Link the first time it charges. Other fights give the same tips once, the first time their moment comes.
+
+**As built.** The lessons come in that order, each with a gold pulse on what it teaches, and doing the thing (clicking a foe, pressing 2, drinking) puts its card away as well as GOT IT does; the keys and the mouse work while the fight's held. Any fight holds while a lesson's card is up, not only the tutorial, since each comes once a game. The sea-wraiths have no telegraphed move, so the telegraph lesson doesn't come at sea: it comes on the first wind-up the player meets, Grell's Hook Pull on the docks. A downed friend, the allies, walking and the win have lessons of their own too.
 
 ### 7.3 Options
 

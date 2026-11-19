@@ -215,6 +215,7 @@ public partial class ExploreScreen : GameScreen
         }
 
         if (HandleTutorialInput(input)) return;
+        if (HandleDebugInput(input)) return;
         if (HandleInventoryInput(input)) return;
 
         if (_openMap.Occurred(input))
@@ -280,6 +281,7 @@ public partial class ExploreScreen : GameScreen
 
         FindNearest();
         CheckAreas();
+        if (UpdateField(gameTime)) return;
         UpdateBanter(gameTime);
         Roam(gameTime);
         Chatter();
@@ -454,6 +456,7 @@ public partial class ExploreScreen : GameScreen
         _campers.Clear();
         clock.Restart();
         foreach (MapNpc placed in _room.Npcs) _everyNpc.Add(Dressed(new Npc(placed, _walk)));
+        PlaceField();
         LegendQuestGame.Note("people dressed (" + _room.Npcs.Count + ")", clock.Elapsed.TotalMilliseconds);
         clock.Restart();
         SeatCampers();
@@ -604,7 +607,7 @@ public partial class ExploreScreen : GameScreen
     private bool RefreshPresence()
     {
         List<PropSprite> props = _everyProp.FindAll(prop => _propIds.TryGetValue(prop, out string id) ? Present(id, prop.Presence) : prop.Presence.Holds(_game.Flags));
-        List<Npc> npcs = _everyNpc.FindAll(npc => Present(npc.Definition.Id, npc.Definition.Presence) && !Fallen(npc));
+        List<Npc> npcs = _everyNpc.FindAll(npc => Present(npc.Definition.Id, npc.Definition.Presence) && !Fallen(npc) && !Resting(npc));
         var things = _everyThing.FindAll(each => Present(each.Thing.Id, each.Thing.Presence));
         bool changed = !props.SequenceEqual(_props) || !npcs.SequenceEqual(_npcs) || !things.SequenceEqual(_things);
 

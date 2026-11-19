@@ -45,6 +45,9 @@ public class GameOverScreen : MenuScreen
     /// <summary>The fight that was lost, by its encounter id, or null outside one.</summary>
     private readonly string _fight;
 
+    /// <summary>The fight that was lost, for the proof run.</summary>
+    internal string ProofFight => _fight;
+
     private SpriteFont _font;
     private SpriteFont _detailFont;
     private Rectangle _panelBounds;
@@ -131,6 +134,19 @@ public class GameOverScreen : MenuScreen
 
     /// <summary>For the proof run, since it can't press keys: RETRY THE FIGHT (or LOAD LAST SAVE).</summary>
     internal void ProofLoadLastSave() => LoadLastSave();
+
+    /// <summary>For the proof run: RETRY ON STORY, if the screen offers it; otherwise RETRY THE FIGHT.</summary>
+    /// <returns>True if it was retried on Story.</returns>
+    internal bool ProofRetryOnStory()
+    {
+        if (_story is null)
+        {
+            LoadLastSave();
+            return false;
+        }
+        RetryOnStory();
+        return true;
+    }
 
     /// <summary>Loads whichever slot was written last, onto its map. If it's gone since the screen came up, LOAD LAST SAVE just goes dead.</summary>
     private void LoadLastSave()
