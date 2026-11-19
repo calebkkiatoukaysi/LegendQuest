@@ -4,6 +4,7 @@ An armor painted whole, on a figure, and cut into the skeleton's pieces by the b
     python tools/dress_pose.py template <base>                     # the figure to paint an outfit on
     python tools/dress_pose.py cut <painted.png> <base> <folder>   # a painted figure into its pieces
     python tools/dress_pose.py preview <base> <out.png> <folder> [<folder> ...] [--moving] [--side-foot]   # pieces posed
+    python tools/dress_pose.py assets                              # just rewrite its section of ASSETS.md
 
 A trial of another way to make an armor than tools/body_parts.py's (thirteen pieces painted apart):
 the outfit is painted once, whole, on the body stood in a "dressing pose", and the cut takes it
@@ -37,10 +38,16 @@ else: only the joints, the shoulders and the tops of the thighs.
 --moving shows the jog and the run instead, and --side-foot tries the near foot drawn side on (the
 far foot's picture at the near ankle), toes the way the figure's going.
 
+`template` then rewrites this tool's own section of ASSETS.md from what's on disk (`assets` does only
+that): the tool, each template and its .json, and the ChatGPT paintings of 2026-11-18 on them kept
+for the record in tools/source/characters/whole-chatgpt. tools/import_parts.py credits the outfits
+painted whole that the game has (tools/source/characters/whole) and the pieces cut from them.
+
 Needs CPython, numpy and scipy.
 
 Written by Caleb Kiatoukaysi for Legend Quest.
 """
+import glob
 import json
 import os
 import sys
@@ -102,6 +109,15 @@ WAIST_OVER, SKIRT_UNDER = 6, 48
 #: A tail: an area at least TAIL_SHARE of which is TAIL_CLEAR pixels or more from the legs.
 TAIL_CLEAR, TAIL_SHARE = 14, 0.5
 LEGS = ("leg_near_up", "leg_near_low", "leg_far_up", "leg_far_low")
+
+
+A_BEGIN = "<!-- dressing pose: written by tools/dress_pose.py; don't edit between these two lines -->"
+A_END = "<!-- end dressing pose -->"
+A_ANCHOR = "## Tiles and props"
+CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT"
+#: The outfits ChatGPT painted whole on the templates on 2026-11-18, before they were painted again
+#: (tools/source/characters/whole), kept for the record.
+KEPT = os.path.join(CHARS, "whole-chatgpt")
 
 
 def paths(base):
@@ -174,6 +190,37 @@ def template(base):
     json.dump({"base": base, "pose": POSE, "scale": round(scale, 6), "origin": [round(v, 3) for v in origin]},
               open(js, "w", encoding="utf-8"), indent=1)
     print("dress_pose: wrote %s (the %s in the dressing pose, at %.3f of the canvas)" % (os.path.relpath(png, ROOT), NAMES[base], scale))
+    write_assets()
+
+
+def rel(path):
+    return os.path.relpath(path, ROOT).replace(os.sep, "/")
+
+
+def write_assets():
+    """This tool's section of ASSETS.md, from what's on disk."""
+    lines = [A_BEGIN, "## The dressing pose", "",
+             "An outfit painted once, whole, on the body stood in a dressing pose (since 2026-11-18), and cut into the "
+             "skeleton's pieces by `tools/dress_pose.py`, by the body under it.", "",
+             "tools/dress_pose.py - written by Caleb Kiatoukaysi for Legend Quest, stands the painted body in the dressing pose "
+             "as the template an outfit is painted whole on, and cuts a painted outfit into the skeleton's pieces by the body "
+             "under it (what hangs from the waist over the legs into the skirt's piece), each put back on its bone at rest", ""]
+    for base, who in sorted(NAMES.items(), key=lambda kv: kv[1]):
+        png, js = paths(base)
+        if os.path.exists(png):
+            lines += ["%s - the %s's painted body, less the head, stood in the dressing pose (the arms held out from the trunk, "
+                      "the legs a little apart) at the biggest size that fits %d x %d, on black: the template an outfit is "
+                      "painted whole on; built by tools/dress_pose.py from the pieces in tools/source/characters/bodies/%s, "
+                      "the body %s" % (rel(png), who, CANVAS[0], CANVAS[1], base, CREDIT), ""]
+        if os.path.exists(js):
+            lines += ["%s - the pose and where the %s is on %s (its scale and place), which the cut reads back; written by "
+                      "tools/dress_pose.py" % (rel(js), who, os.path.basename(png)), ""]
+    for path in sorted(glob.glob(os.path.join(KEPT, "*.png"))):
+        aid = os.path.basename(path)[:-len(".png")]
+        lines += ["%s - %s as ChatGPT painted it whole on its dressing-pose template, kept for the record; %s (2026-11-18)"
+                  % (rel(path), aid, CREDIT), ""]
+    lines.append(A_END)
+    ic.rewrite(ic.ASSETS, A_BEGIN, A_END, lines, A_ANCHOR)
 
 
 def luma(colour):
@@ -497,6 +544,9 @@ def main(argv):
         template(argv[1])
     elif len(argv) == 4 and argv[0] == "cut":
         cut(argv[1], argv[2], argv[3])
+    elif argv == ["assets"]:
+        write_assets()
+        print("dress_pose: rewrote its section of ASSETS.md")
     elif len(argv) >= 4 and argv[0] == "preview":
         side = "--side-foot" in argv
         moving = "--moving" in argv

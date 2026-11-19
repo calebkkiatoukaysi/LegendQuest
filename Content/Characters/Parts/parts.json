@@ -192,6 +192,10 @@
    2015,
    202
   ],
+  "facial-0": [
+   2047,
+   589
+  ],
   "helm-0": [
    2042,
    2000
@@ -199,6 +203,10 @@
   "helm-1": [
    178,
    55
+  ],
+  "marks-0": [
+   1998,
+   495
   ],
   "offhand-0": [
    841,
@@ -17990,6 +17998,750 @@
     101
    ]
   },
+  "beard-01": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "STUBBLE",
+   "page": "facial-0",
+   "rect": [
+    910,
+    2,
+    72,
+    218
+   ],
+   "pivot": [
+    45.0,
+    30.5
+   ],
+   "maskRect": [
+    986,
+    2,
+    72,
+    218
+   ],
+   "tones": [
+    [
+     188.7,
+     124.0,
+     79.1
+    ],
+    null
+   ]
+  },
+  "beard-02": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "THIN MOUSTACHE",
+   "page": "facial-0",
+   "rect": [
+    1668,
+    2,
+    31,
+    196
+   ],
+   "pivot": [
+    1.0,
+    16.5
+   ],
+   "maskRect": [
+    1703,
+    2,
+    31,
+    196
+   ],
+   "tones": [
+    [
+     119.4,
+     73.5,
+     50.2
+    ],
+    null
+   ]
+  },
+  "beard-03": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "MOUSTACHE",
+   "page": "facial-0",
+   "rect": [
+    1592,
+    2,
+    34,
+    198
+   ],
+   "pivot": [
+    4.0,
+    18.5
+   ],
+   "maskRect": [
+    1630,
+    2,
+    34,
+    198
+   ],
+   "tones": [
+    [
+     115.3,
+     71.9,
+     48.9
+    ],
+    null
+   ]
+  },
+  "beard-04": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "DROOPING MOUSTACHE",
+   "page": "facial-0",
+   "rect": [
+    1386,
+    2,
+    38,
+    200
+   ],
+   "pivot": [
+    5.0,
+    19.5
+   ],
+   "maskRect": [
+    1428,
+    2,
+    38,
+    200
+   ],
+   "tones": [
+    [
+     107.3,
+     66.7,
+     45.0
+    ],
+    null
+   ]
+  },
+  "beard-05": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "GOATEE",
+   "page": "facial-0",
+   "rect": [
+    1470,
+    2,
+    57,
+    198
+   ],
+   "pivot": [
+    27.0,
+    17.5
+   ],
+   "maskRect": [
+    1531,
+    2,
+    57,
+    198
+   ],
+   "tones": [
+    [
+     121.8,
+     75.7,
+     49.6
+    ],
+    null
+   ]
+  },
+  "beard-06": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "CHIN STRAP",
+   "page": "facial-0",
+   "rect": [
+    1879,
+    439,
+    55,
+    50
+   ],
+   "pivot": [
+    27.0,
+    31.5
+   ],
+   "maskRect": [
+    1938,
+    439,
+    55,
+    50
+   ],
+   "tones": [
+    [
+     105.3,
+     64.5,
+     42.1
+    ],
+    null
+   ]
+  },
+  "beard-07": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SHORT BEARD",
+   "page": "facial-0",
+   "rect": [
+    181,
+    439,
+    79,
+    70
+   ],
+   "pivot": [
+    47.0,
+    34.5
+   ],
+   "maskRect": [
+    264,
+    439,
+    79,
+    70
+   ],
+   "tones": [
+    [
+     106.2,
+     64.8,
+     42.8
+    ],
+    null
+   ]
+  },
+  "beard-08": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "FULL BEARD",
+   "page": "facial-0",
+   "rect": [
+    1236,
+    2,
+    71,
+    211
+   ],
+   "pivot": [
+    32.0,
+    30.5
+   ],
+   "maskRect": [
+    1311,
+    2,
+    71,
+    211
+   ],
+   "tones": [
+    [
+     104.1,
+     64.0,
+     42.1
+    ],
+    null
+   ]
+  },
+  "beard-09": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "LONG BEARD",
+   "page": "facial-0",
+   "rect": [
+    1062,
+    2,
+    83,
+    215
+   ],
+   "pivot": [
+    35.0,
+    34.5
+   ],
+   "maskRect": [
+    1149,
+    2,
+    83,
+    215
+   ],
+   "tones": [
+    [
+     101.5,
+     62.9,
+     41.8
+    ],
+    null
+   ]
+  },
+  "beard-10": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BRAIDED BEARD",
+   "page": "facial-0",
+   "rect": [
+    276,
+    2,
+    93,
+    222
+   ],
+   "pivot": [
+    49.0,
+    34.5
+   ],
+   "maskRect": [
+    373,
+    2,
+    93,
+    222
+   ],
+   "tones": [
+    [
+     99.4,
+     60.7,
+     40.3
+    ],
+    null
+   ]
+  },
+  "beard-11": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SIDE-WHISKERS",
+   "page": "facial-0",
+   "rect": [
+    1427,
+    439,
+    66,
+    54
+   ],
+   "pivot": [
+    29.0,
+    38.5
+   ],
+   "maskRect": [
+    1497,
+    439,
+    66,
+    54
+   ],
+   "tones": [
+    [
+     100.3,
+     59.8,
+     38.6
+    ],
+    null
+   ]
+  },
+  "beard-12": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SCRUFFY BEARD",
+   "page": "facial-0",
+   "rect": [
+    470,
+    2,
+    66,
+    221
+   ],
+   "pivot": [
+    28.0,
+    33.5
+   ],
+   "maskRect": [
+    540,
+    2,
+    66,
+    221
+   ],
+   "tones": [
+    [
+     105.3,
+     64.2,
+     42.0
+    ],
+    null
+   ]
+  },
+  "ears-01": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "POINTED EARS",
+   "page": "marks-0",
+   "rect": [
+    780,
+    423,
+    125,
+    46
+   ],
+   "pivot": [
+    75.0,
+    62.5
+   ],
+   "maskRect": [
+    909,
+    423,
+    125,
+    46
+   ],
+   "tones": [
+    [
+     64.2,
+     29.7,
+     16.2
+    ],
+    null
+   ]
+  },
+  "ears-01-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "POINTED EARS",
+   "page": "marks-0",
+   "rect": [
+    1038,
+    423,
+    124,
+    46
+   ],
+   "pivot": [
+    71.75,
+    58.5
+   ],
+   "maskRect": [
+    1166,
+    423,
+    124,
+    46
+   ],
+   "tones": [
+    [
+     64.2,
+     27.9,
+     15.0
+    ],
+    null
+   ]
+  },
+  "ears-02": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "WOLF'S EARS",
+   "page": "marks-0",
+   "rect": [
+    1430,
+    2,
+    88,
+    255
+   ],
+   "pivot": [
+    47.0,
+    129.5
+   ],
+   "maskRect": [
+    1522,
+    2,
+    88,
+    255
+   ],
+   "tones": [
+    [
+     117.0,
+     89.9,
+     73.7
+    ],
+    null
+   ]
+  },
+  "ears-02-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "WOLF'S EARS",
+   "page": "marks-0",
+   "rect": [
+    776,
+    313,
+    85,
+    86
+   ],
+   "pivot": [
+    44.75,
+    128.5
+   ],
+   "maskRect": [
+    865,
+    313,
+    85,
+    86
+   ],
+   "tones": [
+    [
+     118.7,
+     91.9,
+     75.1
+    ],
+    null
+   ]
+  },
+  "ears-03": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BEAR'S EARS",
+   "page": "marks-0",
+   "rect": [
+    978,
+    2,
+    90,
+    271
+   ],
+   "pivot": [
+    47.0,
+    90.5
+   ],
+   "maskRect": [
+    1072,
+    2,
+    90,
+    271
+   ],
+   "tones": [
+    [
+     66.7,
+     37.3,
+     26.4
+    ],
+    null
+   ]
+  },
+  "ears-03-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BEAR'S EARS",
+   "page": "marks-0",
+   "rect": [
+    1294,
+    423,
+    88,
+    41
+   ],
+   "pivot": [
+    44.75,
+    89.5
+   ],
+   "maskRect": [
+    1386,
+    423,
+    88,
+    41
+   ],
+   "tones": [
+    [
+     69.8,
+     38.8,
+     26.9
+    ],
+    null
+   ]
+  },
+  "ears-04": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "FOX'S EARS",
+   "page": "marks-0",
+   "rect": [
+    220,
+    2,
+    91,
+    295
+   ],
+   "pivot": [
+    48.0,
+    114.5
+   ],
+   "maskRect": [
+    315,
+    2,
+    91,
+    295
+   ],
+   "tones": [
+    [
+     169.2,
+     142.5,
+     122.5
+    ],
+    null
+   ]
+  },
+  "ears-04-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "FOX'S EARS",
+   "page": "marks-0",
+   "rect": [
+    1436,
+    313,
+    91,
+    72
+   ],
+   "pivot": [
+    46.75,
+    112.5
+   ],
+   "maskRect": [
+    1531,
+    313,
+    91,
+    72
+   ],
+   "tones": [
+    [
+     160.6,
+     130.6,
+     110.7
+    ],
+    null
+   ]
+  },
+  "ears-05": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "FEATHER TUFTS",
+   "page": "marks-0",
+   "rect": [
+    2,
+    2,
+    105,
+    307
+   ],
+   "pivot": [
+    68.0,
+    126.5
+   ],
+   "maskRect": [
+    111,
+    2,
+    105,
+    307
+   ],
+   "tones": [
+    [
+     122.8,
+     92.0,
+     71.6
+    ],
+    null
+   ]
+  },
+  "ears-05-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "FEATHER TUFTS",
+   "page": "marks-0",
+   "rect": [
+    1216,
+    313,
+    106,
+    73
+   ],
+   "pivot": [
+    65.75,
+    127.5
+   ],
+   "maskRect": [
+    1326,
+    313,
+    106,
+    73
+   ],
+   "tones": [
+    [
+     111.9,
+     81.7,
+     62.1
+    ],
+    null
+   ]
+  },
+  "ears-06": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SHORT POINTS",
+   "page": "marks-0",
+   "rect": [
+    1614,
+    2,
+    105,
+    235
+   ],
+   "pivot": [
+    61.0,
+    54.5
+   ],
+   "maskRect": [
+    1723,
+    2,
+    105,
+    235
+   ],
+   "tones": [
+    [
+     63.6,
+     28.4,
+     14.3
+    ],
+    null
+   ]
+  },
+  "ears-06-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "SHORT POINTS",
+   "page": "marks-0",
+   "rect": [
+    1478,
+    423,
+    104,
+    39
+   ],
+   "pivot": [
+    57.75,
+    52.5
+   ],
+   "maskRect": [
+    1586,
+    423,
+    104,
+    39
+   ],
+   "tones": [
+    [
+     64.0,
+     27.0,
+     14.6
+    ],
+    null
+   ]
+  },
   "face-f01": {
    "slot": "face",
    "base": "base-female",
@@ -21742,6 +22494,1386 @@
     null
    ]
   },
+  "horns-01": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "RAM'S HORNS",
+   "page": "marks-0",
+   "rect": [
+    170,
+    313,
+    148,
+    97
+   ],
+   "pivot": [
+    80.0,
+    99.5
+   ],
+   "maskRect": [
+    322,
+    313,
+    148,
+    97
+   ]
+  },
+  "horns-01-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "RAM'S HORNS",
+   "page": "marks-0",
+   "rect": [
+    474,
+    313,
+    147,
+    95
+   ],
+   "pivot": [
+    76.75,
+    95.5
+   ],
+   "maskRect": [
+    625,
+    313,
+    147,
+    95
+   ]
+  },
+  "horns-02": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SWEPT HORNS",
+   "page": "marks-0",
+   "rect": [
+    410,
+    2,
+    163,
+    278
+   ],
+   "pivot": [
+    82.0,
+    98.5
+   ],
+   "maskRect": [
+    577,
+    2,
+    163,
+    278
+   ]
+  },
+  "horns-02-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "SWEPT HORNS",
+   "page": "marks-0",
+   "rect": [
+    1832,
+    2,
+    164,
+    106
+   ],
+   "pivot": [
+    79.75,
+    99.5
+   ],
+   "maskRect": [
+    2,
+    313,
+    164,
+    106
+   ]
+  },
+  "horns-03": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SHORT HORNS",
+   "page": "marks-0",
+   "rect": [
+    516,
+    423,
+    62,
+    59
+   ],
+   "pivot": [
+    14.0,
+    107.5
+   ],
+   "maskRect": [
+    582,
+    423,
+    62,
+    59
+   ]
+  },
+  "horns-03-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "SHORT HORNS",
+   "page": "marks-0",
+   "rect": [
+    648,
+    423,
+    62,
+    55
+   ],
+   "pivot": [
+    13.75,
+    106.5
+   ],
+   "maskRect": [
+    714,
+    423,
+    62,
+    55
+   ]
+  },
+  "horns-04": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BULL'S HORNS",
+   "page": "marks-0",
+   "rect": [
+    2,
+    423,
+    139,
+    70
+   ],
+   "pivot": [
+    70.0,
+    113.5
+   ],
+   "maskRect": [
+    145,
+    423,
+    139,
+    70
+   ]
+  },
+  "horns-04-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BULL'S HORNS",
+   "page": "marks-0",
+   "rect": [
+    1626,
+    313,
+    139,
+    71
+   ],
+   "pivot": [
+    66.75,
+    116.5
+   ],
+   "maskRect": [
+    1769,
+    313,
+    139,
+    71
+   ]
+  },
+  "horns-05": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "ANTLERS",
+   "page": "marks-0",
+   "rect": [
+    1166,
+    2,
+    128,
+    265
+   ],
+   "pivot": [
+    60.0,
+    139.5
+   ],
+   "maskRect": [
+    1298,
+    2,
+    128,
+    265
+   ]
+  },
+  "horns-05-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "ANTLERS",
+   "page": "marks-0",
+   "rect": [
+    954,
+    313,
+    127,
+    85
+   ],
+   "pivot": [
+    56.75,
+    141.5
+   ],
+   "maskRect": [
+    1085,
+    313,
+    127,
+    85
+   ]
+  },
+  "horns-06": {
+   "slot": "marks",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "CURLED HORNS",
+   "page": "marks-0",
+   "rect": [
+    744,
+    2,
+    113,
+    275
+   ],
+   "pivot": [
+    63.0,
+    87.5
+   ],
+   "maskRect": [
+    861,
+    2,
+    113,
+    275
+   ]
+  },
+  "horns-06-f": {
+   "slot": "marks",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "CURLED HORNS",
+   "page": "marks-0",
+   "rect": [
+    288,
+    423,
+    110,
+    62
+   ],
+   "pivot": [
+    58.75,
+    84.5
+   ],
+   "maskRect": [
+    402,
+    423,
+    110,
+    62
+   ]
+  },
+  "jewel-01": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SMALL HOOP",
+   "page": "facial-0",
+   "rect": [
+    122,
+    565,
+    72,
+    16
+   ],
+   "pivot": [
+    34.0,
+    20.5
+   ],
+   "maskRect": [
+    198,
+    565,
+    72,
+    16
+   ]
+  },
+  "jewel-01-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "SMALL HOOP",
+   "page": "facial-0",
+   "rect": [
+    274,
+    565,
+    12,
+    15
+   ],
+   "pivot": [
+    31.75,
+    17.5
+   ],
+   "maskRect": [
+    290,
+    565,
+    12,
+    15
+   ]
+  },
+  "jewel-02": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BIG HOOP",
+   "page": "facial-0",
+   "rect": [
+    835,
+    514,
+    84,
+    35
+   ],
+   "pivot": [
+    43.0,
+    17.5
+   ],
+   "maskRect": [
+    923,
+    514,
+    84,
+    35
+   ]
+  },
+  "jewel-02-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BIG HOOP",
+   "page": "facial-0",
+   "rect": [
+    1011,
+    514,
+    79,
+    35
+   ],
+   "pivot": [
+    39.75,
+    16.5
+   ],
+   "maskRect": [
+    1094,
+    514,
+    79,
+    35
+   ]
+  },
+  "jewel-03": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "STUD",
+   "page": "facial-0",
+   "rect": [
+    306,
+    565,
+    9,
+    9
+   ],
+   "pivot": [
+    29.0,
+    22.5
+   ],
+   "maskRect": [
+    319,
+    565,
+    9,
+    9
+   ]
+  },
+  "jewel-03-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "STUD",
+   "page": "facial-0",
+   "rect": [
+    86,
+    565,
+    14,
+    17
+   ],
+   "pivot": [
+    31.75,
+    30.5
+   ],
+   "maskRect": [
+    104,
+    565,
+    14,
+    17
+   ]
+  },
+  "jewel-04": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "DROP",
+   "page": "facial-0",
+   "rect": [
+    323,
+    514,
+    62,
+    41
+   ],
+   "pivot": [
+    32.0,
+    20.5
+   ],
+   "maskRect": [
+    389,
+    514,
+    62,
+    41
+   ]
+  },
+  "jewel-04-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "DROP",
+   "page": "facial-0",
+   "rect": [
+    599,
+    514,
+    62,
+    40
+   ],
+   "pivot": [
+    30.75,
+    19.5
+   ],
+   "maskRect": [
+    665,
+    514,
+    62,
+    40
+   ]
+  },
+  "jewel-05": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "EAR RINGS",
+   "page": "facial-0",
+   "rect": [
+    610,
+    2,
+    71,
+    220
+   ],
+   "pivot": [
+    45.0,
+    38.5
+   ],
+   "maskRect": [
+    685,
+    2,
+    71,
+    220
+   ]
+  },
+  "jewel-05-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "EAR RINGS",
+   "page": "facial-0",
+   "rect": [
+    1611,
+    514,
+    21,
+    26
+   ],
+   "pivot": [
+    41.75,
+    34.5
+   ],
+   "maskRect": [
+    1636,
+    514,
+    21,
+    26
+   ]
+  },
+  "jewel-06": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "FEATHER",
+   "page": "facial-0",
+   "rect": [
+    1882,
+    2,
+    73,
+    190
+   ],
+   "pivot": [
+    37.0,
+    3.5
+   ],
+   "maskRect": [
+    1959,
+    2,
+    73,
+    190
+   ]
+  },
+  "jewel-06-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "FEATHER",
+   "page": "facial-0",
+   "rect": [
+    1836,
+    255,
+    69,
+    76
+   ],
+   "pivot": [
+    33.75,
+    11.5
+   ],
+   "maskRect": [
+    1909,
+    255,
+    69,
+    76
+   ]
+  },
+  "jewel-07": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "NOSE RING",
+   "page": "facial-0",
+   "rect": [
+    1867,
+    514,
+    20,
+    24
+   ],
+   "pivot": [
+    -8.0,
+    32.5
+   ],
+   "maskRect": [
+    1891,
+    514,
+    20,
+    24
+   ]
+  },
+  "jewel-07-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "NOSE RING",
+   "page": "facial-0",
+   "rect": [
+    1219,
+    514,
+    63,
+    32
+   ],
+   "pivot": [
+    34.75,
+    36.5
+   ],
+   "maskRect": [
+    1286,
+    514,
+    63,
+    32
+   ]
+  },
+  "jewel-08": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SPECTACLES",
+   "page": "facial-0",
+   "rect": [
+    1915,
+    514,
+    80,
+    22
+   ],
+   "pivot": [
+    39.0,
+    41.5
+   ],
+   "maskRect": [
+    2,
+    565,
+    80,
+    22
+   ]
+  },
+  "jewel-08-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "SPECTACLES",
+   "page": "facial-0",
+   "rect": [
+    1353,
+    514,
+    78,
+    29
+   ],
+   "pivot": [
+    35.75,
+    40.5
+   ],
+   "maskRect": [
+    1435,
+    514,
+    78,
+    29
+   ]
+  },
+  "jewel-09": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "EYEPATCH",
+   "page": "facial-0",
+   "rect": [
+    2,
+    2,
+    80,
+    249
+   ],
+   "pivot": [
+    44.0,
+    60.5
+   ],
+   "maskRect": [
+    86,
+    2,
+    80,
+    249
+   ]
+  },
+  "jewel-09-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "EYEPATCH",
+   "page": "facial-0",
+   "rect": [
+    163,
+    514,
+    76,
+    42
+   ],
+   "pivot": [
+    40.75,
+    54.5
+   ],
+   "maskRect": [
+    243,
+    514,
+    76,
+    42
+   ]
+  },
+  "jewel-10": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "MONOCLE",
+   "page": "facial-0",
+   "rect": [
+    69,
+    439,
+    52,
+    71
+   ],
+   "pivot": [
+    36.0,
+    46.5
+   ],
+   "maskRect": [
+    125,
+    439,
+    52,
+    71
+   ]
+  },
+  "jewel-10-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "MONOCLE",
+   "page": "facial-0",
+   "rect": [
+    1686,
+    255,
+    48,
+    80
+   ],
+   "pivot": [
+    28.75,
+    44.5
+   ],
+   "maskRect": [
+    1738,
+    255,
+    48,
+    80
+   ]
+  },
+  "jewel-11": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "QUILL",
+   "page": "facial-0",
+   "rect": [
+    1982,
+    255,
+    63,
+    71
+   ],
+   "pivot": [
+    75.0,
+    86.5
+   ],
+   "maskRect": [
+    2,
+    439,
+    63,
+    71
+   ]
+  },
+  "jewel-11-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "QUILL",
+   "page": "facial-0",
+   "rect": [
+    347,
+    439,
+    65,
+    67
+   ],
+   "pivot": [
+    72.75,
+    88.5
+   ],
+   "maskRect": [
+    416,
+    439,
+    65,
+    67
+   ]
+  },
+  "jewel-12": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "PEARL",
+   "page": "facial-0",
+   "rect": [
+    731,
+    514,
+    20,
+    38
+   ],
+   "pivot": [
+    39.0,
+    41.5
+   ],
+   "maskRect": [
+    755,
+    514,
+    20,
+    38
+   ]
+  },
+  "jewel-12-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "PEARL",
+   "page": "facial-0",
+   "rect": [
+    1177,
+    514,
+    17,
+    35
+   ],
+   "pivot": [
+    34.75,
+    39.5
+   ],
+   "maskRect": [
+    1198,
+    514,
+    17,
+    35
+   ]
+  },
+  "jewel-13": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "EAR STUDS",
+   "page": "facial-0",
+   "rect": [
+    1565,
+    514,
+    19,
+    28
+   ],
+   "pivot": [
+    41.0,
+    42.5
+   ],
+   "maskRect": [
+    1588,
+    514,
+    19,
+    28
+   ]
+  },
+  "jewel-13-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "EAR STUDS",
+   "page": "facial-0",
+   "rect": [
+    1661,
+    514,
+    20,
+    26
+   ],
+   "pivot": [
+    37.75,
+    40.5
+   ],
+   "maskRect": [
+    1685,
+    514,
+    20,
+    26
+   ]
+  },
+  "jewel-14": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "INDUSTRIAL BAR",
+   "page": "facial-0",
+   "rect": [
+    41,
+    514,
+    27,
+    44
+   ],
+   "pivot": [
+    47.0,
+    48.5
+   ],
+   "maskRect": [
+    72,
+    514,
+    27,
+    44
+   ]
+  },
+  "jewel-14-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "INDUSTRIAL BAR",
+   "page": "facial-0",
+   "rect": [
+    103,
+    514,
+    26,
+    43
+   ],
+   "pivot": [
+    42.75,
+    48.5
+   ],
+   "maskRect": [
+    133,
+    514,
+    26,
+    43
+   ]
+  },
+  "jewel-15": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "EAR CUFFS AND STUDS",
+   "page": "facial-0",
+   "rect": [
+    779,
+    514,
+    24,
+    37
+   ],
+   "pivot": [
+    45.0,
+    47.5
+   ],
+   "maskRect": [
+    807,
+    514,
+    24,
+    37
+   ]
+  },
+  "jewel-15-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "EAR CUFFS AND STUDS",
+   "page": "facial-0",
+   "rect": [
+    1116,
+    255,
+    43,
+    88
+   ],
+   "pivot": [
+    41.75,
+    47.5
+   ],
+   "maskRect": [
+    1163,
+    255,
+    43,
+    88
+   ]
+  },
+  "jewel-16": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "SEPTUM RING",
+   "page": "facial-0",
+   "rect": [
+    326,
+    255,
+    68,
+    127
+   ],
+   "pivot": [
+    42.0,
+    43.5
+   ],
+   "maskRect": [
+    398,
+    255,
+    68,
+    127
+   ]
+  },
+  "jewel-16-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "SEPTUM RING",
+   "page": "facial-0",
+   "rect": [
+    945,
+    439,
+    37,
+    59
+   ],
+   "pivot": [
+    9.75,
+    18.5
+   ],
+   "maskRect": [
+    986,
+    439,
+    37,
+    59
+   ]
+  },
+  "jewel-17": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BROW AND LIP STUDS",
+   "page": "facial-0",
+   "rect": [
+    2,
+    255,
+    34,
+    180
+   ],
+   "pivot": [
+    8.0,
+    54.5
+   ],
+   "maskRect": [
+    40,
+    255,
+    34,
+    180
+   ]
+  },
+  "jewel-17-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BROW AND LIP STUDS",
+   "page": "facial-0",
+   "rect": [
+    906,
+    255,
+    33,
+    93
+   ],
+   "pivot": [
+    9.75,
+    52.5
+   ],
+   "maskRect": [
+    943,
+    255,
+    33,
+    93
+   ]
+  },
+  "jewel-18": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "RINGS",
+   "page": "facial-0",
+   "rect": [
+    1567,
+    439,
+    79,
+    52
+   ],
+   "pivot": [
+    44.0,
+    51.5
+   ],
+   "maskRect": [
+    1650,
+    439,
+    79,
+    52
+   ]
+  },
+  "jewel-18-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "RINGS",
+   "page": "facial-0",
+   "rect": [
+    1733,
+    439,
+    69,
+    52
+   ],
+   "pivot": [
+    40.75,
+    50.5
+   ],
+   "maskRect": [
+    1806,
+    439,
+    69,
+    52
+   ]
+  },
+  "jewel-19": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "GOLD EAR CUFFS",
+   "page": "facial-0",
+   "rect": [
+    1738,
+    2,
+    68,
+    195
+   ],
+   "pivot": [
+    42.0,
+    43.5
+   ],
+   "maskRect": [
+    1810,
+    2,
+    68,
+    195
+   ]
+  },
+  "jewel-19-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "GOLD EAR CUFFS",
+   "page": "facial-0",
+   "rect": [
+    1517,
+    514,
+    20,
+    28
+   ],
+   "pivot": [
+    42.75,
+    35.5
+   ],
+   "maskRect": [
+    1541,
+    514,
+    20,
+    28
+   ]
+  },
+  "jewel-20": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "EAR PLUG",
+   "page": "facial-0",
+   "rect": [
+    78,
+    255,
+    63,
+    146
+   ],
+   "pivot": [
+    37.0,
+    20.5
+   ],
+   "maskRect": [
+    145,
+    255,
+    63,
+    146
+   ]
+  },
+  "jewel-20-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "EAR PLUG",
+   "page": "facial-0",
+   "rect": [
+    645,
+    439,
+    37,
+    62
+   ],
+   "pivot": [
+    35.75,
+    21.5
+   ],
+   "maskRect": [
+    686,
+    439,
+    37,
+    62
+   ]
+  },
+  "jewel-21": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BROW STUDS",
+   "page": "facial-0",
+   "rect": [
+    170,
+    2,
+    49,
+    233
+   ],
+   "pivot": [
+    13.0,
+    51.5
+   ],
+   "maskRect": [
+    223,
+    2,
+    49,
+    233
+   ]
+  },
+  "jewel-21-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BROW STUDS",
+   "page": "facial-0",
+   "rect": [
+    798,
+    255,
+    50,
+    95
+   ],
+   "pivot": [
+    14.75,
+    54.5
+   ],
+   "maskRect": [
+    852,
+    255,
+    50,
+    95
+   ]
+  },
+  "jewel-22": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BEADED SEPTUM RING",
+   "page": "facial-0",
+   "rect": [
+    1289,
+    439,
+    65,
+    55
+   ],
+   "pivot": [
+    36.0,
+    19.5
+   ],
+   "maskRect": [
+    1358,
+    439,
+    65,
+    55
+   ]
+  },
+  "jewel-22-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BEADED SEPTUM RING",
+   "page": "facial-0",
+   "rect": [
+    727,
+    439,
+    37,
+    61
+   ],
+   "pivot": [
+    9.75,
+    20.5
+   ],
+   "maskRect": [
+    768,
+    439,
+    37,
+    61
+   ]
+  },
+  "jewel-23": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "LIP STUDS",
+   "page": "facial-0",
+   "rect": [
+    212,
+    255,
+    53,
+    134
+   ],
+   "pivot": [
+    27.0,
+    4.5
+   ],
+   "maskRect": [
+    269,
+    255,
+    53,
+    134
+   ]
+  },
+  "jewel-23-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "LIP STUDS",
+   "page": "facial-0",
+   "rect": [
+    1997,
+    439,
+    35,
+    47
+   ],
+   "pivot": [
+    9.75,
+    6.5
+   ],
+   "maskRect": [
+    2,
+    514,
+    35,
+    47
+   ]
+  },
+  "jewel-24": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "MIXED PIERCINGS",
+   "page": "facial-0",
+   "rect": [
+    760,
+    2,
+    71,
+    220
+   ],
+   "pivot": [
+    42.0,
+    39.5
+   ],
+   "maskRect": [
+    835,
+    2,
+    71,
+    220
+   ]
+  },
+  "jewel-24-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "MIXED PIERCINGS",
+   "page": "facial-0",
+   "rect": [
+    455,
+    514,
+    68,
+    40
+   ],
+   "pivot": [
+    41.75,
+    38.5
+   ],
+   "maskRect": [
+    527,
+    514,
+    68,
+    40
+   ]
+  },
   "offhand-dagger": {
    "slot": "offhand",
    "base": "base-male",
@@ -21868,6 +24000,282 @@
    "pivot": [
     39.79,
     77.03
+   ]
+  },
+  "skin-01": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "FRECKLES",
+   "page": "facial-0",
+   "rect": [
+    470,
+    255,
+    80,
+    96
+   ],
+   "pivot": [
+    43.0,
+    85.5
+   ],
+   "maskRect": [
+    554,
+    255,
+    80,
+    96
+   ]
+  },
+  "skin-01-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "FRECKLES",
+   "page": "facial-0",
+   "rect": [
+    1370,
+    255,
+    75,
+    80
+   ],
+   "pivot": [
+    39.75,
+    80.5
+   ],
+   "maskRect": [
+    1449,
+    255,
+    75,
+    80
+   ]
+  },
+  "skin-02": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BROW SCAR",
+   "page": "facial-0",
+   "rect": [
+    1027,
+    439,
+    51,
+    58
+   ],
+   "pivot": [
+    39.0,
+    65.5
+   ],
+   "maskRect": [
+    1082,
+    439,
+    51,
+    58
+   ]
+  },
+  "skin-02-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BROW SCAR",
+   "page": "facial-0",
+   "rect": [
+    1790,
+    255,
+    19,
+    79
+   ],
+   "pivot": [
+    7.75,
+    80.5
+   ],
+   "maskRect": [
+    1813,
+    255,
+    19,
+    79
+   ]
+  },
+  "skin-03": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "NOSE SCAR",
+   "page": "facial-0",
+   "rect": [
+    1709,
+    514,
+    75,
+    25
+   ],
+   "pivot": [
+    43.0,
+    50.5
+   ],
+   "maskRect": [
+    1788,
+    514,
+    75,
+    25
+   ]
+  },
+  "skin-03-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "NOSE SCAR",
+   "page": "facial-0",
+   "rect": [
+    1137,
+    439,
+    72,
+    56
+   ],
+   "pivot": [
+    39.75,
+    48.5
+   ],
+   "maskRect": [
+    1213,
+    439,
+    72,
+    56
+   ]
+  },
+  "skin-04": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "BURN",
+   "page": "facial-0",
+   "rect": [
+    638,
+    255,
+    76,
+    96
+   ],
+   "pivot": [
+    39.0,
+    85.5
+   ],
+   "maskRect": [
+    718,
+    255,
+    76,
+    96
+   ]
+  },
+  "skin-04-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "BURN",
+   "page": "facial-0",
+   "rect": [
+    809,
+    439,
+    64,
+    59
+   ],
+   "pivot": [
+    39.75,
+    50.5
+   ],
+   "maskRect": [
+    877,
+    439,
+    64,
+    59
+   ]
+  },
+  "skin-05": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "TATTOO",
+   "page": "facial-0",
+   "rect": [
+    485,
+    439,
+    76,
+    66
+   ],
+   "pivot": [
+    39.0,
+    74.5
+   ],
+   "maskRect": [
+    565,
+    439,
+    76,
+    66
+   ]
+  },
+  "skin-05-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "TATTOO",
+   "page": "facial-0",
+   "rect": [
+    980,
+    255,
+    64,
+    90
+   ],
+   "pivot": [
+    30.75,
+    81.5
+   ],
+   "maskRect": [
+    1048,
+    255,
+    64,
+    90
+   ]
+  },
+  "skin-06": {
+   "slot": "facial",
+   "base": "base-male",
+   "socket": "neck",
+   "name": "ASH",
+   "page": "facial-0",
+   "rect": [
+    1528,
+    255,
+    75,
+    80
+   ],
+   "pivot": [
+    38.0,
+    69.5
+   ],
+   "maskRect": [
+    1607,
+    255,
+    75,
+    80
+   ]
+  },
+  "skin-06-f": {
+   "slot": "facial",
+   "base": "base-female",
+   "socket": "neck",
+   "name": "ASH",
+   "page": "facial-0",
+   "rect": [
+    1210,
+    255,
+    76,
+    82
+   ],
+   "pivot": [
+    39.75,
+    81.5
+   ],
+   "maskRect": [
+    1290,
+    255,
+    76,
+    82
    ]
   },
   "weapon-basket": {

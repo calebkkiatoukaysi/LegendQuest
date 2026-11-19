@@ -4,6 +4,7 @@ Weapons painted on their own, with no hand, and put in the figure's fist here.
     python tools/weapon_alone.py template                                   # the blank sheet to paint four on
     python tools/weapon_alone.py cut <painted.png> <base> <id[/hand[/kind]]> ...   # a sheet's columns, each in its fist (- for an empty one)
     python tools/weapon_alone.py preview <base> <out.png> <id> [<id> ...]   # each held, at rest and in a few poses
+    python tools/weapon_alone.py assets                                     # just rewrite its section of ASSETS.md
 
 The owner's call (2026-11-18): ChatGPT, asked to put an item through a fist, redraws the hand with
 it. So an item is painted alone, upright, with nothing holding it, and the game does the holding:
@@ -31,10 +32,18 @@ is two things held at once, one a hand (a spear and a shield), drawn into the on
 `preview` draws each on the body at rest and in a few of the game's poses, the item moving with the
 hand.
 
+`cut` then rewrites this tool's own section of ASSETS.md from what's on disk (`assets` does only
+that): the template, each painted sheet in tools/source/characters/weapon-sheets (weapons-NN.png,
+the .json beside it saying what's in each column, as `cut` takes them, and items.py, the list they
+were painted from), and each item cut from them and held. Which sheet and column an item came from
+is in its <id>.json when it says, or else in the sheets' .json; whoever made it is
+ChatGPT, for Caleb, unless tools/source/characters/generated.json lists its id.
+
 Needs CPython, numpy and scipy.
 
 Written by Caleb Kiatoukaysi for Legend Quest.
 """
+import glob
 import json
 import os
 import re
@@ -79,6 +88,18 @@ SPECK = 120
 GUARD_WIDE = 1.9
 #: A handle is at least this many rows long.
 GRIP_LEAST = 34
+#: The painted sheets, each with a .json beside it ({"base", "specs": the columns as `cut` takes them}).
+SHEETS = os.path.join(CHARS, "weapon-sheets")
+ALONE, HELD = os.path.join(CHARS, "weapons-alone"), os.path.join(CHARS, "weapons")
+A_BEGIN = "<!-- weapons painted alone: written by tools/weapon_alone.py; don't edit between these two lines -->"
+A_END = "<!-- end weapons painted alone -->"
+A_ANCHOR = "## Tiles and props"
+CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT"
+#: An item tools/source/characters/generated.json lists (its "ids").
+CREDIT_GENERATED = ("made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), "
+                    "from the art brief's prompt")
+CREDIT_MIXED = ("supplied by Caleb Kiatoukaysi, made in ChatGPT, but for the items tools/source/characters/generated.json "
+                "lists, made with Google's Gemini image model by Claude at his request (2026-11-19)")
 
 
 def kind_of(item):
@@ -228,7 +249,10 @@ def stood(base, bodies, parts):
 def cut(painted, base, specs):
     bodies = D.body(base)
     w, h = D.CANVAS
-    alone_dir, held_dir = os.path.join(CHARS, "weapons-alone"), os.path.join(CHARS, "weapons")
+    alone_dir, held_dir = ALONE, HELD
+    # Where it was cut from, for ASSETS.md, when the sheet's kept in the repo.
+    sheet = os.path.relpath(os.path.abspath(painted), ROOT).replace(os.sep, "/")
+    sheet = None if sheet.startswith("..") else sheet
     os.makedirs(alone_dir, exist_ok=True)
     os.makedirs(held_dir, exist_ok=True)
     found = items(painted)
@@ -244,14 +268,113 @@ def cut(painted, base, specs):
         grip = grip_of(kind, solid)
         name = item if side == "near" else item + ".far"
         ic.write_png(os.path.join(alone_dir, name + ".png"), ic.straight(D.premul(colour, alpha)))
-        json.dump({"grip": [round(grip[0], 1), round(grip[1], 1)], "kind": kind, "hand": side},
-                  open(os.path.join(alone_dir, name + ".json"), "w", encoding="utf-8"), indent=1)
+        note = {"grip": [round(grip[0], 1), round(grip[1], 1)], "kind": kind, "hand": side, "base": base, "column": k + 1}
+        if sheet:
+            note["sheet"] = sheet
+        json.dump(note, open(os.path.join(alone_dir, name + ".json"), "w", encoding="utf-8"), indent=1)
         whole.setdefault(item, {})[side] = held(base, colour, alpha, grip, side, kind)
         print("  %-28s a %s, in the %s hand; its grip at %.0f, %.0f" % (item, kind, side, grip[0], grip[1]))
     for item, parts in whole.items():
         figure = stood(base, bodies, parts)
         rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)
         ic.write_png(os.path.join(held_dir, item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
+    write_assets()
+
+
+def rel(path):
+    return os.path.relpath(path, ROOT).replace(os.sep, "/")
+
+
+def generated():
+    """The ids tools/source/characters/generated.json says were made with another image model."""
+    path = os.path.join(CHARS, "generated.json")
+    return set(json.load(open(path, encoding="utf-8")).get("ids", [])) if os.path.exists(path) else set()
+
+
+def credit(ids, made):
+    """Who made these items: ChatGPT, for Caleb, unless generated.json lists them."""
+    ids = set(ids)
+    return CREDIT_GENERATED if ids and ids <= made else CREDIT_MIXED if ids & made else CREDIT
+
+
+def sheets():
+    """The painted sheets and what's in each, from the .json beside each:
+    {its repo path: (its base, [(column from 1, id, hand)])}."""
+    out = {}
+    for js in sorted(glob.glob(os.path.join(SHEETS, "*.json"))):
+        note = json.load(open(js, encoding="utf-8"))
+        cols = [(k + 1,) + spec(text)[:2] for k, text in enumerate(note.get("specs", [])) if text not in ("", "-")]
+        out[rel(js[:-len(".json")] + ".png")] = (note.get("base"), cols)
+    return out
+
+
+def where_from(name, item, side, painted):
+    """Where an item cut alone came from: (its sheet's repo path or None, its column or None, its
+    base or None), from its own .json or else the sheets' .json."""
+    note = json.load(open(os.path.join(ALONE, name + ".json"), encoding="utf-8"))
+    if note.get("sheet"):
+        return note["sheet"], note.get("column"), note.get("base")
+    for path, (base, cols) in painted.items():
+        for column, got, hand in cols:
+            if got == item and hand == side:
+                return path, column, note.get("base", base)
+    return None, None, note.get("base")
+
+
+def write_assets():
+    """This tool's section of ASSETS.md, from what's on disk."""
+    made, painted = generated(), sheets()
+    lines = [A_BEGIN, "## Weapons painted alone", "",
+             "Weapons and held things painted on their own, upright, with nothing holding them, four to a sheet on a "
+             "template, since 2026-11-18: `tools/weapon_alone.py` cuts each from its column, works out where its grip is "
+             "and puts it in the figure's fist, drawn under the hand's own piece, for tools/import_parts.py to take as it "
+             "does any item painted on the base.", "",
+             "tools/weapon_alone.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank sheet an item is painted "
+             "alone on, cuts a painted sheet into its items (keyed off the black, each one's grip worked out from its own "
+             "shape by its kind) and puts each in the fist that holds it, turned and sized as its kind is held", ""]
+    if os.path.exists(template_path()):
+        lines += ["%s - the blank sheet an item is painted alone on: %d x %d, black, %s columns parted by thin grey lines, "
+                  "with a pair of grey ticks in each where the middle of the item's grip goes; built by tools/weapon_alone.py"
+                  % (rel(template_path()), SHEET[0], SHEET[1], {4: "four"}.get(COLS, str(COLS))), ""]
+    if os.path.exists(os.path.join(SHEETS, "items.py")):
+        lines += ["%s - the list the sheets were painted from: each item's id, the base it's held on and, for each hand, "
+                  "its kind and the art brief's words for it (the prompt); written by Caleb Kiatoukaysi for Legend Quest"
+                  % rel(os.path.join(SHEETS, "items.py")), ""]
+    for png in sorted(glob.glob(os.path.join(SHEETS, "*.png"))):
+        path = rel(png)
+        base, cols = painted.get(path, (None, []))
+        what = ", ".join(item + (" (far hand)" if hand == "far" and not item.startswith("offhand-") else "")
+                         for _, item, hand in cols)
+        lines += ["%s - a sheet of items painted alone%s, one to a column, on %s; %s"
+                  % (path, " (%s)" % what if what else "", rel(template_path()), credit([c[1] for c in cols], made)), ""]
+        if os.path.exists(png[:-len(".png")] + ".json"):
+            lines += ["%s.json - what's in each column of %s (the item's id, the hand that holds it and its kind, as "
+                      "tools/weapon_alone.py cut takes them) and the base they're held on; read when it's cut"
+                      % (path[:-len(".png")], os.path.basename(png)), ""]
+    froms = {}
+    for png in sorted(glob.glob(os.path.join(ALONE, "*.png"))):
+        name = os.path.basename(png)[:-len(".png")]
+        item, side = (name[:-len(".far")], "far") if name.endswith(".far") else (name, "near")
+        sheet, column, base = where_from(name, item, side, painted) if os.path.exists(png[:-4] + ".json") else (None, None, None)
+        froms.setdefault(item, []).append((sheet, base))
+        source = ("column %d of %s" % (column, sheet) if sheet and column else sheet
+                  or "a sheet in tools/source/characters/weapon-sheets")
+        lines += ["%s - %s as it was painted, alone and upright, keyed off the black: cut by tools/weapon_alone.py from %s; %s"
+                  % (rel(png), item if side == "near" else item + " (what's in the far hand)", source, credit([item], made)), ""]
+        if os.path.exists(png[:-4] + ".json"):
+            lines += ["%s.json - where the grip of %s.png is, the kind of thing it is and the hand that holds it; written by "
+                      "tools/weapon_alone.py" % (rel(png)[:-len(".png")], name), ""]
+    for item in sorted(froms):
+        held_png = os.path.join(HELD, item + ".png")
+        if not os.path.exists(held_png):
+            continue
+        cut_from = sorted({s for s, _ in froms[item] if s}) or ["a sheet in tools/source/characters/weapon-sheets"]
+        base = next((b for _, b in froms[item] if b), None)
+        on = "tools/source/characters/%s.png" % base if base and os.path.exists(os.path.join(CHARS, base + ".png")) else "its base"
+        lines += ["%s - %s in the fist of %s, drawn under the hand's own piece: cut by tools/weapon_alone.py from %s; the item "
+                  "%s; the base %s" % (rel(held_png), item, on, " and ".join(cut_from), credit([item], made), CREDIT), ""]
+    lines.append(A_END)
+    ic.rewrite(ic.ASSETS, A_BEGIN, A_END, lines, A_ANCHOR)
 
 
 def alone(base, item):
@@ -299,6 +422,9 @@ def main(argv):
         cut(argv[1], argv[2], argv[3:])
     elif len(argv) >= 4 and argv[0] == "preview":
         preview(argv[1], argv[2], argv[3:])
+    elif argv == ["assets"]:
+        write_assets()
+        print("weapon_alone: rewrote its section of ASSETS.md")
     else:
         sys.exit(__doc__)
 

@@ -6,6 +6,7 @@ Part sheets: several parts in one ChatGPT picture instead of one picture each.
     python tools/part_sheet.py fit <png> <sheet-id> [--force] [--check <png>] [--record <json>]   # cut it, wherever ChatGPT put things
     python tools/part_sheet.py cut <png> <sheet-id> [--force]   # cut one that kept to the template exactly
     python tools/part_sheet.py list                       # the sheets and their cells, from Story/13 §4.0, §4.9, §4.10, §5.0 and §6.0
+    python tools/part_sheet.py assets                     # just rewrite its section of ASSETS.md from what's on disk
 
 Seven kinds, each a 1536x1024 picture of cells with thin grey lines between them, on black:
 
@@ -82,8 +83,10 @@ each cell:
     weapons), and warns when the match
     is poor (ChatGPT moved or rescaled the figure: make that part on its own) or when the part runs
     off the cell (it's cut there).
-Then it rewrites its own section of ASSETS.md from what's on disk. tools/import_parts.py takes the
-parts from there into the game.
+Then it rewrites its own section of ASSETS.md from what's on disk (`assets` does only that): a part
+is credited to the sheet it was cut from only while that sheet is in tools/source/characters/sheets,
+and a weapon painted alone (tools/weapon_alone.py, which credits it) not at all. tools/import_parts.py
+takes the parts from there into the game.
 """
 import glob
 import os
@@ -1360,6 +1363,12 @@ def drawn_from(base_name, kind):
             % ("man" if base_name == "base-male" else "woman"))
 
 
+def alone_cut(part):
+    """Whether a weapon's picture is tools/weapon_alone.py's (the item painted alone, in
+    weapons-alone/), not a weapon sheet's cell: that tool's section of ASSETS.md credits it."""
+    return any(os.path.exists(os.path.join(CHARS, "weapons-alone", part + end + ".png")) for end in ("", ".far"))
+
+
 def write_assets(table):
     lines = [A_BEGIN, "## Part sheets", "",
              "Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape or weapon into each cell of a "
@@ -1395,7 +1404,11 @@ def write_assets(table):
     for sid in sorted(table):
         kind = kind_of(sid)
         folder = KINDS[kind]["folder"]
+        if not os.path.exists(os.path.join(SHEETS, sid + ".png")):
+            continue  # not cut from this sheet: it isn't there (a part painted some other way since)
         for k, _, part in cells(kind, table[sid][0], table[sid][2]):
+            if kind == "weapon" and alone_cut(part):
+                continue  # painted alone and cut by tools/weapon_alone.py, which credits it
             if os.path.exists(os.path.join(CHARS, folder, part + ".png")):
                 lines += ["tools/source/characters/%s/%s.png - %s on its base's canvas, cut by tools/part_sheet.py from cell %d "
                           "of tools/source/characters/sheets/%s.png; %s" % (folder, part, part, k + 1, sid, credit(sid)), ""]
@@ -1430,9 +1443,12 @@ def write_assets(table):
 
 
 def main(argv):
-    if not argv or argv[0] not in ("templates", "cut", "fit", "list", "check"):
+    if not argv or argv[0] not in ("templates", "cut", "fit", "list", "check", "assets"):
         sys.exit(__doc__)
-    if argv[0] == "templates":
+    if argv[0] == "assets":
+        write_assets(sheets_table())
+        print("part_sheet: rewrote its section of ASSETS.md")
+    elif argv[0] == "templates":
         for kind in KINDS:
             if kind == "armor":
                 continue  # painted in pieces now: tools/body_parts.py armor
