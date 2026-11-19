@@ -130,6 +130,9 @@ public partial class LegendQuestGame
         SaveSystem.Write(0, new SaveData { ZoneId = "questeria", PlaytimeSeconds = 4320 });
         SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { ZoneId = "barrow", PlaytimeSeconds = 2840 });
         File.WriteAllText(SaveSystem.PathFor(ProofBrokenSlot), "{ this was never a save");
+
+        // The Moves part is filmed on its own, so it starts at once rather than after the rest.
+        if (ProofLast == ProofStage.Moves) _proofStage = ProofStage.Moves;
     }
 
     /// <summary>Runs the proof schedule, one drawn frame at a time.</summary>
@@ -262,6 +265,10 @@ public partial class LegendQuestGame
 
             case ProofStage.TitleAgain:
                 _proofPending = RunSubject<TitleScreen>(_ => ProofTitleAgain(), ProofSlotsAgainShot, ProofStage.Done, null);
+                break;
+
+            case ProofStage.Moves:
+                _proofPending = ProofMoves();
                 break;
 
             default:

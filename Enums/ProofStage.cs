@@ -90,6 +90,9 @@ public enum ProofStage
     /// <summary>Back on the title after QUIT TO TITLE, and the slots with the autosave in them.</summary>
     TitleAgain,
 
+    /// <summary>The fighting moves filmed frame by frame in a room of their own (LegendQuestGame.ProofMoves): only when asked for by name, and then straight away, without the menus first.</summary>
+    Moves,
+
     /// <summary>Writing the audio log and quitting.</summary>
     Done,
 }
