@@ -1094,11 +1094,11 @@ I'll save it as extra-sheet-06.png.
 
 #### `extra-sheet-07` · Extra sheet: piercings, ears and nose · P2
 
-**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-13`, 2 `jewel-14`, 3 `jewel-15`, 4 `jewel-16`, 5 `jewel-17`, 6 `jewel-18`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-13`, 2 `jewel-14`, 3 `jewel-15`, 4 `jewel-16`, 5 `jewel-17`, 6 `jewel-18`. Piercings are painted on `extra-sheet-faces` (the same heads with faces, so each lands on the ear, brow, nose or lip it goes through), at twice life size, and `python tools/part_sheet.py unface` takes the faces out before the cut.
 
 1. A row of small silver studs up the edge of the ear, and one at the lobe.
-2. A silver bar through the top of the ear, with a stud and a ring lower down.
-3. A silver cuff and small rings up the ear, and a square stud at the lobe.
+2. Two small silver rings side by side on the upper rim of the ear, and a silver stud on the lobe.
+3. A plain silver cuff clipped round the middle of the ear's rim, and a small square silver stud on the lobe.
 4. A silver ring through the septum and a small stud in the nostril.
 5. Two silver studs through the eyebrow and one under the lower lip.
 6. Silver rings through the eyebrow, the nostril and both corners of the lower lip.
@@ -1107,7 +1107,7 @@ I'll save it as extra-sheet-07.png.
 
 #### `extra-sheet-08` · Extra sheet: piercings, more · P2
 
-**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-19`, 2 `jewel-20`, 3 `jewel-21`, 4 `jewel-22`, 5 `jewel-23`, 6 `jewel-24`.
+**Basis:** Edits `extra-sheet`. Columns: 1 `jewel-19`, 2 `jewel-20`, 3 `jewel-21`, 4 `jewel-22`, 5 `jewel-23`, 6 `jewel-24`. Piercings are painted on `extra-sheet-faces` (the same heads with faces, so each lands on the ear, brow, nose or lip it goes through), at twice life size, and `python tools/part_sheet.py unface` takes the faces out before the cut.
 
 1. Gold cuffs and small rings up the edge of the ear.
 2. A round gold plug stretching the earlobe.
@@ -1268,17 +1268,17 @@ Edit the attached blank base image: change ONLY this: a single pearl earring. It
 
 Edit the attached blank base image: change ONLY this: a row of small silver studs up the edge of the ear, and one at the lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-13.png.
 
-#### `jewel-14` · The industrial bar · P2
+#### `jewel-14` · Ear rings and a stud · P2
 
 **Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-14-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY this: a silver bar through the top of the ear, with a stud and a ring lower down. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-14.png.
+Edit the attached blank base image: change ONLY this: two small silver rings side by side on the upper rim of the ear, and a silver stud on the lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-14.png.
 
-#### `jewel-15` · Ear cuffs and studs · P2
+#### `jewel-15` · An ear cuff and a stud · P2
 
 **Basis:** Edits `base-male-blank`. One of the extras (§4.10). The woman's copy is `jewel-15-f`, on `base-female-blank`.
 
-Edit the attached blank base image: change ONLY this: a silver cuff and small rings up the ear, and a square stud at the lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-15.png.
+Edit the attached blank base image: change ONLY this: a plain silver cuff clipped round the middle of the ear's rim, and a small square silver stud on the lobe. It goes over the face and under the hair, so paint it on the blank head as it is. Paint it in its own colours. Keep the blank face, the head's outline and everything else exactly as they are. Keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as jewel-15.png.
 
 #### `jewel-16` · The septum ring · P2
 
