@@ -1019,6 +1019,11 @@ def shine(labels, count, sizes, own, open_):
 #: piece lying EXTRA_ALONG of its length on the base's outline (the outline drawn a pixel off).
 EXTRA_DRIFT, EXTRA_CHANGED, EXTRA_MARK = 3, 24, 13
 EXTRA_SPECK, EXTRA_DOT, EXTRA_ALONG = 14, 5, 0.7
+#: A repainted hair's skin (extra_part): lighter than HAIR_SKIN_LUM, in the skin's hues (EAR_HUE);
+#: the line left round it is HAIR_SKIN_LINE thick or less, or a scrap under HAIR_SKIN_SCRAP pixels.
+HAIR_SKIN_LUM, HAIR_SKIN_LINE, HAIR_SKIN_SCRAP = 150.0, 3, 500
+#: Within HAIR_SKIN_NEAR pixels of the head that skin is the hair's far side: hair, HAIR_SKIN_SHADE as bright as the hair round it.
+HAIR_SKIN_NEAR, HAIR_SKIN_SHADE = 36, 0.8
 #: Where a painter puts an ear on the blank head, as shares of the head's box (left of its left
 #: edge, right of it, and down from its top to the ear's top and its bottom); the skin's hues there
 #: (green and blue against red, least and most), and what's dark enough to be the line round it.
@@ -1063,6 +1068,40 @@ def extra_part(out, b, ref, covered, base_name, part):
     mark = part.startswith("skin-")
     drift = _drift(out, ref, EXTRA_DRIFT)
     new = (drift > (EXTRA_MARK if mark else EXTRA_CHANGED)) & covered
+    if part.startswith("hair-"):
+        # A hair painted again on the template's head: where the painter let the far cheek, the
+        # neck or a shoulder out a little, there's skin where the base has its outline or the
+        # black, and it's new. It isn't hair: what's as light as skin and in the skin's hues goes
+        # (a mid-brown hair's highlight is darker), and the thin dark line left round it.
+        c_ = out.astype(np.float64)
+        red_ = np.maximum(c_[..., 0], 1.0)
+        light = c_ @ np.array([0.299, 0.587, 0.114]) > HAIR_SKIN_LUM
+        skin_hue = ((c_[..., 0] >= c_[..., 1]) & (c_[..., 1] >= c_[..., 2]) & (c_[..., 1] / red_ >= EAR_HUE[0]) & (c_[..., 1] / red_ <= EAR_HUE[1])
+                    & (c_[..., 2] / red_ >= EAR_HUE[2]) & (c_[..., 2] / red_ <= EAR_HUE[3]))
+        moved = new & light & skin_hue
+        # Beside the head that skin is where the hair's far side shows past the cheek or the brow
+        # on the painter's wider head: taken away it would leave the sky between the face and the
+        # hair, so it's hair, in the shade of the hair round it. Anywhere else it simply goes.
+        behind = moved & ic.grow(_on_head(base_name), HAIR_SKIN_NEAR)
+        if behind.any():
+            lum_ = c_ @ np.array([0.299, 0.587, 0.114])
+            body_ = (new & ~moved & (lum_ > FIT_LINE * 2)).astype(np.float64)
+            near_ = ic.local_mean(c_, body_, (4, 8, 16, 32, 64))
+            behind &= ~np.isnan(near_[:, :, 0])
+            out = out.copy()
+            out[behind] = np.rint(np.clip(near_[behind] * HAIR_SKIN_SHADE, 0, 255)).astype(out.dtype)
+        moved &= ~behind
+        new &= ~moved
+        thin = new & ~ic.grow(~ic.grow(~new, HAIR_SKIN_LINE), HAIR_SKIN_LINE)
+        new &= ~(thin & ic.grow(moved, HAIR_SKIN_LINE + 1) & ~ic.grow(new & ~thin, 1))
+        scraps, n_ = ic.components(new)
+        if n_:
+            small = np.bincount(scraps.ravel(), minlength=n_ + 1) < HAIR_SKIN_SCRAP
+            beside = np.zeros(n_ + 1, bool)
+            beside[np.unique(scraps[ic.grow(moved, HAIR_SKIN_LINE + 1) & new])] = True
+            gone = small & beside
+            gone[0] = False
+            new &= ~gone[scraps]
     figure = ref.max(axis=2) >= FIT_BLACK
     edge = ic.grow(((ref.astype(np.float64) @ np.array([0.299, 0.587, 0.114]) < FIT_LINE) & figure)
                    | (ic.grow(figure, 1) & ic.grow(~figure, 1)), 2)
