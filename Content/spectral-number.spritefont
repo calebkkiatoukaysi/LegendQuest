@@ -69,10 +69,36 @@ with.
         <End>&#45;</End>
       </CharacterRegion>
 
-      <!-- The digits. -->
+      <!-- The point and the slash a timer or a share is written with ("2.5", "3/5"). -->
+      <CharacterRegion>
+        <Start>&#46;</Start>
+        <End>&#47;</End>
+      </CharacterRegion>
+
+      <!-- The digits, and the colon of a clock ("1:30"). -->
       <CharacterRegion>
         <Start>&#48;</Start>
-        <End>&#57;</End>
+        <End>&#58;</End>
+      </CharacterRegion>
+
+      <!-- The percent of a share ("64%"). -->
+      <CharacterRegion>
+        <Start>&#37;</Start>
+        <End>&#37;</End>
+      </CharacterRegion>
+
+      <!-- The m and s of a timer ("12s", "2m") and the x of a stack ("x3"). -->
+      <CharacterRegion>
+        <Start>&#109;</Start>
+        <End>&#109;</End>
+      </CharacterRegion>
+      <CharacterRegion>
+        <Start>&#115;</Start>
+        <End>&#115;</End>
+      </CharacterRegion>
+      <CharacterRegion>
+        <Start>&#120;</Start>
+        <End>&#120;</End>
       </CharacterRegion>
     </CharacterRegions>
   </Asset>

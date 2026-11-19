@@ -4225,6 +4225,12 @@ Content/Combat/conditions.png - created by Caleb Kiatoukaysi for Legend Quest, a
 
 Content/Combat/hud.png - created by Caleb Kiatoukaysi for Legend Quest, the pieces of the fight's screen: the hotbar's slots, the initiative portraits, the action, bonus action, reaction and Shift pips, the Focus bar, death saves, the Soul-Link sigil in its five states, the target rings, the plates at the places in the rows and the chevron over one you can Shift to, a support's banner and its progress ring, and the arrow, fire bolt, frost ray, radiant mote, eldritch blast, magic missile and flask in flight, drawn procedurally by tools/generate_combat_art.py, released under public domain
 
+Content/Combat/skills.png - created by Caleb Kiatoukaysi for Legend Quest, the real-time fight's skill icons: one for every class skill in Story/10-classes.md (the passives with a gold rim), the bar's own (the potion, the elixir, the Soul-Link Strike, Help, the auto attacks), the telegraph warning and the foes' telegraphed moves, each a glyph on a tile the colour of its school, 24x24, indexed by id in Combat/icons.json, drawn procedurally by tools/generate_combat_art.py, released under public domain
+
+Content/Combat/auras.png - created by Caleb Kiatoukaysi for Legend Quest, the real-time fight's aura icons: every condition the combat design names (stunned, frozen, restrained, prone, blinded, poisoned, frightened, charmed, taunted, marked, slowed, burning, bleeding), concentration, hasted, shielded, blessed, inspired, hexed, warded, regenerating, a generic buff and debuff and the class kits' own, 24x24, indexed by id in Combat/icons.json, drawn procedurally by tools/generate_combat_art.py, released under public domain
+
+Content/Combat/icons.json - written by tools/generate_combat_art.py for Legend Quest, the index of Combat/skills.png and Combat/auras.png: each sheet's icon ids in cell order, and which skills are passives, read by Components/Realtime/HudIcons, released under public domain
+
 Content/keycaps.png - created by Caleb Kiatoukaysi for Legend Quest, the key cap the tutorial tips and HOW TO PLAY write keys on, and the mouse with its left button, right button and wheel lit, drawn procedurally by tools/generate_ui.py, released under public domain
 
 ## Old maps
@@ -4519,7 +4525,11 @@ Content/spectral-ui.spritefont - written by Caleb Kiatoukaysi for Legend Quest, 
 
 Content/spectral-detail.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Light at 17pt, letterspaced
 
-Content/spectral-number.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Medium at 40pt, only the digits and the plus and minus signs, for the numbers that pop up over someone hit or healed
+Content/spectral-number.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Medium at 40pt, only the digits, the plus and minus signs and a timer's few marks (the point, the slash, the colon, the percent, and m, s and x), for the numbers that pop up over someone hit or healed and the real-time HUD's big timers
+
+Content/spectral-timer.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Medium at 18pt, for the real-time hotbar's cooldown timers ("12", "2.5")
+
+Content/spectral-small.spritefont - written by Caleb Kiatoukaysi for Legend Quest, from the MonoGame SpriteFont template; Spectral Medium at 12pt, letterspaced, for the real-time HUD's small words: aura timers ("12s"), stacks, Focus costs, keys, the numbers on the bars and the names over heads
 
 ## The scripts
 
@@ -4545,7 +4555,7 @@ tools/generate_meadow.py - written by Caleb Kiatoukaysi for Legend Quest, draws 
 
 tools/generate_items.py - written by Caleb Kiatoukaysi for Legend Quest, draws the item icons and the inventory's slots: every pixel is given a material and shaded from the top left at the end, with a dark outline round the lot, and it checks Items/ItemCatalog.cs's icons and rarities against its own list before it writes anything. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 
-tools/generate_combat_art.py - written by Caleb Kiatoukaysi for Legend Quest, draws the ability and condition icons and the pieces of the fight's screen with generate_items.py's kit, and checks Combat/CombatIcons.cs and the AbilityId and ConditionId enums against its own tables before it writes anything. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
+tools/generate_combat_art.py - written by Caleb Kiatoukaysi for Legend Quest, draws the ability and condition icons and the pieces of the fight's screen with generate_items.py's kit, and checks Combat/CombatIcons.cs and the AbilityId and ConditionId enums against its own tables before it writes anything; and draws the real-time fight's skill and aura icons (Combat/skills.png, Combat/auras.png) with their index (Combat/icons.json), checking first that every skill in Story/10-classes.md has its icon. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 
 tools/rooms/roomkit.py, tools/rooms/generate_room_placeholders.py - written by Caleb Kiatoukaysi for Legend Quest, the room placeholder tools: generate_room_placeholders.py paints every room's layers, its thumbnail and its doors.txt into Content/Rooms out of the game's own props, tiles and title pictures, and writes previews of them; roomkit.py is what every room tool shares. They need nothing but CPython, and every one is seeded, so a rerun gives the same files
 
