@@ -1,35 +1,69 @@
-# Room background artwork
+# Room artwork source collection
 
-Original source illustrations created with ChatGPT's built-in image generation for Caleb Kiatoukaysi, following `Story/14-background-prompts.md` and the supplied room-background PDF. Broad visual inspiration: [AQW Battleon Town](https://aqwwiki.wikidot.com/battleon-town); no AQW game images are included in this collection.
+Original illustrations created with ChatGPT's built-in image generation for Caleb Kiatoukaysi, following Story/14-background-prompts.md and the supplied room-background PDF. Broad visual inspiration: [AQW Battleon Town](https://aqwwiki.wikidot.com/battleon-town); no AQW game images are included.
 
-## Progress
+## Coverage
 
 | Asset type | Saved | Brief total |
 | --- | ---: | ---: |
-| Background panels, including interiors | 50 | 74 |
-| Transparent foreground strips | 0 | 22 |
-| Floor textures and overlays | 0 | 90 |
-| Total | 50 | 186 |
+| Background panels, including interiors | 74 | 74 |
+| Transparent foreground strips | 22 | 22 |
+| Floor textures, overlays and features | 90 | 90 |
+| Total | 186 | 186 |
 
-Generation stopped at the account image-generation usage limit. The tool reported the next reset as November 19, 2026 at approximately 12:06 AM America/Chicago. The remaining 136 assets are explicitly marked pending in the manifest; no existing game art is counted toward these totals.
+Source generation is complete. All 74 backgrounds use the richer detail direction; the 32 earlier panels received an additional edit pass. Rejected variants are excluded. Production fitting and runtime import remain pending.
 
-## More detailed art direction
+## More detailed backgrounds
 
-The owner requested more background detail during production. The revised Lantern Market first panel demonstrates the direction: carved timber joints and corbels, roof construction and wear, richer stonework, window tracery, metal fittings, individual leaf and blossom clusters, lantern construction, and a layered distant city. Later panels use the richer direction where recorded in `completed-assets.json`. Earlier panels still need the same detail revision; this collection does not claim that every panel has received it.
+The detail pass adds scene-appropriate material texture, joinery, fasteners, masonry wear, carvings, window and lantern construction, foliage and environmental layering while keeping the clean outlined, cel-shaded style. Walking areas stay visually quiet. Ship edits retain a wooden vessel on open ocean rather than adding land-based architecture.
 
-Keep the clean outlined, cel-shaded style and a quiet open walking band. Architectural and environmental detail belongs above that band. Preserve each room's palette, lighting, door layout and story setting.
+## Files and prompts
 
-## Files and review status
+- generated/<zone>/<room>/bg-<panel>.png: 74 landscape background sources, 1536 x 1024.
+- generated/<zone>/<room>/fg-<panel>.png: 22 foreground sources, 1536 x 1024, with true alpha.
+- tiles/<tileset>/<name>.png: 90 square tile sources, preserved at the generator's native 1254 x 1254. Overlay jobs have true alpha.
+- [generation-manifest.json](generation-manifest.json): all 186 baseline prompts, detail direction, source paths and intended import destinations.
+- [completed-assets.json](completed-assets.json): saved-file hashes, bytes, built-in generation method, revision and actual prompt plus promptAppend. Concatenate prompt and promptAppend to reconstruct each request.
+- [review-report.json](review-report.json): decoded dimensions, modes, alpha ranges and integrity results for every source.
 
-- `generated/<zone>/<room>/bg-<panel>.png`: full-resolution 1536 x 1024 source paintings.
-- `previews/contact-1.jpg` and `previews/contact-2.jpg`: labeled review sheets.
-- `generation-manifest.json`: all 186 planned assets, their full baseline prompts, revised detail direction, intended import destinations, and generated/pending status.
-- `completed-assets.json`: the 50 saved sources, generation method, revision metadata and prompts.
+## Review and game import
 
-These are source-art candidates, not imported runtime textures. Visual review found deviations in threshold heights, door sizes/positions, and panel overlaps. In particular, several paintings put the back edge of the floor below the prescribed y=656 line. Door geometry and joins must be fitted to the layout templates before runtime import. The images remain separate from `Content/Rooms` so the current game is unchanged.
+These are source-art candidates awaiting production fitting. They have not been copied into Content/Rooms or tools/source, so existing game art and runtime behavior are unchanged.
 
-After fitting and completing a room, copy its panels to the manifest's `importDestination` paths under `tools/source/rooms`, then run the existing `cut_room.py` and asset checks. Do not copy an incomplete room into that import directory. Foregrounds and tiles remain ungenerated.
+Visual review found deviations in door size and position, threshold heights, the prescribed floor line at y=656, and adjoining-panel overlaps. Match every room to its layout templates and reconcile joins before import. The detail edits retain the source compositions; they do not certify template alignment.
 
-![Background review sheet 1](previews/contact-1.jpg)
+Foregrounds have transparent backgrounds, but some tree strips exceed the brief's sparse coverage and place trunks near the center. Fit placement and scale against the matching background, check the walking band and door clearance, and clean any soft edge spill before use.
 
-![Background review sheet 2](previews/contact-2.jpg)
+All 90 tiles need normalization to the required 1024 x 1024 source size. Check opposite edges in a repeated grid, overlay scale and viewing angle, and feature/wall-strip crops before cutting them. A requested seamless prompt does not certify a seamless result.
+
+Integrity validation passed: all 186 planned sources exist, decode as PNG, have distinct hashes matching the completed manifest, and contain nonempty alpha where required. All 96 landscape sources match 1536 x 1024; the 90 square sources are 1254 x 1254. Integrity checks are separate from the outstanding visual fitting above.
+
+After fitting a complete room, copy panels to their manifest importDestination paths under tools/source/rooms, then use the existing cut_room.py and asset checks. Fit and normalize tiles before passing them to cut_tiles.py. Do not import an unfitted room as production art.
+
+## Background review sheets
+
+![Backgrounds 1](previews/contact-1.jpg)
+
+![Backgrounds 2](previews/contact-2.jpg)
+
+![Backgrounds 3](previews/contact-3.jpg)
+
+![Backgrounds 4](previews/contact-4.jpg)
+
+## Foreground review sheets
+
+Checkerboards show transparent space.
+
+![Foregrounds 1](previews/foregrounds-1.jpg)
+
+![Foregrounds 2](previews/foregrounds-2.jpg)
+
+## Tile review sheets
+
+![Tiles 1](previews/tiles-1.jpg)
+
+![Tiles 2](previews/tiles-2.jpg)
+
+![Tiles 3](previews/tiles-3.jpg)
+
+![Tiles 4](previews/tiles-4.jpg)

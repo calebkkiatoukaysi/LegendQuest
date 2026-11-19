@@ -1,0 +1,2234 @@
+{
+  "sourceCount": 186,
+  "countsByKind": {
+    "bg": 74,
+    "fg": 22,
+    "tile": 90
+  },
+  "nativeDimensions": {
+    "1536x1024": 96,
+    "1254x1254": 90
+  },
+  "sizeMismatches": 90,
+  "integrity": "PNG decoding, manifest coverage, hashes, file sizes, distinct files and required alpha checked; passed",
+  "runtimeReadiness": "Not imported. Geometry, joins, alpha cleanup, scale and seamlessness still require fitting and review.",
+  "previews": [
+    "previews/contact-1.jpg",
+    "previews/contact-2.jpg",
+    "previews/contact-3.jpg",
+    "previews/contact-4.jpg",
+    "previews/foregrounds-1.jpg",
+    "previews/foregrounds-2.jpg",
+    "previews/tiles-1.jpg",
+    "previews/tiles-2.jpg",
+    "previews/tiles-3.jpg",
+    "previews/tiles-4.jpg"
+  ],
+  "files": [
+    {
+      "file": "art/rooms/generated/gulls-wager/deck/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1924766,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/gulls-wager/deck/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2023501,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/gulls-wager/deck/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2106867,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/harbourside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2746987,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/harbourside/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2718966,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/harbourside/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2724479,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/fish-market/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2666339,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/fish-market/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2570677,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/fish-market/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2509267,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/pier/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2680056,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/gate-plaza/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2586238,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/gate-plaza/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2546840,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/gate-plaza/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2602030,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/festival-square/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2481044,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/festival-square/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2479792,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/festival-square/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2501101,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/lantern-market/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2828527,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/lantern-market/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2506352,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/lantern-market/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2689592,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/sunspire-steps/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2396357,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/thornbridge-gate/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2668662,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/gilded-flagon/taproom/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2634699,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/gilded-flagon/taproom/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2381365,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/shop/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2751819,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/forge/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2762770,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/bakery/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2608903,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/chapel/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2921793,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/cottage-a/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2325937,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/cottage-b/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2718174,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/warehouse/inside/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2377552,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/farmland/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2207046,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/farmland/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2291602,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/farmland/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2502746,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/fork/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2201898,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/fork/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2484352,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/fork/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2607099,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/barrow/steps/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3093964,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/barrow/hall/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2919684,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/barrow/hall/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2756062,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/barrow/hall/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2990340,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/barrow/side-room/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3010772,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/edge/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2631951,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/edge/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2894269,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/edge/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3018871,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/deep/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2869636,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/deep/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2997151,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/deep/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3096681,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/camp/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2794043,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/lip/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3103024,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/lip/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3176463,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/lip/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3319556,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/cut/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3262768,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/floor/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3344492,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/floor/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3501536,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood-quarry/floor/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3722837,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/thornbridge/camp-gate/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2390263,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/thornbridge/tents/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2596001,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/thornbridge/tents/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2741075,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/thornbridge/tents/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2927059,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/thornbridge/river-edge/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2780848,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/entrance/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2886081,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/entrance/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3013981,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/entrance/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3058699,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/halls/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2822456,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/halls/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3056361,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/halls/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3090809,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/strongroom/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2905624,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/strongroom/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3044812,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/strongroom/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3091939,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/old-crown-vault/treasury/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2987611,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/sunspire-keep/great-hall/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2796089,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/sunspire-keep/great-hall/bg-2.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2933602,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/sunspire-keep/great-hall/bg-3.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 3084528,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/rusty-anvil/bar/bg-1.png",
+      "kind": "bg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2285933,
+      "revision": "detailed-v2",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/harbourside/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 536807,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/harbourside/fg-2.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 588369,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/docks/harbourside/fg-3.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 591375,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/gate-plaza/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 769964,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/festival-square/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 873751,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/festival-square/fg-2.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1304801,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/festival-square/fg-3.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 748706,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/lantern-market/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1165806,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/questeria/thornbridge-gate/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 750448,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/farmland/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1104233,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/farmland/fg-2.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 738082,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/farmland/fg-3.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1281892,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/fork/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1516183,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/fork/fg-2.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1587839,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/road/fork/fg-3.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1730816,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/edge/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1275234,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/edge/fg-3.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 690058,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/deep/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 2175080,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/deep/fg-2.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 2349806,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/deep/fg-3.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 2009820,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/mirewood/camp/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1978509,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/generated/thornbridge/river-edge/fg-1.png",
+      "kind": "fg",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        254
+      ],
+      "bytes": 1661743,
+      "revision": "v1",
+      "sizeMatchesBrief": true
+    },
+    {
+      "file": "art/rooms/tiles/questeria/plaza.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1690455,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/questeria/terrace.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1912387,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/questeria/cobble.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1869433,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/questeria/grass.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1776395,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/questeria/water.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1558262,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/questeria/planks.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1861371,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/ship/deck.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1476759,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/ship/sea.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1379215,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/ship/rail-n.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1413196,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/ship/rail-s.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1463852,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/interior/floor-wood.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1521616,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/interior/floor-stone.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2159215,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/interior/rug.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2723803,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/interior/wall-top.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1770485,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/interior/wall-face.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1685970,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/interior/wall-base.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1329363,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/crypt/floor.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1947674,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/crypt/steps.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1728374,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/crypt/wall-top.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2175098,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/crypt/bones.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 390021,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/grass.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1825581,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/long-grass.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2543559,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/path.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1467662,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/road.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1931982,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/soil.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1550505,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/stream.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1973072,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/wall.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1681428,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/ruts.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 456740,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/reeds.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 692128,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/crops.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 332973,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/petals.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 300888,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/flowers.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 427270,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/clover.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 715138,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/pebbles.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 196233,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/tuft.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 500265,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/meadow/lilies.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 645632,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/grass.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1932347,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/grass-wilt.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1939270,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/grass-rot.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2783322,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/leaves.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2140909,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/leaves-blackvein.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2623737,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/gloom-moss.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1793782,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/trail.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1682930,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/tar-stream.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1505885,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/undergrowth.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2488678,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/undergrowth-rot.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2084818,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/tuft.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 428314,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/flowers.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 346176,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/fern.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 622855,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/pebbles.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 152319,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/roots.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 470268,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/litter.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 671360,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/veins.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 975898,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/tuft-dead.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 419544,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/toadstools.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 397302,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/tar-spatter.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 406658,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/brambles.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 976497,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/mirewood/tar-slick.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 386695,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/floor.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2184606,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/root-floor.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2126089,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/ramp.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2287480,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/wall-top.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1468784,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/tar-seep.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 2115488,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/gravel.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 415415,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/roots.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 324274,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/fungus.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 489139,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/tools.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 592860,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/quarry/shards.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 205700,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/floor.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1693616,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/inlay.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1777723,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/tunnel.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1738134,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/steps.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1615868,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/wall-top.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1925802,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/earth.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1750969,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/earth-top.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1505571,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/pressure-plate.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1615461,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/debris.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 622447,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/coins.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 458977,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/darts.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 234177,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/vault/bones.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "bytes": 315054,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/marble.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1407609,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/carpet.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1687562,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/dais.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1861830,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/steps.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1492921,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/wall-top.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1896355,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/wall-high.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1581664,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/wall-face.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1447266,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/wall-base.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1541354,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/window-high.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1969264,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    },
+    {
+      "file": "art/rooms/tiles/keep/window.png",
+      "kind": "tile",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaRange": null,
+      "bytes": 1596186,
+      "revision": "v1",
+      "sizeMatchesBrief": false
+    }
+  ]
+}
