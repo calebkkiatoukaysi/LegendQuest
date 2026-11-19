@@ -67,7 +67,9 @@ A skill's dice go up with *level*, not rank: one more die at level 5, and anothe
 
 ### 1.6 What a skill line means
 
-Each class table lists: the rank it unlocks at; the kind (**A** action, **B** bonus action, **R** reaction, **P** passive); Focus cost; cooldown in turns (**CD**); the target (`11-combat.md` §2.3 has the target shapes); and the effect. "1/fight" means once per fight.
+Each class table lists: the rank it unlocks at; the kind (**A** action, **B** bonus action, **R** reaction, **P** passive); Focus cost; cooldown (**CD**); the target; and the effect. "1/fight" means once per fight.
+
+Combat is real time (`11-combat.md`). The tables below were written for turns, and `11-combat.md` §4.2 to §4.3 say how each column reads now: **A** is on the global cooldown and **B** off it, **R** is armed and fires on its trigger, a turn is 3 seconds, CD 1 to 4 are 6, 8, 12 and 16 seconds, 1/fight is a 45 s cooldown, and the row shapes become areas around the target. Each class also has its way of filling Focus (`11-combat.md` §4.1). The numbers the simulator settled on are in the section **Tuned numbers** at the end of this file, which wins where it differs from a table.
 
 ---
 
@@ -429,7 +431,17 @@ Commander and duellist. Medium armour, longswords, rapiers.
 
 #### Hourwarden (`hourwarden`) · Archmage Thessaly · the Sunspire ruins
 
-Time mage. No armour, staffs. Unlocked after the coronation (`a3-c5-06`), for Act 4: it's listed here so its trainer scene can be written with Act 3's ending, and so the systems are built for it. Its skills: Rewind (an ally's hit points go back to what they were at the start of the last round), Haste (an extra action next turn), Stop (a foe skips its next turn), Echo Strike (your last skill again, at half), and Ultimate, Bleed the Clock (every foe loses its next turn). Ranks and numbers are set with Act 4.
+Time mage. No armour, staffs. Unlocked after the coronation (`a3-c5-06`), for Act 4: it's listed here so its trainer scene can be written with Act 3's ending, and so the systems are built for it. Its skills: Rewind (an ally's hit points go back to what they were a few seconds ago), Haste (an ally acts faster), Stop (a foe stops), Echo Strike (your last skill again, at half), and Ultimate, Bleed the Clock (every foe stops). The kit below is provisional, so the real-time systems have it to build against; its ranks and numbers are settled with Act 4.
+
+| Rank | Skill | Kind | Focus | CD | Target | Effect |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Second Hand | A | — | — | 1 foe | 1d8⁺ force from the staff's head, the swing a beat behind itself |
+| 1 | Rewind | B | 25 | 3 | 1 ally | Their hit points go back to what they were 6 s ago, if that's more |
+| 2 | Haste | B | 25 | 3 | 1 ally | Haste +30% for 9 s |
+| 3 | Stop | A | 30 | 3 | 1 foe | Wis save or Frozen 3 s |
+| 4 | Echo Strike | P | | | | A skill you use has a one-in-five chance to happen again at half strength |
+| 5 | Bleed the Clock | A | 70 | 1/fight | all foes | Wis save or Frozen 4 s; those who save are Slowed 6 s |
+| 10 | Stolen Minute | P | | | | Your cooldowns run 10% faster |
 
 ---
 
