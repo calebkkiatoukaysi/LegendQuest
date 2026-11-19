@@ -14,4 +14,11 @@ namespace LegendQuest.Combat;
 /// <param name="Turns">How many of the bearer's turns the condition lasts.</param>
 /// <param name="Foe">For SupportTarget.Foe, the foe it's aimed at, which has to be one of this fight's; null otherwise.</param>
 public sealed record SupportAbility(string Text, SupportTarget Target, DiceExpression Damage, DamageType Type,
-    ConditionId? Condition = null, int Turns = 0, string Foe = null);
+    ConditionId? Condition = null, int Turns = 0, string Foe = null)
+{
+    /// <summary>In real time, how long the condition lasts, in milliseconds: Turns at 3 s a turn unless set.</summary>
+    public int ConditionMs { get; init; } = -1;
+
+    /// <summary>How long the condition lasts in real time.</summary>
+    public int LastsMs => ConditionMs >= 0 ? ConditionMs : Turns * 3000;
+}

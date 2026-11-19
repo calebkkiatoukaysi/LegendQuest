@@ -14,4 +14,11 @@ namespace LegendQuest.Combat;
 /// Its fight-add, fight-guest and support-off change the fight. A stub until the fights that use it
 /// (M7): validation turns down an encounter with one.
 /// </param>
-public sealed record EncounterWave(int Round, IReadOnlyList<EncounterFoe> Foes, string Bark, string Interlude = null);
+public sealed record EncounterWave(int Round, IReadOnlyList<EncounterFoe> Foes, string Bark, string Interlude = null)
+{
+    /// <summary>In real time, the second they walk in at (sooner if the field's clear); without one, the start of their Round at 6 s a round.</summary>
+    public int AtSeconds { get; init; } = -1;
+
+    /// <summary>The second they walk in at in real time: AtSeconds, or (Round - 1) × 6.</summary>
+    public int ArrivesAtSeconds => AtSeconds >= 0 ? AtSeconds : (Round - 1) * EncounterDefinition.SecondsPerRound;
+}

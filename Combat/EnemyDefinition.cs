@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LegendQuest.Combat.Realtime;
 using LegendQuest.Rules;
 
 namespace LegendQuest.Combat;
@@ -59,4 +60,62 @@ public sealed class EnemyDefinition
 
     /// <summary>The Focus each of its hits takes from whoever it hits, as well as the damage, or 0.</summary>
     public int FocusDrain { get; init; }
+
+    // Real time (11-combat.md §5.1). The turn-based engine reads none of these.
+
+    /// <summary>Its auto attack's swing timer, or 0 for its size's: 2.5 s for most, 3.0 s for a big one (QuickSwingMs for quick beasts is set here).</summary>
+    public int AttackMs { get; init; }
+
+    /// <summary>How many of its attacks a Multiattack swing strikes, in order, in a combo; 0 for all of them.</summary>
+    public int Combo { get; init; }
+
+    /// <summary>Its telegraphed moves from the start of the fight, by SkillCatalog id (foe-trip, foe-blasting-charge).</summary>
+    public IReadOnlyList<string> Skills { get; init; } = Array.Empty<string>();
+
+    /// <summary>A move its auto attack makes instead of a plain attack (the hexer's Ashen Bolt, with its cast), by SkillCatalog id, or null.</summary>
+    public string AutoSkill { get; init; }
+
+    /// <summary>A boss's phases after its first, in order, each at a share of its hit points (11-combat.md §5.2).</summary>
+    public IReadOnlyList<FoePhase> Phases { get; init; } = Array.Empty<FoePhase>();
+
+    /// <summary>How it holds what it fights with, for its clips; null for a creature's claws and teeth (Unarmed), or what its first attack's name suggests.</summary>
+    public WeaponKind? Weapon { get; init; }
+
+    /// <summary>Whether it's undead or a fiend, for the skills that do more to them (Divine Smite, Dawnlight).</summary>
+    public bool Undead { get; init; }
+
+    /// <summary>Whether it's a beast or a swarm, for the skills that care (the Hivekeeper's They Know Me).</summary>
+    public bool Beast { get; init; }
+
+    /// <summary>The swing timer of a quick beast: wolves and wraiths.</summary>
+    public const int QuickSwingMs = 2000;
+
+    /// <summary>The swing timer of most foes.</summary>
+    public const int SwingMs = 2500;
+
+    /// <summary>The swing timer of a big one.</summary>
+    public const int BigSwingMs = 3000;
+
+    /// <summary>Its swing timer: AttackMs, or its size's.</summary>
+    public int SwingTimeMs => AttackMs > 0 ? AttackMs : Big ? BigSwingMs : SwingMs;
+
+    /// <summary>How many times its hit dice's average its hit points are in real time, where a party lands several blows for every one of a turn: DefaultHpScale unless set.</summary>
+    /// <remarks>11-combat.md §9.2's first lever for a fight's length. The turn-based engine doesn't read it.</remarks>
+    public float HpScale { get; init; }
+
+    /// <summary>The real-time hit point scale of a stat block that doesn't set its own.</summary>
+    public const float DefaultHpScale = 4.5f;
+
+    /// <summary>Its real-time hit point scale: HpScale, or the default.</summary>
+    public float RealtimeHpScale => HpScale > 0f ? HpScale : DefaultHpScale;
+
+    /// <summary>The share of what its blows roll that they do in real time, where it swings two or three times for every one of a turn while the party's hit points stay as they were: DefaultDamageScale unless set.</summary>
+    /// <remarks>11-combat.md §9.2's damage lever. The turn-based engine doesn't read it.</remarks>
+    public float DamageScale { get; init; }
+
+    /// <summary>The real-time damage scale of a stat block that doesn't set its own.</summary>
+    public const float DefaultDamageScale = 0.5f;
+
+    /// <summary>Its real-time damage scale: DamageScale, or the default.</summary>
+    public float RealtimeDamageScale => DamageScale > 0f ? DamageScale : DefaultDamageScale;
 }

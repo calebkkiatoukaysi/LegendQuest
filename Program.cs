@@ -1,11 +1,13 @@
 ﻿using System;
 using LegendQuest;
 using LegendQuest.Combat;
+using LegendQuest.Combat.Realtime;
 
 // Three dev switches. --simulate <encounter-id> [runs] [story|balanced|tactician] fights an encounter
-// headless with the AI on both sides, prints how it went against its targets, and quits without ever
-// opening a window, exiting 1 if anything failed (--simulate all fights every one; Balanced if no
-// difficulty's named, and Tactician's verdicts are only for information). --proof <dir> plays
+// headless on the real-time engine with the AI on both sides, prints how it went against its targets,
+// and quits without ever opening a window, exiting 1 if anything failed (--simulate all fights every
+// one, --simulate classes puts each class in your place, --simulate selftest checks the engine itself,
+// trace:<encounter-id> prints one run and skill:<skill-id> one skill's scripted fight; Balanced if no difficulty's named, and Tactician's verdicts are only for information). --proof <dir> plays
 // through the screens, saves a picture of each one into <dir>, and quits;
 // --proof <dir> <part> stops after that part of the run (a ProofStage, like Docks). Anything else
 // starts the game. --validate reads every zone and checks every conversation, shop and loot table and
@@ -13,7 +15,7 @@ using LegendQuest.Combat;
 // wrong and exits 1, or exits 0.
 if (args.Length > 1 && args[0] == "--simulate")
 {
-    int runs = CombatSimulator.DefaultRuns;
+    int runs = BattleSimulator.DefaultRuns;
     Difficulty difficulty = Difficulty.Balanced;
     for (int i = 2; i < args.Length; i++)
     {
@@ -27,7 +29,7 @@ if (args.Length > 1 && args[0] == "--simulate")
             return;
         }
     }
-    if (!CombatSimulator.Run(args[1], runs, difficulty)) Environment.ExitCode = 1;
+    if (!BattleSimulator.Run(args[1], runs, difficulty)) Environment.ExitCode = 1;
     return;
 }
 
@@ -42,6 +44,8 @@ if (args.Length > 0 && args[0] == "--validate")
         Console.Error.WriteLine(fault.Message);
         Environment.Exit(1);
     }
+    foreach (string clip in MotionTimings.Missing(SkillCatalog.Clips()))
+        Console.WriteLine($"validate: warning: clips.json has no clip {clip}; the engine times it by its fallback.");
     Console.WriteLine("validate: every zone, conversation, shop, loot table, imported picture and character part checks out.");
     return;
 }

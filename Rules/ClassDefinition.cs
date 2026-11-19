@@ -20,6 +20,24 @@ public sealed class ClassDefinition
     /// <summary>What the story calls it on screen. The ClassId is the SRD's name for it.</summary>
     public required string Name { get; init; }
 
+    /// <summary>Its code id, the start of every one of its skill ids (fighter, lodge-ranger): 10-classes.md's, in backticks after the name.</summary>
+    public required string Code { get; init; }
+
+    /// <summary>Whether it's one of the sixteen advanced classes or the Hourwarden, learned from someone in the story rather than chosen at creation.</summary>
+    public bool Advanced { get; init; }
+
+    /// <summary>How it fills its Focus in a fight (11-combat.md §4.1).</summary>
+    public FocusModel Focus { get; init; }
+
+    /// <summary>The threat it makes, in percent: 200 for the Warden, the Ironvein Bulwark and the Watchblade, whose job it is to be hit (11-combat.md §5.1); 100 for the rest.</summary>
+    public int ThreatPct { get; init; } = 100;
+
+    /// <summary>The two saving throws it's proficient in, from the SRD for the base classes.</summary>
+    public required IReadOnlyList<Ability> Saves { get; init; }
+
+    /// <summary>The base class whose interim kit the old turn-based engine gives it (AbilityCatalog) until that engine goes: its own, for a base class.</summary>
+    public ClassId InterimKit { get; init; }
+
     /// <summary>What it's for, in a few words, for the creation screen.</summary>
     public required string Role { get; init; }
 

@@ -323,7 +323,7 @@ public static class AbilityCatalog
 
         foreach (ClassId id in Enum.GetValues<ClassId>())
         {
-            if (!Kits.TryGetValue(id, out AbilityId[] kit)) throw new InvalidOperationException($"Class {id} has no kit in AbilityCatalog.");
+            if (!Kits.TryGetValue(ClassCatalog.Get(id).InterimKit, out AbilityId[] kit)) throw new InvalidOperationException($"Class {id} has no kit in AbilityCatalog.");
             if (Get(kit[0]).Bar != BarSlot.Auto) throw new InvalidOperationException($"Class {id}'s kit doesn't start with an auto attack.");
             foreach (AbilityId ability in kit)
                 if (Array.IndexOf(PartyShared, ability) >= 0) throw new InvalidOperationException($"Class {id}'s kit has {ability}, which everyone has already.");
@@ -339,7 +339,8 @@ public static class AbilityCatalog
 
     /// <summary>A class's own kit, in bar order: its auto attack first, then its skills and what's always on.</summary>
     /// <param name="id">Which class.</param>
-    public static IReadOnlyList<AbilityId> Kit(ClassId id) => Kits[id];
+    /// <remarks>An advanced class fights from the interim kit of the base class its ClassDefinition names, until the real-time engine's SkillCatalog replaces this.</remarks>
+    public static IReadOnlyList<AbilityId> Kit(ClassId id) => Kits[ClassCatalog.Get(id).InterimKit];
 
     /// <summary>Whether an ability is one every stat block or every party member has, so a stat block has no need to list it.</summary>
     /// <param name="id">Which.</param>
@@ -392,7 +393,7 @@ public static class AbilityCatalog
                 return block;
             }
 
-            var kit = new List<AbilityId>(Kits[who.Member.Class]);
+            var kit = new List<AbilityId>(AbilityCatalog.Kit(who.Member.Class));
             kit.AddRange(PartyShared);
             return kit;
         }

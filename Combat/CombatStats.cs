@@ -29,27 +29,6 @@ public static class CombatStats
     /// <summary>What the Defence fighting style adds to AC in armour.</summary>
     private const int DefenceBonus = 1;
 
-    /// <summary>The two saving throws each class is proficient in, from the SRD. Here rather than on ClassDefinition since only a fight rolls saves.</summary>
-    private static readonly Dictionary<ClassId, Ability[]> Saves = new()
-    {
-        [ClassId.Fighter] = new[] { Ability.Strength, Ability.Constitution },
-        [ClassId.Rogue] = new[] { Ability.Dexterity, Ability.Intelligence },
-        [ClassId.Cleric] = new[] { Ability.Wisdom, Ability.Charisma },
-        [ClassId.Wizard] = new[] { Ability.Intelligence, Ability.Wisdom },
-        [ClassId.Paladin] = new[] { Ability.Wisdom, Ability.Charisma },
-        [ClassId.Druid] = new[] { Ability.Intelligence, Ability.Wisdom },
-        [ClassId.Warlock] = new[] { Ability.Wisdom, Ability.Charisma },
-        [ClassId.Bard] = new[] { Ability.Dexterity, Ability.Charisma },
-    };
-
-    /// <summary>Checks every class has its saves.</summary>
-    /// <remarks>Throws on purpose, so a class added to the enum and not here shows up when the game starts.</remarks>
-    static CombatStats()
-    {
-        foreach (ClassId id in Enum.GetValues<ClassId>())
-            if (!Saves.TryGetValue(id, out Ability[] saves) || saves.Length != 2)
-                throw new InvalidOperationException($"Class {id} needs its two saving throws in CombatStats.");
-    }
 
     /// <summary>The short name of an ability, the way the log and the dice show it: STR, DEX.</summary>
     /// <param name="ability">The ability.</param>
@@ -99,7 +78,17 @@ public static class CombatStats
     /// <param name="member">Who.</param>
     /// <param name="ability">Which save.</param>
     public static int SaveBonus(PartyMember member, Ability ability) =>
-        member.Scores.Modifier(ability) + (Array.IndexOf(Saves[member.Class], ability) >= 0 ? LevelTable.Proficiency(member.Level) : 0);
+        member.Scores.Modifier(ability) + (Proficient(member.Class, ability) ? LevelTable.Proficiency(member.Level) : 0);
+
+    /// <summary>Whether a class is proficient in a saving throw: one of the two its ClassDefinition gives it (the SRD's, for the base classes).</summary>
+    /// <param name="id">The class.</param>
+    /// <param name="ability">Which save.</param>
+    public static bool Proficient(ClassId id, Ability ability)
+    {
+        foreach (Ability save in ClassCatalog.Get(id).Saves)
+            if (save == ability) return true;
+        return false;
+    }
 
     /// <summary>The ability their class casts with, or null if it doesn't.</summary>
     /// <param name="member">Who.</param>
