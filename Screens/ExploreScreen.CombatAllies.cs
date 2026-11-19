@@ -1,36 +1,43 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendQuest.Characters;
 using LegendQuest.Combat;
+using LegendQuest.Combat.Realtime;
 using LegendQuest.Components;
 using LegendQuest.Story;
 using LegendQuest.Tutorial;
 using LegendQuest.World;
+using SupportView = LegendQuest.Combat.Realtime.SupportView;
 
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// A fight's allies on the screen: the supports' figures behind your side with a banner over each,
-/// their entries at the end of the turn order, and what their strikes look like; and the guests in
-/// the rows falling back when they're beaten.
+/// A fight's supports on the screen: their figures behind the party with a banner over each and its
+/// ring filling to the next time it acts, and what their shots and nets look like.
 /// </summary>
 /// <remarks>
-/// 11-combat §4. A support is drawn as whoever the encounter says (EncounterSupport.Figure): one of
-/// the party sitting the fight out, someone standing in the room, or a figure made for it (an
+/// Story/11-combat.md §5.4. A support is drawn as whoever the encounter says (EncounterSupport.Figure):
+/// one of the party sitting the fight out, someone standing in the room, or a figure made for it (an
 /// origin, the cast, an enemy, a creature, a townsfolk sheet, or someone a zone puts down elsewhere).
-/// Each stands at FightStage.SupportStand on the band's back edge, those in the room walking there
-/// and the rest fading in. Its banner says what it does, lit while it acts at the end of this round
-/// and dim before its first round, after its last, and once a script's stood it down; one holding
-/// out for something (Sera at the crystal) has a ring beside it that fills as the rounds go. When it
-/// acts, its figure winds up and strikes, an arrow flies if it shoots, and its name pops over it; the
-/// damage or the condition follows as its own events. Nobody can hit a support, so nothing is drawn
-/// under one.
+/// Each stands on the band's back edge behind the party (BattleArena.SupportSpot, spread along the
+/// edge), those in the room walking there and the rest fading in. Its banner says what it does, lit
+/// for a moment when it acts and dim once a script's stood it down; its ring fills to its next turn,
+/// or for one holding out for something (Sera at the crystal) to the end of the hold. When it acts,
+/// its figure swings or shoots, an arrow flies if it shoots, and its name pops over it; the blow
+/// lands with the arrow. Nobody can hit a support, so nothing is drawn under one.
 /// </remarks>
 public partial class ExploreScreen
 {
     /// <summary>How far over a support's head its banner sits, in screen pixels.</summary>
     private const int SupportBannerRise = 14;
+
+    /// <summary>How far apart along the back edge two supports stand, in world pixels.</summary>
+    private const float SupportSpacing = 22f;
+
+    /// <summary>How long a support's banner stays lit after it acts.</summary>
+    private const int SupportLitMs = 700;
 
     /// <summary>Each support's figure, by the support's id.</summary>
     private readonly Dictionary<string, WalkerSprite> _supportFigures = new();
@@ -38,29 +45,41 @@ public partial class ExploreScreen
     /// <summary>Where each figure that was standing in the room before it was a support stood, to go back to.</summary>
     private readonly Dictionary<WalkerSprite, Vector2> _supportHomes = new();
 
-    /// <summary>Puts each support's figure at its place behind your side: one standing in the room walks there, any other fades in on it.</summary>
+    /// <summary>When a support's shot lands on each foe it's flying at, by the foe's id, for its blow to land with it.</summary>
+    private readonly Dictionary<string, float> _supportShot = new();
+
+    /// <summary>A support's banner as it's drawn: who, what it says, its icon, whether it's lit, and its ring.</summary>
+    private sealed record SupportBannerView(string Id, string Line, Rectangle? Icon, bool Lit, float? Progress);
+
+    /// <summary>Puts each support's figure at its place behind the party: one standing in the room walks there, any other fades in on it.</summary>
     private void PlaceSupports()
     {
         _supportFigures.Clear();
         _supportHomes.Clear();
+        _supportShot.Clear();
 
-        IReadOnlyList<SupportState> supports = _combat.Supports;
+        IReadOnlyList<SupportView> supports = _battle.Supports;
+        Vector2 spot = ToScreen(_battle.Arena.SupportSpot);
+        float ahead = Leader.Position.X >= spot.X ? -1f : 1f;
         for (int i = 0; i < supports.Count; i++)
         {
-            if (SupportFigure(supports[i].Support.Figure) is not WalkerSprite walker) continue;
+            if (SupportFigure(supports[i].Figure) is not WalkerSprite walker) continue;
 
-            Vector2 stand = _stage.SupportStand(i, supports.Count);
+            float x = Math.Clamp(spot.X + ahead * i * SupportSpacing, _battle.Arena.Left, _battle.Arena.Right);
+            var stand = new Vector2(x, _room.BackEdgeAt(x) + BattleFloor.Inset);
+            Direction facing = Leader.Position.X >= x ? Direction.Right : Direction.Left;
             _supportFigures[supports[i].Id] = walker;
             if (walker.Opacity <= 0f)
             {
                 walker.Position = stand;
-                walker.Facing = Direction.Right;
-                FadeTo(walker, 1f, ArriveSeconds);
+                walker.Facing = facing;
+                ArriveIn(walker);
                 continue;
             }
 
             if (!_benched.ContainsKey(walker)) _supportHomes[walker] = walker.Position;
-            WalkTo(walker, stand, Direction.Right, TakePlacesLeast, TakePlacesMost);
+            _benched.Remove(walker);
+            WalkTo(walker, stand, facing, StandBackLeast, StandBackMost);
         }
     }
 
@@ -73,8 +92,10 @@ public partial class ExploreScreen
             walker.IsWalking = false;
             walker.Release();
         }
+        foreach (WalkerSprite walker in _supportFigures.Values) walker.InFight = false;
         _supportHomes.Clear();
         _supportFigures.Clear();
+        _supportShot.Clear();
     }
 
     /// <summary>The figure a support is drawn as: one of the party sitting it out, someone in the room who isn't fighting, or one made for it; null if there's nobody to draw.</summary>
@@ -91,7 +112,7 @@ public partial class ExploreScreen
         return MadeFigure(figure) is WalkerSprite made ? Spawn(made) : null;
     }
 
-    /// <summary>A figure made for a support who isn't anyone in the room: an origin as they'd be dressed, one of the cast, an enemy, a creature, a townsfolk sheet, or someone a zone puts down elsewhere, each with their imported picture if they've one.</summary>
+    /// <summary>A figure made for someone who isn't anyone in the room: an origin as they'd be dressed, one of the cast, an enemy, a creature, a townsfolk sheet, or someone a zone puts down elsewhere, each with their imported picture if they've one.</summary>
     private WalkerSprite MadeFigure(string figure)
     {
         if (Origins.Exists(figure)) return GuestWalker(figure);
@@ -109,36 +130,30 @@ public partial class ExploreScreen
         return null;
     }
 
-    /// <summary>Every support as the screen shows it, in the order they act.</summary>
-    private List<SupportView> SupportViews()
+    /// <summary>Every support's banner as it's drawn: lit for a moment as it acts, its ring filling to its next turn (or to the end of the hold, for one holding out).</summary>
+    /// <remarks>Its line is who they are, and only while it's lit what they did: a long line up the whole fight sat across the middle of it.</remarks>
+    private List<SupportBannerView> SupportBanners()
     {
-        var views = new List<SupportView>();
-        foreach (SupportState state in _combat.Supports)
+        var views = new List<SupportBannerView>();
+        foreach (SupportView support in _battle.Supports)
         {
-            EncounterSupport support = state.Support;
-            string name = support.Name.ToUpperInvariant();
-            string line = support.Ability?.Text.ToUpperInvariant() ?? name;
-            float? progress = support.Progress && _encounter.EndsAfterRounds > 0
-                ? MathHelper.Clamp((float)_shown.Round / _encounter.EndsAfterRounds, 0f, 1f)
-                : null;
-            views.Add(new SupportView(support.Id, name, line, SupportIcon(support.Ability), state.Ready && !state.Off, progress));
+            EncounterSupport definition = SupportOf(support.Id);
+            bool lit = !support.Off && support.LastMs >= 0 && _battle.NowMs - support.LastMs < SupportLitMs;
+            string line = (lit ? definition?.Ability?.Text ?? support.Name : support.Name).ToUpperInvariant();
+            float? progress = null;
+            if (support.Progress) progress = (float)_battle.SurviveShare;
+            else if (!support.Off && definition?.Ability is not null && support.EveryMs > 0)
+                progress = MathHelper.Clamp(1f - (support.NextMs - _battle.NowMs) / (float)support.EveryMs, 0f, 1f);
+            views.Add(new SupportBannerView(support.Id, line, SupportIcon(definition?.Ability), lit, progress));
         }
         return views;
     }
 
-    /// <summary>The supports that act, for the end of the turn order: the ones with nothing to do (a figure the story needs there) aren't on it.</summary>
-    private List<SupportView> ActingSupports()
+    /// <summary>A support of the encounter by its id, or null.</summary>
+    private EncounterSupport SupportOf(string id)
     {
-        List<SupportView> views = SupportViews();
-        views.RemoveAll(view => FindSupport(view.Id)?.Support.Ability is null);
-        return views;
-    }
-
-    /// <summary>A support in the fight by its id, or null.</summary>
-    private SupportState FindSupport(string id)
-    {
-        foreach (SupportState state in _combat.Supports)
-            if (state.Id == id) return state;
+        foreach (EncounterSupport support in _encounter.Supports)
+            if (support.Id == id) return support;
         return null;
     }
 
@@ -157,19 +172,20 @@ public partial class ExploreScreen
         };
     }
 
-    /// <summary>Where a support's banner goes over its figure, on screen.</summary>
-    private Rectangle SupportBannerOver(WalkerSprite walker, SupportView view)
+    /// <summary>Where a support's banner goes over its figure, on screen, kept inside the screen's edges.</summary>
+    private Rectangle SupportBannerOver(WalkerSprite walker, SupportBannerView view)
     {
         Vector2 head = HeadOnScreen(walker);
         int width = _supportBanner.Width(view.Line);
         int extra = view.Progress is null ? 0 : SupportBanner.RingSize;
-        return new Rectangle((int)(head.X - (width + extra) / 2f), (int)(head.Y - SupportBannerRise - SupportBanner.Height), width, SupportBanner.Height);
+        int x = Math.Clamp((int)(head.X - (width + extra) / 2f), (int)Margin, Math.Max((int)Margin, LegendQuestGame.ScreenWidth - (int)Margin - width - extra));
+        return new Rectangle(x, (int)(head.Y - SupportBannerRise - SupportBanner.Height), width, SupportBanner.Height);
     }
 
     /// <summary>Draws the banners over the supports' figures. Goes in the point sampled screen batch.</summary>
-    private void DrawSupportBannersArt(SpriteBatch spriteBatch, IReadOnlyList<SupportView> views, float alpha)
+    private void DrawSupportBannersArt(SpriteBatch spriteBatch, IReadOnlyList<SupportBannerView> views, float alpha)
     {
-        foreach (SupportView view in views)
+        foreach (SupportBannerView view in views)
         {
             if (!_supportFigures.TryGetValue(view.Id, out WalkerSprite walker) || walker.Opacity <= 0f) continue;
             _supportBanner.DrawArt(spriteBatch, SupportBannerOver(walker, view), view.Icon, view.Lit, view.Progress, walker.Opacity * alpha);
@@ -177,53 +193,39 @@ public partial class ExploreScreen
     }
 
     /// <summary>Writes the lines on the banners over the supports' figures. Goes in the linear sampled screen batch.</summary>
-    private void DrawSupportBannersWords(SpriteBatch spriteBatch, IReadOnlyList<SupportView> views, float alpha)
+    private void DrawSupportBannersWords(SpriteBatch spriteBatch, IReadOnlyList<SupportBannerView> views, float alpha)
     {
-        foreach (SupportView view in views)
+        foreach (SupportBannerView view in views)
         {
             if (!_supportFigures.TryGetValue(view.Id, out WalkerSprite walker) || walker.Opacity <= 0f) continue;
             _supportBanner.DrawWords(spriteBatch, SupportBannerOver(walker, view), view.Line, view.Lit, walker.Opacity * alpha);
         }
     }
 
-    /// <summary>A support acting at the end of the round: its figure winds up and strikes, an arrow flies to the foe if it shoots, and its name pops over it. What it did follows.</summary>
-    private void CueSupport(CombatEvent happened)
+    /// <summary>A support acting: its figure swings or shoots at the one it's aimed at, an arrow flies if it shoots (the blow lands with it), a net or a blessing falls if that's what it does, and its name pops over it.</summary>
+    private void CueSupport(BattleEvent happened)
     {
-        SupportState state = FindSupport(happened.Actor);
-        string name = state?.Support.Name.ToUpperInvariant() ?? happened.Actor?.ToUpperInvariant();
-        _proofSupportShown = true;
-        _log.Add(happened.Text ?? $"{name}: {state?.Support.Ability?.Text}", Palette.Gold);
-        _beatLength = WindUpSeconds + StrikeSeconds;
-        if (happened.Actor is null || !_supportFigures.TryGetValue(happened.Actor, out WalkerSprite by)) return;
-
-        WalkerSprite on = FighterWalker(happened.Target);
-        if (on is not null) by.Face(on.Position);
-        by.Play(WalkerPose.WindUp, WindUpSeconds);
-        _popups.Word(HeadOf(by), name, Palette.Gold);
+        EncounterSupport support = SupportOf(happened.ActorId);
+        WalkerSprite on = FighterWalker(happened.TargetId);
         Lesson(TutorialCatalog.CombatAllies);
+        if (support is null || !_supportFigures.TryGetValue(support.Id, out WalkerSprite by)) return;
 
-        bool shoots = state?.Support.Ability is SupportAbility ability && !ability.Damage.IsNone && Shoots(ability.Text);
-        DamageType kind = state?.Support.Ability?.Type ?? DamageType.Bludgeoning;
-        _beatStrikeAt = WindUpSeconds;
+        if (on is not null) by.Face(on.Position);
+        _popups.Word(NumbersAt(by), support.Name.ToUpperInvariant(), Palette.Gold);
+        SupportAbility ability = support.Ability;
+        bool shoots = ability is not null && !ability.Damage.IsNone && Shoots(ability.Text);
         if (!shoots || on is null)
         {
-            _beatStrike = () =>
-            {
-                by.Play(WalkerPose.Strike, StrikePoseSeconds);
-                if (on is not null && happened.Amount > 0) _effects.Sparks(ChestOf(on), CombatStyle.DamageColour(kind), Upward, SparkSpread);
-            };
+            by.PlayMove(on is null ? "cast" : "auto-one-hand-1");
+            if (on is not null && ability?.Condition is not null) _effects.Motes(ChestOf(on) - new Vector2(0f, 18f), new Point(18, 10), Palette.Bone, true);
             return;
         }
 
-        Vector2 from = ChestOf(by), to = ChestOf(on);
-        float flight = FlightSeconds(from, to);
-        _beatStrike = () =>
-        {
-            by.Play(WalkerPose.Strike, StrikePoseSeconds);
-            _effects.Launch(CombatStyle.Arrow, from, to, flight, null);
-            _audio.Play(Sfx.Bow, LaunchVolume);
-        };
-        _beatLength = WindUpSeconds + flight;
+        by.PlayMove("auto-bow-1");
+        Vector2 from = by.BonePosition("hand_near"), to = ChestOf(on);
+        _effects.Launch(CombatStyle.Arrow, from, to, SupportFlightSeconds, null);
+        Play("swing-bow", by, QuietVolume);
+        if (happened.TargetId is string foe) _supportShot[foe] = _shownMs + SupportFlightSeconds * 1000f;
     }
 
     /// <summary>Whether a support's ability is something shot from where it stands, so an arrow flies: its line names an arrow, a bow, a bolt or a crossbow.</summary>
@@ -231,25 +233,10 @@ public partial class ExploreScreen
     {
         if (text is null) return false;
         foreach (string word in ShotWords)
-            if (text.Contains(word, System.StringComparison.OrdinalIgnoreCase)) return true;
+            if (text.Contains(word, StringComparison.OrdinalIgnoreCase)) return true;
         return false;
     }
 
     /// <summary>The words in a support's line that mean it shoots.</summary>
     private static readonly string[] ShotWords = { "arrow", "bow", "bolt", "crossbow" };
-
-    /// <summary>A guest beaten down to nothing falling back out of the fight: they fade from their slot, unhurt for the story.</summary>
-    private void CueFellBack(CombatEvent happened)
-    {
-        Combatant guest = Fighter(happened.Target ?? happened.Actor);
-        WalkerSprite walker = FighterWalker(guest?.Id);
-        string name = guest?.Name.ToUpperInvariant() ?? string.Empty;
-        _log.Add(happened.Text ?? $"{name} FALLS BACK OUT OF THE FIGHT.", Palette.Bone);
-        _beatLength = DieSeconds;
-        if (walker is null) return;
-
-        _popups.Word(HeadOf(walker), "FALLS BACK", Palette.Bone);
-        walker.Play(WalkerPose.Hurt, HurtPoseSeconds);
-        FadeTo(walker, 0f, FadeOutSeconds);
-    }
 }

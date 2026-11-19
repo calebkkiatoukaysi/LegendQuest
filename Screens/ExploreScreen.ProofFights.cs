@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using LegendQuest.Combat;
+using LegendQuest.Combat.Realtime;
 using LegendQuest.Items;
 using LegendQuest.StateManagement;
+using LegendQuest.Tutorial;
 
 namespace LegendQuest.Screens;
 
@@ -13,59 +14,62 @@ namespace LegendQuest.Screens;
 /// help or a tip for a shot.
 /// </summary>
 /// <remarks>
-/// A fight takes as long as its dice say, so no part of the run's schedule could know where one
-/// ends. While one's on, it gets the run to itself: EnemyMind plays the party's turns as well as
-/// the foes', faster than real time, and the run takes a shot of the opening (everyone in their
-/// slots, the supports behind them, the turn order) and of the end. The tutorial at sea is the
-/// exception: its first turn is played by hand, the way a player would meet it: a back-row slot
-/// pointed at (its chevron and the ring under the foe who'd swing), Auto picked with the front row
-/// it reaches lit, a wraith aimed at (its odds), the attack, the log, and the crew's boat-hook at the
-/// end of the round. The zone's dice are seeded under the proof run, so every run
-/// fights the same fights; one that's lost goes to the game-over screen like any other, and the
-/// run (LegendQuestGame.Proof.cs) loads the save from before it and fights it again.
+/// <para>
+/// A fight takes as long as it takes, so no part of the run's schedule could know where one ends.
+/// While one's on, it gets the run to itself: the party's AI drives the leader as well as the rest,
+/// in real time on the run's lockstep clock, and the run takes a shot of the fight in the thick of it
+/// (the first moment from a few seconds in with several people mid-move and numbers in the air, or
+/// at the latest half a minute in) and of the panel at the end. For a few fights it also films a run
+/// of frames from that moment, every second frame for three seconds, into rt/, to check that each
+/// blow's number and flash come on the frame it lands.
+/// </para>
+/// <para>
+/// The tutorial at sea starts the way a player would: the pretend mouse goes over the nearest wraith
+/// and clicks it, the shot shows the target picked (its ring, its frame, the card), and then the AI
+/// plays on. The fights are seeded under the proof run, so every run fights the same fights; one
+/// that's lost goes to the game-over screen like any other, and the run (LegendQuestGame.Proof.cs)
+/// loads the save from before it and fights it again.
+/// </para>
 /// </remarks>
 public partial class ExploreScreen
 {
-    /// <summary>How fast fights play under the proof run, as a multiple of real time.</summary>
-    private const float ProofFightSpeed = 3f;
+    /// <summary>How far into a fight its shot can be taken from, and the latest it waits for a busy moment, in frames.</summary>
+    private const int ProofShotFrom = 240;
+    private const int ProofShotLatest = 1800;
 
-    /// <summary>How many frames in a row a fight has to have been settled (everyone in their slot, the dice rolled, the first round begun) before its opening shot; and the latest the shot waits for that, after which it's taken anyway and the run says so.</summary>
-    private const int ProofFightSettled = 12;
-    private const int ProofFightOpeningLatest = 600;
+    /// <summary>How busy a moment has to be for the fight's shot: figures mid-move and numbers in the air, counted together (ProofBusy).</summary>
+    private const int ProofShotBusy = 5;
 
     /// <summary>How long the panel at the end has been ready (faded in) before its shot, and how long after the shot it's put away.</summary>
     private const int ProofFightEnding = 6;
     private const int ProofFightDismiss = 12;
 
-    /// <summary>How long each of the tutorial's hand-played moments is held before its shot.</summary>
-    private const int ProofMomentFrames = 24;
+    /// <summary>The tutorial's opening: how long a lesson's card is up before its shot, how long after that the mouse is over the wraith before the click (and the other lessons are done), how long a lesson waits to be put away before GOT IT is pressed for it, and when the log's shot is after the lessons.</summary>
+    private const int ProofLessonShot = 30;
+    private const int ProofAimFrames = 20;
+    private const int ProofLessonGiveUp = 90;
+    private const int ProofLogShot = 420;
 
-    /// <summary>How long into the support's strike at the end of the tutorial's first round its shot is taken, so the blow's landing. The fight plays at its own speed until then.</summary>
-    private const int ProofSupportFrames = 16;
+    /// <summary>How long the lesson that's up has been up, in frames.</summary>
+    private int _proofLessonFrames;
 
-    /// <summary>The longest the tutorial waits for the end of its first round before giving up on that shot.</summary>
-    private const int ProofSupportLatest = 1200;
-
-    /// <summary>The sea-wraith the tutorial's first attack goes for: the one that comes up over the rail nearest the bow.</summary>
-    private const string ProofTutorialTarget = "wraith-1";
+    /// <summary>The fights a run of frames is filmed of, and how long the run is and how often it saves a frame.</summary>
+    private static readonly string[] ProofFilmed = { "a1-c1-01-gulls", "a1-c2-02-thornmother" };
+    private const int ProofFilmFrames = 180;
+    private const int ProofFilmEvery = 2;
 
     /// <summary>How long a screen opened over the room for a shot gets to come in.</summary>
     private const int ProofScreenSettles = 30;
 
-    /// <summary>The fight the run's in, by encounter id; how long it's been on; how long its end panel has been up; and how far the tutorial's hand-played turn has got.</summary>
+    /// <summary>The fight the run's in, by encounter id; how long it's been on; how long its end panel has been up; the frame the tutorial's click was made on; and how far into the film it is (-1 before it starts).</summary>
     private string _proofFight;
     private int _proofFightClock;
     private int _proofEndingClock;
-    private int _proofTutorialStep;
-    private int _proofTutorialMark;
+    private int _proofClickedAt;
+    private int _proofFilm;
 
-    /// <summary>Whether the fight's opening shot's been taken, how many frames in a row it's been settled for, and whether a support's strike has been shown since the tutorial started waiting for one.</summary>
-    private bool _proofOpened;
-    private int _proofSettled;
-    private bool _proofSupportShown;
-
-    /// <summary>The last of the tutorial's hand-played steps, which is done.</summary>
-    private const int ProofTutorialDone = 12;
+    /// <summary>Whether the fight's shot has been taken.</summary>
+    private bool _proofShot;
 
     /// <summary>One frame of a fight under the proof run.</summary>
     /// <returns>The shot to take this frame, or null.</returns>
@@ -76,151 +80,109 @@ public partial class ExploreScreen
             _proofFight = _encounter.Id;
             _proofFightClock = 0;
             _proofEndingClock = 0;
-            _proofTutorialStep = 0;
-            _proofOpened = false;
-            _proofSettled = 0;
-            _proofSupportShown = false;
-            ProofAutoplay(!_encounter.Tutorial, ProofFightSpeed);
+            _proofClickedAt = -1;
+            _proofFilm = -1;
+            _proofShot = false;
+            ProofAutoplay(!_encounter.Tutorial, 1f);
         }
         _proofFightClock++;
 
         if (ProofFightOver)
         {
-            if (!_proofOpened)
+            ProofLetGo();
+            if (!_proofShot)
             {
-                _proofOpened = true;
-                ProofNote($"{_proofFight} was over before it settled, so its opening shot is of its end.");
+                _proofShot = true;
+                ProofNote($"{_proofFight} was over before it got busy, so its shot is of its end.");
                 return $"fight-{_proofFight}.png";
-            }
-            if (_encounter.Tutorial && _proofTutorialStep < ProofTutorialDone)
-            {
-                ProofNote($"{_proofFight} ended at the tutorial's step {_proofTutorialStep}, so the shots after it weren't taken.");
-                _proofTutorialStep = ProofTutorialDone;
             }
 
             // The panel's own clock: its shot once it's faded in and ready, then it's put away.
             if (!_result.Ready) return null;
             _proofEndingClock++;
-            string ending = _combat.Outcome == CombatOutcome.Defeat ? "lost" : "won";
+            string ending = FightWon ? "won" : "lost";
             if (_proofEndingClock == ProofFightEnding) return $"fight-{_proofFight}-{ending}.png";
             if (_proofEndingClock >= ProofFightEnding + ProofFightDismiss) ProofContinue();
             return null;
         }
 
-        if (!_proofOpened)
+        if (_encounter.Tutorial && TutorialOpening() is string opening) return opening;
+
+        if (_proofFilm >= 0 && _proofFilm < ProofFilmFrames)
         {
-            _proofSettled = FightSettled ? _proofSettled + 1 : 0;
-            if (_proofSettled < ProofFightSettled && _proofFightClock < ProofFightOpeningLatest) return null;
-            if (_proofSettled < ProofFightSettled) ProofNote($"{_proofFight} hadn't settled after {ProofFightOpeningLatest} frames; its opening shot is taken anyway.");
-            _proofOpened = true;
+            int frame = _proofFilm++;
+            return frame % ProofFilmEvery == 0 ? $"rt/{_proofFight}-{frame / ProofFilmEvery:000}.png" : null;
+        }
+
+        if (!_proofShot && _proofFightClock >= ProofShotFrom && (ProofBusy() >= ProofShotBusy || _proofFightClock >= ProofShotLatest))
+        {
+            _proofShot = true;
+            if (Array.IndexOf(ProofFilmed, _proofFight) >= 0) _proofFilm = 0;
             return $"fight-{_proofFight}.png";
         }
-        return _encounter.Tutorial ? TutorialTurnStep() : null;
+        return null;
     }
 
-    /// <summary>Whether a fight's settled for its opening shot: everyone's walked to their slot, nobody's still fading in, and the first round has begun, so the turn order's filled in.</summary>
-    private bool FightSettled => _holdLeft <= 0f && _glides.Count == 0 && _fades.Count == 0 && _shown.Round > 0;
+    /// <summary>
+    /// The tutorial's opening, the way a player meets it: its first three lessons, each card held up
+    /// for its shot and then done as it says (the mouse over the nearest wraith and a click, GOT IT,
+    /// 2 for the first skill), the shot of the wraith targeted, then the AI playing on; and the log's
+    /// shot later.
+    /// </summary>
+    /// <returns>A shot to take this frame, or null.</returns>
+    private string TutorialOpening()
+    {
+        if (_proofClickedAt < 0)
+        {
+            if (_tutorials.Current is { HoldsFight: true } lesson && _tutorialPanel.Showing) return ProofLesson(lesson.Id);
+            _proofLessonFrames = 0;
+            if (!_tutorials.Seen(TutorialCatalog.CombatAbility) || _tutorials.Current is not null) return null;
+
+            // The three lessons are done: the AI plays on from here.
+            _proofClickedAt = _proofFightClock;
+            ProofLetGo();
+            ProofAutoplay(true, 1f);
+            return null;
+        }
+
+        int since = _proofFightClock - _proofClickedAt;
+        if (since == ProofLogShot) ProofShowLog(true);
+        if (since == ProofLogShot + 2) return "combat-log.png";
+        if (since == ProofLogShot + 3) ProofShowLog(false);
+        return null;
+    }
+
+    /// <summary>One frame of a lesson's card being up in the tutorial fight under the proof run: its shot once it's in, then what it says done, the way a player would; GOT IT if that doesn't put it away.</summary>
+    /// <param name="id">The lesson, by its tip's id.</param>
+    /// <returns>A shot to take this frame, or null.</returns>
+    private string ProofLesson(string id)
+    {
+        int frame = ++_proofLessonFrames;
+        if (frame == 1 && id != TutorialCatalog.CombatTarget) ProofLetGo();
+        if (frame == ProofLessonShot) return $"lesson-{id[(id.IndexOf('-') + 1)..]}.png";
+        if (id == TutorialCatalog.CombatAttack && frame == ProofLessonShot + 1)
+        {
+            if (!ProofTargeted) ProofNote($"{_proofFight}: the click on the nearest wraith didn't target it.");
+            return "combat-target.png";
+        }
+
+        if (id == TutorialCatalog.CombatTarget && frame >= ProofLessonShot && ProofNearestFoe() is string foe)
+        {
+            ProofAimAtFighter(foe);
+            if (frame == ProofLessonShot + ProofAimFrames) ProofClick();
+        }
+        if (id == TutorialCatalog.CombatAttack && frame == ProofLessonShot + ProofAimFrames) _tutorials.Dismiss();
+        if (id == TutorialCatalog.CombatAbility && frame == ProofLessonShot + ProofAimFrames) UseSlot(_battle.Leader, 1);
+        if (frame == ProofLessonShot + ProofLessonGiveUp)
+        {
+            ProofNote($"{_proofFight}: lesson {id} was still up after it was done; put away.");
+            _tutorials.Dismiss();
+        }
+        return null;
+    }
 
     /// <summary>Says something about the run's fight shots on the error stream, for a shot that had to be taken late or not at all, rather than waiting for ever.</summary>
     private static void ProofNote(string text) => Console.Error.WriteLine("proof: " + text);
-
-    /// <summary>
-    /// The tutorial's first turn, by hand (11-combat's proof, M4 plan §9): a back-row slot pointed
-    /// at, its chevron lit and the ember ring under any foe who'd swing for it; Auto picked with the
-    /// mouse off everyone, so the front row it reaches is lit; the nearest wraith pointed at (its
-    /// odds); the click; the log; and then, with EnemyMind playing on, the crew's boat-hook at the end
-    /// of the first round.
-    /// </summary>
-    private string TutorialTurnStep()
-    {
-        int since = _proofFightClock - _proofTutorialMark;
-        switch (_proofTutorialStep)
-        {
-            case 0 when ProofYourTurn:
-                ProofAimAtSlot(ProofShiftSlot());
-                return Moment();
-
-            case 1 when since == ProofMomentFrames:
-                _proofTutorialStep++;
-                return "combat-shift.png";
-
-            case 2:
-                ProofPressAbility(AutoOf(_combat.Current).Id);
-                ProofAimAt(new Vector2(_stage.Centre.X, _room.BackEdgeAt(_stage.Centre.X) + 1f));
-                return Moment();
-
-            case 3 when since == ProofMomentFrames:
-                _proofTutorialStep++;
-                return "combat-reach.png";
-
-            case 4:
-                ProofAimAtFighter(ProofTutorialTarget);
-                return Moment();
-
-            case 5 when since == ProofMomentFrames:
-                _proofTutorialStep++;
-                return "combat-target.png";
-
-            case 6:
-                ProofClick();
-                return Moment();
-
-            case 7 when since == ProofMomentFrames * 2:
-                ProofShowLog(true);
-                _proofTutorialStep++;
-                return "combat-attack.png";
-
-            case 8 when since == ProofMomentFrames * 3:
-                _proofTutorialStep++;
-                return "combat-log.png";
-
-            case 9:
-                ProofShowLog(false);
-                ProofLetGo();
-                ProofAutoplay(true, 1f);
-                _proofSupportShown = false;
-                return Moment();
-
-            case 10 when _proofSupportShown:
-                return Moment();
-
-            case 10 when since >= ProofSupportLatest:
-                ProofNote($"{_proofFight}: no support acted within {ProofSupportLatest} frames, so combat-support.png wasn't taken.");
-                ProofAutoplay(true, ProofFightSpeed);
-                _proofTutorialStep = ProofTutorialDone;
-                return null;
-
-            case 11 when since == ProofSupportFrames:
-                ProofAutoplay(true, ProofFightSpeed);
-                _proofTutorialStep = ProofTutorialDone;
-                return "combat-support.png";
-
-            default:
-                return null;
-        }
-    }
-
-    /// <summary>The slot the tutorial's Shift shot points at: a back-row slot you can Shift to, one a foe would swing at you for if there is one, or the back row's middle.</summary>
-    private Slot ProofShiftSlot()
-    {
-        Combatant me = _combat.Current;
-        Slot? fallback = null;
-        foreach (Slot slot in _combat.Shifts(me))
-        {
-            if (slot.Row != Row.Back) continue;
-            if (_combat.Opportunist(me, slot) is not null) return slot;
-            fallback ??= slot;
-        }
-        return fallback ?? new Slot(Side.Party, Row.Back, 1);
-    }
-
-    /// <summary>Starts the clock on one of the tutorial's moments, and moves on to waiting for it.</summary>
-    private string Moment()
-    {
-        _proofTutorialMark = _proofFightClock;
-        _proofTutorialStep++;
-        return null;
-    }
 
     /// <summary>Opens a screen over the room for a while, takes its shot, and puts it away.</summary>
     /// <param name="open">Makes the screen.</param>

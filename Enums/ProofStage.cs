@@ -98,4 +98,13 @@ public enum ProofStage
 
     /// <summary>Not part of the run: the real-time HUD drawn from made-up views over a room, in each of its states, and its icons, asked for on its own (--proof &lt;dir&gt; Hud).</summary>
     Hud,
+
+    /// <summary>Not part of the run: story fights from the Red Gulls to the sappers and the fields, each a fresh game in its own room, fought by the party's AI (LegendQuestGame.ProofArena), asked for on its own (--proof &lt;dir&gt; Arena).</summary>
+    Arena,
+
+    /// <summary>Not part of the run: the Thornmother through her three phases, her Thorn Burst filmed, asked for on its own (--proof &lt;dir&gt; Boss).</summary>
+    Boss,
+
+    /// <summary>Not part of the run: six classes in your place in the raid on Thornbridge, each pressing its skills, asked for on its own (--proof &lt;dir&gt; Classes).</summary>
+    Classes,
 }

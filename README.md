@@ -2,9 +2,9 @@
 
 A MonoGame project for CIS 580 - Foundations of Game Programming, Kansas State University.
 
-Legend Quest is a top-down, turn-based fantasy RPG. You make a character, gather a party of up to
-four, walk the maps in real time, talk your way through conversations where the risky options
-roll a d20 on screen, and fight turn by turn when talking doesn't work. What each character wears
+Legend Quest is a side-on fantasy RPG. You make a character, gather a party of up to four, walk the
+maps in real time, talk your way through conversations where the risky options roll a d20 on screen,
+and fight in real time, where you stand, when talking doesn't work. What each character wears
 shows on them as they walk. The rules underneath will be 5e's, from the SRD 5.1.
 
 This is the skeleton: every system working end to end on a little content, built so maps,
@@ -83,7 +83,13 @@ One switch exists for working on the game, and it isn't the game:
 dotnet run -- --proof shots       # play through the screens, save a picture of each to shots/, and quit
 dotnet run -- --proof shots Docks # the same, but stop after that part of the run (a ProofStage)
 dotnet run -- --proof shots Hud   # only the real-time HUD, drawn from made-up views, and its icons (see The real-time HUD)
+dotnet run -- --proof shots Arena   # story fights from the gulls to the sappers, and the fields, each a fresh game (Combat, On screen)
+dotnet run -- --proof shots Boss    # the Thornmother through her three phases, her Thorn Burst filmed frame by frame
+dotnet run -- --proof shots Classes # six classes in your place, each pressing its skills, two ultimates filmed
 ```
+
+Set `LQ_ARENA_ONLY` to part of a bout's shot path (`field/`, `sappers`) to run only those bouts of
+Arena, Boss or Classes.
 
 The story has four checks of its own, run before every commit with `dotnet build` and
 `python tools/check_assets.py` (`Story/01-build-plan.md` §0):
@@ -133,10 +139,10 @@ fade (`ExploreScreen.Proof.cs`, `ExploreScreen.ProofBeats.cs` and `ExploreScreen
 The beats find people, triggers, doors, ways out, things and spawns by their ids in the zone file,
 and change room first, through the same fade a player gets, when one's in another room of the zone.
 Every fight on the way is fought, from the sea-wraiths to the sappers: whenever one's on, it has the
-run to itself (`ExploreScreen.ProofFights.cs`), EnemyMind plays the party's turns as well as the
-foes' at three times the speed, and there's a shot of each fight's opening and its end. The
-tutorial's first turn is played by hand, for the movement preview past the budget, the target's
-tooltip, the attack and the log. The zones' dice are seeded under the run, so it fights the same way
+run to itself (`ExploreScreen.ProofFights.cs`): the party's AI drives the leader as well as everyone
+else, in real time on the run's lockstep clock, and there's a shot of each fight in the thick of it
+and of its end (Combat, On screen). The tutorial at sea starts with the pretend mouse clicking a
+wraith, for the target picked and later the log. The zones' dice are seeded under the run, so it fights the same way
 each time, and a part's clock stops while a fight's on. A fight the party loses goes to game over
 like anyone's, and the run loads the save from just before it and fights it again on the next seed,
 five times at most before it says one's too hard. In the Flagon it opens the bag, the character
@@ -173,8 +179,10 @@ lever's pulled. A second switch, `--simulate`, fights an encounter headless (see
 | The zone map | **M** in a room shows the zone's rooms laid out the way they join, with their badges and "!"s. The **arrows** or the mouse pick a room, and **Enter** or a click jumps to it if you've been there, but not in a fight or a scene. **Tab** switches to the world, which is where it opens from a waypoint, to pick somewhere to travel to. **M** or **Esc** closes it |
 | A tip | **Enter** or a **click** on its card puts it away. It never stops you walking, and goes by itself once there's been time to read it twice |
 | How to play | **Esc**, then HOW TO PLAY. **Left** and **right** (or **Q** and **E**) turn the page, a **click** on a tab jumps to it, and **Esc** goes back |
-| In a fight | **Click** a tile to walk there, a foe to attack it (walking into reach first if it's in range of a walk), or a friend who's down to help them up. **1** to **0**, then **-** and **=**, or a **click** picks a hotbar slot: one used on yourself happens at once, anything else waits for a target. **Tab** goes through the targets and **Enter** uses it on the one picked out. **Right click** or **Esc** puts it back. **WASD** or the **arrows** step a tile, **Space**, **End** or END TURN ends the turn, **L** shows and hides the log (the **wheel** scrolls it with the mouse on it), and **Esc** with nothing picked pauses. Pointing at anything says what it is and what a click would do |
+| In a fight | **Click** a foe to target it (your auto attack comes on and you walk into its reach), a friend to target them (and help them up if they're down), or the floor to walk there; **WASD** or the **arrows** walk too. **1** to **6** or a **click** use the bar: **1** the auto attack on and off, **2** to **5** your skills on your target (walking into reach first), **6** a healing potion; **7** or the sigil is the Soul-Link Strike. **Tab** picks the next foe, nearest first, **T** your target's target, **Esc** clears your target (and with none, pauses), **L** shows and hides the log (the **wheel** scrolls it), and **Alt** shows everyone's numbers. Pointing at anything says what it is |
 | The end of a fight | **Enter**, **Space** or a **click** on the panel goes on to what happens next |
+| A foe in a room | A red name is a foe you can fight (a field, Combat, On screen): **click** it and the fight starts, with it your target. Some come at you when you come near |
+| Debug builds only | **F9** puts whoever you're controlling in the next class (all twenty-five), dressed in its kit; **F10** gives them the next rank in it. For trying a class's skills, in a scratch game |
 | The inventory | **I** for the bag, **C** for the character sheet, or **Esc** and then INVENTORY. **Q** and **E** (or **F1** to **F4**, or a **click** on a face) pick who you're looking at, **Tab** turns between the bag and the sheet, and **I**, **C** or **Esc** closes it. On a pad, the shoulders pick who, Y turns the page, A uses and B closes |
 | In the inventory | The **arrows** move round the slots, the bag and the key items. **Enter** or a **click** puts on what's in the bag (whatever was there goes back in it), drinks a potion, or takes off what's in a slot; on an empty slot it finds something in the bag for it. The **mouse wheel** scrolls the bag. On the sheet, **up** and **down** pick an ability to read |
 | A shop | Talk to the keeper. **Enter** or a **click** buys one or sells one, and with **Shift** held it sells the whole stack. **Tab** crosses the counter, **Q** and **E** pick who the cards measure against, **Esc** leaves |
@@ -626,8 +634,10 @@ that costs a longsword its two-handed die says so, and the card can't disagree w
 The character sheet (**Tab**, or **C**) has their level, class and experience, their people and
 what their class is for, the six scores with their modifiers and the save under each (gold for
 their class's own), their proficiency bonus, how they attack with each hand and with spells, and
-their class's abilities out of `AbilityCatalog`, each with what it costs and what's left of
-anything it spends. Picking one reads out what it does under the list.
+their class's kit out of `SkillCatalog`, each with its icon from the fight's hotbar and what it
+costs in a fight, and the ones their rank hasn't opened yet dimmed with the rank that does. Over the
+kit go their rank in the class, its class points, and how many more the next rank wants. Picking one
+reads out what it does under the list.
 
 Shops open from their keepers' conversations, once the talking's done (`DialogueEffect.Shop`): the
 Trader at the blue stall in the Lantern Market, the smith at Halden's Forge (inside, or by its
@@ -656,10 +666,10 @@ says I and C.
 
 ## Combat
 
-Fights are moving to real time, the way `Story/11-combat.md` lays it out: you trade blows where you
+Fights are in real time, the way `Story/11-combat.md` lays it out: you trade blows where you
 stand, your auto attack swings on its own timer, and four class skills and a potion sit on the bar.
-The real-time engine is built and simulated (`Combat/Realtime/`, below); the fight screen still plays
-the turn-based engine described after it, until the screen moves over.
+`Combat/Realtime/` is the engine (below), and the fight screen plays it in the room you're in (On
+screen). There is one combat system: the turn-based engine and its screen are gone.
 
 ### The real-time engine
 
@@ -704,7 +714,7 @@ flight), and its events carry that tick, so the number shows on the frame the bl
   classes' and the Hourwarden's in `SkillCatalog.ActOne.cs` and `SkillCatalog.ActTwo.cs` (gathered,
   with what they share, in `SkillCatalog.Advanced.cs`), the foes' moves in `SkillCatalog.Foes.cs`,
   and the guide at the top of `SkillCatalog.cs` says how to add a class. Every class has its own kit
-  now; the turn-based screen still gives an advanced class its base class's interim kit. The
+  now. The
   advanced kits brought their own kinds of effect: summons that fight on your side for the rest of
   the fight (the Watchman, a knight of the Order), Broadside's guns outdoors and Grapeshot indoors
   (`BattleRules.Outdoors`), gold taken as data for the result panel (`Battle.Stolen`,
@@ -741,89 +751,12 @@ flight), and its events carry that tick, so the number shows on the frame the bl
 - **The encounter.** Supports act every few seconds from their start (`EncounterSupport.FromSeconds`,
   `EverySeconds`), waves walk in from the room's edge at their second (`EncounterWave.AtSeconds`) or
   sooner if the field's clear, guests join at theirs, and a fight you only have to last ends at
-  `EndsAfterSeconds`. The rounds the turn-based engine reads are kept beside them.
+  `EndsAfterSeconds`. The old rounds are kept beside them in the data.
 - **For the HUD.** `Battle.Bar(fighter)` (the seven slots with cooldowns, the GCD, costs, reach and
   why not), `WhyNot`, `InReach`, `Threat(foe)`, `Phase(boss)`, `Supports`, `SurviveShare`,
   `SoulLinkCharge`; every `Fighter` has its position, facing, hit points, temporary hit points,
   Focus, auras, cast, swing, target, weapon kind and current clip. `ApplyToParty()` writes the
   party's hit points back when it's over.
-
-### The turn-based engine (the screen's, until it moves over)
-
-The fight screen still plays turn-based 5e from the SRD 5.1, in side-view rows inside the room
-you're in. `Combat/` is the rules and draws nothing: `CombatEngine` takes the
-encounter, who's in it (`CombatantSetup`s), a `Random` and the `FightRules` (the difficulty, the
-story's flags, and where the kits come from), and every command (`Begin`, `Shift`, `Use`, `EndTurn`,
-`RunAiTurn`, `Apply`, `Concede`) hands back the `CombatEvent`s it caused, in order, each with its
-whole log line ("SERA casts PRODUCE FLAME at GLOOMFANG WOLF: 14 + 4 = 18 vs AC 11 - HIT. 1d8 = 6
-fire."), for the screen to play out at its own pace, the way The Black Box's table did. Nothing in
-it waits on time.
-
-- **Rows.** Each side has a front row and a back row, in lanes: the party's front is slots 1 to 3
-  and its back 4 to 6, the foes' 1 to 4 and 5 to 8, so a lane's back slot is behind its front one. A
-  big foe (the Thornmother) takes two slots side by side. `Formation` is who stands where, and
-  `FightRoster` lines the party up: anyone whose auto attack is melee in front, everyone else at the
-  back, guests in the row they'd rather, and whoever the fight sits out left out of it.
-- **Reach.** Melee needs you in your side's front row and reaches only theirs; a reach weapon
-  reaches either row from your front and their front from your back; ranged attacks, spells and
-  "any row" skills (Backstab) reach anyone. A side's front is its back row once nobody's standing in
-  front, and a Downed party member keeps their slot but screens nobody. Shapes say who else a pick
-  catches: a foe and those beside it (Blasting Charge), a row (Entangle, Thorn Burst), a column, a
-  side, or random picks.
-- **Turns.** Initiative is d20 + Dexterity. A turn has a Shift, an action, a bonus action, and a
-  reaction to use before your next turn. A **Shift** is free, once a turn: swap with an ally next to
-  you, or step into an empty slot in the other row. Restrained, Prone and Slowed stop it, and
-  standing up from Prone spends it. Leaving the front row while a foe in theirs has melee and its
-  reaction gives the one that'd hurt most a swing first, unless you're Disengaged.
-- **Focus.** It replaces spell slots and per-rest uses. The party's side starts a fight on the
-  difficulty's (40 on Balanced), foes on 40; everyone gains 15 at the start of their own turn and 10
-  for each auto attack, up to 100, and it's gone when the fight ends. Skills cost Focus, some have a
-  cooldown counted in your own turns, and ultimates are once a fight. A stat block pays no Focus: a
-  foe's Focus skill is once a fight for it instead. A foe with `FocusDrain` takes Focus off whoever
-  it hits.
-- **Kits.** Until `10-classes.md`'s skills come in, everyone fights from the interim kits
-  (`AbilityCatalog.Interim`, through `IKitSource`): the class's auto attack, a skill or two, and the
-  shared actions (Dodge, Help, Drink Potion, which can be handed to an ally next to you, Alchemist's
-  Fire, Drink Elixir for 30 Focus, and the Soul-Link Strike).
-
-| Class | Auto | Skills (Focus / cooldown) |
-| --- | --- | --- |
-| Fighter | Attack | Second Wind (bonus) 20/4; Defence |
-| Rogue | Attack, with Sneak Attack | Backstab 20/0, any row; Cunning Step (bonus) 20/2: a free Shift nobody gets a swing at, and Dodging |
-| Cleric | Sacred Flame | Cure Wounds 25/1; Healing Word (bonus) 20/1 |
-| Wizard | Fire Bolt | Magic Missile 25/1, three darts; Ray of Frost 15/0, Slowed |
-| Paladin | Attack | Lay on Hands 20, from a pool of 5 a level a fight; Protection |
-| Druid | Produce Flame | Entangle 30/3, a row Restrained 2 turns; Healing Word (bonus) 20/1 |
-| Warlock | Eldritch Blast | Hex (bonus) 20 |
-| Bard | Vicious Mockery | Bardic Inspiration (bonus) 20/1; Healing Word (bonus) 20/1 |
-
-- **Attacks.** Advantage from Help, and on a Restrained, Marked, Stunned, Blinded or Prone target
-  (Prone gives ranged disadvantage instead), Pack Tactics (another of the pack standing in its front row, and you in
-  yours), and a Downed target hit in melee, which is a critical too; disadvantage from Dodge,
-  Poisoned, Frightened, Blinded, being mocked, armour you aren't trained for, and a Warden's raised
-  shield over someone next to them. Sneak Attack rides on advantage, on a target an ally hit this
-  round, and on a Marked or Prone one. Burning, Bleeding and Poisoned hurt at the start of a turn;
-  Frozen and Stunned lose it; Taunted and Charmed narrow who can be picked.
-- **Going down.** A party member at 0 is Downed and rolls death saves on their turn; a hit on them is
-  a failure (two for a critical), a 20 gets them up on 1 HP, and healing or Help gets them up any
-  time. Foes at 0 die. A fight to yield (Kael's duel) or a brawl (the Red Gulls) knocks people out
-  instead; the duel ends when Kael gives up. Nobody in the party dies for good: whoever's fallen gets
-  up on 1 HP once it's won.
-- **The Soul-Link.** When you and the Soul-Bound both hit the same foe between your turns it
-  charges; at two charges either of you can spend it on the Soul-Link Strike, both weapons and 1d8
-  radiant on a sure hit, if you can both reach the foe with your autos. While `soul-bond-broken` is
-  set it's off.
-- **Allies.** A **guest** (`EncounterGuest`) stands in a slot on your side and EnemyMind plays them;
-  at 0 they fall back out of the fight, unhurt for the story (Mira at Thornbridge, Kael against the
-  sappers). A **support** (`EncounterSupport`) stands behind the rows where nobody can hit it, and at
-  the end of each round from its `FromRound` it does one sure thing (Odelle's crew's boat-hooks,
-  Tomas's net, Sera's arrows from the trees, the Lodge's wardens, the Watch's crossbows); a script
-  can stand it down (`support-off`). Either can wait on a story flag (`When`): the wardens only come
-  if Tamsin was told the Lodge sent you.
-- **Waves and endings.** An encounter can bring more foes on a later round (sooner if everyone
-  before them is beaten), each to its slot or the nearest free one, end after so many rounds
-  (`EndsAfterRounds`: hold the den for five while Sera draws the rot out, her ring filling as it
-  goes), and sit party members out (`SitsOut`).
 
 ### Difficulty and levels
 
@@ -842,44 +775,6 @@ Levels come from experience: `LevelTable.Expected` is the level the story has th
 fight (§6.3: level 1 in the Prologue and A1-C1, 2 in A1-C2 and A1-C3, 3 in A1-C4), a story fight
 gives about a third of a level at that level, less above it and more below, and `Leveling` brings
 the hit points with each.
-
-### The AI
-
-`EnemyMind` plays whoever's turn it is, foe or guest, or the party under `--simulate`. For staying
-put and for every slot a Shift could take them to (tried on with `Formation.Try` and put back), it
-scores every ability they could use on everyone it could be pointed at, and Shifting alone, does the
-best, and goes again until nothing's worth doing. A score is in points of damage, every weight a
-named constant: an attack is its hit chance times its damage, plus the chance it drops the target,
-how hurt and how dangerous they are, and what it puts on them; healing a point is worth a little
-more; getting someone up is worth the most, and less each time they've gone down already, so
-nobody spends every turn hauling up a friend who's knocked straight back down; a skill with a price
-(Focus, a cooldown, once a fight) costs a little, so autos come first unless the skill buys more.
-
-A Shift costs what its opportunity attack would do (the damage, and the chance it drops them), or
-just the bonus action if Cunning Step can slip away first, and earns whatever it does for where
-the side stands: an archer or caster behind a front row is worth 4, and the side is charged twice
-for what the foes' melee could do to it in a round, each foe at the one of them it'd pick by its own
-sums, with the cost of getting them back up if it dropped them. So the rogue steps back behind your
-shield and Backstabs from there, a hurt friend stops standing in front, and the foes' fragile stay
-behind theirs. Something on themselves (a potion, Second Wind) is done before a dangerous Shift,
-not after. `Predict` gives the would-be pick without acting, for the intent icon over a foe. It has
-no randomness of its own, so a seed replays a fight exactly.
-
-| File | What it is |
-| --- | --- |
-| `CombatEngine` | The rules, in partials: turns, waves and endings; the rows, reach, Shift and pulls; allies and orders; abilities and their prices; attacks; health; and the odds for the tooltip |
-| `Formation`, `Slot`, `FightRoster` | Who stands where, one place to stand, and how a fight lines up |
-| `Combatant`, `TurnBudget`, `ActiveCondition` | Someone in a fight (their Focus and cooldowns too), what's left of their turn, and what's on them |
-| `AbilityCatalog`, `IKitSource`, `CombatStats` | What everyone can do and the interim kits, where kits come from, and a party member's numbers from what they wear |
-| `EnemyCatalog`, `EncounterCatalog` | The foes' stat blocks, and every fight by the story's id with its slots, waves, guests and supports |
-| `FightRules`, `DifficultyRules`, `Rules/LevelTable`, `Characters/Leveling` | What a fight's played by, what each difficulty changes, and the levels |
-| `EnemyMind`, `CombatSimulator`, `StallWatch` | The AI, `--simulate`, and why a simulated fight never finished |
-| `ShownFight`, `TurnPlan` | The fight as far as the screen's shown it, and what a click on your turn would do |
-| `World/Rooms/FightStage` | Where each slot stands in the room |
-| `Screens/ExploreScreen.Combat*` | The fight in the room: starting and ending it, playing it out, its cues, your turn, the cards, drawing it, its tips, and the proof run's hooks |
-| `Components/CombatHotbar`, `BudgetBar`, `InitiativeBar`, `UnitFrame`, `SoulLinkSigil`, `SupportBanner` | The bar and END TURN, what's left of the turn, the turn order, the frame of whoever's turn it is, the Soul-Link's meter, and a support's banner |
-| `Components/CombatLog`, `CombatCard`, `TurnBanner`, `DamagePopups`, `CombatResult` | The log, the card by whatever's pointed at, the banner when a turn starts, the numbers that pop, and the panel at the end |
-| `Components/CombatEffects`, `ScreenShake`, `CombatStyle`, `CombatArt` | What's thrown about (sparks, motes, what flies), the shake, the colours and sounds of each kind of damage, and the fight's sheets |
 
 ### The simulator
 
@@ -960,8 +855,7 @@ with the Soul-Bound and no front-liner in the two-person fights: Shadowstep 68, 
 damage, the Hemomancer healing and the Warden and Watchblade threat. Every advanced skill open at rank
 5 was used by the AI, but for The Bell (nobody's hurt enough when it's ready).
 
-The turn-based engine's own simulator (`Combat/CombatSimulator`) is still in the code for the screen's
-engine, but `--simulate` no longer runs it.
+The turn-based engine and its simulator are gone; `--simulate` is the real-time one.
 
 ### Tuning
 
@@ -998,7 +892,7 @@ fights are won every time even with Sera going down in half of the raids (nobody
 holds a foe's attention, and her opening Moonbeam puts her on top of every threat table it catches),
 and Kael, who knocks people out rather than killing, almost never takes the whole party down.
 
-The turn-based retune, for the screen's engine, started from every story fight won 100% of the time
+The turn-based retune, for the turn-based engine before it was replaced (kept here for its reasons, which the real-time numbers inherited), started from every story fight won 100% of the time
 and the Soul-Bound, the AC 13 Shadowstep, going down in up to 99% of the Thornmother's. Three things
 were silly first, and are `EnemyMind`'s: nobody ever left the front row, so whoever had the least
 armour took every swing; a hurt rogue stepped back past a foe and then drank its potion, so the swing
@@ -1029,77 +923,172 @@ the crystal. The sappers are diggers, a point worse with a pick than a soldier w
 
 ### On screen
 
-A fight happens in the room you're in, side-on, in rows. A conversation that ends with
-`DialogueEffect.Fight` starts it when it's over, the way a shop or a journey waits for the talking
-to end, and the game's autosaved first, so a lost fight can be fought again. `World/Rooms/FightStage`
-lays the slots out across the room's fight range: your side's front and back rows on the left, the
-foes' on the right, front rows facing each other across the middle. The party walks to its slots
-and the foes standing about walk to theirs; foes who turn up fade in at theirs; guests take free
-slots on your side, and supports (Odelle's crew, Tomas, the Watch on the wall, Sera at the
-treeline) stand behind the rows with a banner saying what they'll do at the end of each round.
-Anyone else in the room steps back to the far edge to watch, or leaves by the nearest edge if the
-fight's to the death, and comes back after. The battle's song comes in, the fight's name goes
-across the screen, and the initiative dice fill the turn order in along the top a portrait at a
-time, with the supports' line at the end of it.
+A fight happens in real time in the room you're in, side-on, where everyone stands
+(`Story/11-combat.md` §2). A conversation that ends with `DialogueEffect.Fight` starts it when it's
+over, the way a shop or a journey waits for the talking to end, and the game's autosaved first, so a
+lost fight can be fought again. Nobody walks to a slot: `ExploreScreen.Combat` hands `BattleRoster`'s
+setups to the engine with each fighter's feet where they're standing (the party, the room's people who
+turn, the guests who are here), and `World/Rooms/BattleFloor` builds the `BattleArena` from the room's
+floor band across its fight range: the widest rectangle of floor that stays on the band all the way
+along, the encounter's places for foes who turn up (ahead of the party, round the foes who are
+there), the far end of the range on the foes' side for waves to walk in from, and the back edge
+behind the party for the supports. `--validate` checks every room a fight is fought in has floor
+enough for one. The Battle is made with the difficulty, the story's flags, you as the leader (whoever
+of the party's first if you're sitting it out), the bag, the room's dark (or the eclipse's) and sky,
+and a seed (the proof run's own). While it's on, the room's ways out, doors, triggers, scenes and
+banter wait; anyone standing about who isn't in it steps back to the far edge to watch a fight to
+yield, or leaves by the nearest edge for one to the death, and comes back after. The battle's music
+comes in with its stinger (`AudioManager.BeginBattle`) and the fight's name goes across the screen.
 
-The engine works each command out whole, and `ExploreScreen.CombatPlayback` shows what it caused a
-beat at a time, the way The Black Box's table read its round a line at a time. `ShownFight` keeps
-up with what's been shown, so the bars, the turn order and the death saves never get ahead of the
-picture. `ExploreScreen.CombatCues` is what each beat looks and sounds like:
+**The loop** (`ExploreScreen.CombatLoop`). The screen keeps the fight's shown time and steps the
+engine in its 20 ms ticks until it's a tick ahead, so every figure is drawn between its last two ticks
+and every `BattleEvent` is played when the shown time reaches the tick it happened on. Under the proof
+run the shown time moves exactly a sixtieth of a second for each drawn frame (lockstep), so its
+captured frames are evenly spaced. Every fighter's walker is put where the engine has them each frame,
+turned the way it has them facing, walking while they move, in the ready stance (`InFight`) with the
+engine's weapon kind; a crowd standing almost on one spot is drawn eased a few pixels apart across the
+room so it doesn't heap up (only the drawing moves). The camera follows you. A blocking tip, the pause
+menu and the panel at the end hold the fight.
 
-- **A Shift** is a walk to the new slot, swapping with whoever's there.
-- **An attack** winds up, then lunges, or lets fly (an arrow, a fire bolt, a frost ray, an eldritch
-  blast, a flask lobbed in an arc, each turned to where it's going and trailing its colour). Its
-  log line goes in as it lands, with the sparks in the damage's colour, the damage's sound, the
-  target flashing red, recoiling and hurt, and a small shake (a bigger one, gold sparks and
-  CRITICAL! for a critical). Then the number pops in the big Spectral digits as the bar drains. A
-  miss is a sidestep and MISS.
-- **A spell** lifts the caster's hands in a cloud of its colour; a save shows radiant light falling,
-  a burst, or the vines, and SAVED or FAILED over whoever made it. Healing rises in warm motes with
-  its number.
-- **Going down** is the downed pose and DOWN!, then the death saves over them and on their portrait:
-  three sockets for successes, three for failures. Help or healing gets them up. A foe who dies fades
-  off the map in grey motes; one of yours who runs out of death saves has fallen, faint on the
-  ground, for the rest of the fight.
-- **The Soul-Link** flickers violet as it charges, gold motes rise off the two of you, and full it
-  glows and says READY; the strike is the two of you winding up and lunging together in a fall of
-  gold. The Soul-Bound's lines come up over their head the way banter does.
-- **A turn** starts with its banner (YOUR TURN, or whose it is) and the camera going to them. A
-  foe's turn waits a moment so its banner can be read, then EnemyMind plays it, at the same pace.
+**The cues** (`ExploreScreen.CombatCues`) are played on whoever they happen to, all at once, never in
+a queue:
 
-On your turn the bar along the bottom is whoever's turn it is: their portrait, health and Focus,
-six buttons on 1 to 6 (the auto attack, three skills, the ultimate and a potion, each with its Focus
-cost and any cooldown), a small strip on 7 to 0 for Dodge, Help, a throw and an elixir, the
-Soul-Link sigil (click it to strike when it's charged), and END TURN. Over it are the action's
-circle, the bonus action's triangle, the reaction and the Shift pip, each pale for what the thing
-you're pointing at would spend. Plates glow under every slot; picking or pointing at a skill lights
-the plates it can reach, so the row a melee swing can't get past shows plainly, and tints whoever
-its shape would catch. Chevrons mark where you can Shift, and pointing at one rings any foe that'd
-get a swing at you for leaving the front. Pointing at someone shows the card: their health and
-armour, what's on them, and what a click would do, with the engine's own odds ("72% TO HIT",
-"4 TO 11 SLASHING", "DC 13 DEX SAVE  ·  58% THEY FAIL"). Anything that can't be done says why, in
-the engine's words ("Needs 25 Focus.", "Ready in 2 turns."). Over each foe is its health, and once
-you've seen it do something, what it means to do next. Everything on the screen has a card. L
-shows the log; the tips come up on the right.
+- **A move** (`ActionStarted`) plays its clip on the mover (`WalkerSprite.PlayMove`), the swing's
+  whoosh timed to peak on its blow (`CombatSounds.SwingLeadMs`), or for a spell the school's cast
+  sound and a glow in the hand until it leaves. The engine times every blow to its clip's impact, so
+  the hit lands on that frame. A hit-stop holds a figure's clip for a few frames while the engine goes
+  on; afterwards the clip plays a little faster until it's back in step, so a combo's next blow still
+  lands on its frame.
+- **A telegraph** holds the foe's wind-up with a glint and the warning sound, and puts the move's
+  ground marker (`CombatEffects.Mark`: a ring, a line or a cone the size of its area) on the floor,
+  filling until the blow and resolving on it; an interrupted one goes. A cast with a cast time plays
+  the caster's channel and its glow.
+- **What flies** (`ProjectileLaunched`): an arrow or bolt, a school's bolt, or a beam of lightning,
+  from the hand to the target, timed to arrive on the engine's tick.
+- **A blow landing** (`Damaged`): the hit-stop on both, the white flash, the squash and the knock
+  (`WalkerSprite.TakeHit`), sparks where the weapon meets the body or the school's burst, the weapon's
+  or the school's sound with the critical's over it, the number (white, gold and bigger for a
+  critical, red on the party, small and tinted for a tick), the flinch unless they're mid-move, and a
+  shake only for a heavy skill, a critical, a kill, a big blow on you or a boss's slam, never an auto
+  attack. A miss, a dodge or a block is MISS, DODGE (a sidestep) or BLOCK (a clash and the block clip)
+  with its sound; a save is RESIST. Healing is the green number, a glow and a green wash. An aura going
+  on is a small glow on the figure; the HUD shows the aura itself.
+- **Life and death.** Knocked down and up, Downed (the collapse, staying on the floor), death saves,
+  back up, and a foe's death: its die clip, a held beat, then a fade in motes. One of the party fallen
+  for the rest of the fight stays on the floor, faint. A guest who falls back or a foe who yields
+  fades out.
+- **The rest.** Someone joining fades in where the engine has them; a support swings or shoots from
+  behind the party (its banner lit, its ring filling to its next turn, its arrow carrying the blow); a
+  boss's phase puts its name across the screen with a flash, a burst, the boss sound and a slam; a
+  bark is a bubble over whoever said it; the Soul-Link charging is gold round the two of you; the
+  win is everyone's victory pose.
 
-When the last foe's beaten the panel comes up with the experience, the gold and what the fallen
-carried (each foe's `LootTable` and the encounter's, rolled into the gold and the bag), the
-encounter's `Victory` flag is set, everyone who's down or fallen gets up on 1 HP, and its `Then`
-conversation plays. Nobody in the party dies for good. Lose a fight with a `Lost` conversation and
-that plays instead, everyone back on 1 HP; lose any other and it's `GameOverScreen`. A foe who died
-stays off the map for the rest of the visit, and its presence flag keeps it off after that. There's
-no saving mid-fight, and no inventory: what's worn can't change in the middle of one.
+**The HUD** (`ExploreScreen.CombatHudView`, drawn by `Components/Realtime/CombatHud`, below) is built
+from the engine every frame: your frame (the leader), the party's rows, your target's frame with its
+cast bar and auras, the boss's wide frame while one's in the fight, the hotbar from `Battle.Bar(you)`
+with its cooldown and GCD sweeps, reach, cost and why not, your cast and swing over it, the Soul-Link
+sigil on 7, and a nameplate over everyone else with a foe's telegraph filling over its head and the
+ring under your target. The card for whoever the mouse is on in the room is the screen's own
+(`ExploreScreen.CombatCards`); the HUD draws its own for a slot, the sigil or an aura.
 
-The first fight, the wraiths at sea, is marked `Tutorial`: the combat tips come a lesson at a time
-on your turns (the rows and who can reach whom, Shift, attacking, Focus and the skills, the bonus
-action once the action's spent, allies, ending the turn, the Soul-Link the first time it charges),
-and with tips on, whatever each is about pulses gold until you've done it: the plates, the foes,
-the button, END TURN. In any other fight the same tips come once, the first time their moment does.
+**Input** (`ExploreScreen.CombatInput`, §2.3 and §7.1). Everything you do is a `BattleCommand` for
+the leader, so the engine owns where you are. A click on a foe targets it, which turns the auto attack
+on and walks you into its reach; a click on one of your side targets them (and helps them up if
+they're Downed); a click on the floor walks you there; WASD and the arrows walk you while they're
+held. 1 to 6 or a click on a slot use the bar (1 the auto attack on and off, 2 to 5 a skill on your
+target or its own choice, walking into reach first if it's out of reach, 6 the bag's best healing
+potion), 7 or the sigil the Soul-Link Strike; Tab the next foe, nearest first; T your target's
+target; Escape clears your target, and with none it's the pause menu; L the log; Alt everyone's
+numbers. The HUD is hit-tested before the room. Something that can't be done says why over the bar.
 
-The proof run has `ProofAutoplay(on, speed)` to have EnemyMind play the party too (the panel at the
-end goes by itself), `ProofAimAtFighter(id)` and `ProofAimAtSlot(slot)` to point,
-`ProofPressAbility(id)` to pick a slot, `ProofClick()` to click, `ProofShowLog(shown)` and
-`ProofContinue()`, and `ProofInFight`, `ProofYourTurn` and `ProofFightOver` to wait on.
+**The end.** When the engine's won or lost and everything's been shown, the panel comes up after a
+moment: the experience, the class points (`ClassRanks.AwardFight`) and any rank or level gained, the
+gold (with what was lifted mid-fight and the party's share) and the loot into the bag;
+`Battle.ApplyToParty` writes the hit points back, the jingle plays (`AudioManager.EndBattle`), and
+dismissing it sets the fight's `Victory` flag, gets anyone down up on 1, heals what the difficulty
+says after a story fight, and plays the `Then` (or `Lost`) conversation. A loss with no `Lost` script
+is the game-over screen with its retries; WIN THIS FIGHT hands the fight to the party.
+
+**The options** (`OptionsScreen`, §7.3): the screen's shake (full, reduced, off), hit flashes and
+damage numbers, taken as the fight starts and again every frame, so changing them from the pause
+menu mid-fight works at once.
+
+**The lessons** (`ExploreScreen.CombatTutorial`, §7.2) come one at a time, each once a game, at its
+moment: what a fight is (holding everything while it's up), then picking a foe while you've none,
+the auto attack once you've one, your first skill once your first swing lands, the cooldowns and the
+global cooldown just after the skill goes off, Focus and your class's way of filling it a moment
+later (or as soon as a skill's too dear), the potion the first time you're hurt (or a while after),
+a foe's first telegraph, the Soul-Link when it first fills, a friend down, the allies, walking and
+the win. The tutorial fight at sea is where they nearly all come; any other fight gives the ones
+not yet seen the first time their moment comes. Each lesson's card holds the fight
+(`TutorialTip.HoldsFight`) and puts a gold pulse round what it's about (the foe, slot 1 and the swing
+bar, slot 2, the skills' sweeps, the Focus bar, the potion, the foe winding up, the sigil), but the
+keys and the mouse still work: doing what it says (clicking the foe, pressing 2, drinking) puts it
+away and the fight goes on, and so does GOT IT. The Focus lesson's body has a slot, `{focus}`, that
+the fight fills with the leader's model ("Yours fills as your blows land, and more on a critical.").
+
+**The fields** (`Combat/EncounterCatalog.Field`, `ExploreScreen.Field`, §2.1) are foes who keep a
+wild room once the story's past them: three gloomfangs in the Mirewood's deep wood once the scene with
+the pack at its edge is over (`a1-c2-01`), two Hollowed footmen at Thornbridge's river once Chapter 3's
+done (`a1-c3`; not straight after the raid, while Mira's still talking there), and the Old
+Crown Vault's four constructs, each a fight of its own, asleep until they're woken. Their names are
+red. Clicking one starts its fight where everyone stands, with it as your target, so your auto
+attack walks you in; the wolves and the Hollowed come at you by themselves when you come within
+120 world pixels (not in the first two seconds in the room or after a fight, so a room that's just
+filled doesn't pull you straight back in). Each is a `Random` encounter worth a random fight's
+experience and 15 class points, with its foes' own loot. A field that's beaten is back a minute of
+play later, or at once if you leave the room and come back. Its foes are the room's npcs: the vault's
+constructs are in the zone file already, and the others the table puts down (`FieldGround`), since
+the zone files are written by `tools/rooms`; `--validate` checks every field against its room and its
+floor. Losing one is the game-over screen with its retries, as any fight without a `Lost` script.
+
+**The proof run** plays every story fight in real time: the party's AI drives the leader too
+(`Battle.LeaderAutoplay`), at 1x on the lockstep clock. It takes `fight-<id>.png` at the first busy
+moment from a few seconds in (several people mid-move and numbers in the air) and `fight-<id>-won.png`
+on the panel, and for the Red Gulls and the Thornmother films three seconds of every second frame into
+`rt/`. The tutorial at sea puts its first three lessons up even though the run's tips are quiet,
+takes each card's shot (`lesson-target.png`, `lesson-attack.png`, `lesson-ability.png`) and does what
+it says, as a player would: the pretend mouse clicks the nearest wraith (`combat-target.png` is the
+target picked), GOT IT, and 2 for the first skill; then the AI plays on, and the log's shown later
+(`combat-log.png`). A fight the run loses is retried like a player would: from the autosave, and
+after two losses, on Story.
+
+**The fight stages** (`LegendQuestGame.ProofArena`, `ExploreScreen.ProofArena`) are run on their own:
+`--proof <dir> Arena`, `Boss` or `Classes`. Each bout is a fresh game the way the story has it at
+that fight: you (a Blademaster, Caleb), the Soul-Bound (Wren) and the companions who've joined by
+then, at `LevelTable`'s level and the class rank the story's fights before it give, in the room the
+fight's fought in, with the story's flags up to it, and the save made as the fight starts, so the
+room starts it as it loads. The party's AI fights for everyone. Each bout saves, once each, the
+fight's start, the thick of it, the bar's cooldowns just after your first skill, a telegraph's
+marker part filled, each boss phase's banner, a friend downed and being helped up, the Soul-Link
+Strike, and the panel. **Arena** fights the Red Gulls, the gloomfangs, the raid and the sappers, then
+the fields: the Mirewood's pack coming at the party on the path, the room cleared, and the pack back
+a minute later; and, after a look at your character sheet (`field/construct-sheet.png`: the kit's icons,
+the rank locks, the class points), a vault construct pointed at (its red name, the hand) and clicked. **Boss** fights
+the Thornmother through all three phases with the Lodge's wardens on the lip, and films her first
+Thorn Burst every second frame into `seq/`. **Classes** puts six classes in your place (Blademaster,
+Arcanist, Lightbearer, Warden, Hemomancer, Lodge Ranger) at rank 5 in the raid on Thornbridge (the
+longest of Act 1's fights), presses each of their four skills as soon as it can go, through the same
+code keys 2 to 5 use, with a shot of each, and
+films the first two classes' ultimates into `seq/`. A bout that's lost is fought again on the next
+seed, three times at most, and one that runs past three minutes is given up on, each with a line on
+the error stream.
+
+| File | What it is |
+| --- | --- |
+| `Screens/ExploreScreen.Combat` | Starting a fight in place and ending it: the roster, the arena, the Battle, the bystanders, the panel and the rewards |
+| `Screens/ExploreScreen.CombatLoop` | The fight's clock, stepping the engine, placing everyone, keeping clips in step |
+| `Screens/ExploreScreen.CombatCues` | What each event looks and sounds like, on whoever it happens to |
+| `Screens/ExploreScreen.CombatHudView`, `CombatDraw`, `CombatCards` | The HUD's views from the engine, drawing the fight, the card for someone in the room |
+| `Screens/ExploreScreen.CombatInput` | The mouse and the keys as BattleCommands |
+| `Screens/ExploreScreen.CombatAllies`, `CombatTutorial`, `CombatProof`, `ProofFights` | The supports, the lessons and their gold pulse, and the proof run's fights |
+| `Screens/ExploreScreen.Field`, `Combat/EncounterCatalog.Field` | The fields: their foes put down, red names, a click or coming near to fight, and the room filling again |
+| `Screens/ExploreScreen.ProofArena`, `LegendQuestGame.ProofArena` | The Arena, Boss and Classes proof stages |
+| `Screens/ExploreScreen.Debug` | F9 and F10 in debug builds: the next class, the next rank |
+| `World/Rooms/BattleFloor` | The arena from a room's floor band, and its check |
+| `Combat/FightRoster`, `Slot`, `CombatStats` | A fight's starting foes and their ids, a foe's place when it isn't in the room, and a party member's numbers from what they wear |
+| `Components/CombatLog`, `CombatCard`, `TurnBanner`, `CombatResult`, `SupportBanner` | The log, the card, the banner for the fight's name and a boss's phase, the panel at the end, and a support's banner with its ring |
+| `Components/CombatEffects`, `DamagePopups`, `ScreenShake`, `CombatStyle`, `CombatArt` | What's thrown about, the numbers, the shake, the colours of each kind of damage, and the fight's sheets |
 
 ## Conversations
 
@@ -1217,7 +1206,7 @@ they did before there were tips.
 
 | File | What it is |
 | --- | --- |
-| `TutorialTip` | One tip: its id, its title, its words, the keys it teaches, where its card goes (`TipAnchor`), what it's about (`TipTopic`), and whether it holds everything until it's read (only the first fight's does) |
+| `TutorialTip` | One tip: its id, its title, its words, the keys it teaches, where its card goes (`TipAnchor`), what it's about (`TipTopic`), whether it holds everything until it's read (only the first fight's does), whether it holds a fight while the keys still work (the fight's lessons, `HoldsFight`, which never go by themselves), and what a slot in its words says when the game has nothing more particular (`Fill`; HOW TO PLAY shows that) |
 | `TutorialCatalog` | Every tip, checked when the game starts like the other tables: no two with one id, a title that fits on its card, no more than 120 letters of words and six keys, and every id the game calls by name in the table. A wall of text stops the game before it can turn up mid-play |
 | `Tutorials` | The tips for one game: which have been seen (kept in the save, in `SaveData.Tips`, so it's once a game and a new game on another slot teaches it all again), the one that's up and the ones waiting. A tip counts as seen the moment it comes up, so quitting with one on screen doesn't bring it back. It draws nothing; `Show` puts one in line, `Complete` says you've done what it teaches |
 | `TutorialPanel` | The card: cut from the forms' panel at the party cards' size, the title in gold, the words in bone, the keys on ivory caps (`KeyCaps`), and ENTER · GOT IT in the corner. A gold edge flares as it comes in and settles, so the eye goes to it once. It rises into place, or drops for the ones along the top |
@@ -1236,7 +1225,8 @@ they did before there were tips.
 | Something to say | The first time one of the party has a gold "!" over them, or something to say with you beside them |
 | Waiting at the Flagon | The first time anyone's waiting at camp |
 | Every control | Once you've had five tips: Esc, then HOW TO PLAY |
-| The fight's and the bag's | Written, and waiting for the screens they're about: `combat-start` to `combat-victory`, `inventory-open`, `inventory-equip`, `inventory-potion` and `loot` |
+| The fight's lessons | `combat-start`, `combat-target`, `combat-attack`, `combat-ability`, `combat-cooldown`, `combat-focus`, `combat-potion`, `combat-telegraph`, `combat-soul-link`, `combat-downed`, `combat-allies`, `combat-move` and `combat-victory`, at the moments Combat, On screen gives |
+| The bag's | `inventory-open`, `inventory-equip`, `inventory-potion` and `loot` |
 
 The conversation's tips (going on, answering, the dice) and the wheel are only in HOW TO PLAY: a
 conversation has the whole screen, and there's no single moment to say the wheel zooms. The map
@@ -1244,7 +1234,8 @@ screen notices the moments in `ExploreScreen.Tutorial.cs`, since nearly all of t
 already knows every frame (who's nearest, who's marked, what you're to do next), and the few that
 are something you do (talking, using something, opening the map) tell it from where they happen.
 The proof run keeps the tips quiet (`Tutorials.Quiet`), so its shots are the same as they were and
-nothing waits on a press it can't make; `ProofTip` puts one up for a shot of its card.
+nothing waits on a press it can't make; `ProofTip` puts one up for a shot of its card, and the
+tutorial fight puts its first three lessons up the same way.
 
 ## The walker
 
@@ -1830,7 +1821,7 @@ the textbook); for now they're copied as text and read at startup, which is enou
 - `Story/` is the story's tables (`Meters`, `KeyItems`, `Paintings`, `Tints`, `Cast`, the quest board's `Postings`, and `Banters`) and the plan the rest of the game is built from: the build plan, the writing guide, the scripts, the specs for rooms, combat, classes and art, and the generated registry (`Story/README.md` says what each is), with their two tools in `Story/tools/`.
 - `Tutorial/` is the tutorial's tips, which draw nothing: `TutorialTip`, every one of them in `TutorialCatalog`, and `Tutorials` for which a game has seen and which are waiting. `TutorialPanel` and `KeyCaps` in `Components/` show them.
 - `Rules/` is the 5e parts that draw nothing: `AbilityScores`, `AbilityCheck`, `Dice`, `DiceExpression` and `RollResult`, `AttackMath`, `ArmourClass`, and the classes in `ClassCatalog`.
-- `Combat/` is the fights, which draw nothing: `CombatEngine` and its partials, `Combatant`, `TurnBudget`, `ActiveCondition`, `CombatEvent`, the rows it all happens in (`Formation`, `Slot`, `FightRoster`), the rules a fight's played by (`FightRules`, `DifficultyRules`, `IKitSource`), the catalogs (`AbilityCatalog`, `EnemyCatalog`, `EncounterCatalog`, with the encounters' `EncounterGuest`s and `EncounterSupport`s), `EnemyMind` for the AI, and `CombatSimulator` and `StallWatch` for `--simulate`.
+- `Combat/` is the fights, which draw nothing: the real-time engine in `Combat/Realtime/` (`Battle` and its partials, `Fighter`, `BattleEvent`, `BattleCommand`, `BattleArena`, `BattleRoster`, `BattleRules`, the brains, and `BattleSimulator` for `--simulate`), the kits (`SkillCatalog`), the catalogs (`EnemyCatalog`, `EncounterCatalog`, with the encounters' `EncounterGuest`s, `EncounterSupport`s and `EncounterWave`s), a fight's starting foes (`FightRoster`, `Slot`), the difficulty (`DifficultyRules`), class ranks (`ClassRanks`) and a party member's numbers (`CombatStats`).
 - `Items/` is everything that can be carried, worn or sold: `ItemDefinition` and `ItemCatalog`, the bag (`Inventory` over the save's `ItemStack`s), the shops (`ShopDefinition`, `ShopCatalog`) and what foes drop (`LootTable`, `LootResult`, `LootTableCatalog`). The inventory's and the shops' rules are here too, drawing nothing: `Wardrobe`, `Trade`, `GearComparison`, `ItemReadout` and `BagOrder`.
 - `Components/` is every screen element, the torches, the toasts, the tooltip, the party's cards, the cursor, the paintings, the quest board, the chapters' card, the tutorial's card and key caps, the 3D d20 (`DieModel`) and the panel it's thrown on (`DiceTable`), and the inventory's icons, grids, item cards, faces, tiles and character sheet, each with `LoadContent`, `Update` and `Draw` the way the tutorials do it. `Components/Realtime/` is the real-time fight's HUD (see [The real-time HUD](#the-real-time-hud)).
 - `Collisions/` is the collision tutorial's rectangle and helper.

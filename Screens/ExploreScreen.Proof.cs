@@ -116,8 +116,15 @@ public partial class ExploreScreen
     /// </summary>
     private IEnumerable<ProofBeat> DocksBeats()
     {
+        // The arrival's shots are beats only while the ship's coming in; loaded from the autosave
+        // after a lost fight there's no arrival, so each is a beat that does nothing instead, and the
+        // visit has as many beats either way (ProofResumeAt counts them to pick up where it was).
         var beats = new List<object>();
-        if (_arriving != Arriving.None)
+        if (_arriving == Arriving.None)
+        {
+            for (int i = 0; i < ProofArrivalShots; i++) beats.Add(Do(() => { }));
+        }
+        else
         {
             beats.Add(ArrivalShot(Arriving.Sailing, 3.3f, "arrival-sailing.png"));
             beats.Add(ArrivalShot(Arriving.Sailing, 5f, "arrival-furling.png"));
@@ -140,6 +147,9 @@ public partial class ExploreScreen
             Shot("docks.png"),
             Out("city"));
     }
+
+    /// <summary>How many shots of the ship coming in the docks' visit takes.</summary>
+    private const int ProofArrivalShots = 7;
 
     /// <summary>How far east the walk into the Red Gulls goes at most, in art pixels: the conversation stops it once it's in their trigger.</summary>
     private const float ProofIntoTheGulls = 120f;

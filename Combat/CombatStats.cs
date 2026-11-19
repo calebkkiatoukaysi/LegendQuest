@@ -34,12 +34,12 @@ public static class CombatStats
     /// <param name="ability">The ability.</param>
     public static string Abbreviation(Ability ability) => ability.ToString()[..3].ToUpperInvariant();
 
-    /// <summary>Their armour class: the armour's, plus Defence if their class has it and they're wearing armour.</summary>
+    /// <summary>Their armour class: the armour's, plus Defence if their class has it (the Blademaster and the classes built on it) and they're wearing armour.</summary>
     /// <param name="member">Who.</param>
     public static int ArmourClassOf(PartyMember member)
     {
         int ac = ArmourClass.Of(member);
-        bool defence = AbilityCatalog.Kit(member.Class).Contains(AbilityId.Defence);
+        bool defence = ClassCatalog.Get(member.Class).InterimKit == ClassId.Fighter;
         return defence && member.WornIn(EquipmentSlot.Body) is { Armour: not ArmourCategory.None } ? ac + DefenceBonus : ac;
     }
 

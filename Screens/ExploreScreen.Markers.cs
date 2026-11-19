@@ -110,14 +110,15 @@ public partial class ExploreScreen
     private IndicatorFrame Indicators()
     {
         _plated.Clear();
-        var plates = new List<(string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named)>();
+        var plates = new List<(string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile)>();
         foreach (Npc npc in _npcs)
         {
-            bool named = npc.Definition.Cast is not null || npc.Definition.Talk is not null || npc.Definition.Badge is not null || _campers.Contains(npc);
+            bool hostile = Hostile(npc);
+            bool named = hostile || npc.Definition.Cast is not null || npc.Definition.Talk is not null || npc.Definition.Badge is not null || _campers.Contains(npc);
             MarkerKind marker = MarkerKind.None;
             foreach ((WalkerSprite walker, _, MarkerKind kind) in _marked)
                 if (walker == npc.Walker) marker = kind;
-            plates.Add((npc.Definition.Name, HeadOf(npc.Walker), marker, npc.Definition.Badge, named));
+            plates.Add((npc.Definition.Name, HeadOf(npc.Walker), marker, npc.Definition.Badge, named, hostile));
             if (named || _showAll || NpcAt(_mouseWorld) == npc) _plated.Add(npc.Walker);
         }
 

@@ -358,6 +358,11 @@ public partial class ExploreScreen
     /// <param name="npc">Who.</param>
     private void Talk(Npc npc)
     {
+        if (Hostile(npc))
+        {
+            Engage(npc);
+            return;
+        }
         TutorialDone(TutorialCatalog.Talk);
         Leader.Face(npc.Walker.Position);
 

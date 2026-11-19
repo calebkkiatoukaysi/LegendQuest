@@ -74,18 +74,6 @@ public static class CombatStyle
         [DamageType.Acid] = (new Color(176, 240, 96), Sfx.Cast),
     };
 
-    /// <summary>What flies from the user to the target for each ability that throws or shoots something, by its hud.png piece. A weapon attack from range flies an Arrow; anything else here lands where it is.</summary>
-    private static readonly Dictionary<AbilityId, string> Flying = new()
-    {
-        [AbilityId.FireBolt] = "fire-bolt",
-        [AbilityId.ProduceFlame] = "fire-bolt",
-        [AbilityId.RayOfFrost] = "frost-ray",
-        [AbilityId.EldritchBlast] = "eldritch-blast",
-        [AbilityId.MagicMissile] = "magic-missile",
-        [AbilityId.ThrowAlchemistsFire] = "flask",
-        [AbilityId.BlastingCharge] = "flask",
-    };
-
     /// <summary>The conditions that are good news for whoever has them, so they pop up in gold rather than red.</summary>
     private static readonly Dictionary<ConditionId, bool> Helpful = new()
     {
@@ -151,7 +139,6 @@ public static class CombatStyle
         }
 
         CombatIcons.Frames(Arrow);
-        foreach (string piece in Flying.Values) CombatIcons.Frames(piece);
     }
 
     /// <summary>The colour of a kind of damage: its sparks, its motes and its number's glow.</summary>
@@ -161,10 +148,6 @@ public static class CombatStyle
     /// <summary>The sound of a kind of damage landing.</summary>
     /// <param name="kind">The kind of damage.</param>
     public static Sfx DamageSound(DamageType kind) => Damage[kind].Sound;
-
-    /// <summary>The hud.png piece that flies for an ability, or null if nothing does.</summary>
-    /// <param name="ability">The ability.</param>
-    public static string Projectile(AbilityId ability) => Flying.GetValueOrDefault(ability);
 
     /// <summary>What a condition does, in a line.</summary>
     /// <param name="condition">The condition.</param>
@@ -187,15 +170,5 @@ public static class CombatStyle
         spriteBatch.Draw(pixel, new Rectangle(area.Left, area.Bottom - RimThickness, area.Width, RimThickness), rim);
         spriteBatch.Draw(pixel, new Rectangle(area.Left, area.Top, RimThickness, area.Height), rim);
         spriteBatch.Draw(pixel, new Rectangle(area.Right - RimThickness, area.Top, RimThickness, area.Height), rim);
-    }
-
-    /// <summary>The colour of the light a spell or a gift makes round its user and its target.</summary>
-    /// <param name="ability">The ability.</param>
-    public static Color LightOf(AbilityDefinition ability)
-    {
-        if (ability.Kind is AbilityKind.Heal or AbilityKind.Potion) return Healing;
-        if (ability.Conditions.Contains(ConditionId.Restrained)) return Nature;
-        if (ability.Damage.IsNone || ability.Kind == AbilityKind.Condition && ability.Id != AbilityId.Hex) return Blessing;
-        return DamageColour(ability.DamageType);
     }
 }

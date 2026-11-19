@@ -167,7 +167,7 @@ public sealed class IndicatorLayer
             if (exit.Presence.Holds(frame.Flags)) LayOutExit(camera, frame, exit, exit == pointedExit, time);
         foreach (RoomDoor door in frame.Room.Doors)
             if (door.Presence.Holds(frame.Flags)) LayOutDoor(camera, frame, door, door == pointedDoor, time);
-        foreach ((string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named) plate in frame.Plates)
+        foreach ((string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile) plate in frame.Plates)
             LayOutPlate(camera, frame, plate);
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
@@ -363,14 +363,14 @@ public sealed class IndicatorLayer
     }
 
     /// <summary>Lays out a name over a head, if it shows: in front of it the "!" if they've a marker and the badge if you can buy from or train with them, and the name in the colour that goes with them.</summary>
-    private void LayOutPlate(Camera2D camera, IndicatorFrame frame, (string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named) plate)
+    private void LayOutPlate(Camera2D camera, IndicatorFrame frame, (string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile) plate)
     {
         Vector2 mouse = frame.Mouse;
         bool pointed = MathF.Abs(mouse.X - plate.Head.X) <= FigureReach.X && mouse.Y >= plate.Head.Y && mouse.Y <= plate.Head.Y + FigureReach.Y;
         if (!plate.Named && !pointed && !frame.ShowAll) return;
 
         string name = plate.Name.ToUpperInvariant();
-        Color colour = plate.Marker switch
+        Color colour = plate.Hostile ? PlateRed : plate.Marker switch
         {
             MarkerKind.Quest => Palette.Gold,
             MarkerKind.Event => PlateRed,

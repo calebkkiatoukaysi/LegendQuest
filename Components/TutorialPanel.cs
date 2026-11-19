@@ -155,12 +155,12 @@ public class TutorialPanel
         {
             _gap = MathF.Max(0f, _gap - seconds);
             if (_gap > 0f || tutorials.Next() is not TutorialTip next) return;
-            Begin(next);
+            Begin(next, tutorials.Words(next));
         }
 
         _shown = MathF.Min(1f, _shown + seconds / FadeInSeconds);
         _age += seconds;
-        if (!_tip.Blocking && _age >= HoldSeconds + _tip.Body.Length * SecondsPerLetter) tutorials.Dismiss();
+        if (!_tip.Blocking && !_tip.HoldsFight && _age >= HoldSeconds + _tip.Body.Length * SecondsPerLetter) tutorials.Dismiss();
     }
 
     /// <summary>Draws the veil behind a tip that holds everything, the card, its gold edge and its key caps. Goes in a point sampled batch, before DrawWords.</summary>
@@ -214,11 +214,11 @@ public class TutorialPanel
     }
 
     /// <summary>Puts a tip on the card: its title in capitals, its words broken to fit, and the card sized round them.</summary>
-    private void Begin(TutorialTip tip)
+    private void Begin(TutorialTip tip, string words)
     {
         _tip = tip;
         _title = tip.Title.ToUpperInvariant();
-        _rows = Text.Wrap(tip.Body, _font, CardWidth - Inset * 2);
+        _rows = Text.Wrap(words, _font, CardWidth - Inset * 2);
         _shown = 0f;
         _age = 0f;
 

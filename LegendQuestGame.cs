@@ -87,7 +87,7 @@ public partial class LegendQuestGame : Game
     /// before the conversations, which check their travels against them, and the rest of the zones'
     /// checks (talks, barks, every fight's foes together) wait for the conversations. Then who's drawn
     /// for each fight's supports, which is often someone standing in a zone, and that every room a
-    /// fight's fought in has room on its floor for the fight's slots. Last, every imported picture's
+    /// fight's fought in has floor enough for one (BattleFloor). Last, every imported picture's
     /// .json, which has to be for someone the tables know, and the character parts' parts.json.
     /// </remarks>
     public static void LoadAndCheckData()
@@ -96,7 +96,9 @@ public partial class LegendQuestGame : Game
         DialogueCatalog.ValidateAll();
         ZoneCatalog.ValidateAfterDialogue();
         EncounterCatalog.ValidateAfterZones();
-        foreach (RoomDefinition room in EncounterCatalog.FightRooms()) FightStage.Check(room);
+        foreach (RoomDefinition room in EncounterCatalog.FightRooms()) BattleFloor.Check(room);
+        EncounterCatalog.ValidateField();
+        foreach (RoomDefinition room in EncounterCatalog.FieldRooms()) BattleFloor.Check(room);
         _ = ShopCatalog.All.Count() + LootTableCatalog.All.Count();
         ImportedArt.LoadAll();
         PartCatalog.LoadAll();

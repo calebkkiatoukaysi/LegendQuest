@@ -35,7 +35,7 @@ public enum DialogueEventKind
     /// <summary>A fight's to start once the conversation's over. The id is the encounter's.</summary>
     Fight,
 
-    /// <summary>A change to the fight that's going, from an interlude: a support stood down, foes added, a guest joining. The event's Order is what to hand CombatEngine.Apply once the conversation's over.</summary>
+    /// <summary>A change to the fight that's going, from an interlude: a support stood down, foes added, a guest joining. The event's Order is what to hand Battle.Apply once the conversation's over.</summary>
     FightOrder,
 
     /// <summary>Everyone was given experience. The amount's how much each.</summary>

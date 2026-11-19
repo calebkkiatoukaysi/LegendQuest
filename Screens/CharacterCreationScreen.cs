@@ -1138,10 +1138,10 @@ public class CharacterCreationScreen : MenuScreen
     /// <summary>The lines their people comes in.</summary>
     private IReadOnlyList<string> Lineages() => LookOptions.Lineages(_member.Look.Ancestry);
 
-    /// <summary>The class a step along from another, wrapping round.</summary>
+    /// <summary>The class a step along from another, wrapping round: one of the eight base classes, since the advanced ones are learned in the story, not chosen at the start.</summary>
     private static ClassId Step(ClassId from, int step)
     {
-        ClassId[] all = Enum.GetValues<ClassId>();
+        ClassId[] all = Enum.GetValues<ClassId>()[..ClassCatalog.BaseClasses];
         return all[LookOptions.Wrap(Array.IndexOf(all, from) + step, all.Length)];
     }
 

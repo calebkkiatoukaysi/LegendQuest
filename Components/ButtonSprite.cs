@@ -33,6 +33,9 @@ public class ButtonSprite
     /// <summary>The fixed corner of each frame. Has to match BUTTON_CORNER in tools/generate_ui.py.</summary>
     private const int CornerSize = 8;
 
+    /// <summary>How far a shrunk label keeps from the corner art on each side as well, in screen pixels, so a long one (the options' DIFFICULTY  &lt;  BALANCED  &gt;) doesn't run into the brackets.</summary>
+    private const float LabelClearance = 10f;
+
     /// <summary>Rows in the sheet, which is also the number of animation states.</summary>
     private const int SheetRows = 4;
 
@@ -300,12 +303,12 @@ public class ButtonSprite
     }
 
     /// <summary>How far a label may be shrunk to fit a fixed-size plate, so a long one never runs off the edges.</summary>
-    /// <remarks>The margin is the corner art, which a label shouldn't sit over.</remarks>
+    /// <remarks>The margin is the corner art, which a label shouldn't sit over, and a little clearance either side of it.</remarks>
     private float LabelFit
     {
         get
         {
-            float room = Size.X - CornerSize * 2 * DrawScale;
+            float room = Size.X - (CornerSize * DrawScale + LabelClearance) * 2;
             float width = _font.MeasureString(Label ?? string.Empty).X;
             return width > room ? room / width : 1f;
         }

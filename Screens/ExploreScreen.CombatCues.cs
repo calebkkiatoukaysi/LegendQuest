@@ -1,750 +1,698 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Xna.Framework;
+using LegendQuest.Audio;
 using LegendQuest.Characters;
+using LegendQuest.Characters.Motion;
 using LegendQuest.Combat;
-using LegendQuest.Components;
+using LegendQuest.Combat.Realtime;
 using LegendQuest.Dialogue;
+using LegendQuest.Components;
+using LegendQuest.Items;
 using LegendQuest.Rules;
 using LegendQuest.Tutorial;
 
 namespace LegendQuest.Screens;
 
 /// <summary>
-/// What each thing that happens in a fight looks and sounds like as it's shown: the motion, the
-/// poses, what flies, the sparks and the motes, the numbers, the shake, the sound and the log line.
+/// What each thing that happens in a fight looks and sounds like, played on whoever it happens to
+/// the moment it happens: the clips, the markers on the floor, what flies, the impacts, the numbers,
+/// the shake, the sounds and the log's line.
 /// </summary>
 /// <remarks>
-/// The Black Box's TableCues and TableScreen.Effects, in rows: each CombatEvent is a beat with a
-/// length, and everything it sets off happens as it's shown. An attack winds up, then lunges or
-/// lets fly, and its log line goes in as the blow lands, with the hit's sparks, its sound and the
-/// shake right after; the number pops as the bar drains. A Shift is a step from one slot to
-/// another, and everyone turns back to face the other side once they're there. The camera holds on
-/// the middle of the fight throughout. Every length is a named constant: quick enough that a turn
-/// doesn't drag, slow enough to follow.
+/// <para>
+/// There's no queue of beats: every fighter's figure plays its own clips (Story/11-combat.md §8), so
+/// four people can be mid-swing at once. A move starts its clip when the engine starts it
+/// (ActionStarted) and the engine has timed its blow to the clip's impact, so the hit that follows
+/// is played on that frame: the hit-stop on both, the white flash, the squash and the knock
+/// (WalkerSprite.TakeHit), sparks where the weapon meets the body, the weapon's or the school's
+/// sound with the critical's over it, the number, and a shake only for a heavy skill, a critical, a
+/// kill, a big blow on you, or a boss's slam (never an auto attack). A swing's whoosh starts just
+/// before its blow, by its family's lead (CombatSounds.SwingLeadMs). A foe's telegraph holds its
+/// wind-up with a glint and a marker on the floor that fills until the blow and resolves on it.
+/// </para>
+/// <para>
+/// A reaction clip (a flinch, a block, a knockdown, a death) carries a "hit" of its own, the frame
+/// it's struck on: only an action's "hit" is a blow (Clip.IsAction), and the screen takes blows from
+/// the engine's events, not the clips, so the clip events it listens to are the landings (dust) and
+/// the effects named in the clips (fx). A flinch isn't played on someone mid-move, so a blow taken
+/// while swinging doesn't cut the swing short; the flash, squash and knock still show it.
+/// </para>
 /// </remarks>
 public partial class ExploreScreen
 {
-    // How long each kind of beat is shown for, in seconds.
-
-    /// <summary>One initiative roll: quick, so the turn order fills in at a run.</summary>
-    private const float InitiativeSeconds = 0.16f;
-
-    /// <summary>A turn starting, so its banner's read before anything happens.</summary>
-    private const float TurnSeconds = 0.6f;
-
-    /// <summary>A Shift from one slot to another.</summary>
-    private const float ShiftSeconds = 0.35f;
-
-    /// <summary>A foe lashing out at someone pulling away.</summary>
-    private const float OpportunitySeconds = 0.4f;
-
-    /// <summary>An ability used: the cast, or the drink, or the dash.</summary>
-    private const float AbilitySeconds = 0.5f;
-
-    /// <summary>An attack's wind-up before the blow, and the blow itself from close up.</summary>
-    private const float WindUpSeconds = 0.22f;
-    private const float StrikeSeconds = 0.14f;
-
-    /// <summary>A hit landing, and a critical, which is let to land harder.</summary>
-    private const float HitSeconds = 0.2f;
-    private const float CriticalSeconds = 0.36f;
-
-    /// <summary>A miss, a number popping up, healing, a save, a condition going on or coming off.</summary>
-    private const float MissSeconds = 0.4f;
-    private const float DamageSeconds = 0.32f;
-    private const float HealSeconds = 0.4f;
-    private const float SaveSeconds = 0.55f;
-    private const float ConditionSeconds = 0.32f;
-    private const float ConditionGoneSeconds = 0.15f;
-
-    /// <summary>Going down, a death save, stopping dying, getting up, dying: each given time to land.</summary>
-    private const float DownedSeconds = 0.85f;
-    private const float DeathSaveSeconds = 0.85f;
-    private const float StabiliseSeconds = 0.5f;
-    private const float ReviveSeconds = 0.6f;
-    private const float DieSeconds = 0.9f;
-
-    /// <summary>The round ending with supports to act, and the fight handed to the party.</summary>
-    private const float RoundEndSeconds = 0.35f;
-    private const float ConcedeSeconds = 0.6f;
-
-    /// <summary>The Soul-Link charging, someone joining, a line said, and a line in the log with nothing else to it.</summary>
-    private const float ChargeSeconds = 0.75f;
-    private const float JoinSeconds = 0.7f;
-    private const float BarkBeatSeconds = 0.35f;
-    private const float LogSeconds = 0.3f;
-
-    // The motion.
-
-    /// <summary>How long a pose is held: the strike, the cast, being hurt.</summary>
-    private const float StrikePoseSeconds = 0.3f;
-    private const float CastPoseSeconds = 0.45f;
-    private const float HurtPoseSeconds = 0.35f;
-
-    /// <summary>How far a lunge goes, a blow knocks someone back, and a miss is sidestepped, in world pixels, and how long each takes there and back.</summary>
-    private const float LungeDistance = 6f;
-    private const float LungeSeconds = 0.22f;
-    private const float RecoilDistance = 3f;
-    private const float RecoilSeconds = 0.2f;
+    /// <summary>How far a dodge sidesteps, in world pixels, and how long it takes there and back.</summary>
     private const float DodgeDistance = 4f;
     private const float DodgeSeconds = 0.3f;
 
-    /// <summary>How long a hit's red flash takes to die away.</summary>
-    private const float FlashSeconds = 0.3f;
+    /// <summary>How long a block's hit-stop holds both, in frames.</summary>
+    private const int BlockFrames = 3;
 
-    /// <summary>How fast things fly, in world pixels a second, and the least and most time any flight takes.</summary>
-    private const float ProjectileSpeed = 260f;
-    private const float FlightLeast = 0.12f;
-    private const float FlightMost = 0.6f;
+    /// <summary>How much of a blow, as a share of the most health someone has, is a big one on you: it shakes the screen.</summary>
+    private const float BigHitShare = 0.2f;
 
-    /// <summary>How far up their figure from their feet someone's chest is, as a share of how tall they stand: where blows land and motes rise from.</summary>
-    private const float ChestShare = 0.55f;
+    /// <summary>How long a fallen foe lies before it fades in motes, and how long the fade takes.</summary>
+    private const float LieSeconds = 0.5f;
+    private const float FadeOutSeconds = 0.6f;
 
-    /// <summary>How long a fallen foe takes to fade out of the room, and how faint one of the party who's fallen is drawn.</summary>
-    private const float FadeOutSeconds = 0.8f;
+    /// <summary>How faint one of the party who's fallen for the rest of the fight is drawn, on the floor.</summary>
     private const float FallenOpacity = 0.6f;
-
-    // What's thrown about.
-
-    /// <summary>How hard a hit, a critical, someone going down and a blast shake the screen, from 0 to 1.</summary>
-    private const float HitShake = 0.22f;
-    private const float CriticalShake = 0.55f;
-    private const float DownedShake = 0.35f;
-    private const float BlastShake = 0.3f;
-
-    /// <summary>Straight up the screen, and how wide sparks fan off a blow and off a critical, in radians.</summary>
-    private const float Upward = -MathHelper.PiOver2;
-    private const float SparkSpread = 1.1f;
-    private const float CriticalSpread = 1.6f;
-
-    /// <summary>The areas motes start in, in world pixels: round someone casting, round someone healed or dying, and a column over someone light's falling on.</summary>
-    private static readonly Point CastCloud = new(16, 22);
-    private static readonly Point HealCloud = new(18, 26);
-    private static readonly Point FallCloud = new(12, 10);
-
-    /// <summary>How far over someone's head radiant light starts falling, in world pixels.</summary>
-    private const float FallFrom = 30f;
-
-    /// <summary>The colour a foe fades away in.</summary>
-    private static readonly Color Fading = new(170, 160, 200);
-
-    /// <summary>The colour of damage numbers over a foe, and over one of yours.</summary>
-    private static readonly Color DamageOnFoe = new(255, 240, 222);
-    private static readonly Color DamageOnParty = new(255, 108, 92);
-
-    // Sound.
-
-    /// <summary>How loud a foe's turn starting is, against yours, and something being thrown.</summary>
-    private const float QuietTurn = 0.45f;
-    private const float LaunchVolume = 0.7f;
-
-    // Words.
-
-    /// <summary>How the engine's save line says it was made: "... = 17 - SAVES.".</summary>
-    private const string SavedWord = " - SAVES";
-
-    /// <summary>What a death save has to reach to count as made: 5e's 10.</summary>
-    private const int DeathSaveTarget = 10;
 
     /// <summary>How long a line said mid-fight stays over the speaker's head, plus a bit for every letter.</summary>
     private const float BarkSeconds = 2.4f;
     private const float BarkSecondsPerLetter = 0.05f;
 
-    /// <summary>Whoever the last critical shown landed on, until its number's popped, so the number's the big one.</summary>
-    private string _criticalOn;
+    /// <summary>How long a support's arrow or stone takes to reach its foe, and how far over the feet the chest is, as a share of the figure.</summary>
+    private const float SupportFlightSeconds = 0.18f;
+    private const float ChestShare = 0.55f;
 
-    /// <summary>Starts showing an event: the screen's picture of the fight catches up with it, and everything it sets off starts.</summary>
+    /// <summary>How far over someone's head the numbers start, in world pixels.</summary>
+    private const float NumbersRise = 4f;
+
+    /// <summary>How loud a support's shot and a foe's buff are against the rest.</summary>
+    private const float QuietVolume = 0.6f;
+
+    /// <summary>The colour a foe fades away in, and the smoke a vanishing fighter goes in.</summary>
+    private static readonly Color Fading = new(190, 170, 220);
+    private static readonly Color Smoke = new(150, 150, 160);
+
+    /// <summary>The markers on the floor still filling, by the fighter whose telegraph or cast they are, to resolve or cancel.</summary>
+    private readonly Dictionary<string, int> _cueMarks = new();
+
+    /// <summary>Plays one thing the engine did, on whoever it happened to, and writes its log line.</summary>
     /// <param name="happened">The event.</param>
-    private void StartBeat(CombatEvent happened)
+    private void Cue(BattleEvent happened)
     {
-        _beat = happened;
-        _beatClock = 0f;
-        _beatLength = 0f;
-        _beatStrike = null;
-        _beatLine = null;
-        _shown.Show(happened);
-        _eventsShown++;
-
-        Combatant actor = happened.Kind == CombatEventKind.SupportActed ? null : Fighter(happened.Actor);
-        Combatant target = Fighter(happened.Target);
-        WalkerSprite by = happened.Kind == CombatEventKind.SupportActed ? null : FighterWalker(happened.Actor);
-        WalkerSprite on = FighterWalker(happened.Target);
-        AbilityDefinition ability = happened.Ability is AbilityId id ? AbilityCatalog.Get(id) : null;
-        if (actor is { Side: Side.Foes } && happened.Kind is CombatEventKind.AbilityUsed or CombatEventKind.AttackRolled)
-            _seenMoves.Add(MoveKey(actor, happened.Ability ?? AbilityId.Attack));
+        Fighter actor = FighterOf(happened.ActorId);
+        Fighter target = FighterOf(happened.TargetId);
+        WalkerSprite by = FighterWalker(happened.ActorId);
+        WalkerSprite on = FighterWalker(happened.TargetId);
+        SkillDefinition skill = SkillOf(happened.SkillId);
+        NoticeForLessons(happened);
+        ArenaSaw(happened);
 
         switch (happened.Kind)
         {
-            case CombatEventKind.InitiativeRolled:
-                if (by is not null) _popups.Word(HeadOf(by), happened.Amount.ToString(CultureInfo.InvariantCulture), Palette.Gold);
-                if (_shown.Order.Count == 1) _audio.Play(Sfx.DiceRoll);
-                _log.Add(happened.Text, Palette.Note);
-                _beatLength = InitiativeSeconds;
+            case BattleEventKind.ActionStarted:
+                CueAction(happened, actor, by, on, skill);
                 break;
 
-            case CombatEventKind.RoundStarted:
-                _log.Add($"ROUND {happened.Amount}", Palette.Gold);
+            case BattleEventKind.Telegraph:
+                CueTelegraph(happened, actor, by);
                 break;
 
-            case CombatEventKind.TurnStarted:
-                CueTurn(actor, by);
+            case BattleEventKind.CastStarted:
+                CueCast(happened, actor, by, skill);
                 break;
 
-            case CombatEventKind.Shifted:
-                CueShift(happened, actor, by);
+            case BattleEventKind.CastInterrupted:
+                CueInterrupted(happened, by);
                 break;
 
-            case CombatEventKind.OpportunityAttack:
-                if (by is not null && on is not null)
-                {
-                    by.Face(on.Position);
-                    _popups.Word(HeadOf(by), "OPPORTUNITY ATTACK", Palette.Ember);
-                }
-                Say(happened.Text, actor);
-                _beatLength = OpportunitySeconds;
+            case BattleEventKind.ProjectileLaunched:
+                CueProjectile(happened, actor, by, on, skill);
                 break;
 
-            case CombatEventKind.AbilityUsed:
-                CueAbility(happened, actor, by, on, ability);
+            case BattleEventKind.Damaged:
+                CueDamage(happened, actor, target, by, on, skill);
                 break;
 
-            case CombatEventKind.AttackRolled:
-                CueAttack(happened, actor, by, on, ability);
+            case BattleEventKind.Absorbed:
+                if (on is not null) _popups.Avoided(happened.TargetId, NumbersAt(on), "ABSORBED");
                 break;
 
-            case CombatEventKind.Hit:
-            case CombatEventKind.Critical:
-                CueImpact(happened, actor, by, on, ability);
+            case BattleEventKind.Missed:
+            case BattleEventKind.Dodged:
+            case BattleEventKind.Blocked:
+                CueAvoided(happened, by, on);
                 break;
 
-            case CombatEventKind.Missed:
-                if (on is not null)
-                {
-                    _popups.Word(HeadOf(on), "MISS", Palette.Note);
-                    if (by is not null)
-                    {
-                        Vector2 toward = Toward(by, on);
-                        on.Nudge(new Vector2(-toward.Y, toward.X) * DodgeDistance, DodgeSeconds);
-                    }
-                }
-                _audio.Play(Sfx.Miss);
-                _beatLength = MissSeconds;
+            case BattleEventKind.Healed:
+                CueHealed(happened, target, on);
                 break;
 
-            case CombatEventKind.Damaged:
-                CueDamage(happened, actor, target, on);
+            case BattleEventKind.AuraApplied:
+                CueAura(happened, actor, target, on);
                 break;
 
-            case CombatEventKind.Healed:
+            case BattleEventKind.KnockedDown:
+                if (on is null) break;
+                on.PlayMove("knockdown", hold: true);
+                Play(SoundKeys.Knockdown, on);
+                break;
+
+            case BattleEventKind.GotUp:
+                if (by is not null && actor is { IsDown: false, IsDead: false }) by.PlayMove("getup");
+                break;
+
+            case BattleEventKind.Downed:
+                CueDowned(target, on);
+                break;
+
+            case BattleEventKind.DeathSave:
                 if (on is null || happened.Amount <= 0) break;
-                _popups.Number(HeadOf(on), happened.Amount, true, false, CombatStyle.Healing);
-                _effects.Motes(ChestOf(on), HealCloud, CombatStyle.Healing, false);
-                _beatLength = HealSeconds;
+                bool made = happened.Flags.HasFlag(HitFlags.Save);
+                _popups.Word(NumbersAt(on), $"DEATH SAVE  {happened.Amount}", made ? Palette.Gold : Palette.Ember);
                 break;
 
-            case CombatEventKind.SaveRolled:
-                CueSave(happened, actor, on, ability);
+            case BattleEventKind.Revived:
+                if (by is not null && by != on && by.Move is { Name: "channel" }) by.StopMove();
+                CueRevived(happened, target, on);
                 break;
 
-            case CombatEventKind.ConditionAdded:
-                if (happened.Text is null || on is null) break;
-                var condition = (ConditionId)happened.Amount;
-                _popups.Word(HeadOf(on), ConditionInfo.Name(condition).ToUpperInvariant(), CombatStyle.Helps(condition) ? Palette.Gold : Palette.Ember);
-                Say(happened.Text, actor);
-                _beatLength = ConditionSeconds;
+            case BattleEventKind.Died:
+                CueDied(target, on);
                 break;
 
-            case CombatEventKind.ConditionRemoved:
-                if (happened.Text is null) break;
-                Say(happened.Text, actor);
-                _beatLength = ConditionGoneSeconds;
+            case BattleEventKind.FellBack:
+                CueFellBack(actor, by);
                 break;
 
-            case CombatEventKind.Downed:
-            case CombatEventKind.DeathSave:
-            case CombatEventKind.Stabilised:
-            case CombatEventKind.Revived:
-            case CombatEventKind.Died:
-                CueLife(happened, target, on);
-                break;
-
-            case CombatEventKind.SoulLinkCharged:
-                CueCharge(happened, by);
-                break;
-
-            case CombatEventKind.SoulLinkStrike:
-                CueTogether(happened, actor, by, on);
-                break;
-
-            case CombatEventKind.Victory:
-                _log.Add(happened.Text, Palette.Gold);
-                break;
-
-            case CombatEventKind.Defeat:
-                _log.Add(happened.Text, Palette.Ember);
-                break;
-
-            case CombatEventKind.Joined:
+            case BattleEventKind.Joined:
                 CueJoined(happened, actor);
                 break;
 
-            case CombatEventKind.FocusChanged:
-                if (happened.Text is null || on is null) break;
-                _popups.Word(HeadOf(on), $"{happened.Amount:+0;-0} FOCUS", CombatStyle.FocusText);
-                Say(happened.Text, actor);
-                _beatLength = ConditionSeconds;
+            case BattleEventKind.Vanished:
+                if (by is null) break;
+                _effects.Motes(ChestOf(by), new Point(20, 26), Smoke, false);
+                FadeTo(by, 0f, 0.2f);
                 break;
 
-            case CombatEventKind.SupportActed:
+            case BattleEventKind.SupportActed:
                 CueSupport(happened);
                 break;
 
-            case CombatEventKind.FellBack:
-                CueFellBack(happened);
+            case BattleEventKind.PhaseChanged:
+                CuePhase(happened, actor, by);
                 break;
 
-            case CombatEventKind.RoundEnded:
-                _log.Add(happened.Text ?? $"END OF ROUND {happened.Amount}", Palette.Note);
-                if (_combat.Supports.Count > 0) _beatLength = RoundEndSeconds;
+            case BattleEventKind.Bark:
+                CueBark(happened, actor, by);
                 break;
 
-            case CombatEventKind.Conceded:
-                _log.Add(happened.Text ?? "THE FIGHT IS GIVEN TO YOU.", Palette.Gold);
-                _beatLength = ConcedeSeconds;
+            case BattleEventKind.SoulLinkCharged:
+                CueCharge(happened, by);
                 break;
 
-            case CombatEventKind.Interlude:
-                _log.Add(happened.Text ?? "A PAUSE IN THE FIGHT.", Palette.Note);
+            case BattleEventKind.SoulLinkStrike:
+                Play(SoundKeys.SoulLink, on);
+                if (on is not null) _effects.Motes(ChestOf(on) - new Vector2(0f, 24f), new Point(14, 12), Palette.Gold, true);
+                if (by is not null) _effects.Glint(HeadOf(by), Palette.Gold);
                 break;
 
-            case CombatEventKind.Bark:
-                if (by is null || actor is null || happened.Text is null) break;
-                string line = TextTokens.Fill(happened.Text, _game);
-                _barks.Add((by, line, 0f, BarkSeconds + line.Length * BarkSecondsPerLetter));
-                _log.Add($"{actor.Name.ToUpperInvariant()}: \"{line}\"", Palette.Torch);
-                _beatLength = BarkBeatSeconds;
+            case BattleEventKind.FightWon:
+                CueVictory();
+                break;
+
+            case BattleEventKind.FightLost:
+                _log.Add(happened.Text ?? "THE FIGHT IS LOST.", Palette.Ember);
+                break;
+
+            case BattleEventKind.Armed:
+                if (by is not null) _effects.Glint(HeadOf(by) + new Vector2(0f, 8f), Palette.Gold);
+                break;
+
+            case BattleEventKind.ReactionFired:
+                if (by is not null && skill is not null) _popups.Word(NumbersAt(by), skill.Name.ToUpperInvariant(), Palette.Gold);
+                break;
+
+            case BattleEventKind.Taunted:
+                if (on is not null) _popups.Word(NumbersAt(on), "TAUNTED", Palette.Ember);
+                break;
+
+            case BattleEventKind.Denied:
+                if (actor is not null && actor == _battle.Leader && !_proofAutoplay) Refuse(happened.Text ?? "Not now.");
+                break;
+
+            case BattleEventKind.Transformed:
+                if (by is null) break;
+                _effects.Motes(ChestOf(by), new Point(22, 30), CombatStyle.Nature, false);
+                by.WeaponKind = WeaponKinds.Clip(actor?.Form?.Weapon ?? actor?.WeaponKind ?? WeaponKind.Unarmed);
+                break;
+
+            case BattleEventKind.HelpStarted:
+                if (by is null) break;
+                by.PlayMove("channel");
+                _popups.Word(NumbersAt(by), "HELPING", Palette.Gold);
+                break;
+
+            case BattleEventKind.PotionDrunk:
+                if (by is null) break;
+                if (by.Move is not { IsAction: true }) by.PlayMove("drink-potion");
+                Play(SoundKeys.Potion, by);
+                break;
+
+            case BattleEventKind.Stole:
+                if (by is not null) _effects.Glint(ChestOf(by), Palette.Gold);
+                break;
+        }
+
+        if (happened.Text is not null && Logged(happened.Kind)) Say(happened.Text, actor);
+    }
+
+    // The moves.
+
+    /// <summary>A move starting: its clip on the mover, facing whoever it's aimed at; the swing's whoosh timed to peak on the blow; for a spell the school's cast and the glow in the hand until it leaves.</summary>
+    private void CueAction(BattleEvent happened, Fighter actor, WalkerSprite by, WalkerSprite on, SkillDefinition skill)
+    {
+        if (by is null || actor is null) return;
+        if (_cueMarks.Remove(actor.Id, out int telegraphed)) AtShown(happened.ImpactMs, () => _effects.Resolve(telegraphed));
+        if (on is not null && on != by) by.Face(on.Position);
+
+        Clip clip = by.PlayMove(happened.Motion ?? "strike-one-hand", restart: true);
+        if (clip is not null) _moves[actor.Id] = (clip, happened.AtMs);
+
+        string school = SchoolOf(skill);
+        bool weapon = skill is null || skill.Weapon || skill.Id == SkillCatalog.FoeAttack || happened.Motion?.StartsWith("auto-", StringComparison.Ordinal) == true;
+        if (school is not null && !weapon)
+        {
+            Play(CombatSounds.Cast(school), by);
+            float charge = MathF.Max(0.05f, (happened.ImpactMs - happened.AtMs) / 1000f);
+            Element element = CombatEffects.ElementOf(school);
+            WalkerSprite caster = by;
+            _effects.ChargeIn(() => caster.BonePosition("hand_near"), element, charge);
+            return;
+        }
+
+        string family = FamilyOf(actor);
+        if (family is "bow" or "crossbow") return;
+        int lead = CombatSounds.SwingLeadMs(family);
+        string swing = CombatSounds.Swing(family);
+        WalkerSprite swinger = by;
+        AtShown(happened.ImpactMs - lead, () => Play(swing, swinger));
+    }
+
+    /// <summary>A foe winding up a big move: its held coil (the clip names it), a glint, the warning sound, and the marker on the floor filling until the blow lands, if it's aimed at a piece of the floor.</summary>
+    private void CueTelegraph(BattleEvent happened, Fighter actor, WalkerSprite by)
+    {
+        if (by is null || actor is null) return;
+        if (happened.Motion is string coil) by.PlayMove(coil, restart: true, hold: true);
+        _effects.Glint(HeadOf(by) + new Vector2(actor.Facing < 0 ? -6f : 6f, 6f));
+        Play(SoundKeys.Telegraph, by);
+        if (happened.Area is BattleArea area && MarkFor(area, happened.DurationMs / 1000f) is int mark) _cueMarks[actor.Id] = mark;
+    }
+
+    /// <summary>A cast with a cast time starting: the caster's channel, the school's cast sound, the glow in the hand, and a marker for one aimed at the floor.</summary>
+    private void CueCast(BattleEvent happened, Fighter actor, WalkerSprite by, SkillDefinition skill)
+    {
+        if (by is null || actor is null) return;
+        by.PlayMove("channel", restart: true);
+        string school = SchoolOf(skill) ?? "force";
+        Play(CombatSounds.Cast(school), by);
+        WalkerSprite caster = by;
+        _effects.ChargeIn(() => caster.BonePosition("hand_near"), CombatEffects.ElementOf(school), happened.DurationMs / 1000f);
+        if (happened.Area is BattleArea { Shape: not AreaKind.Room } area && skill?.Area is not (AreaShape.Single or null)
+            && MarkFor(area, happened.DurationMs / 1000f) is int mark)
+            _cueMarks[actor.Id] = mark;
+    }
+
+    /// <summary>A cast or a wind-up stopped: back to the ready stance, its marker gone, and the word over them.</summary>
+    private void CueInterrupted(BattleEvent happened, WalkerSprite by)
+    {
+        if (happened.ActorId is string id && _cueMarks.Remove(id, out int mark)) _effects.Cancel(mark);
+        if (by is null) return;
+        if (happened.SkillId != "help") _popups.Word(NumbersAt(by), "INTERRUPTED", Palette.Ember);
+        by.StopMove();
+    }
+
+    /// <summary>The marker on the floor for a piece of it a blow will land on, filling over the wind-up: a ring, a line or a cone, in the warning's colour. Null for the whole room.</summary>
+    private int? MarkFor(BattleArea area, float seconds)
+    {
+        Vector2 at = ToScreen(area.Center), to = ToScreen(area.To);
+        return area.Shape switch
+        {
+            AreaKind.Ring => _effects.Mark(MarkerShape.Ring, at, at, area.Radius, seconds),
+            AreaKind.Line => _effects.Mark(MarkerShape.Line, at, to, Vector2.Distance(at, to), seconds, width: MathF.Max(8f, area.Width)),
+            AreaKind.Cone => _effects.Mark(MarkerShape.Cone, at, to, area.Radius, seconds, halfAngle: MathHelper.ToRadians(area.Width / 2f)),
+            _ => null,
+        };
+    }
+
+    /// <summary>Something leaving the hand: an arrow or a bolt, a bolt of a school, or a beam of lightning, timed to land on the tick the engine lands it; a bow's shot sounds as it goes.</summary>
+    private void CueProjectile(BattleEvent happened, Fighter actor, WalkerSprite by, WalkerSprite on, SkillDefinition skill)
+    {
+        float seconds = MathF.Max(0.02f, (happened.ImpactMs - happened.AtMs) / 1000f);
+        Vector2 from = by?.BonePosition("hand_near") ?? ToScreen(happened.Position) - new Vector2(0f, 20f);
+        Vector2 to = on is not null ? ChestOf(on) : ToScreen(happened.Area?.To ?? happened.Position) - new Vector2(0f, 12f);
+        DamageType type = happened.DamageType;
+
+        if (type is DamageType.Piercing or DamageType.Slashing or DamageType.Bludgeoning)
+        {
+            _effects.Launch(CombatStyle.Arrow, from, to, seconds, null);
+            string family = actor is null ? "bow" : FamilyOf(actor);
+            Play(CombatSounds.Swing(family is "bow" or "crossbow" ? family : "bow"), by);
+            return;
+        }
+
+        Element element = CombatEffects.ElementOf(type);
+        if (element == Element.Lightning) _effects.BeamFrom(element, from, to, MathF.Max(seconds, 0.12f));
+        else _effects.Projectile(element, from, to, seconds, skill?.Id.Contains("blasting") == true ? 26f : 0f, bursts: true);
+    }
+
+    // The blows.
+
+    /// <summary>
+    /// Damage landing, on the tick the engine landed it (the clip's impact frame): the hit-stop,
+    /// flash, squash and knock, sparks at the contact point (in the damage's colour for a foe's chill
+    /// or fiery touch) or the school's burst, the sound with the critical's over it, the number, the
+    /// flinch (unless they're mid-move), and the shake its cause earns. Only a skill's spell washes
+    /// its target in the school's colour; an auto attack's never does, or a foe whose every touch is
+    /// cold would leave you pale the whole fight. A tick of something over time is only its small
+    /// tinted number.
+    /// </summary>
+    private void CueDamage(BattleEvent happened, Fighter actor, Fighter target, WalkerSprite by, WalkerSprite on, SkillDefinition skill)
+    {
+        if (on is null || target is null || happened.Amount <= 0 && !happened.Flags.HasFlag(HitFlags.Kill)) return;
+
+        HitFlags flags = happened.Flags;
+        bool taken = target.Side == Side.Party;
+        Vector2 numbers = NumbersAt(on);
+        Element element = CombatEffects.ElementOf(happened.DamageType);
+
+        if (flags.HasFlag(HitFlags.Tick))
+        {
+            _popups.Tick(target.Id, numbers, happened.Amount, element == Element.Physical ? DamagePopups.TakenColour : CombatEffects.ColourOf(element));
+            on.FlashTint(CombatEffects.ColourOf(element == Element.Physical ? Element.Blood : element), 8);
+            if (target == _battle.Leader) Play(SoundKeys.AuraTick, on);
+            return;
+        }
+
+        // A blow from a support has no clip to land on: it lands with its arrow.
+        if (actor is null && _supportShot.Remove(target.Id, out float lands) && lands > _shownMs)
+        {
+            AtShown(lands, () => Land(happened, null, target, null, on, skill, numbers, taken));
+            return;
+        }
+        Land(happened, actor, target, by, on, skill, numbers, taken);
+    }
+
+    /// <summary>One blow landing on someone: everything CueDamage says, at once.</summary>
+    private void Land(BattleEvent happened, Fighter actor, Fighter target, WalkerSprite by, WalkerSprite on, SkillDefinition skill, Vector2 numbers, bool taken)
+    {
+        HitFlags flags = happened.Flags;
+        bool critical = flags.HasFlag(HitFlags.Crit), kill = flags.HasFlag(HitFlags.Kill), auto = flags.HasFlag(HitFlags.Auto);
+        bool heavy = !auto && (flags.HasFlag(HitFlags.Big) || skill is not null && skill.Id != SkillCatalog.FoeAttack);
+        string school = CombatSounds.SchoolOf(happened.DamageType);
+        bool magic = school is not null && (skill is null || !skill.Weapon);
+        bool spell = magic && !auto;
+        Element element = school is not null ? CombatEffects.ElementOf(happened.DamageType) : Element.Physical;
+
+        on.TakeHit(by, happened.Amount, Math.Max(1, target.MaxHp), critical, kill, heavy, spell ? CombatEffects.ColourOf(element) : null);
+
+        Vector2 toward = by is null ? new Vector2(target.Facing < 0 ? 1f : -1f, 0f) : new Vector2(MathF.Sign(on.Position.X - by.Position.X), 0f);
+        if (toward.X == 0f) toward = Vector2.UnitX;
+        if (magic && skill?.Projectile is not null)
+        {
+            // Its bolt bursts where it lands (CueProjectile).
+        }
+        else if (spell)
+        {
+            _effects.Burst(ChestOf(on), element, heavy ? 1.4f : 1f, -toward);
+        }
+        else
+        {
+            Vector2 chest = on.BonePosition("torso");
+            Vector2 tip = by?.WeaponTip ?? chest;
+            float near = on.Position.X - toward.X * on.Size.X * 0.22f;
+            var contact = new Vector2(near, MathHelper.Clamp(tip.Y, on.Position.Y - on.Size.Y * 0.85f, on.Position.Y - on.Size.Y * 0.25f));
+            Vector2 swing = by?.SwingDirection ?? Vector2.Zero;
+            if (swing.LengthSquared() < 1e-3f) swing = toward;
+            _effects.Impact(by is null ? chest : contact, swing, element, critical, heavy, BlowOf(actor, happened.DamageType));
+        }
+
+        Play(magic ? CombatSounds.Impact(school) : CombatSounds.Hit(actor is null ? "bow" : FamilyOf(actor)), on);
+        if (critical) Play(SoundKeys.Crit, on);
+
+        _popups.Damage(target.Id, numbers, happened.Amount, critical, taken);
+
+        if (!kill && on.Move is not { IsAction: true } && !target.IsDown && !Prone(target))
+            on.PlayMove(critical || heavy ? "hurt-big" : "hurt");
+
+        if (Shake(happened, actor, target, auto, heavy, spell) is ShakeCause cause)
+            _effects.Shaker.Kick(cause, critical, _camera.ToScreen(ChestOf(on)), heavy || critical || kill ? toward : Vector2.Zero);
+    }
+
+    /// <summary>What shakes the screen for a blow, or null: never an auto attack; a kill, a boss's heavy blow, a big blow on you, a heavy skill, an area spell, a spell, or a critical on its own.</summary>
+    private ShakeCause? Shake(BattleEvent happened, Fighter actor, Fighter target, bool auto, bool heavy, bool spell)
+    {
+        if (auto) return null;
+        HitFlags flags = happened.Flags;
+        if (flags.HasFlag(HitFlags.Kill)) return ShakeCause.Kill;
+        if (actor is not null && _battle.IsBoss(actor) && flags.HasFlag(HitFlags.Big)) return ShakeCause.BossSlam;
+        if (target == _battle.Leader && happened.Amount >= target.MaxHp * BigHitShare) return ShakeCause.PlayerBigHit;
+        if (flags.HasFlag(HitFlags.Area) && spell) return ShakeCause.AreaSpell;
+        if (heavy) return spell ? ShakeCause.Spell : ShakeCause.Heavy;
+        if (flags.HasFlag(HitFlags.Crit)) return ShakeCause.Light;
+        return null;
+    }
+
+    /// <summary>A blow that didn't land: the dodge or the block on the one it was aimed at (unless they're mid-move), a sidestep or a clash, the word, and its sound.</summary>
+    private void CueAvoided(BattleEvent happened, WalkerSprite by, WalkerSprite on)
+    {
+        if (on is null) return;
+        Vector2 numbers = NumbersAt(on);
+        bool free = on.Move is not { IsAction: true };
+        switch (happened.Kind)
+        {
+            case BattleEventKind.Dodged:
+                if (free) on.PlayMove("dodge");
+                Vector2 away = by is null ? Vector2.UnitX : on.Position - by.Position;
+                if (away.LengthSquared() > 0f) away = Vector2.Normalize(away);
+                on.Nudge(new Vector2(away.X, 0.4f) * DodgeDistance, DodgeSeconds);
+                _popups.Avoided(happened.TargetId, numbers, "DODGE");
+                Play(SoundKeys.Dodge, on);
+                break;
+
+            case BattleEventKind.Blocked:
+                if (free) on.PlayMove("block");
+                on.Freeze(BlockFrames, HitStopRole.Victim, 1f);
+                by?.Freeze(BlockFrames, HitStopRole.Attacker);
+                _effects.Impact(on.BonePosition("hand_far"), by is null ? Vector2.UnitX : new Vector2(MathF.Sign(on.Position.X - by.Position.X), 0f), Element.Physical, blow: "blunt");
+                _popups.Avoided(happened.TargetId, numbers, "BLOCK");
+                Play(SoundKeys.Block, on);
                 break;
 
             default:
-                if (happened.Text is null) break;
-                Say(happened.Text, actor);
-                if (happened.Ability == AbilityId.Protection && by is not null)
-                {
-                    _audio.Play(Sfx.Shield);
-                    _popups.Word(HeadOf(by), "SHIELD UP", Palette.Gold);
-                }
-                _beatLength = LogSeconds;
+                bool saved = happened.Flags.HasFlag(HitFlags.Save);
+                _popups.Avoided(happened.TargetId, numbers, saved ? "RESIST" : "MISS");
+                if (!saved) Play(SoundKeys.Miss, on);
                 break;
         }
     }
 
-    /// <summary>A turn starting: its banner, its sound, the camera to them, and for one of yours, the hotbar becoming theirs.</summary>
-    private void CueTurn(Combatant actor, WalkerSprite by)
+    /// <summary>Healing landing: the green number (a tick's smaller), the glow, a green wash, and the sound.</summary>
+    private void CueHealed(BattleEvent happened, Fighter target, WalkerSprite on)
+    {
+        if (on is null || target is null || happened.Amount <= 0) return;
+        Vector2 numbers = NumbersAt(on);
+        if (happened.Flags.HasFlag(HitFlags.Tick))
+        {
+            _popups.Tick(target.Id, numbers, happened.Amount, DamagePopups.HealColour, heal: true);
+            return;
+        }
+        _popups.Heal(target.Id, numbers, happened.Amount);
+        _effects.HealGlow(ChestOf(on));
+        on.FlashTint(DamagePopups.HealColour, 10);
+        Play(SoundKeys.Heal, on);
+    }
+
+    /// <summary>An aura going on: the HUD shows it; on the figure only a small glow, gold for a blessing and the school's for a curse, and a sound when it's yours or on you.</summary>
+    private void CueAura(BattleEvent happened, Fighter actor, Fighter target, WalkerSprite on)
+    {
+        if (on is null || target is null) return;
+        Aura aura = null;
+        foreach (Aura each in target.Auras)
+            if (each.Id == happened.AuraId) aura = each;
+        bool good = aura?.Beneficial ?? target.Side == actor?.Side;
+        _effects.Motes(ChestOf(on), new Point(12, 18), good ? CombatStyle.Blessing : CombatStyle.Threat, false);
+        if (actor == _battle.Leader || target == _battle.Leader) Play(good ? SoundKeys.Buff : SoundKeys.Debuff, on, QuietVolume);
+    }
+
+    // Life and death.
+
+    /// <summary>One of the party going down: they fall and stay on the floor rolling their saves, with the word, the sound, and a shake if it's you.</summary>
+    private void CueDowned(Fighter target, WalkerSprite on)
+    {
+        if (on is null || target is null) return;
+        on.PlayMove("collapse", hold: true);
+        Play(SoundKeys.Downed, on);
+        _popups.Word(NumbersAt(on), _encounter.Nonlethal ? "KNOCKED OUT" : "DOWN!", Palette.Ember);
+        if (target == _battle.Leader) _effects.Shaker.Kick(ShakeCause.Downed, false, _camera.ToScreen(on.Position));
+        if (target.Side == Side.Party && !_encounter.Nonlethal) Lesson(TutorialCatalog.CombatDowned);
+    }
+
+    /// <summary>Someone back on their feet: the get-up, the glow and the word, and a note to say so after a fight that's over.</summary>
+    private void CueRevived(BattleEvent happened, Fighter target, WalkerSprite on)
+    {
+        if (on is null || target is null) return;
+        on.PlayMove("revive");
+        on.Opacity = 1f;
+        _effects.HealGlow(ChestOf(on), 1.3f);
+        Play(SoundKeys.Revive, on);
+        _popups.Word(NumbersAt(on), "BACK UP", DamagePopups.HealColour);
+    }
+
+    /// <summary>Someone dying: a foe's death clip, a held beat on the floor, then a fade in motes; one of the party who's fallen for the rest of the fight stays on the floor, faint.</summary>
+    private void CueDied(Fighter target, WalkerSprite on)
+    {
+        if (on is null || target is null) return;
+        Play(SoundKeys.Death, on);
+        if (target.Side == Side.Party)
+        {
+            if (on.Move is null || on.Move.Name != "collapse") on.PlayMove("collapse", hold: true);
+            FadeTo(on, FallenOpacity, FadeOutSeconds);
+            _popups.Word(NumbersAt(on), "FALLEN", Palette.Ember);
+            return;
+        }
+
+        Clip die = on.PlayMove("die", hold: true);
+        float lies = (die?.Length ?? 0.8f) + LieSeconds;
+        WalkerSprite gone = on;
+        AtShown(_shownMs + lies * 1000f, () =>
+        {
+            _effects.DeathMotes(gone.Position - new Vector2(0f, gone.Size.Y * 0.2f), gone.Size * new Vector2(1f, 0.5f), Fading);
+            FadeTo(gone, 0f, FadeOutSeconds);
+        });
+    }
+
+    /// <summary>A guest beaten down, or a foe who yields, stepping out of the fight: the word over them and a fade, unhurt for the story.</summary>
+    private void CueFellBack(Fighter actor, WalkerSprite by)
+    {
+        if (by is null || actor is null) return;
+        _popups.Word(NumbersAt(by), actor.Side == Side.Foes ? "YIELDS" : "FALLS BACK", Palette.Bone);
+        if (by.Move is not { IsAction: true }) by.PlayMove("hurt-big");
+        FadeTo(by, actor.Side == Side.Foes ? 0.85f : 0f, FadeOutSeconds);
+    }
+
+    /// <summary>Someone joining partway through (a wave, a summon, a guest, a foe out of the smoke): their figure, faded in or walking in from where the engine has them, motes, and the word.</summary>
+    private void CueJoined(BattleEvent happened, Fighter actor)
     {
         if (actor is null) return;
-
-        _aiWait = 0f;
-        Cancel();
-
-        string name = actor.Name.ToUpperInvariant();
-        bool yours = actor.Side == Side.Party && actor.Member is not null && !actor.Guest;
-        if (yours && _game.Party.IndexOf(actor.Member) is int index and >= 0) _game.Leader = index;
-
-        if (yours && !_proofAutoplay)
-        {
-            _banner.Show("YOUR TURN", $"{name}  ·  {WhatTheyAre(actor)}", Palette.Gold);
-            _audio.Play(Sfx.TurnStart);
-        }
-        else
-        {
-            Color colour = actor.Side == Side.Foes ? CombatStyle.FoeLine : Palette.Bone;
-            _banner.Show($"{name}'S TURN", $"ROUND {_shown.Round}", colour);
-            _audio.Play(Sfx.TurnStart, QuietTurn);
-        }
-
-        _log.Add($"{name}'S TURN", LineColour(actor));
-        _beatLength = TurnSeconds;
-        LessonTurnStarted(actor);
+        WalkerSprite walker = FigureForJoiner(actor);
+        walker.Position = ToScreen(actor.Position);
+        _before[actor.Id] = actor.Position;
+        if (walker.Opacity < 1f) ArriveIn(walker);
+        if (actor.Side == Side.Foes && !actor.Vanished) _popups.Word(NumbersAt(walker), "JOINS THE FIGHT", CombatStyle.FoeLine);
+        else if (actor.Side == Side.Party) _popups.Word(NumbersAt(walker), "JOINS THE FIGHT", Palette.Gold);
     }
 
-    /// <summary>An ability used: the cast or the strike, the light round the user (and the one it's for), its sound, and for a charge thrown into a crowd, the charge flying to where it lands.</summary>
-    private void CueAbility(CombatEvent happened, Combatant actor, WalkerSprite by, WalkerSprite on, AbilityDefinition ability)
+    /// <summary>A boss changing phase: its name across the screen, a white flash and a squash, the boss's own sound and a slam of a shake.</summary>
+    private void CuePhase(BattleEvent happened, Fighter actor, WalkerSprite by)
     {
-        Say(happened.Text, actor);
-        _beatLength = AbilitySeconds;
-        if (by is null || ability is null) return;
-
-        if (on is not null && on != by) by.Face(on.Position);
-        by.Play(ability.Spell ? WalkerPose.Cast : WalkerPose.Strike, CastPoseSeconds);
-
-        Color light = CombatStyle.LightOf(ability);
-        bool glows = ability.Spell || ability.Kind is AbilityKind.Heal or AbilityKind.Potion or AbilityKind.Condition;
-        if (glows) _effects.Motes(ChestOf(by), CastCloud, light, false);
-        if (on is not null && on != by && ability.Kind is AbilityKind.Heal or AbilityKind.Condition or AbilityKind.Help)
-            _effects.Motes(ChestOf(on), HealCloud, light, false);
-
-        Sfx? sound = ability.Kind switch
-        {
-            AbilityKind.Heal => Sfx.Heal,
-            AbilityKind.Potion => Sfx.Potion,
-            _ when ability.Spell => Sfx.Cast,
-            _ when ability.Conditions.Count > 0 && ability.Shape == TargetShape.Self => Sfx.Shield,
-            _ => null,
-        };
-        if (sound is Sfx play) _audio.Play(play);
-        if (ability.Kind == AbilityKind.Help) _popups.Word(HeadOf(by), ability.Name.ToUpperInvariant(), Palette.Gold);
-
-        string flying = CombatStyle.Projectile(ability.Id);
-        if (flying is null || ability.Kind != AbilityKind.Save) return;
-
-        Vector2 from = ChestOf(by), to = LandingOf(ability.Id) ?? on?.Position ?? by.Position;
-        float flight = FlightSeconds(from, to);
-        _beatStrikeAt = WindUpSeconds;
-        _beatStrike = () =>
-        {
-            _effects.Launch(flying, from, to, flight, light);
-            _audio.Play(Sfx.Miss, LaunchVolume);
-        };
-        _beatLength = WindUpSeconds + flight;
+        if (actor is null) return;
+        string phase = happened.Text?.ToUpperInvariant() ?? $"PHASE {happened.Amount}";
+        _banner.Show(actor.Name.ToUpperInvariant(), phase, Palette.Ember);
+        Play(SoundKeys.BossPhase, by);
+        if (by is null) return;
+        by.FlashWhite(6, 10);
+        by.Squash(-0.12f, 14);
+        _effects.Burst(ChestOf(by), Element.Necrotic, 1.6f);
+        _effects.Shaker.Kick(ShakeCause.BossSlam, false, _camera.ToScreen(ChestOf(by)));
     }
 
-    /// <summary>An attack: the wind-up, then the lunge or what flies, its log line going in as it lands.</summary>
-    private void CueAttack(CombatEvent happened, Combatant actor, WalkerSprite by, WalkerSprite on, AbilityDefinition ability)
+    /// <summary>A line shouted mid-fight: a bubble over whoever said it, as the banter's are, and the log; one said by nobody (a wave's) goes under the banner. A bubble waits while a banner's up (a boss's phase and its roar come together), so the two aren't on top of each other.</summary>
+    private void CueBark(BattleEvent happened, Fighter actor, WalkerSprite by)
     {
-        _criticalOn = null;
-        _beatLine = happened.Text;
-        _beatLineColour = LineColour(actor);
-        _beatLength = WindUpSeconds;
-        if (by is null || on is null) return;
-
-        by.Face(on.Position);
-
-        bool spell = ability?.Spell == true;
-        Color light = ability is null ? Palette.Gold : CombatStyle.LightOf(ability);
-        by.Play(spell ? WalkerPose.Cast : WalkerPose.WindUp, WindUpSeconds);
-        if (spell) _effects.Motes(ChestOf(by), CastCloud, light, false);
-
-        string flying = Flying(actor, ability);
-        _beatStrikeAt = WindUpSeconds;
-        if (flying is null)
+        if (happened.Text is null) return;
+        string line = TextTokens.Fill(happened.Text, _game);
+        if (by is null || actor is null)
         {
-            _beatStrike = () =>
-            {
-                by.Play(WalkerPose.Strike, StrikePoseSeconds);
-                by.Nudge(Toward(by, on) * LungeDistance, LungeSeconds);
-            };
-            _beatLength = WindUpSeconds + StrikeSeconds;
+            _banner.Show(string.Empty, line.ToUpperInvariant(), Palette.Torch);
             return;
         }
-
-        Vector2 from = ChestOf(by), to = ChestOf(on);
-        float flight = FlightSeconds(from, to);
-        bool arrow = flying == CombatStyle.Arrow;
-        _beatStrike = () =>
-        {
-            by.Play(spell ? WalkerPose.Cast : WalkerPose.Strike, StrikePoseSeconds);
-            _effects.Launch(flying, from, to, flight, arrow ? null : light);
-            _audio.Play(arrow ? Sfx.Bow : Sfx.Cast, LaunchVolume);
-        };
-        _beatLength = WindUpSeconds + flight;
+        _barks.RemoveAll(bark => bark.Walker == by);
+        _barks.Add((by, line, -_banner.Left, BarkSeconds + line.Length * BarkSecondsPerLetter));
     }
 
-    /// <summary>A hit or a critical landing (a dart flying in first, for Magic Missile): sparks the damage's colour, its sound, the target hurt and knocked back, and the shake.</summary>
-    private void CueImpact(CombatEvent happened, Combatant actor, WalkerSprite by, WalkerSprite on, AbilityDefinition ability)
+    /// <summary>The Soul-Link charging: gold round the two of you, a soft chime, the word, and the tip about it the first time.</summary>
+    private void CueCharge(BattleEvent happened, WalkerSprite by)
     {
-        bool critical = happened.Kind == CombatEventKind.Critical;
-        if (critical) _criticalOn = happened.Target;
-        if (happened.Text is not null) _beatLine = happened.Text;
-        _beatLineColour = LineColour(actor);
-        _beatLength = critical ? CriticalSeconds : HitSeconds;
-        if (on is null) return;
-
-        DamageType kind = happened.Type ?? DamageType.Bludgeoning;
-        string flying = ability is { Kind: AbilityKind.AutoHit } && by is not null ? CombatStyle.Projectile(ability.Id) : null;
-        if (flying is null)
-        {
-            Land(by, on, kind, critical);
-            return;
-        }
-
-        Vector2 from = ChestOf(by), to = ChestOf(on);
-        float flight = FlightSeconds(from, to);
-        _effects.Launch(flying, from, to, flight, CombatStyle.DamageColour(kind));
-        _audio.Play(Sfx.Cast, LaunchVolume);
-        _beatStrikeAt = flight;
-        _beatStrike = () => Land(by, on, kind, critical);
-        _beatLength = flight + HitSeconds;
-    }
-
-    /// <summary>A blow landing on someone.</summary>
-    /// <param name="by">Who struck it, or null.</param>
-    /// <param name="on">Who it landed on.</param>
-    /// <param name="kind">The kind of damage.</param>
-    /// <param name="critical">Whether it was a critical.</param>
-    private void Land(WalkerSprite by, WalkerSprite on, DamageType kind, bool critical)
-    {
-        Vector2 chest = ChestOf(on);
-        Vector2 away = by is null ? -Vector2.UnitY : Toward(by, on);
-        float facing = by is null ? Upward : MathF.Atan2(away.Y, away.X);
-
-        _effects.Sparks(chest, CombatStyle.DamageColour(kind), facing, SparkSpread);
-        _audio.Play(CombatStyle.DamageSound(kind));
-        if (critical)
-        {
-            _effects.Sparks(chest, Palette.Gold, Upward, CriticalSpread);
-            _audio.Play(Sfx.Crit);
-            _popups.Word(HeadOf(on), "CRITICAL!", Palette.Gold);
-        }
-
-        if (on.Pose != WalkerPose.Downed) on.Play(WalkerPose.Hurt, HurtPoseSeconds);
-        on.Flash(FlashSeconds);
-        if (by is not null) on.Nudge(away * RecoilDistance, RecoilSeconds);
-        _effects.Kick(critical ? CriticalShake : HitShake, _camera.ToScreen(chest));
-    }
-
-    /// <summary>Damage shown: the number over them as their bar drains, or for someone already down, the death save it costs them.</summary>
-    private void CueDamage(CombatEvent happened, Combatant actor, Combatant target, WalkerSprite on)
-    {
-        _beatLength = DamageSeconds;
-        if (on is null || target is null) return;
-
-        if (happened.Text is not null)
-        {
-            _popups.Word(HeadOf(on), "DEATH SAVE FAILED", Palette.Ember);
-            on.Flash(FlashSeconds);
-            Say(happened.Text, actor);
-            return;
-        }
-
-        bool critical = _criticalOn == happened.Target;
-        _criticalOn = null;
-        _popups.Number(HeadOf(on), happened.Amount, false, critical, target.Side == Side.Party ? DamageOnParty : DamageOnFoe);
-    }
-
-    /// <summary>A saving throw shown: the spell's light on whoever made it or didn't (radiant light falling, a burst of fire, the vines), and SAVED or FAILED over them.</summary>
-    private void CueSave(CombatEvent happened, Combatant actor, WalkerSprite on, AbilityDefinition ability)
-    {
-        Say(happened.Text, actor);
-        _beatLength = SaveSeconds;
-        if (on is null) return;
-
-        bool saved = happened.Text?.Contains(SavedWord, StringComparison.Ordinal) == true;
-        Color light = ability is null ? Palette.Gold : CombatStyle.LightOf(ability);
-        Vector2 chest = ChestOf(on);
-        if (ability?.Id == AbilityId.SacredFlame)
-        {
-            _effects.Motes(chest - new Vector2(0f, FallFrom), FallCloud, light, true);
-        }
-        else if (ability is { Kind: AbilityKind.Save } && !ability.Damage.IsNone)
-        {
-            _effects.Sparks(chest, light, Upward, CriticalSpread);
-            _effects.Kick(BlastShake, _camera.ToScreen(chest));
-        }
-        else if (ability is not null)
-        {
-            _effects.Motes(chest, CastCloud, light, false);
-        }
-
-        _popups.Word(HeadOf(on), saved ? "SAVED" : "FAILED", saved ? Palette.Bone : Palette.Ember);
-    }
-
-    /// <summary>Going down, a death save, stopping dying, getting up, and dying, each with its pose, its sound and its word.</summary>
-    private void CueLife(CombatEvent happened, Combatant target, WalkerSprite on)
-    {
-        Say(happened.Text, target);
-        if (on is null || target is null) return;
-
-        switch (happened.Kind)
-        {
-            case CombatEventKind.Downed:
-                on.Play(WalkerPose.Downed);
-                _audio.Play(Sfx.Downed);
-                _popups.Word(HeadOf(on), _encounter.Nonlethal ? "KNOCKED OUT" : "DOWN!", Palette.Ember);
-                _effects.Kick(DownedShake, _camera.ToScreen(on.Position));
-                if (target.Side == Side.Party && !_encounter.Nonlethal) Lesson(TutorialCatalog.CombatDowned);
-                _beatLength = DownedSeconds;
-                break;
-
-            case CombatEventKind.DeathSave:
-                bool made = happened.Amount >= DeathSaveTarget;
-                _popups.Word(HeadOf(on), $"DEATH SAVE  {happened.Amount}", made ? Palette.Gold : Palette.Ember);
-                _audio.Play(Sfx.DiceRoll);
-                _beatLength = DeathSaveSeconds;
-                break;
-
-            case CombatEventKind.Stabilised:
-                _popups.Word(HeadOf(on), "STABLE", Palette.Gold);
-                _beatLength = StabiliseSeconds;
-                break;
-
-            case CombatEventKind.Revived:
-                on.Release();
-                _effects.Motes(ChestOf(on), HealCloud, CombatStyle.Healing, false);
-                _audio.Play(Sfx.Heal);
-                _popups.Word(HeadOf(on), "BACK UP", CombatStyle.Healing);
-                if (target.Member is not null && !target.Guest && happened.Actor == happened.Target && VictoryAhead() && !_backUp.Contains(target.Name))
-                    _backUp.Add(target.Name);
-                _beatLength = ReviveSeconds;
-                break;
-
-            case CombatEventKind.Died:
-                _audio.Play(Sfx.Death);
-                on.Play(WalkerPose.Downed);
-                if (target.Side == Side.Foes)
-                {
-                    FadeTo(on, 0f, FadeOutSeconds);
-                    _effects.Motes(ChestOf(on), HealCloud, Fading, false);
-                }
-                else
-                {
-                    FadeTo(on, FallenOpacity, FadeOutSeconds);
-                    _popups.Word(HeadOf(on), "FALLEN", Palette.Ember);
-                }
-                _beatLength = DieSeconds;
-                break;
-        }
-    }
-
-    /// <summary>The Soul-Link charging: the sigil's flicker, its chime, gold round the two of you, and the tip about it the first time.</summary>
-    private void CueCharge(CombatEvent happened, WalkerSprite by)
-    {
-        _sigil.Flicker();
-        _audio.Play(Sfx.SoulLink);
-        _log.Add(happened.Text, Palette.Gold);
         foreach (string duo in new[] { Origins.You, Origins.SoulBound })
-            if (FighterWalker(duo) is WalkerSprite walker) _effects.Motes(ChestOf(walker), HealCloud, Palette.Gold, false);
-
-        if (by is not null) _popups.Word(HeadOf(by), happened.Amount >= SoulLink.Full ? "SOUL-LINK READY" : "SOUL-LINK", Palette.Gold);
-        Lesson(TutorialCatalog.CombatSoulLink);
-        _beatLength = ChargeSeconds;
+            if (FighterWalker(duo) is WalkerSprite walker) _effects.Motes(ChestOf(walker), new Point(16, 22), Palette.Gold, false);
+        bool full = happened.Amount >= Battle.SoulLinkCharges;
+        Play(full ? SoundKeys.CooldownReady : SoundKeys.Buff, by, QuietVolume);
+        if (by is not null) _popups.Word(NumbersAt(by), full ? "SOUL-LINK READY" : "SOUL-LINK", Palette.Gold);
+        if (full) Lesson(TutorialCatalog.CombatSoulLink);
     }
 
-    /// <summary>The Soul-Link Strike: the two of you winding up together, then lunging as one in a fall of gold. The hit that follows lands it.</summary>
-    private void CueTogether(CombatEvent happened, Combatant actor, WalkerSprite by, WalkerSprite on)
+    /// <summary>The fight's won: everyone of the party still standing strikes their victory pose, and the last blow's accent.</summary>
+    private void CueVictory()
     {
-        _beatLine = happened.Text;
-        _beatLineColour = Palette.Gold;
-        _beatLength = WindUpSeconds + StrikeSeconds;
-        if (by is null || on is null) return;
-
-        WalkerSprite partner = FighterWalker(_combat.Partner(actor)?.Id);
-        WalkerSprite[] strikers = partner is null ? new[] { by } : new[] { by, partner };
-        foreach (WalkerSprite striker in strikers)
+        Play(SoundKeys.Victory, null);
+        foreach (Fighter fighter in _battle.Fighters)
         {
-            striker.Face(on.Position);
-            striker.Play(WalkerPose.WindUp, WindUpSeconds);
+            if (fighter.Side != Side.Party || !fighter.Present || fighter.HasLeft || !_fighters.TryGetValue(fighter.Id, out WalkerSprite walker)) continue;
+            if (walker.Move is { Name: "collapse" }) walker.PlayMove("revive");
+            else walker.PlayMove("victory-" + WeaponKinds.Clip(fighter.Form?.Weapon ?? fighter.WeaponKind), hold: true);
         }
-
-        _effects.Motes(ChestOf(on) - new Vector2(0f, FallFrom), FallCloud, Palette.Gold, true);
-        _audio.Play(Sfx.SoulLink);
-        _beatStrikeAt = WindUpSeconds;
-        _beatStrike = () =>
-        {
-            foreach (WalkerSprite striker in strikers)
-            {
-                striker.Play(WalkerPose.Strike, StrikePoseSeconds);
-                striker.Nudge(Toward(striker, on) * LungeDistance, LungeSeconds);
-            }
-        };
     }
 
-    /// <summary>A Shift, or a pull or a push: whoever it is steps to their new slot and turns back to face the other side. A swap is two of these, one for each.</summary>
-    private void CueShift(CombatEvent happened, Combatant actor, WalkerSprite by)
+    // Helpers.
+
+    /// <summary>Whether a kind of event writes its line in the log: not the walking, the threat or the Focus, which would drown everything else.</summary>
+    private static bool Logged(BattleEventKind kind) => kind is not (BattleEventKind.Moved or BattleEventKind.ThreatTargetChanged or BattleEventKind.FocusChanged
+        or BattleEventKind.AuraTicked or BattleEventKind.AuraRefreshed or BattleEventKind.Denied or BattleEventKind.FightLost);
+
+    /// <summary>A skill by its id, or null for none or an id the catalog hasn't got (a help, a support).</summary>
+    private static SkillDefinition SkillOf(string id) => id is not null && SkillCatalog.Exists(id) ? SkillCatalog.Get(id) : null;
+
+    /// <summary>The spell school a skill's cast and impact sound like (CombatSounds.Schools), or null for a weapon's blow, a heal or a buff.</summary>
+    private static string SchoolOf(SkillDefinition skill)
     {
-        if (happened.Text is not null) Say(happened.Text, actor);
-        _beatLength = ShiftSeconds;
-        if (by is null || actor is null || FeetOf(actor) is not Vector2 feet) return;
-
-        Glide(by, feet, ShiftSeconds);
-        _restFacing[by] = actor.Side == Side.Party ? Direction.Right : Direction.Left;
+        if (skill is null || skill.Weapon) return null;
+        if (skill.Projectile is DamageType flies && CombatSounds.SchoolOf(flies) is string school) return school;
+        foreach (Effect effect in skill.Effects)
+            if (effect.Kind == EffectType.Damage && !effect.Weapon && effect.Type is DamageType type && CombatSounds.SchoolOf(type) is string hurts) return hurts;
+        return null;
     }
 
-    /// <summary>Someone joining partway through (a wave's foe, a guest who comes in a later round): their figure, the room's if they're standing in it, walking or fading in on their slot in a cloud of motes.</summary>
-    private void CueJoined(CombatEvent happened, Combatant actor)
+    /// <summary>The weapon family someone's blows sound like: a beast's claws or teeth, a party member's weapon in hand, or their weapon kind's.</summary>
+    private static string FamilyOf(Fighter fighter)
     {
-        Say(happened.Text, actor);
-        if (actor is null || FeetOf(actor) is not Vector2 feet) return;
-
-        Direction facing = actor.Side == Side.Party ? Direction.Right : Direction.Left;
-        if (!_fighters.TryGetValue(actor.Id, out WalkerSprite walker))
-        {
-            walker = actor.Enemy is not null && actor.Side == Side.Foes ? Spawn(EnemyWalker(actor.Enemy)) : FigureForGuest(actor.Id);
-            _fighters[actor.Id] = walker;
-        }
-
-        if (walker.Opacity <= 0f)
-        {
-            walker.Position = feet;
-            walker.Facing = facing;
-            FadeTo(walker, 1f, ArriveSeconds);
-        }
-        else
-        {
-            WalkTo(walker, feet, facing, TakePlacesLeast, TakePlacesMost);
-        }
-        _effects.Motes(ChestOf(walker), HealCloud, actor.Side == Side.Foes ? Fading : CombatStyle.Blessing, false);
-        _popups.Word(HeadOf(walker), "JOINS THE FIGHT", actor.Side == Side.Foes ? CombatStyle.FoeLine : Palette.Gold);
-        _beatLength = JoinSeconds;
+        if (fighter.Form is not null) return "claw";
+        if (fighter.Enemy is EnemyDefinition enemy && enemy.Beast)
+            return enemy.Attacks.Count > 0 && enemy.Attacks[0].DamageType == DamageType.Piercing ? "bite" : "claw";
+        if (fighter.Member?.WornIn(EquipmentSlot.MainHand) is ItemDefinition weapon) return CombatSounds.FamilyOfWeapon(weapon.Base ?? weapon.Id);
+        return CombatSounds.FamilyOfKind(WeaponKinds.Clip(fighter.WeaponKind));
     }
 
-    /// <summary>The figure for a guest joining partway through: theirs if they're standing in the room, or one made for them.</summary>
-    private WalkerSprite FigureForGuest(string id)
+    /// <summary>How a weapon's blow lands, for its sparks: a cut, a thrust or a blow.</summary>
+    private static string BlowOf(Fighter actor, DamageType type) => type switch
     {
-        Npc standing = _npcs.Find(npc => npc.Definition.Id == id || npc.Definition.Cast == id);
-        return standing?.Walker ?? Spawn(GuestWalker(id));
+        DamageType.Piercing => "thrust",
+        DamageType.Bludgeoning => "blunt",
+        _ => actor?.WeaponKind is WeaponKind.Polearm or WeaponKind.Dagger ? "thrust" : "slash",
+    };
+
+    /// <summary>Whether someone's on the ground (knocked down), so a flinch would stand them up.</summary>
+    private bool Prone(Fighter fighter) => _battle.Has(fighter, ConditionId.Prone);
+
+    /// <summary>Plays a combat sound, panned by where it happens on the screen.</summary>
+    private void Play(string key, WalkerSprite where, float volume = 1f)
+    {
+        float pan = where is null ? 0f : MathHelper.Clamp((_camera.ToScreen(where.Position).X / LegendQuestGame.ScreenWidth - 0.5f) * 1.2f, -0.8f, 0.8f);
+        _audio.PlayCombat(key, pan, volume);
     }
 
-    /// <summary>Someone in the fight by their id, or null.</summary>
-    private Combatant Fighter(string id) => id is null ? null : _combat.Find(id);
-
-    /// <summary>Writes a line in the log, in the colour of whoever did it: bone for yours, soft red for a foe's, gold for the fight's own.</summary>
-    private void Say(string line, Combatant actor) => _log.Add(line, LineColour(actor));
-
-    /// <summary>The colour a line's written in, by whose it is.</summary>
-    private static Color LineColour(Combatant actor) => actor is null ? Palette.Gold : actor.Side == Side.Foes ? CombatStyle.FoeLine : Palette.Bone;
-
-    /// <summary>What someone is, for their turn's banner and their frame: "LEVEL 1 BLADEMASTER", or a guest's or a foe's kind.</summary>
-    private static string WhatTheyAre(Combatant who) => who.Member is not null
-        ? $"LEVEL {who.Member.Level} {ClassCatalog.Get(who.Member.Class).Name.ToUpperInvariant()}"
-        : who.Side == Side.Foes ? "FOE" : "ALLY";
+    /// <summary>Where someone's numbers and words start: a little over their head.</summary>
+    private static Vector2 NumbersAt(WalkerSprite walker) => HeadOf(walker) - new Vector2(0f, NumbersRise);
 
     /// <summary>Where someone's chest is: where blows land and motes rise from.</summary>
     private static Vector2 ChestOf(WalkerSprite walker) => walker.Position - new Vector2(0f, walker.Size.Y * ChestShare);
 
-    /// <summary>The way from one figure to another, as a unit, or nothing if they're on the same spot.</summary>
-    private static Vector2 Toward(WalkerSprite from, WalkerSprite to)
-    {
-        Vector2 way = to.Position - from.Position;
-        return way.LengthSquared() > 0f ? Vector2.Normalize(way) : Vector2.Zero;
-    }
+    /// <summary>Writes a line in the log, in the colour of whoever did it: bone for yours, soft red for a foe's, gold for the fight's own.</summary>
+    private void Say(string line, Fighter actor) => _log.Add(line, LineColour(actor));
 
-    /// <summary>How long something takes to fly between two points.</summary>
-    private static float FlightSeconds(Vector2 from, Vector2 to) => MathHelper.Clamp(Vector2.Distance(from, to) / ProjectileSpeed, FlightLeast, FlightMost);
+    /// <summary>The colour a line's written in, by whose it is.</summary>
+    private static Color LineColour(Fighter actor) => actor is null ? Palette.Gold : actor.Side == Side.Foes ? CombatStyle.FoeLine : Palette.Bone;
 
-    /// <summary>What flies for an attack: the ability's own (a fire bolt, a flask), or an arrow for a weapon attack by someone whose weapon shoots (a foe whose every attack does); null for a blow from close up.</summary>
-    private static string Flying(Combatant actor, AbilityDefinition ability)
+    /// <summary>The combat sounds the cues play by name (CombatSounds has the families and the schools).</summary>
+    private static class SoundKeys
     {
-        if (ability is not null && CombatStyle.Projectile(ability.Id) is string piece) return piece;
-        if (actor is null) return null;
-        if (actor.Member is not null) return actor.MainHand.Ranged ? CombatStyle.Arrow : null;
-        return actor.Attacks.Count > 0 && actor.Attacks.All(attack => attack.Ranged) ? CombatStyle.Arrow : null;
-    }
-
-    /// <summary>Where a charge thrown into a crowd lands: on the first one it catches, from the save that follows it.</summary>
-    private Vector2? LandingOf(AbilityId ability)
-    {
-        foreach (CombatEvent waiting in _beats)
-            if (waiting.Kind == CombatEventKind.SaveRolled && waiting.Ability == ability && FighterWalker(waiting.Target) is WalkerSprite caught) return caught.Position;
-        return null;
-    }
-
-    /// <summary>Whether the fight's won further down the events still to show, so whoever gets up now got up because it's over.</summary>
-    private bool VictoryAhead()
-    {
-        foreach (CombatEvent waiting in _beats)
-            if (waiting.Kind == CombatEventKind.Victory) return true;
-        return false;
+        public const string Crit = "crit", Block = "block", Dodge = "dodge", Miss = "miss", Heal = "heal", Buff = "buff", Debuff = "debuff";
+        public const string AuraTick = "aura-tick", Telegraph = "telegraph", BossPhase = "boss-phase", Knockdown = "knockdown", Death = "death";
+        public const string Downed = "downed", Revive = "revive", Potion = "potion", SoulLink = "soul-link", Press = "ui-press", Denied = "ui-denied";
+        public const string CooldownReady = "cooldown-ready", Victory = "victory";
     }
 }

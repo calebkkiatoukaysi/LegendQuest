@@ -503,7 +503,7 @@ public static class ItemCatalog
     private static string ConsumableProblem(ItemDefinition item)
     {
         int effects = (item.Heals.IsNone ? 0 : 1) + (item.ThrownDamage.IsNone ? 0 : 1) + (item.FocusRestored > 0 ? 1 : 0);
-        if (item.FocusRestored is < 0 or > Combatant.MaxFocus) return $"gives back {item.FocusRestored} Focus, past the 0 to {Combatant.MaxFocus} there is";
+        if (item.FocusRestored is < 0 or > Combat.Realtime.Fighter.MaxFocus) return $"gives back {item.FocusRestored} Focus, past the 0 to {Combat.Realtime.Fighter.MaxFocus} there is";
         if (effects != 1) return $"is a consumable that does {effects} things, and it has to do one";
         return item.ThrownDamage.IsNone == item.ThrowRange > 0f ? "has to have a ThrowRange if and only if it's thrown" : null;
     }

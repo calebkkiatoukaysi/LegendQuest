@@ -36,6 +36,10 @@ public class PlayerFrame : FighterFrame
     /// <inheritdoc />
     protected override string PortraitPiece(FighterHudView fighter) => "portrait-current";
 
+    /// <summary>Where the Focus bar is on the screen, for a lesson that points at it.</summary>
+    /// <param name="kit">The shared art and fonts.</param>
+    public Rectangle FocusArea(HudKit kit) => FocusBar(kit);
+
     /// <summary>Where the Focus bar is: the bar under the health, short of the room for its number.</summary>
     private Rectangle FocusBar(HudKit kit)
     {

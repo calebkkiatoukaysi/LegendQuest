@@ -119,6 +119,14 @@ public partial class ExploreScreen
         if (NpcAt(world) is Npc npc)
         {
             _preview = null;
+            if (Hostile(npc))
+            {
+                // Its red name says who it is; the hand says a click fights it.
+                _highlight = npc.Walker.Position;
+                _cursor.Shape = CursorShape.Use;
+                if (click) Engage(npc);
+                return;
+            }
             _tipName = npc.Definition.Name;
             _highlight = npc.Walker.Position;
             _cursor.Shape = CursorShape.Talk;

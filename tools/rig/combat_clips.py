@@ -476,6 +476,10 @@ def autos():
             if not side_smear:
                 beats[1].trail = beats[3].trail = None
                 beats[1].trail, beats[3].trail = "start", "end"
+            if kind == "polearm" and n == 1:
+                # The thrust lifts the arm through more than a right angle to reach forward, so a
+                # ribbon over the whole sweep is a half-disc over the head: it opens at the contact.
+                beats[1].trail, beats[2].trail = None, "start"
             seq("auto-%s-%d" % (kind, n), beats, settle=settle, blend=0.04, start=stance(kind), end=stance(kind),
                 notes="auto attack %d of 3 with a %s weapon" % (n, kind))
     for kind in ("bow", "crossbow"):
@@ -1480,6 +1484,10 @@ def foes():
             settle=16, blend=0.05, notes="a blasting charge lit and lobbed over the front row")
     heavy("foe-sapper-chief-lantern", "one-hand", 2, timing=(10, 3, 3, 10, 16), fx="spark", notes="the lantern swung into the foe")
     heavy("foe-vault-construct-gilded-slam", "unarmed", 2, timing=(14, 4, 3, 10, 20), notes="a slow, heavy slam of the fist")
+    # The Hollowed footman's telegraphed chop: the rusted blade taken up in both hands and brought
+    # down over the top, harder than its auto.
+    heavy("foe-hollowed-footman-overhead-chop", "two-hand", 1, timing=(12, 4, 3, 10, 20), power=1.4,
+          notes="the rusted blade raised in both hands and chopped down")
     seq("foe-vault-construct-trip", [B(10, F(torso=10, look=6, legs=L(-2, 8), near=A(-20, 40), far=A(-10, 40)), "out"),
                                      B(3, F(torso=12, legs=L(-3, 9), near=A(-30, 40), far=A(-20, 40)), "in"),
                                      B(4, F(torso=30, look=20, legs=L(6, 16, near=8), near=A(40, 10), far=A(30, 10)), "back",

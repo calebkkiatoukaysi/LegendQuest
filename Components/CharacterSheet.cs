@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using LegendQuest.Characters;
 using LegendQuest.Combat;
+using LegendQuest.Combat.Realtime;
+using LegendQuest.Components.Realtime;
 using LegendQuest.Items;
 using LegendQuest.Rules;
 
@@ -14,12 +16,13 @@ namespace LegendQuest.Components;
 /// <summary>
 /// The character sheet, as the inventory's right-hand page: level, class and the experience to the
 /// next level, their people and what their class is for, proficiency, the six scores with their
-/// modifiers and saves, how they attack, and their class's abilities with what each costs in a fight.
+/// modifiers and saves, how they attack, and their class's kit with what each skill costs in a fight
+/// and the rank that opens it.
 /// </summary>
 /// <remarks>
-/// Every number comes from where a fight gets it (CombatStats, LevelTable, AbilityCatalog), so
+/// Every number comes from where a fight gets it (CombatStats, LevelTable, SkillCatalog), so
 /// the sheet can't disagree with the dice. It's laid out again whenever it's shown someone, and an
-/// ability's row can be picked with the keys or the mouse to read what it does in the box at the
+/// skill's row can be picked with the keys or the mouse to read what it does in the box at the
 /// bottom, the way a long description shouldn't crowd the list. Anything that won't fit above the
 /// bottom of its area is left off rather than drawn over what's under it. The tiles go in a point
 /// sampled batch, the words in a linear one after.
@@ -36,7 +39,7 @@ public class CharacterSheet
 
     /// <summary>Where an attack's columns start, from the sheet's left edge: its to-hit and its damage. Each has its name over it on the heading's row.</summary>
     private const float HitColumn = 220f;
-    private const float DamageColumn = 310f;
+    private const float DamageColumn = 330f;
 
     /// <summary>What goes between the parts of a line: a people and a role, or what an ability costs and what's left.</summary>
     private const string Separator = "  ·  ";
@@ -45,9 +48,15 @@ public class CharacterSheet
     private static readonly Ability[] Abilities = Enum.GetValues<Ability>();
 
     private readonly StatTiles _tiles = new();
+
+    /// <summary>The fight's icons, for each skill's row, as the hotbar shows them.</summary>
+    private readonly HudIcons _icons = new();
+
+    /// <summary>How wide the room is in front of a skill's name for its icon, in screen pixels.</summary>
+    private const int IconRoom = 30;
     private readonly List<(string Text, float X, float Y, Color Colour, bool Big, bool Right)> _words = new();
     private readonly List<(Rectangle Tile, string Name, string Number, string Under)> _scores = new();
-    private readonly List<(Rectangle Row, AbilityDefinition Ability)> _abilities = new();
+    private readonly List<(Rectangle Row, SkillDefinition Skill, bool Locked)> _abilities = new();
 
     private SpriteFont _font;
     private SpriteFont _detailFont;
@@ -55,11 +64,13 @@ public class CharacterSheet
     private float _detailTop;
     private int _picked;
 
-    /// <summary>Loads the fonts and the tiles.</summary>
+    /// <summary>Loads the fonts, the tiles and the skills' icons.</summary>
     /// <param name="content">The content manager to load with.</param>
-    public void LoadContent(ContentManager content)
+    /// <param name="device">The graphics device, for the icons' sweep.</param>
+    public void LoadContent(ContentManager content, GraphicsDevice device)
     {
         _tiles.LoadContent(content);
+        _icons.LoadContent(content, device);
         _font = content.Load<SpriteFont>("spectral-ui");
         _detailFont = content.Load<SpriteFont>("spectral-detail");
     }
@@ -115,6 +126,14 @@ public class CharacterSheet
     public void DrawTiles(SpriteBatch spriteBatch, float alpha)
     {
         foreach ((Rectangle tile, _, _, _) in _scores) _tiles.DrawTile(spriteBatch, tile, alpha);
+
+        // Each skill's icon in front of its name, dimmed while its rank's still to come.
+        float scale = MathF.Min(1f, (_detailFont.LineSpacing - 2f) / _icons.Size);
+        foreach ((Rectangle row, SkillDefinition skill, bool locked) in _abilities)
+        {
+            float drop = (row.Height - _icons.Size * scale) / 2f;
+            _icons.Draw(spriteBatch, skill.Id, new Vector2(row.Left, MathF.Round(row.Top + drop)), scale, (locked ? Color.Gray * 0.45f : Color.White) * alpha);
+        }
     }
 
     /// <summary>Writes everything on the sheet, the picked ability's row in torchlight and what it does under the list. Goes in a linear sampled batch, after DrawTiles.</summary>
@@ -130,14 +149,15 @@ public class CharacterSheet
 
         for (int i = 0; i < _abilities.Count; i++)
         {
-            (Rectangle row, AbilityDefinition ability) = _abilities[i];
-            Text.Draw(spriteBatch, _detailFont, ability.Name, row.Left, row.Top, (i == _picked ? Palette.Torch : Palette.Bone) * alpha, Palette.Shadow * alpha);
+            (Rectangle row, SkillDefinition skill, bool locked) = _abilities[i];
+            Color colour = i == _picked ? Palette.Torch : locked ? Palette.Note : Palette.Bone;
+            Text.Draw(spriteBatch, _detailFont, skill.Name, row.Left + IconRoom, row.Top, colour * alpha, Palette.Shadow * alpha);
         }
 
         if (_picked >= _abilities.Count) return;
 
         float top = _detailTop;
-        foreach (string row in Text.Wrap(_abilities[_picked].Ability.Description, _detailFont, _area.Width))
+        foreach (string row in Text.Wrap(_abilities[_picked].Skill.Description, _detailFont, _area.Width))
         {
             if (top + _detailFont.LineSpacing > _area.Bottom) break;
             Text.Draw(spriteBatch, _detailFont, row, _area.Left, top, Palette.Narration * alpha, Palette.Shadow * alpha);
@@ -145,17 +165,22 @@ public class CharacterSheet
         }
     }
 
-    /// <summary>Their level and class, the experience to their next level, and their people and what their class is for.</summary>
+    /// <summary>Their level and class, then their people, what their class is for if there's room, and the experience to their next level.</summary>
     /// <returns>Where the next part starts.</returns>
     private float LayOutHeader(PartyMember member, float y)
     {
         ClassDefinition kind = ClassCatalog.Get(member.Class);
         string level = "LEVEL " + member.Level.ToString(CultureInfo.InvariantCulture) + "  " + kind.Name.ToUpperInvariant();
         Word(level, _area.Left, y, Palette.Heading, big: true);
-        Word(ToNextLevel(member), _area.Right, y + (_font.LineSpacing - _detailFont.LineSpacing) / 2f, Palette.Note, right: true);
         y += _font.LineSpacing;
 
-        Word(member.Look.Ancestry + Separator + kind.Role, _area.Left, y, Palette.Note);
+        // The experience goes at the right of the line under (beside a long class's name it ran into
+        // it), and the class's role before it only if there's room: a line more would push the kit's
+        // last row off the sheet.
+        string who = member.Look.Ancestry + Separator + kind.Role, next = ToNextLevel(member);
+        if (_detailFont.MeasureString(who + Separator + next).X > _area.Width) who = member.Look.Ancestry.ToString();
+        Word(who, _area.Left, y, Palette.Note);
+        Word(next, _area.Right, y, Palette.Note, right: true);
         return y + _detailFont.LineSpacing;
     }
 
@@ -228,37 +253,51 @@ public class CharacterSheet
         return y + _detailFont.LineSpacing;
     }
 
-    /// <summary>Their class's abilities, a row each with what it costs in a fight, and the room under them for the picked one's description.</summary>
+    /// <summary>The rank that opens each of a kit's skills, in ClassKit.All's order: the auto attack and the first skill, the second and third, the ultimate, and the two passives.</summary>
+    private static readonly int[] OpensAt =
+    {
+        1, 1, ClassRanks.Skill2Rank, ClassRanks.Skill3Rank, ClassRanks.UltimateRank, ClassRanks.PassiveRank, ClassRanks.LastPassiveRank,
+    };
+
+    /// <summary>Their class's kit (SkillCatalog), a row each with its icon and what it costs in a fight, the ones their rank hasn't opened yet dimmed with the rank that does, and the room under them for the picked one's description. The heading has their rank in the class and its class points, and how many more the next rank wants.</summary>
     private void LayOutAbilities(PartyMember member, float y)
     {
-        y = Heading("ABILITIES", y);
-        foreach (AbilityId id in AbilityCatalog.Kit(member.Class))
+        int points = member.PointsIn(member.Class);
+        string next = member.Rank >= ClassRanks.MaxRank ? "HIGHEST RANK"
+            : $"{ClassRanks.PointsFor(member.Rank + 1) - points} CP TO RANK {member.Rank + 1}";
+        Word(next, _area.Right, y, Palette.Note, right: true);
+        y = Heading($"SKILLS  ·  RANK {member.Rank}  ·  {points} CP", y);
+        IReadOnlyList<SkillDefinition> kit = SkillCatalog.Kit(member.Class).All;
+        for (int i = 0; i < kit.Count; i++)
         {
-            AbilityDefinition ability = AbilityCatalog.Get(id);
+            SkillDefinition skill = kit[i];
+            if (skill is null) continue;
             if (y + _detailFont.LineSpacing > _area.Bottom) break;
-            _abilities.Add((new Rectangle(_area.Left, (int)y, _area.Width, _detailFont.LineSpacing), ability));
-            Word(Tag(ability), _area.Right, y, Palette.Note, right: true);
+            int opens = i < OpensAt.Length ? OpensAt[i] : 1;
+            bool locked = member.Rank < opens;
+            _abilities.Add((new Rectangle(_area.Left, (int)y, _area.Width, _detailFont.LineSpacing), skill, locked));
+            Word(locked ? $"RANK {opens}" : Tag(skill), _area.Right, y, Palette.Note, right: true);
             y += _detailFont.LineSpacing;
         }
         _detailTop = y + HeadingGap * 2;
     }
 
-    /// <summary>What an ability costs to use in a fight, like "BONUS ACTION  ·  20 FOCUS  ·  COOLDOWN 4", or "ONCE A FIGHT".</summary>
-    private static string Tag(AbilityDefinition ability)
+    /// <summary>What a skill costs to use in a fight, like "BONUS  ·  20 FOCUS  ·  12 S", or "PASSIVE": its kind, its Focus and its cooldown, short enough to clear the skill's name and icon.</summary>
+    private static string Tag(SkillDefinition skill)
     {
         var parts = new List<string>
         {
-            ability.Kind == AbilityKind.Passive ? "PASSIVE" : ability.Cost switch
+            skill.Kind switch
             {
-                ActionCost.BonusAction => "BONUS ACTION",
-                ActionCost.Reaction => "REACTION",
-                ActionCost.Free => "FREE",
-                _ => "ACTION",
+                SkillKind.Auto => "AUTO ATTACK",
+                SkillKind.Bonus => "BONUS",
+                SkillKind.Reaction => "REACTION",
+                SkillKind.Passive => "PASSIVE",
+                _ => skill.Ultimate ? "ULTIMATE" : "ACTION",
             },
         };
-        if (ability.Focus > 0) parts.Add(ability.Focus.ToString(CultureInfo.InvariantCulture) + " FOCUS");
-        if (ability.Cooldown > 0) parts.Add("COOLDOWN " + ability.Cooldown.ToString(CultureInfo.InvariantCulture));
-        if (ability.OncePerFight) parts.Add("ONCE A FIGHT");
+        if (skill.Focus > 0) parts.Add(skill.Focus.ToString(CultureInfo.InvariantCulture) + " FOCUS");
+        if (skill.CooldownMs > 0) parts.Add((skill.CooldownMs / 1000f).ToString("0.#", CultureInfo.InvariantCulture) + " S");
         return string.Join(Separator, parts);
     }
 

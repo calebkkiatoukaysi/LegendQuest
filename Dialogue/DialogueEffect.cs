@@ -99,7 +99,7 @@ public readonly record struct DialogueEffect(EffectKind Kind, string Id, int Amo
     /// <param name="guest">Who: an origin id, or an EnemyCatalog id.</param>
     public static DialogueEffect FightGuest(string guest) => new(EffectKind.FightGuest, guest);
 
-    /// <summary>What it changes about a fight that's going, for a SupportOff, FightAdd or FightGuest: what the screen hands CombatEngine.Apply. Null for any other kind.</summary>
+    /// <summary>What it changes about a fight that's going, for a SupportOff, FightAdd or FightGuest: what the screen hands Battle.Apply. Null for any other kind.</summary>
     public FightOrder Order => Kind switch
     {
         EffectKind.SupportOff => new FightOrder(FightOrderKind.SupportOff, Id, 0),
