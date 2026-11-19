@@ -2,7 +2,7 @@
 Weapons painted on their own, with no hand, and put in the figure's fist here.
 
     python tools/weapon_alone.py template                                   # the blank sheet to paint four on
-    python tools/weapon_alone.py cut <painted.png> <base> <id> [<id> ...]   # a sheet into its items, each in the fist
+    python tools/weapon_alone.py cut <painted.png> <base> <id[/hand[/kind]]> ...   # a sheet's columns, each in its fist (- for an empty one)
     python tools/weapon_alone.py preview <base> <out.png> <id> [<id> ...]   # each held, at rest and in a few poses
 
 The owner's call (2026-11-18): ChatGPT, asked to put an item through a fist, redraws the hand with
@@ -25,7 +25,8 @@ point forward, a staff near upright, a carried thing hanging), made the size its
 weapon is painted smaller than life to fit its column), its grip on the hand's socket, drawn under
 the hand's own piece: tools/source/characters/weapons/<id>.png, the base with the item in its
 fist, which tools/import_parts.py takes as it does any item painted on the base. An id starting
-"offhand-" goes in the far hand.
+"offhand-" goes in the far hand, and so does a column given as <id>/far; the same id in two columns
+is two things held at once, one a hand (a spear and a shield), drawn into the one picture.
 
 `preview` draws each on the body at rest and in a few of the game's poses, the item moving with the
 hand.
@@ -61,25 +62,44 @@ TICK, LINE_GREY = 26, 96
 #: The first kind whose words are in the item's id is its kind.
 HOLDS = (
     ("shield", r"shield|buckler", (0.0, 1.0)),
-    ("carried", r"lantern|basket|bucket|pail|pot|jug|bag|sack|satchel|tray|book|bottle|tankard|cup|flask|net|fish|bell|censer|cage|kettle", (0.0, 1.0)),
-    ("long", r"staff|spear|halberd|pike|glaive|trident|scythe|crook|banner|pole|oar|rake|pitchfork|hoe|broom|longbow|lance|standard", (8.0, 1.45)),
+    ("carried", r"lantern|basket|bucket|pail|pot|jug|bag|sack|satchel|tray|bottle|net|fish|bell|censer|cage|kettle|crate|doll", (0.0, 1.0)),
+    ("long", r"staff|spear|halberd|pike|glaive|trident|scythe|crook|banner|pole|oar|rake|pitchfork|hoe|broom|lance|standard|gaff|spade|peel", (8.0, 1.45)),
+    ("bigbow", r"longbow|thornwood-bow", (6.0, 1.35)),
     ("bow", r"bow", (10.0, 1.0)),
+    ("stick", r"cane|walking-stick", (8.0, 1.0)),
+    ("held", r"letter|cup|tankard|coin|loaf|book|ledger|scroll|map|flower|shawl|cap|purse|lamp|smoker|needle|quill|pen|telescope|duster|spindle|notice|charge", (18.0, 1.0)),
     ("blade", r"", (115.0, 1.0)),
 )
+KINDS = {name: hold for name, _, hold in HOLDS}
 #: Where each hand holds, by the bone, and the joint and tip its socket's between.
 HANDS = {"near": "hand_near", "far": "hand_far"}
 #: Smaller than this (pixels) and a painted scrap isn't the item's.
 SPECK = 120
-#: A handle is the rows no wider than this many times the thinner rows of an item's lower half
-#: (their 30th percentile: a pommel's tip is thinner still, and isn't the handle).
-GRIP_THIN = 1.4
+#: A guard is a row of an item's lower part this many times wider than that part's middle width.
+GUARD_WIDE = 1.9
+#: A handle is at least this many rows long.
+GRIP_LEAST = 34
 
 
 def kind_of(item):
+    """An item's kind by the words in its id: (kind, (degrees, size))."""
     for name, words, hold in HOLDS:
         if re.search(words, item):
             return name, hold
     return HOLDS[-1][0], HOLDS[-1][2]
+
+
+def spec(text):
+    """A column's item as it's given on the command line, id[/hand[/kind]]: (id, hand, kind). The
+    hand is near unless it says far (or the id starts "offhand-"); the kind is the id's own unless
+    it's named. An id in two columns is two things held at once, one a hand (a spear and a shield)."""
+    parts = text.split("/")
+    item = parts[0]
+    side = parts[1] if len(parts) > 1 and parts[1] else ("far" if item.startswith("offhand-") else "near")
+    kind = parts[2] if len(parts) > 2 and parts[2] else kind_of(item)[0]
+    if side not in HANDS or kind not in KINDS:
+        sys.exit("weapon_alone: %s isn't id[/near|far[/%s]]" % (text, "|".join(KINDS)))
+    return item, side, kind
 
 
 def template_path():
@@ -143,12 +163,12 @@ def items(painted):
     return out
 
 
-def grip_of(item, solid):
-    """Where the hand goes on an item painted upright, by its kind, from its own shape (ChatGPT puts
-    the grip near the ticks, not on them): a carried thing's ring at its top; the middle of a shield
-    or a bow; a long weapon a little above its middle; and for the rest (a sword, an axe, a mace) the
-    middle of the longest thin stretch of its lower half, which is its handle."""
-    kind = kind_of(item)[0]
+def grip_of(kind, solid):
+    """Where the hand goes on an item painted upright, by its kind, from its own shape (the painter
+    puts the grip near the ticks, not on them): a carried thing's ring at its top, and a stick's
+    handle; the middle of a shield or a bow; a long weapon a little above its middle; a small held
+    thing low down; and for the rest (a sword, an axe, a mace) the handle under its guard, or low on its
+    haft when it has none."""
     rows = np.nonzero(solid.any(axis=1))[0]
     top, bottom = int(rows[0]), int(rows[-1])
     xs = np.arange(solid.shape[1])
@@ -156,67 +176,94 @@ def grip_of(item, solid):
     right = np.where(solid, xs[None, :], -1).max(axis=1)
     width = (right - left + 1).astype(float)
     middle = lambda y: (left[y] + right[y]) / 2.0  # noqa: E731
-    if kind == "carried":
+    if kind in ("carried", "stick"):
         y = top + min(14, (bottom - top) // 8)
-    elif kind in ("shield", "bow"):
+    elif kind in ("shield", "bow", "bigbow"):
         y = (top + bottom) // 2
     elif kind == "long":
         y = int(top + 0.45 * (bottom - top))
+    elif kind == "held":
+        y = int(top + 0.7 * (bottom - top))
     else:
-        lo = int(top + 0.5 * (bottom - top))
-        thin = width[lo:bottom + 1] <= GRIP_THIN * np.percentile(width[lo:bottom + 1], 30)
-        runs, n = ndi.label(thin)
-        best = max(range(1, n + 1), key=lambda i: (runs == i).sum())
-        where = np.nonzero(runs == best)[0]
-        y = lo + int(where.mean())
+        # A guard (the widest row of the lower part, well wider than the rest of it) has the handle
+        # under it, down to the pommel; with none (an axe, a mace, a club) the hand's low on the haft.
+        lo = int(top + 0.4 * (bottom - top))
+        lower = width[lo:max(lo + 1, bottom - 8)]
+        guard = lo + int(np.argmax(lower))
+        if lower.max() >= GUARD_WIDE * np.median(lower) and bottom - guard >= GRIP_LEAST:
+            y = (guard + bottom) // 2
+        else:
+            y = int(top + 0.76 * (bottom - top))
     return float(middle(y)), float(y)
 
 
-def held(base, colour, alpha, grip, item):
-    """An item on the base's canvas, in the fist: (colour, alpha) under the hand, and which hand."""
-    side = "far" if item.startswith("offhand-") else "near"
-    _, (angle, size) = kind_of(item)
-    if side == "far":
-        angle = -angle if angle > 20 else angle
+def held(base, colour, alpha, grip, side, kind):
+    """An item on the base's canvas, in a fist: premultiplied, to go under that hand."""
+    angle, size = KINDS[kind]
+    if side == "far" and angle > 20:
+        angle = angle - 25.0  # the far hand's is held a little higher, so the two don't lie on each other
     t = np.radians(angle)
     c, s = np.cos(t) * size, np.sin(t) * size
     at = socket(base, side)
     m = np.array([[c, -s, 0.0], [s, c, 0.0]])
     m[:, 2] = at - m[:, :2] @ np.array(grip)
     w, h = D.CANVAS
-    pm = np.clip(D.warp(D.premul(colour, alpha), m, (h, w)), 0.0, 1.0)
-    return pm, side
+    return np.clip(D.warp(D.premul(colour, alpha), m, (h, w)), 0.0, 1.0)
 
 
-def cut(painted, base, ids):
+def stood(base, bodies, parts):
+    """The base stood up from its pieces, each item ({hand: premultiplied}) under the hand that holds it."""
+    w, h = D.CANVAS
+    figure = np.zeros((h, w, 4))
+    for bone in K.DRAW:
+        for side, pm in parts.items():
+            if bone == HANDS[side]:
+                figure = pm + figure * (1.0 - pm[:, :, 3:])
+        if bone in bodies:
+            layer = D.premul(*bodies[bone])
+            figure = layer + figure * (1.0 - layer[:, :, 3:])
+    return figure
+
+
+def cut(painted, base, specs):
     bodies = D.body(base)
     w, h = D.CANVAS
     alone_dir, held_dir = os.path.join(CHARS, "weapons-alone"), os.path.join(CHARS, "weapons")
     os.makedirs(alone_dir, exist_ok=True)
     os.makedirs(held_dir, exist_ok=True)
     found = items(painted)
-    for k, item in enumerate(ids):
+    whole = {}
+    for k, text in enumerate(specs):
+        if text in ("", "-"):
+            continue
+        item, side, kind = spec(text)
         if k >= COLS or found[k] is None:
             print("  %-28s nothing painted in column %d: redo" % (item, k + 1))
             continue
         colour, alpha, solid = found[k]
-        grip = grip_of(item, solid)
-        ic.write_png(os.path.join(alone_dir, item + ".png"), ic.straight(D.premul(colour, alpha)))
-        json.dump({"grip": [round(grip[0], 1), round(grip[1], 1)], "kind": kind_of(item)[0]},
-                  open(os.path.join(alone_dir, item + ".json"), "w", encoding="utf-8"), indent=1)
-        pm, side = held(base, colour, alpha, grip, item)
-        # The base stood up from its pieces, the item under the hand that holds it.
-        figure = np.zeros((h, w, 4))
-        for bone in K.DRAW:
-            if bone == HANDS[side]:
-                figure = pm + figure * (1.0 - pm[:, :, 3:])
-            if bone not in bodies:
-                continue
-            layer = D.premul(*bodies[bone])
-            figure = layer + figure * (1.0 - layer[:, :, 3:])
+        grip = grip_of(kind, solid)
+        name = item if side == "near" else item + ".far"
+        ic.write_png(os.path.join(alone_dir, name + ".png"), ic.straight(D.premul(colour, alpha)))
+        json.dump({"grip": [round(grip[0], 1), round(grip[1], 1)], "kind": kind, "hand": side},
+                  open(os.path.join(alone_dir, name + ".json"), "w", encoding="utf-8"), indent=1)
+        whole.setdefault(item, {})[side] = held(base, colour, alpha, grip, side, kind)
+        print("  %-28s a %s, in the %s hand; its grip at %.0f, %.0f" % (item, kind, side, grip[0], grip[1]))
+    for item, parts in whole.items():
+        figure = stood(base, bodies, parts)
         rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)
         ic.write_png(os.path.join(held_dir, item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
-        print("  %-28s a %s, in the %s hand; its grip at %.0f, %.0f" % (item, kind_of(item)[0], side, grip[0], grip[1]))
+
+
+def alone(base, item):
+    """An item's parts as they were cut, each in its fist: {hand: premultiplied}."""
+    parts = {}
+    for name in (item, item + ".far"):
+        path = os.path.join(CHARS, "weapons-alone", name + ".png")
+        if os.path.exists(path):
+            rgba = ic.read_png(path)[0].astype(np.float64)
+            note = json.load(open(path[:-4] + ".json", encoding="utf-8"))
+            parts[note["hand"]] = held(base, rgba[:, :, :3], rgba[:, :, 3] / 255.0, note["grip"], note["hand"], note["kind"])
+    return parts
 
 
 #: The poses a preview shows.
@@ -231,11 +278,9 @@ def preview(base, out, ids):
     w, h = D.CANVAS
     rows = []
     for item in ids:
-        rgba = ic.read_png(os.path.join(CHARS, "weapons-alone", item + ".png"))[0].astype(np.float64)
-        grip = json.load(open(os.path.join(CHARS, "weapons-alone", item + ".json"), encoding="utf-8"))["grip"]
-        pm, side = held(base, rgba[:, :, :3], rgba[:, :, 3] / 255.0, grip, item)
         layers = dict(bodies)
-        layers[HANDS[side] + "+"] = (pm[:, :, :3] / np.maximum(pm[:, :, 3:], 1e-6) * 255.0, pm[:, :, 3])
+        for side, pm in alone(base, item).items():
+            layers[HANDS[side] + "+"] = (pm[:, :, :3] / np.maximum(pm[:, :, 3:], 1e-6) * 255.0, pm[:, :, 3])
         row = []
         for name, t in SHOTS:
             clip = known.get(name % base if name and "%s" in name else name) if name else None

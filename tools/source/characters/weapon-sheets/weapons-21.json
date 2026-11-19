@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-spear-lantern/near/long",
+  "weapon-spear-lantern/far/carried",
+  "weapon-vesk-sword/near/blade",
+  "weapon-mordain-glaive/near/long"
+ ]
+}

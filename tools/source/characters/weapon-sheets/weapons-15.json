@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-crate/far/carried",
+  "weapon-hammer-tongs/near/blade",
+  "weapon-hammer-tongs/far/blade",
+  "weapon-thornwood-bow/near/bigbow"
+ ]
+}

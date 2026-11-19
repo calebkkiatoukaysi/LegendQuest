@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-chief-pick-lantern/near/blade",
+  "weapon-chief-pick-lantern/far/carried",
+  "weapon-toy-sword/near/blade",
+  "weapon-pitchfork/near/long"
+ ]
+}

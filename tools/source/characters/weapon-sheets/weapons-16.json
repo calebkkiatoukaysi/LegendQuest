@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-sunsteel-blade/near/blade",
+  "weapon-mallet/near/blade",
+  "weapon-spade/near/long",
+  "weapon-heron-cane/near/stick"
+ ]
+}

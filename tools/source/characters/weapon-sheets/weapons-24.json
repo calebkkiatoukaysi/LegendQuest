@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-raider-kit/near/blade",
+  "weapon-raider-kit/far/shield",
+  "-",
+  "-"
+ ]
+}

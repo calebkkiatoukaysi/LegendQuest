@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-felling-axe/near/blade",
+  "weapon-oil-lamp/near/held",
+  "weapon-varkhul-greatsword/near/blade",
+  "weapon-cultist-dagger/near/blade"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-sb-blades/near/blade",
+  "weapon-sb-blades/far/blade",
+  "weapon-sera-longbow/near/bigbow",
+  "weapon-sera-longbow/far/held"
+ ]
+}

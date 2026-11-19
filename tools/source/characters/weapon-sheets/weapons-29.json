@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-pilgrim-staff/near/long",
+  "weapon-peel/near/long",
+  "weapon-peel/far/held",
+  "weapon-spindle/near/carried"
+ ]
+}

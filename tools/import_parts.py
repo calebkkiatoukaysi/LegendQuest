@@ -260,6 +260,22 @@ A_ANCHOR = "## Tiles and props"
 M_BEGIN = "#------------ Characters/Parts: written by tools/import_parts.py ------------#"
 M_END = "#---------------------------- end Characters/Parts ----------------------------#"
 CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py"
+#: The parts that weren't made in ChatGPT: tools/source/characters/generated.json lists the ids
+#: (armors, weapons) made with another image model at the owner's request, and says so here.
+CREDIT_GENERATED = ("made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), "
+                    "from the art brief's prompt; cut by tools/import_parts.py")
+CREDIT_MIXED = ("supplied by Caleb Kiatoukaysi, made in ChatGPT, but for the parts tools/source/characters/generated.json "
+                "lists, made with Google's Gemini image model at his request; cut by tools/import_parts.py")
+
+
+def generated():
+    """The ids of the parts made with another image model than ChatGPT (generated.json), or none."""
+    path = os.path.join(ROOT, "tools", "source", "characters", "generated.json")
+    return set(json.load(open(path, encoding="utf-8"))["ids"]) if os.path.exists(path) else set()
+
+
+def credit(part):
+    return CREDIT_GENERATED if part in generated() else CREDIT
 
 
 def fail(message):
@@ -2191,20 +2207,20 @@ def body_credits():
         # is kept for the record when the armor's been painted again whole.
         whole = os.path.exists(os.path.join(SOURCE, "whole", aid + ".png"))
         if whole:
-            lines += ["tools/source/characters/whole/%s.png - %s as ChatGPT painted it whole on its dressing-pose template "
+            lines += ["tools/source/characters/whole/%s.png - %s as the painter painted it whole on its dressing-pose template "
                       "(the armor brief of 2026-11-18), kept as it came; tools/dress_pose.py cuts it into the pieces in %s/%s; %s"
-                      % (aid, aid, FOLDERS["armor"], aid, CREDIT), ""]
+                      % (aid, aid, FOLDERS["armor"], aid, credit(aid)), ""]
         if os.path.exists(os.path.join(SOURCE, "sheets", aid + ".png")):
             lines += ["tools/source/characters/sheets/%s.png - %s as ChatGPT painted it on its armor template (Story/13 §5), "
                       "kept as it came; %s; %s"
                       % (aid, aid, "painted again whole since, and kept for the record" if whole
-                         else "tools/body_parts.py cuts it into the pieces in %s/%s" % (FOLDERS["armor"], aid), CREDIT), ""]
+                         else "tools/body_parts.py cuts it into the pieces in %s/%s" % (FOLDERS["armor"], aid), credit(aid)), ""]
         for path in piece_files(folder):
             bone = os.path.basename(path)[:-4]
             lines += ["tools/source/characters/%s/%s/%s.png - %s's %s piece at rest on the canvas, cut by %s; %s"
                       % (FOLDERS["armor"], aid, bone, aid, bone.replace("_", " "),
-                         "tools/dress_pose.py from the outfit ChatGPT painted whole on its dressing-pose template" if whole
-                         else "tools/body_parts.py from the outfit ChatGPT painted on its armor template", CREDIT), ""]
+                         "tools/dress_pose.py from the outfit painted whole on its dressing-pose template" if whole
+                         else "tools/body_parts.py from the outfit ChatGPT painted on its armor template", credit(aid)), ""]
     return lines
 
 
@@ -2265,7 +2281,8 @@ def assets_section(names, layers, where, empty=False):
         what = ", ".join(held)
         lines += ["Content/Characters/Parts/%s - an atlas page of %d part%s (%s)%s, cut from tools/source/characters; %s"
                   % (name, len(held), "" if len(held) == 1 else "s", what,
-                     " and %d mask%s" % (masks, "" if masks == 1 else "s") if masks else "", CREDIT), ""]
+                     " and %d mask%s" % (masks, "" if masks == 1 else "s") if masks else "",
+                     CREDIT_MIXED if generated() & set(held) else CREDIT), ""]
     return lines + [A_END]
 
 

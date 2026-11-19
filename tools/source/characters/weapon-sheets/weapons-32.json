@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-sketchbook/far/held",
+  "weapon-sketchbook/near/held",
+  "weapon-lantern/near/carried",
+  "weapon-smoker/near/held"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-netting-needle/near/held",
+  "weapon-loaf/near/held",
+  "weapon-rag-doll/near/carried",
+  "weapon-tankard/near/held"
+ ]
+}

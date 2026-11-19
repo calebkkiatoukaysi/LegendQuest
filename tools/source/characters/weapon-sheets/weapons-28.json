@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-flat-cap-held/near/held",
+  "weapon-basket/near/carried",
+  "weapon-flower-basket/far/carried",
+  "weapon-flower-basket/near/held"
+ ]
+}

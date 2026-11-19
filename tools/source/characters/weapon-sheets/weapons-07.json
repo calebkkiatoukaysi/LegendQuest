@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-kael-knives/near/blade",
+  "weapon-kael-knives/far/blade",
+  "weapon-kael-rapier/near/blade",
+  "weapon-kael-rapier/far/blade"
+ ]
+}

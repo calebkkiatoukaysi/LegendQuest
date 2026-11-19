@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-brannock/near/blade",
+  "weapon-brannock/far/shield",
+  "weapon-cutlass/near/blade",
+  "weapon-gaff/near/long"
+ ]
+}

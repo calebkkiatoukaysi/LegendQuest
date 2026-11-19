@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-hollowed-sword/near/blade",
+  "weapon-hexer-staff/near/long",
+  "weapon-sapper-pick/near/blade",
+  "weapon-sapper-pick/far/held"
+ ]
+}

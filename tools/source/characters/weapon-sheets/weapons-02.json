@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-scimitar/near/blade",
+  "weapon-handaxe/near/blade",
+  "weapon-battleaxe/near/blade",
+  "weapon-greatsword/near/blade"
+ ]
+}

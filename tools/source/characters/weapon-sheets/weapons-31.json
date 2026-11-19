@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-ledger-pen/far/held",
+  "weapon-ledger-pen/near/held",
+  "weapon-folded-shawl/near/held",
+  "-"
+ ]
+}

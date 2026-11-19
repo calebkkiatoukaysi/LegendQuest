@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-warhammer/near/blade",
+  "weapon-mace/near/blade",
+  "weapon-quarterstaff/near/long",
+  "weapon-spear/near/long"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-unmade-spear-shield/near/long",
+  "weapon-unmade-spear-shield/far/shield",
+  "weapon-pike/near/long",
+  "-"
+ ]
+}

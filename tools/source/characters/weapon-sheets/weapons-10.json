@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-telescope/near/held",
+  "weapon-tack-hammer/near/blade",
+  "weapon-tack-hammer/far/held",
+  "weapon-walking-stick/near/stick"
+ ]
+}

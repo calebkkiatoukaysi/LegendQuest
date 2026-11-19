@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-letters/near/held",
+  "weapon-stew-pot/near/carried",
+  "weapon-silk-bolt/far/carried",
+  "weapon-lute/near/carried"
+ ]
+}

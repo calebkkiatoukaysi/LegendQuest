@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-corwin-kit/near/blade",
+  "weapon-corwin-kit/far/shield",
+  "weapon-corwin-sword/near/blade",
+  "-"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-dagger/near/blade",
+  "weapon-shortsword/near/blade",
+  "weapon-longsword/near/blade",
+  "weapon-rapier/near/blade"
+ ]
+}

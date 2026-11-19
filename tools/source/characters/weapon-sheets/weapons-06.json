@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "offhand-shortsword/far/blade",
+  "offhand-scimitar/far/blade",
+  "offhand-handaxe/far/blade",
+  "offhand-ember-dagger/far/blade"
+ ]
+}

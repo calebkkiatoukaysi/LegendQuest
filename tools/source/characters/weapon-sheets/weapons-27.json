@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-scrolls/near/held",
+  "weapon-broom/near/long",
+  "weapon-coin/near/held",
+  "weapon-practice-sword/near/blade"
+ ]
+}

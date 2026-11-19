@@ -99,6 +99,8 @@ SKIRT_ACROSS, SKIRT_FLARE, SKIRT_BREAK, SKIRT_LEAST = 0.9, 14, 12, 40
 #: The skirt's piece starts this far over the hips' joint (the belt's line), and carries on under the
 #: torso this far above that.
 WAIST_OVER, SKIRT_UNDER = 6, 48
+#: A tail: an area at least TAIL_SHARE of which is TAIL_CLEAR pixels or more from the legs.
+TAIL_CLEAR, TAIL_SHARE = 14, 0.5
 LEGS = ("leg_near_up", "leg_near_low", "leg_far_up", "leg_far_low")
 
 
@@ -331,6 +333,19 @@ def owners(colour, alpha, masks, seen, near, shoulder=None, neck=None, waist=Non
         take = skirt_rows[:, None] & there & np.isin(own, leg_ranks)
         own[take] = RANK["torso"]
         hung |= take
+    # A coat's open tails, a cloak's ends, a loincloth: an area in the legs' place that starts above
+    # the knee and stands mostly well clear of the legs themselves isn't a trouser leg or a boot. It
+    # hangs too.
+    clear = ndi.distance_transform_edt(~legs_mask) >= TAIL_CLEAR
+    knee = min(np.nonzero(masks[b].any(axis=1))[0].min() for b in ("leg_near_low", "leg_far_low"))
+    index = np.arange(1, n + 1)
+    rows_of = np.broadcast_to(np.arange(figure.shape[0])[:, None], figure.shape)
+    starts = np.concatenate([[figure.shape[0]], ndi.minimum(rows_of, areas, index)])
+    in_legs = np.bincount(areas[there & np.isin(own, [RANK[b] for b in LEGS])], minlength=n + 1)
+    off_legs = np.bincount(areas[there & clear & np.isin(own, [RANK[b] for b in LEGS])], minlength=n + 1)
+    tails = (in_legs >= 120) & (off_legs >= TAIL_SHARE * in_legs) & (starts < knee)
+    tails[0] = False
+    hung |= tails[areas] & there & np.isin(own, [RANK[b] for b in LEGS])
     # What hangs, from the waist down, is the skirt's piece, which hangs from the hips beside the
     # torso: it stays plumb when the torso leans, and sways with the stride.
     if waist is not None:

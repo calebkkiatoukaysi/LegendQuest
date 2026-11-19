@@ -1,0 +1,9 @@
+{
+ "base": "base-female",
+ "specs": [
+  "weapon-night-flowers/near/held",
+  "weapon-vreya-blade/near/blade",
+  "weapon-glass-lamp/near/held",
+  "weapon-map/near/held"
+ ]
+}

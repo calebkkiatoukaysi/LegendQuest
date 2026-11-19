@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-tin-cup/near/held",
+  "weapon-quill-letter/near/held",
+  "weapon-quill-letter/far/held",
+  "weapon-letter/near/held"
+ ]
+}

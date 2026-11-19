@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-climber-hook/near/blade",
+  "weapon-relief-kit/near/long",
+  "weapon-relief-kit/far/shield",
+  "-"
+ ]
+}

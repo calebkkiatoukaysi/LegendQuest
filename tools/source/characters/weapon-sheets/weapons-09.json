@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-cudgel/near/blade",
+  "weapon-watch-kit/near/long",
+  "weapon-watch-kit/far/shield",
+  "weapon-halberd/near/long"
+ ]
+}

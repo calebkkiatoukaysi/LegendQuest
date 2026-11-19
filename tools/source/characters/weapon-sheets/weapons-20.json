@@ -1,0 +1,9 @@
+{
+ "base": "base-male",
+ "specs": [
+  "weapon-gilded-kit/near/blade",
+  "weapon-gilded-kit/far/shield",
+  "weapon-mace-shield/near/blade",
+  "weapon-mace-shield/far/shield"
+ ]
+}
