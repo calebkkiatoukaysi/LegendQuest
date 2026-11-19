@@ -1182,6 +1182,95 @@ towards you or away. `ExploreScreen` dresses each party member in what their `Eq
 (`Paperdoll.GearOf` reads each item's `Layer`), and `Paperdoll` checks every layer is there for
 every build when it loads, and that every item's `Layer` is one it has.
 
+### Fighting moves and impacts
+
+The real-time fight drives a figure by moves rather than poses. `WalkerSprite.PlayMove(name,
+restart, speed, hold)` plays any clip by name (`auto-two-hand-2`, `skill-wizard-fire-bolt`, `hurt`,
+`knockdown`, `die`), starts it again if it's the one playing, and returns the clip, whose events
+(`Clip.Events`, `FirstEvent("hit")`) say when its blows land. As playback crosses each event the
+figure fires `ClipEvent` (once each time round a loop), so the screen lands the number, the flash
+and the sound on the frame the clip does. A clip that's played out goes back to `ready` in a fight
+(`InFight`) or `idle` out of one, unless it holds (a death, a knockdown until its get-up). A missing
+clip falls back to the nearest one there is, so a fight never stands still for want of one.
+`WeaponKind` is the kind of weapon the engine says they swing. The old `Play(pose)` still works.
+
+`ClipTrack` eases each key as it says (`smooth`, `in`, `out`, `back`, `hold`, `linear`), with the
+same maths as `tools/rig/clips.py` to the fourth decimal place, and `Skeleton.Solve` carries a
+bone's stretch to its children's joints the way `skeleton.world()` does.
+
+`Characters/Motion` stages each blow on the figures themselves, with the numbers in `Feel` (the
+feel spec): a hit-stop that freezes the attacker and the target alone for 3 to 14 frames
+(`Feel.HitStopFrames`), the target shaking a pixel or two and tapering off, the attacker creeping on,
+the world going on round them; a white flash in the figure's own shape, 2 frames (4 on a critical),
+then an element's tint for a spell (`Silhouettes` makes a white copy of each piece once); a squash
+that springs back, and a knock away from the blow (`TakeHit` does all of these at once). Through a
+clip's `trail` windows the weapon smears longer along its blade and leaves a fading ribbon from its
+base to its tip, sampled four times a frame from the clip so a fast swing stays a smooth arc
+(`WeaponTrail`, drawn additively by `RibbonBatch`). The skirt and a cape swing after the body on
+damped springs (`Spring`), held still through a hit-stop. Hair is painted into the head piece, so
+it moves with the head. A creature drawn from a sheet (a sea wraith, a Gloomfang, the Thornmother)
+plays the same names as procedural motion on its frames (`CreatureMotion`): a wind-up that crouches
+and pulses red, a lunge that stretches toward its target, a squash when it's hit, and a death that
+flashes, is knocked back, tips over, holds and fades into motes.
+
+`Components/CombatEffects` draws what flies about: sparks along the swing and the arc of the blow
+(a crescent for a blade, a ring for a blunt blow, a streak for a thrust), a burst for each school
+(fire, frost, lightning, radiant, necrotic, force, psychic, nature, thunder, poison, blood), bolts
+with ribbons, beams, a charge in the hand, dust when a body lands, death motes, and ground markers
+(a ring, a line and a cone that fill over their time and flash when they resolve). Its shapes are
+made when it loads (`Particles/EffectTextures`), so there's no art for them. `ScreenShake` adds
+trauma by cause (`ShakeCause`: none for an auto attack, 0.25 for a heavy skill, 0.4 for a kill, 0.2
+more for a critical), kicks the picture a few pixels the way a heavy blow went, and has a strength
+(full, reduced, off). `DamagePopups` colours its numbers by what they are: white dealt, gold and
+bigger with a bounce for a critical, red taken, green with a "+" for healing, grey words for MISS,
+DODGE and BLOCK, smaller tinted ticks, and at most six over anyone, the rest merged into a running
+total. `Settings` has `ScreenShake`, `HitFlashes` and `DamageNumbers`, all on to start with.
+
+`--proof <dir> Moves` films all of it in a room of its own, a sixtieth of a second for each frame
+drawn whatever the real clock does, into `<dir>/moves/<take>-NNN.png` (every second frame): each
+weapon kind's auto attacks, some skills, a critical, a block, a dodge, a knockdown and get-up, a
+death, each creature's wind-up, attack and death, each ground marker, every school's bolt and the
+numbers. It also writes `moves/samples.tsv`, the clips sampled every frame, to check the easing
+against the Python's.
+
+### The fight's clips
+
+`tools/rig/combat_clips.py` makes the fight's clips, and `tools/rig/clips.py` adds them to
+everything else it writes into `clips.json`. There are three auto attacks for each of the nine kinds
+of weapon (`auto-<kind>-1` to `-3`: for a sword, a chop over the top, a rising backhand and a
+lunge), and a `skill-<id>` for every class skill that isn't passive or a weapon auto. There are also
+`telegraph-<kind>` (a held coil that loops), the rigged foes' moves (`foe-<enemy>-<move>`) and the
+reactions: `block`, `dodge`, `hurt`, `hurt-big`, `knockdown` and `getup`, `downed`, `die`, `revive`,
+`victory-<kind>`, `ready` (with `ready-<kind>` for each weapon's guard), `cast`, `channel`,
+`drink-potion` and `soul-link-strike`.
+
+Each skill clip comes from an archetype with its own numbers. The archetypes are a heavy blow, a
+combo, a leap and slam, a spin, a dash, one- and two-handed casts, a throw, a war cry, a shield
+bash or slam, a reach to an ally, a transformation and so on.
+
+Each blow eases out into its coil and holds there a moment. It strikes in two or three frames at 60
+a second (ease `in`), overshoots on a `back` ease and settles. The hips and torso lead the shoulder,
+and the head comes late. On the contact frames the weapon hand is stretched into a smear, inside a
+`trail` window, and the skirt swings after the hips on a spring.
+
+Events: `hit` (one for each blow of a multi-hit), `release` (with the hand), `recover`, `land`,
+`telegraph`, `step` and `fx`, whose ids are only for show:
+
+- a charge's `glow-hand`, `glow-hands`, `glow-body` and `glow-weapon` start as the wind-up does;
+- `glint` marks the start of a hold;
+- the others are `burst-self`, `burst-ground`, `dust`, `smoke`, `spark`, `ring`, `coin` and `echo`.
+
+`python tools/rig/clips.py --check` fails on any of these:
+
+- a foot through the floor;
+- a joint bent backward;
+- a clip the fight needs that is missing;
+- a blow with no `hit` or `release`.
+
+`tools/rig/clip_strip.py` draws a clip's frames at 30 a second on a dressed figure, holding what
+that kind or class fights with. Each event is marked under its frame, and an onion skin of the
+whole move closes the band. With `--gif` it also writes the clip as an animated GIF.
+
 ## Saving
 
 Five slots, one JSON file each, under `%LOCALAPPDATA%\LegendQuest\Saves`: three numbered ones
@@ -1486,7 +1575,17 @@ python tools/rooms/generate_room_placeholders.py --preview <folder>   # and what
 python tools/rooms/make_room_template.py   # the 1536x1024 guide each panel of each room is painted over, in shots/art/room-templates/
 python tools/rooms/cut_room.py             # my paintings of the rooms, in tools/source/rooms/, cut into them (Rooms above)
 python tools/rooms/cut_tiles.py            # my floor textures, in tools/source/tiles/, cut into the tilesets
+python tools/rig/clips.py                  # every clip the figures play, into Content/Characters/Parts/clips.json (the fight's from tools/rig/combat_clips.py)
+python tools/rig/clips.py --check          # fails if a foot goes through the floor, a joint bends backward, or a clip the fight needs is missing
+python tools/rig/clip_strip.py <out.png> <clip> ... [--gif <out.gif>]   # a clip's frames on a dressed figure, a contact sheet to check it by
 ```
+
+A clip's keys can each say how they ease to the next (`[t, v, "back"]`: `smooth`, `in`, `out`, `back`,
+which overshoots and settles, `hold` and `linear`), so a blow can ease into its coil, snap through
+the contact in two or three frames and overshoot after it; the maths is in `clips.eased()` and
+the game's `ClipTrack` matches it. A fighting clip also carries its `blend` in, the `trail`
+windows its weapon smears over, and events: `hit` on the frame each blow lands, `release` when
+something leaves the hand, `recover` when the next action may cut it, `telegraph`, `land` and `fx`.
 
 They need nothing but CPython. The PNG writer is in `tools/pixels.py` (copied from The Black Box's
 `generate_assets.py`), and every drawing is seeded, so running a script again produces the same

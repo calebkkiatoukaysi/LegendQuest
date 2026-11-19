@@ -2445,7 +2445,7 @@ tools/rig/clips.py - written by Caleb Kiatoukaysi for Legend Quest, the clips th
 
 tools/rig/gait.py - written by Caleb Kiatoukaysi for Legend Quest, the jog, the walk and the run worked out on the skeleton: planted feet rolling heel to toe at the pace the figure moves, the legs reaching them by IK, the hips riding on the planted knee, the arms swinging against the legs
 
-Content/Characters/Parts/clips.json - every clip from tools/rig/clips.py, its other names and which clip each fighting move plays for each kind of weapon; written by tools/import_parts.py
+Content/Characters/Parts/clips.json - every clip from tools/rig/clips.py, its other names and which clip each fighting move plays for each kind of weapon; written by tools/rig/clips.py (and again by tools/import_parts.py, from the same code)
 
 tools/vectorize.py - written by Caleb Kiatoukaysi for Legend Quest, redraws a picture as vector art (flat cel colours, smooth lines, Bezier outlines) and draws it back at any size; the importer runs the parts through it when VECTOR is on
 
@@ -4714,6 +4714,10 @@ tools/rig/style.py - written by Caleb Kiatoukaysi for Legend Quest, the owner's 
 tools/rig/theme.py - written by Caleb Kiatoukaysi for Legend Quest, the rig's colours, from the owner's art guide (tools/source/art-guide.png, "2D Art Style & Generation Guide"): muted, earthy, worked out in OKLab by the same formulas for every material. It needs nothing but CPython and numpy, and nothing in it is random, so a rerun gives the same files
 
 tools/rig/vector.py - written by Caleb Kiatoukaysi for Legend Quest, the rig's drawing library: anti-aliased vector shapes into numpy pictures, by 4x4 supersampling. Every part of every kit is drawn with it (03-art-overhaul.md §12, the art plan's §2.7). It needs nothing but CPython and numpy, and nothing in it is random, so a rerun gives the same files
+
+tools/rig/combat_clips.py - written by Caleb Kiatoukaysi for Legend Quest, the real-time fight's clips for tools/rig/clips.py: three auto-attack swings for each of the nine kinds of weapon, a clip for every class skill, the foes' wind-ups and special moves, blocks, dodges, hurts, knockdowns, deaths, victories and the breathing fight stance, each built from poses given as directions in the room, eased per key (anticipation, a fast strike, an overshoot), with the hit and release events the fight times its blows by
+
+tools/rig/clip_strip.py - written by Caleb Kiatoukaysi for Legend Quest, draws a clip's frames on a dressed figure into a contact sheet (its events, trail windows and an onion skin of the whole move marked) and, if asked, an animated GIF, to check a clip by; it needs CPython, numpy, scipy and Pillow
 
 ## The pictures the generators read
 

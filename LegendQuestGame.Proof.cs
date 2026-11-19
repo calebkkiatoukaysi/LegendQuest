@@ -131,6 +131,9 @@ public partial class LegendQuestGame
         SaveSystem.Write(SaveSystem.QuickSlot, new SaveData { ZoneId = "barrow", PlaytimeSeconds = 2840 });
         File.WriteAllText(SaveSystem.PathFor(ProofBrokenSlot), "{ this was never a save");
         BeginHudProof();
+
+        // The Moves part is filmed on its own, so it starts at once rather than after the rest.
+        if (ProofLast == ProofStage.Moves) _proofStage = ProofStage.Moves;
     }
 
     /// <summary>Runs the proof schedule, one drawn frame at a time.</summary>
@@ -267,6 +270,10 @@ public partial class LegendQuestGame
 
             case ProofStage.Hud:
                 _proofPending = ProofHud();
+                break;
+
+            case ProofStage.Moves:
+                _proofPending = ProofMoves();
                 break;
 
             default:

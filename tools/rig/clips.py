@@ -60,12 +60,16 @@ from vector import ROOT  # noqa: E402
 import gait as G  # noqa: E402
 
 OUT = os.path.join(ROOT, "Content", "Characters", "Parts", "clips.json")
-EVENTS = ("step", "hit", "release", "pass")
+EVENTS = ("step", "hit", "release", "pass", "telegraph", "recover", "land", "fx", "clap")
 CLASSES = ("one-hand", "two-hand", "polearm", "dagger", "unarmed", "hook")
 RANGED = ("bow", "crossbow")
 CLIPS = {}
 ALIASES = {}
 NO_DRAG = set()
+SPRING = set()
+"""Clips whose skirt follows the hips on a spring (spring_skirt()), worked out after they're planted."""
+PLANT_RATE = {}
+"""Clips planted at more keys a second than PLANT_FPS: the fast fighting moves."""
 
 
 # --------------------------------------------------------------------------- #
@@ -198,24 +202,67 @@ def channels(poses):
     return sorted(out)
 
 
+def _led(times, lead, length):
+    """A track's key times moved `lead` seconds earlier (later, if it's negative), its first and last
+    keys left where they are and the rest kept in order between them; and which keys are kept."""
+    if not lead or len(times) < 3:
+        return list(times), list(range(len(times)))
+    out = [times[0]]
+    for t in times[1:-1]:
+        out.append(min(max(t - lead, out[-1] + 0.002), length))
+    out.append(times[-1])
+    keep = [0] + [i for i in range(1, len(out) - 1) if out[i] < out[-1] - 0.002] + [len(out) - 1]
+    return [out[i] for i in keep], keep
+
+
 def clip(name, length, keys, loop=False, events=(), swaps=(), layer=None, ease="smooth", partner=None,
-         fx=(), face=None, expr=None, notes=None, front=None, speed=None, drag=True):
-    """Adds a clip from (time, pose) keys. `drag` False keeps its forearms, hands and head as keyed."""
+         fx=(), face=None, expr=None, notes=None, front=None, speed=None, drag=True, blend=None, trail=None,
+         lead=None, tracks=None, plant_fps=None, spring=False):
+    """Adds a clip from (time, pose) keys, or (time, pose, ease) ones, the ease governing every
+    channel from that key to the next (contract §2.2; none is the clip's `ease`). `drag` False keeps
+    its forearms, hands and head as keyed. `lead` ({bone: seconds}) keys a bone's channels that much
+    before the pose's time (a negative lead, after it), so a blow starts in the hips and the
+    shoulder and arrives at the hand, and the head follows late. `tracks` ({"bone.ch": [(t, v) or
+    (t, v, ease)]}) are channels keyed outright, on their own times (a smear's stretch). `blend` is
+    the crossfade into the clip (seconds), `trail` the weapon's smear windows, `spring` swings the
+    skirt after the hips (spring_skirt())."""
     if loop and keys[-1][0] < length:
         keys = list(keys) + [(length, keys[0][1])]
     bones = {}
-    for bone, ch in channels(keys):
+    lead = lead or {}
+    for bone, ch in channels([k[:2] for k in keys]):
         default = 1.0 if ch in ("sx", "sy") else 0.0
         key = bone if ch == "rot" else bone + "." + ch
-        track = [[round(t, 4), round(float(p.get(key, default)), 3)] for t, p in keys]
+        times, kept = [k[0] for k in keys], list(range(len(keys)))
+        if bone in lead and not loop:
+            times, kept = _led(times, lead[bone], length)
+        track = []
+        for t, i in zip(times, kept):
+            k = keys[i]
+            entry = [round(t, 4), round(float(k[1].get(key, default)), 3)]
+            if len(k) > 2 and k[2] and k[2] != ease and i < len(keys) - 1:
+                entry.append(k[2])
+            track.append(entry)
         bones.setdefault(bone, {})[ch] = track
+    for key, track in (tracks or {}).items():
+        bone, _, ch = key.partition(".")
+        bones.setdefault(bone, {})[ch or "rot"] = [
+            [round(k[0], 4), round(float(k[1]), 3)] + ([k[2]] if len(k) > 2 and k[2] != ease else []) for k in track]
     c = {"length": round(length, 4), "loop": loop, "ease": ease, "bones": bones}
+    if blend is not None:
+        c["blend"] = round(blend, 3)
+    if trail:
+        c["trail"] = [[round(a, 4), round(b, 4), what] for a, b, what in trail]
+    if plant_fps:
+        PLANT_RATE[name] = plant_fps
+    if spring:
+        SPRING.add(name)
     if speed:
         c["speed"] = round(speed, 2)
     if not drag:
         NO_DRAG.add(name)
     if events:
-        c["events"] = [[round(t, 4), e] for t, e in events]
+        c["events"] = [[round(e[0], 4)] + list(e[1:]) for e in sorted(events, key=lambda e: e[0])]
     if swaps:
         c["swaps"] = [list(s) for s in swaps]
     if layer:
@@ -280,8 +327,33 @@ def slopes(times, values, loop):
     return m
 
 
+BACK = 1.70158
+"""The overshoot of the "back" ease: about a tenth past the next key before it settles on it."""
+
+
+def eased(name, u):
+    """How far (0 to 1, "back" a little past 1) a segment eased `name` has got at u of the way
+    through it (contract §2.2; "smooth" isn't one: it's the cubic through the whole track)."""
+    if name == "linear":
+        return u
+    if name == "in":
+        return u * u
+    if name == "out":
+        return 1.0 - (1.0 - u) * (1.0 - u)
+    if name == "back":
+        v = u - 1.0
+        return 1.0 + (BACK + 1.0) * v * v * v + BACK * v * v
+    if name == "hold":
+        return 0.0
+    if name == "sine":
+        return 0.5 - 0.5 * math.cos(math.pi * u)
+    raise ValueError("no ease called %s" % name)
+
+
 def value_at(track, t, ease, loop, cache=None):
-    """A track's value at t, as the game has it: held before its first key and after its last."""
+    """A track's value at t, as the game has it: held before its first key and after its last. Each segment is eased as the key it starts from says (its
+    third item), or as the clip does (`ease`) if it doesn't say; "smooth" is the cubic through the
+    whole track."""
     times = [k[0] for k in track]
     values = [k[1] for k in track]
     if t <= times[0]:
@@ -293,11 +365,9 @@ def value_at(track, t, ease, loop, cache=None):
         k += 1
     h = max(1e-6, times[k] - times[k - 1])
     f = (t - times[k - 1]) / h
-    if ease == "linear":
-        return values[k - 1] + (values[k] - values[k - 1]) * f
-    if ease == "sine":
-        f = 0.5 - 0.5 * math.cos(math.pi * f)
-        return values[k - 1] + (values[k] - values[k - 1]) * f
+    own = track[k - 1][2] if len(track[k - 1]) > 2 else ease
+    if own != "smooth":
+        return values[k - 1] + (values[k] - values[k - 1]) * eased(own, f)
     m = cache if cache is not None else slopes(times, values, loop)
     f2, f3 = f * f, f * f * f
     return ((2 * f3 - 3 * f2 + 1) * values[k - 1] + (f3 - 2 * f2 + f) * h * m[k - 1]
@@ -537,7 +607,7 @@ def standing():
                        "arm_near_up": -20, "arm_near_low": -60})
     pose_clip("lean-rail", {"torso": 22, "head": -10, "arm_near_up": -60, "arm_near_low": -30,
                             "arm_far_up": -50, "arm_far_low": -40, "leg_far_up": 6})
-    clip("turn", 0.15, [(0, REST), (0.075, {"hips.y": 3, "torso.sx": 0.6, "hips.sx": 0.6, "head.sx": 0.7}), (0.15, REST)],
+    clip("turn", 0.15, [(0, REST), (0.075, P(stand_on(0.0, 3.0), {"torso.sx": 0.6, "hips.sx": 0.6, "head.sx": 0.7})), (0.15, REST)],
          ease="linear", notes="the runtime flips facing at the halfway point, where the figure is squashed thinnest")
     there_and_back("bow", P({"torso": 40, "head": 18, "arm_near_up": 8, "arm_far_up": 4}), 1.4, 0.5)
     there_and_back("bow-head", {"head": 20, "torso": 4}, 0.9, 0.3)
@@ -637,7 +707,7 @@ def moves():
         return P(crouch(10), arms, {"hips.x": 3 * side, "torso": -9 * side, "head": 6 * side,
                                     "leg_near_up": -12 * side, "leg_near_low": 14, "leg_far_up": 12 * side, "leg_far_low": 14})
     dip = P(crouch(18), reach("near", 600, 470), reach("far", 760, 480))
-    clip("dance", 1.2, [(0, groove(1)), (0.3, dip), (0.6, groove(-1)), (0.9, dip), (1.2, groove(1))], loop=True,
+    clip("dance", 1.2, [(0, groove(1)), (0.1, P(groove(1), {"arm_near_up": 70, "arm_near_low": -12})), (0.3, dip), (0.6, groove(-1)), (0.9, dip), (1.2, groove(1))], loop=True,
          events=[(0.3, "step"), (0.9, "step")], notes="a bouncing two-step, one hand high and the other low, then swapping")
     alias("dance", "celebrate")
     up = P(reach("near", 330, 90), reach("far", 760, 100))
@@ -653,12 +723,16 @@ def moves():
     alias("jump", "hop")
     hello = P(reach("near", 300, 150), {"head": -4})
     side = P(hello, {"arm_near_low": hello["arm_near_low"] - 28})
-    clip("wave", 1.3, [(0, REST), (0.3, hello), (0.5, side), (0.7, hello), (0.9, side), (1.3, REST)],
+    # Coming down, the forearm straightens first, so the elbow never bends back on the way.
+    lowering = {"arm_near_up": 95, "arm_near_low": -12, "head": -2}
+    clip("wave", 1.3, [(0, REST), (0.3, hello), (0.5, side), (0.7, hello), (0.9, side), (1.02, lowering), (1.3, REST)],
          notes="the near hand up beside the head, the forearm waving")
     alias("wave", "wave-hand", "greet")
     hands_up = P(reach("near", 300, 80), reach("far", 790, 90), {"head": -10})
     clip("cheer", 1.0, [(0, REST), (0.25, P(crouch(10), hands_up)), (0.5, P(hands_up, {"root.y": -10})),
-                        (0.75, P(crouch(10), hands_up)), (1.0, REST)], events=[(0.75, "step")],
+                        (0.75, P(crouch(10), hands_up)),
+                        (0.84, P(crouch(6), hands_up, {"arm_near_up": 110, "arm_near_low": -12})),
+                        (1.0, REST)], events=[(0.75, "step")],
          notes="both arms up in a V")
 
 
@@ -839,14 +913,6 @@ BLOW = {
     "unarmed": {"arm_near_up": -84, "arm_near_low": -2, "torso": 15, "hips.x": 6, "leg_near_up": -18},
     "hook": {"arm_far_up": -50, "arm_far_low": -10, "torso": 19, "hips.x": 6, "leg_near_up": -18},
 }
-VICTORY = {
-    "one-hand": {"arm_near_up": -160, "arm_near_low": -10, "head": -10},
-    "two-hand": {"arm_near_up": -20, "arm_near_low": -20, "arm_far_up": -30, "arm_far_low": -40, "torso": -4},
-    "polearm": {"arm_near_up": -20, "arm_near_low": -90, "head": -8},
-    "dagger": {"arm_near_up": -40, "arm_near_low": -110, "hand_near": 40, "head": -6},
-    "unarmed": {"arm_near_up": -150, "arm_near_low": -60, "head": -12},
-    "hook": {"arm_far_up": -140, "arm_far_low": -30, "head": -8},
-}
 
 
 def follow(pose, more=0.18):
@@ -855,12 +921,9 @@ def follow(pose, more=0.18):
 
 
 def combat():
-    # The fight stance breathes and bounces lightly on the knees, the feet planted, the chest and
-    # the guard a beat behind the hips.
-    low = P(crouch(15, near=7.0, far=-4.0), {k: v for k, v in READY.items() if not k.startswith(("leg_", "foot_", "hips"))})
-    clip("ready", 1.2, [(0, READY), (0.6, P(low, {"torso": READY["torso"] + 1.0, "torso.sy": 1.006,
-                                                  "arm_near_up": READY["arm_near_up"] + 2, "arm_far_up": READY["arm_far_up"] + 2}))],
-         loop=True)
+    """The old turn-based screen's wind-ups and strikes (it times them itself: wind-ups 0.22 s,
+    strikes 0.30 s with the hit at 0.12) and the bow's draw and loose, kept as they were; then the
+    real-time fight's clips, tools/rig/combat_clips.py's."""
     for k in CLASSES:
         # The wind-up eases back into the coil and settles there; the strike snaps through the
         # mark at the hit, carries on past it, and comes back to guard.
@@ -869,7 +932,6 @@ def combat():
         clip("strike-" + k, 0.30, [(0, wound), (0.05, P(READY, {key: 0.75 * v + 0.25 * BLOW[k].get(key, 0.0) for key, v in WIND[k].items()})),
                                    (0.12, P(READY, BLOW[k])), (0.19, P(READY, follow(BLOW[k]))), (0.30, READY)],
              events=[(0.12, "hit")], drag=False)
-        clip("victory-" + k, 1.0, [(0, READY), (0.3, P(VICTORY[k], {"hips.y": -1.5})), (0.5, VICTORY[k]), (1.0, VICTORY[k])])
     bow = {"arm_near_up": -84, "arm_near_low": 0, "arm_far_up": -86, "arm_far_low": -150, "torso": -4, "head": -2}
     for k in RANGED:
         clip("draw-" + k, 0.5, [(0, READY), (0.25, {"arm_far_up": -150, "arm_far_low": -40}), (0.5, bow)],
@@ -877,34 +939,14 @@ def combat():
              notes="takes an arrow from the back socket's quiver")
         clip("loose-" + k, 0.3, [(0, bow), (0.06, P(bow, {"arm_far_low": -170, "arm_far_up": -100})), (0.3, READY)],
              events=[(0.06, "release")])
-    cast = P(READY, ARMS_FORWARD, {"hand_near": -40, "torso": 9})
-    clip("cast", 0.45, [(0, READY), (0.2, P(READY, {"arm_near_up": -20, "arm_near_low": -100, "arm_far_up": -20, "arm_far_low": -100, "torso": -3})),
-                        (0.25, cast), (0.45, cast)], events=[(0.25, "release")], fx=[(0.25, "glow", "hand_front")])
-    clip("channel", 1.0, [(0, cast), (0.5, P(cast, {"torso": 6, "arm_near_low": -32})), (1.0, cast)], loop=True,
-         fx=[(0, "glow", "hand_front")])
     clip("throw-combat", 0.5, [(0, READY), (0.2, P(READY, {"arm_near_up": 50, "arm_near_low": -90, "torso": -7})),
                                (0.3, P(READY, {"arm_near_up": -110, "arm_near_low": -10, "torso": 17})), (0.5, READY)],
          events=[(0.28, "release")])
-    clip("block", 0.4, [(0, READY), (0.12, P(READY, {"arm_far_up": -70, "arm_far_low": -80, "arm_near_up": -60, "arm_near_low": -90,
-                                                    "torso": -3, "hips.x": -3})), (0.4, READY)], events=[(0.12, "hit")])
-    clip("dodge", 0.4, [(0, READY), (0.15, P(crouch(22), {"hips.x": -16, "torso": 18, "head": 10})), (0.4, READY)])
-    # A flinch: thrown back at once, the head snapping a beat after the chest, then easing forward
-    # past guard a touch before it settles.
-    hit = P(READY, {"hips.x": -6, "torso": -20, "head": -18, "arm_near_up": -20, "arm_far_up": -30})
-    clip("hurt", 0.4, [(0, READY), (0.06, hit), (0.2, P(READY, {"hips.x": -3, "torso": 5, "head": 2})), (0.4, READY)],
-         expr="angry", drag=False)
-    clip("hurt-big", 0.45, [(0, READY), (0.1, P(crouch(10), {"hips.x": -14, "torso": -26, "head": -24, "arm_near_up": -50, "arm_far_up": -60})),
-                            (0.3, P(READY, {"hips.x": -7, "torso": 7})), (0.45, P(READY, {"hips.x": -6}))], expr="shock", drag=False)
     clip("catch", 0.35, [(0, READY), (0.08, P(READY, {"hips.x": -4, "torso": -5, "arm_near_up": -70, "arm_far_up": -65})), (0.35, READY)])
-    # Falling: the knees go first, the torso tips back after them, the arms fling up late, a small
-    # bounce as the back meets the floor.
-    buckle = P(crouch(30), {"torso": -20, "head": 8, "arm_near_up": -40, "arm_far_up": -20})
-    bounce = P(LYING, {"root": LYING["root"] + 4, "head": -16, "arm_near_up": -84, "arm_far_up": -112})
-    clip("downed", 0.95, [(0, READY), (0.3, buckle), (0.72, LYING), (0.82, bounce), (0.95, LYING)])
-    clip("die", 1.0, [(0, READY), (0.3, buckle), (0.72, LYING), (0.82, bounce), (0.95, LYING), (1.0, LYING)],
-         fx=[(0.9, "fade", "root")])
-    clip("revive", 0.6, [(0, LYING), (0.3, KNEEL), (0.6, READY)])
     clip("yield", 0.6, [(0, READY), (0.6, P(KNEEL, {"arm_near_up": 8, "arm_near_low": 0, "head": 18, "torso": 14}))])
+    import combat_clips
+    combat_clips.install(sys.modules[__name__])
+    COMBAT_MAP.update(combat_clips.combat_map())
 
 
 COMBAT_MAP = {
@@ -916,29 +958,69 @@ COMBAT_MAP = {
     "cast": "cast", "channel": "channel", "throw": "throw-combat", "block": "block", "dodge": "dodge",
     "hurt": "hurt", "hurt-big": "hurt-big", "downed": "downed", "die": "die", "revive": "revive",
     "yield": "yield", "walk": "walk", "run": "run",
-    "victory": {k: "victory-" + k for k in CLASSES},
 }
+"""Which clip each fighting move plays, for each kind of weapon where it differs (ClipLibrary.ForMove);
+combat() adds the real-time fight's (auto, auto-2, auto-3, telegraph, victory, knockdown, ...)."""
 
 PROPS = ("crystal-break", "split", "shrink", "pull", "float-free", "lean-toward", "spin", "cross", "land")
 """03 §4.3's props and things that aren't people: they play on the prop's own strip (Burr's
 `land` is the flier rig's)."""
 
 
+def spring_skirt(c, hz=3.0, damping=0.45, gain=1.6, fps=60):
+    """Swings a clip's skirt after its hips: the skirt is a pendulum hung from the hips, a damped
+    spring of `hz` and `damping`, pushed back as the hips are pushed forward (`gain` degrees a
+    second squared for each rig px a second squared) and settling back on whatever the clip keys it
+    to. Written as keys every other frame at `fps`, held to 30 degrees either way; left alone if it
+    hardly moves, or while the figure lies down."""
+    n = max(2, int(math.ceil(c["length"] * fps)))
+    dt = c["length"] / n
+    xs, keyed, lying = [], [], False
+    for k in range(n + 1):
+        p = sample(c, k * dt)
+        xs.append(p.get("hips.x", 0.0) + p.get("root.x", 0.0))
+        keyed.append(p.get("skirt", 0.0))
+        lying = lying or abs(p.get("root", 0.0)) > 30
+    if lying:
+        return False
+    w = 2 * math.pi * hz
+    angle, speed, out = 0.0, 0.0, []
+    for k in range(n + 1):
+        a = (xs[k + 1] - 2 * xs[k] + xs[k - 1]) / (dt * dt) if 0 < k < n else 0.0
+        speed += (gain * a - w * w * angle - 2 * damping * w * speed) * dt
+        angle = max(-30.0, min(30.0, angle + speed * dt))
+        out.append(angle)
+    if max(abs(v) for v in out) < 0.5:
+        return False
+    picks = list(range(0, n + 1, 2)) + ([n] if n % 2 else [])
+    c["bones"].setdefault("skirt", {})["rot"] = [[round(k * dt, 4), round(keyed[k] + out[k], 2)] for k in picks]
+    return True
+
+
 def humanoid():
     CLIPS.clear()
     ALIASES.clear()
     NO_DRAG.clear()
+    SPRING.clear()
+    PLANT_RATE.clear()
     standing()
     moves()
     hands()
     two_actors()
     combat()
+    global PLANT_FPS
     for name, c in CLIPS.items():
         if c.get("speed") or name == "idle":
             continue
-        plant(name, c)
+        PLANT_FPS, normal = PLANT_RATE.get(name, PLANT_FPS), PLANT_FPS
+        try:
+            plant(name, c)
+        finally:
+            PLANT_FPS = normal
         if name not in NO_DRAG:
             drag(name, c)
+        if name in SPRING:
+            spring_skirt(c)
     for a, target in ALIASES.items():
         if a in CLIPS:
             raise ValueError("alias %s is also a clip" % a)
@@ -984,6 +1066,45 @@ def build():
     return {"format": "LegendQuest rig clips 1", "events": list(EVENTS), "rigs": rigs, "props": list(PROPS)}
 
 
+WEAPON_KINDS = ("one-hand", "two-hand", "polearm", "dagger", "unarmed", "hook", "staff", "bow", "crossbow")
+FOE_MOVES = ("foe-bosun-grell-hook-pull", "foe-kael-duel-feint", "foe-kael-duel-smoke-bomb", "foe-hollowed-hexer-ashen-bolt",
+             "foe-hollowed-sapper-blasting-charge", "foe-sapper-chief-blasting-charge")
+REACTIONS = ("block", "dodge", "hurt", "hurt-big", "knockdown", "getup", "downed", "die", "revive", "ready", "idle", "cast",
+             "channel", "drink-potion", "soul-link-strike")
+
+
+def skill_ids():
+    """Every class skill's id from Story/10-classes.md's tables (<class code>-<the skill's name in
+    kebab case>), with its rank, kind, Focus and effect."""
+    import re
+    out = []
+    code = None
+    for line in open(os.path.join(ROOT, "Story", "10-classes.md"), encoding="utf-8"):
+        head = re.match(r"#{3,4} .*\(`([a-z-]+)`\)", line)
+        if head:
+            code = head.group(1)
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if code and len(cells) >= 7 and cells[0].isdigit():
+            words = re.sub(r"[^a-z0-9 -]", "", cells[1].lower().replace("'", "").replace("\u2019", ""))
+            name = re.sub(r"[ -]+", "-", words).strip("-")
+            out.append({"id": code + "-" + name, "rank": int(cells[0]), "kind": cells[2], "focus": cells[3],
+                        "effect": cells[6]})
+    return out
+
+
+def needed():
+    """The clip names the fight's contract (§2.3) says must be there."""
+    names = set(REACTIONS) | set(FOE_MOVES)
+    for k in WEAPON_KINDS:
+        names |= {"auto-%s-%d" % (k, n) for n in (1, 2, 3)} | {"telegraph-" + k, "victory-" + k}
+    for s in skill_ids():
+        if s["kind"] == "P" or s["effect"].startswith("Weapon dice") and s["focus"] in ("—", "-", ""):
+            continue
+        names.add("skill-" + s["id"])
+    return names
+
+
 def check():
     """Each clip played through on the bases averaged, at DRAG_FPS: how far a foot goes below the
     ground (rig px), how far an elbow or a knee bends the wrong way (degrees), and, for a clip that
@@ -1018,7 +1139,10 @@ def check():
                 ax = kx + leg.l2 * math.cos(math.radians(shin))
                 ay = ky + leg.l2 * math.sin(math.radians(shin)) + pose.get("root.y", 0.0)
                 foot = up + low + pose.get("foot_%s" % side, 0.0)
-                lowest = max(ay + G._turn(o, foot)[1] - o[1] for o in (legs["far"].heel_off, legs["far"].toe_off))
+                # Against the ground: the sole's lowest point against where the lowest is at rest
+                # (as plant() keeps it), so a foot rolled up onto its heel isn't counted as sunk.
+                sole = (legs["far"].heel_off, legs["far"].toe_off)
+                lowest = max(ay + G._turn(o, foot)[1] for o in sole) - max(o[1] for o in sole)
                 sink = max(sink, lowest - leg.ankle[1])
                 if c.get("speed") and lowest - leg.ankle[1] > -0.3:
                     planted.setdefault(side, []).append(ax + c["speed"] * t)
@@ -1032,27 +1156,39 @@ def check():
             slide = max(slide, max(xs) - min(xs)) if len(xs) < 4 else slide
         if sink > (2.5 if c.get("speed") else 1.5) or bend > 6.0:
             worst.append((name, sink, bend))
+    missing = sorted(n for n in needed() if n not in doc["clips"] and n not in doc["aliases"])
+    for name in missing:
+        print("  %-22s missing" % name)
+    blows = [n for n in doc["clips"] if n.startswith(("auto-", "skill-", "foe-"))
+             and not any(e[1] in ("hit", "release") for e in doc["clips"][n].get("events", []))]
+    for name in blows:
+        print("  %-22s has no hit or release" % name)
+    worst += [(n, 0.0, 0.0) for n in missing + blows]
     for name, sink, bend in sorted(worst, key=lambda w: -max(w[1], w[2] / 4)):
+        if (name, 0.0, 0.0) in [(n, 0.0, 0.0) for n in missing + blows]:
+            continue
         print("  %-22s foot %4.1f below the ground, a joint %5.1f degrees the wrong way" % (name, sink, bend))
-    print("  %d clips, %d with a foot under the ground or a joint bent backward" % (len(doc["clips"]), len(worst)))
+    print("  %d clips, %d with a foot under the ground or a joint bent backward, %d of the fight's missing, %d blows "
+          "with no hit or release" % (len(doc["clips"]), len(worst) - len(missing) - len(blows), len(missing), len(blows)))
+    return not worst
 
 
 def dumps(doc):
     """clips.json's text: indented down to each track, a track's keys on its one line."""
     import re
     text = json.dumps(doc, indent=1)
-    text = re.sub(r"\[\s+(-?[0-9.e+-]+),\s+(-?[0-9.e+-]+)\s+\]", r"[\1, \2]", text)
-    keys = r"\[\s+((?:\[-?[0-9.e+-]+, -?[0-9.e+-]+\],?\s*)+)\]"
+    text = re.sub(r'\[\s+(-?[0-9.e+-]+),\s+(-?[0-9.e+-]+)(?:,\s+("[a-z]+"))?\s+\]',
+                  lambda m: "[%s, %s%s]" % (m.group(1), m.group(2), ", " + m.group(3) if m.group(3) else ""), text)
+    keys = r'\[\s+((?:\[-?[0-9.e+-]+, -?[0-9.e+-]+(?:, "[a-z]+")?\],?\s*)+)\]'
     return re.sub(keys, lambda m: "[" + ", ".join(re.findall(r"\[[^\[\]]+\]", m.group(1))) + "]", text) + "\n"
 
 
 def main():
     if "--check" in sys.argv[1:]:
-        check()
-        return
+        sys.exit(0 if check() else 1)
     doc = build()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8", newline="\r\n") as f:
+    with open(OUT, "w", encoding="utf-8", newline="\n") as f:
         f.write(dumps(doc))
     print("  " + os.path.relpath(OUT, ROOT).replace(os.sep, "/"))
     for rig, d in doc["rigs"].items():
