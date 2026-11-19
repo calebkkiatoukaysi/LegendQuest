@@ -12125,6 +12125,19 @@
 /processorParam:Version=3.8.5.1
 /build:Characters/Parts/face-0.png
 
+#begin Characters/Parts/facial-0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=False
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.1
+/build:Characters/Parts/facial-0.png
+
 #begin Characters/Parts/helm-0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -12150,6 +12163,19 @@
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.1
 /build:Characters/Parts/helm-1.png
+
+#begin Characters/Parts/marks-0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=False
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.1
+/build:Characters/Parts/marks-0.png
 
 #begin Characters/Parts/offhand-0.png
 /importer:TextureImporter

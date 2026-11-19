@@ -1395,6 +1395,10 @@ def write_assets(table):
     for sid in sorted(table):
         kind = kind_of(sid)
         folder = KINDS[kind]["folder"]
+        # Only a sheet that's here cut its parts: a weapon or an armor of the same id made another
+        # way (tools/weapon_alone.py, tools/dress_pose.py) is that tool's to account for.
+        if not os.path.exists(os.path.join(SHEETS, sid + ".png")):
+            continue
         for k, _, part in cells(kind, table[sid][0], table[sid][2]):
             if os.path.exists(os.path.join(CHARS, folder, part + ".png")):
                 lines += ["tools/source/characters/%s/%s.png - %s on its base's canvas, cut by tools/part_sheet.py from cell %d "
