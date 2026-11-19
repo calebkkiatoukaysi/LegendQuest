@@ -66,10 +66,10 @@ public static partial class SkillCatalog
         // The sappers' lit charge, lobbed onto the floor where the target stands.
         yield return new()
         {
-            Id = "foe-blasting-charge", Name = "Blasting Charge", CooldownMs = Recharge6, TelegraphMs = 1500, Interruptible = false, Range = SkillRange.Long,
+            Id = "foe-blasting-charge", Name = "Blasting Charge", CooldownMs = Recharge6, TelegraphMs = 2000, Interruptible = false, Range = SkillRange.Long,
             Area = AreaShape.Ring, AreaPx = Battle.NeighbourPx, Dc = 12, Projectile = DamageType.Fire,
             Effects = new[] { SaveHit("2d6+2", DamageType.Fire, Ability.Dexterity, true) },
-            Description = "A charge lands and its marker fills for 1.5 s: 2d6 + 2 fire to everyone in it, Dex save for half.",
+            Description = "A charge lands and its marker fills for 2 s: 2d6 + 2 fire to everyone in it, Dex save for half.",
         };
 
         // The hexer's auto: a bolt of ash with a cast an interrupt (or a solid hit) can stop.

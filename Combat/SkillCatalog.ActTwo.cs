@@ -18,7 +18,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "gilded-knight-sunburst", Name = "Sunburst", Class = ClassId.GildedKnight, Kind = SkillKind.Bonus, Focus = 25, CooldownMs = Cd2, Range = SkillRange.Long,
+            Id = "gilded-knight-sunburst", Name = "Sunburst", Class = ClassId.GildedKnight, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2, Range = SkillRange.Long,
             Projectile = DamageType.Radiant,
             Effects = new[]
             {
@@ -71,21 +71,21 @@ public static partial class SkillCatalog
             Effects = new[]
             {
                 SpellHit("1d10", DamageType.Necrotic, plus: true),
-                new Effect { Kind = EffectType.Heal, Flat = 2, On = EffectOn.Self, IfLanded = true },
+                new Effect { Kind = EffectType.Heal, Flat = 1, On = EffectOn.Self, IfLanded = true },
             },
-            Description = "1d10⁺ necrotic; a hit heals you 2.",
+            Description = "1d10⁺ necrotic; a hit heals you 1.",
         };
         yield return new()
         {
-            Id = "hemomancer-drain", Name = "Drain", Class = ClassId.Hemomancer, Focus = 25, CooldownMs = Cd2, Range = SkillRange.Long, Projectile = DamageType.Necrotic,
+            Id = "hemomancer-drain", Name = "Drain", Class = ClassId.Hemomancer, Focus = 30, CooldownMs = Cd2, Range = SkillRange.Long, Projectile = DamageType.Necrotic,
             Effects = new[] { SpellHit("2d8", DamageType.Necrotic, plus: true) with { Lifesteal = 1.0 } }, Description = "2d8⁺ necrotic; heal what you deal.",
         };
         yield return new()
         {
-            Id = "hemomancer-blood-shield", Name = "Blood Shield", Class = ClassId.Hemomancer, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, HpCost = 5, CooldownMs = Cd3,
+            Id = "hemomancer-blood-shield", Name = "Blood Shield", Class = ClassId.Hemomancer, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, HpCost = 5, CooldownMs = Cd4,
             Range = SkillRange.Long, Target = SkillTarget.Ally, Ai = AiUse.Buff,
-            Effects = new[] { new Effect { Kind = EffectType.TempHp, Dice = D("2d8"), LevelTimes = 1, Aura = TempHpShield("blood-shield", "Blood Shield", ShieldMs) } },
-            Description = "Pay 5 hit points: an ally gets temporary hit points 2d8 + level.",
+            Effects = new[] { new Effect { Kind = EffectType.TempHp, Dice = D("2d6"), LevelTimes = 1, Aura = TempHpShield("blood-shield", "Blood Shield", ShieldMs) } },
+            Description = "Pay 5 hit points: an ally gets temporary hit points 2d6 + level.",
         };
         yield return new()
         {
@@ -126,7 +126,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "hivekeeper-honey-salve", Name = "Honey Salve", Class = ClassId.Hivekeeper, Focus = 20, CooldownMs = Cd1, Range = SkillRange.Short, Target = SkillTarget.Ally,
+            Id = "hivekeeper-honey-salve", Name = "Honey Salve", Class = ClassId.Hivekeeper, Focus = 30, CooldownMs = Cd2, Range = SkillRange.Short, Target = SkillTarget.Ally,
             Ai = AiUse.Heal,
             Effects = new[] { Heal("1d8", plus: true), Put(Honey) }, Description = "Heal 1d8⁺ + Wis, and 2 more every 3 s for 9 s. Gets a Downed ally up.",
         };
@@ -179,7 +179,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "glasswright-mirror-image", Name = "Mirror Image", Class = ClassId.Glasswright, Kind = SkillKind.Bonus, Focus = 25, CooldownMs = Cd4, Range = SkillRange.Self,
+            Id = "glasswright-mirror-image", Name = "Mirror Image", Class = ClassId.Glasswright, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd3, Range = SkillRange.Self,
             Target = SkillTarget.Self, Ai = AiUse.Defensive, AiValue = 6,
             Effects = new[]
             {
@@ -244,7 +244,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "lamplighter-vespers", Name = "Vespers", Class = ClassId.Lamplighter, Rank = 2, Focus = 25, CooldownMs = Cd2, Range = SkillRange.Self, Target = SkillTarget.None,
+            Id = "lamplighter-vespers", Name = "Vespers", Class = ClassId.Lamplighter, Rank = 2, Focus = 20, CooldownMs = Cd2, Range = SkillRange.Self, Target = SkillTarget.None,
             Area = AreaShape.AlliesBehind, Ai = AiUse.Heal,
             Effects = new[] { Heal("1d8", plus: true) }, Description = "You and every ally further from the foes than you: heal 1d8⁺ + Wis.",
         };
@@ -291,7 +291,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "crownsworn-command", Name = "Command", Class = ClassId.Crownsworn, Kind = SkillKind.Bonus, Focus = 25, CooldownMs = Cd2, Range = SkillRange.Long,
+            Id = "crownsworn-command", Name = "Command", Class = ClassId.Crownsworn, Kind = SkillKind.Bonus, Focus = 15, CooldownMs = Cd2, Range = SkillRange.Long,
             Target = SkillTarget.Ally, Ai = AiUse.Utility, AiValue = 6,
             Effects = new[] { new Effect { Kind = EffectType.Reset } },
             Description = "An ally acts again: their GCD ends now, and the next action skill they use starts no cooldown.",
@@ -343,7 +343,7 @@ public static partial class SkillCatalog
         yield return new()
         {
             Id = "hourwarden-second-hand", Name = "Second Hand", Class = ClassId.Hourwarden, Kind = SkillKind.Auto, Range = SkillRange.Long, Projectile = DamageType.Force,
-            Effects = new[] { SpellHit("1d8", DamageType.Force, plus: true) }, Description = "1d8⁺ force from the staff's head, the swing a beat behind itself.",
+            Effects = new[] { SpellHit("1d10", DamageType.Force, plus: true) }, Description = "1d10⁺ force from the staff's head, the swing a beat behind itself.",
         };
         yield return new()
         {

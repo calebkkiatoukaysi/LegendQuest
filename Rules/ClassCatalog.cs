@@ -35,6 +35,12 @@ public static class ClassCatalog
     /// <summary>The threat a defender makes, in percent: double (11-combat.md §5.1).</summary>
     private const int DefenderThreat = 200;
 
+    /// <summary>The threat a class that fights from the shadows makes, in percent: the Shadowstep's, so a foe it cuts doesn't always know where the cut came from.</summary>
+    private const int ShadowThreat = 60;
+
+    /// <summary>The Lanerunner's: a street fighter who's gone before a foe turns, if not quite a shadow.</summary>
+    private const int SlipperyThreat = 85;
+
     private static readonly ClassDefinition[] Table =
     {
         new()
@@ -51,7 +57,7 @@ public static class ClassCatalog
             Recommended = new AbilityScores { Strength = 8, Dexterity = 15, Constitution = 14, Intelligence = 12, Wisdom = 10, Charisma = 13 },
             ArmourUpTo = ArmourCategory.Light, WeaponsAlso = new[] { "longsword", "rapier", "shortsword" },
             StartingKit = Kit("shortsword", "dagger", "leather-armour"),
-            Focus = FocusModel.Opportunist, Saves = new[] { Ability.Dexterity, Ability.Intelligence }, InterimKit = ClassId.Rogue,
+            Focus = FocusModel.Opportunist, ThreatPct = ShadowThreat, Saves = new[] { Ability.Dexterity, Ability.Intelligence }, InterimKit = ClassId.Rogue,
         },
         new()
         {
@@ -63,7 +69,7 @@ public static class ClassCatalog
         },
         new()
         {
-            Id = ClassId.Wizard, Code = "wizard", Name = "Arcanist", Role = "Studied spellcaster, burst damage.", HpModifier = -10,
+            Id = ClassId.Wizard, Code = "wizard", Name = "Arcanist", Role = "Studied spellcaster, burst damage.",
             Recommended = new AbilityScores { Strength = 8, Dexterity = 13, Constitution = 14, Intelligence = 15, Wisdom = 12, Charisma = 10 },
             ArmourUpTo = ArmourCategory.None, CastingAbility = Ability.Intelligence,
             StartingKit = Kit("quarterstaff", "mage-robes"),
@@ -173,11 +179,11 @@ public static class ClassCatalog
             Recommended = new AbilityScores { Strength = 8, Dexterity = 15, Constitution = 13, Intelligence = 12, Wisdom = 10, Charisma = 14 },
             ArmourUpTo = ArmourCategory.Light, WeaponsAlso = new[] { "shortsword" },
             StartingKit = Kit("dagger", "dagger", "leather-armour"),
-            Focus = FocusModel.Opportunist, Saves = new[] { Ability.Dexterity, Ability.Intelligence }, InterimKit = ClassId.Rogue,
+            Focus = FocusModel.Opportunist, ThreatPct = SlipperyThreat, Saves = new[] { Ability.Dexterity, Ability.Intelligence }, InterimKit = ClassId.Rogue,
         },
         new()
         {
-            Id = ClassId.Wayfarer, Code = "wayfarer", Name = "Wayfarer", Role = "Jack of all trades.", Advanced = true,
+            Id = ClassId.Wayfarer, Code = "wayfarer", Name = "Wayfarer", Role = "Jack of all trades.", HpModifier = 10, Advanced = true,
             Recommended = new AbilityScores { Strength = 13, Dexterity = 15, Constitution = 14, Intelligence = 10, Wisdom = 12, Charisma = 8 },
             ArmourUpTo = ArmourCategory.Light,
             StartingKit = Kit("quarterstaff", "leather-armour"),

@@ -65,7 +65,7 @@ public static partial class SkillCatalog
     public const int Turn = 3000;
 
     /// <summary>The tables' CD 1 to 4, and once a fight, in milliseconds (11-combat.md §4.2).</summary>
-    public const int Cd1 = 6000, Cd2 = 8000, Cd3 = 12000, Cd4 = 16000, OncePerFight = 45000;
+    public const int Cd1 = 3000, Cd2 = 6000, Cd3 = 9000, Cd4 = 12000, OncePerFight = 45000;
 
     private static readonly Dictionary<string, SkillDefinition> ById = new(StringComparer.Ordinal);
     private static readonly Dictionary<ClassId, ClassKit> Kits = new();

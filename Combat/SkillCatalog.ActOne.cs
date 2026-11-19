@@ -85,7 +85,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "netcaster-mend", Name = "Mend", Class = ClassId.Netcaster, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd1, Range = SkillRange.Long,
+            Id = "netcaster-mend", Name = "Mend", Class = ClassId.Netcaster, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2, Range = SkillRange.Long,
             Target = SkillTarget.Ally, Ai = AiUse.Heal,
             Effects = new[] { Heal("1d6", plus: true), new Effect { Kind = EffectType.Cleanse, Cleanses = new[] { ConditionId.Restrained } } },
             Description = "Heal 1d6⁺ + Wis, and end Restrained. Gets a Downed ally up.",
@@ -188,20 +188,20 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "lodge-ranger-hunters-mark", Name = "Hunter's Mark", Class = ClassId.LodgeRanger, Kind = SkillKind.Bonus, Focus = 20, Range = SkillRange.Long,
+            Id = "lodge-ranger-hunters-mark", Name = "Hunter's Mark", Class = ClassId.LodgeRanger, Kind = SkillKind.Bonus, Focus = 10, Range = SkillRange.Long,
             Concentration = true, Ai = AiUse.Control, AiValue = 6,
             Effects = new[]
             {
-                Put(Debuff("hunters-mark", "Hunter's Mark", 10 * Turn, new StatMod(Stat.TakenFromSource, Dice: D("1d6"))) with { CountsAsMarked = true }),
+                Put(Debuff("hunters-mark", "Hunter's Mark", 10 * Turn, new StatMod(Stat.TakenFromSource, Dice: D("2d4"))) with { CountsAsMarked = true }),
             },
-            Description = "Marked for 30 s: your hits on it do +1d6 (concentration).",
+            Description = "Marked for 30 s: your hits on it do +2d4 (concentration).",
         };
         yield return new()
         {
-            Id = "lodge-ranger-hawk-strike", Name = "Hawk Strike", Class = ClassId.LodgeRanger, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2,
+            Id = "lodge-ranger-hawk-strike", Name = "Hawk Strike", Class = ClassId.LodgeRanger, Rank = 2, Kind = SkillKind.Bonus, Focus = 0, CooldownMs = Cd1,
             Range = SkillRange.Long,
-            Effects = new[] { SpellHit("1d6", DamageType.Piercing, plus: true), new Effect { Kind = EffectType.Interrupt, IfLanded = true } },
-            Description = "Your hawk stoops: 1d6⁺ piercing, and a hit stops what the foe is winding up.",
+            Effects = new[] { SpellHit("2d6", DamageType.Piercing, plus: true), new Effect { Kind = EffectType.Interrupt, IfLanded = true } },
+            Description = "Your hawk stoops: 2d6⁺ piercing, and a hit stops what the foe is winding up.",
         };
         yield return new()
         {
@@ -233,15 +233,15 @@ public static partial class SkillCatalog
         yield return new()
         {
             Id = "battlemage-force-bolt", Name = "Force Bolt", Class = ClassId.Battlemage, Kind = SkillKind.Auto, Range = SkillRange.Long, Projectile = DamageType.Force,
-            Effects = new[] { SpellHit("1d8", DamageType.Force, plus: true), new Effect { Kind = EffectType.Knockback, Distance = 40f, IfLanded = true, WithinPx = Ranges.Melee + 10f } },
-            Description = "1d8⁺ force; a foe in melee with you is pushed 40 px back.",
+            Effects = new[] { SpellHit("2d6", DamageType.Force, plus: true), new Effect { Kind = EffectType.Knockback, Distance = 40f, IfLanded = true, WithinPx = Ranges.Melee + 10f } },
+            Description = "2d6⁺ force; a foe in melee with you is pushed 40 px back.",
         };
         yield return new()
         {
-            Id = "battlemage-ward", Name = "Ward", Class = ClassId.Battlemage, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2, Range = SkillRange.Long,
+            Id = "battlemage-ward", Name = "Ward", Class = ClassId.Battlemage, Kind = SkillKind.Bonus, Focus = 30, CooldownMs = Cd4, Range = SkillRange.Long,
             Target = SkillTarget.Ally, Ai = AiUse.Buff,
-            Effects = new[] { new Effect { Kind = EffectType.TempHp, Dice = D("1d10"), AddCasting = true, LevelTimes = 1, Aura = TempHpShield("ward", "Ward", ShieldMs) } },
-            Description = "Temporary hit points 1d10 + Int + level.",
+            Effects = new[] { new Effect { Kind = EffectType.TempHp, Dice = D("1d6"), AddCasting = true, LevelTimes = 1, Aura = TempHpShield("ward", "Ward", ShieldMs) } },
+            Description = "Temporary hit points 1d6 + Int + level.",
         };
         yield return new()
         {
@@ -342,10 +342,10 @@ public static partial class SkillCatalog
             Id = "bulwark-shield-bash", Name = "Shield Bash", Class = ClassId.Bulwark, Kind = SkillKind.Auto, Range = SkillRange.Melee,
             Effects = new[]
             {
-                SpellHit("1d6", DamageType.Bludgeoning, plus: true) with { AddAbility = Ability.Strength },
+                SpellHit("1d10", DamageType.Bludgeoning, plus: true) with { AddAbility = Ability.Strength },
                 new Effect { Kind = EffectType.Knockback, Distance = 40f, IfLanded = true },
             },
-            Description = "1d6⁺ + Str bludgeoning, and a hit knocks the foe 40 px back.",
+            Description = "1d10⁺ + Str bludgeoning, and a hit knocks the foe 40 px back.",
         };
         yield return new()
         {
@@ -410,10 +410,10 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "ember-mender-cauterise", Name = "Cauterise", Class = ClassId.EmberMender, Focus = 25, CooldownMs = Cd1, Range = SkillRange.Short, Target = SkillTarget.Ally,
+            Id = "ember-mender-cauterise", Name = "Cauterise", Class = ClassId.EmberMender, Focus = 30, CooldownMs = Cd2, Range = SkillRange.Short, Target = SkillTarget.Ally,
             Ai = AiUse.Heal,
-            Effects = new[] { Heal("2d6", plus: true), new Effect { Kind = EffectType.Cleanse, Cleanses = new[] { ConditionId.Bleeding, ConditionId.Poisoned } } },
-            Description = "Heal 2d6⁺ + Int; ends Bleeding and Poisoned. Gets a Downed ally up.",
+            Effects = new[] { Heal("2d4", plus: true), new Effect { Kind = EffectType.Cleanse, Cleanses = new[] { ConditionId.Bleeding, ConditionId.Poisoned } } },
+            Description = "Heal 2d4⁺ + Int; ends Bleeding and Poisoned. Gets a Downed ally up.",
         };
         yield return new()
         {
@@ -466,7 +466,7 @@ public static partial class SkillCatalog
         };
         yield return new()
         {
-            Id = "lanerunner-rooftops", Name = "Rooftops", Class = ClassId.Lanerunner, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2, Range = SkillRange.Self,
+            Id = "lanerunner-rooftops", Name = "Rooftops", Class = ClassId.Lanerunner, Rank = 2, Kind = SkillKind.Bonus, Focus = 10, CooldownMs = Cd2, Range = SkillRange.Self,
             Target = SkillTarget.Self, Ai = AiUse.Defensive, AiValue = 4,
             Effects = new[]
             {
@@ -513,18 +513,18 @@ public static partial class SkillCatalog
         yield return new()
         {
             Id = "wayfarer-walking-stick", Name = "Walking Stick", Class = ClassId.Wayfarer, Kind = SkillKind.Auto, Range = SkillRange.Melee,
-            Effects = new[] { SpellHit("1d6", DamageType.Bludgeoning, plus: true) with { AddCasting = true } }, Description = "1d6⁺ + Str or Dex bludgeoning.",
+            Effects = new[] { SpellHit("1d8", DamageType.Bludgeoning, plus: true) with { AddCasting = true } }, Description = "1d8⁺ + Str or Dex bludgeoning.",
         };
         yield return new()
         {
             Id = "wayfarer-throw-anything", Name = "Throw Anything", Class = ClassId.Wayfarer, Focus = 15, CooldownMs = Cd1, Range = SkillRange.Short,
             Projectile = DamageType.Bludgeoning,
-            Effects = new[] { new Effect { Kind = EffectType.Throw, Dice = D("1d6"), Type = DamageType.Bludgeoning } },
-            Description = "Throw the bag's best thing for throwing (an Alchemist's Fire) at double strength, used up; with nothing, whatever's to hand: 2d6 bludgeoning.",
+            Effects = new[] { new Effect { Kind = EffectType.Throw, Dice = D("1d10"), Type = DamageType.Bludgeoning } },
+            Description = "Throw the bag's best thing for throwing (an Alchemist's Fire) at double strength, used up; with nothing, whatever's to hand: 2d10 bludgeoning.",
         };
         yield return new()
         {
-            Id = "wayfarer-duchess-kicks", Name = "Duchess Kicks", Class = ClassId.Wayfarer, Rank = 2, Kind = SkillKind.Bonus, Focus = 25, CooldownMs = Cd3,
+            Id = "wayfarer-duchess-kicks", Name = "Duchess Kicks", Class = ClassId.Wayfarer, Rank = 2, Kind = SkillKind.Bonus, Focus = 20, CooldownMs = Cd2,
             Range = SkillRange.Melee,
             Effects = new[] { SureHit("2d6", DamageType.Bludgeoning), new Effect { Kind = EffectType.Knockback, Distance = 40f } },
             Description = "2d6 bludgeoning, and knocked 40 px back. (She's off-screen, but she's very much involved.)",

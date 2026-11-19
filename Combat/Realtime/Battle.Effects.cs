@@ -38,6 +38,9 @@ public sealed partial class Battle
     /// <summary>Sneak Attack's window: an ally's hit on the target this recently counts, and it comes round this often.</summary>
     public const int SneakWindowMs = 3000;
 
+    /// <summary>Sneak Attack's d6s before levels 5 and 9 add theirs: two, as 5e has them by third level, so a rogue's cut is the hardest single blow in the early party.</summary>
+    public const int SneakDice = 2;
+
     /// <summary>How long a rider waits for its hit when its skill doesn't say.</summary>
     private const int RiderMs = 6000;
 
@@ -730,7 +733,7 @@ public sealed partial class Battle
             amount += TakenExtra(t, f, context, crit);
             if (sneakReady)
             {
-                amount += Scaled(new DiceExpression(1, 6, 0), f.Level).Roll(_rng, "Sneak Attack", crit).Total;
+                amount += Scaled(new DiceExpression(SneakDice, 6, 0), f.Level).Roll(_rng, "Sneak Attack", crit).Total;
                 f.LastSneakMs = NowMs;
             }
         }

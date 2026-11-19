@@ -241,6 +241,9 @@ public sealed class Fighter
     /// <summary>How many auto-attack swings they've made, for the clip's 1, 2, 3.</summary>
     internal int Swings { get; set; }
 
+    /// <summary>When damage last made them save to keep their concentration: at most one such save a turn.</summary>
+    internal int LastConcentrationSaveMs { get; set; } = -100000;
+
     /// <summary>The last moment anyone hit them, for a foe's reset.</summary>
     internal int LastHurtMs { get; set; }
 

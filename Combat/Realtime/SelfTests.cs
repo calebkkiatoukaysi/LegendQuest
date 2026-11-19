@@ -115,11 +115,31 @@ internal static partial class SelfTests
         return problem is null;
     }
 
+    /// <summary>What the check says of a skill that was used but whose effect never came about.</summary>
+    private const string Fizzled = "used, but nothing it does happened";
+
+    /// <summary>How many fights a skill gets to show what it does, when it was used and the dice kept it from landing (a rider on the next hit, missed three times running).</summary>
+    private const int Tries = 3;
+
     /// <summary>Uses one skill in a scripted fight and checks it did what it says; null if it did, else what went wrong. A form's own skills are tried too, inside the form.</summary>
+    /// <remarks>A skill used whose effect never came about is tried again on a fresh seed, up to Tries fights: the check is that it can, not that the dice let it the first time.</remarks>
     private static string TrySkill(ClassId cls, SkillDefinition skill, out List<string> extra, Action<Battle, BattleEvent> log = null)
     {
+        string problem = null;
         extra = new List<string>();
-        var (battle, me, friend, foe) = Scripted(cls);
+        for (int attempt = 0; attempt < Tries; attempt++)
+        {
+            problem = TryOnce(cls, skill, extra, log, attempt);
+            if (problem is null || !problem.StartsWith(Fizzled, StringComparison.Ordinal)) return problem;
+            extra.Clear();
+        }
+        return problem;
+    }
+
+    /// <summary>One try of TrySkill, in a scripted fight seeded for the attempt.</summary>
+    private static string TryOnce(ClassId cls, SkillDefinition skill, List<string> extra, Action<Battle, BattleEvent> log, int attempt)
+    {
+        var (battle, me, friend, foe) = Scripted(cls, attempt: attempt);
 
         if (skill.Kind == SkillKind.Passive)
         {
@@ -175,7 +195,7 @@ internal static partial class SelfTests
         }
         if (denied is not null && !used) return "denied: " + denied;
         if (!used) return "never used";
-        return done ? null : "used, but nothing it does happened";
+        return done ? null : Fizzled;
     }
 
     /// <summary>
@@ -245,8 +265,9 @@ internal static partial class SelfTests
     /// <param name="outdoors">Whether it's fought outdoors.</param>
     /// <param name="aiDrivesYou">Whether the party's AI plays you too, rather than nobody.</param>
     /// <param name="bagExtra">An item to put in the bag beside the potions, or null.</param>
+    /// <param name="attempt">Which try this is, for a fresh seed: 0 the first.</param>
     private static (Battle Battle, Fighter Me, Fighter Friend, Fighter Foe) Scripted(ClassId cls, EncounterDefinition encounter = null, bool outdoors = true,
-        bool aiDrivesYou = false, string bagExtra = null)
+        bool aiDrivesYou = false, string bagExtra = null, int attempt = 0)
     {
         encounter ??= Dummies;
         PartyMember tester = Origins.Create(Origins.You);
@@ -268,7 +289,7 @@ internal static partial class SelfTests
         bag.Add(ItemCatalog.HealingPotion, 3);
         if (bagExtra is not null) bag.Add(bagExtra);
         var rules = new BattleRules(Difficulty.Balanced, null, aiDrivesYou ? null : Origins.You, bag) { Outdoors = outdoors };
-        var battle = new Battle(encounter, BattleRoster.Build(encounter, new[] { tester, friend }), rules, 99UL + (ulong)cls);
+        var battle = new Battle(encounter, BattleRoster.Build(encounter, new[] { tester, friend }), rules, 99UL + (ulong)cls + 1000UL * (ulong)attempt);
         Fighter me = battle.Find(Origins.You), mate = battle.Find(Origins.SoulBound);
         me.FocusMilli = Fighter.MaxFocus * 1000;
         me.Hp = me.MaxHp * 3 / 5;
