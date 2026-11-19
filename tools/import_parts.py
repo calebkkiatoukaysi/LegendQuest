@@ -932,7 +932,22 @@ def head_piece(base, rgb, hair):
     if hair is True:
         colour, alpha, kept = hair_mend(base, rgb, colour, alpha, kept)
     alpha = keep_near_main(alpha * kept)
-    there = alpha > 0.5
+    return piece_masks(rgb, colour, alpha, hair)
+
+
+def cut_piece(rgba, hair):
+    """An extra that comes cut out already, clear everywhere but itself (tools/part_sheet.py's
+    extra_part): its colour and alpha as they are, and its masks as head_piece's."""
+    rgb = rgba[:, :, :3].astype(np.int32)
+    if rgb.shape[:2] != (CANVAS[1], CANVAS[0]):
+        fail("an extra is %dx%d, not the bases' %dx%d" % (rgb.shape[1], rgb.shape[0], CANVAS[0], CANVAS[1]))
+    return piece_masks(rgb, rgb.astype(np.float64), rgba[:, :, 3].astype(np.float64) / 255.0, hair, least=0.02 if hair == "skin" else 0.5)
+
+
+def piece_masks(rgb, colour, alpha, hair, least=0.5):
+    """A head piece's layer and what of it is dyed (head_piece's `hair`): (colour, alpha, mask, tones).
+    `least` is how solid a pixel must be to be dyed: a skin mark cut out soft is skin all through."""
+    there = alpha > least
     nothing = np.zeros(alpha.shape)
     if hair is None:
         return colour, alpha, np.stack([nothing, nothing, nothing], axis=2), None
@@ -1086,7 +1101,11 @@ def extra_layers(blanks, edits, layers, report, drawn, vectored):
             source = os.path.join(SOURCE, FOLDERS[kind], pid + ".png")
 
             def make(source=source, base=base, pid=pid, dyes=dyes):
-                colour, alpha, mask, tones = head_piece(blanks[base], load(source), True if dyes == "hair" else dyes)
+                rgba, own_alpha = ic.read_png(source)
+                if own_alpha and (rgba[:, :, 3] == 0).mean() > 0.5:
+                    colour, alpha, mask, tones = cut_piece(rgba, True if dyes == "hair" else dyes)
+                else:
+                    colour, alpha, mask, tones = head_piece(blanks[base], load(source), True if dyes == "hair" else dyes)
                 colour, alpha = drawn(pid, colour, alpha)
                 return shrink(colour, alpha, mask), tones
 

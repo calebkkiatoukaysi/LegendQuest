@@ -103,8 +103,12 @@ public static class RigComposer
         IEnumerable<PartImage> parts, Morph morph, Func<PartImage, Paint> paint, Func<PartImage, Vector2> fit = null)
     {
         Vector2 root = sockets[Sockets.Root];
-        var placed = new List<(Color[] Pixels, int Width, int Height, int Left, int Top, string Key)>();
-        foreach (PartImage part in parts.OrderBy(p => p.Slot))
+        List<PartImage> inOrder = parts.OrderBy(p => p.Slot).ToList();
+        // A mark on the skin (freckles, a scar, soot) shows only where what's under it is skin, so
+        // only then is each part's skin kept track of.
+        bool marked = inOrder.Any(OnSkin);
+        var placed = new List<(Color[] Pixels, int Width, int Height, int Left, int Top, string Key, Color[] Mask, bool OnSkin)>();
+        foreach (PartImage part in inOrder)
         {
             Vector2 at = morph.Move(sockets[Sockets.Of(part.Slot)], root);
             Vector2 scale = morph.ScaleOf(part.Slot) * (fit?.Invoke(part) ?? Vector2.One);
@@ -113,8 +117,11 @@ public static class RigComposer
             int left = (int)MathF.Round(at.X - part.Pivot.X * width / part.Width);
             int top = (int)MathF.Round(at.Y - part.Pivot.Y * height / part.Height);
             Color[] pixels = Painted(part, paint(part));
-            if (width != part.Width || height != part.Height) pixels = ImportedFigure.Scaled(pixels, part.Width, part.Height, width, height);
-            placed.Add((pixels, width, height, left, top, KeyOf(part)));
+            bool resized = width != part.Width || height != part.Height;
+            if (resized) pixels = ImportedFigure.Scaled(pixels, part.Width, part.Height, width, height);
+            Color[] mask = marked && !OnSkin(part) ? part.Mask : null;
+            if (mask is not null && resized) mask = ImportedFigure.Scaled(mask, part.Width, part.Height, width, height);
+            placed.Add((pixels, width, height, left, top, KeyOf(part), mask, OnSkin(part)));
         }
         if (placed.Count == 0) throw new ArgumentException("There are no parts to put together.", nameof(parts));
 
@@ -126,10 +133,22 @@ public static class RigComposer
 
         // Each piece's own picture, its parts put together in slot order.
         var pieces = new Dictionary<string, Color[]>(StringComparer.Ordinal);
-        foreach ((Color[] pixels, int width, int height, int left, int top, string key) in placed)
+        var skins = new Dictionary<string, byte[]>(StringComparer.Ordinal);
+        foreach ((Color[] pixels, int width, int height, int left, int top, string key, Color[] mask, bool onSkin) in placed)
         {
             if (!pieces.TryGetValue(key, out Color[] layer)) pieces[key] = layer = new Color[canvasWidth * canvasHeight];
-            Over(layer, canvasWidth, pixels, width, height, left - x0, top - y0);
+            if (!marked)
+            {
+                Over(layer, canvasWidth, pixels, width, height, left - x0, top - y0);
+                continue;
+            }
+            if (!skins.TryGetValue(key, out byte[] skin)) skins[key] = skin = new byte[canvasWidth * canvasHeight];
+            if (onSkin) OverSkin(layer, skin, canvasWidth, pixels, width, height, left - x0, top - y0);
+            else
+            {
+                Over(layer, canvasWidth, pixels, width, height, left - x0, top - y0);
+                Covered(skin, canvasWidth, pixels, mask, width, height, left - x0, top - y0);
+            }
         }
         var at0 = new Vector2(x0, y0);
         var jointAt = new Dictionary<string, Vector2>(StringComparer.Ordinal);
@@ -263,6 +282,51 @@ public static class RigComposer
 
     /// <summary>How bright a colour is, 0 to 1, as the dyes shade by it.</summary>
     public static float Luma(Vector3 colour) => 0.299f * colour.X + 0.587f * colour.Y + 0.114f * colour.Z;
+
+    /// <summary>The ids of the marks on the skin begin with this: freckles, scars, soot, a tattoo.</summary>
+    private const string SkinMark = "skin-";
+
+    /// <summary>Whether a part is a mark on the skin, which shows only where there's skin under it: not over an eye, a brow, a beard or the line round the face.</summary>
+    private static bool OnSkin(PartImage part) => part.Slot == PartSlot.Facial && part.Id.StartsWith(SkinMark, StringComparison.Ordinal);
+
+    /// <summary>How much of each pixel of a piece is skin once a part's laid on it: the part's own (its mask's red) where the part is, by how solid it is there.</summary>
+    private static void Covered(byte[] skin, int canvasWidth, Color[] pixels, Color[] mask, int width, int height, int left, int top)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            int row = (top + y) * canvasWidth + left;
+            for (int x = 0; x < width; x++)
+            {
+                int a = pixels[y * width + x].A;
+                if (a == 0) continue;
+                int own = mask is null ? 0 : mask[y * width + x].R;
+                skin[row + x] = (byte)((skin[row + x] * (255 - a) + own * a + 127) / 255);
+            }
+        }
+    }
+
+    /// <summary>A premultiplied picture laid over a piece only as far as the piece is skin there.</summary>
+    private static void OverSkin(Color[] canvas, byte[] skin, int canvasWidth, Color[] pixels, int width, int height, int left, int top)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            int row = (top + y) * canvasWidth + left;
+            for (int x = 0; x < width; x++)
+            {
+                Color s = pixels[y * width + x];
+                int k = skin[row + x];
+                if (s.A == 0 || k == 0) continue;
+                int r = (s.R * k + 127) / 255, g = (s.G * k + 127) / 255, b = (s.B * k + 127) / 255, a = (s.A * k + 127) / 255;
+                Color d = canvas[row + x];
+                int keep = 255 - a;
+                canvas[row + x] = new Color(
+                    Math.Min(255, r + (d.R * keep + 127) / 255),
+                    Math.Min(255, g + (d.G * keep + 127) / 255),
+                    Math.Min(255, b + (d.B * keep + 127) / 255),
+                    Math.Min(255, a + (d.A * keep + 127) / 255));
+            }
+        }
+    }
 
     /// <summary>Lays a premultiplied picture over a premultiplied canvas: what's under shows through by what the picture leaves.</summary>
     private static void Over(Color[] canvas, int canvasWidth, Color[] pixels, int width, int height, int left, int top)

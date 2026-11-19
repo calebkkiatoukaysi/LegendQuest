@@ -491,9 +491,11 @@ public static partial class PartCatalog
         if (face is not null) parts.Add(face);
         foreach (PartImage worn in new[] { armor, Part(outfit.Cape), Part(OnBase(outfit.Helm, baseId)), Part(outfit.Weapon), Part(outfit.Offhand) })
             if (worn is not null && (worn.Base == baseId || worn.Slot != PartSlot.Armor)) parts.AddRange(Drawn(worn));
-        // The beard, the earrings, the scars over the face; the ears and horns over the hair.
+        // The beard, the earrings, the scars over the face; the ears and horns over the hair. Each is
+        // painted to its own head, so one with no copy on this base (a beard, on the woman) isn't worn:
+        // someone who picked a beard and then a woman's face has none.
         foreach (string extra in outfit.Extras)
-            if (Part(OnBase(extra, baseId)) is PartImage worn && worn.Slot is PartSlot.Facial or PartSlot.Marks) parts.Add(worn);
+            if (Part(OnBase(extra, baseId)) is PartImage worn && worn.Base == baseId && worn.Slot is PartSlot.Facial or PartSlot.Marks) parts.Add(worn);
         if (headOnly) parts.RemoveAll(part => !InPortrait(part));
 
         var sockets = b.Sockets.ToDictionary(s => s.Key, s => new Vector2(s.Value[0], s.Value[1]), StringComparer.Ordinal);

@@ -2492,978 +2492,6 @@ Several parts at a time: ChatGPT paints one face, hairstyle, outfit, helm, cape 
 
 tools/part_sheet.py - written by Caleb Kiatoukaysi for Legend Quest, makes the blank face, hair, armor, helm, cape and weapon sheets from the bases and cuts a painted sheet back into one picture per part, lined up with its base
 
-tools/dress_pose.py - written by Caleb Kiatoukaysi for Legend Quest, a trial of armors painted whole: stands the painted body in a dressing pose (arms out, legs apart) as a template to paint one outfit on, and cuts the painted figure into the skeleton's pieces by the body under it, a skirt kept whole on the torso and each piece carried on under the ones over it
-
-tools/source/characters/dress-pose-man.png - the painted man, less his head, stood in the dressing pose on black: the template an outfit is painted whole on; made by tools/dress_pose.py from the pieces in bodies/base-male
-
-tools/source/characters/dress-pose-man.json - where tools/dress_pose.py put the figure on dress-pose-man.png, and the pose; written by tools/dress_pose.py
-
-tools/source/characters/dress-pose-woman.png - the painted woman, less her head, stood in the dressing pose on black: the template an outfit is painted whole on; made by tools/dress_pose.py from the pieces in bodies/base-female
-
-tools/source/characters/dress-pose-woman.json - where tools/dress_pose.py put the figure on dress-pose-woman.png, and the pose; written by tools/dress_pose.py
-
-tools/weapon_alone.py - written by Caleb Kiatoukaysi for Legend Quest, weapons and held items painted on their own, with no hand: makes the blank four-column sheet to paint them on, finds each item's grip from its own shape and puts it in the figure's fist, under the hand's own piece
-
-tools/source/characters/weapon-alone-sheet.png - the blank sheet weapons are painted alone on: four columns on black with a pair of ticks at the grip's height; made by tools/weapon_alone.py
-
-tools/source/characters/generated.json - the ids of the parts made with another image model than ChatGPT (the sixty high-fantasy armors and the hundred and one weapons of 2026-11-19), so tools/import_parts.py credits them rightly; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/items.py - what each weapon and held item is, which hand holds it and how, as the sheets were asked for; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-01.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-dagger, weapon-shortsword, weapon-longsword, weapon-rapier); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-01.json - which item is in each column of weapons-01.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-02.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-scimitar, weapon-handaxe, weapon-battleaxe, weapon-greatsword); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-02.json - which item is in each column of weapons-02.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-03.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-warhammer, weapon-mace, weapon-quarterstaff, weapon-spear); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-03.json - which item is in each column of weapons-03.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-04.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-shortbow, weapon-longbow, weapon-light-crossbow, weapon-ember-dagger); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-04.json - which item is in each column of weapons-04.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-05.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (offhand-wooden-shield, offhand-steel-shield, offhand-warden-shield, offhand-dagger); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-05.json - which item is in each column of weapons-05.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-06.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (offhand-shortsword, offhand-scimitar, offhand-handaxe, offhand-ember-dagger); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-06.json - which item is in each column of weapons-06.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-07.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-kael-knives, weapon-kael-knives, weapon-kael-rapier, weapon-kael-rapier); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-07.json - which item is in each column of weapons-07.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-08.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-brannock, weapon-brannock, weapon-cutlass, weapon-gaff); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-08.json - which item is in each column of weapons-08.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-09.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-cudgel, weapon-watch-kit, weapon-watch-kit, weapon-halberd); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-09.json - which item is in each column of weapons-09.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-10.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-telescope, weapon-tack-hammer, weapon-tack-hammer, weapon-walking-stick); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-10.json - which item is in each column of weapons-10.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-11.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-tin-cup, weapon-quill-letter, weapon-quill-letter, weapon-letter); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-11.json - which item is in each column of weapons-11.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-12.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-letters, weapon-stew-pot, weapon-silk-bolt, weapon-lute); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-12.json - which item is in each column of weapons-12.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-13.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-hollowed-sword, weapon-hexer-staff, weapon-sapper-pick, weapon-sapper-pick); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-13.json - which item is in each column of weapons-13.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-14.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-chief-pick-lantern, weapon-chief-pick-lantern, weapon-toy-sword, weapon-pitchfork); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-14.json - which item is in each column of weapons-14.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-15.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-crate, weapon-hammer-tongs, weapon-hammer-tongs, weapon-thornwood-bow); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-15.json - which item is in each column of weapons-15.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-16.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-sunsteel-blade, weapon-mallet, weapon-spade, weapon-heron-cane); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-16.json - which item is in each column of weapons-16.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-17.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-felling-axe, weapon-oil-lamp, weapon-varkhul-greatsword, weapon-cultist-dagger); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-17.json - which item is in each column of weapons-17.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-18.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-climber-hook, weapon-relief-kit, weapon-relief-kit); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-18.json - which item is in each column of weapons-18.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-19.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-corwin-kit, weapon-corwin-kit, weapon-corwin-sword); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-19.json - which item is in each column of weapons-19.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-20.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-gilded-kit, weapon-gilded-kit, weapon-mace-shield, weapon-mace-shield); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-20.json - which item is in each column of weapons-20.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-21.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-spear-lantern, weapon-spear-lantern, weapon-vesk-sword, weapon-mordain-glaive); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-21.json - which item is in each column of weapons-21.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-22.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-unmade-spear-shield, weapon-unmade-spear-shield, weapon-pike); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-22.json - which item is in each column of weapons-22.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-23.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-warden-kit, weapon-warden-kit, weapon-protectorate-kit, weapon-protectorate-kit); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-23.json - which item is in each column of weapons-23.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-24.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-raider-kit, weapon-raider-kit); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-24.json - which item is in each column of weapons-24.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-25.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-sb-blades, weapon-sb-blades, weapon-sera-longbow, weapon-sera-longbow); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-25.json - which item is in each column of weapons-25.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-26.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-netting-needle, weapon-loaf, weapon-rag-doll, weapon-tankard); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-26.json - which item is in each column of weapons-26.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-27.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-scrolls, weapon-broom, weapon-coin, weapon-practice-sword); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-27.json - which item is in each column of weapons-27.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-28.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-flat-cap-held, weapon-basket, weapon-flower-basket, weapon-flower-basket); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-28.json - which item is in each column of weapons-28.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-29.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-pilgrim-staff, weapon-peel, weapon-peel, weapon-spindle); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-29.json - which item is in each column of weapons-29.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-30.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-coin-purse, weapon-feather-duster, weapon-staff-ring); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-30.json - which item is in each column of weapons-30.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-31.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-ledger-pen, weapon-ledger-pen, weapon-folded-shawl); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-31.json - which item is in each column of weapons-31.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-32.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-sketchbook, weapon-sketchbook, weapon-lantern, weapon-smoker); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-32.json - which item is in each column of weapons-32.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapon-sheets/weapons-33.png - a sheet of weapons and held items painted alone on weapon-alone-sheet.png (weapon-night-flowers, weapon-vreya-blade, weapon-glass-lamp, weapon-map); made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19); tools/weapon_alone.py puts each in the fist
-
-tools/source/characters/weapon-sheets/weapons-33.json - which item is in each column of weapons-33.png, the hand that holds it and its kind; written by Claude for Legend Quest
-
-tools/source/characters/weapons-alone/offhand-dagger.far.json - where the hand goes on offhand-dagger.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-dagger.far.png - offhand-dagger.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-ember-dagger.far.json - where the hand goes on offhand-ember-dagger.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-ember-dagger.far.png - offhand-ember-dagger.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-handaxe.far.json - where the hand goes on offhand-handaxe.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-handaxe.far.png - offhand-handaxe.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-scimitar.far.json - where the hand goes on offhand-scimitar.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-scimitar.far.png - offhand-scimitar.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-shortsword.far.json - where the hand goes on offhand-shortsword.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-shortsword.far.png - offhand-shortsword.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-steel-shield.far.json - where the hand goes on offhand-steel-shield.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-steel-shield.far.png - offhand-steel-shield.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-warden-shield.far.json - where the hand goes on offhand-warden-shield.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-warden-shield.far.png - offhand-warden-shield.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-wooden-shield.far.json - where the hand goes on offhand-wooden-shield.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/offhand-wooden-shield.far.png - offhand-wooden-shield.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-basket.json - where the hand goes on weapon-basket, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-basket.png - weapon-basket as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-battleaxe.json - where the hand goes on weapon-battleaxe, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-battleaxe.png - weapon-battleaxe as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-brannock.far.json - where the hand goes on weapon-brannock.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-brannock.far.png - weapon-brannock.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-brannock.json - where the hand goes on weapon-brannock, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-brannock.png - weapon-brannock as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-broom.json - where the hand goes on weapon-broom, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-broom.png - weapon-broom as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-chief-pick-lantern.far.json - where the hand goes on weapon-chief-pick-lantern.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-chief-pick-lantern.far.png - weapon-chief-pick-lantern.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-chief-pick-lantern.json - where the hand goes on weapon-chief-pick-lantern, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-chief-pick-lantern.png - weapon-chief-pick-lantern as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-climber-hook.json - where the hand goes on weapon-climber-hook, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-climber-hook.png - weapon-climber-hook as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-coin-purse.json - where the hand goes on weapon-coin-purse, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-coin-purse.png - weapon-coin-purse as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-coin.json - where the hand goes on weapon-coin, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-coin.png - weapon-coin as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-corwin-kit.far.json - where the hand goes on weapon-corwin-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-corwin-kit.far.png - weapon-corwin-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-corwin-kit.json - where the hand goes on weapon-corwin-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-corwin-kit.png - weapon-corwin-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-corwin-sword.json - where the hand goes on weapon-corwin-sword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-corwin-sword.png - weapon-corwin-sword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-crate.far.json - where the hand goes on weapon-crate.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-crate.far.png - weapon-crate.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-cudgel.json - where the hand goes on weapon-cudgel, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-cudgel.png - weapon-cudgel as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-cultist-dagger.json - where the hand goes on weapon-cultist-dagger, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-cultist-dagger.png - weapon-cultist-dagger as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-cutlass.json - where the hand goes on weapon-cutlass, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-cutlass.png - weapon-cutlass as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-dagger.json - where the hand goes on weapon-dagger, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-dagger.png - weapon-dagger as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-ember-dagger.json - where the hand goes on weapon-ember-dagger, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-ember-dagger.png - weapon-ember-dagger as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-feather-duster.json - where the hand goes on weapon-feather-duster, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-feather-duster.png - weapon-feather-duster as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-felling-axe.json - where the hand goes on weapon-felling-axe, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-felling-axe.png - weapon-felling-axe as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-flat-cap-held.json - where the hand goes on weapon-flat-cap-held, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-flat-cap-held.png - weapon-flat-cap-held as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-flower-basket.far.json - where the hand goes on weapon-flower-basket.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-flower-basket.far.png - weapon-flower-basket.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-flower-basket.json - where the hand goes on weapon-flower-basket, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-flower-basket.png - weapon-flower-basket as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-folded-shawl.json - where the hand goes on weapon-folded-shawl, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-folded-shawl.png - weapon-folded-shawl as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-gaff.json - where the hand goes on weapon-gaff, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-gaff.png - weapon-gaff as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-gilded-kit.far.json - where the hand goes on weapon-gilded-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-gilded-kit.far.png - weapon-gilded-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-gilded-kit.json - where the hand goes on weapon-gilded-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-gilded-kit.png - weapon-gilded-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-glass-lamp.json - where the hand goes on weapon-glass-lamp, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-glass-lamp.png - weapon-glass-lamp as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-greatsword.json - where the hand goes on weapon-greatsword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-greatsword.png - weapon-greatsword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-halberd.json - where the hand goes on weapon-halberd, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-halberd.png - weapon-halberd as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hammer-tongs.far.json - where the hand goes on weapon-hammer-tongs.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hammer-tongs.far.png - weapon-hammer-tongs.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hammer-tongs.json - where the hand goes on weapon-hammer-tongs, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hammer-tongs.png - weapon-hammer-tongs as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-handaxe.json - where the hand goes on weapon-handaxe, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-handaxe.png - weapon-handaxe as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-heron-cane.json - where the hand goes on weapon-heron-cane, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-heron-cane.png - weapon-heron-cane as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hexer-staff.json - where the hand goes on weapon-hexer-staff, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hexer-staff.png - weapon-hexer-staff as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hollowed-sword.json - where the hand goes on weapon-hollowed-sword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-hollowed-sword.png - weapon-hollowed-sword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-knives.far.json - where the hand goes on weapon-kael-knives.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-knives.far.png - weapon-kael-knives.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-knives.json - where the hand goes on weapon-kael-knives, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-knives.png - weapon-kael-knives as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-rapier.far.json - where the hand goes on weapon-kael-rapier.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-rapier.far.png - weapon-kael-rapier.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-rapier.json - where the hand goes on weapon-kael-rapier, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-kael-rapier.png - weapon-kael-rapier as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-lantern.json - where the hand goes on weapon-lantern, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-lantern.png - weapon-lantern as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-ledger-pen.far.json - where the hand goes on weapon-ledger-pen.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-ledger-pen.far.png - weapon-ledger-pen.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-ledger-pen.json - where the hand goes on weapon-ledger-pen, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-ledger-pen.png - weapon-ledger-pen as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-letter.json - where the hand goes on weapon-letter, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-letter.png - weapon-letter as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-letters.json - where the hand goes on weapon-letters, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-letters.png - weapon-letters as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-light-crossbow.json - where the hand goes on weapon-light-crossbow, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-light-crossbow.png - weapon-light-crossbow as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-loaf.json - where the hand goes on weapon-loaf, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-loaf.png - weapon-loaf as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-longbow.json - where the hand goes on weapon-longbow, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-longbow.png - weapon-longbow as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-longsword.json - where the hand goes on weapon-longsword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-longsword.png - weapon-longsword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-lute.json - where the hand goes on weapon-lute, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-lute.png - weapon-lute as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mace-shield.far.json - where the hand goes on weapon-mace-shield.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mace-shield.far.png - weapon-mace-shield.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mace-shield.json - where the hand goes on weapon-mace-shield, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mace-shield.png - weapon-mace-shield as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mace.json - where the hand goes on weapon-mace, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mace.png - weapon-mace as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mallet.json - where the hand goes on weapon-mallet, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mallet.png - weapon-mallet as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-map.json - where the hand goes on weapon-map, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-map.png - weapon-map as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mordain-glaive.json - where the hand goes on weapon-mordain-glaive, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-mordain-glaive.png - weapon-mordain-glaive as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-netting-needle.json - where the hand goes on weapon-netting-needle, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-netting-needle.png - weapon-netting-needle as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-night-flowers.json - where the hand goes on weapon-night-flowers, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-night-flowers.png - weapon-night-flowers as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-oil-lamp.json - where the hand goes on weapon-oil-lamp, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-oil-lamp.png - weapon-oil-lamp as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-peel.far.json - where the hand goes on weapon-peel.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-peel.far.png - weapon-peel.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-peel.json - where the hand goes on weapon-peel, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-peel.png - weapon-peel as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-pike.json - where the hand goes on weapon-pike, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-pike.png - weapon-pike as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-pilgrim-staff.json - where the hand goes on weapon-pilgrim-staff, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-pilgrim-staff.png - weapon-pilgrim-staff as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-pitchfork.json - where the hand goes on weapon-pitchfork, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-pitchfork.png - weapon-pitchfork as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-practice-sword.json - where the hand goes on weapon-practice-sword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-practice-sword.png - weapon-practice-sword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-protectorate-kit.far.json - where the hand goes on weapon-protectorate-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-protectorate-kit.far.png - weapon-protectorate-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-protectorate-kit.json - where the hand goes on weapon-protectorate-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-protectorate-kit.png - weapon-protectorate-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-quarterstaff.json - where the hand goes on weapon-quarterstaff, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-quarterstaff.png - weapon-quarterstaff as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-quill-letter.far.json - where the hand goes on weapon-quill-letter.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-quill-letter.far.png - weapon-quill-letter.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-quill-letter.json - where the hand goes on weapon-quill-letter, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-quill-letter.png - weapon-quill-letter as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-rag-doll.json - where the hand goes on weapon-rag-doll, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-rag-doll.png - weapon-rag-doll as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-raider-kit.far.json - where the hand goes on weapon-raider-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-raider-kit.far.png - weapon-raider-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-raider-kit.json - where the hand goes on weapon-raider-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-raider-kit.png - weapon-raider-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-rapier.json - where the hand goes on weapon-rapier, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-rapier.png - weapon-rapier as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-relief-kit.far.json - where the hand goes on weapon-relief-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-relief-kit.far.png - weapon-relief-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-relief-kit.json - where the hand goes on weapon-relief-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-relief-kit.png - weapon-relief-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sapper-pick.far.json - where the hand goes on weapon-sapper-pick.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sapper-pick.far.png - weapon-sapper-pick.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sapper-pick.json - where the hand goes on weapon-sapper-pick, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sapper-pick.png - weapon-sapper-pick as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sb-blades.far.json - where the hand goes on weapon-sb-blades.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sb-blades.far.png - weapon-sb-blades.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sb-blades.json - where the hand goes on weapon-sb-blades, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sb-blades.png - weapon-sb-blades as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-scimitar.json - where the hand goes on weapon-scimitar, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-scimitar.png - weapon-scimitar as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-scrolls.json - where the hand goes on weapon-scrolls, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-scrolls.png - weapon-scrolls as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sera-longbow.far.json - where the hand goes on weapon-sera-longbow.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sera-longbow.far.png - weapon-sera-longbow.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sera-longbow.json - where the hand goes on weapon-sera-longbow, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sera-longbow.png - weapon-sera-longbow as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-shortbow.json - where the hand goes on weapon-shortbow, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-shortbow.png - weapon-shortbow as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-shortsword.json - where the hand goes on weapon-shortsword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-shortsword.png - weapon-shortsword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-silk-bolt.far.json - where the hand goes on weapon-silk-bolt.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-silk-bolt.far.png - weapon-silk-bolt.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sketchbook.far.json - where the hand goes on weapon-sketchbook.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sketchbook.far.png - weapon-sketchbook.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sketchbook.json - where the hand goes on weapon-sketchbook, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sketchbook.png - weapon-sketchbook as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-smoker.json - where the hand goes on weapon-smoker, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-smoker.png - weapon-smoker as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spade.json - where the hand goes on weapon-spade, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spade.png - weapon-spade as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spear-lantern.far.json - where the hand goes on weapon-spear-lantern.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spear-lantern.far.png - weapon-spear-lantern.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spear-lantern.json - where the hand goes on weapon-spear-lantern, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spear-lantern.png - weapon-spear-lantern as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spear.json - where the hand goes on weapon-spear, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spear.png - weapon-spear as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spindle.json - where the hand goes on weapon-spindle, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-spindle.png - weapon-spindle as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-staff-ring.json - where the hand goes on weapon-staff-ring, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-staff-ring.png - weapon-staff-ring as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-stew-pot.json - where the hand goes on weapon-stew-pot, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-stew-pot.png - weapon-stew-pot as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sunsteel-blade.json - where the hand goes on weapon-sunsteel-blade, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-sunsteel-blade.png - weapon-sunsteel-blade as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tack-hammer.far.json - where the hand goes on weapon-tack-hammer.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tack-hammer.far.png - weapon-tack-hammer.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tack-hammer.json - where the hand goes on weapon-tack-hammer, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tack-hammer.png - weapon-tack-hammer as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tankard.json - where the hand goes on weapon-tankard, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tankard.png - weapon-tankard as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-telescope.json - where the hand goes on weapon-telescope, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-telescope.png - weapon-telescope as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-thornwood-bow.json - where the hand goes on weapon-thornwood-bow, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-thornwood-bow.png - weapon-thornwood-bow as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tin-cup.json - where the hand goes on weapon-tin-cup, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-tin-cup.png - weapon-tin-cup as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-toy-sword.json - where the hand goes on weapon-toy-sword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-toy-sword.png - weapon-toy-sword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-unmade-spear-shield.far.json - where the hand goes on weapon-unmade-spear-shield.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-unmade-spear-shield.far.png - weapon-unmade-spear-shield.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-unmade-spear-shield.json - where the hand goes on weapon-unmade-spear-shield, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-unmade-spear-shield.png - weapon-unmade-spear-shield as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-varkhul-greatsword.json - where the hand goes on weapon-varkhul-greatsword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-varkhul-greatsword.png - weapon-varkhul-greatsword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-vesk-sword.json - where the hand goes on weapon-vesk-sword, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-vesk-sword.png - weapon-vesk-sword as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-vreya-blade.json - where the hand goes on weapon-vreya-blade, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-vreya-blade.png - weapon-vreya-blade as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-walking-stick.json - where the hand goes on weapon-walking-stick, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-walking-stick.png - weapon-walking-stick as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-warden-kit.far.json - where the hand goes on weapon-warden-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-warden-kit.far.png - weapon-warden-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-warden-kit.json - where the hand goes on weapon-warden-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-warden-kit.png - weapon-warden-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-warhammer.json - where the hand goes on weapon-warhammer, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-warhammer.png - weapon-warhammer as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-watch-kit.far.json - where the hand goes on weapon-watch-kit.far, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-watch-kit.far.png - weapon-watch-kit.far as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-watch-kit.json - where the hand goes on weapon-watch-kit, the hand and the kind; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons-alone/weapon-watch-kit.png - weapon-watch-kit as it was painted, alone and upright; cut by tools/weapon_alone.py from its sheet in weapon-sheets; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-dagger.png - the base with offhand-dagger in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-ember-dagger.png - the base with offhand-ember-dagger in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-handaxe.png - the base with offhand-handaxe in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-scimitar.png - the base with offhand-scimitar in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-shortsword.png - the base with offhand-shortsword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-steel-shield.png - the base with offhand-steel-shield in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-warden-shield.png - the base with offhand-warden-shield in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/offhand-wooden-shield.png - the base with offhand-wooden-shield in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-basket.png - the base with weapon-basket in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-battleaxe.png - the base with weapon-battleaxe in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-brannock.png - the base with weapon-brannock in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-broom.png - the base with weapon-broom in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-chief-pick-lantern.png - the base with weapon-chief-pick-lantern in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-climber-hook.png - the base with weapon-climber-hook in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-coin-purse.png - the base with weapon-coin-purse in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-coin.png - the base with weapon-coin in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-corwin-kit.png - the base with weapon-corwin-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-corwin-sword.png - the base with weapon-corwin-sword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-crate.png - the base with weapon-crate in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-cudgel.png - the base with weapon-cudgel in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-cultist-dagger.png - the base with weapon-cultist-dagger in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-cutlass.png - the base with weapon-cutlass in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-dagger.png - the base with weapon-dagger in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-ember-dagger.png - the base with weapon-ember-dagger in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-feather-duster.png - the base with weapon-feather-duster in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-felling-axe.png - the base with weapon-felling-axe in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-flat-cap-held.png - the base with weapon-flat-cap-held in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-flower-basket.png - the base with weapon-flower-basket in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-folded-shawl.png - the base with weapon-folded-shawl in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-gaff.png - the base with weapon-gaff in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-gilded-kit.png - the base with weapon-gilded-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-glass-lamp.png - the base with weapon-glass-lamp in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-greatsword.png - the base with weapon-greatsword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-halberd.png - the base with weapon-halberd in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-hammer-tongs.png - the base with weapon-hammer-tongs in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-handaxe.png - the base with weapon-handaxe in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-heron-cane.png - the base with weapon-heron-cane in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-hexer-staff.png - the base with weapon-hexer-staff in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-hollowed-sword.png - the base with weapon-hollowed-sword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-kael-knives.png - the base with weapon-kael-knives in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-kael-rapier.png - the base with weapon-kael-rapier in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-lantern.png - the base with weapon-lantern in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-ledger-pen.png - the base with weapon-ledger-pen in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-letter.png - the base with weapon-letter in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-letters.png - the base with weapon-letters in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-light-crossbow.png - the base with weapon-light-crossbow in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-loaf.png - the base with weapon-loaf in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-longbow.png - the base with weapon-longbow in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-longsword.png - the base with weapon-longsword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-lute.png - the base with weapon-lute in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-mace-shield.png - the base with weapon-mace-shield in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-mace.png - the base with weapon-mace in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-mallet.png - the base with weapon-mallet in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-map.png - the base with weapon-map in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-mordain-glaive.png - the base with weapon-mordain-glaive in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-netting-needle.png - the base with weapon-netting-needle in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-night-flowers.png - the base with weapon-night-flowers in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-oil-lamp.png - the base with weapon-oil-lamp in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-peel.png - the base with weapon-peel in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-pike.png - the base with weapon-pike in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-pilgrim-staff.png - the base with weapon-pilgrim-staff in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-pitchfork.png - the base with weapon-pitchfork in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-practice-sword.png - the base with weapon-practice-sword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-protectorate-kit.png - the base with weapon-protectorate-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-quarterstaff.png - the base with weapon-quarterstaff in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-quill-letter.png - the base with weapon-quill-letter in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-rag-doll.png - the base with weapon-rag-doll in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-raider-kit.png - the base with weapon-raider-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-rapier.png - the base with weapon-rapier in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-relief-kit.png - the base with weapon-relief-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-sapper-pick.png - the base with weapon-sapper-pick in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-sb-blades.png - the base with weapon-sb-blades in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-scimitar.png - the base with weapon-scimitar in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-scrolls.png - the base with weapon-scrolls in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-sera-longbow.png - the base with weapon-sera-longbow in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-shortbow.png - the base with weapon-shortbow in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-shortsword.png - the base with weapon-shortsword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-silk-bolt.png - the base with weapon-silk-bolt in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-sketchbook.png - the base with weapon-sketchbook in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-smoker.png - the base with weapon-smoker in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-spade.png - the base with weapon-spade in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-spear-lantern.png - the base with weapon-spear-lantern in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-spear.png - the base with weapon-spear in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-spindle.png - the base with weapon-spindle in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-staff-ring.png - the base with weapon-staff-ring in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-stew-pot.png - the base with weapon-stew-pot in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-sunsteel-blade.png - the base with weapon-sunsteel-blade in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-tack-hammer.png - the base with weapon-tack-hammer in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-tankard.png - the base with weapon-tankard in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-telescope.png - the base with weapon-telescope in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-thornwood-bow.png - the base with weapon-thornwood-bow in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-tin-cup.png - the base with weapon-tin-cup in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-toy-sword.png - the base with weapon-toy-sword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-unmade-spear-shield.png - the base with weapon-unmade-spear-shield in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-varkhul-greatsword.png - the base with weapon-varkhul-greatsword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-vesk-sword.png - the base with weapon-vesk-sword in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-vreya-blade.png - the base with weapon-vreya-blade in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-walking-stick.png - the base with weapon-walking-stick in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-warden-kit.png - the base with weapon-warden-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-warhammer.png - the base with weapon-warhammer in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/weapons/weapon-watch-kit.png - the base with weapon-watch-kit in its fist, under the hand's own piece; put there by tools/weapon_alone.py; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19)
-
-tools/source/characters/whole-chatgpt/armor-brannock.png - armor-brannock as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-busker.png - armor-busker as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-chain-mail-f.png - armor-chain-mail-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-chain-mail.png - armor-chain-mail as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-chain-shirt-f.png - armor-chain-shirt-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-chain-shirt.png - armor-chain-shirt as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-child-cove-f.png - armor-child-cove-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-clerk-f.png - armor-clerk-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-construct-stone.png - armor-construct-stone as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-corra.png - armor-corra as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-courier.png - armor-courier as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-crane-f.png - armor-crane-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-elara.png - armor-elara as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-elder-coat.png - armor-elder-coat as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-elder-woman.png - armor-elder-woman as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-fencer.png - armor-fencer as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-glassblower.png - armor-glassblower as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-hide-f.png - armor-hide-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-hide.png - armor-hide as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-hollowed-chief.png - armor-hollowed-chief as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-hollowed-footman.png - armor-hollowed-footman as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-hollowed-hexer.png - armor-hollowed-hexer as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-hollowed-sapper.png - armor-hollowed-sapper as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-kael.png - armor-kael as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-leather-f.png - armor-leather-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-leather.png - armor-leather as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-leon.png - armor-leon as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-lodge-ranger.png - armor-lodge-ranger as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-mage-robes-f.png - armor-mage-robes-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-maid.png - armor-maid as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-merchant.png - armor-merchant as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-noble-gown.png - armor-noble-gown as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-noble.png - armor-noble as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-padded-f.png - armor-padded-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-padded.png - armor-padded as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-pilgrim.png - armor-pilgrim as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-plate-f.png - armor-plate-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-refugee-child.png - armor-refugee-child as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-refugee-man-f.png - armor-refugee-man-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-refugee-woman.png - armor-refugee-woman as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-road.png - armor-road as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-royal-guard.png - armor-royal-guard as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-royal-livery.png - armor-royal-livery as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-sailor.png - armor-sailor as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-sb-traveller.png - armor-sb-traveller as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-scale-f.png - armor-scale-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-sera.png - armor-sera as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-smith.png - armor-smith as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-studded.png - armor-studded as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-tavern-m.png - armor-tavern-m as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-temple.png - armor-temple as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-trader.png - armor-trader as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-traveller-f.png - armor-traveller-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-traveller.png - armor-traveller as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-urchin-f.png - armor-urchin-f as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-urchin.png - armor-urchin as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-villager-man.png - armor-villager-man as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-villager-woman.png - armor-villager-woman as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-watch-captain.png - armor-watch-captain as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
-tools/source/characters/whole-chatgpt/armor-watch.png - armor-watch as ChatGPT painted it whole on its dressing-pose template (2026-11-18), the plainer one the game had for a day, kept for the record; supplied by Caleb Kiatoukaysi, made in ChatGPT
-
 tools/sheet_fit.py - written by Caleb Kiatoukaysi for Legend Quest, finds a base under each cell of a sheet ChatGPT laid out its own way, at any scale and place (masked cross-correlation, coarse then fine), for part_sheet.py fit
 
 tools/source/characters/face-sheet-female.png - the blank face sheet: ten copies of its head and shoulders at full size, five across and two down, from tools/source/characters/base-female.png, with grey lines between them; built by tools/part_sheet.py
@@ -3488,6 +2516,22 @@ tools/source/characters/weapon-sheet-female.png - the blank weapon sheet: four c
 
 tools/source/characters/weapon-sheet-male.png - the blank weapon sheet: four copies of its two fists, each with a stub of forearm, where they are on the figure, at 0.56 scale, side by side, the rest of the figure left out, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
+tools/source/characters/sheets/extra-sheet-01.png - extra sheet extra-sheet-01 (beard-01, beard-02, beard-03, beard-04, beard-05, beard-06, beard-07, beard-08, beard-09, beard-10, beard-11, beard-12), painted on tools/source/characters/extra-sheet-male.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-02.png - extra sheet extra-sheet-02 (jewel-01, jewel-02, jewel-03, jewel-04, jewel-05, jewel-06), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-03.png - extra sheet extra-sheet-03 (jewel-07, jewel-08, jewel-09, jewel-10, jewel-11, jewel-12), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-04.png - extra sheet extra-sheet-04 (skin-01, skin-02, skin-03, skin-04, skin-05, skin-06), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-05.png - extra sheet extra-sheet-05 (ears-01, ears-02, ears-03, ears-04, ears-05, ears-06), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-06.png - extra sheet extra-sheet-06 (horns-01, horns-02, horns-03, horns-04, horns-05, horns-06), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-07.png - extra sheet extra-sheet-07 (jewel-13, jewel-14, jewel-15, jewel-16, jewel-17, jewel-18), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/sheets/extra-sheet-08.png - extra sheet extra-sheet-08 (jewel-19, jewel-20, jewel-21, jewel-22, jewel-23, jewel-24), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
 tools/source/characters/sheets/face-sheet-f01.png - face sheet face-sheet-f01 (face-f01, face-f02, face-f03, face-f04, face-f05, face-f06, face-f07, face-f08, face-f09, face-f10), painted on tools/source/characters/face-sheet-female.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 tools/source/characters/sheets/face-sheet-m01.png - face sheet face-sheet-m01 (face-m01, face-m02, face-m03, face-m04, face-m05, face-m06, face-m07, face-m08, face-m09, face-m10), painted on tools/source/characters/face-sheet-male.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
@@ -3503,6 +2547,198 @@ tools/source/characters/sheets/hair-sheet-04.png - hair sheet hair-sheet-04 (hai
 tools/source/characters/sheets/hair-sheet-05.png - hair sheet hair-sheet-05 (hair-33, hair-34, hair-35, hair-36, hair-37, hair-38, hair-39, hair-40), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 tools/source/characters/sheets/hair-sheet-06.png - hair sheet hair-sheet-06 (hair-41, hair-42, hair-43, hair-44, hair-45, hair-46, hair-47, hair-48), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/extras/beard-01.png - beard-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-02.png - beard-02 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-03.png - beard-03 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-04.png - beard-04 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-05.png - beard-05 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-06.png - beard-06 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-07.png - beard-07 on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-08.png - beard-08 on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-09.png - beard-09 on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-10.png - beard-10 on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-11.png - beard-11 on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/beard-12.png - beard-12 on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-01.png - jewel-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-02.png - jewel-02 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-03.png - jewel-03 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-04.png - jewel-04 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-05.png - jewel-05 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-06.png - jewel-06 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-01-f.png - jewel-01-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-02-f.png - jewel-02-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-03-f.png - jewel-03-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-04-f.png - jewel-04-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-05-f.png - jewel-05-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-06-f.png - jewel-06-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-02.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-07.png - jewel-07 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-08.png - jewel-08 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-09.png - jewel-09 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-10.png - jewel-10 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-11.png - jewel-11 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-12.png - jewel-12 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-07-f.png - jewel-07-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-08-f.png - jewel-08-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-09-f.png - jewel-09-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-10-f.png - jewel-10-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-11-f.png - jewel-11-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-12-f.png - jewel-12-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-03.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-01.png - skin-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-02.png - skin-02 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-03.png - skin-03 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-04.png - skin-04 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-05.png - skin-05 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-06.png - skin-06 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-01-f.png - skin-01-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-02-f.png - skin-02-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-03-f.png - skin-03-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-04-f.png - skin-04-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-05-f.png - skin-05-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/skin-06-f.png - skin-06-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-04.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-01.png - ears-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-02.png - ears-02 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-03.png - ears-03 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-04.png - ears-04 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-05.png - ears-05 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-06.png - ears-06 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-01-f.png - ears-01-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-02-f.png - ears-02-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-03-f.png - ears-03-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-04-f.png - ears-04-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-05-f.png - ears-05-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/ears-06-f.png - ears-06-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-05.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-01.png - horns-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-02.png - horns-02 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-03.png - horns-03 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-04.png - horns-04 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-05.png - horns-05 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-06.png - horns-06 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-01-f.png - horns-01-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-02-f.png - horns-02-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-03-f.png - horns-03-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-04-f.png - horns-04-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-05-f.png - horns-05-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/horns-06-f.png - horns-06-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-13.png - jewel-13 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-14.png - jewel-14 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-15.png - jewel-15 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-16.png - jewel-16 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-17.png - jewel-17 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-18.png - jewel-18 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-13-f.png - jewel-13-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-14-f.png - jewel-14-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-15-f.png - jewel-15-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-16-f.png - jewel-16-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-17-f.png - jewel-17-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-18-f.png - jewel-18-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-07.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-19.png - jewel-19 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-20.png - jewel-20 on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-21.png - jewel-21 on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-22.png - jewel-22 on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-23.png - jewel-23 on its base's canvas, cut by tools/part_sheet.py from cell 5 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-24.png - jewel-24 on its base's canvas, cut by tools/part_sheet.py from cell 6 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-19-f.png - jewel-19-f on its base's canvas, cut by tools/part_sheet.py from cell 7 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-20-f.png - jewel-20-f on its base's canvas, cut by tools/part_sheet.py from cell 8 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-21-f.png - jewel-21-f on its base's canvas, cut by tools/part_sheet.py from cell 9 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-22-f.png - jewel-22-f on its base's canvas, cut by tools/part_sheet.py from cell 10 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-23-f.png - jewel-23-f on its base's canvas, cut by tools/part_sheet.py from cell 11 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
+
+tools/source/characters/extras/jewel-24-f.png - jewel-24-f on its base's canvas, cut by tools/part_sheet.py from cell 12 of tools/source/characters/sheets/extra-sheet-08.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
 tools/source/characters/faces/face-f01.png - face-f01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/face-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
@@ -3735,6 +2971,208 @@ tools/source/characters/hairs/hair-46-f.png - hair-46-f on its base's canvas, cu
 tools/source/characters/hairs/hair-47-f.png - hair-47-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 tools/source/characters/hairs/hair-48-f.png - hair-48-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-sb-blades.png - weapon-sb-blades on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-sera-longbow.png - weapon-sera-longbow on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-netting-needle.png - weapon-netting-needle on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-loaf.png - weapon-loaf on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-f01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-rag-doll.png - weapon-rag-doll on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-tankard.png - weapon-tankard on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-scrolls.png - weapon-scrolls on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-broom.png - weapon-broom on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-f02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-coin.png - weapon-coin on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-practice-sword.png - weapon-practice-sword on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-flat-cap-held.png - weapon-flat-cap-held on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-basket.png - weapon-basket on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-f03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-flower-basket.png - weapon-flower-basket on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-pilgrim-staff.png - weapon-pilgrim-staff on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-peel.png - weapon-peel on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-spindle.png - weapon-spindle on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-f04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-coin-purse.png - weapon-coin-purse on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-feather-duster.png - weapon-feather-duster on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-staff-ring.png - weapon-staff-ring on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-ledger-pen.png - weapon-ledger-pen on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-folded-shawl.png - weapon-folded-shawl on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-sketchbook.png - weapon-sketchbook on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-f06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-lantern.png - weapon-lantern on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-smoker.png - weapon-smoker on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-night-flowers.png - weapon-night-flowers on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-vreya-blade.png - weapon-vreya-blade on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-f07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-glass-lamp.png - weapon-glass-lamp on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-f08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-map.png - weapon-map on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-f08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-dagger.png - weapon-dagger on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-shortsword.png - weapon-shortsword on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-longsword.png - weapon-longsword on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-rapier.png - weapon-rapier on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m01.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-scimitar.png - weapon-scimitar on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-handaxe.png - weapon-handaxe on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-battleaxe.png - weapon-battleaxe on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-greatsword.png - weapon-greatsword on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m02.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-warhammer.png - weapon-warhammer on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-mace.png - weapon-mace on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-quarterstaff.png - weapon-quarterstaff on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-spear.png - weapon-spear on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m03.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-shortbow.png - weapon-shortbow on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-longbow.png - weapon-longbow on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-light-crossbow.png - weapon-light-crossbow on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-ember-dagger.png - weapon-ember-dagger on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m04.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-wooden-shield.png - offhand-wooden-shield on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-steel-shield.png - offhand-steel-shield on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-warden-shield.png - offhand-warden-shield on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-dagger.png - offhand-dagger on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m05.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-shortsword.png - offhand-shortsword on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-scimitar.png - offhand-scimitar on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-handaxe.png - offhand-handaxe on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/offhand-ember-dagger.png - offhand-ember-dagger on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-kael-knives.png - weapon-kael-knives on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-kael-rapier.png - weapon-kael-rapier on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-brannock.png - weapon-brannock on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-cutlass.png - weapon-cutlass on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m07.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-gaff.png - weapon-gaff on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-cudgel.png - weapon-cudgel on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-watch-kit.png - weapon-watch-kit on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-halberd.png - weapon-halberd on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m08.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-telescope.png - weapon-telescope on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-tack-hammer.png - weapon-tack-hammer on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-walking-stick.png - weapon-walking-stick on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-tin-cup.png - weapon-tin-cup on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m09.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-quill-letter.png - weapon-quill-letter on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m10.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-letter.png - weapon-letter on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m10.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-letters.png - weapon-letters on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m10.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-stew-pot.png - weapon-stew-pot on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m10.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-silk-bolt.png - weapon-silk-bolt on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m11.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-lute.png - weapon-lute on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m11.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-hollowed-sword.png - weapon-hollowed-sword on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m11.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-hexer-staff.png - weapon-hexer-staff on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m11.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-sapper-pick.png - weapon-sapper-pick on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m12.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-chief-pick-lantern.png - weapon-chief-pick-lantern on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m12.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-toy-sword.png - weapon-toy-sword on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m12.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-pitchfork.png - weapon-pitchfork on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m12.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-crate.png - weapon-crate on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m13.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-hammer-tongs.png - weapon-hammer-tongs on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m13.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-thornwood-bow.png - weapon-thornwood-bow on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m14.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-sunsteel-blade.png - weapon-sunsteel-blade on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m14.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-mallet.png - weapon-mallet on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m14.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-spade.png - weapon-spade on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m14.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-heron-cane.png - weapon-heron-cane on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m15.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-felling-axe.png - weapon-felling-axe on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m15.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-oil-lamp.png - weapon-oil-lamp on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m15.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-varkhul-greatsword.png - weapon-varkhul-greatsword on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m15.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-cultist-dagger.png - weapon-cultist-dagger on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m16.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-climber-hook.png - weapon-climber-hook on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m16.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-relief-kit.png - weapon-relief-kit on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m16.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-corwin-kit.png - weapon-corwin-kit on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m17.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-corwin-sword.png - weapon-corwin-sword on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m17.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-gilded-kit.png - weapon-gilded-kit on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m17.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-mace-shield.png - weapon-mace-shield on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m17.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-spear-lantern.png - weapon-spear-lantern on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m18.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-vesk-sword.png - weapon-vesk-sword on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m18.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-mordain-glaive.png - weapon-mordain-glaive on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m18.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-unmade-spear-shield.png - weapon-unmade-spear-shield on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m18.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-pike.png - weapon-pike on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/weapon-sheet-m19.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-warden-kit.png - weapon-warden-kit on its base's canvas, cut by tools/part_sheet.py from cell 2 of tools/source/characters/sheets/weapon-sheet-m19.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-protectorate-kit.png - weapon-protectorate-kit on its base's canvas, cut by tools/part_sheet.py from cell 3 of tools/source/characters/sheets/weapon-sheet-m19.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+
+tools/source/characters/weapons/weapon-raider-kit.png - weapon-raider-kit on its base's canvas, cut by tools/part_sheet.py from cell 4 of tools/source/characters/sheets/weapon-sheet-m19.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
 <!-- end part sheets -->
 

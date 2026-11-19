@@ -26,6 +26,17 @@ public partial class LegendQuestGame
     /// <summary>Where the shots go, or null when the game is being played.</summary>
     public string ProofDirectory { get; init; }
 
+    /// <summary>Whether the run is the tour of the creation screen: every option of every row, a picture each, and then it quits.</summary>
+    public bool ProofTour { get; init; }
+
+    /// <summary>The tour's steps, each ending with the picture to take; how many frames since the last was taken; and the picture it's waiting to take.</summary>
+    private IEnumerator<string> _tour;
+    private int _tourFrames = -2;
+    private string _tourShot;
+
+    /// <summary>The least and the most frames the tour gives a change to show before its picture.</summary>
+    private const int TourLeast = 5, TourMost = 600;
+
     /// <summary>The part of the run to stop after, so I can look at one part without sitting through the rest. Done runs all of it.</summary>
     public ProofStage ProofLast { get; init; } = ProofStage.Done;
 
@@ -321,6 +332,163 @@ public partial class LegendQuestGame
         }
     }
 
+    /// <summary>
+    /// One frame of the tour: the next step's changes made, then, once the figure for them is up (or
+    /// it's waited long enough), its picture named; a frame's left after a picture before the next
+    /// step, so the picture is of what was asked for. When the steps run out the run's done.
+    /// </summary>
+    private string ProofTourStep(CharacterCreationScreen creation)
+    {
+        if (creation is null) return null;
+        _tour ??= Tour(creation).GetEnumerator();
+        _tourFrames++;
+        if (_tourFrames < 0) return null;
+        if (_tourFrames == 0)
+        {
+            if (!_tour.MoveNext())
+            {
+                _proofStage = ProofStage.Done;
+                return null;
+            }
+            _tourShot = _tour.Current;
+            return null;
+        }
+        if (_tourFrames < TourLeast || !creation.ProofSettled && _tourFrames < TourMost) return null;
+        _tourFrames = -2;
+        return _tourShot;
+    }
+
+    /// <summary>
+    /// The tour: every tab; every painted face; on a man's face and a woman's, every hair, every skin,
+    /// hair and eye swatch and every extra of every kind; then the things that could go wrong: a beard
+    /// kept through a change to a woman's face, the ends of the height and the build, every people and
+    /// class, the armor's dyes and what it hides, RANDOM ten times, and them turned round.
+    /// </summary>
+    private static IEnumerable<string> Tour(CharacterCreationScreen c)
+    {
+        static string Slug(string label) => label.ToLowerInvariant().Replace(' ', '-');
+        c.ProofType("Caleb");
+        for (int page = 0; page < 4; page++)
+        {
+            c.ProofPage(page);
+            yield return $"tab-{page}.png";
+        }
+
+        c.ProofPage(1);
+        int faces = c.ProofOptionCount(c.ProofFindRow("PORTRAIT"));
+        for (int face = 1; face < faces; face++)
+        {
+            c.ProofPick(c.ProofFindRow("PORTRAIT"), face);
+            yield return $"face-{face:00}.png";
+        }
+
+        // A man's face and a woman's: the men's are the first half of the painted ones.
+        int men = (faces - 1) / 2;
+        foreach ((int face, string who) in new[] { (Math.Min(3, men), "m"), (men + Math.Min(3, faces - 1 - men), "f") })
+        {
+            c.ProofPage(1);
+            c.ProofPick(c.ProofFindRow("PORTRAIT"), face);
+            int hairs = c.ProofOptionCount(c.ProofFindRow("HAIR"));
+            for (int hair = 0; hair < hairs; hair++)
+            {
+                c.ProofPick(c.ProofFindRow("HAIR"), hair);
+                yield return $"hair-{who}-{hair:00}.png";
+            }
+            c.ProofPick(c.ProofFindRow("HAIR"), Math.Min(12, hairs - 1));
+            foreach (string label in new[] { "SKIN", "HAIR DYE", "EYES" })
+            {
+                int swatches = c.ProofOptionCount(c.ProofFindRow(label));
+                for (int swatch = 1; swatch < swatches; swatch++)
+                {
+                    c.ProofPick(c.ProofFindRow(label), swatch);
+                    yield return $"swatch-{who}-{Slug(label)}-{swatch:00}.png";
+                }
+                c.ProofPick(c.ProofFindRow(label), 0);
+            }
+
+            c.ProofPage(2);
+            yield return $"extras-{who}.png";
+            for (int row = 0; row < c.ProofRowCount; row++)
+            {
+                string label = c.ProofRowLabel(row);
+                int options = c.ProofOptionCount(row);
+                for (int option = 1; option < options; option++)
+                {
+                    c.ProofPick(row, option);
+                    yield return $"extra-{who}-{Slug(label)}-{option:00}.png";
+                }
+                c.ProofPick(row, 0);
+            }
+        }
+
+        // A bearded man with an earring, then a woman's face picked: the beard goes, the earring stays.
+        c.ProofPage(1);
+        c.ProofPick(c.ProofFindRow("PORTRAIT"), Math.Min(5, men));
+        c.ProofPage(2);
+        c.ProofPick(c.ProofFindRow("BEARD"), 8);
+        c.ProofPick(c.ProofFindRow("EARRINGS"), 2);
+        yield return "edge-bearded-man.png";
+        c.ProofPage(1);
+        c.ProofPick(c.ProofFindRow("PORTRAIT"), men + 2);
+        yield return "edge-then-woman-look.png";
+        c.ProofPage(2);
+        yield return "edge-then-woman-extras.png";
+        c.ProofPage(1);
+        c.ProofPick(c.ProofFindRow("PORTRAIT"), Math.Min(5, men));
+        c.ProofPage(2);
+        yield return "edge-back-to-man-extras.png";
+        c.ProofPick(c.ProofFindRow("BEARD"), 0);
+        c.ProofPick(c.ProofFindRow("EARRINGS"), 0);
+
+        // The ends of the height and the build, by the arrow keys, past their ends.
+        c.ProofPage(1);
+        foreach ((string label, int step, string name) in new[] { ("HEIGHT", -1, "shortest"), ("HEIGHT", 1, "tallest"), ("BUILD", -1, "slightest"), ("BUILD", 1, "broadest") })
+        {
+            for (int i = 0; i < 12; i++) c.ProofAdjust(c.ProofFindRow(label), step);
+            yield return $"edge-{name}.png";
+            for (int i = 0; i < 12; i++) c.ProofAdjust(c.ProofFindRow(label), -step);
+            c.ProofPick(c.ProofFindRow(label), c.ProofOptionCount(c.ProofFindRow(label)) / 2);
+        }
+
+        // Every people and every class.
+        c.ProofPage(0);
+        for (int people = 0; people < Enum.GetValues<Ancestry>().Length; people++)
+        {
+            c.ProofAdjust(c.ProofFindRow("PEOPLE"), 1);
+            yield return $"people-{people:00}.png";
+        }
+        for (int cls = 0; cls < Enum.GetValues<ClassId>().Length; cls++)
+        {
+            c.ProofAdjust(c.ProofFindRow("CLASS"), 1);
+            yield return $"class-{cls:00}.png";
+        }
+
+        // The armor's dyes, and the helm and the cape hidden.
+        c.ProofPage(3);
+        foreach ((string label, int option) in new[] { ("BASE", 3), ("TRIM", 9), ("BASE", 12), ("TRIM", 2) })
+        {
+            c.ProofPick(c.ProofFindRow(label), option);
+            yield return $"armor-{Slug(label)}-{option:00}.png";
+        }
+        c.ProofAdjust(c.ProofFindRow("HELM"), 1);
+        c.ProofAdjust(c.ProofFindRow("CAPE"), 1);
+        yield return "armor-hidden.png";
+
+        for (int roll = 0; roll < 10; roll++)
+        {
+            c.ProofPage(roll % 4);
+            c.ProofRandom();
+            yield return $"random-{roll:00}.png";
+        }
+        c.ProofTurn();
+        yield return "turned.png";
+        for (int action = 1; action <= 3; action++)
+        {
+            c.ProofPreview(action);
+            yield return $"preview-{action}.png";
+        }
+    }
+
     /// <summary>A new game from the slots to the ship: the Prologue's card, you made (on every tab), what drives you, the Soul-Bound made from the memory, what you remember, and the red moon.</summary>
     /// <remarks>Every step goes through the screens' own proof hooks, so it's the same code a player's keys and clicks reach.</remarks>
     private string ProofNewGameFlow()
@@ -347,6 +515,9 @@ public partial class LegendQuestGame
 
             case 90:
                 return "create.png";
+
+            case > 90 when ProofTour:
+                return ProofTourStep(creation);
 
             case 91:
                 creation?.ProofType("Caleb");

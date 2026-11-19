@@ -48,6 +48,9 @@ public class CharacterCreationScreen : MenuScreen
     private const string YouHeading = "WHO ARE YOU, WANDERER?";
     private const string SoulBoundHeading = "WHO WALKS BESIDE YOU?";
     private const string SoulBoundLine = "No one walks into legend alone.";
+
+    /// <summary>Where that line's written: in from the name card's left, and below it, clear of the flag and the rigging.</summary>
+    private const float SoulBoundInset = 14f, SoulBoundBelow = 12f;
     private const string Note = "LEFT / RIGHT TO CHANGE  ·  Q / E FOR TABS  ·  TAB TO NAME";
     private const string TypingNote = "TYPE THE NAME  ·  ENTER WHEN IT'S DONE";
     private const string NeedsNameNote = "THEY NEED A NAME  ·  CLICK THE NAME BOX TO TYPE IT";
@@ -135,10 +138,14 @@ public class CharacterCreationScreen : MenuScreen
     private static readonly Rectangle UnderThem = new(210, 828, 580, 64);
     private const int UnderThemEnds = 40;
 
-    /// <summary>A colour row's swatch: its size, how far in from the row's right end, and its frame.</summary>
-    private static readonly Point ChipSize = new(30, 30);
-    private const float ChipInset = 70f;
+    /// <summary>A colour row's swatch: its size, the gap after it, and its frame.</summary>
+    private static readonly Point ChipSize = new(28, 28);
+    private const float ChipGap = 10f;
     private const int ChipFrame = 2;
+
+    /// <summary>A row's words: how far in from the plate's ends, the room for its name, the room for each arrow, and how big the name and what's picked are written (a share of the font).</summary>
+    private const float RowEnds = 30f, RowLabelWidth = 150f, RowArrowGap = 24f;
+    private const float RowLabelSize = 0.62f, RowValueSize = 0.78f;
     private static readonly Color ShadowColor = Color.Black * 0.45f;
 
     /// <summary>How long they face each way before turning, and how long a step takes.</summary>
@@ -164,7 +171,7 @@ public class CharacterCreationScreen : MenuScreen
     private Color _deckTint = Color.White;
     private readonly Random _random = new();
     private readonly StringBuilder _name = new();
-    private readonly List<(MenuEntry Row, Func<string> Value)> _rows = new();
+    private readonly List<(MenuEntry Row, string Label, Func<string> Value)> _rows = new();
     private readonly List<List<MenuEntry>> _pages = new() { new(), new(), new(), new() };
 
     /// <summary>Rows shown only sometimes, and when: the painted figure's with a painted face, the paperdoll's without.</summary>
@@ -616,19 +623,25 @@ public class CharacterCreationScreen : MenuScreen
 
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        Text.DrawBacking(spriteBatch, _glow, UnderThem, UnderThemEnds, Palette.Ink * (0.7f * alpha));
+        Text.DrawBacking(spriteBatch, _glow, UnderThem, UnderThemEnds, Palette.Ink * (0.82f * alpha));
+        if (_soulBound)
+        {
+            float width = _detailFont.MeasureString(SoulBoundLine).X;
+            Text.DrawBacking(spriteBatch, _glow, new Rectangle((int)(NameCard.Left + SoulBoundInset) - 6, (int)(NameCard.Bottom + SoulBoundBelow) - 4, (int)width + 12, _detailFont.LineSpacing + 8),
+                UnderThemEnds, Palette.Ink * (0.7f * alpha));
+        }
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
 
         // Over the deck between the card and the panel: the Soul-Bound's line. Under them, their scores and the preview's keys.
         if (_soulBound)
-            Text.Draw(spriteBatch, _detailFont, SoulBoundLine, (NameCard.Right + OptionsPanel.Left) / 2f, NameCard.Top + 8f,
-                Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true, width: OptionsPanel.Left - NameCard.Right - 24f);
+            Text.Draw(spriteBatch, _detailFont, SoulBoundLine, NameCard.Left + SoulBoundInset, NameCard.Bottom + SoulBoundBelow,
+                Palette.Narration * alpha, Palette.FormShadow * alpha);
         Text.Draw(spriteBatch, _detailFont, Scores(), FigureFeet.X, ScoresY,
             Palette.Bone * alpha, Palette.FormShadow * alpha, centred: true);
         if (_preview.DrawsArt)
             Text.Draw(spriteBatch, _detailFont, PreviewKeys(), FigureFeet.X, PreviewKeysY,
-                Palette.Note * alpha, Palette.FormShadow * alpha, centred: true);
+                Palette.Bone * (0.8f * alpha), Palette.FormShadow * alpha, centred: true);
         Text.Draw(spriteBatch, _detailFont, About(), OptionsPanel.Center.X, ButtonsY - ButtonSize.Y / 2f - 18f - _detailFont.LineSpacing,
             Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true, width: RowSize.X);
 
@@ -648,7 +661,7 @@ public class CharacterCreationScreen : MenuScreen
         spriteBatch.End();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        DrawChips(spriteBatch, alpha);
+        DrawRows(spriteBatch, alpha);
         DrawDetail(spriteBatch, alpha);
         spriteBatch.End();
     }
@@ -845,16 +858,44 @@ public class CharacterCreationScreen : MenuScreen
     }
 
     /// <summary>Each colour row's swatch at its right end, framed: the colour picked, or an empty frame for as painted.</summary>
-    private void DrawChips(SpriteBatch spriteBatch, float alpha)
+    private void DrawRows(SpriteBatch spriteBatch, float alpha)
     {
-        foreach (MenuEntry row in MenuEntries)
+        foreach ((MenuEntry row, string label, Func<string> value) in _rows)
         {
-            if (!_chips.TryGetValue(row, out Func<Color?> chip)) continue;
-            var box = new Rectangle((int)(row.Plate.Center.X + RowSize.X / 2f - ChipInset), (int)(row.Plate.Center.Y - ChipSize.Y / 2f), ChipSize.X, ChipSize.Y);
-            spriteBatch.Draw(ScreenManager.BlankTexture, box, Palette.FormShadow * alpha);
-            var inside = new Rectangle(box.X + ChipFrame, box.Y + ChipFrame, box.Width - ChipFrame * 2, box.Height - ChipFrame * 2);
-            spriteBatch.Draw(ScreenManager.BlankTexture, inside, (chip() is Color colour ? colour : Palette.Note * 0.35f) * alpha);
+            if (!_rowAt.ContainsKey(row)) continue;
+            Rectangle plate = row.Plate.Bounds;
+            float fade = row.Plate.Opacity, middle = plate.Center.Y;
+            bool lit = row.Plate.Focused;
+            Color name = (lit ? Palette.Heading : Palette.Note) * fade, shown = (lit ? Color.White : Palette.Bone) * fade, arrow = (lit ? Palette.Torch : Palette.Note * 0.8f) * fade;
+
+            RowText(spriteBatch, label, plate.Left + RowEnds, middle, RowLabelWidth, RowLabelSize, name, fade, -1);
+            float from = plate.Left + RowEnds + RowLabelWidth + RowArrowGap, to = plate.Right - RowEnds;
+            RowText(spriteBatch, "<", from, middle, RowArrowGap, RowValueSize, arrow, fade, -1);
+            RowText(spriteBatch, ">", to, middle, RowArrowGap, RowValueSize, arrow, fade, 1);
+            from += RowArrowGap;
+            to -= RowArrowGap;
+            if (_chips.TryGetValue(row, out Func<Color?> chip))
+            {
+                // A colour row's swatch, in its own place before the name, so no name runs under it.
+                var box = new Rectangle((int)from, (int)(middle - ChipSize.Y / 2f), ChipSize.X, ChipSize.Y);
+                spriteBatch.Draw(ScreenManager.BlankTexture, box, Palette.FormShadow * fade);
+                var inside = new Rectangle(box.X + ChipFrame, box.Y + ChipFrame, box.Width - ChipFrame * 2, box.Height - ChipFrame * 2);
+                DrawSwatch(spriteBatch, inside, chip(), fade);
+                from += ChipSize.X + ChipGap;
+            }
+            RowText(spriteBatch, value(), (from + to) / 2f, middle, to - from, RowValueSize, shown, fade, 0);
         }
+    }
+
+    /// <summary>A row's words, no bigger than `size` of the font and shrunk to fit `most` across, about a line's middle: from x (-1), centred on it (0) or ending at it (1).</summary>
+    private void RowText(SpriteBatch spriteBatch, string text, float x, float middle, float most, float size, Color colour, float fade, int align)
+    {
+        if (string.IsNullOrEmpty(text)) return;
+        Vector2 measured = _font.MeasureString(text);
+        float scale = MathF.Min(size, most / measured.X);
+        var at = new Vector2(MathF.Round(align == 0 ? x - measured.X * scale / 2f : align > 0 ? x - measured.X * scale : x), MathF.Round(middle - _font.LineSpacing * scale / 2f));
+        spriteBatch.DrawString(_font, text, at + Palette.ShadowOffset, Palette.LabelShadow * fade, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+        spriteBatch.DrawString(_font, text, at, colour, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
     }
 
     /// <summary>Escape is the same as BACK.</summary>
@@ -911,12 +952,81 @@ public class CharacterCreationScreen : MenuScreen
     /// <summary>For the proof run: BEGIN.</summary>
     internal void ProofBegin() => Confirm();
 
+    // The tour (LegendQuestGame's --tour): every row and every one of its options, picked the way a
+    // player's keys and clicks pick them, to look at each.
+
+    /// <summary>For the tour: how many rows the tab's showing.</summary>
+    internal int ProofRowCount => MenuEntries.Count - _tabs.Count - _buttons.Count;
+
+    /// <summary>For the tour: a shown row's label (HAIR, BEARD), or null past the last.</summary>
+    internal string ProofRowLabel(int row)
+    {
+        if (row < 0 || row >= ProofRowCount) return null;
+        MenuEntry entry = MenuEntries[_tabs.Count + row];
+        foreach ((MenuEntry candidate, string label, Func<string> _) in _rows)
+            if (candidate == entry) return label;
+        return null;
+    }
+
+    /// <summary>For the tour: where a row's shown on the tab by its label, or -1 if it isn't.</summary>
+    internal int ProofFindRow(string label)
+    {
+        for (int row = 0; row < ProofRowCount; row++)
+            if (ProofRowLabel(row) == label) return row;
+        return -1;
+    }
+
+    /// <summary>For the tour: how many things a row's grid offers, or -1 for a row with no grid.</summary>
+    internal int ProofOptionCount(int row) =>
+        row >= 0 && row < ProofRowCount && _details.TryGetValue(MenuEntries[_tabs.Count + row], out Detail detail) ? detail.Count : -1;
+
+    /// <summary>For the tour: an item of a row's grid, as if it had been clicked.</summary>
+    internal void ProofPick(int row, int index)
+    {
+        if (row < 0 || row >= ProofRowCount) return;
+        SelectedEntry = _tabs.Count + row;
+        MenuEntry entry = MenuEntries[SelectedEntry];
+        if (!_details.TryGetValue(entry, out Detail detail)) return;
+        _detailRow = entry;
+        if (index == detail.Current()) return;
+        detail.Pick(index);
+        Refresh();
+    }
+
+    /// <summary>For the tour: a row stepped left or right, as if by the arrow keys.</summary>
+    internal void ProofAdjust(int row, int step)
+    {
+        if (row < 0 || row >= ProofRowCount) return;
+        SelectedEntry = _tabs.Count + row;
+        MenuEntry entry = MenuEntries[SelectedEntry];
+        entry.OnAdjust(step);
+        int now = MenuEntries.IndexOf(entry);
+        if (now >= 0 && _details.ContainsKey(entry)) _detailRow = entry;
+    }
+
+    /// <summary>For the tour: RANDOM.</summary>
+    internal void ProofRandom() => Randomise();
+
+    /// <summary>For the tour: R, turning them to face the other way.</summary>
+    internal void ProofTurn() => _preview.Facing = _preview.Facing == Direction.Right ? Direction.Left : Direction.Right;
+
+    /// <summary>For the tour: whether the figure for how they look now is up and faded in, so a shot shows it.</summary>
+    internal bool ProofSettled
+    {
+        get
+        {
+            if (!Painted) return true;
+            Outfit outfit = PartCatalog.OutfitOf(_member);
+            return outfit is null || (PartCatalog.LargeWhenReady(outfit, PaintedHeight) is ImportedFigure ready && ready == _shown && _fade >= 1f);
+        }
+    }
+
     /// <summary>A row with a value between arrows, on a tab.</summary>
     private MenuEntry AddRow(int page, string label, Func<string> value)
     {
         var row = new MenuEntry(string.Empty, Palette.Torch, RowSize);
         _pages[page].Add(row);
-        _rows.Add((row, () => label + "    <  " + value() + "  >"));
+        _rows.Add((row, label, value));
         return row;
     }
 
@@ -1188,8 +1298,6 @@ public class CharacterCreationScreen : MenuScreen
     /// <summary>Bakes them again and writes every row's value onto its plate.</summary>
     private void Refresh()
     {
-        foreach ((MenuEntry row, Func<string> value) in _rows) row.Text = value();
-
         if (ScreenManager is null || _font is null) return;
         _sheet?.Dispose();
         _sheet = _paperdoll.Compose(ScreenManager.GraphicsDevice, _member.Look, Paperdoll.GearOf(_member));

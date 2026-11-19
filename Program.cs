@@ -46,10 +46,14 @@ if (args.Length > 0 && args[0] == "--validate")
     return;
 }
 
-bool proof = args.Length > 1 && args[0] == "--proof";
+// --tour <dir> is the proof run through the making of your character only, clicking through every
+// face, hair, swatch and extra on the creation screen and saving a picture of each.
+bool tour = args.Length > 1 && args[0] == "--tour";
+bool proof = tour || args.Length > 1 && args[0] == "--proof";
 using var game = new LegendQuestGame
 {
     ProofDirectory = proof ? args[1] : null,
-    ProofLast = proof && args.Length > 2 && Enum.TryParse(args[2], out ProofStage last) ? last : ProofStage.Done,
+    ProofLast = tour ? ProofStage.Creation : proof && args.Length > 2 && Enum.TryParse(args[2], out ProofStage last) ? last : ProofStage.Done,
+    ProofTour = tour,
 };
 game.Run();

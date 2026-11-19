@@ -264,6 +264,16 @@ A_END = "<!-- end part sheets -->"
 OLD_SECTIONS = (("<!-- face sheets: written by tools/face_sheet.py; don't edit between these two lines -->", "<!-- end face sheets -->"),)
 A_ANCHOR = "## Tiles and props"
 CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT"
+#: A sheet made with another image model (tools/source/characters/generated.json's "sheets"), and its parts.
+CREDIT_GENERATED = "made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt"
+
+
+def credit(sheet_id):
+    """Who made a sheet: ChatGPT, for Caleb, unless generated.json says otherwise."""
+    import json
+    path = os.path.join(CHARS, "generated.json")
+    made = json.load(open(path, encoding="utf-8")).get("sheets", []) if os.path.exists(path) else []
+    return CREDIT_GENERATED if sheet_id in made else CREDIT
 
 
 def kind_of(sheet_id):
@@ -811,7 +821,10 @@ def fit_cut(png, sheet_id, force=False, check=None, record=None, write=True):
         ref, covered = drawn_back(b, (x1 - x0, y1 - y0), s, tx, ty)
         placed.append((k, cell_base, part, b, out, ref, covered, (x0, y0, x1, y1), score, s, tx, ty))
     for k, cell_base, part, b, out, ref, covered, (x0, y0, x1, y1), score, s, tx, ty in placed:
-        if kind in ("hair", "extra"):
+        if kind == "extra":
+            out, solid = extra_part(out, b, ref, covered, cell_base, part)
+            kept = solid > 0
+        elif kind == "hair":
             out, kept = head_part(out, b, ref, covered, cell_base, part)
         elif kind in ("cape", "weapon"):
             out, kept = changed_only(out, b, (x1 - x0, y1 - y0), s, tx, ty)
@@ -849,7 +862,12 @@ def fit_cut(png, sheet_id, force=False, check=None, record=None, write=True):
         if os.path.exists(dest) and not force:
             report.append("  cell %d %s: kept the one already there (--force to replace it)" % (k + 1, part))
         else:
-            save(dest, out)
+            if kind == "extra":
+                # An extra is kept as itself, clear everywhere else: tools/import_parts.py takes its
+                # alpha as it is, so a thin ring isn't lost to a second sorting against the base.
+                ic.write_png(dest, np.dstack([np.where(kept[:, :, None], out, 0), solid]).astype(np.uint8))
+            else:
+                save(dest, out)
             report.append("  cell %d %s: scale %.4f, at %+.1f, %+.1f, fit %.3f%s" % (k + 1, part, s, tx, ty, score,
                                                                                 ("; " + "; ".join(notes)) if notes else ""))
         if check:
@@ -929,6 +947,172 @@ def shine(labels, count, sizes, own, open_):
         out[lab_] = (own[y0:y1, x0:x1][ring].mean() >= FIT_SHINE_RING
                      and open_[y0:y1, x0:x1][ring].mean() <= FIT_SHINE_OPEN)
     return out
+
+
+#: An extra painted by a painter that leaves the base as it is (2026-11-19): a pixel is the extra's
+#: when nothing within EXTRA_DRIFT pixels of it on the base is its colour (the largest channel
+#: difference over EXTRA_CHANGED; a skin mark, which is skin on skin, over EXTRA_MARK). A piece of
+#: under EXTRA_SPECK pixels (EXTRA_DOT for a skin mark: a freckle's small) is noise, and so is a thin
+#: piece lying EXTRA_ALONG of its length on the base's outline (the outline drawn a pixel off).
+EXTRA_DRIFT, EXTRA_CHANGED, EXTRA_MARK = 3, 24, 13
+EXTRA_SPECK, EXTRA_DOT, EXTRA_ALONG = 14, 5, 0.7
+#: Where a painter puts an ear on the blank head, as shares of the head's box (left of its left
+#: edge, right of it, and down from its top to the ear's top and its bottom); the skin's hues there
+#: (green and blue against red, least and most), and what's dark enough to be the line round it.
+EAR_ZONE = (0.12, 0.42, 0.25, 0.9)
+EAR_HUE = (0.42, 0.82, 0.25, 0.66)
+EAR_LINE = 95.0
+#: An ear's skin is EAR_LEAST pixels or more that are EAR_THICK from its edge.
+EAR_THICK, EAR_LEAST = 2, 60
+#: The jewellery that's piercings (§4.10's sheets 7 and 8), and how saturated a dark line is that's
+#: a brow's or a lip's brown rather than metal's edge.
+PIERCINGS = range(13, 25)
+PIERCING_BROWN = 0.3
+#: Gold is the skin's hue but yellower: at least this much of its red in green, and less than this in blue.
+PIERCING_GOLD = (0.7, 0.37)
+#: A gap along one of the base's lines this narrow (twice it), with the part on both sides, is the part's.
+EXTRA_CLOSE = 8
+#: The base's lines reach EXTRA_BESIDE further for that; a hole right through the part of at most
+#: EXTRA_HOLE pixels, EXTRA_ON_LINE of it on those lines, is the part's too.
+EXTRA_BESIDE, EXTRA_HOLE, EXTRA_ON_LINE = 5, 900, 0.1
+#: ...where the painting is darker than EXTRA_FILL_LUM (skin's lighter).
+EXTRA_FILL_LUM = 130.0
+#: A beard's thin run (no body EXTRA_THIN deep) of EXTRA_STUB pixels or more, EXTRA_STUB_SHARE of it
+#: within EXTRA_STUB_REACH of the base's lines and darker than EXTRA_STUB_DARK, is one of those
+#: lines drawn off.
+EXTRA_THIN, EXTRA_STUB, EXTRA_STUB_REACH, EXTRA_STUB_SHARE, EXTRA_STUB_DARK = 2, 25, 6, 0.8, 80.0
+#: A skin mark is solid where it's EXTRA_FULL more unlike the skin than the least that counts, and
+#: never fainter than EXTRA_FAINT where it's surely there.
+EXTRA_FULL, EXTRA_FAINT = 22.0, 0.3
+
+
+def extra_part(out, b, ref, covered, base_name, part):
+    """A fitted extra (a beard, an earring, spectacles, a scar, ears, horns) against the base drawn
+    the same way (ref): (the part on the canvas, kept). head_part sorts a hair from a head ChatGPT
+    drew again, by colour, and a gold ring or a pale scar is the skin's colour to it; this is for a
+    sheet whose heads are the template's own, pixel for pixel but for a little drift, where what's
+    new is simply what isn't on the base: every pixel with no match near it there, in pieces big
+    enough to be meant, less the slivers of the base's own outline, and its soft edge."""
+    mark = part.startswith("skin-")
+    drift = _drift(out, ref, EXTRA_DRIFT)
+    new = (drift > (EXTRA_MARK if mark else EXTRA_CHANGED)) & covered
+    figure = ref.max(axis=2) >= FIT_BLACK
+    edge = ic.grow(((ref.astype(np.float64) @ np.array([0.299, 0.587, 0.114]) < FIT_LINE) & figure)
+                   | (ic.grow(figure, 1) & ic.grow(~figure, 1)), 2)
+    thick = ~ic.grow(~new, 1)
+    labels, count = ic.components(new)
+    if count:
+        sizes = np.maximum(np.bincount(labels.ravel(), minlength=count + 1), 1)
+        along = np.bincount(labels.ravel(), weights=edge.ravel().astype(np.float64), minlength=count + 1) / sizes
+        solid = np.bincount(labels.ravel(), weights=thick.ravel().astype(np.float64), minlength=count + 1)
+        gone = (sizes < (EXTRA_DOT if mark else EXTRA_SPECK)) | ((along >= EXTRA_ALONG) & (solid < EXTRA_SPECK))
+        gone[0] = False
+        new &= ~gone[labels]
+    if part.startswith("jewel-"):
+        # The blank head has no ear (a face brings its own), so the painter gives it one to hang an
+        # earring on: skin, and the line round it, where the ear is. It isn't the earring: what's
+        # there in the skin's own hues goes, and the lines beside that, but not metal, stone or
+        # feather, nor a line beside one of those.
+        on_head = _on_head(base_name)
+        hx, hy, hw, hh = _HEADS[base_name][1]
+        across, down = np.arange(out.shape[1])[None, :], np.arange(out.shape[0])[:, None]
+        zone = ((across >= hx - EAR_ZONE[0] * hw) & (across <= hx + EAR_ZONE[1] * hw)
+                & (down >= hy + EAR_ZONE[2] * hh) & (down <= hy + EAR_ZONE[3] * hh))
+        c = out.astype(np.float64)
+        red = np.maximum(c[..., 0], 1.0)
+        lum = c @ np.array([0.299, 0.587, 0.114])
+        warm = (c[..., 0] >= c[..., 1]) & (c[..., 1] >= c[..., 2])
+        hued = warm & (c[..., 1] / red >= EAR_HUE[0]) & (c[..., 1] / red <= EAR_HUE[1]) & (c[..., 2] / red >= EAR_HUE[2]) & (c[..., 2] / red <= EAR_HUE[3])
+        dark = lum < EAR_LINE
+        if int(part.split("-")[1]) in PIERCINGS:
+            # A piercing is painted on a bare face, so the painter draws the brow, the nose and the
+            # lips it goes through as well as the ear: all the skin's hues on the head go, and the
+            # brown lines that aren't a stud's or a ring's own edge.
+            zone = ic.grow(on_head, 6)
+            hued &= ~((c[..., 1] / red >= PIERCING_GOLD[0]) & (c[..., 2] / red < PIERCING_GOLD[1]))
+            flesh = new & zone & hued & ~dark
+            thing = new & ~hued & ~dark
+            brown = dark & warm & ((c.max(axis=2) - c.min(axis=2)) / np.maximum(c.max(axis=2), 1.0) > PIERCING_BROWN)
+            new &= ~(flesh | (new & zone & brown & ~ic.grow(thing, 3)))
+        else:
+            flesh = new & zone & hued & ~dark
+            # Only an ear is that much skin: the soft edge of a strap or a wire across the temple is
+            # skin-hued too, and thin.
+            if (~ic.grow(~flesh, EAR_THICK)).sum() >= EAR_LEAST:
+                thing = new & ~(hued & zone) & ~dark
+                lines = new & zone & dark & warm & ic.grow(flesh, 4) & ~ic.grow(thing, 2)
+                new &= ~(flesh | lines)
+        labels, count = ic.components(new)
+        if count:
+            sizes = np.bincount(labels.ravel(), minlength=count + 1)
+            small = sizes < EXTRA_SPECK
+            small[0] = False
+            new &= ~small[labels]
+    if mark:
+        # A mark is on the skin and of it: on the head only (the neck and shoulders are the armor's
+        # to cover), and as strong as it's unlike the skin, so a freckle's soft edge and a smudge's
+        # fade are theirs, and what shows through it is whoever's skin it's on. Its colour is what,
+        # laid over the base that thinly, makes what was painted.
+        head = _on_head(base_name)
+        new &= head
+        kept = (new | (ic.grow(new, 2) & (drift > EXTRA_MARK // 2))) & head & covered
+        alpha = np.clip((drift.astype(np.float64) - EXTRA_MARK // 2) / EXTRA_FULL, 0.0, 1.0) * kept
+        alpha = np.where(new, np.maximum(alpha, EXTRA_FAINT), alpha)
+        under = ref.astype(np.float64)
+        colour = np.clip(under + (out.astype(np.float64) - under) / np.maximum(alpha, EXTRA_FAINT)[:, :, None], 0, 255)
+        return np.rint(colour).astype(np.uint8), np.rint(alpha * 255).astype(np.uint8)
+    # Where it's painted over one of the base's own lines (a beard over the jaw, a horn over the
+    # head's outline) and is as dark there, nothing's new, and the line would show through it: a gap
+    # along a base line, closed over by the part on both sides, is the part's.
+    # Only what's dark there, though: the skin seen through a hoop is the head's.
+    lum = out.astype(np.float64) @ np.array([0.299, 0.587, 0.114])
+    dark = (lum < EXTRA_FILL_LUM) & covered
+    # The base's lines for this: its black outline and the browner ones inside it (a collarbone, the
+    # neck's), which a brown beard is the colour of.
+    drawn = edge | ((ref.astype(np.float64) @ np.array([0.299, 0.587, 0.114]) < EXTRA_FILL_LUM) & figure)
+    lines = ic.grow(drawn, EXTRA_BESIDE)
+    closed = ~ic.grow(~ic.grow(new, EXTRA_CLOSE), EXTRA_CLOSE)
+    new |= closed & lines & dark
+    # And a hole right through it that's mostly on those lines (not a mouth left open in a beard,
+    # which is on none).
+    holes, count = ic.components(~new)
+    if count:
+        sizes = np.maximum(np.bincount(holes.ravel(), minlength=count + 1), 1)
+        on_line = np.bincount(holes.ravel(), weights=lines.ravel().astype(np.float64), minlength=count + 1) / sizes
+        outside = np.unique(np.concatenate([holes[0], holes[-1], holes[:, 0], holes[:, -1]]))
+        fill = (sizes <= EXTRA_HOLE) & (on_line >= EXTRA_ON_LINE)
+        fill[outside] = False
+        fill[0] = False
+        new |= fill[holes] & dark
+    # One of the base's lines drawn a little off, running out of the part: thin, dark, long, and
+    # beside the base's line nearly all its length. It goes, whatever it's joined to.
+    body = ic.grow(~ic.grow(~new, EXTRA_THIN), EXTRA_THIN) & new
+    thin = new & ~ic.grow(body, 1)
+    labels, count = ic.components(thin)
+    if count:
+        sizes = np.maximum(np.bincount(labels.ravel(), minlength=count + 1), 1)
+        beside = np.bincount(labels.ravel(), weights=ic.grow(drawn, EXTRA_STUB_REACH).ravel().astype(np.float64), minlength=count + 1) / sizes
+        dark = np.bincount(labels.ravel(), weights=(lum < EXTRA_STUB_DARK).ravel().astype(np.float64), minlength=count + 1) / sizes
+        stub = (sizes >= EXTRA_STUB) & (beside >= EXTRA_STUB_SHARE) & (dark >= EXTRA_STUB_SHARE)
+        stub[0] = False
+        if part.startswith("beard-"):
+            new &= ~stub[labels]
+    # Pinholes close, and its soft edge comes with it: what's beside it and not the base's.
+    kept = new | (ic.grow(new, 1) & ~ic.grow(~ic.grow(new, 1), 1) & covered)
+    kept |= ic.grow(kept, 1) & covered & (drift > EXTRA_CHANGED // 2)
+    return np.where(kept[:, :, None], out, b), np.where(kept, 255, 0).astype(np.uint8)
+
+
+_HEADS = {}
+
+
+def _on_head(base_name):
+    """Where a base's head is, and a little round it: above the jaw's seam, on the figure."""
+    if base_name not in _HEADS:
+        import import_parts as ip
+        base_ = ip.Base(base_name)
+        _HEADS[base_name] = (ic.grow(base_.above & (base_.alpha > 0.5), 2), base_.head)
+    return _HEADS[base_name][0]
 
 
 def head_part(out, b, ref, covered, base_name, part):
@@ -1207,14 +1391,14 @@ def write_assets(table):
         if os.path.exists(os.path.join(SHEETS, sid + ".png")):
             kind = kind_of(sid)
             lines += ["tools/source/characters/sheets/%s.png - %s sheet %s (%s), painted on tools/source/characters/%s.png; %s"
-                      % (sid, kind, sid, ", ".join(table[sid][2]), template_id(kind, table[sid][0]), CREDIT), ""]
+                      % (sid, kind, sid, ", ".join(table[sid][2]), template_id(kind, table[sid][0]), credit(sid)), ""]
     for sid in sorted(table):
         kind = kind_of(sid)
         folder = KINDS[kind]["folder"]
         for k, _, part in cells(kind, table[sid][0], table[sid][2]):
             if os.path.exists(os.path.join(CHARS, folder, part + ".png")):
                 lines += ["tools/source/characters/%s/%s.png - %s on its base's canvas, cut by tools/part_sheet.py from cell %d "
-                          "of tools/source/characters/sheets/%s.png; %s" % (folder, part, part, k + 1, sid, CREDIT), ""]
+                          "of tools/source/characters/sheets/%s.png; %s" % (folder, part, part, k + 1, sid, credit(sid)), ""]
     # The faces painted before the head was fixed, heads and hair together, and their sheets.
     for path in sorted(glob.glob(os.path.join(SHEETS, "head-and-hair", "*.png"))):
         lines += ["tools/source/characters/sheets/head-and-hair/%s - a face sheet painted the old way, eight heads with their "
