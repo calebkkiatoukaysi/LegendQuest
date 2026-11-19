@@ -95,7 +95,7 @@ public class CharacterCreationScreen : MenuScreen
 
     /// <summary>The paperdoll, full length: how much bigger than art pixels. And where their feet go on the deck, either way.</summary>
     private const float FigureScale = 11f;
-    private static readonly Vector2 FigureFeet = new(770f, 800f);
+    private static readonly Vector2 FigureFeet = new(735f, 800f);
 
     /// <summary>The paperdoll's face, blown up for the card: the head and shoulders of the frame facing down, and how big.</summary>
     private static readonly Rectangle Bust = new(4, 4, 24, 24);
@@ -139,7 +139,7 @@ public class CharacterCreationScreen : MenuScreen
     /// are; the preview's keys under their feet, no wider than the gap; each on a soft dark so it reads.
     /// </summary>
     private const float ScoresBelow = 12f, PreviewKeysY = 846f, PreviewKeysWidth = 400f;
-    private static readonly Rectangle UnderThem = new(590, 842, 360, 34);
+    private static readonly Rectangle UnderThem = new(555, 842, 360, 34);
     private const int UnderThemEnds = 40;
 
     /// <summary>A colour row's swatch: its size, the gap after it, and its frame.</summary>
@@ -643,12 +643,12 @@ public class CharacterCreationScreen : MenuScreen
 
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        if (_preview.DrawsArt) Text.DrawBacking(spriteBatch, _glow, UnderThem, UnderThemEnds, Palette.Ink * (0.82f * alpha));
+        if (_preview.DrawsArt) Text.DrawBacking(spriteBatch, _glow, UnderThem, UnderThemEnds, Palette.Ink * (0.9f * alpha));
         // Under the card: their scores, and under those the Soul-Bound's line.
         float scoresY = NameCard.Bottom + ScoresBelow, lineY = scoresY + _detailFont.LineSpacing + 6f;
         float scoresWidth = MathF.Min(NameCard.Width - SoulBoundInset * 2f, _detailFont.MeasureString(Scores()).X);
         Text.DrawBacking(spriteBatch, _glow, new Rectangle((int)(NameCard.Left + SoulBoundInset) - 6, (int)scoresY - 4, (int)scoresWidth + 12, _detailFont.LineSpacing + 8),
-            UnderThemEnds, Palette.Ink * (0.7f * alpha));
+            UnderThemEnds, Palette.Ink * (0.9f * alpha));
         if (_soulBound)
         {
             float width = _detailFont.MeasureString(SoulBoundLine).X;
@@ -665,7 +665,7 @@ public class CharacterCreationScreen : MenuScreen
             Palette.Bone * alpha, Palette.FormShadow * alpha, width: NameCard.Width - SoulBoundInset * 2f);
         if (_preview.DrawsArt)
             Text.Draw(spriteBatch, _detailFont, PreviewKeys(), FigureFeet.X, PreviewKeysY,
-                Palette.Bone * (0.8f * alpha), Palette.FormShadow * alpha, centred: true, width: PreviewKeysWidth);
+                Palette.Bone * alpha, Palette.FormShadow * alpha, centred: true, width: PreviewKeysWidth);
         Text.Draw(spriteBatch, _detailFont, About(), OptionsPanel.Center.X, ButtonsY - ButtonSize.Y / 2f - 18f - _detailFont.LineSpacing,
             Palette.Narration * alpha, Palette.FormShadow * alpha, centred: true, width: RowSize.X);
 
