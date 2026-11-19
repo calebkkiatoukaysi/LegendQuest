@@ -179,8 +179,10 @@ GAP = 400
 #: with HAIR_RING of their edge on the hair, are filled, both in the hair's own colour round them.
 HAIR_CLOSE, HAIR_HOLE, HAIR_NEAR, HAIR_RING = 3, 3000, 30, 0.85
 #: A gap between a hair and who it's on (hair_slivers): HAIR_SLIVER pixels or fewer enclosed by the
-#: two, or HAIR_CRACKED or fewer in a crack narrower than twice HAIR_CRACK between hair and head.
-HAIR_SLIVER, HAIR_CRACK, HAIR_CRACKED = 2500, 10, 1500
+#: two, or HAIR_CRACKED or fewer in a pocket between hair and head with a mouth narrower than twice HAIR_CRACK.
+HAIR_SLIVER, HAIR_CRACK, HAIR_CRACKED = 2500, 12, 2500
+#: How dark what fills such a gap is, against the hair's edge beside it.
+HAIR_UNDER = 0.88
 #: Specks of near black (brightest channel HAIR_SPECK_DARK or less, HAIR_SPECK pixels or fewer)
 #: with the hair all round them are ChatGPT's bigger head showing through, never the hair (its
 #: lines are a deep brown): they take the hair's colour round them too.
@@ -1031,9 +1033,9 @@ def hair_slivers(base, colour, alpha, kept):
     """A hair's slivers of nothing against the head closed: where the hair was painted over the
     head's own outline it's the base's colour there and was cut away with it, which leaves a crack
     between the two that the sky shows through. A gap that the hair and the figure enclose between
-    them (HAIR_SLIVER pixels or fewer), or one narrower than twice HAIR_CRACK that the hair and the
-    head both touch (HAIR_CRACKED or fewer), is the hair's, in the colour of the hair's own edge
-    beside it. Returns (colour, alpha, kept)."""
+    them (HAIR_SLIVER pixels or fewer), or a pocket the hair and the head both touch whose mouth is
+    narrower than twice HAIR_CRACK (HAIR_CRACKED or fewer), is the hair's, in the colour of the
+    hair's own edge beside it. Returns (colour, alpha, kept)."""
     head = base.above & (base.alpha > 0.5)
     # What's really there of the hair: a pixel kept but keyed out with the black is a gap too.
     mine_, kept = kept, kept & (alpha > 0.5)
@@ -1048,8 +1050,15 @@ def hair_slivers(base, colour, alpha, kept):
         inside[0] = False
         inside[outside] = False
         sliver |= inside[gaps]
+    # And a pocket between the hair and the head whose mouth is narrower than twice HAIR_CRACK: what
+    # the open air can't reach through a gap that wide.
     solid = kept | head
-    cracks = erode(ic.grow(solid, HAIR_CRACK), HAIR_CRACK) & ~solid & ~sliver & ~(base.alpha > 0.5)
+    wide, count = ic.components(erode(~solid, HAIR_CRACK))
+    open_air = np.zeros(kept.shape, bool)
+    if count:
+        rim = np.unique(np.concatenate([wide[0], wide[-1], wide[:, 0], wide[:, -1]]))
+        open_air = ic.grow(np.isin(wide, rim[rim > 0]), HAIR_CRACK + 1)
+    cracks = ~solid & ~open_air & ~sliver & ~(base.alpha > 0.5)
     labels, count = ic.components(cracks)
     if count:
         sizes = np.bincount(labels.ravel(), minlength=count + 1)
@@ -1072,7 +1081,8 @@ def hair_slivers(base, colour, alpha, kept):
     near = ic.local_mean(colour, (kept & ic.grow(sliver, 2)).astype(np.float64), (2, 4, 8, 16, 32))
     fill = sliver & ~np.isnan(near[:, :, 0])
     colour, alpha = colour.copy(), alpha.copy()
-    colour[fill] = near[fill]
+    # A little darker than the edge it's taken from: it's the hair's underside, in its own shade.
+    colour[fill] = near[fill] * HAIR_UNDER
     alpha[fill] = 1.0
     return colour, alpha, mine_ | fill
 
