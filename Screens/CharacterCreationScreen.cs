@@ -49,6 +49,10 @@ public class CharacterCreationScreen : MenuScreen
     private const string SoulBoundHeading = "WHO WALKS BESIDE YOU?";
     private const string SoulBoundLine = "No one walks into legend alone.";
 
+    /// <summary>The close-up of their head on the LOOK and EXTRAS tabs: how big, and how far under what's written below the name card.</summary>
+    private const int CloseUpSize = 300;
+    private const float CloseUpBelow = 16f;
+
     /// <summary>How far in from the name card's left what's written under it starts: their scores, and that line.</summary>
     private const float SoulBoundInset = 14f;
     private const string Note = "LEFT / RIGHT TO CHANGE  ·  Q / E FOR TABS  ·  TAB TO NAME";
@@ -535,6 +539,7 @@ public class CharacterCreationScreen : MenuScreen
         UpdateFigure(seconds);
         UpdateRows(seconds);
 
+        if (_proofHold > 0) _proofHold--;
         _actionClock += seconds;
         _preview.IsWalking = _action == PreviewAction.Walking;
         WalkerPose pose = _action switch
@@ -629,6 +634,7 @@ public class CharacterCreationScreen : MenuScreen
         _panel.Draw(spriteBatch, NameCard, alpha);
         _panel.Draw(spriteBatch, OptionsPanel, alpha);
         DrawBust(spriteBatch, alpha);
+        DrawCloseUp(spriteBatch, alpha);
         DrawNameBox(spriteBatch, alpha);
         spriteBatch.End();
 
@@ -976,6 +982,18 @@ public class CharacterCreationScreen : MenuScreen
         if (_details.ContainsKey(MenuEntries[SelectedEntry])) _detailRow = MenuEntries[SelectedEntry];
     }
 
+    /// <summary>For the tour: the preview plays one of the game's clips by name (kneel, sit), held at its end, and a shot waits for it to get there.</summary>
+    internal void ProofClip(string name)
+    {
+        _action = PreviewAction.Standing;
+        _actionClock = 0f;
+        _preview.Release();
+        _proofHold = (int)MathF.Ceiling(_preview.PlayClip(name) * 60f) + 20;
+    }
+
+    /// <summary>Frames left before a clip the tour asked for has played through.</summary>
+    private int _proofHold;
+
     /// <summary>For the proof run: the preview walking (1), attacking (2) or casting (3), as if F had been pressed till it was.</summary>
     internal void ProofPreview(int action)
     {
@@ -1049,6 +1067,7 @@ public class CharacterCreationScreen : MenuScreen
     {
         get
         {
+            if (_proofHold > 0) return false;
             if (!Painted) return true;
             Outfit outfit = PartCatalog.OutfitOf(_member);
             return outfit is null || (PartCatalog.LargeWhenReady(outfit, PaintedHeight) is ImportedFigure ready && ready == _shown && _fade >= 1f);
@@ -1369,6 +1388,26 @@ public class CharacterCreationScreen : MenuScreen
         int frame = 1 + (int)(_clock / StepSeconds) % 4;
         var source = new Rectangle(frame * 32, (int)facing * 48, 32, 48);
         spriteBatch.Draw(_sheet, FigureFeet, source, Color.White * alpha, 0f, new Vector2(16f, 46f), FigureScale, SpriteEffects.None, 0f);
+    }
+
+    /// <summary>
+    /// Their head, big, under the name card while the LOOK or the EXTRAS tab is open: a stud or a
+    /// scar is a few pixels on the figure, and this is where it's seen. Smooth sampled, as it's the
+    /// figure's own picture drawn larger.
+    /// </summary>
+    private void DrawCloseUp(SpriteBatch spriteBatch, float alpha)
+    {
+        if (_page is not (1 or 2) || !ShowsPainted || _shown is null) return;
+        int top = (int)(NameCard.Bottom + ScoresBelow + (_detailFont.LineSpacing + 6f) * (_soulBound ? 2 : 1) + CloseUpBelow);
+        var well = new Rectangle(NameCard.Left, top, CloseUpSize, CloseUpSize);
+        spriteBatch.Draw(ScreenManager.BlankTexture, well, Palette.Ink * (0.92f * alpha));
+        Frame(spriteBatch, well, 2, Palette.Gold * (0.8f * alpha));
+        var inside = new Rectangle(well.X + 4, well.Y + 4, well.Width - 8, well.Height - 8);
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
+        spriteBatch.Draw(_shown.Portrait(inside.Size), inside, Color.White * alpha);
+        spriteBatch.End();
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
     }
 
     /// <summary>Their face in its well on the card: the painted one as their figure has it, or the paperdoll's blown up.</summary>

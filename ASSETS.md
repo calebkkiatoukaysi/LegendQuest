@@ -2550,7 +2550,7 @@ tools/source/characters/sheets/hair-sheet-04.png - hair sheet hair-sheet-04 (hai
 
 tools/source/characters/sheets/hair-sheet-05.png - hair sheet hair-sheet-05 (hair-33, hair-34, hair-35, hair-36, hair-37, hair-38, hair-39, hair-40), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
-tools/source/characters/sheets/hair-sheet-06.png - hair sheet hair-sheet-06 (hair-41, hair-42, hair-43, hair-44, hair-45, hair-46, hair-47, hair-48), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+tools/source/characters/sheets/hair-sheet-06.png - hair sheet hair-sheet-06 (hair-41, hair-42, hair-43, hair-44, hair-45, hair-46, hair-47, hair-48), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT, but for hair-47-f, hair-48-f, painted again with Google's Gemini image model by Claude at his request (2026-11-19)
 
 tools/source/characters/extras/beard-01.png - beard-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
@@ -2972,9 +2972,9 @@ tools/source/characters/hairs/hair-45-f.png - hair-45-f on its base's canvas, cu
 
 tools/source/characters/hairs/hair-46-f.png - hair-46-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
-tools/source/characters/hairs/hair-47-f.png - hair-47-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+tools/source/characters/hairs/hair-47-f.png - hair-47-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
-tools/source/characters/hairs/hair-48-f.png - hair-48-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+tools/source/characters/hairs/hair-48-f.png - hair-48-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
 <!-- end part sheets -->
 

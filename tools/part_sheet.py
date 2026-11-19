@@ -5,6 +5,7 @@ Part sheets: several parts in one ChatGPT picture instead of one picture each.
     python tools/part_sheet.py check <png> <sheet-id>     # does it keep the template's size and layout?
     python tools/part_sheet.py fit <png> <sheet-id> [--force] [--check <png>] [--record <json>]   # cut it, wherever ChatGPT put things
     python tools/part_sheet.py cut <png> <sheet-id> [--force]   # cut one that kept to the template exactly
+    python tools/part_sheet.py unface <png> <sheet-id>     # a piercings sheet painted on extra-sheet-faces.png, its faces taken out
     python tools/part_sheet.py list                       # the sheets and their cells, from Story/13 §4.0, §4.9, §4.10, §5.0 and §6.0
 
 Seven kinds, each a 1536x1024 picture of cells with thin grey lines between them, on black:
@@ -268,12 +269,18 @@ CREDIT = "supplied by Caleb Kiatoukaysi, made in ChatGPT"
 CREDIT_GENERATED = "made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt"
 
 
-def credit(sheet_id):
-    """Who made a sheet: ChatGPT, for Caleb, unless generated.json says otherwise."""
+def credit(sheet_id, part=None, parts=()):
+    """Who made a sheet, or one part cut from it: ChatGPT, for Caleb, unless generated.json says
+    otherwise (a whole sheet in its "sheets", or single cells painted again in its "ids")."""
     import json
     path = os.path.join(CHARS, "generated.json")
-    made = json.load(open(path, encoding="utf-8")).get("sheets", []) if os.path.exists(path) else []
-    return CREDIT_GENERATED if sheet_id in made else CREDIT
+    doc = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    if sheet_id in doc.get("sheets", []) or part in doc.get("ids", []):
+        return CREDIT_GENERATED
+    again = [p for p in parts if p in doc.get("ids", [])]
+    if again:
+        return CREDIT + ", but for %s, painted again with Google's Gemini image model by Claude at his request (2026-11-19)" % ", ".join(again)
+    return CREDIT
 
 
 def kind_of(sheet_id):
@@ -419,6 +426,49 @@ def template(kind, base_name):
         sheet[y:y + ch, x:x + cw] = crops[PAIR[k // cols] if base_name == "both" else base_name]
     sheet[line_mask(kind)] = LINE
     return sheet
+
+
+#: The faces the piercings' template wears (extra-sheet-faces.png), and what's the same on a sheet
+#: painted on it: within UNFACE_REACH pixels and UNFACE_SAME in every channel of that template, or a
+#: changed speck under UNFACE_SPECK pixels, or within UNFACE_LINES of a grey line.
+FACED = {"base-male": "face-m03", "base-female": "face-f03"}
+FACED_ID = "extra-sheet-faces"
+UNFACE_REACH, UNFACE_SAME, UNFACE_SPECK, UNFACE_LINES = 6, 34, 10, 10
+
+
+def faced_template():
+    """The extra sheet for both bases with a face on every head: what piercings are painted on, so
+    the painter can see the ear, the brow, the nose and the lips each goes through."""
+    real = globals()["base"]
+
+    def faced(name, kind=None):
+        return load(os.path.join(CHARS, "faces", FACED[name] + ".png")) if kind == "extra" else real(name, kind)
+    globals()["base"] = faced
+    try:
+        return template("extra", "both")
+    finally:
+        globals()["base"] = real
+
+
+def unface(png, sheet_id):
+    """A sheet painted on the faces template made into one painted on the blank template: everything
+    that's still the faces template's becomes the blank's, so only what was added is left, on blank
+    heads, for `fit` to cut. Written to tools/source/characters/sheets/<sheet-id>.png."""
+    if kind_of(sheet_id) != "extra":
+        sys.exit("part_sheet: only an extra sheet is painted on faces")
+    painted, faces, blank = load(png), faced_template(), template("extra", "both")
+    if painted.shape != faces.shape:
+        sys.exit("part_sheet: %s is %dx%d, not the template's %dx%d" % (png, painted.shape[1], painted.shape[0], SHEET_W, SHEET_H))
+    changed = (_drift(painted, faces, UNFACE_REACH) > UNFACE_SAME) & ~ic.grow(line_mask("extra"), UNFACE_LINES)
+    labels, count = ic.components(changed)
+    if count:
+        small = np.bincount(labels.ravel(), minlength=count + 1) < UNFACE_SPECK
+        small[0] = False
+        changed &= ~small[labels]
+    os.makedirs(SHEETS, exist_ok=True)
+    dest = os.path.join(SHEETS, sheet_id + ".png")
+    save(dest, np.where(ic.grow(changed, 1)[:, :, None], painted, blank))
+    print("part_sheet: wrote %s, the faces taken out (%d pixels of it painted)" % (os.path.relpath(dest, ROOT), int(changed.sum())))
 
 
 def edges(rgb):
@@ -1387,11 +1437,16 @@ def write_assets(table):
             source = " and ".join(drawn_from(b, kind) for b in (PAIR if base_name == "both" else (base_name,)))
             lines += ["tools/source/characters/%s.png - the blank %s sheet: %s, from %s, with grey "
                       "lines between them; built by tools/part_sheet.py" % (tid, kind, what, source), ""]
+    if os.path.exists(os.path.join(CHARS, FACED_ID + ".png")):
+        lines += ["tools/source/characters/%s.png - the extra sheet with a face on every head (%s on the man, %s on the woman), "
+                  "for piercings: painted on it they land on the ear, the brow, the nose and the lips, and `tools/part_sheet.py "
+                  "unface` takes the faces back out before the sheet's cut; built by tools/part_sheet.py from the blank extra "
+                  "sheet and tools/source/characters/faces" % (FACED_ID, FACED["base-male"], FACED["base-female"]), ""]
     for sid in sorted(table):
         if os.path.exists(os.path.join(SHEETS, sid + ".png")):
             kind = kind_of(sid)
             lines += ["tools/source/characters/sheets/%s.png - %s sheet %s (%s), painted on tools/source/characters/%s.png; %s"
-                      % (sid, kind, sid, ", ".join(table[sid][2]), template_id(kind, table[sid][0]), credit(sid)), ""]
+                      % (sid, kind, sid, ", ".join(table[sid][2]), template_id(kind, table[sid][0]), credit(sid, parts=[part for _, _, part in cells(kind, table[sid][0], table[sid][2])])), ""]
     for sid in sorted(table):
         kind = kind_of(sid)
         folder = KINDS[kind]["folder"]
@@ -1402,7 +1457,7 @@ def write_assets(table):
         for k, _, part in cells(kind, table[sid][0], table[sid][2]):
             if os.path.exists(os.path.join(CHARS, folder, part + ".png")):
                 lines += ["tools/source/characters/%s/%s.png - %s on its base's canvas, cut by tools/part_sheet.py from cell %d "
-                          "of tools/source/characters/sheets/%s.png; %s" % (folder, part, part, k + 1, sid, credit(sid)), ""]
+                          "of tools/source/characters/sheets/%s.png; %s" % (folder, part, part, k + 1, sid, credit(sid, part)), ""]
     # The faces painted before the head was fixed, heads and hair together, and their sheets.
     for path in sorted(glob.glob(os.path.join(SHEETS, "head-and-hair", "*.png"))):
         lines += ["tools/source/characters/sheets/head-and-hair/%s - a face sheet painted the old way, eight heads with their "
@@ -1434,7 +1489,7 @@ def write_assets(table):
 
 
 def main(argv):
-    if not argv or argv[0] not in ("templates", "cut", "fit", "list", "check"):
+    if not argv or argv[0] not in ("templates", "cut", "fit", "list", "check", "unface"):
         sys.exit(__doc__)
     if argv[0] == "templates":
         for kind in KINDS:
@@ -1444,7 +1499,13 @@ def main(argv):
                 tid = template_id(kind, base_name)
                 save(os.path.join(CHARS, tid + ".png"), template(kind, base_name))
                 print("part_sheet: wrote tools/source/characters/%s.png" % tid)
+        save(os.path.join(CHARS, FACED_ID + ".png"), faced_template())
+        print("part_sheet: wrote tools/source/characters/%s.png" % FACED_ID)
         write_assets(sheets_table())
+    elif argv[0] == "unface":
+        if len(argv) != 3:
+            sys.exit("part_sheet: unface <png> <sheet-id>")
+        unface(argv[1], argv[2])
     elif argv[0] == "list":
         for sid, (base_name, pri, ids) in sorted(sheets_table().items()):
             print("%s (%s, %s): %s" % (sid, base_name, pri, ", ".join("%d %s" % (k + 1, f) for k, _, f in cells(kind_of(sid), base_name, ids))))

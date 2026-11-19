@@ -1316,12 +1316,13 @@ def cape_layer(base, rgb):
     return colour, alpha, np.stack([nothing, base_mask, trim_mask], axis=2), tones
 
 
-def hand_layer(base, rgb):
+def hand_layer(base, rgb, shield=False):
     """A weapon's or an off-hand item's layer on its base: the changed pieces that reach a hand,
     without the base's own fingers where ChatGPT redrew them (skin painted where the base had skin),
-    so a gloved hand never gets a bare fist drawn over it. Nothing on it is dyed: (colour, alpha,
-    None, None)."""
-    fingers = (skin_weight(rgb) > 0.5) & (base.skin > 0.5)
+    so a gloved hand never gets a bare fist drawn over it. A `shield` is over its fist
+    (tools/weapon_alone.py), and wood there is as warm as skin: all of it is kept. Nothing on it is
+    dyed: (colour, alpha, None, None)."""
+    fingers = (skin_weight(rgb) > 0.5) & (base.skin > 0.5) & (not shield)
     colour, alpha, kept = changed_pieces(base, rgb, ~fingers)
     hands = np.zeros(alpha.shape, bool)
     for socket in ("hand.near", "hand.far"):
@@ -1982,8 +1983,8 @@ def build(check, vector=VECTOR):
             base = base_of(pid, edits)
             if base is None:
                 fail("tools/source/characters/%s/%s.png isn't a %s in Story/13-art-prompts.md §6, or what it edits isn't" % (FOLDERS[slot], pid, slot))
-            cutter = cape_layer if slot == "cape" else hand_layer
-            colour, alpha, mask, tones = cutter(bases[base], load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png")))
+            source = load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png"))
+            colour, alpha, mask, tones = cape_layer(bases[base], source) if slot == "cape" else hand_layer(bases[base], source, "shield" in pid or "buckler" in pid)
             colour, alpha = drawn(pid, colour, alpha)
             layers[pid] = (slot, base, shrink(colour, alpha, mask), {"tones": tones} if tones else {})
             report.append("  %-24s %s" % (pid, base))

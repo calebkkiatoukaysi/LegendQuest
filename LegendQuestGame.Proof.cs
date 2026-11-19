@@ -487,6 +487,14 @@ public partial class LegendQuestGame
             c.ProofPreview(action);
             yield return $"preview-{action}.png";
         }
+
+        // Down on a knee and sat, in what they stand up in: a skirt or a coat's tails gathers, it doesn't hang through the deck.
+        c.ProofPreview(0);
+        foreach (string clip in new[] { "kneel", "sit", "block" })
+        {
+            c.ProofClip(clip);
+            yield return $"clip-{clip}.png";
+        }
     }
 
     /// <summary>A new game from the slots to the ship: the Prologue's card, you made (on every tab), what drives you, the Soul-Bound made from the memory, what you remember, and the red moon.</summary>
