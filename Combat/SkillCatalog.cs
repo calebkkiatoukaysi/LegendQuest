@@ -18,7 +18,7 @@ namespace LegendQuest.Combat;
 /// with its Code (the start of every skill id), Focus model, threat and saves.</item>
 /// <item>Write a new partial, SkillCatalog.&lt;Group&gt;.cs, with a static method that returns its seven
 /// SkillDefinitions: the rank 1 auto (Kind Auto), the rank 1, 2 and 3 skills, the rank 5 ultimate
-/// (Ultimate = true) and the rank 4 and 10 passives (Kind Passive). Ids are skill-ids.md's:
+/// (Ultimate = true) and the rank 4 and 10 passives (Kind Passive). Ids are
 /// `&lt;code&gt;-&lt;kebab name&gt;`. Then add one line calling it to the Advanced partial method (see
 /// SkillCatalog.Base.cs's BaseClasses for the shape): implement
 /// <c>static partial void Advanced(List&lt;SkillDefinition&gt; rows)</c> in your partial and add your rows there.
@@ -26,7 +26,7 @@ namespace LegendQuest.Combat;
 /// <item>Convert each table line by 11-combat.md §4.2 and §4.3: A is Kind Action (on the GCD), B Bonus,
 /// R Reaction (an Arm effect first, then what it does when it fires, On = Attacker for whoever set it off),
 /// P Passive (Mods for always-on numbers, Procs for things it does when something happens, AllyMods for
-/// what it gives allies near). CD 1 to 4 are 6000, 8000, 12000, 16000 ms; 1/fight is CooldownMs 45000 with
+/// what it gives allies near). CD 1 to 4 are Cd1 to Cd4 (3000, 6000, 9000 and 12000 ms, the tuned numbers); 1/fight is CooldownMs 45000 with
 /// Ultimate = true (ready at the start). A turn is 3000 ms. Shapes: "1 foe, front" is Range Melee (or
 /// Weapon); "1 foe" Long; "foe + neighbours" AreaShape.Neighbours; "1 row" Row; "front row of foes" Front
 /// with Target None; "a column" Line; "all foes"/"all allies" AllFoes/AllAllies with Range Room and
@@ -39,7 +39,7 @@ namespace LegendQuest.Combat;
 /// wait on the one before it landing (a hit, or a failed save). If a skill needs something no kind
 /// does, add the smallest new EffectType (or Stat, When, ProcTrigger) on the end of its enum and its
 /// case in Battle.Effects.cs.</item>
-/// <item>Each non-passive skill gets a clip, skill-&lt;id&gt; (contract §2.3), except a weapon auto,
+/// <item>Each non-passive skill gets a clip, skill-&lt;id&gt; (tools/rig/combat_clips.py makes them), except a weapon auto,
 /// which plays the weapon's auto-&lt;kind&gt;-n. Its blows land on that clip's hit or release events;
 /// set Strikes for a skill with several. Set Projectile to the school for anything that flies.</item>
 /// <item>Give the AI what it needs: Ai (what it's for), AiValue (what a buff, control or taunt is worth
@@ -49,8 +49,9 @@ namespace LegendQuest.Combat;
 /// </list>
 /// <para>
 /// The static constructor checks every row (a kit of seven at the right ranks, an id that starts with its
-/// class's code, effects with what their kinds need), so a mistake shows up when the game starts. A class
-/// without a kit here fights with the kit of its ClassDefinition.InterimKit's class until it has one.
+/// class's code, effects with what their kinds need), so a mistake shows up when the game starts. Every class
+/// has its kit; ClassDefinition.InterimKit is only there for a class added before its kit is written,
+/// which fights with that class's kit until it has its own.
 /// </para>
 /// </remarks>
 public static partial class SkillCatalog

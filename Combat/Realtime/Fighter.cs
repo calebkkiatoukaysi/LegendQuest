@@ -100,6 +100,9 @@ public sealed class Fighter
     /// <summary>How much further than their feet their body reaches, for reach and areas: a big foe's bulk.</summary>
     public float Size { get; internal set; }
 
+    /// <summary>When they next look for a freer spot round their target, if they're crowded (Battle.Resettle).</summary>
+    internal int ResettleAtMs { get; set; }
+
     /// <summary>Where they're walking to, or null if they're standing.</summary>
     public Vector2? Goal { get; internal set; }
 

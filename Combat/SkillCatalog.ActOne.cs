@@ -101,7 +101,7 @@ public static partial class SkillCatalog
         {
             Id = "netcaster-weather-eye", Name = "Weather Eye", Class = ClassId.Netcaster, Rank = 4, Kind = SkillKind.Passive,
             Procs = new[] { new Proc(ProcTrigger.FightStart, new[] { PartyFocus(10) }) },
-            Description = "The party starts every fight with 10 more Focus (it was +2 initiative).",
+            Description = "The party starts every fight with 10 more Focus.",
         };
         yield return new()
         {

@@ -11,7 +11,7 @@ namespace LegendQuest.Rules;
 /// A static table keyed by the enum, like The Black Box's ItemCatalog. The armour, shields, martial
 /// weapons and casting abilities are 5e's, from the SRD 5.1. Hit points aren't: they come from level
 /// and Constitution, with each class's modifier on top, 10-classes.md §1.4's (+20% for the Warden,
-/// +10% for the Blademaster, -10% for the Arcanist, nothing for the rest). One simplification:
+/// +10% for the Swordhand, -10% for the Arcanist, nothing for the rest). One simplification:
 /// every class here is trained with every simple weapon, where the SRD gives wizards and druids a
 /// shorter list, so Sera's shortbow is hers to use. The Hexblade fights with a pact blade, so it's
 /// trained with the shortsword in its kit. The names are the story's own; the kits are the team's,
@@ -45,7 +45,7 @@ public static class ClassCatalog
     {
         new()
         {
-            Id = ClassId.Fighter, Code = "fighter", Name = "Blademaster", Role = "Frontline weapon specialist.", HpModifier = 10,
+            Id = ClassId.Fighter, Code = "fighter", Name = "Swordhand", Role = "Frontline weapon specialist.", HpModifier = 10,
             Recommended = new AbilityScores { Strength = 15, Dexterity = 13, Constitution = 14, Intelligence = 8, Wisdom = 12, Charisma = 10 },
             ArmourUpTo = ArmourCategory.Heavy, Shields = true, MartialWeapons = true,
             StartingKit = Kit("longsword", "wooden-shield", "chain-mail"),

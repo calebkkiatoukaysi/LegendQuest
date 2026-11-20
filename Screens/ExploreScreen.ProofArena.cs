@@ -77,6 +77,9 @@ public partial class ExploreScreen
     /// <summary>How long the party walks back from a field it's beaten, in frames, out of reach of it filling again.</summary>
     private const int ArenaStepBack = 150;
 
+    /// <summary>How long the party rests after it, before the shot of them kneeling, in frames.</summary>
+    private const int ArenaRestFrames = 240;
+
     /// <summary>How long the pretend mouse rests on a field's foe before the shot of it and the click, in frames.</summary>
     private const int ArenaHover = 30;
 
@@ -191,7 +194,7 @@ public partial class ExploreScreen
         return null;
     }
 
-    /// <summary>After a field fight's panel's put away: the party steps back from where the field stands, a shot of the room cleared, and then one of it filled again.</summary>
+    /// <summary>After a field fight's panel's put away: the party steps back from where the field stands, a shot of the room cleared, the party resting (R) with what it did to their hit points, and then one of the field filled again.</summary>
     private string ArenaAfter(ArenaPlan plan)
     {
         if (!plan.WaitForRespawn)
@@ -207,6 +210,18 @@ public partial class ExploreScreen
         }
         _proofMove = _arenaClock < ArenaStepBack ? new Vector2(-1f, 0f) : null;
         if (_arenaClock == ArenaStepBack + 10) return plan.Prefix + "-cleared.png";
+        if (_arenaClock == ArenaStepBack + 12)
+        {
+            // The pack seldom leaves a mark, so the run takes the party down to half first, to see a rest bring them back.
+            foreach (PartyMember member in _game.Party) member.Hp = Math.Max(1, member.MaxHp / 2);
+            ProofNote($"{plan.Prefix}: before resting, " + string.Join(", ", _game.Party.Select(member => $"{member.Name} {member.Hp}/{member.MaxHp}")));
+            StartResting();
+        }
+        if (_arenaClock == ArenaStepBack + 12 + ArenaRestFrames)
+        {
+            ProofNote($"{plan.Prefix}: after {ArenaRestFrames / 60} s resting ({(_resting ? "still kneeling" : "up again")}), " + string.Join(", ", _game.Party.Select(member => $"{member.Name} {member.Hp}/{member.MaxHp}")));
+            return plan.Prefix + "-resting.png";
+        }
         if (_arenaClock > ArenaStepBack + 10 && _fieldCleared.Count == 0 && _arenaTaken.Add("respawned"))
         {
             ProofNote($"{plan.Prefix}: the field filled again after {_arenaClock / 60f:F0} s of frames.");

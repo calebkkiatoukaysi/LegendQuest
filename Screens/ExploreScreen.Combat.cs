@@ -183,6 +183,8 @@ public partial class ExploreScreen
         _backUp.Clear();
         _fightEnded = false;
         _handedWin = false;
+        _wonCued = false;
+        _cooling.Clear();
 
         _fightDifficulty = RetryState.Start(encounter.Id, ProofSeed is null ? _audio.Settings.Mode : Difficulty.Balanced);
         bool Flag(string flag) => _game.Flags.Contains(flag);
@@ -480,6 +482,8 @@ public partial class ExploreScreen
         if (_encounter.Lost is null)
         {
             RetryState.Lost(_encounter.Id);
+            // The battle song goes and the defeat jingle plays under the game-over screen.
+            _audio.EndBattle(false);
             ScreenManager.AddScreen(new GameOverScreen(_encounter.Id, RetryState.Options(_encounter.Id, _fightDifficulty), ConcedeFight));
             return;
         }
@@ -514,6 +518,7 @@ public partial class ExploreScreen
         if (points > 0) lines.Add(($"+{points} CLASS POINTS", Palette.Gold));
         foreach (string line in levelled) lines.Add((line.ToUpperInvariant(), Palette.Heading));
         foreach (string line in ranked) lines.Add((line.ToUpperInvariant(), Palette.Heading));
+        if (levelled.Count + ranked.Count > 0) Play(SoundKeys.LevelUp, null);
     }
 
     /// <summary>Rolls what every foe who died was carrying and the fight's own treasure, adds the gold lifted mid-fight and the party's share of the takings, and puts it in the gold and the bag.</summary>

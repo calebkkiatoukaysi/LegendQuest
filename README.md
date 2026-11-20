@@ -166,7 +166,7 @@ lever's pulled. A second switch, `--simulate`, fights an encounter headless (see
 | Menus and forms | **Arrows** or **WASD** to move, **Enter** or **Space** to pick, **Esc** to go back. The mouse works too |
 | Options | **Left** and **right** change the selected row |
 | Save slots | **Left** and **right** move between a slot and its ERASE |
-| Walking a room | **A** and **D** or **left** and **right** to walk along it, **W** and **S** or **up** and **down** to walk deeper or nearer on the floor, **E**, **Space** or **Enter** to use or talk to what you're next to or go through the door you're at, **M** for the zone map, **Esc** to pause. Walk off either end, or into a stair, to go on. Everyone faces left or right |
+| Walking a room | **A** and **D** or **left** and **right** to walk along it, **W** and **S** or **up** and **down** to walk deeper or nearer on the floor, **E**, **Space** or **Enter** to use or talk to what you're next to or go through the door you're at, **M** for the zone map, **R** to rest (everyone kneels and gets 5% of their hit points back a second until they're full or you move; walking about gives 1% every 2 s anyway), **Esc** to pause. Walk off either end, or into a stair, to go on. Everyone faces left or right |
 | Walking a room, the mouse | **Left click** the floor to walk there (the path shows while you point), someone, something or a door to walk up to it and talk, use it or go through, or a way out's chevrons to walk into it. Above the floor there's only the painting. Pointing at anything says what it is |
 | The party | **Tab** for the next in line, **F1** to **F4** for one in particular, or click their card or them |
 | Talking to the party | **E** (with nobody and nothing else in reach) or a **click** on one of them talks to them, when they've something to say: the cursor's a speech bubble, the tooltip ends TALK, and a gold "!" floats over anyone with something new |
@@ -179,7 +179,7 @@ lever's pulled. A second switch, `--simulate`, fights an encounter headless (see
 | The zone map | **M** in a room shows the zone's rooms laid out the way they join, with their badges and "!"s. The **arrows** or the mouse pick a room, and **Enter** or a click jumps to it if you've been there, but not in a fight or a scene. **Tab** switches to the world, which is where it opens from a waypoint, to pick somewhere to travel to. **M** or **Esc** closes it |
 | A tip | **Enter** or a **click** on its card puts it away. It never stops you walking, and goes by itself once there's been time to read it twice |
 | How to play | **Esc**, then HOW TO PLAY. **Left** and **right** (or **Q** and **E**) turn the page, a **click** on a tab jumps to it, and **Esc** goes back |
-| In a fight | **Click** a foe to target it (your auto attack comes on and you walk into its reach), a friend to target them (and help them up if they're down), or the floor to walk there; **WASD** or the **arrows** walk too. **1** to **6** or a **click** use the bar: **1** the auto attack on and off, **2** to **5** your skills on your target (walking into reach first), **6** a healing potion; **7** or the sigil is the Soul-Link Strike. **Tab** picks the next foe, nearest first, **T** your target's target, **Esc** clears your target (and with none, pauses), **L** shows and hides the log (the **wheel** scrolls it), and **Alt** shows everyone's numbers. Pointing at anything says what it is |
+| In a fight | **Click** a foe to target it (your auto attack comes on and you walk into its reach), a friend to target them (and help them up if they're down), or the floor to walk there; **WASD** or the **arrows** walk too. **1** to **6** or a **click** use the bar: **1** the auto attack on and off, **2** to **5** your skills on your target (walking into reach first), **6** a healing potion; **7** or the sigil is the Soul-Link Strike. **Tab** picks the next foe, nearest first (a run of presses keeps the order it started with), **T** your target's target, **Esc** clears your target (and with none, pauses), **L** or a click on its tab shows and hides the log (the **wheel** scrolls it), and **Alt** shows everyone's numbers. Pointing at anything says what it is |
 | The end of a fight | **Enter**, **Space** or a **click** on the panel goes on to what happens next |
 | A foe in a room | A red name is a foe you can fight (a field, Combat, On screen): **click** it and the fight starts, with it your target. Some come at you when you come near |
 | Debug builds only | **F9** puts whoever you're controlling in the next class (all twenty-five), dressed in its kit; **F10** gives them the next rank in it. For trying a class's skills, in a scratch game |
@@ -187,9 +187,11 @@ lever's pulled. A second switch, `--simulate`, fights an encounter headless (see
 | In the inventory | The **arrows** move round the slots, the bag and the key items. **Enter** or a **click** puts on what's in the bag (whatever was there goes back in it), drinks a potion, or takes off what's in a slot; on an empty slot it finds something in the bag for it. The **mouse wheel** scrolls the bag. On the sheet, **up** and **down** pick an ability to read |
 | A shop | Talk to the keeper. **Enter** or a **click** buys one or sells one, and with **Shift** held it sells the whole stack. **Tab** crosses the counter, **Q** and **E** pick who the cards measure against, **Esc** leaves |
 
-A gamepad works anywhere the keyboard does: the d-pad or left stick, A to use, B to back out, Y for
-the zone map, the right shoulder for the next in the party, the left shoulder held for what Alt
-shows, X to put a tip away, and Start.
+A gamepad works anywhere the keyboard does outside a fight: the d-pad or left stick, A to use, B to
+back out, Y for the zone map, the right shoulder for the next in the party, the left shoulder held
+for what Alt shows, X to put a tip away, and Start. In a fight a pad can walk and turn through the
+foes, but the bar (1 to 7), assist (T), the log (L) and resting (R) are the keyboard's and the
+mouse's for now.
 
 ## Screens
 
@@ -246,8 +248,9 @@ as the proof shots. What's in so far:
   and P-05 are the voyage: the deck of the Gull's Wager at night, two days out, where you can walk
   about and hear the crew before you go to the rail at the bow (the red "!"), then the Soul-Bound
   talking about the new king, the bell from the crow's nest, and the sea-wraiths up over the port
-  rail: the first fight, and a guided one, where a wraith at a time teaches you to move, attack, use
-  an ability, fill and spend the Soul-Link, and end your turn. Then Questeria at dawn.
+  rail: the first fight, and a guided one, where the wraiths teach you a step at a time to pick a
+  foe, let the auto attack swing, press your first skill, read the cooldowns and Focus, drink the
+  potion, and fill and spend the Soul-Link. Then Questeria at dawn.
 - **Act 1, Chapter 1: Saltwind Welcome.** The ship comes into Saltwind Docks and Act 1's card comes
   up. Across the boardwalk, under a red "!", the Red Gulls are shaking old Tomas down for a dock tax
   that doesn't exist, and it starts when you walk up to them. You can wade in,
@@ -500,15 +503,16 @@ already, anyone else who joins waits at camp, which is the Gilded Flagon.
 | --- | --- |
 | `PartyMember` | Someone in the party, as the save keeps them: name, pronouns, class, level, experience, ability scores, hit points, what they're wearing (item ids by slot, changed with `Equip`, `Unequip` and `PutOn`), what they've spent since they last rested, look, and where they're standing. The most hit points they can have includes anything worn that adds to it |
 | `Origins` | Everyone who can be in the party and how they start: class, scores (5e's standard array, 15 14 13 12 10 8, where their class recommends), look and kit. A companion the story arms sets out in their own (Sera's shortbow, Kael's twin daggers, Brannock's round shield); everyone else in their class's. You and the Soul-Bound start from theirs and the creation screen does the rest |
-| `ClassCatalog` | The eight classes: the SRD's names in the code and the story's on screen (a Fighter is a Blademaster, a Rogue a Shadowstep, a Cleric a Lightbearer, a Wizard an Arcanist, a Paladin a Warden, a Druid a Wildcaller, a Warlock a Hexblade and a Bard a Skald), each with its role, its hit die, where its scores go, the armour, shields and weapons it's trained with (every class has the simple weapons), the ability it casts with, its speed, and its starting kit: its weapon, shield and armour, and a travelling cloak and boots. A kit it couldn't wear stops the game at startup |
+| `ClassCatalog` | The 25 classes, each with its kit (`SkillCatalog`): the eight base ones have the SRD's names in the code and the story's on screen (a Fighter is a Swordhand, a Rogue a Shadowstep, a Cleric a Lightbearer, a Wizard an Arcanist, a Paladin a Warden, a Druid a Wildcaller, a Warlock a Hexblade and a Bard a Skald), each with its role, its hit die, where its scores go, the armour, shields and weapons it's trained with (every class has the simple weapons), the ability it casts with, its speed, and its starting kit: its weapon, shield and armour, and a travelling cloak and boots. A kit it couldn't wear stops the game at startup |
 | `AbilityCheck` | A check: a d20 plus a modifier against a DC, with or without advantage, and a natural 20 or 1 deciding it whatever the total |
 | `AbilityScores` | The six scores, and 5e's modifier: half of (score minus 10), rounded down |
 | `DiceExpression` | Dice written 5e's way (`2d6+3`, `1d8`, `3`), parsed once and rolled into a `RollResult` with every die and every modifier by where it came from; a critical rolls the dice twice and the bonus once. `Dice` rolls one die |
 | `AttackMath` | The d20 with advantage or disadvantage, whether a roll hits (a natural 20 always, a natural 1 never), the exact chance it will for the tooltip, and how several advantages and disadvantages cancel |
 | `ArmourClass` | AC from what's worn: the armour's base, Dexterity up to its cap (all for light, +2 for medium, none for heavy), and every worn bonus, a shield's +2 among them. 10 plus Dexterity in nothing |
 
-Hit points at level 1 are 5e's: the whole hit die plus the Constitution modifier. Everyone stays
-level 1 in the skeleton.
+Hit points follow 10-classes.md §1.4: 10 plus the Constitution modifier at level 1, and 7 plus it
+for every level after, with the class's HpModifier on top (+10% for the Swordhand, -10% for the
+Arcanist), and whatever anything worn adds. Everyone levels up as Difficulty and levels says.
 
 - **Following.** The others walk your trail: wherever your feet have been, a point every few
   pixels, and each aims for the spot their own distance back along it, 22 art pixels apart, so they
@@ -795,11 +799,12 @@ dotnet run -- --simulate numbers                  # every class's real-time numb
 dotnet run -- --simulate selftest                 # the engine's own checks
 dotnet run -- --simulate trace:a1-c3-02-raid 3    # run 3 of a fight, its whole log
 dotnet run -- --simulate trace:a1-c4-02-sappers@hourwarden   # the same with a class in your place
+dotnet run -- --simulate a1-c1-01-gulls@rogue 400 # one fight with a class in your place, a line a member
 dotnet run -- --simulate skill:glasswright-refract # the self-test's scripted fight for one skill, its whole log
 ```
 
 `--simulate` opens no window and drives the real-time engine (`Combat/Realtime/BattleSimulator`).
-Each run lines up the party the story would have there (you as a Blademaster, the Soul-Bound as a
+Each run lines up the party the story would have there (you as a Swordhand, the Soul-Bound as a
 Shadowstep, and the companions who'd be with you) at `LevelTable.Expected` and the class rank the
 story would have them at (`ClassRanks.ExpectedRank`), fresh, with two healing potions, through
 `BattleRoster` as the game does, with the fight's guests, supports and waves, on the difficulty asked
@@ -859,75 +864,79 @@ Pick Pocket once a foe, Captain's Share, Throw Anything using up the flask, Luck
 Bleed the Clock and Echo Strike), that every foe's move fires and lands, and that no fight stalls on
 any difficulty. `skill:` prints the scripted fight the every-skill check uses for one skill.
 
-The tuned pass, `--simulate all 200` on Balanced with the anim stream's clips (5 of 8 pass; on Story
-all 8 pass, every one won every time):
+The tuned pass, `--simulate all 200` on Balanced (5 of 8 pass; on Story all 8 pass, every one won
+every time):
 
 | Encounter | Kind | Lv | Won | Seconds | Who goes down most | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
-| `p-05-wraiths` | Tutorial | 1 | 100% | 26 | you, 10% | pass |
-| `a1-c1-01-gulls` | Story | 1 | 96% | 25 | you, 29% | pass |
-| `a1-c2-01-gloomfangs` | Story | 2 | 93% | 31 | you, 30% | pass |
-| `a1-c2-02-thornmother` | Boss | 2 | 89% (92% with the wardens) | 88 | the Soul-Bound, 44% | pass |
-| `a1-c2-02-guard-wave` | Story | 2 | 96% | 42 | the Soul-Bound, 12% | pass |
-| `a1-c3-02-raid` | Story | 2 | 100% | 52 | Sera, 24% | too easy |
-| `a1-c4-02-kael` | MiniBoss | 3 | 100% | 47 | you, 45% | too easy |
-| `a1-c4-02-sappers` | Story | 3 | 100% | 49 | you, 34% | too easy |
+| `p-05-wraiths` | Tutorial | 1 | 100% | 29 | you, 10% | pass |
+| `a1-c1-01-gulls` | Story | 1 | 97% | 30 | you, 14% | pass |
+| `a1-c2-01-gloomfangs` | Story | 2 | 97% | 34 | you, 21% | pass |
+| `a1-c2-02-thornmother` | Boss | 2 | 87% (91% with the wardens) | 93 | the Soul-Bound, 54% | pass |
+| `a1-c2-02-guard-wave` | Story | 2 | 97% | 44 | the Soul-Bound, 18% | pass |
+| `a1-c3-02-raid` | Story | 2 | 100% | 59 | Sera, 23% | too easy |
+| `a1-c4-02-kael` | MiniBoss | 3 | 100% | 48 | you, 42% | too easy |
+| `a1-c4-02-sappers` | Story | 3 | 98% | 58 | you, 37% | too easy |
 
-On 600 runs the Thornmother comes out at 91%, a point over her band: that's the price of keeping her
-at 99% or more on Story, since her Balanced and Story bands only just overlap. Its pace, the same run:
+The raid, Kael and the sappers are still over their bands: each is won all but every time while whoever
+takes the blows already goes down about as often as §9.2 allows, so more damage or hit points only
+downs more people (the tuning tried both). They want something other than numbers: a support that
+comes later, a wave more, or a foe that goes for the back line. Its pace, the same run:
 
 | Encounter | Your auto | A skill to press | Pressed | Focus | A foe under the party's fire | The boss |
 | --- | --- | --- | --- | --- | --- | --- |
-| `p-05-wraiths` | 2.1 s | 3.0 s (rank 1) | 3.7 s | 78 | 8.8 s | |
-| `a1-c1-01-gulls` | 2.1 s | 2.5 s | 2.9 s | 72 | 6.0 s | |
-| `a1-c2-01-gloomfangs` | 2.1 s | 2.5 s | 3.0 s | 67 | 8.0 s | |
-| `a1-c2-02-thornmother` | 2.3 s | 4.0 s | 3.9 s | 26 | (whelps) | 87 s: 26 + 28 + 33, every phase seen |
-| `a1-c2-02-guard-wave` | 2.1 s | 2.3 s | 2.4 s | 45 | 8.3 s | |
-| `a1-c3-02-raid` | 2.2 s | 2.4 s | 2.6 s | 66 | 7.5 s | |
-| `a1-c4-02-kael` | 2.2 s | 3.7 s | 3.4 s | 21 | | 46 s: 25 + 21 (he yields) |
-| `a1-c4-02-sappers` | 2.2 s | 2.4 s | 2.6 s | 36 | 12.0 s | |
+| `p-05-wraiths` | 2.1 s | 3.0 s (rank 1) | 3.7 s | 69 | 9.6 s | |
+| `a1-c1-01-gulls` | 2.1 s | 2.8 s | 3.1 s | 51 | 7.1 s | |
+| `a1-c2-01-gloomfangs` | 2.1 s | 2.9 s | 3.1 s | 49 | 8.8 s | |
+| `a1-c2-02-thornmother` | 2.3 s | 4.1 s | 4.0 s | 26 | (whelps) | 91 s: 26 + 30 + 35, every phase seen |
+| `a1-c2-02-guard-wave` | 2.1 s | 2.6 s | 2.5 s | 32 | 9.4 s | |
+| `a1-c3-02-raid` | 2.2 s | 2.6 s | 2.7 s | 53 | 8.4 s | |
+| `a1-c4-02-kael` | 2.3 s | 3.7 s | 3.5 s | 22 |  | 47 s: 26 + 21 (he yields) |
+| `a1-c4-02-sappers` | 2.4 s | 3.0 s | 3.0 s | 28 | 14.5 s | |
 
-Against a single big foe the Blademaster's Focus runs low (Cleave catches only one), so the bar's
+Against a single big foe the Swordhand's Focus runs low (Cleave catches only one), so the bar's
 4 s there is Focus, not cooldowns: what to spend it on is the player's choice.
 
 `--simulate classes 200` (50 runs a fight, each class in your place at the story's levels, ranks 1
-to 5). The median class wins 88% of the Act 1 fights; the Blademaster, the story's own pick, 96%:
+to 5). The median class wins 89% of the Act 1 fights; the Swordhand, the story's own pick, 96%:
 
 | Class | Won | Dmg/s | Heal/s | Threat | Control | A skill every | Leads its party (of 8 fights) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Blademaster | 96% | 5.4 | 0.4 | 80% | 0% | 2.9 s | threat 8 |
-| Shadowstep | 81% | 6.0 | 0.1 | 60% | 0% | 2.6 s | damage 5 |
-| Lightbearer | 88% | 1.9 | 0.7 | 53% | 0% | 6.6 s | healing 5 |
-| Arcanist | 79% | 5.4 | 0.2 | 75% | 0% | 2.7 s | threat 6 |
-| Warden | 89% | 4.0 | 0.4 | 83% | 0% | 2.9 s | threat 8 |
-| Wildcaller | 89% | 2.9 | 0.5 | 63% | 9% | 6.4 s | control 7 |
-| Hexblade | 81% | 5.1 | 0.1 | 75% | 1% | 2.8 s | threat 6 |
-| Skald | 90% | 1.9 | 0.6 | 55% | 0% | 10.1 s | healing 4 |
-| Watchblade | 83% | 2.4 | 0.2 | 79% | 16% | 5.8 s | threat 8, control 8 |
-| Netcaster | 91% | 2.0 | 0.6 | 50% | 20% | 6.1 s | control 8 |
-| Deckhand | 93% | 3.1 | 0.5 | 60% | 6% | 5.1 s | control 8 |
-| Lodge Ranger | 79% | 5.4 | 0.2 | 73% | 0% | 3.5 s | threat 5 |
-| Guild Battlemage | 96% | 3.8 | 0.1 | 66% | 0% | 6.2 s | threat 4 |
-| Ashwalker | 90% | 5.4 | 0.2 | 77% | 10% | 4.5 s | control 8 |
-| Ironvein Bulwark | 82% | 2.5 | 0.1 | 79% | 0% | 3.3 s | threat 7 |
-| Ember Mender | 96% | 2.2 | 0.9 | 58% | 0% | 5.2 s | healing 7 |
-| Lanerunner | 73% | 5.5 | 0.1 | 79% | 0% | 2.5 s | threat 7 |
-| Wayfarer | 83% | 4.8 | 0.2 | 69% | 0% | 3.3 s | threat 3 (nothing in half) |
-| Gilded Knight | 82% | 4.9 | 0.1 | 67% | 4% | 4.1 s | control 4 |
-| Hemomancer | 94% | 3.3 | 1.1 | 70% | 0% | 4.4 s | healing 8 |
-| Hivekeeper | 91% | 2.3 | 0.8 | 60% | 0% | 6.3 s | healing 6 |
-| Glasswright | 81% | 3.8 | 0.1 | 78% | 7% | 4.5 s | threat 8, control 5 |
-| Lamplighter | 92% | 2.2 | 0.8 | 54% | 0% | 4.6 s | healing 5 |
-| Crownsworn | 79% | 3.0 | 0.5 | 79% | 0% | 4.2 s | threat 7 |
-| Hourwarden | 88% | 2.6 | 0.1 | 45% | 5% | 5.0 s | control 5 |
+| Swordhand | 96% | 4.6 | 0.4 | 81% | 0% | 3.2 s | healing 3, threat 8 |
+| Shadowstep | 81% | 5.9 | 0.1 | 60% | 0% | 2.8 s | damage 5, threat 2 |
+| Lightbearer | 94% | 1.9 | 0.6 | 54% | 0% | 6.3 s | healing 4, threat 1 |
+| Arcanist | 82% | 5.3 | 0.2 | 76% | 0% | 2.6 s | damage 1, threat 7 |
+| Warden | 86% | 3.6 | 0.3 | 83% | 0% | 3.7 s | healing 3, threat 8 |
+| Wildcaller | 96% | 2.7 | 0.5 | 64% | 8% | 5.6 s | healing 4, threat 2, control 7 |
+| Hexblade | 84% | 5.0 | 0.1 | 74% | 1% | 3.7 s | threat 6, control 1 |
+| Skald | 89% | 1.8 | 0.6 | 56% | 0% | 4.9 s | healing 4 |
+| Watchblade | 88% | 2.3 | 0.2 | 82% | 16% | 8.3 s | threat 8, control 8 |
+| Netcaster | 97% | 2.0 | 0.6 | 53% | 19% | 5.4 s | healing 4, control 8 |
+| Deckhand | 95% | 2.9 | 0.5 | 58% | 5% | 4.9 s | healing 3, threat 2, control 8 |
+| Lodge Ranger | 80% | 5.4 | 0.2 | 74% | 0% | 2.6 s | damage 4, threat 5 |
+| Guild Battlemage | 98% | 3.7 | 0.0 | 67% | 0% | 6.5 s | threat 5 |
+| Ashwalker | 92% | 5.0 | 0.1 | 76% | 9% | 4.7 s | damage 2, threat 7, control 8 |
+| Ironvein Bulwark | 84% | 2.4 | 0.1 | 79% | 0% | 4.6 s | threat 7 |
+| Ember Mender | 98% | 2.2 | 0.8 | 58% | 0% | 4.9 s | healing 7, threat 1 |
+| Lanerunner | 84% | 5.4 | 0.1 | 76% | 0% | 4.0 s | damage 3, threat 6 |
+| Wayfarer | 84% | 4.6 | 0.2 | 68% | 0% | 2.9 s | healing 1, threat 3 (nothing in half) |
+| Gilded Knight | 88% | 4.6 | 0.1 | 67% | 3% | 4.4 s | damage 1, threat 3, control 4 |
+| Hemomancer | 96% | 3.2 | 1.1 | 72% | 0% | 4.3 s | healing 8, threat 3 |
+| Hivekeeper | 94% | 2.3 | 0.8 | 60% | 0% | 5.6 s | healing 6, threat 2 |
+| Glasswright | 86% | 3.7 | 0.1 | 78% | 7% | 5.3 s | threat 8, control 5 |
+| Lamplighter | 94% | 2.1 | 0.7 | 54% | 0% | 4.4 s | healing 5 |
+| Crownsworn | 86% | 2.9 | 0.5 | 80% | 0% | 4.6 s | healing 2, threat 6 |
+| Hourwarden | 93% | 2.6 | 0.0 | 46% | 5% | 5.7 s | healing 4, threat 1, control 5 |
 
-Eight classes are within 5 points of the median; the rest are 6 to 10 points off (the Lanerunner 15).
-Almost all of the gap comes from the three fights you and the Soul-Bound fight alone at rank 2: the
-gulls, the gloomfangs and the guard wave. There the Blademaster's plate, Cleave across the pack and
-Second Wind carry the duo at 90 to 96%, while a light class without an area skill yet wins 20 to 60%.
-Every class wins the four-member fights. The damage classes now out-damage the front line (5 to 6 a
-second against the Blademaster's 5.4), and every class but the Wayfarer leads its party at something
-in at least half the fights. The AI used every skill open at rank 5 except the Skald's Inspiration.
+Eleven classes are within 5 points of the median; the rest are 6 to 9 points off, so §9.2's "within 5
+points" isn't met yet. Almost all of the gap comes from the fights you and the Soul-Bound fight
+alone at rank 2 (the gulls, the gloomfangs and the guard wave) and from the Thornmother: there the
+Swordhand's plate, Cleave across the pack and Second Wind carry the duo, while a light class without
+an area skill or a way to keep a foe off yet wins 26 to 80% of them (the Shadowstep 16% against the
+Thornmother). The Skald and the Lamplighter win the tutorial only 76% and 80% of the time. Every
+class wins the four-member fights. The fix is the light classes' rank 1 and 2 kits for those fights,
+not the fights' numbers, and it's still to do. The AI used every skill open at rank 5 except the
+Skald's Inspiration.
 
 The turn-based engine and its simulator are gone; `--simulate` is the real-time one.
 
@@ -947,7 +956,7 @@ three real-time levers, read by nothing turn-based:
 - `HitShift`: what it adds to its attack rolls (+10 by default).
 
 A surer, lighter blow is the point of the last two. Against a stream of swings, armour decides almost
-everything: at +4 a wolf hits AC 13 1.7 times as often as the Blademaster's AC 19, but at +14 only 1.2
+everything: at +4 a wolf hits AC 13 1.7 times as often as the Swordhand's AC 19, but at +14 only 1.2
 times as often. So a fight a plate-wearer finds fair is no longer a rout for someone in leather. Blows
 that light mostly do 1 (the least a hit does), so at these levels hit points and to-hit are the levers
 that move a fight; the damage scale only starts to matter above about a third.
@@ -980,7 +989,7 @@ What moved, and why:
   to 20, and at the old numbers a full bar offered a press only every 4 to 6 s.
   - Heals stayed at 6 s (Cure Wounds, both Healing Words, Mend, Cauterise, Honey Salve) and Second
     Wind at 16; otherwise the healers in your place won everything.
-  - The Blademaster's Cleave became a 3 s filler (CD 1), so the story's own class has a skill to
+  - The Swordhand's Cleave became a 3 s filler (CD 1), so the story's own class has a skill to
     press every 2.5 to 3 s from rank 1.
 - **Concentration** is saved against at most once a turn. Hit two or three times as often as at the
   table, Hex, Hunter's Mark and Moonbeam lasted seconds, and the AI paid for them again and again.
@@ -989,7 +998,7 @@ What moved, and why:
   worth went up to 14 for the same reason.
 - **Threat.** The Shadowstep makes 60% and the Lanerunner 85%. At the front with Sneak Attack, the
   Soul-Bound took every boss's attention and went down in 76 to 90% of the Thornmother's and Kael's
-  fights; now the Blademaster holds them.
+  fights; now the Swordhand holds them.
 - **Focus.** Opportunist pays +8 a hit (from +5), and Pact +2 a second and +8 a cursed hit (from +1
   and +6). The Shadowstep, Lodge Ranger, Lanerunner and Hexblade sat at 16 to 25 Focus with skills
   ready and nothing to pay for them.
@@ -1186,18 +1195,21 @@ after two losses, on Story.
 
 **The fight stages** (`LegendQuestGame.ProofArena`, `ExploreScreen.ProofArena`) are run on their own:
 `--proof <dir> Arena`, `Boss` or `Classes`. Each bout is a fresh game the way the story has it at
-that fight: you (a Blademaster, Caleb), the Soul-Bound (Wren) and the companions who've joined by
+that fight: you (a Swordhand, Caleb), the Soul-Bound (Wren) and the companions who've joined by
 then, at `LevelTable`'s level and the class rank the story's fights before it give, in the room the
 fight's fought in, with the story's flags up to it, and the save made as the fight starts, so the
 room starts it as it loads. The party's AI fights for everyone. Each bout saves, once each, the
 fight's start, the thick of it, the bar's cooldowns just after your first skill, a telegraph's
 marker part filled, each boss phase's banner, a friend downed and being helped up, the Soul-Link
-Strike, and the panel. **Arena** fights the Red Gulls, the gloomfangs, the raid and the sappers, then
-the fields: the Mirewood's pack coming at the party on the path, the room cleared, and the pack back
+Strike, and the panel. **Arena** fights the Red Gulls (filming their melee from Grell's first Hook Pull, every second frame,
+into `seq/`, to see how a crowd stands round its targets), the gloomfangs, the raid and the sappers, then
+the fields: the Mirewood's pack coming at the party on the path, the room cleared, the party resting
+(`field/wolves-resting.png`: the run takes them to half first, and writes their hit points before and
+after), and the pack back, on its own spots,
 a minute later; and, after a look at your character sheet (`field/construct-sheet.png`: the kit's icons,
 the rank locks, the class points), a vault construct pointed at (its red name, the hand) and clicked. **Boss** fights
 the Thornmother through all three phases with the Lodge's wardens on the lip, and films her first
-Thorn Burst every second frame into `seq/`. **Classes** puts six classes in your place (Blademaster,
+Thorn Burst every second frame into `seq/`. **Classes** puts six classes in your place (Swordhand,
 Arcanist, Lightbearer, Warden, Hemomancer, Lodge Ranger) at rank 5 in the raid on Thornbridge (the
 longest of Act 1's fights), presses each of their four skills as soon as it can go, through the same
 code keys 2 to 5 use, with a shot of each, and
@@ -1751,7 +1763,9 @@ sigil, an aura, a party row) for clicks, and the card for it is drawn by `DrawWo
 - **`PartyFrames`**: a row each under your auras, with their auras beside it; a downed one greys,
   says DOWN, and shows its death saves.
 - **`TargetFrame`** (top centre): the same for your target, with its armour class and its cast bar
-  (grey with a lock when it can't be stopped). With a boss up it drops under the boss's frame.
+  (grey with a lock when it can't be stopped). With a boss up it drops under the boss's frame, and
+  while your target is the boss itself it isn't drawn at all, since the boss's frame already shows
+  its health, cast and auras; an add you target keeps its own.
 - **`BossFrame`**: wide, across the top, with the boss's title, a tick on the bar and a pip for each
   phase, its cast bar under it and its auras.
 - **`Hotbar`**: slots 1 to 6 and the Soul-Link sigil on 7, each clickable. A cooldown is a dark veil
@@ -1916,8 +1930,9 @@ In the order they're being built:
    on the dice, clocks, approval~~; the journal is still to come.
 8. ~~Combat, and `--simulate`.~~
 9. Resting, full saving, and the polish. ~~A long rest~~ (the night at sea, the camp in the
-   Mirewood, and a room at the Gilded Flagon, all back to full); short rests and the camp screen
-   are still to come.
+   Mirewood, and a room at the Gilded Flagon, all back to full), and ~~hit points coming back
+   between fights~~ (1% every 2 s as you go about, 5% a second resting on R); the camp screen is
+   still to come.
 
 The story goes in alongside them, in its own order:
 
@@ -1964,9 +1979,13 @@ the textbook); for now they're copied as text and read at startup, which is enou
 
 ## Assets
 
-Every picture, song and sound in the game is original: drawn or synthesised by the scripts in
-`tools/`, or cut by one of them from pictures I made. The only outside work is the Spectral font, the MonoGame template files, and a few of
-5e's rules from the SRD 5.1, which is credited in there word for word as its licence asks. See
+Every picture, song and sound in the game is made for it: drawn or synthesised by the scripts in
+`tools/`, or cut by one of them from pictures I made. The only outside work is the Spectral font, the
+MonoGame template files, a few of 5e's rules from the SRD 5.1 (credited in there word for word as its
+licence asks), and the instrument recordings the music is played on and a few combat sounds are
+layered with: two sample libraries by Versilian Studios (VSCO 2 Community Edition and VCSL),
+released under CC0 1.0, which `tools/score/fetch_samples.py` fetches to a cache outside the repo and
+which are never committed or shipped. See
 [ASSETS.md](ASSETS.md) for every file.
 
 ## Author's Note

@@ -116,7 +116,7 @@ public partial class ExploreScreen
         return false;
     }
 
-    /// <summary>Notes a field fight that's over and won: its foes leave the room for a minute of play (or until you come back into it) rather than for the visit, as the dead of a story fight do.</summary>
+    /// <summary>Notes a field fight that's over and won: its foes leave the room for a minute of play (or until you come back into it) rather than for the visit, as the dead of a story fight do, and go back to their own spots, so the field fills again where it stood and not on top of where you won.</summary>
     /// <remarks>EndFight calls it before working out who's in the room again. A field fight lost ends at the game-over screen, which loads the save from before it.</remarks>
     private void ClearedField()
     {
@@ -124,6 +124,15 @@ public partial class ExploreScreen
         if (_encounter?.Kind != EncounterKind.Random) return;
         foreach (FieldGround ground in EncounterCatalog.GroundsIn(_zone.Id, _room.Id).Where(each => each.Encounter == _encounter.Id))
         {
+            foreach (Npc npc in _everyNpc)
+            {
+                if (FieldOf(npc)?.Encounter != ground.Encounter) continue;
+                npc.Walker.Release();
+                npc.Walker.Position = npc.Definition.Feet;
+                npc.Walker.Facing = npc.Definition.Facing;
+                npc.Walker.IsWalking = false;
+                npc.Walker.Opacity = 1f;
+            }
             _fieldCleared[ground.Encounter] = _game.PlaytimeSeconds;
             foreach (FieldFoe foe in ground.Foes) _fallen.Remove($"{_room.Id}/{foe.Npc}");
         }

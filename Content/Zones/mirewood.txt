@@ -4,7 +4,7 @@
 id = mirewood
 name = The Mirewood
 world = 900 330
-music = Exploring
+music = Meadow
 region = mirewood
 danger = 20
 

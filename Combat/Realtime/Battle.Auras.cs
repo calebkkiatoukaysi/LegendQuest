@@ -112,7 +112,7 @@ public sealed partial class Battle
             When.Melee => context.Melee,
             When.Ranged => context.Ranged,
             When.Spell => context.Spell,
-            When.VsMarked => context.Other is not null && Has(context.Other, ConditionId.Marked),
+            When.VsMarked => context.Other is not null && IsMarked(context.Other),
             When.BelowHalf => f.HpShare < 0.5,
             When.VsUndead => context.Other?.Enemy?.Undead == true,
             When.Dark => Rules.Dark,
@@ -200,7 +200,13 @@ public sealed partial class Battle
         };
         if (skill?.Concentration == true && source is not null)
         {
+            // One concentration at a time (§3.6): another skill ends the last, and so does the same one cast
+            // again on someone new; a cast that catches several at once (this tick) keeps them all.
             if (source.Concentrating is not null && source.Concentrating != skill) EndConcentration(source);
+            else if (source.Concentrating == skill)
+                foreach (Fighter other in _fighters)
+                    foreach (Aura held in other.AuraList)
+                        if (!held.Gone && held.Concentration && held.Source == source && held.Skill == skill && held.StartMs < NowMs) RemoveAura(other, held, "concentration moved");
             source.Concentrating = skill;
             aura.Concentration = true;
         }

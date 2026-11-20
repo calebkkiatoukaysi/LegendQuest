@@ -1181,7 +1181,7 @@ def shield_slam(name, notes=None):
 
 def skills():
     S = "skill-"
-    # Blademaster
+    # Swordhand
     kit("one-hand")
     spin(S + "fighter-cleave", "one-hand", turns=1, notes="Cleave: one wide sweep round through the foe and its neighbours")
     guard_up(S + "fighter-second-wind", "brace", notes="Second Wind: braced, a deep breath, back on the feet")
@@ -1378,9 +1378,14 @@ def skills():
               after=lambda o: [B(6, F(base=o, torso=o["torso"] - 2, arm_far_up=o["arm_far_up"] + 20), "in"),
                                B(3, F(base=o, arm_far_up=o["arm_far_up"] - 10), "back", ev=(("release", "hand_far"),))],
               notes="Prism Ray: a ray from the fingertips, and its echo split off to another foe")
-    spin(S + "glasswright-mirror-image", "one-hand", turns=1, hits=0, notes="Mirror Image: a turn, and three of you")
-    CLIP = C.CLIPS[S + "glasswright-mirror-image"]
-    CLIP["events"] = [[0.35, "release"], [0.35, "fx", "burst-self"], [0.45, "recover"]]
+    # Mirror Image is a spell, not a blow: the free hand drawn up across the face, glowing, then swept
+    # out and down as the images split off, the sword kept at guard and no trail.
+    veil = F(torso=-4, look=-6, legs=L(-2, 2), far=A(125, 95, wrist=-30))
+    split = F(torso=3, look=4, legs=L(1, 3, near=2), far=A(55, 15, wrist=-60))
+    seq(S + "glasswright-mirror-image", [B(10, veil, "out", ev=(("fx", "glow-hand"),)), B(3, F(base=veil, torso=-6), "in"),
+                                         B(4, split, "back", ev=(("release", "hand_far"), ("fx", "burst-self"))),
+                                         B(8, F(base=split, torso=4), "smooth")],
+        settle=14, blend=0.06, notes="Mirror Image: the hand across the face, swept away, and three of you")
     hand_cast(S + "glasswright-refract", "sweep", side="far", charge=3, hold=1, follow_frames=6, settle=10, fx=None,
               notes="Refract: a sweep of the hand and the shot turned aside")
     two_hand_cast(S + "glasswright-glasshouse", "spread", charge=12, notes="Glasshouse: the hands drawn in and the glass flung open")

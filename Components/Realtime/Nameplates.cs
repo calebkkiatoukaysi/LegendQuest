@@ -45,29 +45,39 @@ public class Nameplates
 
     private const string Down = "DOWN";
 
+    /// <summary>How far in from the screen's edges a plate stays, in screen pixels.</summary>
+    private const int Edge = 4;
+
+    /// <summary>Where across the screen someone's plate is centred: over their head, but kept far enough in that the name and the bar stay on the screen.</summary>
+    private static float Across(HudKit kit, NameplateView plate)
+    {
+        float half = MathF.Max(TargetBarWidth, kit.Small.MeasureString(plate.Name ?? string.Empty).X) / 2f + Edge;
+        return Math.Clamp(plate.Head.X, half, MathF.Max(half, LegendQuestGame.ScreenWidth - half));
+    }
+
     /// <summary>Where someone's health bar is.</summary>
-    private static Rectangle Bar(NameplateView plate)
+    private static Rectangle Bar(HudKit kit, NameplateView plate)
     {
         int w = plate.IsTarget ? TargetBarWidth : BarWidth, h = plate.IsTarget ? TargetBarHeight : BarHeight;
-        return new Rectangle((int)MathF.Round(plate.Head.X - w / 2f), (int)MathF.Round(plate.Head.Y - Lift - h), w, h);
+        return new Rectangle((int)MathF.Round(Across(kit, plate) - w / 2f), (int)MathF.Round(plate.Head.Y - Lift - h), w, h);
     }
 
     /// <summary>Where the top of someone's name is.</summary>
-    private static float NameTop(HudKit kit, NameplateView plate) => Bar(plate).Y - Spacing - kit.Small.LineSpacing + 2;
+    private static float NameTop(HudKit kit, NameplateView plate) => Bar(kit, plate).Y - Spacing - kit.Small.LineSpacing + 2;
 
     /// <summary>Where the telegraph's icon is: over the name.</summary>
     private static Rectangle WarnIcon(HudKit kit, NameplateView plate)
     {
         int size = kit.Icons.Size + 2;
         float top = NameTop(kit, plate) - Spacing - WarnHeight - Spacing - size;
-        return new Rectangle((int)MathF.Round(plate.Head.X - size / 2f), (int)MathF.Round(top), size, size);
+        return new Rectangle((int)MathF.Round(Across(kit, plate) - size / 2f), (int)MathF.Round(top), size, size);
     }
 
     /// <summary>Where the telegraph's bar is: under its icon, over the name.</summary>
     private static Rectangle WarnBar(HudKit kit, NameplateView plate)
     {
         Rectangle icon = WarnIcon(kit, plate);
-        return new Rectangle((int)MathF.Round(plate.Head.X - BarWidth / 2f), icon.Bottom + Spacing, BarWidth, WarnHeight);
+        return new Rectangle((int)MathF.Round(Across(kit, plate) - BarWidth / 2f), icon.Bottom + Spacing, BarWidth, WarnHeight);
     }
 
     /// <summary>The top of everything someone's plate draws, for the target's marker to sit over.</summary>
@@ -85,7 +95,7 @@ public class Nameplates
         foreach (NameplateView plate in plates)
         {
             float a = alpha * (plate.IsTarget ? 1f : Others);
-            Rectangle bar = Bar(plate);
+            Rectangle bar = Bar(kit, plate);
             Color fill = plate.IsDown ? DownBar : plate.Foe ? HudKit.FoeHealth : HudKit.PartyHealth;
             kit.Bar(spriteBatch, bar, plate.IsDown ? 1f : plate.HealthShare, fill, a);
             if (plate.IsTarget) DrawBrackets(spriteBatch, kit, bar, a);
@@ -113,12 +123,12 @@ public class Nameplates
             float a = alpha * (plate.IsTarget ? 1f : Others);
             Color name = plate.Foe ? (plate.Hostile ? HostileName : FoeName) : Palette.Bone;
             if (plate.IsTarget) name = Color.Lerp(name, Color.White, 0.35f);
-            HudKit.Outlined(spriteBatch, kit.Small, plate.Name, new Vector2(plate.Head.X, NameTop(kit, plate)), name * a, a, align: 0.5f);
+            HudKit.Outlined(spriteBatch, kit.Small, plate.Name, new Vector2(Across(kit, plate), NameTop(kit, plate)), name * a, a, align: 0.5f);
 
-            Rectangle bar = Bar(plate);
+            Rectangle bar = Bar(kit, plate);
             string inBar = plate.IsDown ? Down : plate.Numbers;
             if (inBar is not null)
-                HudKit.Outlined(spriteBatch, kit.Small, inBar, new Vector2(plate.Head.X, bar.Bottom + 1), (plate.IsDown ? Palette.Ember : Color.White) * a, a, align: 0.5f);
+                HudKit.Outlined(spriteBatch, kit.Small, inBar, new Vector2(bar.Center.X, bar.Bottom + 1), (plate.IsDown ? Palette.Ember : Color.White) * a, a, align: 0.5f);
         }
     }
 

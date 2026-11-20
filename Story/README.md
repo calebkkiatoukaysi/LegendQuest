@@ -13,7 +13,7 @@ Everything needed to finish LegendQuest's main story, from the Prologue to the e
    - `07-companions.md`: camp talks, the five personal quests, romances, {sb}'s letters home, Elara, banters
    - `08-random-encounters.md`: the encounter system and 36 written encounters
 4. **`10-classes.md`** — classes: AQW-style swapping and ranks 1 to 10 on 5e rules, 8 base and 17 advanced classes with every skill, who teaches each one, and their scenes.
-5. **`11-combat.md`** — side-view row fights, which NPCs fight beside you in every story fight, difficulty modes and win-rate targets, and the level curve.
+5. **`11-combat.md`** — real-time fights in the room you're in, which NPCs fight beside you in every story fight, difficulty modes and win-rate targets, and the level curve.
 6. **`12-rooms.md`** — AQW-style rooms: the format, edge exits, badges over shops, trainers, inns and doors, how detailed the painting is, and every zone's rooms.
 7. **`03-art-overhaul.md`** and **`03b-world-art.md`** — the art: the rig, live items, faces, detail level, who looks like what; then each place's brief, buildings, props, effects, UI and music.
 8. **`09-registry.md`** — generated. Every script, flag, meter, item, speaker, fight, backdrop and spawn the scripts use, and who sets and reads each.

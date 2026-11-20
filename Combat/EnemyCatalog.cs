@@ -93,7 +93,7 @@ public static class EnemyCatalog
             Attacks = new[] { new EnemyAttack("Nip", 3, Dice("1d4"), DamageType.Piercing, Reach.Melee, WeaponProperty.None) },
             Abilities = new[] { AbilityId.PackTactics },
             Xp = 10,
-            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, HpScale = 3f, Beast = true, DamageScale = 0.18f,
+            AttackMs = EnemyDefinition.QuickSwingMs, Weapon = WeaponKind.Unarmed, HpScale = 3f, Beast = true, DamageScale = 0.18f, HitShift = 0,
         },
 
         // A1-C2-02's boss: the she-bear the crystal took, two attacks a turn and thorns through her hide.
@@ -113,7 +113,7 @@ public static class EnemyCatalog
             },
             Abilities = new[] { AbilityId.Multiattack, AbilityId.ThornBurst, AbilityId.Trip },
             LootTable = "thornmother", Xp = 450, Big = true,
-            Weapon = WeaponKind.Unarmed, Skills = new[] { "foe-trip" }, Beast = true, HpScale = 10.5f, DamageScale = 0.22f,
+            Weapon = WeaponKind.Unarmed, Skills = new[] { "foe-trip" }, Beast = true, HpScale = 10.5f, DamageScale = 0.24f,
             Phases = new[]
             {
                 new FoePhase(0.66, "Thorns")

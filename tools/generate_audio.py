@@ -30,6 +30,7 @@ import cmath
 import math
 import os
 import random
+import subprocess
 import sys
 import time
 import wave
@@ -3170,6 +3171,20 @@ COMBAT_RECORDINGS = {
 
 _RECORDINGS = {}
 
+#: Which take of a combat sound is being built, 1 to COMBAT_TAKES, for a builder that varies by it.
+COMBAT_TAKE = 1
+_PINNED = []
+
+
+def vcsl_pinned():
+    """Whether the cache's VCSL checkout is at VCSL_COMMIT, the commit ASSETS.md names, so a rerun
+    layers the same recordings it credits. Asked of git once a run."""
+    if not _PINNED:
+        head = subprocess.run(["git", "-C", os.path.join(SAMPLES_ROOT, "VCSL"), "rev-parse", "HEAD"],
+                              capture_output=True, text=True)
+        _PINNED.append(head.returncode == 0 and head.stdout.strip() == VCSL_COMMIT)
+    return _PINNED[0]
+
 
 def recording(rel, length):
     """One recording from the sample cache, mixed down to mono, its silent lead-in cut off and its
@@ -4120,9 +4135,10 @@ def cx_ui_denied(rng):
 
 
 def cx_cooldown_ready(rng):
-    """A skill ready again: one small bright ping."""
+    """A skill ready again: one small bright ping, on a note of its own in each take (D, E, A), so
+    no two takes sound alike."""
     x = silence(sec(0.5))
-    m = rng.choice((86, 88, 93))
+    m = (86, 88, 93)[(COMBAT_TAKE - 1) % 3]
     place(x, chime(midi_hz(m), R, rng, 0.6, 0.45), 0.0, 0.8)
     place(x, chime(midi_hz(m + 7), R, rng, 0.4, 0.3), 0.03, 0.3)
     return room(x, 0.3, 6000.0, 0.15)
@@ -4251,7 +4267,13 @@ def build_combat(key):
         print("  %s/%s-*.wav  skipped: it's layered with recordings that aren't in %s "
               "(python tools/score/fetch_samples.py fetches them)" % (COMBAT_FOLDER, key, SAMPLES_ROOT))
         return
+    if files and not vcsl_pinned():
+        print("  %s/%s-*.wav  skipped: the VCSL in %s isn't at commit %s, the one ASSETS.md credits "
+              "(python tools/score/fetch_samples.py checks it out)" % (COMBAT_FOLDER, key, SAMPLES_ROOT, VCSL_COMMIT))
+        return
+    global COMBAT_TAKE
     for take in range(1, COMBAT_TAKES + 1):
+        COMBAT_TAKE = take
         name = "%s-%d" % (key, take)
         rng = random.Random(zlib.crc32(("combat/" + name).encode()))
         if files:

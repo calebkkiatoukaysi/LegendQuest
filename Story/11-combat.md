@@ -63,7 +63,7 @@ You move as you do outside fights: click the floor, or WASD and the arrows. Ever
 | **Long** | 220 | Bows, crossbows, most spells |
 | **Room** | anywhere in the room | Ultimates that say "all foes", party buffs |
 
-Clicking a foe targets it; if your auto attack can't reach, you walk until it can. Pressing a skill whose target is out of reach walks you into reach and then uses it. Moving doesn't stop your auto attack, but the swing only lands if you're in reach when it comes round. Casting a spell with a cast time roots you; moving cancels it.
+Clicking a foe targets it; if your auto attack can't reach, you walk until it can. Pressing a skill whose target is out of reach walks you into reach and then uses it. Moving doesn't stop your auto attack, but the swing only lands if you're in reach when it comes round, and while you walk somewhere you clicked it waits until you get there rather than stopping you where you are. Casting a spell with a cast time roots you; moving cancels it.
 
 ### 2.3 Targeting
 
@@ -75,7 +75,7 @@ Clicking a foe targets it; if your auto attack can't reach, you walk until it ca
 | T | Assist: target what your target is targeting (an ally's foe, a foe's victim) |
 | Esc | Clear the target and stop auto-attacking |
 | A skill with no target | Picks the nearest foe (or, for a heal, the most hurt ally; for a self skill, you) |
-| Target dies | Auto-targets the nearest foe that's attacking you, else the nearest |
+| Target dies | Auto-targets the nearest foe that's attacking you, else the nearest; one only gone from sight for now (Kael's smoke) with no other foe about stays your target, the swing held until it's back |
 
 ### 2.4 The bar
 
@@ -96,14 +96,14 @@ Passives (ranks 4 and 10) act on their own and show as icons on your frame.
 - **Auto attack**: swings every **2.0 s** (light and finesse weapons 1.8 s, heavy and two-handed 2.4 s, crossbows 2.6 s), shortened by haste. It costs nothing and builds Focus.
 - **Global cooldown (GCD)**: using an **action** skill (kind A in `10-classes.md`) puts every action skill on a **1.5 s** global cooldown, shortened by haste down to 1.0 s. **Bonus** skills (kind B) are off the GCD: instant, and usable inside it, but they share a short 0.5 s lockout with each other. The auto attack ignores the GCD.
 - **Cooldowns**: each skill's own, in seconds (§4.2). Haste shortens them.
-- **Cast times**: most skills are instant: the clip plays and the blow lands on its impact frame (about 0.25 to 0.7 s in). A few spells have a cast time (0.8 to 1.5 s) shown on a cast bar; damage, moving or a Stun interrupts them. Ultimates have a short wind-up everyone can see.
+- **Cast times**: most skills are instant: the clip plays and the blow lands on its impact frame (about 0.25 to 0.7 s in). A few spells have a cast time (0.8 to 1.5 s) shown on a cast bar; moving or a Stun interrupts them, and so does damage the caster fails a Constitution save against (DC 10 or half the damage, the higher), as concentration is kept in 5e. Ultimates have a short wind-up everyone can see.
 - **A tick** of the rules is 20 ms. Everything in the engine runs in whole milliseconds on a fixed step, so the simulator and the game play the same fight from the same seed.
 
 ### 2.6 Ending a fight
 
 As now: the fight's won when every foe is beaten (or yields, or the encounter's own ending fires: a time limit survived, a health share reached), and lost when the whole party is down. The panel comes up with experience, gold, loot and class points; the `Victory` flag is set; anyone down gets up on 1 hit point; the `Then` script plays. Lose a fight with a `Lost` script and it plays; otherwise it's the game over screen with its retries.
 
-Out of a fight, hit points come back slowly while you walk (1% of the most you can have every 2 s) and quickly while you **rest** (R, out of combat only: kneel, 5% every second, Focus is irrelevant out of fights). Resting is cancelled by moving or by a foe engaging.
+Out of a fight, hit points come back slowly while you walk (1% of the most you can have every 2 s) and quickly while you **rest** (R, out of combat only: kneel, 5% every second, Focus is irrelevant out of fights). Resting is cancelled by moving or by a foe engaging. (Built: `ExploreScreen.Rest`. A field fight heals nothing afterwards, so this is how a party gets back up between them; a story fight still heals what the difficulty says.)
 
 ---
 
@@ -175,13 +175,13 @@ Every fighter has **Focus, 0 to 100**. Skills cost it. It's gone when the fight 
 
 | Model | Fills Focus | Classes |
 | --- | --- | --- |
-| **Momentum** | +8 for each of your hits, +14 on a crit | Blademaster, Ashwalker, Watchblade, Deckhand, Crownsworn |
-| **Opportunist** | +5 a hit, +16 a crit, +12 when you dodge | Shadowstep, Lanerunner, Lodge Ranger |
+| **Momentum** | +8 for each of your hits, +14 on a crit | Swordhand, Ashwalker, Watchblade, Deckhand, Crownsworn |
+| **Opportunist** | +8 a hit, +16 a crit, +12 when you dodge | Shadowstep, Lanerunner, Lodge Ranger |
 | **Bulwark** | +6 when you're hit, +10 when you block, +4 for each of your hits | Warden, Ironvein Bulwark, Gilded Knight |
 | **Wellspring** | +5 a second, steadily | Arcanist, Guild Battlemage, Glasswright, Hourwarden |
 | **Devotion** | +3 a second, +4 for every heal you land | Lightbearer, Ember Mender, Lamplighter, Hivekeeper |
 | **Wild** | +3 a second, +2 for every tick of your damage or healing over time | Wildcaller, Netcaster |
-| **Pact** | +6 for each hit on a target carrying your curse (Hex), +2 otherwise; +1 a second | Hexblade |
+| **Pact** | +8 for each hit on a target carrying your curse (Hex), +2 otherwise; +2 a second | Hexblade |
 | **Tempo** | starts every fight on 80; +6 for each of your hits | Skald, Wayfarer |
 | **Blood** | +4 a second; some skills cost hit points as well | Hemomancer |
 
@@ -189,7 +189,7 @@ The auto attack's +10 Focus in `10-classes.md` is now the model's "+N a hit". Fo
 
 ### 4.2 Converting the class tables
 
-Every skill in `10-classes.md` keeps its target, effect and dice, and gets real-time numbers by these rules, then tuned by the simulator (§9); the tuned numbers are written back into `10-classes.md`:
+Every skill in `10-classes.md` keeps its target, effect and dice, and gets real-time numbers by these rules, then tuned by the simulator (§9); the tuned numbers are written back into `10-classes.md` (§8.1 there wins where the two differ). The cooldowns below are the tuned ones, shorter than the first pass's 6, 8, 12 and 16 s:
 
 | Old | Real time |
 | --- | --- |
@@ -198,10 +198,10 @@ Every skill in `10-classes.md` keeps its target, effect and dice, and gets real-
 | **R** (reaction) | Pressed to **arm** it: it stays ready for 4 s (or until it fires) and fires when its trigger happens: Riposte answers the next melee miss on you, Shield raises AC against the next attack, Hellish Rebuke answers the next hit, Counterspell stops the next foe cast, Cover takes the next hit meant for the ally, Refract turns the next ranged attack on an ally |
 | **P** (passive) | Always on, as written |
 | No cooldown | GCD only |
-| CD 1 | 6 s |
-| CD 2 | 8 s |
-| CD 3 | 12 s |
-| CD 4 | 16 s |
+| CD 1 | 3 s |
+| CD 2 | 6 s |
+| CD 3 | 9 s |
+| CD 4 | 12 s |
 | 1/fight (the ultimates and the summons) | 45 s, ready at the start of the fight |
 | "Take another action" (Action Surge, Command) | Resets the GCD and the cooldown of the action skill used next |
 
@@ -262,7 +262,7 @@ A boss (or mini-boss) has **phases**, triggered at shares of its health: each ph
 - **The party AI** (the old `EnemyMind`'s utility scoring, now run only when a fighter is free to act, about every 0.3 s): it scores every usable skill on every target by expected damage, healing and control, weighed by what the target means to the fight (its threat to the party, how hurt it is, whether it's casting something), minus the price (Focus, cooldown). Tanks taunt foes that are hitting someone else; healers heal before they hurt; everyone assists your target unless something more urgent is happening; ranged fighters keep their distance from melee foes. It has no randomness of its own.
 - **Going down.** A party member at 0 hit points is **Downed**: on the ground, rolling a death save every 3 s (5e: three successes and they're stable on 0, three failures and they've fallen for the rest of the fight; a natural 20 gets them up on 1). Healing gets them up at once. **Help** (anyone can, for free) is a 2 s channel standing next to them that gets them up on 1 hit point; moving or a Stun breaks it. A foe hitting a Downed fighter counts a failed death save. Nobody in the party dies for good: everyone fallen gets up on 1 hit point when the fight's won.
 - **If you go down**, the camera stays with you, the bar greys, and the fight goes on; you're up the moment someone heals or helps you. If the whole party is down, the fight's lost.
-- **The Soul-Link.** When you and {sb} both land a hit on the same foe within 3 s of each other, it charges (at most once every 3 s); at two charges the sigil on slot 7 lights and either of you can spend it on the **Soul-Link Strike**: both of you strike that foe together, both weapons' damage and 1d8 radiant, a sure hit, with the duo's own clip. Its barks are the P-05 lines. While `soul-bond-broken` is set it's off and the sigil is grey.
+- **The Soul-Link.** When you and {sb} both land a hit on the same foe within 3 s of each other, it charges (at most once every 3 s); at two charges the sigil on slot 7 lights and either of you can spend it on the **Soul-Link Strike** (while you lead one of the two, {sb}'s AI leaves it to you for 6 s, or until you're down or can't act, so the 7 stays lit long enough to press): both of you strike that foe together, both weapons' damage and 1d8 radiant, a sure hit, with the duo's own clip. Its barks are the P-05 lines. While `soul-bond-broken` is set it's off and the sigil is grey.
 
 ### 5.4 Allies
 
@@ -301,7 +301,7 @@ Supports keep their banner, now with its timer ring filling to the next time it 
 | `a1-c2-02-guard-wave` | Story, survive | Hold for 45 s while Sera draws the rot out (her ring fills). Waves walk in from the room's edge at 0, 12 and 24 s, sooner if the field's clear |
 | `a1-c3-02-raid` | Story | Footmen and a hexer; a second wave at 18 s ("Where's the Watch?!"). The hexer's **Ashen Bolt** has a 1.0 s cast that interrupts can stop |
 | `a1-c4-02-kael` | Mini-boss, a duel, yields at 30% | Two phases. **Phase 1**: rapier and off-hand combo, **Feint** (telegraphed 0.5 s, his next hit crits). **Phase 2 (below 60%)**: **Smoke Bomb**: a cloud, he vanishes for 2 s and reappears behind his target with a guaranteed Sneak Attack |
-| `a1-c4-02-sappers` | Story | Three sappers and their chief. **Blasting Charge**: the sapper lobs a charge that lands as a ground marker filling for 1.5 s, 2d6+2 fire to everyone in it, Dex save for half |
+| `a1-c4-02-sappers` | Story | Three sappers and their chief. **Blasting Charge**: the sapper lobs a charge that lands as a ground marker filling for 2 s, 2d6+2 fire to everyone in it, Dex save for half |
 
 ### 6.2 To come (as the scripts are built), restated for real time
 
@@ -417,9 +417,9 @@ Experience to the next level: 300 × the current level. Story fights give about 
 
 | | |
 | --- | --- |
-| `Combat/` (rules and data, draws nothing) | Dice, attack maths, saves and stats as before; `EnemyCatalog`, `EncounterCatalog` (now with telegraphed skills, auto-attack timers, phases, waves and supports in seconds); `SkillCatalog` (every class's kit, by skill id `<class>-<skill>`), `ClassCatalog` with all 24 classes and the Hourwarden |
+| `Combat/` (rules and data, draws nothing) | Dice, attack maths, saves and stats as before; `EnemyCatalog`, `EncounterCatalog` (now with telegraphed skills, auto-attack timers, phases, waves and supports in seconds); `SkillCatalog` (every class's kit, by skill id `<class>-<skill>`); `Rules/ClassCatalog` has all 24 classes and the Hourwarden |
 | `Combat/Realtime/` | `Battle`: the fight, stepped in fixed 20 ms ticks from a seed, taking commands (target, move, use a skill, potion, Soul-Link) and returning timed events; fighters, auras, threat, the party and foe brains, encounter scripting (waves, supports, phases, endings) |
-| `Combat/CombatSimulator` | `--simulate <id\|all\|classes> [runs] [difficulty]` on the real-time engine |
+| `Combat/Realtime/BattleSimulator` | `--simulate <id\|all\|classes> [runs] [difficulty]` on the real-time engine |
 | `Screens/ExploreScreen.Combat*` | The fight as a layer on the room: steps the engine, plays its events as cues on each fighter, takes your input, draws the HUD |
 | `Components/` | Player, target, party and boss frames; the hotbar with sweeps; aura rows; cast and swing bars; nameplates; floating numbers; the result panel |
 | `Characters/Parts/ClipLibrary`, `Characters/WalkerSprite` | Clips with events, per-key easing, blend times, hit-stop, smears and trails, springs |

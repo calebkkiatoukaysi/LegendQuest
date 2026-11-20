@@ -162,8 +162,9 @@ public partial class LegendQuestGame
     {
         ProofStage.Arena => new List<ArenaBout>
         {
-            // The story's fights, each in its own room with the party it has by then.
-            new("a1-c1-01-gulls", "docks", "harbourside", new Vector2(700, 770), null, new ArenaPlan { Prefix = "arena/gulls" }, Array.Empty<string>()),
+            // The story's fights, each in its own room with the party it has by then; the gulls' melee filmed
+            // from Grell's first Hook Pull, to see how a crowd stands round its targets.
+            new("a1-c1-01-gulls", "docks", "harbourside", new Vector2(700, 770), null, new ArenaPlan { Prefix = "arena/gulls", FilmMove = "foe-hook-pull" }, Array.Empty<string>()),
             new("a1-c2-01-gloomfangs", "mirewood", "edge", new Vector2(1400, 760), null, new ArenaPlan { Prefix = "arena/gloomfangs" },
                 new[] { Act1Chapter1.GullsBeaten }),
             new("a1-c3-02-raid", "thornbridge", "river-edge", new Vector2(620, 740), null, new ArenaPlan { Prefix = "arena/raid" },

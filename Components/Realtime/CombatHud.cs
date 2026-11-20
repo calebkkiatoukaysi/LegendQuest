@@ -21,7 +21,8 @@ namespace LegendQuest.Components.Realtime;
 /// </para>
 /// <para>
 /// The layout follows the view: the party's rows start under however many rows of auras you have,
-/// and the target's frame drops under the boss's while there's a boss. At says what the mouse is
+/// and the target's frame drops under the boss's while there's a boss (the view leaves it out while
+/// the target is the boss, whose own frame already shows it). At says what the mouse is
 /// on, for clicks (a slot, the sigil, a party row) and for the card; the card is drawn by
 /// DrawWords, over a slot or the sigil, or by the mouse for an aura, and what the slot under the
 /// mouse would spend shows on your Focus bar.
@@ -189,6 +190,29 @@ public class CombatHud
     {
         Party.Top = Player.AurasBottom(view.Player) + PartyDrop;
         Target.Top = view.Boss is null ? TargetFrame.DefaultTop : BossFrame.Bottom + TargetDrop;
+    }
+
+    /// <summary>The pieces of the screen the HUD covers for a view, for what's drawn over the room (a support's banner) to keep clear of: your frame with its auras, the party's rows, the boss's frame and cast bar, the target's frame, and the hotbar with the swing and cast strips over it.</summary>
+    /// <param name="view">What the HUD shows.</param>
+    public IEnumerable<Rectangle> Covered(HudView view)
+    {
+        Arrange(view);
+        if (view.Player is not null)
+        {
+            Rectangle you = Player.Bounds;
+            yield return new Rectangle(you.X, you.Y, you.Width, System.Math.Max(you.Height, Player.AurasBottom(view.Player) - you.Y));
+        }
+        if (view.Party is not null)
+            foreach (Rectangle row in Party.Rows(view.Party.Count)) yield return row;
+        if (view.Boss is not null)
+        {
+            yield return BossFrame.Bounds;
+            yield return BossFrame.CastArea;
+        }
+        if (view.Target is not null) yield return Target.Bounds;
+        yield return Hotbar.Panel;
+        yield return Hotbar.SwingArea;
+        yield return Hotbar.CastArea;
     }
 
     /// <summary>The target's nameplate, or null.</summary>

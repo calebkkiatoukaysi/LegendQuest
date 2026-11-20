@@ -33,6 +33,9 @@ public partial class ExploreScreen
     /// <summary>How far over a support's head its banner sits, in screen pixels.</summary>
     private const int SupportBannerRise = 14;
 
+    /// <summary>The room kept between a support's banner or name and the HUD's frames it's moved off, in screen pixels.</summary>
+    private const int HudClear = 6;
+
     /// <summary>How far apart along the back edge two supports stand, in world pixels.</summary>
     private const float SupportSpacing = 22f;
 
@@ -172,14 +175,53 @@ public partial class ExploreScreen
         };
     }
 
-    /// <summary>Where a support's banner goes over its figure, on screen, kept inside the screen's edges.</summary>
+    /// <summary>Where a support's banner goes over its figure, on screen, kept inside the screen's edges and off the HUD's frames.</summary>
     private Rectangle SupportBannerOver(WalkerSprite walker, SupportBannerView view)
     {
         Vector2 head = HeadOnScreen(walker);
         int width = _supportBanner.Width(view.Line);
         int extra = view.Progress is null ? 0 : SupportBanner.RingSize;
         int x = Math.Clamp((int)(head.X - (width + extra) / 2f), (int)Margin, Math.Max((int)Margin, LegendQuestGame.ScreenWidth - (int)Margin - width - extra));
-        return new Rectangle(x, (int)(head.Y - SupportBannerRise - SupportBanner.Height), width, SupportBanner.Height);
+        return ClearOfHud(new Rectangle(x, (int)(head.Y - SupportBannerRise - SupportBanner.Height), width + extra, SupportBanner.Height), extra);
+    }
+
+    /// <summary>A box drawn over the room moved off whatever HUD frame it would sit on: under a frame in the top half of the screen, over one in the bottom half (the hotbar), a few times over if moving it lands it on another.</summary>
+    /// <param name="box">Where it would go, in screen pixels.</param>
+    /// <param name="trim">How much of its width is for the box's own use and comes off what's returned (a banner's ring).</param>
+    private Rectangle ClearOfHud(Rectangle box, int trim = 0)
+    {
+        if (_hudView is not null)
+        {
+            var covered = new List<Rectangle>(_hud.Covered(_hudView));
+            for (int pass = 0; pass < 4; pass++)
+            {
+                Rectangle hit = covered.Find(frame => frame.Intersects(box));
+                if (hit.IsEmpty) break;
+                box.Y = hit.Center.Y < LegendQuestGame.ScreenHeight / 2 ? hit.Bottom + HudClear : hit.Top - HudClear - box.Height;
+            }
+        }
+        box.Width -= trim;
+        return box;
+    }
+
+    /// <summary>Where a support's name pops up when it acts, in world pixels: over its banner, kept on the screen, and under the banner instead if over it would be on a HUD frame.</summary>
+    private Vector2 SupportNameAt(WalkerSprite by, string id, string name)
+    {
+        Vector2 size = _popups.WordSize(name);
+        SupportBannerView view = SupportBanners().Find(each => each.Id == id);
+        Rectangle banner = view is null ? Rectangle.Empty : SupportBannerOver(by, view);
+        var at = view is null ? _camera.ToScreen(NumbersAt(by)) : new Vector2(banner.Center.X, banner.Top - HudClear);
+        float half = size.X / 2f;
+        at.X = Math.Clamp(at.X, Margin + half, Math.Max(Margin + half, LegendQuestGame.ScreenWidth - Margin - half));
+        var word = new Rectangle((int)(at.X - half), (int)(at.Y - size.Y), (int)size.X, (int)size.Y);
+        if (!banner.IsEmpty && _hudView is not null)
+            foreach (Rectangle frame in _hud.Covered(_hudView))
+                if (frame.Intersects(word))
+                {
+                    at.Y = banner.Bottom + HudClear + size.Y;
+                    break;
+                }
+        return _camera.ToWorld(at);
     }
 
     /// <summary>Draws the banners over the supports' figures. Goes in the point sampled screen batch.</summary>
@@ -211,7 +253,8 @@ public partial class ExploreScreen
         if (support is null || !_supportFigures.TryGetValue(support.Id, out WalkerSprite by)) return;
 
         if (on is not null) by.Face(on.Position);
-        _popups.Word(NumbersAt(by), support.Name.ToUpperInvariant(), Palette.Gold);
+        string name = support.Name.ToUpperInvariant();
+        _popups.Word(SupportNameAt(by, support.Id, name), name, Palette.Gold);
         SupportAbility ability = support.Ability;
         bool shoots = ability is not null && !ability.Damage.IsNone && Shoots(ability.Text);
         if (!shoots || on is null)

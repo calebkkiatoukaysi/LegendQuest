@@ -318,7 +318,7 @@ public static partial class SkillCatalog
         {
             Id = "crownsworn-no-procedure", Name = "No Procedure", Class = ClassId.Crownsworn, Rank = 4, Kind = SkillKind.Passive,
             Procs = new[] { new Proc(ProcTrigger.FightStart, new[] { PartyFocus(10), new Effect { Kind = EffectType.Ready, On = EffectOn.Self } }) },
-            Description = "The party starts every fight with 10 more Focus, and your first swing comes at once (it was initiative).",
+            Description = "The party starts every fight with 10 more Focus, and your first swing comes at once.",
         };
         yield return new()
         {

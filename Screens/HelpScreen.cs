@@ -84,6 +84,7 @@ public class HelpScreen : MenuScreen
         ("Walk", new[] { "W", "A", "S", "D", "ARROWS", KeyCaps.Click }, "Left stick or d-pad"),
         ("Talk, or use something", new[] { "E", "SPACE", "ENTER", KeyCaps.Click }, "A"),
         ("Change who you control", new[] { "TAB", "F1-F4", KeyCaps.Click }, "Right shoulder"),
+        ("Rest, out of a fight", new[] { "R" }, string.Empty),
         ("The map, and the world", new[] { "M", "TAB" }, "Y, then the shoulders"),
         ("Every badge, name and way out", new[] { "ALT" }, string.Empty),
         ("Put a tip away", new[] { "ENTER", KeyCaps.Click }, "X"),

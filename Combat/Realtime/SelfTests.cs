@@ -200,8 +200,9 @@ internal static partial class SelfTests
 
     /// <summary>
     /// Sets the scripted fight up for a skill that needs more than the plain start: a foe in front of
-    /// you for a skill whose area is around you, and for Rewind an ally who was whole a few seconds
-    /// ago and has just been badly hurt.
+    /// you for a skill whose area is around you, an ally a step behind you for one that covers those
+    /// further from the foes than you (Hold), and for Rewind an ally who was whole a few seconds ago
+    /// and has just been badly hurt.
     /// </summary>
     private static void Stage(Battle battle, Fighter me, Fighter friend, Fighter foe, SkillDefinition skill)
     {
@@ -210,6 +211,7 @@ internal static partial class SelfTests
             foe.Position = me.Position + new Vector2(me.Facing * (Ranges.Melee * 0.6f + me.Size + foe.Size), 0f);
             foe.Target = me;
         }
+        if (skill.Area == AreaShape.AlliesBehind) friend.Position = battle.Arena.Clamp(me.Position - new Vector2(me.Facing * 60f, 0f));
         if (skill.Effects.Any(x => x.Kind == EffectType.Rewind))
         {
             for (int at = battle.NowMs; battle.NowMs < at + 7000;)

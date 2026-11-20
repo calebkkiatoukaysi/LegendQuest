@@ -367,7 +367,7 @@ public class HudPreviewScreen : GameScreen
         return art is not null ? new PortraitView(null, WalkerShape.Person, art) : PortraitView.None;
     }
 
-    /// <summary>You: a Blademaster in a fight, or an Arcanist reaching too far.</summary>
+    /// <summary>You: a Swordhand in a fight, or an Arcanist reaching too far.</summary>
     private FighterHudView You()
     {
         bool arcanist = State == Shot.Reach;
@@ -380,7 +380,7 @@ public class HudPreviewScreen : GameScreen
             new("burning", "Burning", 2, 2.1f, 6f, false, "Fire damage every 3 s.", "Hollowed Hexer"),
             new("shielded", "Ward", 1, 24f, 30f, true, "Temporary hit points: hits come off these first."),
         };
-        return new FighterHudView("you", "Kael", arcanist ? "LEVEL 3 ARCANIST" : "LEVEL 3 BLADEMASTER", Face("you"), false,
+        return new FighterHudView("you", "Kael", arcanist ? "LEVEL 3 ARCANIST" : "LEVEL 3 SWORDHAND", Face("you"), false,
             State == Shot.Boss ? 19 : 29, 40, State == Shot.Reach ? 0 : 6, arcanist ? 18 : 45, 100, 15, auras, null, Swing(), false, 0, 0, false);
     }
 

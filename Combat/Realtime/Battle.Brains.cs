@@ -114,7 +114,7 @@ public sealed partial class Battle
         if (f.Kind == FighterKind.Member && f.HpShare < 0.4 && Problem(f, Potion, f) is null)
             options.Add((20 + (1 - f.HpShare) * 40, BattleCommand.Potion(f.Id)));
 
-        if (SoulLinkProblem(f, target) is null) options.Add((25, BattleCommand.SoulLink(f.Id, target.Id)));
+        if (SoulLinkProblem(f, target) is null && !LeavesSoulLink(f)) options.Add((25, BattleCommand.SoulLink(f.Id, target.Id)));
 
         int saving = Saving(f, target);
         foreach (SkillDefinition skill in f.BarSkills)
@@ -227,13 +227,16 @@ public sealed partial class Battle
     }
 
     /// <summary>The ground marker of a foe's telegraph or cast that someone's standing in, or null.</summary>
-    private BattleArea Danger(Fighter f)
+    private BattleArea Danger(Fighter f) => DangerAt(f, f.Position);
+
+    /// <summary>The ground marker of a foe's telegraph or cast that someone would be in if they stood at a point, or null.</summary>
+    private BattleArea DangerAt(Fighter f, Vector2 point)
     {
         foreach (Fighter foe in _fighters)
         {
             if (!Hostile(f, foe) || foe.Action is not ActionState action || action.Area is not BattleArea area || area.Shape == AreaKind.Room) continue;
             if (action.TelegraphUntilMs <= 0 && action.CastUntilMs <= 0) continue;
-            if (area.Contains(f.Position, f.Size + 4f)) return area;
+            if (area.Contains(point, f.Size + 4f)) return area;
         }
         return null;
     }

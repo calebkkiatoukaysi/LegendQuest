@@ -121,8 +121,9 @@ public static partial class BattleSimulator
         string text = e.Weapon ? (e.WeaponTimes > 1 ? $"weapon ×{e.WeaponTimes}" : "weapon") : e.Dice.IsNone ? "" : e.Dice + (e.Plus ? "⁺" : "");
         if (e.AddCasting) text += " + casting";
         if (e.AddAbility is Ability ability) text += " + " + ability.ToString()[..3];
-        if (e.LevelTimes > 0) text += e.LevelTimes == 1 ? " + level" : $" + {e.LevelTimes} × level";
-        if (e.Flat != 0 && e.Dice.IsNone && !e.Weapon) text += e.Flat.ToString(CultureInfo.InvariantCulture);
+        if (e.LevelTimes > 0) text += (text.Length > 0 ? " + " : "") + (e.LevelTimes == 1 ? "level" : $"{e.LevelTimes} × level");
+        if (e.PoolPerLevel > 0) text += $" from a pool of {e.PoolPerLevel} × level";
+        if (e.Flat != 0 && text.Trim().Length == 0) text += e.Flat.ToString(CultureInfo.InvariantCulture);
         else if (e.Flat != 0) text += (e.Flat > 0 ? " + " : " - ") + Math.Abs(e.Flat);
         if (e.Amount > 0 && text.Length == 0) text = e.Amount.ToString(CultureInfo.InvariantCulture);
         if (e.MaxHpShare > 0) text += $"{(text.Length > 0 ? " + " : "")}{e.MaxHpShare:P0} of most HP";

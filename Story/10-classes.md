@@ -4,7 +4,7 @@ How classes work after this change: a mix of Baldur's Gate 3 and AdventureQuest 
 
 The class *names and kits here are LegendQuest's own*. The AQW wiki was the reference for how a class roster is shaped (base classes from a trainer, advanced ones from quests, people and merchants; ranks; a handful of skills and two passives). No AQW class, name or skill is copied.
 
-Combat rules the skills rely on (rows, Focus, actions) are in `11-combat.md`. Notation for the trainer scenes is as in `04-script-prologue-act1.md`.
+Combat rules the skills rely on (reach, areas, Focus, the bar) are in `11-combat.md`. Notation for the trainer scenes is as in `04-script-prologue-act1.md`.
 
 ---
 
@@ -57,7 +57,7 @@ Hit points come from level and Constitution, not class: 10 + Con at level 1, the
 | Modifier | Classes |
 | --- | --- |
 | +20% | Warden, Ironvein Bulwark, Watchblade |
-| +10% | Blademaster, Gilded Knight, Ashwalker, Deckhand, Crownsworn, Wayfarer |
+| +10% | Swordhand, Gilded Knight, Ashwalker, Deckhand, Crownsworn, Wayfarer |
 | 0 | Everyone else |
 | −10% | Guild Battlemage, Glasswright, Hemomancer |
 
@@ -69,7 +69,7 @@ A skill's dice go up with *level*, not rank: one more die at level 5, and anothe
 
 Each class table lists: the rank it unlocks at; the kind (**A** action, **B** bonus action, **R** reaction, **P** passive); Focus cost; cooldown (**CD**); the target; and the effect. "1/fight" means once per fight.
 
-Combat is real time (`11-combat.md`). The tables below were written for turns, and `11-combat.md` §4.2 to §4.3 say how each column reads now: **A** is on the global cooldown and **B** off it, **R** is armed and fires on its trigger, a turn is 3 seconds, CD 1 to 4 are 6, 8, 12 and 16 seconds, 1/fight is a 45 s cooldown, and the row shapes become areas around the target. Each class also has its way of filling Focus (`11-combat.md` §4.1). The numbers the simulator settled on are in the section **Tuned numbers** at the end of this file, which wins where it differs from a table.
+Combat is real time (`11-combat.md`). The tables below were written for turns, and `11-combat.md` §4.2 to §4.3 say how each column reads now: **A** is on the global cooldown and **B** off it, **R** is armed and fires on its trigger, a turn is 3 seconds, CD 1 to 4 are 3, 6, 9 and 12 seconds, 1/fight is a 45 s cooldown, and the row shapes become areas around the target. Each class also has its way of filling Focus (`11-combat.md` §4.1). The numbers the simulator settled on are in the section **Tuned numbers** at the end of this file, which wins where it differs from a table.
 
 ---
 
@@ -77,7 +77,7 @@ Combat is real time (`11-combat.md`). The tables below were written for turns, a
 
 These are the eight the game already has, under the same story names (the SRD name is still the code id). Master Imra Vell teaches all of them at the Proving Hall in Questeria (§4.1), so anyone can learn any of them from Act 1 on.
 
-### 2.1 Blademaster (`fighter`)
+### 2.1 Swordhand (`fighter`)
 
 Front-line damage. Any armour, any weapon, shields.
 
@@ -700,10 +700,10 @@ A companion fights best in their own class, and some story fights expect it: in 
 Every kit plays in real time as §2's and §3's tables read through `11-combat.md` §4.2 and §4.3 (A on
 the GCD, B off it, R armed for 4 s, 1/fight as a 45 s cooldown ready at the start, a turn as 3 s),
 then tuned by the simulator (README "Tuning"). The tuning read CD 1 to 4 as 3, 6, 9 and 12 s, a turn
-each, rather than §4.2's first 6, 8, 12 and 16, so a full bar has a skill to press every two or three
+each, rather than the first pass's 6, 8, 12 and 16, so a full bar has a skill to press every two or three
 seconds; it kept heals at 6 s; and it moved a few skills' costs, cooldowns, dice and durations where a
 class came out weak or overbearing. §8.1 has every number as the engine has it. The tables in §2 and
-§3 are the turn-based screen's, until it moves over. Where a table says something only turns could
+§3 were written for the turn-based screen, which is gone. Where a table says something only turns could
 say, the engine reads it so:
 
 | Skill | In real time |
@@ -713,7 +713,7 @@ say, the engine reads it so:
 | Poisoned Edge | Your next hit within 9 s Poisons: 1d4 poison every 3 s for 9 s |
 | Cunning | Move a quarter faster, and 5% haste (initiative and Shift are gone) |
 | Shadow Dance | Three blows, each on a random foe (they can repeat), each a step behind it with Sneak Attack |
-| Sneak Attack | +1d6⁺ when an ally hit the target in the last 3 s, or it's Marked, Prone or down, or you have advantage; once every 3 s |
+| Sneak Attack | +2d6⁺ (a die more at levels 5 and 9) when an ally hit the target in the last 3 s, or it's Marked, Prone or down, or you have advantage; once every 3 s |
 | Shield | For 4 s, the next attack on you meets +5 AC, which lasts 3 s |
 | Arcane Recovery | +10 Focus every 3 s |
 | Empowered | Once every 3 s, a spell's damage adds Int |
@@ -829,7 +829,7 @@ long it lasts). Passives say what they do.
 | Tempo | +6 a hit |
 | Blood | +4 a second |
 
-#### Blademaster (`fighter`)
+#### Swordhand (`fighter`)
 
 Momentum: +8 a hit, +14 a crit. The auto swings every 2 s with a longsword (one-hand), before haste.
 
@@ -893,7 +893,7 @@ Bulwark: +4 a hit, +6 when you're hit, +10 a block. The auto swings every 2 s wi
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Strike | auto | 1 |  |  |  | 0.18 s | weapon |  | weapon |
 | Divine Smite | B | 1 | 25 | 3 s |  | 0.23 s | self |  | rider on you |
-| Lay on Hands | A | 2 | 20 | GCD |  | 0.28 s | 100 |  | heal ; cleanse |
+| Lay on Hands | A | 2 | 20 | GCD |  | 0.28 s | 100 |  | heal from a pool of 5 × level; cleanse |
 | Raise Shield | B | 3 | 20 | 9 s |  | 0.20 s | self |  | Shield Raised 3 s on you; taunt |
 | Unbroken Oath | A, ultimate | 5 | 60 | 45 s |  | 0.57 s | room | AllAllies | shield 2d10 + level; Oathbound 9 s |
 | Aura of Protection | passive | 4 | | | | | | | Allies within 60 px add your Cha to saves. |
@@ -909,7 +909,7 @@ Wild: +3 a second, +2 a tick of your damage or healing over time. The auto swing
 | Entangle | A | 1 | 30 | 9 s |  | 0.35 s | 220 | Row | Restrained 6 s |
 | Healing Word | B | 2 | 20 | 6 s |  | 0.18 s | 220 |  | heal 1d4⁺ + casting |
 | Moonbeam | A | 3 | 30 | 9 s |  | 0.32 s | 220 | Line | 2d10 radiant; Moonbeam 9 s (2d10 every 3 s) |
-| Wild Shape: Bear | A, ultimate | 5 | 60 | 45 s |  | 0.60 s | self |  | transform on you; shield + 3 × level10 on you |
+| Wild Shape: Bear | A, ultimate | 5 | 60 | 45 s |  | 0.60 s | self |  | transform on you; shield 3 × level + 10 on you |
 | Natural Recovery | passive | 4 | | | | | | | After a fight, the party heals 10%. |
 | Nature's Ward | passive | 10 | | | | | | | Immune to Poisoned. |
 
@@ -966,7 +966,7 @@ Wild: +3 a second, +2 a tick of your damage or healing over time. The auto swing
 | Mend | B | 2 | 20 | 6 s |  | 0.25 s | 220 |  | heal 1d6⁺ + casting; cleanse |
 | Haul In | A | 3 | 25 | 6 s |  | 0.23, 0.37 s | 220 |  | pull; Knocked Down 1.5 s |
 | High Tide | A, ultimate | 5 | 60 | 45 s |  | 0.58 s | room | AllFoes | 3d8 cold; Knocked Down 1.5 s; High Tide 9 s |
-| Weather Eye | passive | 4 | | | | | | | The party starts every fight with 10 more Focus (it was +2 initiative). |
+| Weather Eye | passive | 4 | | | | | | | The party starts every fight with 10 more Focus. |
 | Knots Hold | passive | 10 | | | | | | | Restrained you put on lasts 3 s longer. |
 
 #### Deckhand (`deckhand`)
@@ -1130,7 +1130,7 @@ Wellspring: +5 a second. The auto swings every 2 s with a quarterstaff (staff), 
 | Skill | Kind | Rank | Focus | Cooldown | Cast / wind-up | Blows land | Reach | Area | Does |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Prism Ray | auto | 1 |  |  |  | 0.27, 0.58 s | 220 |  | 1d8⁺ radiant; 1d4⁺ radiant |
-| Mirror Image | B | 1 | 20 | 9 s |  | 0.35 s | self |  | Mirror Image, 3 uses on you |
+| Mirror Image | B | 1 | 20 | 9 s |  | 0.28 s | self |  | Mirror Image, 3 uses on you |
 | Refract | R | 2 | 20 | 6 s |  | 0.12 s | self |  |  |
 | Glasshouse | A | 3 | 30 | 9 s |  | 0.32 s | 220 | Row | Blinded 3 s; 2d6 radiant |
 | Given in Love | A, ultimate | 5 | 60 | 45 s |  | 0.55 s | room | AllAllies | rider |
@@ -1162,7 +1162,7 @@ Momentum: +8 a hit, +14 a crit. The auto swings every 1.8 s with a rapier (one-h
 | Told Rudely | B | 2 | 15 | 9 s |  | 0.20 s | 220 |  | taunt; Marked 3 s |
 | Rally | A | 3 | 30 | 9 s |  | 0.33 s | room | AllAllies | heal 1d8⁺; heal 1 |
 | My Father's Sword | A, ultimate | 5 | 60 | 45 s |  | 0.30, 0.50, 0.70, 1.00 s | 30 |  | weapon ×4; 4d8 radiant; strike |
-| No Procedure | passive | 4 | | | | | | | The party starts every fight with 10 more Focus, and your first swing comes at once (it was initiative). |
+| No Procedure | passive | 4 | | | | | | | The party starts every fight with 10 more Focus, and your first swing comes at once. |
 | Somebody Allowed to Say No | passive | 10 | | | | | | | Once a fight, the first big move a foe winds up (a wind-up of 1 s or more) is stopped before it lands. |
 
 #### Hourwarden (`hourwarden`)

@@ -219,7 +219,8 @@ public static class SaveSystem
     /// saved starts again from the beginning, as every loaded fight does (SaveData.Fight). The old fields
     /// only survive the read because of SaveData.Extra, and the tile maps' because Read reads them on
     /// their own. Version 10 is when classes had ranks: everyone knows the class they have, at the rank
-    /// they joined at (10-classes.md §6), with its class points written down (IntoClassRanks).
+    /// they joined at (10-classes.md §6) and the points of every story fight the flags say was won since,
+    /// written down (IntoClassRanks).
     /// </remarks>
     /// <param name="data">The save as it was read off disk.</param>
     /// <param name="tiles">The tile maps' fields from the same file, for a save older than version 8; otherwise null.</param>
@@ -344,16 +345,22 @@ public static class SaveSystem
         }
     }
 
-    /// <summary>Gives everyone in the party, at camp and away the class they have as a class they know, at the class points of the rank they joined at.</summary>
-    /// <remarks>Mend hasn't been at it yet, so a list or anyone in it can be null.</remarks>
+    /// <summary>Gives everyone in the party, at camp and away the class they have as a class they know, at the class points the story would have given it by now (ClassRanks.PointsFromStory): the rank they joined at, and what every story fight the flags say was won is worth.</summary>
+    /// <remarks>
+    /// A save from before ranks had every skill on the bar, so one from deep in the story mustn't come
+    /// back at rank 1 with half the bar locked. Mend hasn't been at it yet, so a list or anyone in it
+    /// can be null.
+    /// </remarks>
     /// <param name="data">The save.</param>
     private static void IntoClassRanks(SaveData data)
     {
+        data.Flags ??= new HashSet<string>();
         foreach (PartyMember member in (data.Party ?? Enumerable.Empty<PartyMember>()).Concat(data.Camp ?? Enumerable.Empty<PartyMember>()).Concat(data.Away ?? Enumerable.Empty<PartyMember>()))
         {
             if (member is null) continue;
             member.ClassPoints ??= new Dictionary<ClassId, int>();
-            member.Learn(member.Class);
+            int points = ClassRanks.PointsFromStory(member.Id, data.Flags);
+            member.ClassPoints[member.Class] = Math.Max(points, member.ClassPoints.GetValueOrDefault(member.Class));
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using LegendQuest.Audio;
 using LegendQuest.Characters;
@@ -9,6 +10,7 @@ using LegendQuest.Combat;
 using LegendQuest.Combat.Realtime;
 using LegendQuest.Dialogue;
 using LegendQuest.Components;
+using LegendQuest.Components.Realtime;
 using LegendQuest.Items;
 using LegendQuest.Rules;
 using LegendQuest.Tutorial;
@@ -79,6 +81,31 @@ public partial class ExploreScreen
 
     /// <summary>The markers on the floor still filling, by the fighter whose telegraph or cast they are, to resolve or cancel.</summary>
     private readonly Dictionary<string, int> _cueMarks = new();
+
+    /// <summary>Whether the win's been shown: a swing or an arrow still timed to sound after it (a blow that will never land) stays quiet.</summary>
+    private bool _wonCued;
+
+    /// <summary>The keys of your bar's slots on a cooldown long enough to chime for when it ends, as of the last frame.</summary>
+    private readonly HashSet<string> _cooling = new(StringComparer.Ordinal);
+
+    /// <summary>The shortest cooldown worth a chime when it ends, in seconds: a 3 s filler would chime all fight.</summary>
+    private const float ChimeLeastSeconds = 5f;
+
+    /// <summary>A soft chime the moment one of your bar's longer cooldowns comes off, so you know it's back without looking.</summary>
+    /// <param name="view">The HUD as it's about to be drawn.</param>
+    private void ChimeReady(HudView view)
+    {
+        if (view?.Slots is null) return;
+        foreach (SlotView slot in view.Slots)
+        {
+            if (slot.Key is null) continue;
+            if (slot.Cooling)
+            {
+                if (slot.CooldownTotal >= ChimeLeastSeconds) _cooling.Add(slot.Key);
+            }
+            else if (_cooling.Remove(slot.Key) && !_wonCued) Play(SoundKeys.CooldownReady, null, QuietVolume);
+        }
+    }
 
     /// <summary>Plays one thing the engine did, on whoever it happened to, and writes its log line.</summary>
     /// <param name="happened">The event.</param>
@@ -207,6 +234,7 @@ public partial class ExploreScreen
 
             case BattleEventKind.FightLost:
                 _log.Add(happened.Text ?? "THE FIGHT IS LOST.", Palette.Ember);
+                Play(SoundKeys.Defeat, null);
                 break;
 
             case BattleEventKind.Armed:
@@ -264,7 +292,8 @@ public partial class ExploreScreen
         if (clip is not null) _moves[actor.Id] = (clip, happened.AtMs);
 
         string school = SchoolOf(skill);
-        bool weapon = skill is null || skill.Weapon || skill.Id == SkillCatalog.FoeAttack || happened.Motion?.StartsWith("auto-", StringComparison.Ordinal) == true;
+        bool potion = happened.SkillId == Battle.Potion.Id;
+        bool weapon = !potion && (skill is null || skill.Weapon || skill.Id == SkillCatalog.FoeAttack || happened.Motion?.StartsWith("auto-", StringComparison.Ordinal) == true);
         if (school is not null && !weapon)
         {
             Play(CombatSounds.Cast(school), by);
@@ -275,12 +304,14 @@ public partial class ExploreScreen
             return;
         }
 
+        // A heal, a buff or the potion swings nothing: their own cues have their sounds.
+        if (!weapon && !Strikes(skill)) return;
         string family = FamilyOf(actor);
         if (family is "bow" or "crossbow") return;
         int lead = CombatSounds.SwingLeadMs(family);
         string swing = CombatSounds.Swing(family);
         WalkerSprite swinger = by;
-        AtShown(happened.ImpactMs - lead, () => Play(swing, swinger));
+        AtShown(happened.ImpactMs - lead, () => { if (!_wonCued) Play(swing, swinger); });
     }
 
     /// <summary>A foe winding up a big move: its held coil (the clip names it), a glint, the warning sound, and the marker on the floor filling until the blow lands, if it's aimed at a piece of the floor.</summary>
@@ -334,7 +365,9 @@ public partial class ExploreScreen
     {
         float seconds = MathF.Max(0.02f, (happened.ImpactMs - happened.AtMs) / 1000f);
         Vector2 from = by?.BonePosition("hand_near") ?? ToScreen(happened.Position) - new Vector2(0f, 20f);
-        Vector2 to = on is not null ? ChestOf(on) : ToScreen(happened.Area?.To ?? happened.Position) - new Vector2(0f, 12f);
+        // An area's bolt (a Fireball) flies to the middle of where the engine aims it, not at one of its victims.
+        bool area = AreaBolt(skill) && happened.Area is not null;
+        Vector2 to = on is not null && !area ? ChestOf(on) : ToScreen(happened.Area?.To ?? happened.Position) - new Vector2(0f, 12f);
         DamageType type = happened.DamageType;
 
         if (type is DamageType.Piercing or DamageType.Slashing or DamageType.Bludgeoning)
@@ -346,9 +379,27 @@ public partial class ExploreScreen
         }
 
         Element element = CombatEffects.ElementOf(type);
+        if (area)
+        {
+            // It goes off as a whole: a burst the size of the area where it lands, and the area's kick.
+            _effects.Projectile(element, from, to, seconds, 0f, bursts: false);
+            AtShown(happened.ImpactMs, () =>
+            {
+                _effects.Burst(to, element, AreaBurstSize);
+                _effects.Shaker.Kick(ShakeCause.AreaSpell, false, _camera.ToScreen(to));
+            });
+            return;
+        }
         if (element == Element.Lightning) _effects.BeamFrom(element, from, to, MathF.Max(seconds, 0.12f));
         else _effects.Projectile(element, from, to, seconds, skill?.Id.Contains("blasting") == true ? 26f : 0f, bursts: true);
     }
+
+    /// <summary>How much bigger than a bolt's own an area bolt's burst is (the Moves proof stages Fireball at it).</summary>
+    private const float AreaBurstSize = 2.2f;
+
+    /// <summary>Whether a skill's bolt goes off over an area (a Fireball), rather than on the one it's thrown at.</summary>
+    private static bool AreaBolt(SkillDefinition skill) =>
+        skill?.Projectile is not null && skill.Area is AreaShape.AllFoes or AreaShape.Ring or AreaShape.Row or AreaShape.Line or AreaShape.Neighbours or AreaShape.Front;
 
     // The blows.
 
@@ -393,18 +444,20 @@ public partial class ExploreScreen
         HitFlags flags = happened.Flags;
         bool critical = flags.HasFlag(HitFlags.Crit), kill = flags.HasFlag(HitFlags.Kill), auto = flags.HasFlag(HitFlags.Auto);
         bool heavy = !auto && (flags.HasFlag(HitFlags.Big) || skill is not null && skill.Id != SkillCatalog.FoeAttack);
-        string school = CombatSounds.SchoolOf(happened.DamageType);
+        // A class whose magic has its own sound (SchoolOf: nature, blood) lands with it, whatever it hurts with.
+        string own = SchoolOf(skill) is string mine && mine is "nature" or "blood" ? mine : null;
+        string school = own ?? CombatSounds.SchoolOf(happened.DamageType);
         bool magic = school is not null && (skill is null || !skill.Weapon);
         bool spell = magic && !auto;
-        Element element = school is not null ? CombatEffects.ElementOf(happened.DamageType) : Element.Physical;
+        Element element = own is not null ? CombatEffects.ElementOf(own) : school is not null ? CombatEffects.ElementOf(happened.DamageType) : Element.Physical;
 
         on.TakeHit(by, happened.Amount, Math.Max(1, target.MaxHp), critical, kill, heavy, spell ? CombatEffects.ColourOf(element) : null);
 
         Vector2 toward = by is null ? new Vector2(target.Facing < 0 ? 1f : -1f, 0f) : new Vector2(MathF.Sign(on.Position.X - by.Position.X), 0f);
         if (toward.X == 0f) toward = Vector2.UnitX;
-        if (magic && skill?.Projectile is not null)
+        if (magic && skill?.Projectile is not null && !AreaBolt(skill))
         {
-            // Its bolt bursts where it lands (CueProjectile).
+            // Its bolt bursts where it lands (CueProjectile); an area's bursts in the middle, and on each it catches here.
         }
         else if (spell)
         {
@@ -515,11 +568,21 @@ public partial class ExploreScreen
     private void CueDowned(Fighter target, WalkerSprite on)
     {
         if (on is null || target is null) return;
-        on.PlayMove("collapse", hold: true);
+        Clip collapse = on.PlayMove("collapse", hold: true);
         Play(SoundKeys.Downed, on);
+        FallsAt(on, collapse);
         _popups.Word(NumbersAt(on), _encounter.Nonlethal ? "KNOCKED OUT" : "DOWN!", Palette.Ember);
         if (target == _battle.Leader) _effects.Shaker.Kick(ShakeCause.Downed, false, _camera.ToScreen(on.Position));
-        if (target.Side == Side.Party && !_encounter.Nonlethal) Lesson(TutorialCatalog.CombatDowned);
+        // The lesson's about helping a friend up, so it pulses on them; not while it's you on the floor.
+        if (target.Side == Side.Party && target != _battle.Leader && !_encounter.Nonlethal) Lesson(TutorialCatalog.CombatDowned, target.Id);
+    }
+
+    /// <summary>The thud of a body meeting the floor, on the clip's land, if it has one.</summary>
+    private void FallsAt(WalkerSprite on, Clip fall)
+    {
+        if (fall?.FirstEvent("land") is not float land) return;
+        WalkerSprite body = on;
+        AtShown(_shownMs + land * 1000f, () => Play(SoundKeys.BodyFall, body));
     }
 
     /// <summary>Someone back on their feet: the get-up, the glow and the word, and a note to say so after a fight that's over.</summary>
@@ -547,6 +610,7 @@ public partial class ExploreScreen
         }
 
         Clip die = on.PlayMove("die", hold: true);
+        FallsAt(on, die);
         float lies = (die?.Length ?? 0.8f) + LieSeconds;
         WalkerSprite gone = on;
         AtShown(_shownMs + lies * 1000f, () =>
@@ -619,6 +683,7 @@ public partial class ExploreScreen
     /// <summary>The fight's won: everyone of the party still standing strikes their victory pose, and the last blow's accent.</summary>
     private void CueVictory()
     {
+        _wonCued = true;
         Play(SoundKeys.Victory, null);
         foreach (Fighter fighter in _battle.Fighters)
         {
@@ -638,14 +703,28 @@ public partial class ExploreScreen
     private static SkillDefinition SkillOf(string id) => id is not null && SkillCatalog.Exists(id) ? SkillCatalog.Get(id) : null;
 
     /// <summary>The spell school a skill's cast and impact sound like (CombatSounds.Schools), or null for a weapon's blow, a heal or a buff.</summary>
+    /// <remarks>The damage type picks it, but a few classes' magic has its own sound whatever it hurts with: a Wildcaller's thorns and a Hivekeeper's bees are nature, a Hemomancer's spells blood.</remarks>
     private static string SchoolOf(SkillDefinition skill)
     {
         if (skill is null || skill.Weapon) return null;
-        if (skill.Projectile is DamageType flies && CombatSounds.SchoolOf(flies) is string school) return school;
+        string found = null;
+        if (skill.Projectile is DamageType flies) found = CombatSounds.SchoolOf(flies);
         foreach (Effect effect in skill.Effects)
-            if (effect.Kind == EffectType.Damage && !effect.Weapon && effect.Type is DamageType type && CombatSounds.SchoolOf(type) is string hurts) return hurts;
-        return null;
+        {
+            if (found is not null) break;
+            if (effect.Kind == EffectType.Damage && !effect.Weapon && effect.Type is DamageType type) found = CombatSounds.SchoolOf(type);
+        }
+        bool hurts = skill.Effects.Any(effect => effect.Kind == EffectType.Damage && !effect.Weapon);
+        return skill.Class switch
+        {
+            ClassId.Druid or ClassId.Hivekeeper when hurts && found is null => "nature",
+            ClassId.Hemomancer when hurts && found is null or "necrotic" => "blood",
+            _ => found,
+        };
     }
+
+    /// <summary>Whether a move that isn't a weapon's strikes someone (a Shield Bash, a kick, a thrown thing), so swings; a heal, a buff or the potion doesn't.</summary>
+    private static bool Strikes(SkillDefinition skill) => skill is not null && skill.Effects.Any(effect => effect.Kind is EffectType.Damage or EffectType.Throw);
 
     /// <summary>The weapon family someone's blows sound like: a beast's claws or teeth, a party member's weapon in hand, or their weapon kind's.</summary>
     private static string FamilyOf(Fighter fighter)
@@ -693,6 +772,6 @@ public partial class ExploreScreen
         public const string Crit = "crit", Block = "block", Dodge = "dodge", Miss = "miss", Heal = "heal", Buff = "buff", Debuff = "debuff";
         public const string AuraTick = "aura-tick", Telegraph = "telegraph", BossPhase = "boss-phase", Knockdown = "knockdown", Death = "death";
         public const string Downed = "downed", Revive = "revive", Potion = "potion", SoulLink = "soul-link", Press = "ui-press", Denied = "ui-denied";
-        public const string CooldownReady = "cooldown-ready", Victory = "victory";
+        public const string CooldownReady = "cooldown-ready", Victory = "victory", Defeat = "defeat", LevelUp = "level-up", BodyFall = "body-fall";
     }
 }
