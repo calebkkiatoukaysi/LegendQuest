@@ -180,7 +180,7 @@ public partial class ExploreScreen
             case BattleEventKind.DeathSave:
                 if (on is null || happened.Amount <= 0) break;
                 bool made = happened.Flags.HasFlag(HitFlags.Save);
-                _popups.Word(NumbersAt(on), $"DEATH SAVE  {happened.Amount}", made ? Palette.Gold : Palette.Ember);
+                Callout(on, $"DEATH SAVE  {happened.Amount}", made ? Palette.Gold : Palette.Ember);
                 break;
 
             case BattleEventKind.Revived:
@@ -242,11 +242,11 @@ public partial class ExploreScreen
                 break;
 
             case BattleEventKind.ReactionFired:
-                if (by is not null && skill is not null) _popups.Word(NumbersAt(by), skill.Name.ToUpperInvariant(), Palette.Gold);
+                if (by is not null && skill is not null) Callout(by, skill.Name.ToUpperInvariant(), Palette.Gold);
                 break;
 
             case BattleEventKind.Taunted:
-                if (on is not null) _popups.Word(NumbersAt(on), "TAUNTED", Palette.Ember);
+                if (on is not null) Callout(on, "TAUNTED", Palette.Ember);
                 break;
 
             case BattleEventKind.Denied:
@@ -262,7 +262,7 @@ public partial class ExploreScreen
             case BattleEventKind.HelpStarted:
                 if (by is null) break;
                 by.PlayMove("channel");
-                _popups.Word(NumbersAt(by), "HELPING", Palette.Gold);
+                Callout(by, "HELPING", Palette.Gold);
                 break;
 
             case BattleEventKind.PotionDrunk:
@@ -343,7 +343,7 @@ public partial class ExploreScreen
     {
         if (happened.ActorId is string id && _cueMarks.Remove(id, out int mark)) _effects.Cancel(mark);
         if (by is null) return;
-        if (happened.SkillId != "help") _popups.Word(NumbersAt(by), "INTERRUPTED", Palette.Ember);
+        if (happened.SkillId != "help") Callout(by, "INTERRUPTED", Palette.Ember);
         by.StopMove();
     }
 
@@ -571,7 +571,7 @@ public partial class ExploreScreen
         Clip collapse = on.PlayMove("collapse", hold: true);
         Play(SoundKeys.Downed, on);
         FallsAt(on, collapse);
-        _popups.Word(NumbersAt(on), _encounter.Nonlethal ? "KNOCKED OUT" : "DOWN!", Palette.Ember);
+        Callout(on, _encounter.Nonlethal ? "KNOCKED OUT" : "DOWN!", Palette.Ember);
         if (target == _battle.Leader) _effects.Shaker.Kick(ShakeCause.Downed, false, _camera.ToScreen(on.Position));
         // The lesson's about helping a friend up, so it pulses on them; not while it's you on the floor.
         if (target.Side == Side.Party && target != _battle.Leader && !_encounter.Nonlethal) Lesson(TutorialCatalog.CombatDowned, target.Id);
@@ -593,7 +593,7 @@ public partial class ExploreScreen
         on.Opacity = 1f;
         _effects.HealGlow(ChestOf(on), 1.3f);
         Play(SoundKeys.Revive, on);
-        _popups.Word(NumbersAt(on), "BACK UP", DamagePopups.HealColour);
+        Callout(on, "BACK UP", DamagePopups.HealColour);
     }
 
     /// <summary>Someone dying: a foe's death clip, a held beat on the floor, then a fade in motes; one of the party who's fallen for the rest of the fight stays on the floor, faint.</summary>
@@ -605,7 +605,7 @@ public partial class ExploreScreen
         {
             if (on.Move is null || on.Move.Name != "collapse") on.PlayMove("collapse", hold: true);
             FadeTo(on, FallenOpacity, FadeOutSeconds);
-            _popups.Word(NumbersAt(on), "FALLEN", Palette.Ember);
+            Callout(on, "FALLEN", Palette.Ember);
             return;
         }
 
@@ -624,7 +624,7 @@ public partial class ExploreScreen
     private void CueFellBack(Fighter actor, WalkerSprite by)
     {
         if (by is null || actor is null) return;
-        _popups.Word(NumbersAt(by), actor.Side == Side.Foes ? "YIELDS" : "FALLS BACK", Palette.Bone);
+        Callout(by, actor.Side == Side.Foes ? "YIELDS" : "FALLS BACK", Palette.Bone);
         if (by.Move is not { IsAction: true }) by.PlayMove("hurt-big");
         FadeTo(by, actor.Side == Side.Foes ? 0.85f : 0f, FadeOutSeconds);
     }
@@ -637,8 +637,8 @@ public partial class ExploreScreen
         walker.Position = ToScreen(actor.Position);
         _before[actor.Id] = actor.Position;
         if (walker.Opacity < 1f) ArriveIn(walker);
-        if (actor.Side == Side.Foes && !actor.Vanished) _popups.Word(NumbersAt(walker), "JOINS THE FIGHT", CombatStyle.FoeLine);
-        else if (actor.Side == Side.Party) _popups.Word(NumbersAt(walker), "JOINS THE FIGHT", Palette.Gold);
+        if (actor.Side == Side.Foes && !actor.Vanished) Callout(walker, "JOINS THE FIGHT", CombatStyle.FoeLine);
+        else if (actor.Side == Side.Party) Callout(walker, "JOINS THE FIGHT", Palette.Gold);
     }
 
     /// <summary>A boss changing phase: its name across the screen, a white flash and a squash, the boss's own sound and a slam of a shake.</summary>
@@ -655,7 +655,7 @@ public partial class ExploreScreen
         _effects.Shaker.Kick(ShakeCause.BossSlam, false, _camera.ToScreen(ChestOf(by)));
     }
 
-    /// <summary>A line shouted mid-fight: a bubble over whoever said it, as the banter's are, and the log; one said by nobody (a wave's) goes under the banner. A bubble waits while a banner's up (a boss's phase and its roar come together), so the two aren't on top of each other.</summary>
+    /// <summary>A line shouted mid-fight: a line in the barks' lane under the frames at the top (PlaceBarks), and the log; one said by nobody (a wave's) goes under the banner. A line waits while a banner's up (a boss's phase and its roar come together), so the two don't come at once.</summary>
     private void CueBark(BattleEvent happened, Fighter actor, WalkerSprite by)
     {
         if (happened.Text is null) return;
@@ -676,7 +676,7 @@ public partial class ExploreScreen
             if (FighterWalker(duo) is WalkerSprite walker) _effects.Motes(ChestOf(walker), new Point(16, 22), Palette.Gold, false);
         bool full = happened.Amount >= Battle.SoulLinkCharges;
         Play(full ? SoundKeys.CooldownReady : SoundKeys.Buff, by, QuietVolume);
-        if (by is not null) _popups.Word(NumbersAt(by), full ? "SOUL-LINK READY" : "SOUL-LINK", Palette.Gold);
+        if (by is not null) Callout(by, full ? "SOUL-LINK READY" : "SOUL-LINK", Palette.Gold);
         if (full) Lesson(TutorialCatalog.CombatSoulLink);
     }
 
@@ -756,6 +756,15 @@ public partial class ExploreScreen
 
     /// <summary>Where someone's numbers and words start: a little over their head.</summary>
     private static Vector2 NumbersAt(WalkerSprite walker) => HeadOf(walker) - new Vector2(0f, NumbersRise);
+
+    /// <summary>Pops up a callout over someone: over their nameplate, kept off everyone else's, and waiting while the banner's up (DamagePopups.Word).</summary>
+    private void Callout(WalkerSprite walker, string text, Color colour)
+    {
+        string id = null;
+        foreach ((string each, WalkerSprite figure) in _fighters)
+            if (figure == walker) id = each;
+        _popups.Word(NumbersAt(walker), text, colour, id);
+    }
 
     /// <summary>Where someone's chest is: where blows land and motes rise from.</summary>
     private static Vector2 ChestOf(WalkerSprite walker) => walker.Position - new Vector2(0f, walker.Size.Y * ChestShare);

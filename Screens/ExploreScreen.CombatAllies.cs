@@ -185,15 +185,15 @@ public partial class ExploreScreen
         return ClearOfHud(new Rectangle(x, (int)(head.Y - SupportBannerRise - SupportBanner.Height), width + extra, SupportBanner.Height), extra);
     }
 
-    /// <summary>A box drawn over the room moved off whatever HUD frame it would sit on: under a frame in the top half of the screen, over one in the bottom half (the hotbar), a few times over if moving it lands it on another.</summary>
+    /// <summary>A box drawn over the room moved off whatever HUD frame it would sit on: under a frame in the top half of the screen, over one in the bottom half (the hotbar), several times over if moving it lands it on another (a frame, its cast bar, its auras).</summary>
     /// <param name="box">Where it would go, in screen pixels.</param>
     /// <param name="trim">How much of its width is for the box's own use and comes off what's returned (a banner's ring).</param>
     private Rectangle ClearOfHud(Rectangle box, int trim = 0)
     {
         if (_hudView is not null)
         {
-            var covered = new List<Rectangle>(_hud.Covered(_hudView));
-            for (int pass = 0; pass < 4; pass++)
+            var covered = new List<Rectangle>(_hud.Covered(_hudView, true));
+            for (int pass = 0; pass < 8; pass++)
             {
                 Rectangle hit = covered.Find(frame => frame.Intersects(box));
                 if (hit.IsEmpty) break;
@@ -215,7 +215,7 @@ public partial class ExploreScreen
         at.X = Math.Clamp(at.X, Margin + half, Math.Max(Margin + half, LegendQuestGame.ScreenWidth - Margin - half));
         var word = new Rectangle((int)(at.X - half), (int)(at.Y - size.Y), (int)size.X, (int)size.Y);
         if (!banner.IsEmpty && _hudView is not null)
-            foreach (Rectangle frame in _hud.Covered(_hudView))
+            foreach (Rectangle frame in _hud.Covered(_hudView, true))
                 if (frame.Intersects(word))
                 {
                     at.Y = banner.Bottom + HudClear + size.Y;

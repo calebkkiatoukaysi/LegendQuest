@@ -110,6 +110,10 @@ public abstract class FighterFrame
     /// <param name="fighter">Whose frame.</param>
     public int AurasBottom(FighterHudView fighter) => AurasAt.Y + AuraRow.Height(fighter?.Auras?.Count ?? 0, AurasPerRow, true);
 
+    /// <summary>What the aura row under the frame covers on the screen, timers included, or an empty rectangle for none.</summary>
+    /// <param name="fighter">Whose frame.</param>
+    public Rectangle AuraArea(FighterHudView fighter) => AuraRow.Area(fighter?.Auras?.Count ?? 0, AurasAt, AurasPerRow, true, FaceRight);
+
     /// <summary>Which of someone's auras the mouse is on, or null.</summary>
     /// <param name="mouse">Where the mouse is, in screen pixels.</param>
     /// <param name="fighter">Whose frame.</param>

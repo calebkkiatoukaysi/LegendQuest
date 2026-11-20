@@ -93,6 +93,18 @@ public class PartyFrames
         return null;
     }
 
+    /// <summary>What the auras beside each row cover on the screen, timers and all, for a row that has any.</summary>
+    /// <param name="party">The rows' people.</param>
+    public IEnumerable<Rectangle> AuraAreas(IReadOnlyList<FighterHudView> party)
+    {
+        Rectangle[] rows = Rows(party.Count);
+        for (int i = 0; i < rows.Length; i++)
+        {
+            Rectangle area = AuraRow.Area(Shown(party[i].Auras).Count, AurasAt(rows[i]), AurasBeside, false);
+            if (!area.IsEmpty) yield return area;
+        }
+    }
+
     /// <summary>Draws each row: its panel, face, bars or death saves, and the auras beside it. Goes in a point sampled batch.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, point-sampled.</param>
     /// <param name="kit">The HUD's shared art.</param>

@@ -1120,8 +1120,33 @@ a queue:
 - **The rest.** Someone joining fades in where the engine has them; a support swings or shoots from
   behind the party (its banner lit, its ring filling to its next turn, its arrow carrying the blow); a
   boss's phase puts its name across the screen with a flash, a burst, the boss sound and a slam; a
-  bark is a bubble over whoever said it; the Soul-Link charging is gold round the two of you; the
-  win is everyone's victory pose.
+  bark is a line in a lane of its own under the frames at the top of the screen rather than over
+  whoever said it, so it never sits on a nameplate, the numbers or a frame (it waits while a
+  banner's up). The lane doesn't add the speaker's name: the engine's lines name who they're about,
+  but for a boss's phase line ("Thorns split her hide..."), which comes with that boss's phase banner
+  and sits just under its frame. The Soul-Link charging is gold round the two of you; the win is
+  everyone's victory pose.
+- **Keeping it legible.** Each number and word over the room holds a box of its own on the screen,
+  as big as it's drawn (the pop and a critical's bounce in it, with 8 px clear either side), and is
+  drawn inside it (`DamagePopups.Draw`), so none is drawn over another. None is placed on a frame of
+  the HUD (or its auras), a nameplate (the target's chevron and its hit points included), a
+  support's banner, a bark, the log or the banner while it's up. A new one takes the nearest free
+  place to the top of its fighter's nameplate (or your head): up first (at most 96 px past where it
+  would rise to), then aside (at most 96 px), never below where it starts, and not nearer someone
+  else's nameplate than its own while there's anywhere else; further (240 px up, 192 aside) only
+  when there's no room near at all, as when the phase banner is across the fight. Once up, one keeps
+  its place, rises and follows its fighter if they move: the older ones are placed first each frame,
+  so a new one never pushes one you're reading, and a pop only grows into room nobody holds. If one
+  of those things comes over it (a banner coming up, a telegraph appearing over a nameplate, another
+  fighter's nameplate sweeping across), it's nudged clear a few pixels a frame. With no room near,
+  one that's only just come up (under 0.35 s) is moved at once, or if it's a number with nowhere at
+  all, added into a running total of the same kind over the same fighter, which pops again with the
+  sum; one that's been up longer, or a word with nowhere, fades out where it is in a quarter of a
+  second, under whatever came over it, since moved far it would read as a second hit. A new one with
+  no room waits until there is some. A callout (a skill's name, INTERRUPTED, TAUNTED, DOWN!) is
+  smaller than it was and waits while a banner's across the middle (the fight's name, a boss's
+  phase); anything that's waited 2.5 s is dropped. The supports' banners go faint while that
+  banner's up, so they don't show through it.
 
 **The HUD** (`ExploreScreen.CombatHudView`, drawn by `Components/Realtime/CombatHud`, below) is built
 from the engine every frame: your frame (the leader), the party's rows, your target's frame with its
@@ -1507,7 +1532,9 @@ more for a critical), kicks the picture a few pixels the way a heavy blow went, 
 (full, reduced, off). `DamagePopups` colours its numbers by what they are: white dealt, gold and
 bigger with a bounce for a critical, red taken, green with a "+" for healing, grey words for MISS,
 DODGE and BLOCK, smaller tinted ticks, and at most six over anyone, the rest merged into a running
-total. `Settings` has `ScreenShake`, `HitFlashes` and `DamageNumbers`, all on to start with.
+total; it gives each a place of its own and keeps it there (what to keep off and where each
+fighter's nameplate is come from the screen), and holds the callouts while `Holding`. `Settings`
+has `ScreenShake`, `HitFlashes` and `DamageNumbers`, all on to start with.
 
 `--proof <dir> Moves` films all of it in a room of its own, a sixtieth of a second for each frame
 drawn whatever the real clock does, into `<dir>/moves/<take>-NNN.png` (every second frame): each

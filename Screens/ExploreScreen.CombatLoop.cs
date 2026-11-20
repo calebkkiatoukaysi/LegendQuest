@@ -177,6 +177,7 @@ public partial class ExploreScreen
 
         _toast.Update(gameTime);
         _effects.Update(seconds);
+        _popups.Holding = _banner.Left > 0f;
         _popups.Update(seconds);
         _banner.Update(time);
         _log.Update(time);

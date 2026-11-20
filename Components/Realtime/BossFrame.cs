@@ -58,6 +58,10 @@ public class BossFrame
     /// <summary>Where its aura row starts: under the frame at its left.</summary>
     public static Point AurasAt => new(Bounds.X, Bounds.Bottom + CastDrop);
 
+    /// <summary>What the boss's aura row covers on the screen, timers included, or an empty rectangle for none.</summary>
+    /// <param name="boss">The boss.</param>
+    public static Rectangle AuraArea(BossView boss) => AuraRow.Area(boss?.Fighter.Auras?.Count ?? 0, AurasAt, AurasPerRow, true);
+
     /// <summary>Which of the boss's auras the mouse is on, or null.</summary>
     /// <param name="mouse">Where the mouse is.</param>
     /// <param name="boss">The boss.</param>

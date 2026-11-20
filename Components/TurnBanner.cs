@@ -79,6 +79,42 @@ public class TurnBanner
     /// <summary>How much longer the banner that's up stays, in seconds, or 0 if none is.</summary>
     public float Left => _heading is null || _clock == float.MaxValue ? 0f : MathF.Max(0f, InSeconds + HoldSeconds + OutSeconds - _clock);
 
+    /// <summary>
+    /// What the banner that's up covers on the screen, its smudge and rules and the whole of its
+    /// slide in, or null if none is; for the numbers and words over the fight to keep off.
+    /// </summary>
+    public Rectangle? Area
+    {
+        get
+        {
+            if (Left <= 0f) return null;
+            (float width, float height) = Measure();
+            int reach = (int)MathF.Max(width * RuleShare / 2f, width / 2f + Spread.X / 2f);
+            float centre = LegendQuestGame.ScreenWidth / 2f;
+            int top = (int)(MiddleY - height / 2f - Spread.Y), bottom = (int)MathF.Ceiling(MiddleY + height / 2f + Spread.Y);
+            return new Rectangle((int)(centre - Slide) - reach, top, reach * 2 + (int)Slide, bottom - top);
+        }
+    }
+
+    /// <summary>How wide and tall the heading and the line under it are together, in screen pixels.</summary>
+    private (float Width, float Height) Measure()
+    {
+        Vector2 headingSize = _title.MeasureString(_heading) * TitleScale;
+        Vector2 lineSize = _line is null ? Vector2.Zero : _detail.MeasureString(_line);
+        return (MathF.Max(headingSize.X, lineSize.X), headingSize.Y + lineSize.Y);
+    }
+
+    /// <summary>How much of the banner is showing now, 0 to 1, as it comes in and goes; 0 if none is up.</summary>
+    public float Showing
+    {
+        get
+        {
+            float length = InSeconds + HoldSeconds + OutSeconds;
+            if (_heading is null || _clock >= length) return 0f;
+            return MathF.Min(MathHelper.Clamp(_clock / InSeconds, 0f, 1f), MathHelper.Clamp((length - _clock) / OutSeconds, 0f, 1f));
+        }
+    }
+
     /// <summary>Takes the banner down at once.</summary>
     public void Clear() => _clock = float.MaxValue;
 
