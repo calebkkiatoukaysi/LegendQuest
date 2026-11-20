@@ -26,6 +26,12 @@ internal sealed class ArenaPlan
     /// <summary>A foe move it films from its telegraph, every second frame, into seq/, or null.</summary>
     public string FilmMove { get; init; }
 
+    /// <summary>The leader's skills it films, each the first time it starts, and again ("-clear") the first time after that it starts with nobody stood over the leader if somebody was, every second frame for 1.5 s, into seq/.</summary>
+    public string[] FilmSkills { get; init; } = Array.Empty<string>();
+
+    /// <summary>Foe moves it films, each the first time a foe starts it, every second frame for 1.5 s, into seq/: those with no telegraph for FilmMove to start from.</summary>
+    public string[] FilmFoeSkills { get; init; } = Array.Empty<string>();
+
     /// <summary>What the bout does before its fight: none (the save starts the fight), walk at an aggressive field, or click a field's foe.</summary>
     public ArenaStart Start { get; init; }
 
@@ -89,6 +95,12 @@ public partial class ExploreScreen
     /// <summary>How long a frame run is, in frames, and how often it saves one.</summary>
     private const int ArenaFilmFrames = 216, ArenaFilmEvery = 2;
 
+    /// <summary>How long a frame run of one skill or foe move is, in frames (1.5 s): longer than any skill clip, the longest being My Father's Sword's 1.383 s.</summary>
+    private const int ArenaSkillFilmFrames = 90;
+
+    /// <summary>How near another fighter can stand to the leader, across and in front (room px), for a skill of the leader's to be filmed: nearer, and they'd be drawn over the move.</summary>
+    private const float ArenaFilmClearAcross = 36f, ArenaFilmClearInFront = 60f;
+
     /// <summary>How long after a pressed skill goes off its shot is taken, in the fight's milliseconds: about when a skill's clip lands its blow.</summary>
     private const float ArenaSkillShotMs = 420f;
 
@@ -108,7 +120,7 @@ public partial class ExploreScreen
     private readonly List<(float AtMs, string Shot)> _arenaDue = new();
 
     /// <summary>The run of frames being filmed: its name, how far in it is, or null.</summary>
-    private (string Name, int Frame)? _arenaFilm;
+    private (string Name, int Frame, int Length)? _arenaFilm;
 
     /// <summary>Whether this bout's fight has started, and the panel's clock once it's up.</summary>
     private bool _arenaFought;
@@ -268,9 +280,9 @@ public partial class ExploreScreen
             break;
         }
 
-        if (_arenaFilm is (string name, int frame))
+        if (_arenaFilm is (string name, int frame, int length))
         {
-            _arenaFilm = frame + 1 >= ArenaFilmFrames ? null : (name, frame + 1);
+            _arenaFilm = frame + 1 >= length ? null : (name, frame + 1, length);
             if (shot is null && frame % ArenaFilmEvery == 0) shot = $"seq/{name}-{frame / ArenaFilmEvery:000}.png";
         }
 
@@ -332,7 +344,7 @@ public partial class ExploreScreen
             case BattleEventKind.Telegraph:
                 if (happened.Area is not null) Due("telegraph", happened.AtMs + happened.DurationMs * 0.6f, prefix + "-telegraph.png");
                 if (_arena.FilmMove is string move && happened.SkillId == move && _arenaFilm is null && _arenaTaken.Add("film-" + move))
-                    _arenaFilm = (Short(prefix) + "-" + move.Replace("foe-", ""), 0);
+                    _arenaFilm = (Short(prefix) + "-" + move.Replace("foe-", ""), 0, ArenaFilmFrames);
                 break;
 
             case BattleEventKind.PhaseChanged:
@@ -361,9 +373,42 @@ public partial class ExploreScreen
             case BattleEventKind.ActionStarted when leader && skill is not null && skill.Kind != SkillKind.Auto:
                 Due("cooldowns", happened.AtMs + 350f, prefix + "-cooldowns.png");
                 if (skill.Ultimate && _arena.FilmUltimate && _arenaFilm is null && _arenaTaken.Add("film-ultimate"))
-                    _arenaFilm = (Short(prefix) + "-ultimate-" + skill.Id, 0);
+                    _arenaFilm = (Short(prefix) + "-ultimate-" + skill.Id, 0, ArenaFilmFrames);
+                else if (_arena.FilmSkills.Contains(skill.Id) && _arenaFilm is null)
+                {
+                    // Its first go is filmed whatever; if someone stood over the leader, its next go
+                    // that nobody does is filmed too, as "-clear".
+                    string over = CoveredBy(actor);
+                    if (_arenaTaken.Add("film-" + skill.Id))
+                    {
+                        _arenaFilm = (Short(prefix) + "-skill-" + skill.Id, 0, ArenaSkillFilmFrames);
+                        if (over is null) _arenaTaken.Add("film-clear-" + skill.Id);
+                        else ProofNote($"{prefix}: {skill.Id} filmed with {over} stood over the leader; its next clear go will be filmed too.");
+                    }
+                    else if (over is null && _arenaTaken.Add("film-clear-" + skill.Id))
+                        _arenaFilm = (Short(prefix) + "-skill-" + skill.Id + "-clear", 0, ArenaSkillFilmFrames);
+                }
+                break;
+
+            case BattleEventKind.ActionStarted when actor?.Side == Side.Foes && skill is not null && _arena.FilmFoeSkills.Contains(skill.Id):
+                if (_arenaFilm is null && _arenaTaken.Add("film-" + skill.Id))
+                    _arenaFilm = (Short(prefix) + "-" + skill.Id.Replace("foe-", ""), 0, ArenaSkillFilmFrames);
                 break;
         }
+    }
+
+    /// <summary>Who stands where they'd be drawn over this fighter (level with them or in front, and near across), or null if nobody does: a skill of the leader's waits for a go without them to be filmed.</summary>
+    private string CoveredBy(Fighter fighter)
+    {
+        if (FighterWalker(fighter.Id) is not WalkerSprite own) return null;
+        foreach ((string id, WalkerSprite other) in _fighters)
+        {
+            if (id == fighter.Id) continue;
+            Vector2 gap = other.Position - own.Position;
+            if (MathF.Abs(gap.X) < ArenaFilmClearAcross && gap.Y > -4f && gap.Y < ArenaFilmClearInFront)
+                return $"{id} ({gap.X:0} across, {gap.Y:0} in front)";
+        }
+        return null;
     }
 
     /// <summary>Sets a shot for a moment of the fight, once a bout.</summary>

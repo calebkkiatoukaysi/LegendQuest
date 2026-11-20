@@ -1227,7 +1227,8 @@ room starts it as it loads. The party's AI fights for everyone. Each bout saves,
 fight's start, the thick of it, the bar's cooldowns just after your first skill, a telegraph's
 marker part filled, each boss phase's banner, a friend downed and being helped up, the Soul-Link
 Strike, and the panel. **Arena** fights the Red Gulls (filming their melee from Grell's first Hook Pull, every second frame,
-into `seq/`, to see how a crowd stands round its targets), the gloomfangs, the raid and the sappers, then
+into `seq/`, to see how a crowd stands round its targets), the gloomfangs, the raid (filming the
+Hexer's first Hex), Kael's duel (filming his Smoke Bomb and Cunning Disengage) and the sappers, then
 the fields: the Mirewood's pack coming at the party on the path, the room cleared, the party resting
 (`field/wolves-resting.png`: the run takes them to half first, and writes their hit points before and
 after), and the pack back, on its own spots,
@@ -1238,7 +1239,10 @@ Thorn Burst every second frame into `seq/`. **Classes** puts six classes in your
 Arcanist, Lightbearer, Warden, Hemomancer, Lodge Ranger) at rank 5 in the raid on Thornbridge (the
 longest of Act 1's fights), presses each of their four skills as soon as it can go, through the same
 code keys 2 to 5 use, with a shot of each, and
-films the first two classes' ultimates into `seq/`. A bout that's lost is fought again on the next
+films the first two classes' ultimates into `seq/`. It also films Riposte, Second Wind and Raise
+Shield for 1.5 s from the moment each starts (`ArenaPlan.FilmSkills`). When somebody stood level with
+or in front of the leader, drawn over the move, the next go with nobody there is filmed too (`-clear`). A foe move with no
+telegraph is filmed the same way from when a foe starts it (`ArenaPlan.FilmFoeSkills`). A bout that's lost is fought again on the next
 seed, three times at most, and one that runs past three minutes is given up on, each with a line on
 the error stream.
 
@@ -1558,6 +1562,28 @@ Each skill clip comes from an archetype with its own numbers. The archetypes are
 combo, a leap and slam, a spin, a dash, one- and two-handed casts, a throw, a war cry, a shield
 bash or slam, a reach to an ally, a transformation and so on.
 
+Where an archetype would make two skills look alike, the skill has a move of its own that says what
+it does. Raise Shield raps the sword on the shield and lifts it high. Hold the Line stamps down
+into a wide stance behind the shield, and Vigil kneels with the sword planted. Rally sweeps the
+blade up from low and pumps it, while Call the Order is a knight's salute. Rum Ration is a swig and
+a toss, Honey Salve a dip in the pot and a smear, and Angry Hive the smoker shaken overhead. Haste
+winds the free arm round in a big circle like a clock's key. Read the Wound hunches over with the
+head down and the hand at the chin. Cauterise presses down low and snatches the hand up to the
+shoulder, and Warm Hands flings the arms wide, one forward and one back. Ward is traced from low to
+high and set up over the ally, and the Hexer's Hex is thrust out and wrenched back to the chest. The
+casts that shared a style have their own: Stop is raised high and flat, Eldritch Blast is drawn back
+by the ear and driven out, Cinder comes from the lips, Moonbeam is pulled down from the sky, and
+Sanctuary, Vespers and Sunburst set the lantern low, lift it to the bowed head and sweep the blade up
+from the hip. A hand is always drawn as a fist, so a move says what it does with the arm and the
+body, never with the fingers. These moves keep the archetype's frames up to their `hit` or
+`release`, and its length, so the fight's timing doesn't change.
+
+A pose gives each hand's turn between -180 and 180 degrees, so `seq()` takes each hand the shortest
+way round over the whole clip (`unwound()`). A spear or a lantern doesn't spin a full turn between
+two keys that are only a few degrees apart. A swing that is meant to go the long way round is listed
+in `OVER_THE_TOP` and keeps its keys as they are: the dagger's third, which brings the blade forward
+over the head and down (the third auto, Backstab and the last blow of Shadow Dance).
+
 Each blow eases out into its coil and holds there a moment. It strikes in two or three frames at 60
 a second (ease `in`), overshoots on a `back` ease and settles. The hips and torso lead the shoulder,
 and the head comes late. On the contact frames the weapon hand is stretched into a smear, inside a
@@ -1575,7 +1601,15 @@ Events: `hit` (one for each blow of a multi-hit), `release` (with the hand), `re
 - a foot through the floor;
 - a joint bent backward;
 - a clip the fight needs that is missing;
-- a blow with no `hit` or `release`.
+- a blow with no `hit` or `release`;
+- two skill or foe clips that look alike (`likeness()`). Each clip is sampled at 41 points through
+  its length, the hands and the scales left out. How far apart two poses are is the widest gap of
+  any channel. The two clips' samples are lined up by time warping, so two clips that go through the
+  same poses in the same order are as far apart as their poses are, however differently they're
+  timed: the same archetype and style with other timing counts as the same move. A pair whose
+  matched gaps average under 5 degrees fails, and so does a pair whose body tracks are the same
+  keys. When two foes share one ability, one clip serves both through an alias:
+  `foe-sapper-chief-blasting-charge` is `foe-hollowed-sapper-blasting-charge`.
 
 `tools/rig/clip_strip.py` draws a clip's frames at 30 a second on a dressed figure, holding what
 that kind or class fights with. Each event is marked under its frame, and an onion skin of the
@@ -1888,7 +1922,7 @@ python tools/rooms/make_room_template.py   # the 1536x1024 guide each panel of e
 python tools/rooms/cut_room.py             # my paintings of the rooms, in tools/source/rooms/, cut into them (Rooms above)
 python tools/rooms/cut_tiles.py            # my floor textures, in tools/source/tiles/, cut into the tilesets
 python tools/rig/clips.py                  # every clip the figures play, into Content/Characters/Parts/clips.json (the fight's from tools/rig/combat_clips.py)
-python tools/rig/clips.py --check          # fails if a foot goes through the floor, a joint bends backward, or a clip the fight needs is missing
+python tools/rig/clips.py --check          # fails if a foot goes through the floor, a joint bends backward, a clip the fight needs is missing, or two skills' clips look alike
 python tools/rig/clip_strip.py <out.png> <clip> ... [--gif <out.gif>]   # a clip's frames on a dressed figure, a contact sheet to check it by
 ```
 
