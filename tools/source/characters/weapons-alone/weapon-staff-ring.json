@@ -4,5 +4,8 @@
   462.0
  ],
  "kind": "long",
- "hand": "near"
+ "hand": "near",
+ "base": "base-female",
+ "column": 3,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-30.png"
 }

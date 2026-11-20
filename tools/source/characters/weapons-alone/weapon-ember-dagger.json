@@ -1,8 +1,11 @@
 {
  "grip": [
-  193.5,
-  732.0
+  194.0,
+  733.0
  ],
  "kind": "blade",
- "hand": "near"
+ "hand": "near",
+ "base": "base-male",
+ "column": 4,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-04.png"
 }

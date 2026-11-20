@@ -105,6 +105,9 @@ public enum ProofStage
     /// <summary>Not part of the run: the Thornmother through her three phases, her Thorn Burst filmed, asked for on its own (--proof &lt;dir&gt; Boss).</summary>
     Boss,
 
-    /// <summary>Not part of the run: six classes in your place in the raid on Thornbridge, each pressing its skills, asked for on its own (--proof &lt;dir&gt; Classes).</summary>
+    /// <summary>Not part of the run: seven classes in your place in the raid on Thornbridge, each pressing its skills, asked for on its own (--proof &lt;dir&gt; Classes).</summary>
     Classes,
+
+    /// <summary>Every room through the runtime scene loader, at its ends and middle, with a figure for scale (--proof &lt;dir&gt; Rooms).</summary>
+    Rooms,
 }

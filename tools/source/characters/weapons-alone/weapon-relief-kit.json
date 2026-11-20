@@ -4,5 +4,8 @@
   463.0
  ],
  "kind": "long",
- "hand": "near"
+ "hand": "near",
+ "base": "base-male",
+ "column": 2,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-18.png"
 }

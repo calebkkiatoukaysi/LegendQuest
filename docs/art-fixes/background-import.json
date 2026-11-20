@@ -1,0 +1,265 @@
+{
+  "rooms": 37,
+  "panels": 74,
+  "entries": [
+    {
+      "zone": "bakery",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\bakery\\inside",
+      "removed_layers": []
+    },
+    {
+      "zone": "barrow",
+      "room": "steps",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\barrow\\steps",
+      "removed_layers": []
+    },
+    {
+      "zone": "barrow",
+      "room": "hall",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\barrow\\hall",
+      "removed_layers": []
+    },
+    {
+      "zone": "barrow",
+      "room": "side-room",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\barrow\\side-room",
+      "removed_layers": []
+    },
+    {
+      "zone": "chapel",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\chapel\\inside",
+      "removed_layers": []
+    },
+    {
+      "zone": "cottage-a",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\cottage-a\\inside",
+      "removed_layers": []
+    },
+    {
+      "zone": "cottage-b",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\cottage-b\\inside",
+      "removed_layers": []
+    },
+    {
+      "zone": "docks",
+      "room": "pier",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\docks\\pier",
+      "removed_layers": []
+    },
+    {
+      "zone": "docks",
+      "room": "harbourside",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\docks\\harbourside",
+      "removed_layers": []
+    },
+    {
+      "zone": "docks",
+      "room": "fish-market",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\docks\\fish-market",
+      "removed_layers": []
+    },
+    {
+      "zone": "forge",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\forge\\inside",
+      "removed_layers": []
+    },
+    {
+      "zone": "gilded-flagon",
+      "room": "taproom",
+      "panels": 2,
+      "runtime": "Content\\Rooms\\gilded-flagon\\taproom",
+      "removed_layers": []
+    },
+    {
+      "zone": "gulls-wager",
+      "room": "deck",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\gulls-wager\\deck",
+      "removed_layers": []
+    },
+    {
+      "zone": "mirewood-quarry",
+      "room": "lip",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\mirewood-quarry\\lip",
+      "removed_layers": []
+    },
+    {
+      "zone": "mirewood-quarry",
+      "room": "cut",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\mirewood-quarry\\cut",
+      "removed_layers": []
+    },
+    {
+      "zone": "mirewood-quarry",
+      "room": "floor",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\mirewood-quarry\\floor",
+      "removed_layers": []
+    },
+    {
+      "zone": "mirewood",
+      "room": "edge",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\mirewood\\edge",
+      "removed_layers": []
+    },
+    {
+      "zone": "mirewood",
+      "room": "deep",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\mirewood\\deep",
+      "removed_layers": []
+    },
+    {
+      "zone": "mirewood",
+      "room": "camp",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\mirewood\\camp",
+      "removed_layers": []
+    },
+    {
+      "zone": "old-crown-vault",
+      "room": "entrance",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\old-crown-vault\\entrance",
+      "removed_layers": []
+    },
+    {
+      "zone": "old-crown-vault",
+      "room": "halls",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\old-crown-vault\\halls",
+      "removed_layers": []
+    },
+    {
+      "zone": "old-crown-vault",
+      "room": "strongroom",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\old-crown-vault\\strongroom",
+      "removed_layers": []
+    },
+    {
+      "zone": "old-crown-vault",
+      "room": "treasury",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\old-crown-vault\\treasury",
+      "removed_layers": []
+    },
+    {
+      "zone": "questeria",
+      "room": "gate-plaza",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\questeria\\gate-plaza",
+      "removed_layers": []
+    },
+    {
+      "zone": "questeria",
+      "room": "festival-square",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\questeria\\festival-square",
+      "removed_layers": []
+    },
+    {
+      "zone": "questeria",
+      "room": "sunspire-steps",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\questeria\\sunspire-steps",
+      "removed_layers": []
+    },
+    {
+      "zone": "questeria",
+      "room": "lantern-market",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\questeria\\lantern-market",
+      "removed_layers": []
+    },
+    {
+      "zone": "questeria",
+      "room": "thornbridge-gate",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\questeria\\thornbridge-gate",
+      "removed_layers": []
+    },
+    {
+      "zone": "road",
+      "room": "farmland",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\road\\farmland",
+      "removed_layers": []
+    },
+    {
+      "zone": "road",
+      "room": "fork",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\road\\fork",
+      "removed_layers": []
+    },
+    {
+      "zone": "rusty-anvil",
+      "room": "bar",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\rusty-anvil\\bar",
+      "removed_layers": []
+    },
+    {
+      "zone": "shop",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\shop\\inside",
+      "removed_layers": []
+    },
+    {
+      "zone": "sunspire-keep",
+      "room": "great-hall",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\sunspire-keep\\great-hall",
+      "removed_layers": []
+    },
+    {
+      "zone": "thornbridge",
+      "room": "camp-gate",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\thornbridge\\camp-gate",
+      "removed_layers": []
+    },
+    {
+      "zone": "thornbridge",
+      "room": "tents",
+      "panels": 3,
+      "runtime": "Content\\Rooms\\thornbridge\\tents",
+      "removed_layers": []
+    },
+    {
+      "zone": "thornbridge",
+      "room": "river-edge",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\thornbridge\\river-edge",
+      "removed_layers": []
+    },
+    {
+      "zone": "warehouse",
+      "room": "inside",
+      "panels": 1,
+      "runtime": "Content\\Rooms\\warehouse\\inside",
+      "removed_layers": []
+    }
+  ]
+}

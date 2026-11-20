@@ -17,7 +17,7 @@ namespace LegendQuest;
 /// <summary>
 /// The proof run's fight stages, each asked for by name and run on its own: Arena (story fights from
 /// the gulls to the sappers, and the fields), Boss (the Thornmother through her three phases) and
-/// Classes (six classes in your place in the raid on Thornbridge, each pressing its skills).
+/// Classes (seven classes in your place in the raid on Thornbridge, each pressing its skills).
 /// </summary>
 /// <remarks>
 /// <para>
@@ -196,20 +196,21 @@ public partial class LegendQuestGame
                 new[] { Act1Chapter1.GullsBeaten, Act1Chapter2.GloomfangsBeaten, Act1Chapter2.LetterRead, EncounterCatalog.LodgeTold }),
         },
 
-        // Six classes in your place in the raid on Thornbridge (the longest of Act 1's fights, with the
+        // Seven classes in your place in the raid on Thornbridge (the longest of Act 1's fights, with the
         // most to hit and Mira and the Watch beside you), at rank 5 so the ultimate's on the bar, each
         // pressing its four skills as soon as each can go; the first two classes' ultimates filmed, and
         // the skills whose moves were made their own (a guard, a breath, a shield rapped), and again on a
         // go with nobody stood over the leader if the first had somebody.
-        ProofStage.Classes => new[] { ClassId.Fighter, ClassId.Wizard, ClassId.Cleric, ClassId.Paladin, ClassId.Hemomancer, ClassId.LodgeRanger }
+        ProofStage.Classes => new[] { ClassId.Fighter, ClassId.Wizard, ClassId.Cleric, ClassId.Paladin, ClassId.Hemomancer, ClassId.LodgeRanger, ClassId.Warlock }
             .Select((cls, i) => new ArenaBout("a1-c3-02-raid", "thornbridge", "river-edge", new Vector2(620, 740), null,
                 new ArenaPlan
                 {
-                    Prefix = "classes/" + Rules.ClassCatalog.Get(cls).Code, PressSkills = true, FilmUltimate = i < 2,
+                    Prefix = "classes/" + Rules.ClassCatalog.Get(cls).Code, PressSkills = true, FilmUltimate = i < 2 || cls == ClassId.Paladin,
                     FilmSkills = cls switch
                     {
                         ClassId.Fighter => new[] { "fighter-riposte", "fighter-second-wind" },
-                        ClassId.Paladin => new[] { "paladin-raise-shield" },
+                        ClassId.Paladin => new[] { "paladin-raise-shield", "paladin-unbroken-oath" },
+                        ClassId.Warlock => new[] { "warlock-armour-of-shadows", "warlock-hex" },
                         _ => Array.Empty<string>(),
                     },
                 },

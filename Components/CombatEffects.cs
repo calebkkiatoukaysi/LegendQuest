@@ -943,7 +943,7 @@ public class CombatEffects
                 Vector2 r = new Vector2(marker.Size) * depth;
                 _ribbons.Disc(marker.At, r, inside * 0.5f, inside, 0f, 40);
                 _ribbons.Disc(marker.At, r * fill, filled, filled * 0.7f, 0f, 40);
-                _ribbons.Disc(marker.At, r, edge, edge, 0.93f, 48);
+                _ribbons.SoftRing(marker.At, r, edge);
                 break;
             }
             case MarkerShape.Line:

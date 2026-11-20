@@ -11,7 +11,7 @@ drawings this writes. The figure faces right in three-quarter view: the near arm
 are the ones on the left of the picture, nearer us, drawn in front of the body; the far ones are on
 the right, behind it.
 
-Only needs CPython and numpy.
+Needs CPython, numpy and scipy for connected-piece cleanup.
 """
 
 import os
@@ -28,6 +28,66 @@ import import_character as ic  # noqa: E402  (its connected pieces)
 
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 CHARS = os.path.join(ROOT, "tools", "source", "characters")
+
+
+def clean_pieces(pictures, base=None, scale=1.0):
+    """Reassign detached islands through the painted figure, retaining joint overlaps.
+
+    Watershed paths follow the union of the pieces; transparent space is a barrier.
+    The principal connected shape of each bone is a seed. Small disconnected specks
+    and islands in hand pieces (painted weapons) are removed. Cloth can migrate to
+    the torso or skirt, without bridging a gap in the painted silhouette.
+    """
+    from scipy import ndimage as nd
+    names = list(pictures)
+    masks, mains, labels_all = {}, {}, {}
+    for name, (_, alpha) in pictures.items():
+        labels, n = nd.label(alpha > .03)
+        counts = np.bincount(labels.ravel(), minlength=n + 1)
+        counts[0] = 0
+        main = int(np.argmax(counts))
+        if base and name.startswith("hand") and main:
+            # A painted bow or blade can be larger than the fist. The hand's
+            # principal shape is the one at its wrist, never that loose item.
+            x, y = JOINTS[base]["wrist_" + name.split("_")[1]]
+            yy, xx = np.indices(alpha.shape)
+            near = (xx - x * scale) ** 2 + (yy - y * scale) ** 2
+            candidates = [k for k in range(1, len(counts)) if counts[k] >= 12]
+            if candidates:
+                main = min(candidates, key=lambda k: (float(near[labels == k].min()), -counts[k]))
+        masks[name] = alpha > .03
+        mains[name] = labels == main if main else np.zeros(alpha.shape, bool)
+        labels_all[name] = (labels, counts, main)
+    union = np.logical_or.reduce(list(masks.values()))
+    seeds = np.zeros(union.shape, np.int32)
+    for i, name in enumerate(names, 1):
+        seeds[mains[name]] = i
+    owners = nd.watershed_ift(np.where(union, 0, 255).astype(np.uint8), seeds)
+    reachable = nd.binary_propagation(seeds > 0, mask=union)
+    out = {name: (colour.copy(), alpha.copy()) for name, (colour, alpha) in pictures.items()}
+    for name in names:
+        labels, counts, main = labels_all[name]
+        rim = nd.binary_dilation(mains[name], iterations=2)
+        for k in range(1, len(counts)):
+            if k == main:
+                continue
+            island = labels == k
+            # Keep the soft rim of the main shape, including round joint caps.
+            if rim[island].any():
+                continue
+            out[name][1][island] = 0
+            if counts[k] < 12 or name.startswith("hand") or not reachable[island].any():
+                continue
+            votes = np.bincount(owners[island & reachable], minlength=len(names) + 1)
+            votes[0] = 0
+            votes[names.index(name) + 1] = 0
+            target = int(np.argmax(votes))
+            if target and votes[target]:
+                c, a = out[names[target - 1]]
+                take = island & (pictures[name][1] > a)
+                c[take] = pictures[name][0][take]
+                a[take] = pictures[name][1][take]
+    return out
 
 #: The bones, parents first: (bone, parent, the joint it turns about). The joint names are the
 #: JOINTS keys. The torso is one piece, from the neck to the shorts: it turns about the hips joint

@@ -2466,7 +2466,7 @@ The game's cloaks, helms and weapons (`Items/ItemCatalog.cs`) and the hats in `C
 
 ### 6.0 Sheets (four at a time)
 
-The owner's call (2026-11-08): the capes, helms and weapons four at a time, like the hair and the armors. Every card in §6.1 to §6.3 that's painted on a base is in one sheet here (29 sheets for the 107 P0 parts, 8 for P1's 25, 13 for P2's 38), each one ChatGPT picture. The attached template (`tools/source/characters/<kind>-sheet-male.png` or `-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the base: a helm sheet's are the blank base from the top of the canvas to the hips, at full size, with room for a crown; a cape sheet's and a weapon sheet's are the whole figure, a little smaller than an armor sheet's, with room behind the back for a cloak and over the head for a staff. `python tools/part_sheet.py check <png> <sheet-id>` says whether ChatGPT kept to the template, and `python tools/part_sheet.py fit <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/helms/`, `capes/` or `weapons/<id>.png`. A sheet holds one priority, so the opening chapters' parts are done first; the cards that edit another part (`weapon-black-box`, `weapon-brannock-1`, `weapon-brannock-41`, `weapon-brannock-42`) stay single, as do any redos.
+The owner's call (2026-11-08): the capes, helms and weapons four at a time, like the hair and the armors. Every card in §6.1 to §6.3 that's painted on a base is in one sheet here (29 sheets for the 107 P0 parts, 8 for P1's 25, 13 for P2's 38), each one ChatGPT picture. The attached template (`tools/source/characters/<kind>-sheet-male.png` or `-female.png`, made by `python tools/part_sheet.py templates`) is four copies of the base: a helm sheet's are the blank base from the top of the canvas to the hips, at full size, with room for a crown; a cape sheet's and a weapon sheet's are the whole figure, a little smaller than an armor sheet's, with room behind the back for a cloak and over the head for a staff. `python tools/part_sheet.py check <png> <sheet-id>` says whether ChatGPT kept to the template, and `python tools/part_sheet.py fit <png> <sheet-id>` puts each cell back on its base as `tools/source/characters/helms/`, `capes/` or `weapons/<id>.png`. A sheet holds one priority, so the opening chapters' parts are done first; the cards that edit another part (`weapon-black-box`, `offhand-brannock-1`, `offhand-brannock-41`, `offhand-brannock-42`) stay single, as do any redos.
 
 Each sheet's prompt is its kind's sheet block (§2.3) and the list below it.
 
@@ -2799,13 +2799,13 @@ I'll save it as weapon-sheet-m05.png.
 4. Ember dagger, in the off hand: In the FAR hand only (the one on the right), a dagger with a blade of dark metal that glows orange along its edge like a coal, held low; the near hand stays empty.
 I'll save it as weapon-sheet-m06.png.
 
-#### `weapon-sheet-m07` · Weapon sheet: 4 weapons (Kael's twin knives, Kael's rapier and parrying dagger, Brannock's sword and shield, Cutlass) · P0
+#### `weapon-sheet-m07` · Weapon sheet: 4 weapons (Kael's twin knives, Kael's rapier and parrying dagger, Brannock's sword, Cutlass) · P0
 
 **Basis:** Edits `weapon-sheet-male`. Cells: 1 `weapon-kael-knives`, 2 `weapon-kael-rapier`, 3 `weapon-brannock`, 4 `weapon-cutlass`.
 
 1. Kael's twin knives: A pair of long knives with red cord wound round their grips, one in each hand, the near one held reversed.
 2. Kael's rapier and parrying dagger: A slim rapier with a swept hilt in the near hand, held low, point forward, and a parrying dagger held reversed in the far hand.
-3. Brannock's sword and shield: A plain, heavy longsword in the near hand, held low, and a battered round wooden shield with an iron rim strapped to the far forearm, its rim still bare.
+3. Brannock's sword: A plain, heavy longsword in the near hand, held low, and a battered round wooden shield with an iron rim strapped to the far forearm, its rim still bare.
 4. Cutlass: In the near hand, a notched cutlass with a brass basket guard, held casually, point down.
 I'll save it as weapon-sheet-m07.png.
 
@@ -3608,11 +3608,11 @@ Edit the attached base image: change ONLY the hands, giving them a pair of long 
 
 Edit the attached base image: change ONLY the hands, giving them a slim rapier with a swept hilt in the near hand, held low, point forward, and a parrying dagger held reversed in the far hand. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-kael-rapier.png.
 
-#### `weapon-brannock` · Brannock's sword and shield · P0
+#### `weapon-brannock` · Brannock's sword · P0
 
 **Basis:** Edits `base-male`. From `03-art-overhaul.md` §6.4 (`brannock-shield`: a battered round shield, an iron rim); `Origins.cs` (a longsword).
 
-Edit the attached base image: change ONLY the hands, giving them a plain, heavy longsword in the near hand, held low, and a battered round wooden shield with an iron rim strapped to the far forearm, its rim still bare. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-brannock.png.
+Edit the attached base image: change ONLY the hands, giving them a plain, heavy longsword in the near hand, held low. Paint the battered round wooden shield with an iron rim separately as offhand-brannock, never in this sword picture. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-brannock.png.
 
 #### `weapon-cutlass` · Cutlass · P0
 
@@ -4040,188 +4040,348 @@ Edit the attached base image: change ONLY the near hand: close its fingers natur
 
 Edit the attached base image: change ONLY the near hand: close its fingers naturally round a feather duster. Draw the grip clearly in the fingers. Change nothing else: keep the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-feather-duster.png.
 
-#### `weapon-brannock-1` · Brannock's shield, one name · P1
+#### `offhand-brannock-1` · Brannock's shield, one name · P1
 
-**Basis:** Edits `weapon-brannock`. From `03-art-overhaul.md` §6.4 (`brannock-shield`: pictures `0`, `1`, `41`, `42` names); A1-C6-03.
+**Basis:** Edits `offhand-brannock`. From `03-art-overhaul.md` §6.4 (`brannock-shield`: pictures `0`, `1`, `41`, `42` names); A1-C6-03.
 
-Edit the attached image (weapon-brannock.png): change ONLY the shield's rim: one name is freshly scratched into it, drawn as a short scratched mark that reads as a name from a distance, not as real letters. Keep everything else, the sword, the hands, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-brannock-1.png.
+Edit the attached image (offhand-brannock.png): change ONLY the shield's rim: one name is freshly scratched into it, drawn as a short scratched mark that reads as a name from a distance, not as real letters. Keep everything else, the sword, the hands, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as offhand-brannock-1.png.
 
-#### `weapon-brannock-41` · Brannock's shield, forty-one names · P1
+#### `offhand-brannock-41` · Brannock's shield, forty-one names · P1
 
-**Basis:** Edits `weapon-brannock`. From `03-art-overhaul.md` §6.4; `07-companions.md` (Forty Letters).
+**Basis:** Edits `offhand-brannock`. From `03-art-overhaul.md` §6.4; `07-companions.md` (Forty Letters).
 
-Edit the attached image (weapon-brannock.png): change ONLY the shield's rim: it's crowded all the way round with forty-one short scratched names, drawn as marks that read as names from a distance, not as real letters. Keep everything else, the sword, the hands, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-brannock-41.png.
+Edit the attached image (offhand-brannock.png): change ONLY the shield's rim: it's crowded all the way round with forty-one short scratched names, drawn as marks that read as names from a distance, not as real letters. Keep everything else, the sword, the hands, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as offhand-brannock-41.png.
 
-#### `weapon-brannock-42` · Brannock's shield, forty-two names · P2
+#### `offhand-brannock-42` · Brannock's shield, forty-two names · P2
 
-**Basis:** Edits `weapon-brannock`. From `03-art-overhaul.md` §6.4; `COMPANIONS.md` (a forty-second: his own).
+**Basis:** Edits `offhand-brannock`. From `03-art-overhaul.md` §6.4; `COMPANIONS.md` (a forty-second: his own).
 
-Edit the attached image (weapon-brannock.png): change ONLY the shield's rim: forty-one short scratched names all the way round, and one more freshly cut, drawn as marks that read as names from a distance, not as real letters. Keep everything else, the sword, the hands, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as weapon-brannock-42.png.
+Edit the attached image (offhand-brannock.png): change ONLY the shield's rim: forty-one short scratched names all the way round, and one more freshly cut, drawn as marks that read as names from a distance, not as real letters. Keep everything else, the sword, the hands, the body, the pose, the body, the framing, the canvas size and position, the background and the line style exactly the same. Do not move, rescale or redraw anything else. Return it as a PNG at the same 1024×1536 size, on the same solid black background. I'll save it as offhand-brannock-42.png.
 
 ---
+
+### 6.4 Independent far-hand items
+
+Each item is painted alone, upright, with its grip on row 640 and at least 16 px of clear margin. No hands, bodies, labels or second items in a column. Black and white cards are keyed from the border. The importer transforms the item’s own alpha; it never subtracts a painted fist. A second bow column is the quiver or arrows, not a second bow limb.
+
+#### `offhand-brannock` · Independent far-hand item
+
+**Basis:** Edits `weapon-brannock`.
+
+Use the far column of `weapon-brannock` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-chief-pick-lantern` · Independent far-hand item
+
+**Basis:** Edits `weapon-chief-pick-lantern`.
+
+Use the far column of `weapon-chief-pick-lantern` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-corwin-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-corwin-kit`.
+
+Use the far column of `weapon-corwin-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-flower-basket` · Independent far-hand item
+
+**Basis:** Edits `weapon-flower-basket`.
+
+Use the far column of `weapon-flower-basket` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-gilded-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-gilded-kit`.
+
+Use the far column of `weapon-gilded-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-hammer-tongs` · Independent far-hand item
+
+**Basis:** Edits `weapon-hammer-tongs`.
+
+Use the far column of `weapon-hammer-tongs` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-kael-knives` · Independent far-hand item
+
+**Basis:** Edits `weapon-kael-knives`.
+
+Use the far column of `weapon-kael-knives` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-kael-rapier` · Independent far-hand item
+
+**Basis:** Edits `weapon-kael-rapier`.
+
+Use the far column of `weapon-kael-rapier` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-ledger-pen` · Independent far-hand item
+
+**Basis:** Edits `weapon-ledger-pen`.
+
+Use the far column of `weapon-ledger-pen` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-mace-shield` · Independent far-hand item
+
+**Basis:** Edits `weapon-mace-shield`.
+
+Use the far column of `weapon-mace-shield` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-peel` · Independent far-hand item
+
+**Basis:** Edits `weapon-peel`.
+
+Use the far column of `weapon-peel` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-protectorate-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-protectorate-kit`.
+
+Use the far column of `weapon-protectorate-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-quill-letter` · Independent far-hand item
+
+**Basis:** Edits `weapon-quill-letter`.
+
+Use the far column of `weapon-quill-letter` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-raider-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-raider-kit`.
+
+Use the far column of `weapon-raider-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-relief-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-relief-kit`.
+
+Use the far column of `weapon-relief-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-sapper-pick` · Independent far-hand item
+
+**Basis:** Edits `weapon-sapper-pick`.
+
+Use the far column of `weapon-sapper-pick` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-sb-blades` · Independent far-hand item
+
+**Basis:** Edits `weapon-sb-blades`.
+
+Use the far column of `weapon-sb-blades` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-sera-longbow` · Independent far-hand item
+
+**Basis:** Edits `weapon-sera-longbow`.
+
+Use the far column of `weapon-sera-longbow` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-sketchbook` · Independent far-hand item
+
+**Basis:** Edits `weapon-sketchbook`.
+
+Use the far column of `weapon-sketchbook` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-spear-lantern` · Independent far-hand item
+
+**Basis:** Edits `weapon-spear-lantern`.
+
+Use the far column of `weapon-spear-lantern` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-tack-hammer` · Independent far-hand item
+
+**Basis:** Edits `weapon-tack-hammer`.
+
+Use the far column of `weapon-tack-hammer` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-unmade-spear-shield` · Independent far-hand item
+
+**Basis:** Edits `weapon-unmade-spear-shield`.
+
+Use the far column of `weapon-unmade-spear-shield` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-warden-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-warden-kit`.
+
+Use the far column of `weapon-warden-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-watch-kit` · Independent far-hand item
+
+**Basis:** Edits `weapon-watch-kit`.
+
+Use the far column of `weapon-watch-kit` as this separate item. Keep the near column in the weapon slot. Never combine the two held pictures.
+
+#### `offhand-crate` · Far-hand carry option
+
+**Basis:** Edits `weapon-crate`.
+
+The standalone far column, also usable as the main carried item when no near column exists.
+
+#### `offhand-silk-bolt` · Far-hand carry option
+
+**Basis:** Edits `weapon-silk-bolt`.
+
+The standalone far column, also usable as the main carried item when no near column exists.
 
 ## 7. Characters as recipes
 
 Every person and humanoid foe, as the parts they wear, their morph and their colours. The faces are the shared set (§4): many people wear the same one, and the Colours column recolours each (the skin, the eyebrows, beard and hair, the eyes) with the game's swatches (`Characters/Parts/Swatches.cs`), so no two who share a face look alike. A head that isn't a face (§4.3) keeps its own colours. The Helm / hair column is what's on the head, one slot: a style from the hair library (§4.8), or a helm in its place. The Extras column is what they wear on the head besides (§4.10): a beard, jewellery, scars, a people's ears or horns, any number. `—` is an empty slot. A variant id (`elara.act3`) is the same character at another point in the story; `swap` cues in the scripts switch between them. Names with ids in backticks in the notes are other entries.
 
-| Id | Name | Face | Armor | Cape | Helm / hair | Extras | Weapon | Morph (h × w) | Colours (skin, hair, eyes) | Priority | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `you-male` | You, the male default | `face-m03` | `armor-traveller` | — | `hair-03` | — | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 | the player swaps any slot on the creation screen |
-| `you-female` | You, the female default | `face-f03` | `armor-traveller-f` | — | `hair-22` | `skin-01` | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 |  |
-| `soulbound` | {sb}, the default | `face-f04` | `armor-sb-traveller` | `cape-sb` | `hair-31` | — | `weapon-sb-blades` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P0 | the player can change every slot |
-| `you-male.champion` | You, Champion of Fable | `face-m03` | `armor-champion` | — | `hair-03` | — | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P1 | Act 1's end |
-| `you-female.champion` | You, Champion of Fable | `face-f03` | `armor-champion-f` | — | `hair-22` | `skin-01` | `weapon-longsword` | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P1 |  |
-| `soulbound.champion` | {sb}, Champion of Fable | `face-f04` | `armor-champion-f` | `cape-sb` | `hair-31` | — | `weapon-sb-blades` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P1 |  |
-| `soulbound.lord-protector` | {sb}, Lord Protector | `face-f04` | `armor-lord-protector` | — | `hair-31` | — | `weapon-longsword` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P2 | Act 2's end |
-| `mc-child` | You, aged eight | `face-m01` | `armor-child-cove` | — | `hair-14` | `skin-01` | — | 0.62 × 0.66 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 |  |
-| `sb-child` | {sb}, aged eight | `face-f01` | `armor-child-cove-f` | — | `hair-22` | — | — | 0.62 × 0.66 | skin PEACH, hair BLACK, eyes BROWN | P0 |  |
-| `sera` | Sera Vantis | `face-f05` | `armor-sera` | `cape-sera` | `hair-33` | `ears-01` | `weapon-sera-longbow` | 1.04 × 0.90 | skin PORCELAIN, hair HONEY, eyes GREEN | P0 |  |
-| `mira` | Mira Ashgrove | `face-f06` | `armor-mira` | — | `hair-38` | `skin-01` | `weapon-quarterstaff` | 1.01 × 0.90 | skin FAIR, hair COPPER, eyes BROWN | P0 | her healing glow is an effect |
-| `mira-young` | Mira, aged thirteen | `face-f01` | `armor-mira-apprentice` | — | `hair-35` | `skin-01` | `weapon-sketchbook` | 0.80 × 0.80 | skin FAIR, hair COPPER, eyes BROWN | P1 | drawn as an echo |
-| `kael` | Kael Duskmantle | `face-m04` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `horns-02` | `weapon-kael-knives` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P0 | the horns come through the hood |
-| `brannock` | Brannock Ironvein | `face-m09` | `armor-brannock` | — | `hair-04` | `beard-10`, `skin-03` | `weapon-brannock` | 0.85 × 1.36 | skin GOLDEN, hair COPPER, eyes BROWN | P0 | shield `weapon-brannock-1`, `-41`, `-42` as the names come |
-| `brannock.clasps-gone` | Brannock, the clasps gone | `face-m09` | `armor-brannock` | — | — | `beard-10`, `skin-03` | `weapon-brannock-42` | 0.85 × 1.36 | skin GOLDEN, hair COPPER, eyes BROWN | P2 | from A3-C2-05 |
-| `valencia` | Valencia Morvaine | `face-f04` | `armor-valencia` | `cape-valencia` | `helm-circlet-silver` | — | `weapon-dagger` | 1.09 × 0.90 | skin PORCELAIN, hair SILVER, eyes GREY | P2 |  |
-| `valencia.sister-vale` | Sister Vale | `face-f04` | `armor-abbey-habit` | — | `helm-abbey-hood` | — | — | 1.09 × 0.90 | skin PORCELAIN, hair SILVER, eyes GREY | P2 | `valencia-unhooded`: the same without the helm, eyes red (an expression) |
-| `corra` | Corra | `face-f08` | `armor-corra` | — | `hair-38` | — | `weapon-netting-needle` | 0.95 × 1.00 | skin TAN, hair CHESTNUT, eyes GREY | P0 |  |
-| `corra.flashback` | Corra, sixteen years younger | `face-f07` | `armor-corra` | — | — | — | `weapon-netting-needle` | 0.95 × 1.00 | skin TAN, hair CHESTNUT, eyes GREY | P0 | soaked by rain (an effect) |
-| `lookout` | The lookout | `face-m06` | `armor-sailor` | — | `helm-knit-cap` | `beard-12` | `weapon-telescope` | 1.00 × 0.95 | skin BROWN, hair COPPER, eyes GREY | P0 |  |
-| `odelle` | Captain Odelle Marsh | `face-f07` | `armor-odelle` | — | `helm-tricorn` | `jewel-01` | `weapon-cutlass` | 1.00 × 1.00 | skin UMBER, hair BLACK, eyes BROWN | P0 |  |
-| `tomas` | Old Tomas | `face-m10` | `armor-fisher` | — | `helm-knit-cap` | `beard-01` | `weapon-gaff` | 0.95 × 1.00 | skin TAN, hair WHITE, eyes SKY | P0 |  |
-| `red-gull` | Red Gull Thug | `face-m06` | `armor-red-gull` | — | — | `beard-01`, `skin-05` | `weapon-cudgel` | 1.08 × 1.15 | skin UMBER, hair COPPER, eyes BROWN | P0 | also the enemy `red-gull-thug` |
-| `red-gull.b` | Red Gull Thug, second head | `face-m06` | `armor-red-gull` | — | `helm-bandana-red` | `beard-01`, `skin-05` | `weapon-cudgel` | 1.08 × 1.15 | skin FAIR, hair COPPER, eyes GREY | P0 |  |
-| `red-gull.c` | Red Gull Thug, third head | `face-m04` | `armor-red-gull` | — | `hair-09` | `beard-01`, `skin-05` | `weapon-cudgel` | 1.06 × 1.12 | skin TAN, hair BLACK, eyes BROWN | P0 |  |
-| `grell` | Bosun Grell | `face-m06` | `armor-grell` | — | — | `beard-08`, `skin-02` | `weapon-cutlass` | 0.85 × 1.55 | skin TAN, hair COPPER, eyes BROWN | P0 | also the enemy `bosun-grell` |
-| `hale` | Captain Roderic Hale | `face-m09` | `armor-watch-captain` | `cape-watch-captain` | `helm-watch-crest` | `beard-01` | `weapon-cudgel` | 1.03 × 1.14 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
-| `watch` | City Watch | `face-m05` | `armor-watch` | `cape-watch` | `helm-watch` | `beard-01` | `weapon-watch-kit` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P0 | other watchmen wear `face-m09` and `face-m05` |
-| `fennick` | Questmaster Fennick | `face-m07` | `armor-clerk` | — | `hair-05` | `beard-03`, `jewel-08`, `jewel-11` | `weapon-tack-hammer` | 1.00 × 1.08 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
-| `hedda` | Hedda (also `refugee-mother`) | `face-f07` | `armor-refugee-woman` | `cape-blanket` | `hair-26` | — | `weapon-loaf` | 0.99 × 0.95 | skin TAN, hair CHESTNUT, eyes BROWN | P0 |  |
-| `refugee-child` | Lise | `face-f01` | `armor-refugee-child` | — | `hair-35` | — | `weapon-rag-doll` | 0.75 × 0.75 | skin TAN, hair CHESTNUT, eyes BROWN | P0 |  |
-| `brisk` | Sergeant Brisk | `face-m07` | `armor-watch` | `cape-watch` | `helm-watch` | `beard-04` | `weapon-cudgel` | 1.00 × 1.06 | skin BROWN, hair BLACK, eyes BROWN | P0 |  |
-| `refugee-1` | Old Aurek | `face-m10` | `armor-refugee-man` | `cape-blanket` | `hair-12` | `beard-09` | `weapon-walking-stick` | 0.93 × 0.95 | skin TAN, hair WHITE, eyes GREY | P0 |  |
-| `refugee-2` | Teodor | `face-m02` | `armor-refugee-man` | `cape-blanket` | `hair-03` | `beard-01` | `weapon-tin-cup` | 0.95 × 0.90 | skin BROWN, hair BLACK, eyes BROWN | P0 |  |
-| `refugee-3` | Yselle the Glassblower | `face-f06` | `armor-glassblower` | — | `hair-34` | `skin-01`, `skin-06` | — | 0.82 × 1.25 | skin GOLDEN, hair COPPER, eyes AMBER | P0 |  |
-| `elara` | Princess Elara | `face-f05` | `armor-elara` | — | `helm-circlet` | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P0 | the slim sword is part of the armor |
-| `elara-hooded` | Princess Elara, hooded | `face-f05` | `armor-elara-disguise` | `cape-elara-hooded` | `helm-hood-charcoal` | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P0 |  |
-| `leon` | King Leon | `face-m10` | `armor-leon` | `cape-leon` | `helm-crown` | `beard-07` | — | 0.97 × 1.16 | skin FAIR, hair SILVER, eyes GREY | P0 | his sword is part of the armor |
-| `crane` | Lord Chancellor Crane | `face-m08` | `armor-crane` | — | `hair-06` | `beard-02` | `weapon-quill-letter` | 1.10 × 0.85 | skin PORCELAIN, hair BLACK, eyes GREY | P0 |  |
-| `royal-messenger` | Royal Messenger | `face-m02` | `armor-royal-livery` | `cape-royal` | `helm-beret` | `skin-01` | `weapon-letter` | 0.99 × 0.95 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 |  |
-| `royal-guard` | Royal Guard | `face-m09` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | `beard-07` | `weapon-halberd` | 1.04 × 1.08 | skin UMBER, hair BLACK, eyes BROWN | P0 | the captain and lieutenant too |
-| `anvil-barkeep` | Hessa the Barkeep | `face-f08` | `armor-tavern` | `cape-tail-bear` | `hair-26` | `skin-02`, `ears-03` | `weapon-tankard` | 1.08 × 1.20 | skin GOLDEN, hair BLACK, eyes BROWN | P0 |  |
-| `netty` | Netty the Net-Mender | `face-f08` | `armor-villager-woman` | — | `hair-40` | `skin-01` | `weapon-netting-needle` | 0.98 × 1.00 | skin TAN, hair SILVER, eyes GREEN | P0 |  |
-| `maud` | Maud Tolley | `face-f10` | `armor-elder-woman` | — | `hair-37` | — | `weapon-flat-cap-held` | 0.93 × 0.95 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
-| `pip` | Pip the Potboy | `face-m02` | `armor-tavern-m` | — | `hair-03` | `skin-01` | `weapon-stew-pot` | 0.72 × 0.80 | skin FAIR, hair COPPER, eyes BROWN | P0 |  |
-| `osric` | Osric Penhallow | `face-m07` | `armor-merchant` | `cape-short-lavender` | `hair-05` | `beard-03` | `weapon-silk-bolt` | 1.00 × 1.00 | skin PORCELAIN, hair BLACK, eyes BROWN | P0 |  |
-| `lark` | Lark the Busker | `face-m04` | `armor-busker` | `cape-short-lavender` | `hair-21` | `ears-01` | `weapon-lute` | 1.04 × 0.90 | skin PORCELAIN, hair COPPER, eyes VIOLET | P0 |  |
-| `ilsa` | Ilsa Fenwright | `face-f03` | `armor-villager-woman` | — | `hair-34` | — | `weapon-scrolls` | 0.99 × 0.95 | skin GOLDEN, hair COPPER, eyes GREEN | P0 |  |
-| `oswin` | Guardsman Oswin | `face-m03` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | — | `weapon-halberd` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
-| `hesper` | Sister Hesper | `face-f10` | `armor-temple` | — | `hair-27` | — | `weapon-broom` | 0.99 × 1.00 | skin UMBER, hair SILVER, eyes BROWN | P0 |  |
-| `wren` | Wren | `face-f01` | `armor-urchin-f` | — | `hair-26` | `skin-01` | `weapon-coin` | 0.62 × 0.66 | skin BROWN, hair BLACK, eyes AMBER | P0 |  |
-| `imra-vell` | Master Imra Vell | `face-f07` | `armor-fencer` | — | `hair-13` | `skin-03` | `weapon-practice-sword` | 0.99 × 1.00 | skin UMBER, hair BLACK, eyes BROWN | P0 | trainer |
-| `tamsin` | Ranger Tamsin | `face-f07` | `armor-lodge-ranger` | `cape-tamsin` | `hair-26` | `skin-02`, `ears-05` | `weapon-shortbow` | 1.00 × 1.00 | skin TAN, hair CHESTNUT, eyes AMBER | P0 | trainer; her hawk is the creature `lodge-hawk` |
-| `garrick` | Garrick the caravan master | `face-m09` | `armor-caravan` | — | `helm-wide-brim` | `beard-03`, `skin-02` | `weapon-light-crossbow` | 1.00 × 1.00 | skin TAN, hair BLACK, eyes BROWN | P1 |  |
-| `aldric` | Commander Aldric Voss | `face-m09` | `armor-aldric` | `cape-campaign` | `hair-01` | `beard-01` | `weapon-longsword` | 1.00 × 1.05 | skin FAIR, hair SILVER, eyes SKY | P1 |  |
-| `recruit` | The recruit | `face-m02` | `armor-recruit` | — | `helm-kettle` | — | `weapon-spear` | 0.96 × 0.92 | skin FAIR, hair GOLD, eyes BLUE | P1 |  |
-| `thessaly` | Archmage Thessaly Varn | `face-f09` | `armor-thessaly` | — | `hair-01` | — | `weapon-staff-ring` | 1.00 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P1 | trainer |
-| `thessaly.thessaly-crystal` | Thessaly, frozen in crystal | `face-f09` | `armor-thessaly` | — | `hair-01` | — | `weapon-staff-ring` | 1.00 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P2 | the crystal round her is a prop, not a part |
-| `brenna` | Brenna of Ashfall | `face-f07` | `armor-brenna` | `cape-ash` | `hair-42` | `skin-04`, `skin-06` | `weapon-battleaxe` | 1.01 × 1.00 | skin PEACH, hair DARK BROWN, eyes GREY | P1 | trainer |
-| `brenna.protectorate` | Brenna, Act 3 | `face-f07` | `armor-brenna-protectorate` | `cape-ash` | `hair-42` | `skin-04`, `skin-06` | `weapon-battleaxe` | 1.01 × 1.00 | skin PEACH, hair DARK BROWN, eyes GREY | P2 | also her boss fight |
-| `gannet` | Mother Gannet | `face-f08` | `armor-gannet` | — | `helm-lace-cap` | — | `weapon-ledger-pen` | 0.99 × 1.20 | skin FAIR, hair SILVER, eyes BROWN | P1 |  |
-| `hester` | Hester Hollis | `face-f10` | `armor-elder-woman` | — | `hair-37` | — | `weapon-folded-shawl` | 0.90 × 0.90 | skin PORCELAIN, hair WHITE, eyes SKY | P1 |  |
-| `tobin` | Tobin Ashgrove | `face-m07` | `armor-cider-presser` | — | `hair-11` | `beard-07`, `skin-01` | `weapon-mallet` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BROWN | P1 |  |
-| `tobin.levy` | Tobin in the levy | `face-m07` | `armor-levy` | — | `hair-11` | `beard-07`, `skin-01` | `weapon-spade` | 1.00 × 0.95 | skin FAIR, hair COPPER, eyes BROWN | P1 | how he looks when you meet him |
-| `harrow` | Lord Harrow | `face-m08` | `armor-harrow` | — | `hair-10` | `beard-11` | `weapon-heron-cane` | 1.00 × 1.05 | skin FAIR, hair SILVER, eyes GREY | P1 |  |
-| `hobb` | Hobb the woodcutter | `face-m09` | `armor-woodcutter` | — | `helm-knit-cap` | `beard-08`, `skin-01` | `weapon-felling-axe` | 1.08 × 1.15 | skin FAIR, hair COPPER, eyes BLUE | P1 |  |
-| `maleficio` | Maleficio | `face-m10` | `armor-maleficio` | — | `hair-10` | `beard-07` | `weapon-black-box` | 1.01 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P1 |  |
-| `maleficio-young` | Maleficio, remembered | `face-m09` | `armor-scholar` | — | — | `beard-07` | `weapon-oil-lamp` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P1 | drawn as an echo |
-| `relief-column-echo` | The relief column | `face-m05` | `armor-old-pattern` | — | `helm-nasal` | `beard-01` | `weapon-relief-kit` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P1 | drawn pale |
-| `lost-boy` | The woodcutter's boy | `face-m01` | `armor-urchin` | — | `hair-08` | `skin-01` | `weapon-flat-cap-held` | 0.62 × 0.66 | skin FAIR, hair COPPER, eyes BLUE | P1 |  |
-| `mags` | Pedlar Mags | `face-f08` | `armor-pedlar` | `cape-pedlar-pack` | `helm-straw-hat` | — | `weapon-walking-stick` | 0.82 × 1.25 | skin TAN, hair SILVER, eyes BROWN | P1 | trainer; Duchess is a creature |
-| `leon.ill` | King Leon, ill | `face-m10` | `armor-leon-furs` | `cape-leon` | `helm-crown` | `beard-07` | `weapon-walking-stick` | 0.95 × 1.10 | skin STONE, hair COPPER, eyes GREY | P2 |  |
-| `elara.act3` | Elara, leading the resistance | `face-f05` | `armor-elara-field` | `cape-travelling` | `hair-16` | — | `weapon-map` | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P2 |  |
-| `elara.crowned` | Elara, crowned | `face-f05` | `armor-elara-queen` | — | `helm-crown` | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P2 |  |
-| `hale.protectorate` | Captain Hale, Act 3 | `face-m09` | `armor-protectorate` | `cape-watch-captain` | `helm-watch-crest` | `beard-01` | `weapon-cudgel` | 1.03 × 1.14 | skin FAIR, hair SILVER, eyes GREY | P2 |  |
-| `refugee-child.aged` | Lise, aged by the tear | `face-f07` | `armor-refugee-child` | — | — | — | — | 0.98 × 0.95 | skin TAN, hair CHESTNUT, eyes BROWN | P2 | the child's smock, tight on her |
-| `anselle` | Mother Superior Anselle | `face-f10` | `armor-anselle` | — | `hair-37` | — | `weapon-lantern` | 0.98 × 1.05 | skin FAIR, hair SILVER, eyes HAZEL | P2 | trainer |
-| `orla` | Sister Orla | `face-f08` | `armor-beekeeper` | — | `helm-bee-veil` | `skin-01` | `weapon-smoker` | 0.98 × 1.10 | skin PEACH, hair SILVER, eyes BLUE | P2 | trainer |
-| `corwin` | Sir Corwin Halbeck | `face-m05` | `armor-corwin` | `cape-corwin` | `helm-corwin` | — | `weapon-corwin-kit` | 1.04 × 1.05 | skin FAIR, hair SILVER, eyes BLUE | P2 | trainer |
-| `severin` | Lord Severin Morvaine | `face-m08` | `armor-severin` | `cape-severin` | `helm-crown-thorns` | — | — | 1.10 × 0.90 | skin PORCELAIN, hair SILVER, eyes RED | P2 |  |
-| `severin.severin-cell` | Severin, a prisoner | `face-m08` | `armor-prisoner` | — | — | — | — | 1.10 × 0.85 | skin STONE, hair SILVER, eyes RED | P2 |  |
-| `isadora` | Lady Isadora | `face-f06` | `armor-isadora` | — | `hair-41` | — | `weapon-night-flowers` | 1.00 × 0.95 | skin FAIR, hair DARK BROWN, eyes BROWN | P2 | drawn as an echo |
-| `valencia-child` | Valencia as a child | `face-f01` | `armor-child-dress` | — | `hair-21` | — | — | 0.62 × 0.66 | skin PORCELAIN, hair SILVER, eyes GREY | P2 | drawn as an echo |
-| `pell` | Pell | `face-m02` | `armor-morvaine-man` | — | `hair-17` | `skin-01` | `weapon-flat-cap-held` | 0.95 × 0.90 | skin PORCELAIN, hair COPPER, eyes BROWN | P2 |  |
-| `ide` | Ide | `face-f04` | `armor-shift` | — | `hair-47` | — | — | 0.97 × 0.88 | skin PORCELAIN, hair COPPER, eyes BROWN | P2 |  |
-| `maren-elder` | Maren, Hollowmere's elder | `face-f09` | `armor-morvaine-woman` | — | `hair-40` | — | `weapon-walking-stick` | 0.98 × 0.92 | skin PORCELAIN, hair WHITE, eyes GREY | P2 |  |
-| `blood-house-steward` | The blood-house steward | `face-m08` | `armor-morvaine-livery` | — | `hair-06` | — | `weapon-ledger-pen` | 1.00 × 0.92 | skin PORCELAIN, hair SILVER, eyes GREY | P2 |  |
-| `hollowmere-child` | A Hollowmere child | `face-m01` | `armor-morvaine-man` | — | `hair-03` | — | `weapon-toy-sword` | 0.62 × 0.66 | skin PORCELAIN, hair COPPER, eyes GREY | P2 |  |
-| `hollowmere-farmer` | A Hollowmere farmer | `face-f07` | `armor-morvaine-woman` | — | `helm-kerchief` | — | `weapon-basket` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P2 |  |
-| `ruck` | Ruck, the bosun | `face-m09` | `armor-sailor` | — | `hair-11` | `beard-05` | `weapon-cutlass` | 0.95 × 1.10 | skin BROWN, hair SILVER, eyes GREY | P2 | trainer |
-| `davin` | Davin | `face-m02` | `armor-davin` | — | `hair-03` | — | `weapon-corwin-sword` | 0.98 × 0.92 | skin TAN, hair DARK BROWN, eyes BROWN | P2 | trainer |
-| `vorlaith` | Vorlaith, the Unmade King | `face-vorlaith` | `armor-vorlaith` | — | `helm-vorlaith` | — | — | 1.20 × 0.95 | — | P2 | `vorlaith-shape`: the same at 40% opacity |
-| `guild-apprentice` | A Guild apprentice | `face-f02` | `armor-guild-apprentice` | — | `hair-22` | `skin-01` | `weapon-glass-lamp` | 0.94 × 0.88 | skin FAIR, hair HONEY, eyes GREEN | P2 |  |
-| `mason` | A mason | `face-m09` | `armor-smith` | — | `helm-flat-cap` | `beard-08` | `weapon-mallet` | 1.00 × 1.05 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
-| `elder` | The Elder (sheet) | `face-m10` | `armor-elder-coat` | — | `hair-11` | `beard-11` | `weapon-walking-stick` | 0.97 × 0.95 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
-| `trader` | The Trader (sheet) | `face-f03` | `armor-trader` | — | `helm-wide-brim` | — | `weapon-coin-purse` | 1.00 × 1.00 | skin TAN, hair DARK BROWN, eyes GREEN | P0 | also the Chandler |
-| `baker` | The Baker (sheet) | `face-f06` | `armor-baker` | — | `helm-kerchief` | — | `weapon-peel` | 0.98 × 1.10 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 | also the Innkeeper |
-| `smith` | The Smith (sheet) | `face-m09` | `armor-smith` | — | `hair-04` | `beard-07` | `weapon-hammer-tongs` | 1.00 × 1.10 | skin UMBER, hair BLACK, eyes BROWN | P0 |  |
-| `flower-seller` | The Flower Seller (sheet) | `face-f03` | `armor-villager-woman` | — | `helm-kerchief` | — | `weapon-flower-basket` | 0.98 × 0.92 | skin TAN, hair DARK BROWN, eyes GREEN | P0 |  |
-| `traveller` | A Traveller (sheet) | `face-m05` | `armor-road` | `cape-travelling` | `hair-02` | `beard-01` | `weapon-walking-stick` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P0 | also the Harbourmaster, a Regular |
-| `seamstress` | The Seamstress (sheet) | `face-f03` | `armor-villager-woman` | — | `hair-29` | `skin-01` | — | 0.98 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
-| `courier` | A Courier (sheet) | `face-m02` | `armor-courier` | — | `helm-flat-cap` | `skin-01` | `weapon-letters` | 0.96 × 0.90 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 | also `COURIER` in Act 3 |
-| `pilgrim` | A Pilgrim (sheet) | `face-f06` | `armor-pilgrim` | — | `hair-26` | — | `weapon-pilgrim-staff` | 1.00 × 1.00 | skin BROWN, hair BLACK, eyes BROWN | P0 | also `PILGRIM` |
-| `weaver` | The Weaver (sheet) | `face-f06` | `armor-villager-woman` | — | `hair-38` | — | `weapon-spindle` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 |  |
-| `farmhand` | A Farmhand (sheet) | `face-m03` | `armor-villager-man` | — | `helm-straw-hat` | — | `weapon-pitchfork` | 1.00 × 1.00 | skin FAIR, hair GOLD, eyes BLUE | P0 | also a Dock Hand, `FARMER` |
-| `old-man` | An Old Man (sheet) | `face-m10` | `armor-elder-coat` | — | `hair-11` | `beard-11` | `weapon-walking-stick` | 0.94 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
-| `maid` | A Maid (sheet) | `face-f03` | `armor-maid` | — | `hair-29` | `skin-01` | `weapon-feather-duster` | 0.97 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
-| `porter` | A Porter (sheet) | `face-m05` | `armor-porter` | — | `hair-03` | `beard-01` | `weapon-crate` | 1.00 × 1.08 | skin OLIVE, hair BLACK, eyes BROWN | P0 | also a Carrier, a Warehand |
-| `old-woman` | An Old Woman (sheet) | `face-f10` | `armor-elder-woman` | `cape-old-woman` | `hair-37` | — | `weapon-basket` | 0.90 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P0 | also a Drinker |
-| `child` | A Child (sheet) | `face-m01` | `armor-urchin` | — | `helm-flat-cap` | — | `weapon-toy-sword` | 0.62 × 0.66 | skin TAN, hair DARK BROWN, eyes BROWN | P0 |  |
-| `youth` | A Youth (sheet) | `face-m02` | `armor-villager-man` | — | `hair-03` | `skin-01` | — | 0.90 × 0.88 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 |  |
-| `pool-questeria` | The city pool (sample) | `face-f06` | `armor-villager-woman` | — | `helm-kerchief` | — | `weapon-basket` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 | the generator mixes the town faces and armors by seed |
-| `pool-court` | The court (sample: a courtier) | `face-m04` | `armor-noble` | — | `hair-21` | `ears-01` | — | 1.00 × 0.95 | skin PORCELAIN, hair COPPER, eyes GREEN | P0 | the courtiers and the scribe in the throne room |
-| `pool-court-lady` | The court (sample: a lady) | `face-f03` | `armor-noble-gown` | — | `hair-29` | `skin-01` | — | 0.98 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
-| `pool-saltwind` | The docks pool (sample) | `face-m09` | `armor-fisher` | — | `helm-knit-cap` | `beard-08` | — | 1.00 × 1.05 | skin OLIVE, hair BLACK, eyes BROWN | P0 | also `NET-MENDER`, `SAILOR` |
-| `pool-doomward` | The Doomward pool (sample) | `face-m05` | `armor-refugee-man` | `cape-blanket` | `hair-02` | `beard-01` | `weapon-walking-stick` | 1.00 × 0.95 | skin FAIR, hair DARK BROWN, eyes GREY | P0 |  |
-| `pool-morvaine` | The Morvaine pool (sample) | `face-f07` | `armor-morvaine-woman` | — | `hair-33` | — | `weapon-lantern` | 1.00 × 0.92 | skin PORCELAIN, hair BLACK, eyes BROWN | P2 |  |
-| `pool-abbey` | The abbey pool (sample) | `face-f06` | `armor-abbey-lay` | — | `helm-straw-hat` | — | `weapon-basket` | 0.72 × 0.80 | skin FAIR, hair DARK BROWN, eyes HAZEL | P2 |  |
-| `red-gull-thug` | Red Gull Thug | `face-m06` | `armor-red-gull` | — | — | `beard-01`, `skin-05` | `weapon-cudgel` | 1.08 × 1.15 | skin UMBER, hair COPPER, eyes BROWN | P0 | the same as `red-gull`, with its two other heads |
-| `bosun-grell` | Bosun Grell | `face-m06` | `armor-grell` | — | — | `beard-08`, `skin-02` | `weapon-cutlass` | 0.85 × 1.55 | skin TAN, hair COPPER, eyes BROWN | P0 | the same as `grell` |
-| `hollowed-footman` | Hollowed Footman | `face-hollowed` | `armor-hollowed-footman` | — | `helm-hollowed-kettle` | — | `weapon-hollowed-sword` | 0.97 × 1.00 | — | P0 | hunched (a clip) |
-| `hollowed-hexer` | Hollowed Hexer | `face-hollowed` | `armor-hollowed-hexer` | — | `helm-hollowed-hood` | — | `weapon-hexer-staff` | 1.01 × 0.90 | — | P0 |  |
-| `hollowed-sapper` | Hollowed Sapper | `face-hollowed` | `armor-hollowed-sapper` | — | `helm-sapper-goggles` | — | `weapon-sapper-pick` | 0.95 × 1.05 | — | P0 |  |
-| `sapper-chief` | Sapper Chief | `face-hollowed` | `armor-hollowed-chief` | — | `helm-sapper-faceplate` | — | `weapon-chief-pick-lantern` | 1.06 × 1.20 | — | P0 |  |
-| `vault-construct` | Vault Construct | `face-construct-vault` | `armor-construct-stone` | — | — | — | — | 1.20 × 1.35 | — | P0 |  |
-| `kael-duel` | Kael, duelling | `face-m04` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `horns-02` | `weapon-kael-rapier` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P0 |  |
-| `hollowed-climber` | Hollowed Climber | `face-hollowed` | `armor-hollowed-climber` | — | — | — | `weapon-climber-hook` | 1.02 × 0.88 | — | P1 | crouched (a clip) |
-| `varkhul` | Varkhul, the Hollow Knight | `face-m10` | `armor-varkhul` | `cape-varkhul` | `helm-varkhul` | `beard-07` | `weapon-varkhul-greatsword` | 1.20 × 1.25 | skin STONE, hair SILVER, eyes AMBER | P1 | boss |
-| `varkhul.varkhul-unmasked` | Varkhul, unmasked | `face-m10` | `armor-varkhul-split` | `cape-varkhul` | `hair-47` | `beard-07` | — | 1.20 × 1.25 | skin STONE, hair SILVER, eyes AMBER | P1 | kneels (a clip) |
-| `maleficio-boss` | Maleficio, the Sovereign | `face-m10` | `armor-maleficio-ascendant` | — | `hair-10` | `beard-07` | `weapon-black-box` | 1.01 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P1 | floats (the game lifts it); swaps to the creature `hungering` |
-| `cube-cultist` | Cube Cultist | `face-m05` | `armor-cultist` | — | `hair-01` | `skin-06` | `weapon-cultist-dagger` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes GREY | P1 |  |
-| `bandit` | Bandit | `face-m05` | `armor-bandit` | — | `helm-bandit-hood` | `beard-01` | `weapon-shortsword` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P1 | a new id |
-| `thrall` | Thrall | `face-m05` | `armor-thrall` | — | `hair-01` | — | `weapon-spear-lantern` | 1.00 × 1.00 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
-| `vesk` | Vesk | `face-m05` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-vesk-wolf` | — | `weapon-vesk-sword` | 1.08 × 1.15 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
-| `vreya` | Vreya | `face-f04` | `armor-thrall-knight-f` | `cape-thrall-knight` | `helm-vreya-crown` | — | `weapon-vreya-blade` | 1.06 × 1.00 | skin PORCELAIN, hair WHITE, eyes RED | P2 |  |
-| `mordain` | Mordain | `face-m05` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-mordain-beak` | — | `weapon-mordain-glaive` | 1.08 × 0.90 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
-| `gilded-knight` | Gilded Knight | `face-m05` | `armor-gilded-knight` | `cape-gilded` | `helm-gilded` | `beard-01` | `weapon-gilded-kit` | 1.02 × 1.05 | skin FAIR, hair DARK BROWN, eyes GREY | P2 | the `order` pool |
-| `gilded-sergeant` | Gilded Sergeant | `face-m09` | `armor-gilded-knight` | `cape-gilded` | `hair-02` | `beard-08` | `weapon-mace-shield` | 1.00 × 1.12 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
-| `drowned` | Drowned | `face-drowned` | `armor-drowned` | — | — | — | — | 0.97 × 1.05 | — | P2 |  |
-| `blood-wight` | Blood-wight | `face-blood-wight` | `armor-blood-wight` | — | — | — | — | 1.10 × 0.85 | — | P2 |  |
-| `sun-scorched` | Sun-scorched | `face-sun-scorched` | `armor-sun-scorched` | — | — | — | — | 1.00 × 1.00 | — | P2 |  |
-| `thornling` | Thornling | `face-thornling` | `armor-thornling` | — | — | — | — | 0.68 × 0.70 | — | P2 |  |
-| `priest-construct` | Priest-construct | `face-construct-priest` | `armor-construct-priest` | — | — | — | — | 1.20 × 1.30 | — | P2 |  |
-| `severin-boss` | Severin, unbound | `face-m08` | `armor-severin` | `cape-severin-wings` | `helm-crown-thorns` | — | — | 1.10 × 0.90 | skin PORCELAIN, hair SILVER, eyes RED | P2 | floats; claws and blood magic are effects |
-| `smuggler` | Smuggler | `face-f03` | `armor-smuggler` | — | `helm-bandana` | `skin-01` | `weapon-cutlass` | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BLUE | P2 | a new id |
-| `protectorate-watchman` | Protectorate watchman | `face-m05` | `armor-protectorate` | `cape-watch` | `helm-watch` | `beard-01` | `weapon-protectorate-kit` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P2 | also `PROTECTORATE GUARD`; the `protectorate` pool |
-| `protectorate-warden` | Protectorate warden | `face-m09` | `armor-protectorate-warden` | — | `helm-warden` | `beard-07` | `weapon-warden-kit` | 1.08 × 1.18 | skin UMBER, hair BLACK, eyes BROWN | P2 |  |
-| `crown-hollowed` | Crown-raised Hollowed | `face-crown-hollowed` | `armor-crown-hollowed` | — | `helm-hollowed-kettle` | — | `weapon-spear` | 1.00 × 1.00 | — | P2 |  |
-| `crown-construct` | Crown-construct | `face-construct-crown` | `armor-construct-crown` | — | — | — | — | 1.25 × 1.20 | — | P2 |  |
-| `kael-shadow` | Kael, the Protectorate Shadow | `face-m04` | `armor-kael-shadow` | `cape-tail-ember` | `hair-03` | `horns-02` | `weapon-kael-knives` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P2 | boss |
-| `sb-sovereign` | {sb}, the Sovereign Protector | `face-f04` | `armor-sovereign` | — | `helm-crown-dusk-dawn` | — | `weapon-longsword` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P2 | the final boss; the player's own face and look; floats in phase 2 |
-| `unmade` | The Unmade (ancient) | `face-unmade` | `armor-unmade-bronze` | — | `helm-bronze-crest` | — | `weapon-unmade-spear-shield` | 1.00 × 1.00 | — | P2 |  |
-| `unmade.b` | The Unmade (a knight) | `face-unmade` | `armor-old-pattern` | — | `helm-nasal` | — | `weapon-longsword` | 1.00 × 1.00 | — | P2 | the game greys it |
-| `unmade.c` | The Unmade (a pikeman) | `face-unmade` | `armor-pikeman` | — | `helm-morion` | — | `weapon-pike` | 1.00 × 1.00 | — | P2 |  |
-| `unmade.d` | The Unmade (a watchman) | `face-unmade` | `armor-watch` | `cape-watch` | `helm-watch` | — | `weapon-cudgel` | 1.00 × 1.00 | — | P2 | the game greys it |
-| `ashfall-raider` | Ashfall raider | `face-m09` | `armor-ashfall-raider` | `cape-ash` | `hair-02` | `beard-08` | `weapon-raider-kit` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
+| Id | Name | Face | Armor | Cape | Helm / hair | Extras | Weapon | Offhand | Morph (h × w) | Colours (skin, hair, eyes) | Priority | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `you-male` | You, the male default | `face-m03` | `armor-traveller` | — | `hair-03` | — | `weapon-longsword` | — | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 | the player swaps any slot on the creation screen |
+| `you-female` | You, the female default | `face-f03` | `armor-traveller-f` | — | `hair-22` | `skin-01` | `weapon-longsword` | — | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 |  |
+| `soulbound` | {sb}, the default | `face-f04` | `armor-sb-traveller` | `cape-sb` | `hair-31` | — | `weapon-sb-blades` | `offhand-sb-blades` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P0 | the player can change every slot |
+| `you-male.champion` | You, Champion of Fable | `face-m03` | `armor-champion` | — | `hair-03` | — | `weapon-longsword` | — | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P1 | Act 1's end |
+| `you-female.champion` | You, Champion of Fable | `face-f03` | `armor-champion-f` | — | `hair-22` | `skin-01` | `weapon-longsword` | — | 1.00 × 1.00 | skin PEACH, hair CHESTNUT, eyes BROWN | P1 |  |
+| `soulbound.champion` | {sb}, Champion of Fable | `face-f04` | `armor-champion-f` | `cape-sb` | `hair-31` | — | `weapon-sb-blades` | `offhand-sb-blades` | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P1 |  |
+| `soulbound.lord-protector` | {sb}, Lord Protector | `face-f04` | `armor-lord-protector` | — | `hair-31` | — | `weapon-longsword` | — | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P2 | Act 2's end |
+| `mc-child` | You, aged eight | `face-m01` | `armor-child-cove` | — | `hair-14` | `skin-01` | — | — | 0.62 × 0.66 | skin PEACH, hair CHESTNUT, eyes BROWN | P0 |  |
+| `sb-child` | {sb}, aged eight | `face-f01` | `armor-child-cove-f` | — | `hair-22` | — | — | — | 0.62 × 0.66 | skin PEACH, hair BLACK, eyes BROWN | P0 |  |
+| `sera` | Sera Vantis | `face-f05` | `armor-sera` | `cape-sera` | `hair-33` | `ears-01` | `weapon-sera-longbow` | `offhand-sera-longbow` | 1.04 × 0.90 | skin PORCELAIN, hair HONEY, eyes GREEN | P0 |  |
+| `mira` | Mira Ashgrove | `face-f06` | `armor-mira` | — | `hair-38` | `skin-01` | `weapon-quarterstaff` | — | 1.01 × 0.90 | skin FAIR, hair COPPER, eyes BROWN | P0 | her healing glow is an effect |
+| `mira-young` | Mira, aged thirteen | `face-f01` | `armor-mira-apprentice` | — | `hair-35` | `skin-01` | `weapon-sketchbook` | `offhand-sketchbook` | 0.80 × 0.80 | skin FAIR, hair COPPER, eyes BROWN | P1 | drawn as an echo |
+| `kael` | Kael Duskmantle | `face-m04` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `horns-02` | `weapon-kael-knives` | `offhand-kael-knives` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P0 | the horns come through the hood |
+| `brannock` | Brannock Ironvein | `face-m09` | `armor-brannock` | — | `hair-04` | `beard-10`, `skin-03` | `weapon-brannock` | `offhand-brannock` | 0.85 × 1.36 | skin GOLDEN, hair COPPER, eyes BROWN | P0 | shield `offhand-brannock-1`, `-41`, `-42` as the names come |
+| `brannock.clasps-gone` | Brannock, the clasps gone | `face-m09` | `armor-brannock` | — | — | `beard-10`, `skin-03` | `weapon-brannock` | `offhand-brannock-42` | 0.85 × 1.36 | skin GOLDEN, hair COPPER, eyes BROWN | P2 | from A3-C2-05 |
+| `valencia` | Valencia Morvaine | `face-f04` | `armor-valencia` | `cape-valencia` | `helm-circlet-silver` | — | `weapon-dagger` | — | 1.09 × 0.90 | skin PORCELAIN, hair SILVER, eyes GREY | P2 |  |
+| `valencia.sister-vale` | Sister Vale | `face-f04` | `armor-abbey-habit` | — | `helm-abbey-hood` | — | — | — | 1.09 × 0.90 | skin PORCELAIN, hair SILVER, eyes GREY | P2 | `valencia-unhooded`: the same without the helm, eyes red (an expression) |
+| `corra` | Corra | `face-f08` | `armor-corra` | — | `hair-38` | — | `weapon-netting-needle` | — | 0.95 × 1.00 | skin TAN, hair CHESTNUT, eyes GREY | P0 |  |
+| `corra.flashback` | Corra, sixteen years younger | `face-f07` | `armor-corra` | — | — | — | `weapon-netting-needle` | — | 0.95 × 1.00 | skin TAN, hair CHESTNUT, eyes GREY | P0 | soaked by rain (an effect) |
+| `lookout` | The lookout | `face-m06` | `armor-sailor` | — | `helm-knit-cap` | `beard-12` | `weapon-telescope` | — | 1.00 × 0.95 | skin BROWN, hair COPPER, eyes GREY | P0 |  |
+| `odelle` | Captain Odelle Marsh | `face-f07` | `armor-odelle` | — | `helm-tricorn` | `jewel-01` | `weapon-cutlass` | — | 1.00 × 1.00 | skin UMBER, hair BLACK, eyes BROWN | P0 |  |
+| `tomas` | Old Tomas | `face-m10` | `armor-fisher` | — | `helm-knit-cap` | `beard-01` | `weapon-gaff` | — | 0.95 × 1.00 | skin TAN, hair WHITE, eyes SKY | P0 |  |
+| `red-gull` | Red Gull Thug | `face-m06` | `armor-red-gull` | — | — | `beard-01`, `skin-05` | `weapon-cudgel` | — | 1.08 × 1.15 | skin UMBER, hair COPPER, eyes BROWN | P0 | also the enemy `red-gull-thug` |
+| `red-gull.b` | Red Gull Thug, second head | `face-m06` | `armor-red-gull` | — | `helm-bandana-red` | `beard-01`, `skin-05` | `weapon-cudgel` | — | 1.08 × 1.15 | skin FAIR, hair COPPER, eyes GREY | P0 |  |
+| `red-gull.c` | Red Gull Thug, third head | `face-m04` | `armor-red-gull` | — | `hair-09` | `beard-01`, `skin-05` | `weapon-cudgel` | — | 1.06 × 1.12 | skin TAN, hair BLACK, eyes BROWN | P0 |  |
+| `grell` | Bosun Grell | `face-m06` | `armor-grell` | — | — | `beard-08`, `skin-02` | `weapon-cutlass` | — | 0.85 × 1.55 | skin TAN, hair COPPER, eyes BROWN | P0 | also the enemy `bosun-grell` |
+| `hale` | Captain Roderic Hale | `face-m09` | `armor-watch-captain` | `cape-watch-captain` | `helm-watch-crest` | `beard-01` | `weapon-cudgel` | — | 1.03 × 1.14 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `watch` | City Watch | `face-m05` | `armor-watch` | `cape-watch` | `helm-watch` | `beard-01` | `weapon-watch-kit` | `offhand-watch-kit` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P0 | other watchmen wear `face-m09` and `face-m05` |
+| `fennick` | Questmaster Fennick | `face-m07` | `armor-clerk` | — | `hair-05` | `beard-03`, `jewel-08`, `jewel-11` | `weapon-tack-hammer` | `offhand-tack-hammer` | 1.00 × 1.08 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `hedda` | Hedda (also `refugee-mother`) | `face-f07` | `armor-refugee-woman` | `cape-blanket` | `hair-26` | — | `weapon-loaf` | — | 0.99 × 0.95 | skin TAN, hair CHESTNUT, eyes BROWN | P0 |  |
+| `refugee-child` | Lise | `face-f01` | `armor-refugee-child` | — | `hair-35` | — | `weapon-rag-doll` | — | 0.75 × 0.75 | skin TAN, hair CHESTNUT, eyes BROWN | P0 |  |
+| `brisk` | Sergeant Brisk | `face-m07` | `armor-watch` | `cape-watch` | `helm-watch` | `beard-04` | `weapon-cudgel` | — | 1.00 × 1.06 | skin BROWN, hair BLACK, eyes BROWN | P0 |  |
+| `refugee-1` | Old Aurek | `face-m10` | `armor-refugee-man` | `cape-blanket` | `hair-12` | `beard-09` | `weapon-walking-stick` | — | 0.93 × 0.95 | skin TAN, hair WHITE, eyes GREY | P0 |  |
+| `refugee-2` | Teodor | `face-m02` | `armor-refugee-man` | `cape-blanket` | `hair-03` | `beard-01` | `weapon-tin-cup` | — | 0.95 × 0.90 | skin BROWN, hair BLACK, eyes BROWN | P0 |  |
+| `refugee-3` | Yselle the Glassblower | `face-f06` | `armor-glassblower` | — | `hair-34` | `skin-01`, `skin-06` | — | — | 0.82 × 1.25 | skin GOLDEN, hair COPPER, eyes AMBER | P0 |  |
+| `elara` | Princess Elara | `face-f05` | `armor-elara` | — | `helm-circlet` | — | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P0 | the slim sword is part of the armor |
+| `elara-hooded` | Princess Elara, hooded | `face-f05` | `armor-elara-disguise` | `cape-elara-hooded` | `helm-hood-charcoal` | — | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P0 |  |
+| `leon` | King Leon | `face-m10` | `armor-leon` | `cape-leon` | `helm-crown` | `beard-07` | — | — | 0.97 × 1.16 | skin FAIR, hair SILVER, eyes GREY | P0 | his sword is part of the armor |
+| `crane` | Lord Chancellor Crane | `face-m08` | `armor-crane` | — | `hair-06` | `beard-02` | `weapon-quill-letter` | `offhand-quill-letter` | 1.10 × 0.85 | skin PORCELAIN, hair BLACK, eyes GREY | P0 |  |
+| `royal-messenger` | Royal Messenger | `face-m02` | `armor-royal-livery` | `cape-royal` | `helm-beret` | `skin-01` | `weapon-letter` | — | 0.99 × 0.95 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 |  |
+| `royal-guard` | Royal Guard | `face-m09` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | `beard-07` | `weapon-halberd` | — | 1.04 × 1.08 | skin UMBER, hair BLACK, eyes BROWN | P0 | the captain and lieutenant too |
+| `anvil-barkeep` | Hessa the Barkeep | `face-f08` | `armor-tavern` | `cape-tail-bear` | `hair-26` | `skin-02`, `ears-03` | `weapon-tankard` | — | 1.08 × 1.20 | skin GOLDEN, hair BLACK, eyes BROWN | P0 |  |
+| `netty` | Netty the Net-Mender | `face-f08` | `armor-villager-woman` | — | `hair-40` | `skin-01` | `weapon-netting-needle` | — | 0.98 × 1.00 | skin TAN, hair SILVER, eyes GREEN | P0 |  |
+| `maud` | Maud Tolley | `face-f10` | `armor-elder-woman` | — | `hair-37` | — | `weapon-flat-cap-held` | — | 0.93 × 0.95 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `pip` | Pip the Potboy | `face-m02` | `armor-tavern-m` | — | `hair-03` | `skin-01` | `weapon-stew-pot` | — | 0.72 × 0.80 | skin FAIR, hair COPPER, eyes BROWN | P0 |  |
+| `osric` | Osric Penhallow | `face-m07` | `armor-merchant` | `cape-short-lavender` | `hair-05` | `beard-03` | — | `offhand-silk-bolt` | 1.00 × 1.00 | skin PORCELAIN, hair BLACK, eyes BROWN | P0 |  |
+| `lark` | Lark the Busker | `face-m04` | `armor-busker` | `cape-short-lavender` | `hair-21` | `ears-01` | `weapon-lute` | — | 1.04 × 0.90 | skin PORCELAIN, hair COPPER, eyes VIOLET | P0 |  |
+| `ilsa` | Ilsa Fenwright | `face-f03` | `armor-villager-woman` | — | `hair-34` | — | `weapon-scrolls` | — | 0.99 × 0.95 | skin GOLDEN, hair COPPER, eyes GREEN | P0 |  |
+| `oswin` | Guardsman Oswin | `face-m03` | `armor-royal-guard` | `cape-royal` | `helm-royal-guard` | — | `weapon-halberd` | — | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `hesper` | Sister Hesper | `face-f10` | `armor-temple` | — | `hair-27` | — | `weapon-broom` | — | 0.99 × 1.00 | skin UMBER, hair SILVER, eyes BROWN | P0 |  |
+| `wren` | Wren | `face-f01` | `armor-urchin-f` | — | `hair-26` | `skin-01` | `weapon-coin` | — | 0.62 × 0.66 | skin BROWN, hair BLACK, eyes AMBER | P0 |  |
+| `imra-vell` | Master Imra Vell | `face-f07` | `armor-fencer` | — | `hair-13` | `skin-03` | `weapon-practice-sword` | — | 0.99 × 1.00 | skin UMBER, hair BLACK, eyes BROWN | P0 | trainer |
+| `tamsin` | Ranger Tamsin | `face-f07` | `armor-lodge-ranger` | `cape-tamsin` | `hair-26` | `skin-02`, `ears-05` | `weapon-shortbow` | — | 1.00 × 1.00 | skin TAN, hair CHESTNUT, eyes AMBER | P0 | trainer; her hawk is the creature `lodge-hawk` |
+| `garrick` | Garrick the caravan master | `face-m09` | `armor-caravan` | — | `helm-wide-brim` | `beard-03`, `skin-02` | `weapon-light-crossbow` | — | 1.00 × 1.00 | skin TAN, hair BLACK, eyes BROWN | P1 |  |
+| `aldric` | Commander Aldric Voss | `face-m09` | `armor-aldric` | `cape-campaign` | `hair-01` | `beard-01` | `weapon-longsword` | — | 1.00 × 1.05 | skin FAIR, hair SILVER, eyes SKY | P1 |  |
+| `recruit` | The recruit | `face-m02` | `armor-recruit` | — | `helm-kettle` | — | `weapon-spear` | — | 0.96 × 0.92 | skin FAIR, hair GOLD, eyes BLUE | P1 |  |
+| `thessaly` | Archmage Thessaly Varn | `face-f09` | `armor-thessaly` | — | `hair-01` | — | `weapon-staff-ring` | — | 1.00 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P1 | trainer |
+| `thessaly.thessaly-crystal` | Thessaly, frozen in crystal | `face-f09` | `armor-thessaly` | — | `hair-01` | — | `weapon-staff-ring` | — | 1.00 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P2 | the crystal round her is a prop, not a part |
+| `brenna` | Brenna of Ashfall | `face-f07` | `armor-brenna` | `cape-ash` | `hair-42` | `skin-04`, `skin-06` | `weapon-battleaxe` | — | 1.01 × 1.00 | skin PEACH, hair DARK BROWN, eyes GREY | P1 | trainer |
+| `brenna.protectorate` | Brenna, Act 3 | `face-f07` | `armor-brenna-protectorate` | `cape-ash` | `hair-42` | `skin-04`, `skin-06` | `weapon-battleaxe` | — | 1.01 × 1.00 | skin PEACH, hair DARK BROWN, eyes GREY | P2 | also her boss fight |
+| `gannet` | Mother Gannet | `face-f08` | `armor-gannet` | — | `helm-lace-cap` | — | `weapon-ledger-pen` | `offhand-ledger-pen` | 0.99 × 1.20 | skin FAIR, hair SILVER, eyes BROWN | P1 |  |
+| `hester` | Hester Hollis | `face-f10` | `armor-elder-woman` | — | `hair-37` | — | `weapon-folded-shawl` | — | 0.90 × 0.90 | skin PORCELAIN, hair WHITE, eyes SKY | P1 |  |
+| `tobin` | Tobin Ashgrove | `face-m07` | `armor-cider-presser` | — | `hair-11` | `beard-07`, `skin-01` | `weapon-mallet` | — | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BROWN | P1 |  |
+| `tobin.levy` | Tobin in the levy | `face-m07` | `armor-levy` | — | `hair-11` | `beard-07`, `skin-01` | `weapon-spade` | — | 1.00 × 0.95 | skin FAIR, hair COPPER, eyes BROWN | P1 | how he looks when you meet him |
+| `harrow` | Lord Harrow | `face-m08` | `armor-harrow` | — | `hair-10` | `beard-11` | `weapon-heron-cane` | — | 1.00 × 1.05 | skin FAIR, hair SILVER, eyes GREY | P1 |  |
+| `hobb` | Hobb the woodcutter | `face-m09` | `armor-woodcutter` | — | `helm-knit-cap` | `beard-08`, `skin-01` | `weapon-felling-axe` | — | 1.08 × 1.15 | skin FAIR, hair COPPER, eyes BLUE | P1 |  |
+| `maleficio` | Maleficio | `face-m10` | `armor-maleficio` | — | `hair-10` | `beard-07` | `weapon-black-box` | — | 1.01 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P1 |  |
+| `maleficio-young` | Maleficio, remembered | `face-m09` | `armor-scholar` | — | — | `beard-07` | `weapon-oil-lamp` | — | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P1 | drawn as an echo |
+| `relief-column-echo` | The relief column | `face-m05` | `armor-old-pattern` | — | `helm-nasal` | `beard-01` | `weapon-relief-kit` | `offhand-relief-kit` | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P1 | drawn pale |
+| `lost-boy` | The woodcutter's boy | `face-m01` | `armor-urchin` | — | `hair-08` | `skin-01` | `weapon-flat-cap-held` | — | 0.62 × 0.66 | skin FAIR, hair COPPER, eyes BLUE | P1 |  |
+| `mags` | Pedlar Mags | `face-f08` | `armor-pedlar` | `cape-pedlar-pack` | `helm-straw-hat` | — | `weapon-walking-stick` | — | 0.82 × 1.25 | skin TAN, hair SILVER, eyes BROWN | P1 | trainer; Duchess is a creature |
+| `leon.ill` | King Leon, ill | `face-m10` | `armor-leon-furs` | `cape-leon` | `helm-crown` | `beard-07` | `weapon-walking-stick` | — | 0.95 × 1.10 | skin STONE, hair COPPER, eyes GREY | P2 |  |
+| `elara.act3` | Elara, leading the resistance | `face-f05` | `armor-elara-field` | `cape-travelling` | `hair-16` | — | `weapon-map` | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P2 |  |
+| `elara.crowned` | Elara, crowned | `face-f05` | `armor-elara-queen` | — | `helm-crown` | — | — | — | 1.08 × 0.88 | skin FAIR, hair BLACK, eyes GREY | P2 |  |
+| `hale.protectorate` | Captain Hale, Act 3 | `face-m09` | `armor-protectorate` | `cape-watch-captain` | `helm-watch-crest` | `beard-01` | `weapon-cudgel` | — | 1.03 × 1.14 | skin FAIR, hair SILVER, eyes GREY | P2 |  |
+| `refugee-child.aged` | Lise, aged by the tear | `face-f07` | `armor-refugee-child` | — | — | — | — | — | 0.98 × 0.95 | skin TAN, hair CHESTNUT, eyes BROWN | P2 | the child's smock, tight on her |
+| `anselle` | Mother Superior Anselle | `face-f10` | `armor-anselle` | — | `hair-37` | — | `weapon-lantern` | — | 0.98 × 1.05 | skin FAIR, hair SILVER, eyes HAZEL | P2 | trainer |
+| `orla` | Sister Orla | `face-f08` | `armor-beekeeper` | — | `helm-bee-veil` | `skin-01` | `weapon-smoker` | — | 0.98 × 1.10 | skin PEACH, hair SILVER, eyes BLUE | P2 | trainer |
+| `corwin` | Sir Corwin Halbeck | `face-m05` | `armor-corwin` | `cape-corwin` | `helm-corwin` | — | `weapon-corwin-kit` | `offhand-corwin-kit` | 1.04 × 1.05 | skin FAIR, hair SILVER, eyes BLUE | P2 | trainer |
+| `severin` | Lord Severin Morvaine | `face-m08` | `armor-severin` | `cape-severin` | `helm-crown-thorns` | — | — | — | 1.10 × 0.90 | skin PORCELAIN, hair SILVER, eyes RED | P2 |  |
+| `severin.severin-cell` | Severin, a prisoner | `face-m08` | `armor-prisoner` | — | — | — | — | — | 1.10 × 0.85 | skin STONE, hair SILVER, eyes RED | P2 |  |
+| `isadora` | Lady Isadora | `face-f06` | `armor-isadora` | — | `hair-41` | — | `weapon-night-flowers` | — | 1.00 × 0.95 | skin FAIR, hair DARK BROWN, eyes BROWN | P2 | drawn as an echo |
+| `valencia-child` | Valencia as a child | `face-f01` | `armor-child-dress` | — | `hair-21` | — | — | — | 0.62 × 0.66 | skin PORCELAIN, hair SILVER, eyes GREY | P2 | drawn as an echo |
+| `pell` | Pell | `face-m02` | `armor-morvaine-man` | — | `hair-17` | `skin-01` | `weapon-flat-cap-held` | — | 0.95 × 0.90 | skin PORCELAIN, hair COPPER, eyes BROWN | P2 |  |
+| `ide` | Ide | `face-f04` | `armor-shift` | — | `hair-47` | — | — | — | 0.97 × 0.88 | skin PORCELAIN, hair COPPER, eyes BROWN | P2 |  |
+| `maren-elder` | Maren, Hollowmere's elder | `face-f09` | `armor-morvaine-woman` | — | `hair-40` | — | `weapon-walking-stick` | — | 0.98 × 0.92 | skin PORCELAIN, hair WHITE, eyes GREY | P2 |  |
+| `blood-house-steward` | The blood-house steward | `face-m08` | `armor-morvaine-livery` | — | `hair-06` | — | `weapon-ledger-pen` | `offhand-ledger-pen` | 1.00 × 0.92 | skin PORCELAIN, hair SILVER, eyes GREY | P2 |  |
+| `hollowmere-child` | A Hollowmere child | `face-m01` | `armor-morvaine-man` | — | `hair-03` | — | `weapon-toy-sword` | — | 0.62 × 0.66 | skin PORCELAIN, hair COPPER, eyes GREY | P2 |  |
+| `hollowmere-farmer` | A Hollowmere farmer | `face-f07` | `armor-morvaine-woman` | — | `helm-kerchief` | — | `weapon-basket` | — | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P2 |  |
+| `ruck` | Ruck, the bosun | `face-m09` | `armor-sailor` | — | `hair-11` | `beard-05` | `weapon-cutlass` | — | 0.95 × 1.10 | skin BROWN, hair SILVER, eyes GREY | P2 | trainer |
+| `davin` | Davin | `face-m02` | `armor-davin` | — | `hair-03` | — | `weapon-corwin-sword` | — | 0.98 × 0.92 | skin TAN, hair DARK BROWN, eyes BROWN | P2 | trainer |
+| `vorlaith` | Vorlaith, the Unmade King | `face-vorlaith` | `armor-vorlaith` | — | `helm-vorlaith` | — | — | — | 1.20 × 0.95 | — | P2 | `vorlaith-shape`: the same at 40% opacity |
+| `guild-apprentice` | A Guild apprentice | `face-f02` | `armor-guild-apprentice` | — | `hair-22` | `skin-01` | `weapon-glass-lamp` | — | 0.94 × 0.88 | skin FAIR, hair HONEY, eyes GREEN | P2 |  |
+| `mason` | A mason | `face-m09` | `armor-smith` | — | `helm-flat-cap` | `beard-08` | `weapon-mallet` | — | 1.00 × 1.05 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
+| `elder` | The Elder (sheet) | `face-m10` | `armor-elder-coat` | — | `hair-11` | `beard-11` | `weapon-walking-stick` | — | 0.97 × 0.95 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `trader` | The Trader (sheet) | `face-f03` | `armor-trader` | — | `helm-wide-brim` | — | `weapon-coin-purse` | — | 1.00 × 1.00 | skin TAN, hair DARK BROWN, eyes GREEN | P0 | also the Chandler |
+| `baker` | The Baker (sheet) | `face-f06` | `armor-baker` | — | `helm-kerchief` | — | `weapon-peel` | `offhand-peel` | 0.98 × 1.10 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 | also the Innkeeper |
+| `smith` | The Smith (sheet) | `face-m09` | `armor-smith` | — | `hair-04` | `beard-07` | `weapon-hammer-tongs` | `offhand-hammer-tongs` | 1.00 × 1.10 | skin UMBER, hair BLACK, eyes BROWN | P0 |  |
+| `flower-seller` | The Flower Seller (sheet) | `face-f03` | `armor-villager-woman` | — | `helm-kerchief` | — | `weapon-flower-basket` | `offhand-flower-basket` | 0.98 × 0.92 | skin TAN, hair DARK BROWN, eyes GREEN | P0 |  |
+| `traveller` | A Traveller (sheet) | `face-m05` | `armor-road` | `cape-travelling` | `hair-02` | `beard-01` | `weapon-walking-stick` | — | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes GREY | P0 | also the Harbourmaster, a Regular |
+| `seamstress` | The Seamstress (sheet) | `face-f03` | `armor-villager-woman` | — | `hair-29` | `skin-01` | — | — | 0.98 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `courier` | A Courier (sheet) | `face-m02` | `armor-courier` | — | `helm-flat-cap` | `skin-01` | `weapon-letters` | — | 0.96 × 0.90 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 | also `COURIER` in Act 3 |
+| `pilgrim` | A Pilgrim (sheet) | `face-f06` | `armor-pilgrim` | — | `hair-26` | — | `weapon-pilgrim-staff` | — | 1.00 × 1.00 | skin BROWN, hair BLACK, eyes BROWN | P0 | also `PILGRIM` |
+| `weaver` | The Weaver (sheet) | `face-f06` | `armor-villager-woman` | — | `hair-38` | — | `weapon-spindle` | — | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 |  |
+| `farmhand` | A Farmhand (sheet) | `face-m03` | `armor-villager-man` | — | `helm-straw-hat` | — | `weapon-pitchfork` | — | 1.00 × 1.00 | skin FAIR, hair GOLD, eyes BLUE | P0 | also a Dock Hand, `FARMER` |
+| `old-man` | An Old Man (sheet) | `face-m10` | `armor-elder-coat` | — | `hair-11` | `beard-11` | `weapon-walking-stick` | — | 0.94 × 1.00 | skin FAIR, hair SILVER, eyes GREY | P0 |  |
+| `maid` | A Maid (sheet) | `face-f03` | `armor-maid` | — | `hair-29` | `skin-01` | `weapon-feather-duster` | — | 0.97 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `porter` | A Porter (sheet) | `face-m05` | `armor-porter` | — | `hair-03` | `beard-01` | — | `offhand-crate` | 1.00 × 1.08 | skin OLIVE, hair BLACK, eyes BROWN | P0 | also a Carrier, a Warehand |
+| `old-woman` | An Old Woman (sheet) | `face-f10` | `armor-elder-woman` | `cape-old-woman` | `hair-37` | — | `weapon-basket` | — | 0.90 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P0 | also a Drinker |
+| `child` | A Child (sheet) | `face-m01` | `armor-urchin` | — | `helm-flat-cap` | — | `weapon-toy-sword` | — | 0.62 × 0.66 | skin TAN, hair DARK BROWN, eyes BROWN | P0 |  |
+| `youth` | A Youth (sheet) | `face-m02` | `armor-villager-man` | — | `hair-03` | `skin-01` | — | — | 0.90 × 0.88 | skin FAIR, hair DARK BROWN, eyes GREEN | P0 |  |
+| `pool-questeria` | The city pool (sample) | `face-f06` | `armor-villager-woman` | — | `helm-kerchief` | — | `weapon-basket` | — | 1.00 × 1.00 | skin FAIR, hair DARK BROWN, eyes BROWN | P0 | the generator mixes the town faces and armors by seed |
+| `pool-court` | The court (sample: a courtier) | `face-m04` | `armor-noble` | — | `hair-21` | `ears-01` | — | — | 1.00 × 0.95 | skin PORCELAIN, hair COPPER, eyes GREEN | P0 | the courtiers and the scribe in the throne room |
+| `pool-court-lady` | The court (sample: a lady) | `face-f03` | `armor-noble-gown` | — | `hair-29` | `skin-01` | — | — | 0.98 × 0.92 | skin FAIR, hair COPPER, eyes BLUE | P0 |  |
+| `pool-saltwind` | The docks pool (sample) | `face-m09` | `armor-fisher` | — | `helm-knit-cap` | `beard-08` | — | — | 1.00 × 1.05 | skin OLIVE, hair BLACK, eyes BROWN | P0 | also `NET-MENDER`, `SAILOR` |
+| `pool-doomward` | The Doomward pool (sample) | `face-m05` | `armor-refugee-man` | `cape-blanket` | `hair-02` | `beard-01` | `weapon-walking-stick` | — | 1.00 × 0.95 | skin FAIR, hair DARK BROWN, eyes GREY | P0 |  |
+| `pool-morvaine` | The Morvaine pool (sample) | `face-f07` | `armor-morvaine-woman` | — | `hair-33` | — | `weapon-lantern` | — | 1.00 × 0.92 | skin PORCELAIN, hair BLACK, eyes BROWN | P2 |  |
+| `pool-abbey` | The abbey pool (sample) | `face-f06` | `armor-abbey-lay` | — | `helm-straw-hat` | — | `weapon-basket` | — | 0.72 × 0.80 | skin FAIR, hair DARK BROWN, eyes HAZEL | P2 |  |
+| `red-gull-thug` | Red Gull Thug | `face-m06` | `armor-red-gull` | — | — | `beard-01`, `skin-05` | `weapon-cudgel` | — | 1.08 × 1.15 | skin UMBER, hair COPPER, eyes BROWN | P0 | the same as `red-gull`, with its two other heads |
+| `bosun-grell` | Bosun Grell | `face-m06` | `armor-grell` | — | — | `beard-08`, `skin-02` | `weapon-cutlass` | — | 0.85 × 1.55 | skin TAN, hair COPPER, eyes BROWN | P0 | the same as `grell` |
+| `hollowed-footman` | Hollowed Footman | `face-hollowed` | `armor-hollowed-footman` | — | `helm-hollowed-kettle` | — | `weapon-hollowed-sword` | — | 0.97 × 1.00 | — | P0 | hunched (a clip) |
+| `hollowed-hexer` | Hollowed Hexer | `face-hollowed` | `armor-hollowed-hexer` | — | `helm-hollowed-hood` | — | `weapon-hexer-staff` | — | 1.01 × 0.90 | — | P0 |  |
+| `hollowed-sapper` | Hollowed Sapper | `face-hollowed` | `armor-hollowed-sapper` | — | `helm-sapper-goggles` | — | `weapon-sapper-pick` | `offhand-sapper-pick` | 0.95 × 1.05 | — | P0 |  |
+| `sapper-chief` | Sapper Chief | `face-hollowed` | `armor-hollowed-chief` | — | `helm-sapper-faceplate` | — | `weapon-chief-pick-lantern` | `offhand-chief-pick-lantern` | 1.06 × 1.20 | — | P0 |  |
+| `vault-construct` | Vault Construct | `face-construct-vault` | `armor-construct-stone` | — | — | — | — | — | 1.20 × 1.35 | — | P0 |  |
+| `kael-duel` | Kael, duelling | `face-m04` | `armor-kael` | `cape-tail-ember` | `helm-kael-hood` | `horns-02` | `weapon-kael-rapier` | `offhand-kael-rapier` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P0 |  |
+| `hollowed-climber` | Hollowed Climber | `face-hollowed` | `armor-hollowed-climber` | — | — | — | `weapon-climber-hook` | — | 1.02 × 0.88 | — | P1 | crouched (a clip) |
+| `varkhul` | Varkhul, the Hollow Knight | `face-m10` | `armor-varkhul` | `cape-varkhul` | `helm-varkhul` | `beard-07` | `weapon-varkhul-greatsword` | — | 1.20 × 1.25 | skin STONE, hair SILVER, eyes AMBER | P1 | boss |
+| `varkhul.varkhul-unmasked` | Varkhul, unmasked | `face-m10` | `armor-varkhul-split` | `cape-varkhul` | `hair-47` | `beard-07` | — | — | 1.20 × 1.25 | skin STONE, hair SILVER, eyes AMBER | P1 | kneels (a clip) |
+| `maleficio-boss` | Maleficio, the Sovereign | `face-m10` | `armor-maleficio-ascendant` | — | `hair-10` | `beard-07` | `weapon-black-box` | — | 1.01 × 0.95 | skin FAIR, hair SILVER, eyes BROWN | P1 | floats (the game lifts it); swaps to the creature `hungering` |
+| `cube-cultist` | Cube Cultist | `face-m05` | `armor-cultist` | — | `hair-01` | `skin-06` | `weapon-cultist-dagger` | — | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes GREY | P1 |  |
+| `bandit` | Bandit | `face-m05` | `armor-bandit` | — | `helm-bandit-hood` | `beard-01` | `weapon-shortsword` | — | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P1 | a new id |
+| `thrall` | Thrall | `face-m05` | `armor-thrall` | — | `hair-01` | — | `weapon-spear-lantern` | `offhand-spear-lantern` | 1.00 × 1.00 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
+| `vesk` | Vesk | `face-m05` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-vesk-wolf` | — | `weapon-vesk-sword` | — | 1.08 × 1.15 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
+| `vreya` | Vreya | `face-f04` | `armor-thrall-knight-f` | `cape-thrall-knight` | `helm-vreya-crown` | — | `weapon-vreya-blade` | — | 1.06 × 1.00 | skin PORCELAIN, hair WHITE, eyes RED | P2 |  |
+| `mordain` | Mordain | `face-m05` | `armor-thrall-knight` | `cape-thrall-knight` | `helm-mordain-beak` | — | `weapon-mordain-glaive` | — | 1.08 × 0.90 | skin PORCELAIN, hair COPPER, eyes RED | P2 |  |
+| `gilded-knight` | Gilded Knight | `face-m05` | `armor-gilded-knight` | `cape-gilded` | `helm-gilded` | `beard-01` | `weapon-gilded-kit` | `offhand-gilded-kit` | 1.02 × 1.05 | skin FAIR, hair DARK BROWN, eyes GREY | P2 | the `order` pool |
+| `gilded-sergeant` | Gilded Sergeant | `face-m09` | `armor-gilded-knight` | `cape-gilded` | `hair-02` | `beard-08` | `weapon-mace-shield` | `offhand-mace-shield` | 1.00 × 1.12 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
+| `drowned` | Drowned | `face-drowned` | `armor-drowned` | — | — | — | — | — | 0.97 × 1.05 | — | P2 |  |
+| `blood-wight` | Blood-wight | `face-blood-wight` | `armor-blood-wight` | — | — | — | — | — | 1.10 × 0.85 | — | P2 |  |
+| `sun-scorched` | Sun-scorched | `face-sun-scorched` | `armor-sun-scorched` | — | — | — | — | — | 1.00 × 1.00 | — | P2 |  |
+| `thornling` | Thornling | `face-thornling` | `armor-thornling` | — | — | — | — | — | 0.68 × 0.70 | — | P2 |  |
+| `priest-construct` | Priest-construct | `face-construct-priest` | `armor-construct-priest` | — | — | — | — | — | 1.20 × 1.30 | — | P2 |  |
+| `severin-boss` | Severin, unbound | `face-m08` | `armor-severin` | `cape-severin-wings` | `helm-crown-thorns` | — | — | — | 1.10 × 0.90 | skin PORCELAIN, hair SILVER, eyes RED | P2 | floats; claws and blood magic are effects |
+| `smuggler` | Smuggler | `face-f03` | `armor-smuggler` | — | `helm-bandana` | `skin-01` | `weapon-cutlass` | — | 1.00 × 1.00 | skin FAIR, hair COPPER, eyes BLUE | P2 | a new id |
+| `protectorate-watchman` | Protectorate watchman | `face-m05` | `armor-protectorate` | `cape-watch` | `helm-watch` | `beard-01` | `weapon-protectorate-kit` | `offhand-protectorate-kit` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P2 | also `PROTECTORATE GUARD`; the `protectorate` pool |
+| `protectorate-warden` | Protectorate warden | `face-m09` | `armor-protectorate-warden` | — | `helm-warden` | `beard-07` | `weapon-warden-kit` | `offhand-warden-kit` | 1.08 × 1.18 | skin UMBER, hair BLACK, eyes BROWN | P2 |  |
+| `crown-hollowed` | Crown-raised Hollowed | `face-crown-hollowed` | `armor-crown-hollowed` | — | `helm-hollowed-kettle` | — | `weapon-spear` | — | 1.00 × 1.00 | — | P2 |  |
+| `crown-construct` | Crown-construct | `face-construct-crown` | `armor-construct-crown` | — | — | — | — | — | 1.25 × 1.20 | — | P2 |  |
+| `kael-shadow` | Kael, the Protectorate Shadow | `face-m04` | `armor-kael-shadow` | `cape-tail-ember` | `hair-03` | `horns-02` | `weapon-kael-knives` | `offhand-kael-knives` | 1.00 × 0.95 | skin TAN, hair BLACK, eyes AMBER | P2 | boss |
+| `sb-sovereign` | {sb}, the Sovereign Protector | `face-f04` | `armor-sovereign` | — | `helm-crown-dusk-dawn` | — | `weapon-longsword` | — | 1.02 × 1.00 | skin PEACH, hair BLACK, eyes BROWN | P2 | the final boss; the player's own face and look; floats in phase 2 |
+| `unmade` | The Unmade (ancient) | `face-unmade` | `armor-unmade-bronze` | — | `helm-bronze-crest` | — | `weapon-unmade-spear-shield` | `offhand-unmade-spear-shield` | 1.00 × 1.00 | — | P2 |  |
+| `unmade.b` | The Unmade (a knight) | `face-unmade` | `armor-old-pattern` | — | `helm-nasal` | — | `weapon-longsword` | — | 1.00 × 1.00 | — | P2 | the game greys it |
+| `unmade.c` | The Unmade (a pikeman) | `face-unmade` | `armor-pikeman` | — | `helm-morion` | — | `weapon-pike` | — | 1.00 × 1.00 | — | P2 |  |
+| `unmade.d` | The Unmade (a watchman) | `face-unmade` | `armor-watch` | `cape-watch` | `helm-watch` | — | `weapon-cudgel` | — | 1.00 × 1.00 | — | P2 | the game greys it |
+| `ashfall-raider` | Ashfall raider | `face-m09` | `armor-ashfall-raider` | `cape-ash` | `hair-02` | `beard-08` | `weapon-raider-kit` | `offhand-raider-kit` | 1.00 × 1.00 | skin OLIVE, hair BLACK, eyes BROWN | P2 |  |
 
 ### 7.1 Gear
 
@@ -4272,24 +4432,24 @@ What each item in `Items/ItemCatalog.cs` puts on whoever's wearing it, on each b
 
 ### 7.2 The party's own gear
 
-A companion's starting kit is drawn as their own pieces, not the shop's: Sera's shortbow is her longbow, and Brannock's longsword and shield are the one piece. These rows win over §7.1 while that character wears that item in that slot, on their own recipe; `—` draws nothing there, because another piece already holds it. Everyone starts in a travelling cloak (the class kits' basics, `Rules/ClassCatalog.cs`); the Soul-Bound's, Sera's and Kael's draws as their own cape or tail, so it's their recipe's piece that shows (added 2026-11-09, when the first cape test showed the plain cloak hiding the Soul-Bound's). Anything else they put on draws as §7.1 says.
+A companion's starting kit is drawn as their own pieces, not the shop's: Sera's shortbow is her longbow, and Brannock's longsword and shield are independent near- and far-hand parts. These rows win over §7.1 while that character wears that item in that slot, on their own recipe; `—` draws nothing there. A cosmetic second tool or arrow can use the recipe’s Offhand while its original main-hand part is equipped and the equipment off-hand slot is empty. Everyone starts in a travelling cloak (the class kits' basics, `Rules/ClassCatalog.cs`); the Soul-Bound's, Sera's and Kael's draws as their own cape or tail, so it's their recipe's piece that shows (added 2026-11-09, when the first cape test showed the plain cloak hiding the Soul-Bound's). Anything else they put on draws as §7.1 says.
 
 | Who | Slot | Item | Part |
 | --- | --- | --- | --- |
 | `soulbound` | main hand | `shortsword` | `weapon-sb-blades` |
-| `soulbound` | off hand | `dagger` | — |
+| `soulbound` | off hand | `dagger` | `offhand-sb-blades` |
 | `soulbound` | body | `leather-armour` | `armor-sb-traveller` |
 | `soulbound` | cloak | `travelling-cloak` | `cape-sb` |
 | `sera` | main hand | `shortbow` | `weapon-sera-longbow` |
 | `sera` | body | `leather-armour` | `armor-sera` |
 | `sera` | cloak | `travelling-cloak` | `cape-sera` |
 | `kael` | main hand | `dagger` | `weapon-kael-knives` |
-| `kael` | off hand | `dagger` | — |
+| `kael` | off hand | `dagger` | `offhand-kael-knives` |
 | `kael` | body | `leather-armour` | `armor-kael` |
 | `kael` | cloak | `travelling-cloak` | `cape-tail-ember` |
 | `mira` | body | `scale-mail` | `armor-mira` |
 | `brannock` | main hand | `longsword` | `weapon-brannock` |
-| `brannock` | off hand | `wooden-shield` | — |
+| `brannock` | off hand | `wooden-shield` | `offhand-brannock` |
 | `brannock` | body | `chain-mail` | `armor-brannock` |
 
 ---
@@ -4787,7 +4947,7 @@ Every part and creature in this file, in order. The characters are in §7.
 | `weapon-sera-longbow` | Sera's longbow | weapon | §6.3 | P0 |
 | `weapon-kael-knives` | Kael's twin knives | weapon | §6.3 | P0 |
 | `weapon-kael-rapier` | Kael's rapier and parrying dagger | weapon | §6.3 | P0 |
-| `weapon-brannock` | Brannock's sword and shield | weapon | §6.3 | P0 |
+| `weapon-brannock` | Brannock's sword | weapon | §6.3 | P0 |
 | `weapon-cutlass` | Cutlass | weapon | §6.3 | P0 |
 | `weapon-gaff` | A fisherman's gaff | weapon | §6.3 | P0 |
 | `weapon-cudgel` | Cudgel | weapon | §6.3 | P0 |
@@ -4859,9 +5019,9 @@ Every part and creature in this file, in order. The characters are in §7.
 | `weapon-spindle` | A drop spindle | weapon | §6.3 | P0 |
 | `weapon-coin-purse` | A purse of coins | weapon | §6.3 | P0 |
 | `weapon-feather-duster` | A feather duster | weapon | §6.3 | P0 |
-| `weapon-brannock-1` | Brannock's shield, one name | weapon | §6.3 | P1 |
-| `weapon-brannock-41` | Brannock's shield, forty-one names | weapon | §6.3 | P1 |
-| `weapon-brannock-42` | Brannock's shield, forty-two names | weapon | §6.3 | P2 |
+| `offhand-brannock-1` | Brannock's shield, one name | weapon | §6.3 | P1 |
+| `offhand-brannock-41` | Brannock's shield, forty-one names | weapon | §6.3 | P1 |
+| `offhand-brannock-42` | Brannock's shield, forty-two names | weapon | §6.3 | P2 |
 | `sea-wraith` | Sea-wraith | creature | §8 | P0 |
 | `gloomfang` | Gloomfang Wolf | creature | §8 | P0 |
 | `gloomfang.b` | Gloomfang Wolf, second coat | creature | §8 | P0 |
@@ -4884,3 +5044,72 @@ Every part and creature in this file, in order. The characters are in §7.
 | `leviathan-shadow` | The leviathan's shadow | creature | §8 | P2 |
 
 Counts: base 2, face 114, armor 134, cape 27, helm 42, weapon 100, creature 20; 156 recipes. By priority: P0 248, P1 75, P2 116.
+
+### Repair prompts, 20 November 2026
+
+ChatGPT image generation repaired the male sources hair-20 (rounded afro), hair-39
+(high bun) and hair-42 (warrior’s topknot). Prompt: change only the plain mid-brown
+hair, retain its identity, thin even dark-brown outlines and two or three crisp
+cel-shaded tones; complete the clipped top and leave at least 24 px of solid black
+margin above it. Preserve the exact 1024 × 1536 canvas, head outline, blank face,
+ears, body, pose, proportions and position. No text, scenery, watermark or borrowed
+intellectual property. The female counterparts were checked separately.
+
+Weapon sheet 20 repair prompt: preserve the 1536 × 1024 sheet, sword, mace and round
+shield; redraw only the sun shield in column two inside x416–735 and y160–858,
+centred at x576, retaining its gold rim, rivets, sun motif and cel shading. Keep
+32 px clear margins to both column edges, grey template marks and black background.
+No hands, bodies, labels or second item in a column.
+
+`layer: {"cape": "before-head"}` brings a cloak across the chest while keeping the
+face above it. Armour of Shadows uses this field. The soft telegraph rim has a
+one-pixel fringe; hit flashes retain 35% of the original colours for two frames.
+
+Weapon sheet 28 repair prompt: repaint the same flat cap, cloth-lined basket, flower basket and pink rose, one item per column on the exact 1536 × 1024 template. Retain heights and identities, narrow each to leave at least 32 px of clear black on each side, restore every clipped flower, leaf and wicker edge, preserve grey dividers and grip ticks at row 640, thin dark-brown outlines, crisp cel shading and upper-left lighting. No hands, labels, shadows or borrowed art.
+
+
+The mask repair for weapon sheets 13, 16 and 32 uses true transparent RGBA from
+ChatGPT image generation. Prompt: extract the same four original items, retaining
+their exact column placements and sizes, intricate cel-shaded designs, thin dark
+outlines and dark interior material. Remove the background, dividers, ticks and
+labels. Keep the Hexer’s entire dark shaft to its lower tip; remove the opaque disc
+round its crystals. Preserve the pale sunsteel blade and remove its opaque white
+aura. Preserve the sketchbook, charcoal, lantern and smoker; remove every dark
+halo, including the lantern ring’s interior. Only close, smoothly translucent
+crystal light or smoke may remain. Exact 1536 × 1024, complete items, clear margins,
+no hands, figures, shadows or new items. Supplied alpha is retained by the cutter.
+
+
+The same transparent-mask repair was applied to sheets 06, 15, 17, 19, 21, 23,
+24, 31 and 33 after a green-background review found damaged dark wraps and glow
+cards. Prompt: retain the same original items, column order, cel shading, dark
+material and ornament; remove background, template marks and every opaque halo;
+real openings transparent, light only a faint partial-alpha edge. Complete every
+tip and fit each item inside its own 384 px column with 16 px clear margin. Keep
+empty cells empty, no hands, figures, labels or new items. Sheet 15’s crate gets a
+complete closed hanging-rope loop within its column. Sheet 24’s entire round silver
+shield is restored and fitted in column two, leaving columns three and four empty.
+
+The `kind` metadata carried by a split far-hand item tells the composer whether
+it is a shield. Brannock’s shield therefore draws over his far fist even though
+its id does not contain the word shield. A hold scales down only if its painted
+silhouette would otherwise leave the base canvas; its grip remains fixed.
+
+The final mask-edge pass also extracted sheets 01, 03, 04 and 12 to transparent RGBA, preserving complete solid dark material while removing the dagger, mace and steam backgrounds. The ember dagger retains its orange incandescent blade edge, orange rune and crystals. The cooking pot has a complete closed carrying loop instead of a torn-ended strap. Other original items, columns and designs are preserved, with no hands, bodies, labels or scenery.
+
+The travelling cloak was painted from its existing card: edit only what hangs behind base-male, adding a heavy dark-green wool cloak to the calf, hood down, iron clasp, frayed hem; preserve the exact blank mannequin, pose, size and position on black, thin dark-brown outlines, crisp cel shading, upper-left light and clear margins. It supplies real cloth for the forward cloak layer.
+
+The travelling-cloak completion prompt removes the entire mannequin from that design and paints continuous dark-green wool wherever the body hid it, retaining the exact outer silhouette, size, neck/clasp around x520 y350, shoulders at y300–430 and calf hem at y1250 on a 1024 × 1536 transparent RGBA canvas. Only the small neck opening may remain transparent; no body-shaped gaps, skin, limbs, underwear, background, shadow or glow. Preserve the iron clasp, hood down, frayed hem, thin dark-brown outlines, crisp cel shading and upper-left light. The complete standalone alpha is used directly by both import and strip preview.
+Final enclosed-background repair (20 November 2026), `weapons-26.png`: keep exactly the original
+four items, their canvas, positions, scale, silhouettes and designs. Extract the wooden netting
+needle with dark tarred twine, loaf, rag doll and tankard to transparent RGBA. Remove white
+background inside the needle's twine coils and eye and the tankard's handle, retaining all dark
+material, outlines and highlights. Remove grey registration ticks and gridlines. No hands,
+figures, labels, shadows or glow. Thin dark-brown outlines, crisp cel shading, upper-left light.
+Final boot repairs (20 November 2026), `armor-elder-woman/foot_near.png` and
+`armor-villager-woman/foot_far.png`: keep the exact 1024×1536 canvas and each existing
+boot's absolute position, scale, orientation, colour, outlines and shading. Remove the
+stray coat-hem ribbon extending from the ankle, and isolated fragments. Reconstruct only
+the small missing ankle opening as a short natural cuff. Retain toe, heel, sole, laces and
+worn seams. Everything outside the single boot is transparent; do not add a leg, body,
+hand or other boot, recenter, enlarge or crop. Original Legend Quest cel shading and light.

@@ -101,6 +101,25 @@ public sealed class RibbonBatch : IDisposable
         }
     }
 
+    /// <summary>An ellipse with a one-pixel soft fringe on both sides of its rim.</summary>
+    public void SoftRing(Vector2 centre, Vector2 radii, Color colour, float hole = 0.93f, int segments = 128)
+    {
+        Vector2 fringe = new(1.25f, 1.25f);
+        for (int i = 0; i < segments; i++)
+        {
+            float a = MathHelper.TwoPi * i / segments, b = MathHelper.TwoPi * (i + 1) / segments;
+            var d0 = new Vector2(MathF.Cos(a), MathF.Sin(a));
+            var d1 = new Vector2(MathF.Cos(b), MathF.Sin(b));
+            Vector2 inner = radii * hole, softInner = Vector2.Max(Vector2.Zero, inner - fringe);
+            Quad(centre + d0 * softInner, centre + d0 * inner, centre + d1 * inner, centre + d1 * softInner,
+                Color.Transparent, colour, colour, Color.Transparent);
+            Quad(centre + d0 * inner, centre + d0 * radii, centre + d1 * radii, centre + d1 * inner,
+                colour, colour, colour, colour);
+            Quad(centre + d0 * radii, centre + d0 * (radii + fringe), centre + d1 * (radii + fringe), centre + d1 * radii,
+                colour, Color.Transparent, Color.Transparent, colour);
+        }
+    }
+
     /// <summary>Draws everything gathered since Begin, additively or as Begin said.</summary>
     public void End()
     {

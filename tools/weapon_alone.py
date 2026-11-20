@@ -28,7 +28,7 @@ weapon is painted smaller than life to fit its column), its grip on the hand's s
 the hand's own piece: tools/source/characters/weapons/<id>.png, the base with the item in its
 fist, which tools/import_parts.py takes as it does any item painted on the base. An id starting
 "offhand-" goes in the far hand, and so does a column given as <id>/far; the same id in two columns
-is two things held at once, one a hand (a spear and a shield), drawn into the one picture.
+is two independent items: the near picture stays a weapon and the far picture gets its own offhand id.
 A shield is the one thing drawn over its hand, not under it (2026-11-19): it's painted face on, so
 the fist that holds it is behind it. `restand` makes the held pictures again from weapons-alone
 when how something's held changes.
@@ -117,7 +117,7 @@ def kind_of(item):
 def spec(text):
     """A column's item as it's given on the command line, id[/hand[/kind]]: (id, hand, kind). The
     hand is near unless it says far (or the id starts "offhand-"); the kind is the id's own unless
-    it's named. An id in two columns is two things held at once, one a hand (a spear and a shield)."""
+    it's named. An id in two columns is two independent items, one per hand."""
     parts = text.split("/")
     item = parts[0]
     side = parts[1] if len(parts) > 1 and parts[1] else ("far" if item.startswith("offhand-") else "near")
@@ -160,22 +160,70 @@ def socket(base, side):
     return wrist + 0.55 * (tip - wrist)
 
 
+def key_item(rgb):
+    """Remove only border-connected neutral cards, then key their soft edges.
+
+    Dark outlines inside the object stay painted. Isolated sheet labels and ticks
+    are discarded by size and distance from the item's principal component.
+    """
+    rgb = rgb.astype(np.float64)
+    neutral = rgb.max(2) - rgb.min(2) < 12
+    border_rgb = np.concatenate([rgb[0], rgb[-1], rgb[:, 0], rgb[:, -1]])
+    dark_floor = 42 if np.median(border_rgb.max(1)) > 12 else 12
+    candidate = neutral & ((rgb.max(2) <= dark_floor) | (rgb.min(2) > 230))
+    seed = np.zeros(candidate.shape, bool)
+    seed[0] = candidate[0]
+    seed[-1] = candidate[-1]
+    seed[:, 0] = candidate[:, 0]
+    seed[:, -1] = candidate[:, -1]
+    background = ndi.binary_propagation(seed, mask=candidate)
+    clean = rgb.copy()
+    clean[background] = 0
+    colour, alpha = D.key(clean.astype(np.uint8))
+    labels, n = ndi.label(alpha > .5)
+    if not n:
+        raise ValueError("weapon_alone: no item remains after keying")
+    sizes = np.bincount(labels.ravel())
+    sizes[0] = 0
+    main = int(np.argmax(sizes))
+    distance = ndi.distance_transform_edt(labels != main)
+    keep = [main] + [i for i in range(1, n + 1) if i != main and sizes[i] >= max(12, sizes[main] * .005)
+                     and distance[labels == i].min() < 32]
+    alpha *= ndi.binary_dilation(np.isin(labels, keep), iterations=2)
+    border = np.r_[alpha[0], alpha[-1], alpha[:, 0], alpha[:, -1]]
+    if (border > .5).mean() > .10:
+        raise ValueError("weapon_alone: opaque column border; repaint with clear margins")
+    return colour, alpha
+
+
 def items(painted):
     """The painted sheet's columns: [(colour 0-255, alpha 0-1, where it's solid)], None for an empty one."""
     w, h = SHEET
-    got = ic.read_png(painted)[0][:, :, :3]
+    rgba, _ = ic.read_png(painted)
+    own_alpha = rgba[:, :, 3].astype(np.float64) / 255.0
+    transparent = (own_alpha < .01).mean() > .1
+    got = rgba[:, :, :3]
     if got.shape[:2] != (h, w):
         pm = np.concatenate([got / 255.0, np.ones(got.shape[:2] + (1,))], axis=2)
         got = np.rint(np.clip(ic.resample(pm, (0, 0, got.shape[1], got.shape[0]), (w, h))[:, :, :3], 0, 1) * 255).astype(np.uint8)
+        if transparent:
+            from PIL import Image
+            own_alpha = np.array(Image.fromarray(own_alpha.astype(np.float32)).resize((w, h), Image.Resampling.BILINEAR))
     # The template's grey, where it's still grey, is nothing.
     rgb = got.astype(np.int64)
     greyish = (np.abs(rgb[:, :, 0] - rgb[:, :, 1]) < 18) & (np.abs(rgb[:, :, 1] - rgb[:, :, 2]) < 18) & (rgb.max(axis=2) < 170)
     got = got.copy()
     got[ndi.binary_dilation(lines(), iterations=3) & greyish] = 0
-    colour, alpha = D.key(got)
     out = []
     for k in range(COLS):
-        c, a = colour[:, k * CELL:(k + 1) * CELL], alpha[:, k * CELL:(k + 1) * CELL].copy()
+        cell = got[:, k * CELL:(k + 1) * CELL]
+        if (cell.max(2) > 50).sum() < SPECK:
+            out.append(None)
+            continue
+        if transparent:
+            c, a = cell.astype(np.float64), own_alpha[:, k * CELL:(k + 1) * CELL].copy()
+        else:
+            c, a = key_item(cell)
         labels, n = ndi.label(a > 0.5)
         sizes = np.bincount(labels.ravel(), minlength=n + 1)
         keep = np.isin(labels, [i for i in range(1, n + 1) if sizes[i] >= SPECK])
@@ -230,6 +278,19 @@ def held(base, colour, alpha, grip, side, kind):
     t = np.radians(angle)
     c, s = np.cos(t) * size, np.sin(t) * size
     at = socket(base, side)
+    # Scale down only when the held silhouette would leave the source canvas.
+    # The grip remains fixed; no blade tip or staff end is discarded by the warp.
+    ys, xs = np.nonzero(alpha > .01)
+    if len(xs):
+        offsets = np.array([[c, -s], [s, c]]) @ (np.array([xs, ys]) - np.asarray(grip)[:, None])
+        fit = 1.0
+        for axis, limit in enumerate(D.CANVAS):
+            low, high = offsets[axis].min(), offsets[axis].max()
+            if low < 0:
+                fit = min(fit, (at[axis] - 16) / -low)
+            if high > 0:
+                fit = min(fit, (limit - 16 - at[axis]) / high)
+        c, s = c * fit, s * fit
     m = np.array([[c, -s, 0.0], [s, c, 0.0]])
     m[:, 2] = at - m[:, :2] @ np.array(grip)
     w, h = D.CANVAS
@@ -258,7 +319,10 @@ def stood(base, bodies, parts, over=()):
 def shields(item):
     """The hands whose part of an item is a shield, from the notes its cut left: they go over the fist."""
     out = set()
-    for name in (item, item + ".far"):
+    names = [item, item + ".far"]
+    if item.startswith("offhand-"):
+        names.append("weapon-" + item[len("offhand-"):] + ".far")
+    for name in names:
         path = os.path.join(CHARS, "weapons-alone", name + ".json")
         if os.path.exists(path):
             note = json.load(open(path, encoding="utf-8"))
@@ -278,7 +342,9 @@ def restand(base, ids):
             sys.exit("weapon_alone: tools/source/characters/weapons-alone has no %s" % item)
         figure = stood(base, bodies, parts, shields(item))
         rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)
-        ic.write_png(os.path.join(CHARS, "weapons", item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
+        folder = HELD
+        os.makedirs(folder, exist_ok=True)
+        ic.write_png(os.path.join(folder, item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
         print("  %-28s stood again%s" % (item, ", its shield over the fist" if shields(item) else ""))
 
 
@@ -308,12 +374,15 @@ def cut(painted, base, specs):
         if sheet:
             note["sheet"] = sheet
         json.dump(note, open(os.path.join(alone_dir, name + ".json"), "w", encoding="utf-8"), indent=1)
-        whole.setdefault(item, {})[side] = held(base, colour, alpha, grip, side, kind)
+        target = offhand_id(item) if side == "far" and item.startswith("weapon-") else item
+        whole.setdefault(target, {})[side] = held(base, colour, alpha, grip, side, kind)
         print("  %-28s a %s, in the %s hand; its grip at %.0f, %.0f" % (item, kind, side, grip[0], grip[1]))
     for item, parts in whole.items():
         figure = stood(base, bodies, parts, shields(item))
         rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)
-        ic.write_png(os.path.join(held_dir, item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
+        folder = held_dir
+        os.makedirs(folder, exist_ok=True)
+        ic.write_png(os.path.join(folder, item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
     write_assets()
 
 
@@ -409,19 +478,36 @@ def write_assets():
         on = "tools/source/characters/%s.png" % base if base and os.path.exists(os.path.join(CHARS, base + ".png")) else "its base"
         lines += ["%s - %s in the fist of %s, drawn under the hand's own piece: cut by tools/weapon_alone.py from %s; the item "
                   "%s; the base %s" % (rel(held_png), item, on, " and ".join(cut_from), credit([item], made), CREDIT), ""]
+    for png in sorted(glob.glob(os.path.join(HELD, "offhand-*.png"))):
+        item = os.path.basename(png)[:-4]
+        source = "weapon-" + item.removeprefix("offhand-")
+        if os.path.exists(os.path.join(ALONE, source + ".far.png")):
+            lines += ["%s - the separate far-hand item from %s.far.png, placed by tools/weapon_alone.py; %s; released for Legend Quest by its owner"
+                      % (rel(png), rel(os.path.join(ALONE, source)), credit([source], made)), ""]
     lines.append(A_END)
     ic.rewrite(ic.ASSETS, A_BEGIN, A_END, lines, A_ANCHOR)
+
+
+def offhand_id(item):
+    """The independent far-hand part made from a weapon's second column."""
+    return "offhand-" + item.removeprefix("weapon-")
 
 
 def alone(base, item):
     """An item's parts as they were cut, each in its fist: {hand: premultiplied}."""
     parts = {}
-    for name in (item, item + ".far"):
+    names = [item, item + ".far"]
+    if item.startswith("offhand-") and not any(os.path.exists(os.path.join(ALONE, name + ".png")) for name in names):
+        names = ["weapon-" + item[len("offhand-"):] + ".far"]
+    for name in names:
         path = os.path.join(CHARS, "weapons-alone", name + ".png")
         if os.path.exists(path):
             rgba = ic.read_png(path)[0].astype(np.float64)
             note = json.load(open(path[:-4] + ".json", encoding="utf-8"))
-            parts[note["hand"]] = held(base, rgba[:, :, :3], rgba[:, :, 3] / 255.0, note["grip"], note["hand"], note["kind"])
+            if item.startswith("weapon-") and note["hand"] == "far" and os.path.exists(os.path.join(ALONE, item + ".png")):
+                continue
+            side = "near" if item.startswith("weapon-") else note["hand"]
+            parts[side] = held(base, rgba[:, :, :3], rgba[:, :, 3] / 255.0, note["grip"], side, note["kind"])
     return parts
 
 

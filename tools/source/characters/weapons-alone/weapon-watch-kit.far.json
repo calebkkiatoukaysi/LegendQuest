@@ -4,5 +4,8 @@
   511.0
  ],
  "kind": "shield",
- "hand": "far"
+ "hand": "far",
+ "base": "base-male",
+ "column": 3,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-09.png"
 }

@@ -1,5 +1,5 @@
 ; The painted doorway of each door in docks/pier: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/paint_room.py; a door that isn't
-; here has nothing painted for it, and the game uses its box.
-netty-cottage 365 452 72 148
-warehouse-west 980 424 100 176
+; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; painting, made over its guide, so each doorway is the door's box in the zone file.
+netty-cottage 341 400 120 200
+warehouse-west 970 400 120 200

@@ -1,11 +1,11 @@
 ; The painted doorway of each door in questeria/lantern-market: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/paint_room.py; a door that isn't
-; here has nothing painted for it, and the game uses its box.
-flagon 517 440 86 160
-rose-south 863 450 74 150
-bakery 2123 450 74 150
-forge 2408 444 104 156
-townhouse-market 2943 450 74 150
-cottage-garden 1824 452 72 148
-rose-garden 1202 448 76 152
-awning-east 2685 452 70 148
+; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; painting, made over its guide, so each doorway is the door's box in the zone file.
+flagon 500 400 120 200
+rose-south 840 400 120 200
+bakery 2100 400 120 200
+forge 2400 400 120 200
+townhouse-market 2920 400 120 200
+cottage-garden 1800 400 120 200
+rose-garden 1180 400 120 200
+awning-east 2660 400 120 200

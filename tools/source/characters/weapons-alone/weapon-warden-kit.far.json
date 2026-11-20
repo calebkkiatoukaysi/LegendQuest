@@ -1,8 +1,11 @@
 {
  "grip": [
   191.0,
-  516.0
+  517.0
  ],
  "kind": "shield",
- "hand": "far"
+ "hand": "far",
+ "base": "base-male",
+ "column": 2,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-23.png"
 }

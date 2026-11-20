@@ -132,6 +132,8 @@ public partial class LegendQuestGame
             WriteSamples();
             WriteShapes();
             Plan();
+            string only = Environment.GetEnvironmentVariable("LQ_MOVE_ONLY");
+            if (!string.IsNullOrEmpty(only)) _takes.RemoveAll(take => !take.Name.Contains(only, StringComparison.Ordinal));
         }
 
         public override void Unload()
@@ -409,6 +411,30 @@ public partial class LegendQuestGame
 
         private void SkillTakes()
         {
+            // Clear, game-scale silhouettes of the repaired moves, using the real runtime composer.
+            foreach (var move in new[]
+            {
+                (Clip: "skill-paladin-unbroken-oath", Who: "brannock", Weapon: (string)null, Kind: "one-hand"),
+                (Clip: "skill-fighter-riposte", Who: "brannock", Weapon: (string)null, Kind: "one-hand"),
+                (Clip: "foe-hollowed-hexer-hex", Who: "hollowed-hexer", Weapon: "quarterstaff", Kind: "polearm"),
+                (Clip: "foe-kael-duel-smoke-bomb", Who: "kael", Weapon: (string)null, Kind: "one-hand"),
+            })
+            {
+                Take repaired = NewTake("repaired-" + move.Clip, 1.8f);
+                repaired.Setup = () =>
+                {
+                    WalkerSprite by = move.Who.StartsWith("hollowed-", StringComparison.Ordinal)
+                        ? Foe(move.Who, move.Kind) : Member(move.Who, move.Weapon, move.Kind);
+                    WalkerSprite on = Foe("hollowed-footman", "one-hand");
+                    Face(by, on, Ranged);
+                    Wire(by);
+                    Wire(on);
+                    if (ClipLibrary.Get(move.Clip) is null) throw new InvalidOperationException("Missing proof clip: " + move.Clip);
+                    repaired.At.Clear();
+                    repaired.On(0.1f, () => by.PlayMove(move.Clip));
+                };
+            }
+
             // A heavy melee skill: a big blow with a shake and the kick.
             Take cleave = NewTake("skill-fighter-cleave", 2f);
             cleave.Setup = () =>

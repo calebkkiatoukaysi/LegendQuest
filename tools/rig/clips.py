@@ -240,7 +240,7 @@ def gathered(pose):
 
 def clip(name, length, keys, loop=False, events=(), swaps=(), layer=None, ease="smooth", partner=None,
          fx=(), face=None, expr=None, notes=None, front=None, speed=None, drag=True, blend=None, trail=None,
-         lead=None, tracks=None, plant_fps=None, spring=False):
+         lead=None, tracks=None, plant_fps=None, spring=False, behind=None):
     """Adds a clip from (time, pose) keys, or (time, pose, ease) ones, the ease governing every
     channel from that key to the next (contract §2.2; none is the clip's `ease`). `drag` False keeps
     its forearms, hands and head as keyed. `lead` ({bone: seconds}) keys a bone's channels that much
@@ -303,6 +303,8 @@ def clip(name, length, keys, loop=False, events=(), swaps=(), layer=None, ease="
         c["notes"] = notes
     if front:
         c["front"] = list(front)
+    if behind:
+        c["behind"] = [[a, b, list(bones)] for a, b, bones in behind]
     if name in CLIPS:
         raise ValueError("two clips called " + name)
     CLIPS[name] = c
@@ -1021,6 +1023,42 @@ def spring_skirt(c, hz=3.0, damping=0.45, gain=1.6, fps=60):
     return True
 
 
+def head_windows(c):
+    """Keep a raised near arm behind the face, including its hand and held item.
+
+    Measure both mannequins at 60 Hz and pad transitions by one frame. The
+    windows are a draw-order change; poses, events and lengths stay untouched.
+    """
+    import numpy as np
+    import skeleton as K
+    n = max(1, int(math.ceil(c["length"] * 60)))
+    active = []
+    for i in range(n + 1):
+        pose = sample(c, min(c["length"], i / 60))
+        raised = False
+        for base in K.JOINTS:
+            transforms = K.world(base, pose)
+            def point(bone, joint):
+                return transforms[bone] @ np.array([*K.JOINTS[base][joint], 1.0])
+            shoulder = point("arm_near_up", "shoulder_near")
+            elbow = point("arm_near_up", "elbow_near")
+            wrist = point("arm_near_low", "wrist_near")
+            raised |= min(elbow[1], wrist[1]) < shoulder[1] - 8
+        active.append(raised)
+    active = [any(active[max(0, i-1):i+2]) for i in range(n+1)]
+    windows, start = [], None
+    for i, on in enumerate(active + [False]):
+        if on and start is None:
+            start = i / 60
+        elif not on and start is not None:
+            end = min(c["length"], i / 60)
+            if end > start:
+                windows.append([round(start, 4), round(end, 4), ["arm_near_up", "arm_near_low", "hand_near"]])
+            start = None
+    if windows:
+        c["behind"] = windows
+
+
 def humanoid():
     CLIPS.clear()
     ALIASES.clear()
@@ -1045,6 +1083,8 @@ def humanoid():
             drag(name, c)
         if name in SPRING:
             spring_skirt(c)
+        if name.startswith(("auto-", "skill-", "foe-", "windup-", "strike-", "telegraph-")) or name in ("ready", "idle-combat"):
+            head_windows(c)
     for a, target in ALIASES.items():
         if a in CLIPS:
             raise ValueError("alias %s is also a clip" % a)

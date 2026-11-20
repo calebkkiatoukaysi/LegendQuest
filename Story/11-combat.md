@@ -352,6 +352,19 @@ Screen shake (full, reduced, off), hit flashes (on, off), damage numbers (on, of
 
 ## 8. How it looks and sounds
 
+Clips may declare `behind: [[start, end, [bone, ...]]]` in seconds. During each
+half-open window those bones and their attached items draw immediately before the head,
+in their original order; this takes priority over `front`. The near weapon also draws
+before the head at rest, so a tall staff cannot cover the face while its wrist is low.
+A forward cloak sweep uses `layer: {"cape": "before-head"}`; `clip_strip.py --cape <id>`
+honours the same field. These fields change draw order, keeping lengths and hit, release
+and recover event times intact.
+
+Hit flashes retain the painted colours at 65% white for two frames. Telegraph
+ellipses use 128 segments with soft fringes; the separate target ring uses a high-resolution
+soft ellipse with linear sampling, so a large boss does not enlarge the tiny HUD sprite.
+
+
 Each attack, skill, hit and death is staged so it reads, and the damage lands on the frame the blow lands:
 
 - **Timing.** Every move is a clip with an **impact** event (or a **release** for something thrown or shot). The engine schedules the damage at that event's time, so retiming a clip retimes the fight. A light swing is about 4 to 6 frames of anticipation, 2 frames of contact and 12 of recovery; a heavy skill 10 to 14, 3 and 18 to 22, with a held coil before the blow and an overshoot after it. Recovery can be cancelled by your next action once the impact has happened.

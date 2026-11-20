@@ -230,7 +230,7 @@ public static partial class PartCatalog
             {
                 (Color[] page, int stride) = pages[pageName];
                 Color[] mask = maskRect is null ? null : Cut(page, stride, maskRect);
-                return new PartImage(key, slot, entry.Base, rect[2], rect[3], Cut(page, stride, rect), mask, new Vector2(pivot[0], pivot[1]), ratio, tones, bone);
+                return new PartImage(key, slot, entry.Base, rect[2], rect[3], Cut(page, stride, rect), mask, new Vector2(pivot[0], pivot[1]), ratio, tones, bone, entry.Kind);
             }
             if (entry.Pieces is null)
             {
@@ -311,13 +311,17 @@ public static partial class PartCatalog
         if (member?.Look?.Portrait is not string face || Pick(member.Id, face) is not (string name, PartsFile.RecipeEntry recipe)) return null;
         string onBase = FaceBase(face);
         Outfit outfit = Outfit.Of(name, recipe, face);
+        string weapon = Wears(member, name, EquipmentSlot.MainHand, onBase, null);
+        // A bow's arrow or a kit's second tool is cosmetic when no off-hand item
+        // occupies that slot. It belongs only with its own original main-hand part.
+        string paired = weapon == recipe.Weapon ? recipe.Offhand : null;
         return outfit with
         {
             Armor = Wears(member, name, EquipmentSlot.Body, onBase, outfit.Armor),
             Cape = member.Look.HideCape ? null : Wears(member, name, EquipmentSlot.Cloak, onBase, outfit.Cape),
             Helm = HeadOf(member, name, recipe, face, onBase),
-            Weapon = Wears(member, name, EquipmentSlot.MainHand, onBase, null),
-            Offhand = Wears(member, name, EquipmentSlot.OffHand, onBase, null),
+            Weapon = weapon,
+            Offhand = Wears(member, name, EquipmentSlot.OffHand, onBase, paired),
             Tints = Tints.Of(member.Look).Over(outfit.Tints),
             Extras = Chosen(member.Look, outfit.Extras),
             Morph = new Morph(outfit.Morph.Height * member.Look.PaintedMorph.Height, outfit.Morph.Width * member.Look.PaintedMorph.Width),
@@ -726,7 +730,7 @@ public static partial class PartCatalog
                 if (extra is null || f.Parts.TryGetValue(extra, out PartsFile.PartEntry entry) && entry.Slot != Sockets.Name(PartSlot.Facial) && entry.Slot != Sockets.Name(PartSlot.Marks))
                     throw new InvalidOperationException($"{what} wears {extra ?? "nothing"} as an extra, but that isn't a facial part or a mark. Fix it in Story/13-art-prompts.md §7.");
             }
-            foreach ((string part, PartSlot slot) in new[] { (r.Face, PartSlot.Face), (r.Armor, PartSlot.Armor), (r.Cape, PartSlot.Cape), (r.Helm, PartSlot.Helm), (r.Weapon, PartSlot.Weapon) })
+            foreach ((string part, PartSlot slot) in new[] { (r.Face, PartSlot.Face), (r.Armor, PartSlot.Armor), (r.Cape, PartSlot.Cape), (r.Helm, PartSlot.Helm), (r.Weapon, PartSlot.Weapon), (r.Offhand, PartSlot.Offhand) })
             {
                 if (part is not null && f.Parts.TryGetValue(part, out PartsFile.PartEntry entry) && entry.Slot != Sockets.Name(slot))
                     throw new InvalidOperationException($"{what} wears {part} as its {Sockets.Name(slot)}, but that's a {entry.Slot}. Fix it in Story/13-art-prompts.md §7.");

@@ -1,8 +1,11 @@
 {
  "grip": [
-  199.5,
+  198.5,
   512.0
  ],
  "kind": "bigbow",
- "hand": "near"
+ "hand": "near",
+ "base": "base-male",
+ "column": 2,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-04.png"
 }

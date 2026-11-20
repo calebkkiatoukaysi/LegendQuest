@@ -26,8 +26,8 @@ public static class Feel
 
     /// <summary>How many frames the white flash holds for a blow and for a critical, and how many it takes to fade after.</summary>
     public const int FlashFrames = 2;
-    public const int CriticalFlashFrames = 4;
-    public const int FlashFadeFrames = 4;
+    public const int CriticalFlashFrames = 2;
+    public const int FlashFadeFrames = 0;
 
     /// <summary>How long a spell's element tint stays on the target, in frames, after its white flash.</summary>
     public const int ElementTintFrames = 6;

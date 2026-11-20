@@ -30,7 +30,7 @@ public sealed record Outfit(string Name, string Face, string Armor, string Cape,
     /// <param name="recipe">The recipe.</param>
     /// <param name="face">The face to put on it instead of its own, or null for its own.</param>
     public static Outfit Of(string name, PartsFile.RecipeEntry recipe, string face = null) =>
-        new(name, face ?? recipe.Face, recipe.Armor, recipe.Cape, recipe.Helm, recipe.Weapon, null, new Morph(recipe.Morph[0], recipe.Morph[1]), Tints.Named(recipe.Tints)) { Base = recipe.Base, Extras = recipe.Extras ?? System.Array.Empty<string>() };
+        new(name, face ?? recipe.Face, recipe.Armor, recipe.Cape, recipe.Helm, recipe.Weapon, recipe.Offhand, new Morph(recipe.Morph[0], recipe.Morph[1]), Tints.Named(recipe.Tints)) { Base = recipe.Base, Extras = recipe.Extras ?? System.Array.Empty<string>() };
 
     /// <summary>The base its recipe is on, made yet or not: till its face is painted, it's that base's bare mannequin.</summary>
     public string Base { get; init; }

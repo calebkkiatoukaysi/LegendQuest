@@ -1,8 +1,11 @@
 {
  "grip": [
-  201.5,
+  201.0,
   514.0
  ],
  "kind": "bow",
- "hand": "near"
+ "hand": "near",
+ "base": "base-male",
+ "column": 1,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-04.png"
 }

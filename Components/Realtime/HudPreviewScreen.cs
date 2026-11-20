@@ -210,7 +210,7 @@ public class HudPreviewScreen : GameScreen
 
         HudView view = View();
         Point? mouse = Mouse(view);
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
         _hud.DrawRing(spriteBatch, view, 0.9f);
         spriteBatch.End();
 

@@ -4,5 +4,8 @@
   665.0
  ],
  "kind": "held",
- "hand": "far"
+ "hand": "far",
+ "base": "base-female",
+ "column": 4,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-25.png"
 }

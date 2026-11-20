@@ -401,7 +401,7 @@ def check_gear_part(part, slot, base, edits, what):
         fail("%s draws %s, painted on %s, where it has to be on %s" % (what, part, base_of(part, edits), base))
 
 
-RECIPE_SLOTS = ("face", "armor", "cape", "helm", "weapon")
+RECIPE_SLOTS = ("face", "armor", "cape", "helm", "weapon", "offhand")
 
 
 def swatch_names():
@@ -644,7 +644,7 @@ def cut_pieces(base, colour, alpha, mask=None, prior=None):
             channels.append(np.clip(shrunk, 0.0, 1.0) * 255.0)
     out, own = K.pieces(base, np.concatenate(channels, axis=2), small[:, :, 3] / 255.0, scale=PART_SCALE, prior=prior, with_labels=True)
     layers = {}
-    for bone, (c, a) in out.items():
+    for bone, (c, a) in K.clean_pieces(out, base, PART_SCALE).items():
         box = bbox(a > 0)
         if box is None:
             continue
@@ -1251,6 +1251,9 @@ def pieced_armor(base, folder):
         close = np.clip(1.0 - (distance - SKIN_SAME) / SKIN_FADE, 0.0, 1.0)
         skins[bone] = skin_weight(colour) * close * (body_skin > 0.5) * (alpha > 0.99)
         pictures[bone] = (colour, alpha)
+    pictures = K.clean_pieces(pictures, base.name)
+    for bone in bones:
+        skins[bone] *= pictures[bone][1] > 0
     # The far arm and leg are painted in shadow, so for finding the materials each far piece is lit
     # as its near twin is (far_light, from the two as this outfit paints them): a sleeve in the
     # shadow is then the same material as the sleeve in the light, and dyes with it.
@@ -1350,7 +1353,7 @@ def cape_layer(base, rgb):
     return colour, alpha, np.stack([nothing, base_mask, trim_mask], axis=2), tones
 
 
-def hand_layer(base, rgb, shield=False):
+def hand_layer(base, rgb, shield=False, slot="weapon"):
     """A weapon's or an off-hand item's layer on its base: the changed pieces that reach a hand,
     without the base's own fingers where ChatGPT redrew them (skin painted where the base had skin),
     so a gloved hand never gets a bare fist drawn over it. A `shield` is over its fist
@@ -1359,7 +1362,7 @@ def hand_layer(base, rgb, shield=False):
     fingers = (skin_weight(rgb) > 0.5) & (base.skin > 0.5) & (not shield)
     colour, alpha, kept = changed_pieces(base, rgb, ~fingers)
     hands = np.zeros(alpha.shape, bool)
-    for socket in ("hand.near", "hand.far"):
+    for socket in (SLOT_SOCKET[slot],):
         x, y = base.sockets[socket]
         hands[max(0, int(y) - HAND_REACH):int(y) + HAND_REACH, max(0, int(x) - HAND_REACH):int(x) + HAND_REACH] = True
     labels, count = ic.components(kept)
@@ -1367,7 +1370,7 @@ def hand_layer(base, rgb, shield=False):
     kept &= np.isin(labels, reach[reach > 0])
     alpha = alpha * kept
     if not (alpha > 0.5).any():
-        fail("a weapon or off-hand item has nothing near either hand: did ChatGPT put it in the hand?")
+        fail("a held item has nothing near its own %s socket" % SLOT_SOCKET[slot])
     return colour, alpha, None, None
 
 
@@ -2018,10 +2021,46 @@ def build(check, vector=VECTOR):
             if base is None:
                 fail("tools/source/characters/%s/%s.png isn't a %s in Story/13-art-prompts.md §6, or what it edits isn't" % (FOLDERS[slot], pid, slot))
             source = load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png"))
-            colour, alpha, mask, tones = cape_layer(bases[base], source) if slot == "cape" else hand_layer(bases[base], source, "shield" in pid or "buckler" in pid)
+            if slot == "cape":
+                rgba, own_alpha = ic.read_png(os.path.join(SOURCE, FOLDERS[slot], pid + ".png"))
+                if own_alpha and (rgba[:, :, 3] == 0).any():
+                    # A complete standalone cloak can sweep in front of the body;
+                    # subtracting the mannequin would leave body-shaped holes.
+                    colour, alpha = rgba[:, :, :3].astype(np.float64), rgba[:, :, 3] / 255.0
+                    nothing = np.zeros(alpha.shape)
+                    (base_mask, trim_mask), tones = armor_dyes(colour, alpha, nothing)
+                    mask = np.stack([nothing, base_mask, trim_mask], axis=2)
+                else:
+                    colour, alpha, mask, tones = cape_layer(bases[base], source)
+            else:
+                import weapon_alone as W
+                parts = W.alone(base, pid)
+                side = "far" if slot == "offhand" else "near"
+                if side in parts:
+                    pm = parts[side]
+                    alpha = pm[:, :, 3]
+                    colour = pm[:, :, :3] / np.maximum(alpha[:, :, None], 1e-6) * 255.0
+                    mask, tones = None, None
+                else:
+                    colour, alpha, mask, tones = hand_layer(bases[base], source, "shield" in pid or "buckler" in pid, slot)
             colour, alpha = drawn(pid, colour, alpha)
             layers[pid] = (slot, base, shrink(colour, alpha, mask), {"tones": tones} if tones else {})
             report.append("  %-24s %s" % (pid, base))
+
+    # A second item is an independent far-hand layer, never part of the near weapon.
+    import weapon_alone as W
+    for path in sorted(glob.glob(os.path.join(W.ALONE, "*.far.json"))):
+        note = json.load(open(path, encoding="utf-8"))
+        weapon = os.path.basename(path)[:-9]
+        if weapon.startswith("offhand-") or weapon not in layers or not os.path.exists(os.path.join(W.ALONE, weapon + ".png")):
+            continue
+        pid = W.offhand_id(weapon)
+        base = note.get("base", layers[weapon][1])
+        pm = W.alone(base, pid)["far"]
+        alpha = pm[:, :, 3]
+        colour = pm[:, :, :3] / np.maximum(alpha[:, :, None], 1e-6) * 255.0
+        layers[pid] = ("offhand", base, shrink(colour, alpha), {"kind": note["kind"]})
+        report.append("  %-24s %s, split from %s" % (pid, base, weapon))
 
     # The atlases, a set of pages per slot; a part's mask goes beside it on its page.
     by_slot = {}

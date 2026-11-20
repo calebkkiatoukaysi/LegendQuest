@@ -55,6 +55,9 @@ public class HudKit
     /// <summary>The soft round glow, for things that shine.</summary>
     public Texture2D Glow { get; private set; }
 
+    /// <summary>The high-resolution target ellipse, drawn with linear sampling.</summary>
+    public Texture2D TargetRing { get; private set; }
+
     /// <summary>How long the HUD's been running, in seconds, for its pulses and flashes; and how long the last frame was.</summary>
     public float Clock { get; private set; }
     public float Delta { get; private set; }
@@ -75,6 +78,7 @@ public class HudKit
         Icons.LoadContent(content, device);
         Pixel = pixel;
         Glow = content.Load<Texture2D>("glow");
+        TargetRing = content.Load<Texture2D>("target-ring");
         Words = content.Load<SpriteFont>(WordsFont);
         Timer = content.Load<SpriteFont>(TimerFont);
         Small = content.Load<SpriteFont>(SmallFont);

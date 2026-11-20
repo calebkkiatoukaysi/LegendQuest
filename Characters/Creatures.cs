@@ -29,12 +29,12 @@ public static class Creatures
 
         // A Mirewood wolf with black smoke leaking from its eyes: long and low, side on.
         new("gloomfang", "Gloomfang Wolf",
-            Standing(48, 32, figure: new(34f, 26f), shadow: new(30f, 6f), footprint: new(18f, 5f))),
+            Standing(48, 56, figure: new(34f, 26f), shadow: new(30f, 6f), footprint: new(18f, 5f))),
 
         // The boss of the old quarry: a giant she-bear gone wrong, thorns through her fur and black
         // crystal growing out of her. She takes up most of her den.
         new("thornmother", "The Thornmother",
-            Standing(96, 80, figure: new(76f, 72f), shadow: new(70f, 12f), footprint: new(52f, 12f))),
+            Standing(96, 88, figure: new(76f, 72f), shadow: new(70f, 12f), footprint: new(52f, 12f))),
 
         // The Hollowed: Doomward's dead, ash-grey and empty-eyed, in a person's frame.
         new("hollowed-footman", "Hollowed Footman", WalkerShape.Person),

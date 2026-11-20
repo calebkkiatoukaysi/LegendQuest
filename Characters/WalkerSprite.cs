@@ -685,6 +685,7 @@ public class WalkerSprite
             else if (_whiteFade > 0f && _whiteClock < _whiteHold + _whiteFade) white = 1f - (_whiteClock - _whiteHold) / _whiteFade;
             float tint = _tintClock < _tintLength ? 0.7f * (1f - _tintClock / _tintLength) : 0f;
             if (white <= 0f && tint <= 0f) return Color.Transparent;
+            white *= 0.65f;
             Vector4 c = Vector4.One * white + _tintColour.ToVector4() * tint * (1f - white);
             return new Color(Vector4.Min(c, Vector4.One));
         }
@@ -814,13 +815,15 @@ public class WalkerSprite
         // Back to front, what the clip brings in front of the chest moved to just after the head.
         _order.Clear();
         IReadOnlyList<string> front = _player.Clip?.Front ?? Array.Empty<string>();
+        bool Behind(ImportedFigure.Piece p) => p.Key == RigComposer.Weapon || _player.Clip?.BehindHead(p.Bone, _player.Time) == true ||
+            (_player.Clip is Clip c && Contains(c.BeforeHead, p.Key));
         int afterHead = -1;
         // Running, the near foot is its side-on picture (the clip swaps it); else its own.
         bool sideFoot = _player.Clip?.PartOf("foot_near", _player.Time) == "side" && HasPiece(body, RigComposer.SideFoot);
         foreach (ImportedFigure.Piece piece in body.Rig)
         {
             if (piece.Key == (sideFoot ? "foot_near" : RigComposer.SideFoot)) continue;
-            if (front.Count > 0 && Contains(front, piece.Bone)) continue;
+            if (Behind(piece) || (front.Count > 0 && Contains(front, piece.Bone))) continue;
             _order.Add(piece);
             if (piece.Key == "head") afterHead = _order.Count;
         }
@@ -828,8 +831,12 @@ public class WalkerSprite
         {
             int at0 = afterHead < 0 ? _order.Count : afterHead;
             foreach (ImportedFigure.Piece piece in body.Rig)
-                if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && Contains(front, piece.Bone)) _order.Insert(at0++, piece);
+                if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && !Behind(piece) && Contains(front, piece.Bone)) _order.Insert(at0++, piece);
         }
+        int beforeHead = _order.FindIndex(p => p.Key == "head");
+        if (beforeHead < 0) beforeHead = _order.Count;
+        foreach (ImportedFigure.Piece piece in body.Rig)
+            if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && Behind(piece)) _order.Insert(beforeHead++, piece);
 
         SpriteEffects flip = left ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         for (int k = 0; k < _order.Count; k++)

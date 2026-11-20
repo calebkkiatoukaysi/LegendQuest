@@ -219,18 +219,18 @@ class Figure:
             return 255
         return SOLID_ALPHA if p in self.solid else self.opacity(p[1])
 
-    def render(self, outline):
+    def render(self, outline, top=0):
         """The finished frame: every part, an outline round the lot, then the glows over it."""
-        img = new_image(self.w, self.h)
+        img = new_image(self.w, self.h + top)
         for (x, y), rgb in self.colour.items():
-            if 0 <= x < self.w and 0 <= y < self.h:
-                img[y][x] = [rgb[0], rgb[1], rgb[2], self.alpha((x, y))]
+            if 0 <= x < self.w and 0 <= y + top < self.h + top:
+                img[y + top][x] = [rgb[0], rgb[1], rgb[2], self.alpha((x, y))]
         for (x, y) in list(self.colour):
             for n in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
-                if n not in self.colour and 0 <= n[0] < self.w and 0 <= n[1] < self.h:
-                    img[n[1]][n[0]] = [outline[0], outline[1], outline[2], self.alpha((x, y))]
+                if n not in self.colour and 0 <= n[0] < self.w and 0 <= n[1] + top < self.h + top:
+                    img[n[1] + top][n[0]] = [outline[0], outline[1], outline[2], self.alpha((x, y))]
         for (x, y), rgba in self.over:
-            put(img, x, y, rgba)
+            put(img, x, y + top, rgba)
         return img
 
 
@@ -266,14 +266,16 @@ def shifted(ramp, k):
 def sheet(name, w, h, draw, outline):
     """Draws a creature's whole sheet, frame by frame, and saves it as Creatures/<name>.png.
     `draw(figure, facing, column)` draws one frame; facing right is its facing left mirrored."""
-    img = new_image(w * COLUMNS, h * 4)
+    top = {"gloomfang": 24, "thornmother": 8}.get(name, 0)
+    frame_height = h + top
+    img = new_image(w * COLUMNS, frame_height * 4)
     for r in range(4):
         for c in range(COLUMNS):
             fig = Figure(w, h, flip=(r == RIGHT), seed=r * 31 + c * 7)
             draw(fig, LEFT if r == RIGHT else r, c)
-            frame = fig.render(outline)
-            for y in range(h):
-                img[r * h + y][c * w:(c + 1) * w] = frame[y]
+            frame = fig.render(outline, top)
+            for y in range(frame_height):
+                img[r * frame_height + y][c * w:(c + 1) * w] = frame[y]
     write_png(os.path.join(OUT, "Creatures", name + ".png"), img)
 
 

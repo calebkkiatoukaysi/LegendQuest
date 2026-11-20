@@ -1,0 +1,467 @@
+{
+  "description": "Reviewed floor lines and usable-door centres for the original generated backgrounds. Door centres are measured on the supplied paintings; monotone resampling fits them to the unchanged zone layouts. Floors were proposed by the drop in horizontal colour variation and reviewed against the source contact sheets. Original files are preserved. Optional foregrounds and tile sources are not included in this import.",
+  "panels": {
+    "bakery/inside/bg-1": {
+      "floor_y": 736,
+      "rgba_sha256": "3a86993e987422df38480c11468ebc705bde3e154a9ae742d58bfafd593dd263",
+      "doors": {}
+    },
+    "barrow/steps/bg-1": {
+      "floor_y": 690,
+      "rgba_sha256": "f8a310bc087a1a28031a268b08d9de59895f21ac13007470564f8962092be27b",
+      "doors": {}
+    },
+    "barrow/hall/bg-1": {
+      "floor_y": 693,
+      "rgba_sha256": "2328c078e8855ccfc6e619cd94b933451f35ee142ca634122a7d9ac9b552f038",
+      "doors": {
+        "side": 350
+      }
+    },
+    "barrow/hall/bg-2": {
+      "floor_y": 694,
+      "rgba_sha256": "6ecfe077eaf1c34ff3040264bc710fa3448c05a8a421a4e9cdeff7b186ded104",
+      "doors": {
+        "tomb": 350
+      }
+    },
+    "barrow/hall/bg-3": {
+      "floor_y": 694,
+      "rgba_sha256": "e5ddbcd7e2a07ddc1f5e9f319adb78a5572baa0f36adf7a42e030c1739c274a2",
+      "doors": {
+        "tomb": 300
+      }
+    },
+    "barrow/side-room/bg-1": {
+      "floor_y": 725,
+      "rgba_sha256": "553435561b590b1f64100c9678bb485c5d96a72a921e840fbba41263ae4f1bfc",
+      "doors": {
+        "side-out": 270
+      }
+    },
+    "chapel/inside/bg-1": {
+      "floor_y": 702,
+      "rgba_sha256": "1a5a82eba04e74860a97214148c3c460f32e925e4e4cf3ae7541b427dba90d2b",
+      "doors": {}
+    },
+    "cottage-a/inside/bg-1": {
+      "floor_y": 699,
+      "rgba_sha256": "967b494646cedad540283ba6953962d8bb40ba611dea73d056ed8a40b4f728d7",
+      "doors": {}
+    },
+    "cottage-b/inside/bg-1": {
+      "floor_y": 694,
+      "rgba_sha256": "4f404176c2da1de3475bf17883624444870fc3b333a260018a628d7ace9ea8ee",
+      "doors": {}
+    },
+    "docks/pier/bg-1": {
+      "floor_y": 707,
+      "rgba_sha256": "f7b712a971d687ff5279115684a4f62045d607e829f54130cac5e8c156b9fc69",
+      "doors": {
+        "netty-cottage": 335,
+        "warehouse-west": 1005
+      }
+    },
+    "docks/harbourside/bg-1": {
+      "floor_y": 721,
+      "rgba_sha256": "a040c6276eb30f0f295333b6b26a17f6a05d58b565e024de40887a5143920799",
+      "doors": {
+        "anvil": 360
+      }
+    },
+    "docks/harbourside/bg-2": {
+      "floor_y": 723,
+      "rgba_sha256": "675f0ed8b15b2fe5e7a46edbb9c8619b4b6b99707fe99b4963d07a77b07bb81c",
+      "doors": {
+        "warehouse-middle": 1230
+      }
+    },
+    "docks/harbourside/bg-3": {
+      "floor_y": 723,
+      "rgba_sha256": "1039f694e1bfe19294f16ac0a6e3a23dae219812308b9676a71dd28f7fdf7efe",
+      "doors": {
+        "warehouse-middle": 960
+      }
+    },
+    "docks/fish-market/bg-1": {
+      "floor_y": 733,
+      "rgba_sha256": "3a21cf31b3e1429d1b46e9641d777ef97e4da0c84d7d55c994f992c3b25606f6",
+      "doors": {
+        "chandler": 1310
+      }
+    },
+    "docks/fish-market/bg-2": {
+      "floor_y": 732,
+      "rgba_sha256": "a257f997de663f27fc608d74686ff3c2ad4ef4a85e6bca2fd4876399513cedd4",
+      "doors": {}
+    },
+    "docks/fish-market/bg-3": {
+      "floor_y": 733,
+      "rgba_sha256": "e19565d1edf723da6800460c220a2a4200bc5eec5c2c39412f4664fdbf0fc6ff",
+      "doors": {}
+    },
+    "forge/inside/bg-1": {
+      "floor_y": 677,
+      "rgba_sha256": "0d3ae404dbc31975cd80bdb118700920e44821166f6a6430323b4ca92735ddc1",
+      "doors": {}
+    },
+    "gilded-flagon/taproom/bg-1": {
+      "floor_y": 724,
+      "rgba_sha256": "3df09a38af4bcb264cdbd458bba2c9a0e4a4241be23862321231f2b840949610",
+      "doors": {}
+    },
+    "gilded-flagon/taproom/bg-2": {
+      "floor_y": 716,
+      "rgba_sha256": "ddb0d738e986920d36055a759dd24f2ce37b6f82463932fdb90dfbb96f39d313",
+      "doors": {}
+    },
+    "gulls-wager/deck/bg-1": {
+      "floor_y": 678,
+      "rgba_sha256": "945f47c78954a7042ab161e0be83c4cb6806f07bdb9868e3b5d46eca1803440b",
+      "doors": {}
+    },
+    "gulls-wager/deck/bg-2": {
+      "floor_y": 675,
+      "rgba_sha256": "e4646b516944ec9029383da71fbdef52b692020b571583a34a3d4da45fd0950a",
+      "doors": {}
+    },
+    "gulls-wager/deck/bg-3": {
+      "floor_y": 677,
+      "rgba_sha256": "406060874bbffd9d91049cbbc52700130dfcb82883145515d5ca248325106497",
+      "doors": {}
+    },
+    "mirewood-quarry/lip/bg-1": {
+      "floor_y": 700,
+      "rgba_sha256": "6c1eec99b6c98bc870d9f284b96d11b207de8fab906b0a42f26d8172ecb44579",
+      "doors": {}
+    },
+    "mirewood-quarry/lip/bg-2": {
+      "floor_y": 703,
+      "rgba_sha256": "42f25b331d6d5a2a656ecaba158be70c15d8689696cb3c4048dc7e32dbee32eb",
+      "doors": {}
+    },
+    "mirewood-quarry/lip/bg-3": {
+      "floor_y": 701,
+      "rgba_sha256": "aa9a47e17fa584e6d8db9ad8cfdd9f5b6a9fa94a2c182f76d8afb932b4e035c9",
+      "doors": {}
+    },
+    "mirewood-quarry/cut/bg-1": {
+      "floor_y": 701,
+      "rgba_sha256": "bb27571b61c8587fd0f0e678224983b91a4bc871fa578268c758beb61dd03ed0",
+      "doors": {}
+    },
+    "mirewood-quarry/floor/bg-1": {
+      "floor_y": 681,
+      "rgba_sha256": "f31eb66e5b0ca9477adb828d2fcd9c0e1fd9647f285bc18061a1dd97763ef872",
+      "doors": {}
+    },
+    "mirewood-quarry/floor/bg-2": {
+      "floor_y": 679,
+      "rgba_sha256": "744891a95bb4b31807e4f3642d22d4c03c575b65b3522b504adcd5dbdd600cdb",
+      "doors": {}
+    },
+    "mirewood-quarry/floor/bg-3": {
+      "floor_y": 674,
+      "rgba_sha256": "8e98fd6a611670b551c300825a871b8cc27975082012fdc314f81a9c1ce1d857",
+      "doors": {}
+    },
+    "mirewood/edge/bg-1": {
+      "floor_y": 663,
+      "rgba_sha256": "e2c2e6443fe5a00c4d1d22a829a157b7eb16f301d0fd41844b128137a9be637f",
+      "doors": {}
+    },
+    "mirewood/edge/bg-2": {
+      "floor_y": 663,
+      "rgba_sha256": "7e8127ccfdf72a1aab3af6e8d9822932eecaca85f867748534fe0eb58c914eb3",
+      "doors": {}
+    },
+    "mirewood/edge/bg-3": {
+      "floor_y": 663,
+      "rgba_sha256": "ad9da44970413f11285c68750fa920f938ea74766b015605dec3a7336c43001a",
+      "doors": {}
+    },
+    "mirewood/deep/bg-1": {
+      "floor_y": 693,
+      "rgba_sha256": "553b044ee65ea4846458466992a3c488650df934861c32cb28acc2c7337b42a9",
+      "doors": {}
+    },
+    "mirewood/deep/bg-2": {
+      "floor_y": 693,
+      "rgba_sha256": "a0336d178a863f69cc0ee8d40cf3ce16f7c1992b7203acdcf02644f1dfeb8204",
+      "doors": {
+        "quarry": 750
+      }
+    },
+    "mirewood/deep/bg-3": {
+      "floor_y": 694,
+      "rgba_sha256": "9d7985b9cad6421c0c200b689ab56fc1f65ed770d1e3a942eaf8d89131aa77f9",
+      "doors": {
+        "quarry": 700
+      }
+    },
+    "mirewood/camp/bg-1": {
+      "floor_y": 689,
+      "rgba_sha256": "462c50fe1e72942ef4669f62abda10e30b062d754dec435a0db7cb15df674003",
+      "doors": {}
+    },
+    "old-crown-vault/entrance/bg-1": {
+      "floor_y": 673,
+      "rgba_sha256": "6a7d5e471f1511ec944c779ed51cfbd674a228ed3e18b46123390d031247257e",
+      "doors": {
+        "stair-up": 1460
+      }
+    },
+    "old-crown-vault/entrance/bg-2": {
+      "floor_y": 673,
+      "rgba_sha256": "241ebbd53062a1fa75762058b9d20a92dc9db0f8eae5983125e152b5739e21df",
+      "doors": {
+        "stair-up": 110,
+        "outer": 765,
+        "treasury": 1480
+      }
+    },
+    "old-crown-vault/entrance/bg-3": {
+      "floor_y": 675,
+      "rgba_sha256": "37b0c602f410c28c6b77dfa09aa163a021a4d162f8504571fc62ad1c8e67b84b",
+      "doors": {
+        "outer": 465,
+        "treasury": 1080
+      }
+    },
+    "old-crown-vault/halls/bg-1": {
+      "floor_y": 671,
+      "rgba_sha256": "14017e13e73661ad76e99e6ba94bd14283cfbd36e4593711d4122ce426266115",
+      "doors": {}
+    },
+    "old-crown-vault/halls/bg-2": {
+      "floor_y": 671,
+      "rgba_sha256": "8fcc9a667f8823b7dc9631440cf32a786a230edbad7459f48f634fd2a550544d",
+      "doors": {
+        "crown": 170,
+        "halls-out": 1030
+      }
+    },
+    "old-crown-vault/halls/bg-3": {
+      "floor_y": 672,
+      "rgba_sha256": "b1d851cf11e557fb044d648b65b255f53b9e39f25a4b1c7945fc1ca2d2b30394",
+      "doors": {
+        "crown": 70,
+        "halls-out": 745
+      }
+    },
+    "old-crown-vault/strongroom/bg-1": {
+      "floor_y": 700,
+      "rgba_sha256": "2d7ebcea5c8deed9ef1cb9992a21da64109e01bc34409c44eadf5e12f438e484",
+      "doors": {
+        "strongroom-out": 650
+      }
+    },
+    "old-crown-vault/strongroom/bg-2": {
+      "floor_y": 701,
+      "rgba_sha256": "e31154ca486b5b8a6483d8e14b0c8fb4f3298f2874434f004ec44859299b3580",
+      "doors": {}
+    },
+    "old-crown-vault/strongroom/bg-3": {
+      "floor_y": 702,
+      "rgba_sha256": "2d6d78b98f91eed103bbcb704838abcc31c62d9f4dce66e6a68ef334ba9fd6b7",
+      "doors": {}
+    },
+    "old-crown-vault/treasury/bg-1": {
+      "floor_y": 695,
+      "rgba_sha256": "6931550cc0316202eb34770659240b0b410b054b89c527080289141146918b18",
+      "doors": {
+        "treasury-out": 220
+      }
+    },
+    "questeria/gate-plaza/bg-1": {
+      "floor_y": 668,
+      "rgba_sha256": "ea6af24a63601afa234b9b902bd772deb36ebddb36911c8bfafc169bba01b96c",
+      "doors": {
+        "turret-south": 480,
+        "chapel": 870,
+        "ivy-west": 1200
+      }
+    },
+    "questeria/gate-plaza/bg-2": {
+      "floor_y": 671,
+      "rgba_sha256": "3a40a6abf952f44d94276c8e6d9963dd45487f7b772ddf1552fde177edb7adce",
+      "doors": {
+        "shop-south": 338,
+        "rose-west": 735,
+        "awning-south": 1115
+      }
+    },
+    "questeria/gate-plaza/bg-3": {
+      "floor_y": 673,
+      "rgba_sha256": "23d0766537a640ec5a2c68feae7ca1b54b84993da67bd32b7221dfaa549a810d",
+      "doors": {
+        "shop-south": 210,
+        "rose-west": 575,
+        "awning-south": 920
+      }
+    },
+    "questeria/festival-square/bg-1": {
+      "floor_y": 692,
+      "rgba_sha256": "00c30f66ecdd210ebf415bb65a17f2c86e291216e670f1a5e8ca1cbcb82f248a",
+      "doors": {}
+    },
+    "questeria/festival-square/bg-2": {
+      "floor_y": 695,
+      "rgba_sha256": "413b6737629e76ab5002157f80eb014b29f3add3c145b3474fda62a3b8666d9b",
+      "doors": {
+        "road": 800,
+        "ivy-south": 1255,
+        "townhouse-south": 1510
+      }
+    },
+    "questeria/festival-square/bg-3": {
+      "floor_y": 695,
+      "rgba_sha256": "ade8e3d16b7741fcb90450b63ef85d0caaf1d9b7a470ec14596d945fa7dcc3d0",
+      "doors": {
+        "road": 700,
+        "ivy-south": 1100,
+        "townhouse-south": 1300
+      }
+    },
+    "questeria/sunspire-steps/bg-1": {
+      "floor_y": 732,
+      "rgba_sha256": "9291000e244c68a6b3c62d4703bf2c1a93d8abc034d08ce79a00f5593786aac8",
+      "doors": {
+        "keep": 785,
+        "vault": 1140
+      }
+    },
+    "questeria/lantern-market/bg-1": {
+      "floor_y": 683,
+      "rgba_sha256": "0d98a6ac2e202b919c99b5416d64b8737a9102cc6b98467cb89da307ca9ee578",
+      "doors": {
+        "flagon": 520,
+        "rose-south": 850,
+        "rose-garden": 1190
+      }
+    },
+    "questeria/lantern-market/bg-2": {
+      "floor_y": 679,
+      "rgba_sha256": "f0fc2113ac2a281450b2e463b9b1826056502f1565f7557079d011fec2299cb1",
+      "doors": {
+        "cottage-garden": 450,
+        "bakery": 710,
+        "forge": 995,
+        "awning-east": 1260,
+        "townhouse-market": 1500
+      }
+    },
+    "questeria/lantern-market/bg-3": {
+      "floor_y": 686,
+      "rgba_sha256": "0674dafe14d9749aed38670c7f96971a8bc35cc9c70f95e5b168c613f293b139",
+      "doors": {
+        "cottage-garden": 270,
+        "bakery": 530,
+        "forge": 810,
+        "awning-east": 1055,
+        "townhouse-market": 1300
+      }
+    },
+    "questeria/thornbridge-gate/bg-1": {
+      "floor_y": 678,
+      "rgba_sha256": "441100af5d8b7e3d3e25127ce5c2c443fe268ea74f222439a59479b39c9f2404",
+      "doors": {
+        "turret-east": 450,
+        "townhouse-east": 1025
+      }
+    },
+    "road/farmland/bg-1": {
+      "floor_y": 655,
+      "rgba_sha256": "b06ffb0570f450604758d69943d83ae9fba87bfe5bd733c9a22e2acf8262ff6c",
+      "doors": {
+        "farmhouse": 780
+      }
+    },
+    "road/farmland/bg-2": {
+      "floor_y": 655,
+      "rgba_sha256": "7f2e95c0a6a49e3609a7478160a7a55e9e1f8db967187bfe7da34373d758713e",
+      "doors": {}
+    },
+    "road/farmland/bg-3": {
+      "floor_y": 656,
+      "rgba_sha256": "50a86975651f5b188f51a3ab3215fcb901668becb4acaceee4c6f4720468ac62",
+      "doors": {}
+    },
+    "road/fork/bg-1": {
+      "floor_y": 650,
+      "rgba_sha256": "38832b2026cce5aba9be3c8a8ba3f26ebf369a55195ed8c5da06ae8a397caef4",
+      "doors": {
+        "barrow": 1260
+      }
+    },
+    "road/fork/bg-2": {
+      "floor_y": 646,
+      "rgba_sha256": "70ed2b632cdc8d3381b9870302ca3e3b078e88d69cabf91c397fa31f04d86d1c",
+      "doors": {}
+    },
+    "road/fork/bg-3": {
+      "floor_y": 648,
+      "rgba_sha256": "eebcbdf5c76b7ac2cbc4e9132b5d9321671cb818bc8b81b9379bfe88f5ad47e7",
+      "doors": {}
+    },
+    "rusty-anvil/bar/bg-1": {
+      "floor_y": 757,
+      "rgba_sha256": "6e53c886592c53ab16b5343645214fd490d2c13e706c2615324fa2cedf72bdc5",
+      "doors": {}
+    },
+    "shop/inside/bg-1": {
+      "floor_y": 742,
+      "rgba_sha256": "fe741e104ab37d145ce33a27c2abe983f21f2851082a22cc3611de3362e722a4",
+      "doors": {}
+    },
+    "sunspire-keep/great-hall/bg-1": {
+      "floor_y": 728,
+      "rgba_sha256": "f172d7788c77313e05405e040bc30a04fe7563af9645543fdee7a285d36aa2f6",
+      "doors": {}
+    },
+    "sunspire-keep/great-hall/bg-2": {
+      "floor_y": 728,
+      "rgba_sha256": "54b2b851b4e35c92f64e5ca7a13c155092e28e5e5c7f60ddbf43211c3edece6a",
+      "doors": {
+        "door": 1505
+      }
+    },
+    "sunspire-keep/great-hall/bg-3": {
+      "floor_y": 728,
+      "rgba_sha256": "c5c4dac6794f5a1afad1f89c708d6ad788147b2ba987aaa6890c9a0275813d56",
+      "doors": {
+        "door": 1250
+      }
+    },
+    "thornbridge/camp-gate/bg-1": {
+      "floor_y": 665,
+      "rgba_sha256": "6d41c2fa61f4617155edc554ba4d48fd6dd1c89fda5744487cfc0ae31df93d1c",
+      "doors": {}
+    },
+    "thornbridge/tents/bg-1": {
+      "floor_y": 658,
+      "rgba_sha256": "bf0e91405e36245ec573d60720c94891efbc647aef0b76bb033f4bdbe1e9ffcf",
+      "doors": {}
+    },
+    "thornbridge/tents/bg-2": {
+      "floor_y": 661,
+      "rgba_sha256": "e9b1de25c6be85dbc3872fe73cab93ee4338d2cdf2de272ea15bd687624cae53",
+      "doors": {}
+    },
+    "thornbridge/tents/bg-3": {
+      "floor_y": 660,
+      "rgba_sha256": "96687670eac7234384fb8277587ac1a236d9733867f2dba84efc33b2e8f0fb14",
+      "doors": {}
+    },
+    "thornbridge/river-edge/bg-1": {
+      "floor_y": 647,
+      "rgba_sha256": "6fec8d4684d225021ea0af56bf0a6c8231105b735a10d0800a66f988240f2aa8",
+      "doors": {}
+    },
+    "warehouse/inside/bg-1": {
+      "floor_y": 726,
+      "rgba_sha256": "ab50c359394a3ba8a6a36de74a3976cbd71c2affe5082691ba2a3fe11d3a6dc1",
+      "doors": {}
+    }
+  }
+}

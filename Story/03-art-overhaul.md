@@ -134,6 +134,18 @@ A **part** is one picture on one bone. A **slot** is a named place a part goes, 
 
 A clip can move a slot to another layer for its length (`"layer": {"arm_near_up": 6}`), for poses where the near arm goes behind the body, like the bow's draw.
 
+Held items retain their standalone alpha, grip and hold transform. Near and far
+columns become independent weapon and offhand parts, and recipes carry an Offhand column.
+Complete transparent cloaks retain their supplied alpha; legacy cloaks painted on the
+mannequin use the background-difference cut. Armour islands are reassigned along the
+painted figure. A hand's main component is the one at its wrist, so a larger detached
+blade or bow cannot replace the fist. A clipped sheet cell fails unless `--force` is given.
+
+`tools/rig/check_parts.py --json <file>` records raw measurements and findings. Its exact
+allow-list gives a visual reason and an RGBA fingerprint for each reviewed texture;
+changed pixels invalidate the exception. Dark outlines, ear pairs, freckles and painted
+coat gaps need review rather than being treated automatically as damaged art.
+
 ### 3.4 Sockets
 
 A socket is a named point on a bone, with an angle, where an item can be attached. These names are what the scripts' `hold <actor> <socket> <item>` cue uses.
@@ -222,6 +234,14 @@ A clip is a JSON object: a length, whether it loops, keyframes per bone (rotatio
 Clips are written as Python in `tools/rig/clips.py`, which writes `Content/Rig/clips.json`, so they're readable, diffable and seeded like every other generator. A clip only lists the bones it moves; the rest hold the rest pose. Playback blends 0.12 s between clips. `step` events fire the footstep sound, as `WalkerSprite.Stepped` does now.
 
 A clip can be **two-actor**: it names a partner and a meeting offset (`"partner": {"offset": [34, 0], "clip": "shake-hands-b"}`), and the cue runner walks the two actors to that offset before playing both halves together.
+
+Clips may declare `behind: [[start, end, [bone, ...]]]` in seconds. During each
+half-open window those bones and their attached items draw immediately before the head,
+in their original order; this takes priority over `front`. The near weapon also draws
+before the head at rest, so a tall staff cannot cover the face while its wrist is low.
+A forward cloak sweep uses `layer: {"cape": "before-head"}`; `clip_strip.py --cape <id>`
+honours the same field. These fields change draw order, keeping lengths and hit, release
+and recover event times intact.
 
 ### 4.2 Combat clips
 

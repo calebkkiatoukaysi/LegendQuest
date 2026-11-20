@@ -110,14 +110,15 @@ public sealed class RoomScene
         _pixel = new Texture2D(device, 1, 1);
         _pixel.SetData(new[] { Color.White });
 
-        if (_room.Kind == RoomKind.Street)
+        (bool declaredFlat, bool foreground) = ReadLayerMode();
+        if (_room.Kind == RoomKind.Street && !declaredFlat)
         {
             _sky = Layer("sky");
             _far = Layer("far");
         }
-        _flat = _sky is null && _far is null;
+        _flat = declaredFlat || _sky is null && _far is null;
         _mid = Layer("mid");
-        _fore = Layer("fore");
+        _fore = foreground ? Layer("fore") : null;
         if (_far is null && !_flat) ComposePieces("far", FarParallax, FarScale);
         if (_mid is null) ComposePieces("mid", 1f, MidScale);
         if (_fore is null && !_flat) ComposePieces("fore", Parallax(ForeParallax), ForeScale);
@@ -363,6 +364,30 @@ public sealed class RoomScene
 
             float scale = ZoneCatalog.RoomScale;
             _doorArt[parts[0]] = new BoundingRectangle(numbers[0] / scale, numbers[1] / scale, numbers[2] / scale, numbers[3] / scale);
+        }
+    }
+
+    /// <summary>An explicit flat layout prevents obsolete XNBs from restoring removed sky or foreground layers.</summary>
+    private (bool Flat, bool Foreground) ReadLayerMode()
+    {
+        string path = $"{_content.RootDirectory}/Rooms/{_room.Paint}/layers.txt";
+        try
+        {
+            using Stream stream = TitleContainer.OpenStream(path);
+            using var reader = new StreamReader(stream);
+            var lines = new List<string>();
+            for (string line; (line = reader.ReadLine()) is not null;)
+            {
+                string text = line.Trim();
+                if (text.Length > 0 && text[0] != ';') lines.Add(text);
+            }
+            if (lines.Count != 2 || lines[0] != "flat" || lines[1] != "foreground yes" && lines[1] != "foreground no")
+                throw new InvalidOperationException($"{path}: expected flat, then foreground yes/no.");
+            return (true, lines[1] == "foreground yes");
+        }
+        catch (Exception missing) when (missing is FileNotFoundException or DirectoryNotFoundException)
+        {
+            return (false, true);
         }
     }
 

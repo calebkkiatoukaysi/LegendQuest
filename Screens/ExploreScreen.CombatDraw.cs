@@ -80,7 +80,7 @@ public partial class ExploreScreen
         //    room in front of everyone, faint.
         _scene.DrawBack(gameTime, spriteBatch, _camera, tint, shake);
         _effects.DrawGround(world);
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
         _hud.DrawRing(spriteBatch, view, alpha * RingStrength);
         spriteBatch.End();
 

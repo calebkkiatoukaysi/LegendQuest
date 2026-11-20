@@ -1,8 +1,11 @@
 {
  "grip": [
-  221.0,
+  220.5,
   131.0
  ],
  "kind": "carried",
- "hand": "far"
+ "hand": "far",
+ "base": "base-male",
+ "column": 2,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-14.png"
 }

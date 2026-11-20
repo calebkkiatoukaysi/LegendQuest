@@ -475,6 +475,15 @@ def cut(painted, base, out_dir, quiet=False):
         rest = np.clip(warp(premul(c, a), np.linalg.inv(np.vstack([mats[bone], [0, 0, 1]]))[:2], (h, w)), 0.0, 1.0)
         ic.write_png(os.path.join(out_dir, bone + ".png"), ic.straight(rest))
         report.append("  %-13s %6d painted, %6d carried on under the pieces over it" % (bone, int(solid.sum()), int(under.sum())))
+    # The importer uses this same cleanup, so previews and future cuts agree.
+    pictures = {}
+    for bone in PIECES:
+        path = os.path.join(out_dir, bone + ".png")
+        if os.path.exists(path):
+            rgba = ic.read_png(path)[0].astype(np.float64)
+            pictures[bone] = (rgba[:, :, :3], rgba[:, :, 3] / 255.0)
+    for bone, (c, a) in K.clean_pieces(pictures, base).items():
+        ic.write_png(os.path.join(out_dir, bone + ".png"), ic.straight(premul(c, a)))
     if not quiet:
         print("dress_pose: cut %s into %s%s" % (painted, os.path.relpath(out_dir, ROOT),
                                                  ("; %d areas hang from the trunk over the legs" % hanging if hanging else "")

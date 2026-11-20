@@ -7,6 +7,7 @@ layer.
     python tools/rooms/cut_room.py docks questeria/lantern-market
     python tools/rooms/cut_room.py docks/pier --sources <folder> --out <folder> --zones <folder>
     python tools/rooms/cut_room.py docks/pier --painted-floor
+    python tools/rooms/cut_room.py --sources art/rooms/generated --fit art/rooms/runtime-fit.json --background-only --painted-floor
 
 The pictures are tools/source/rooms/<zone>/<room>/bg-<i>.png, one a panel, and fg-<i>.png for any
 panel with a foreground, each 1536 x 1024 (sourcekit.py has the panels' geometry; make_room_template.py
@@ -40,6 +41,7 @@ and numpy.
 """
 
 import argparse
+import json
 import os
 import sys
 
@@ -90,7 +92,7 @@ def band(picture, opaque):
     return sk.resize(p, CANVAS_W, CANVAS_H, box=(0, sk.BLEED, sk.PANEL_W, sk.BAND_H))
 
 
-def stitch(panels, width):
+def stitch(panels, width, fitted=False):
     """Lays the panels (canvas-sized, premultiplied; None for a panel with nothing) along the room,
     each cross-faded into what's under it across the middle of their overlap."""
     out = np.zeros((CANVAS_H, width, 4))
@@ -104,7 +106,11 @@ def stitch(panels, width):
             start, fade = window
             weight = sk.smoothstep((np.arange(sk.SPAN) + 0.5 - start) / fade)
         part = out[:, left:left + sk.SPAN]
-        part[...] = part * (1.0 - weight)[None, :, None] + p * weight[None, :, None]
+        weight = weight[None, :, None]
+        if fitted and window is not None:
+            from fit_backgrounds import seam_weight
+            weight = seam_weight(part, p, *window)
+        part[...] = part * (1.0 - weight) + p * weight
         covered = left + sk.SPAN
     return out
 
@@ -117,10 +123,13 @@ def floor_alpha(room):
     return 1.0 - sk.smoothstep((ys - line[None, :]) / sk.FLOOR_FADE)
 
 
-def cut(zone, room, bg, fg, painted_floor=False):
+def cut(zone, room, bg, fg, painted_floor=False, fit=None):
     """The room's layers: {"mid": uint8 RGBA, "fore": uint8 RGBA or None}."""
     n = sk.panel_count(room.width)
-    mid = stitch([band(bg[i], True) for i in range(1, n + 1)], room.width)
+    if fit is not None:
+        from fit_backgrounds import fit_panel
+        bg = {i: fit_panel(zone, room, i, picture, fit) for i, picture in bg.items()}
+    mid = stitch([band(bg[i], True) for i in range(1, n + 1)], room.width, fitted=fit is not None)
     if not painted_floor:
         mid[..., 3] = 255.0 * floor_alpha(room)
         mid[..., :3] *= mid[..., 3:4] / 255.0
@@ -189,6 +198,11 @@ def door_lines(room):
     return lines
 
 
+def layer_lines(foreground):
+    return ["; Written by tools/rooms/cut_room.py; explicit layers also override stale build outputs.",
+            "flat", "foreground " + ("yes" if foreground else "no")]
+
+
 def write_room(zone, room, layers, out):
     """Writes the room's files into out/<paint>/ and takes away the ones it no longer has. Returns
     (written, removed), file names."""
@@ -202,6 +216,9 @@ def write_room(zone, room, layers, out):
     print("  " + sk.shown(os.path.join(folder, "doors.txt")))
     sk.write_png(os.path.join(folder, "thumb.png"), thumbnail(room, layers))
     written += ["doors.txt", "thumb.png"]
+    with open(os.path.join(folder, "layers.txt"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(layer_lines(layers["fore"] is not None)) + "\n")
+    written.append("layers.txt")
     removed = []
     for name in LAYER_NAMES:
         for f in layer_files_in(folder, name):
@@ -212,7 +229,7 @@ def write_room(zone, room, layers, out):
     return written, removed
 
 
-def register(zone, room, written, bg, fg, folder):
+def register(zone, room, written, bg, fg, folder, painted_floor=False, fitted=False):
     """Content.mgcb's blocks for the room's files, and its two lines in ASSETS.md."""
     paint = room.paint
     added, removed = sk.sync_mgcb("Rooms/%s/" % paint)
@@ -227,10 +244,11 @@ def register(zone, room, written, bg, fg, folder):
     room_line = ("%s - built by tools/rooms/cut_room.py from the owner's painting of %s in %s (%s): painted flat, "
                  "one picture from the sky to the floor with nothing sliding, %s cut to %s 16:9 band, resized to "
                  "1600x900 and cross-faded into the next across their overlap, as the mid layer at one texel to a "
-                 "screen pixel with its floor band left to the tile strip%s; with its 200x113 thumbnail for the zone "
+                 "screen pixel, %s%s; with its 200x113 thumbnail for the zone "
                  "map and doors.txt, each doorway the door's box in the zone file; the picture was %s" % (
                      ", ".join(outputs), room.name, zone.name, source_folder,
                      "its panel" if n == 1 else "its %d panels each" % n, "its" if n == 1 else "their",
+                     "keeping its painted floor over the gameplay tile strip" if painted_floor else "with its floor band left to the tile strip",
                      fore, sk.SUPPLIED))
     source_line = ("%s - %s in %s, painted in ChatGPT over its guide%s from tools/rooms/make_room_template.py: the "
                    "background, sky to floor%s, in %s of 1536x1024, %s; tools/rooms/cut_room.py cuts the room's "
@@ -238,6 +256,10 @@ def register(zone, room, written, bg, fg, folder):
                        ", ".join(sources), room.name, zone.name, "" if n == 1 else "s",
                        " and the foreground strip%s" % ("s" if len(fg) > 1 else "") if fg else "",
                        "one panel" if n == 1 else "%d panels" % n, sk.SUPPLIED))
+    if fitted:
+        room_line = room_line.replace("cross-faded into the next across their overlap",
+                                      "joined with minimum-error seams and 12-pixel soft blends after floor/door-centre fitting (art/rooms/runtime-fit.json)")
+        source_line += "; the original paintings are preserved, with reviewed fitting measurements in art/rooms/runtime-fit.json"
     changed = sk.sync_assets([
         ("## Rooms", lambda p: p.startswith(mine), room_line, None),
         ("## Rooms", lambda p: p.startswith(source_folder), source_line, lambda p: p.startswith(mine)),
@@ -254,7 +276,10 @@ def main():
     ap.add_argument("--sources", default=sk.SOURCES, help="where <zone>/<room>/bg-<i>.png are (default tools/source/rooms)")
     ap.add_argument("--out", default=sk.ROOMS, help="where <paint>/ goes (default Content/Rooms; anywhere else, nothing is registered)")
     ap.add_argument("--painted-floor", action="store_true", help="keep the painted floor in the mid layer, over the tile strip")
+    ap.add_argument("--fit", help="reviewed floor and door-centre measurements, bound to the source pixels")
+    ap.add_argument("--background-only", action="store_true", help="import backgrounds while leaving optional foreground sources for a separate fitting pass")
     args = ap.parse_args()
+    fit = json.load(open(args.fit, encoding="utf-8"))["panels"] if args.fit else None
     try:
         sk.check_picks(args.only, args.zones)
     except sk.SourceError as e:
@@ -280,14 +305,21 @@ def main():
             print("  " + str(e))
             failed.append("%s/%s" % (zone.id, room.id))
             continue
-        layers = cut(zone, room, bg, fg, args.painted_floor)
+        if args.background_only:
+            fg = {}
+        try:
+            layers = cut(zone, room, bg, fg, args.painted_floor, fit)
+        except (sk.SourceError, KeyError) as e:
+            print("  " + str(e))
+            failed.append("%s/%s" % (zone.id, room.id))
+            continue
         share = fore_share(room, layers["fore"])
         written, _ = write_room(zone, room, layers, args.out)
         if layers["fore"] is not None:
             print("    the foreground covers %.1f%% of the floor band%s" % (
                 share * 100, "" if share <= roomkit.FORE_LIMIT else " (over the 12% the rooms keep to)"))
         if into_content:
-            register(zone, room, written, bg, fg, folder)
+            register(zone, room, written, bg, fg, folder, args.painted_floor, fit is not None)
         cut_count += 1
     print("cut_room: %d room%s cut%s%s." % (
         cut_count, "" if cut_count == 1 else "s",

@@ -4,5 +4,8 @@
   137.0
  ],
  "kind": "carried",
- "hand": "near"
+ "hand": "near",
+ "base": "base-female",
+ "column": 4,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-29.png"
 }

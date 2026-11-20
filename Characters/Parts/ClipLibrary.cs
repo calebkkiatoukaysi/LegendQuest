@@ -104,6 +104,21 @@ public sealed record Clip(string Name, float Length, bool Loop, ClipEase Ease, I
     /// <summary>When its weapon smears and trails a ribbon; empty for never.</summary>
     public IReadOnlyList<ClipTrail> Trails { get; init; } = Array.Empty<ClipTrail>();
 
+    /// <summary>Windows in which bones draw immediately before the head, preserving their order.</summary>
+    public IReadOnlyList<ClipBehind> Behind { get; init; } = Array.Empty<ClipBehind>();
+
+    /// <summary>Specific layers drawn immediately before the head, such as a cloak swept forward.</summary>
+    public IReadOnlyList<string> BeforeHead { get; init; } = Array.Empty<string>();
+
+    /// <summary>Whether a bone goes behind the head at this clip time.</summary>
+    public bool BehindHead(string bone, float time)
+    {
+        if (Loop && Length > 0f) time %= Length;
+        foreach (ClipBehind window in Behind)
+            if (time >= window.Start && time < window.End && window.Bones.Contains(bone)) return true;
+        return false;
+    }
+
     /// <summary>
     /// Whether it's an action of the figure's own (an auto attack, a skill, a foe's move, a telegraph,
     /// a strike): its "hit" events are its blows landing. A reaction (hurt, block, knockdown, die)
@@ -497,7 +512,21 @@ public static class ClipLibrary
                 if (t.ValueKind == JsonValueKind.Array && t.GetArrayLength() >= 2 && t[0].ValueKind == JsonValueKind.Number && t[1].ValueKind == JsonValueKind.Number)
                     trails.Add(new ClipTrail(t[0].GetSingle(), t[1].GetSingle(), t.GetArrayLength() >= 3 && t[2].ValueKind == JsonValueKind.String ? t[2].GetString() : "weapon"));
 
-        return new Clip(name, MathF.Max(0.01f, length), loop, ease, tracks, front, speed, steps, swaps) { Events = events, Blend = blend, Trails = trails };
+        var behind = new List<ClipBehind>();
+        if (json.TryGetProperty("behind", out JsonElement bh))
+            foreach (JsonElement window in bh.EnumerateArray())
+            {
+                float start = window[0].GetSingle(), end = window[1].GetSingle();
+                string[] windowBones = window[2].EnumerateArray().Select(b => b.GetString()).ToArray();
+                if (!float.IsFinite(start) || !float.IsFinite(end) || start < 0f || end <= start || end > length || windowBones.Any(b => skeleton.IndexOf(b) < 0))
+                    throw new InvalidOperationException($"Clip {name} has an invalid behind window.");
+                behind.Add(new ClipBehind(start, end, windowBones));
+            }
+        string[] beforeHead = json.TryGetProperty("layer", out JsonElement layer)
+            ? layer.EnumerateObject().Where(p => p.Value.ValueKind == JsonValueKind.String && p.Value.GetString() == "before-head").Select(p => p.Name).ToArray()
+            : Array.Empty<string>();
+        return new Clip(name, MathF.Max(0.01f, length), loop, ease, tracks, front, speed, steps, swaps)
+            { Events = events, Blend = blend, Trails = trails, Behind = behind, BeforeHead = beforeHead };
     }
 }
 
@@ -506,6 +535,9 @@ public static class ClipLibrary
 /// <param name="Bone">The bone whose piece it is.</param>
 /// <param name="Part">Which other picture: the piece "bone.part".</param>
 public readonly record struct ClipSwap(float Time, string Bone, string Part);
+
+/// <summary>A time window that draws its bones before the head.</summary>
+public sealed record ClipBehind(float Start, float End, IReadOnlyList<string> Bones);
 
 /// <summary>
 /// A figure's clip playing: how far into it, how fast, and the pose it's blending from, so going

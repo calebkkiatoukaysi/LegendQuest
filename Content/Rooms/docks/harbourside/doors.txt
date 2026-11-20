@@ -1,6 +1,6 @@
 ; The painted doorway of each door in docks/harbourside: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/paint_room.py; a door that isn't
-; here has nothing painted for it, and the game uses its box.
-anvil 401 442 80 158
-warehouse-middle 2589 422 104 178
-anvil-shut 401 442 80 158
+; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; painting, made over its guide, so each doorway is the door's box in the zone file.
+anvil 381 400 120 200
+warehouse-middle 2581 400 120 200
+anvil-shut 381 400 120 200

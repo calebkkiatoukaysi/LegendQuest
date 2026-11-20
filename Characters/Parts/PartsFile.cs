@@ -74,8 +74,9 @@ public sealed record PartsFile(
     /// <param name="Tones">The colour each dye channel was painted, 0 to 255, or null for a channel it hasn't; null for a part with no dye channels.</param>
     /// <param name="Pieces">A body's or an armor's pieces by bone, each where it is in the atlas: null for a part that's whole.</param>
     /// <param name="Name">A library hair's or an extra's name, as the creation screen shows it; null for other parts.</param>
+    /// <param name="Kind">A split held item's painted kind, so shields draw over their fist without relying on names.</param>
     public sealed record PartEntry(string Slot, string Base, string Socket, string Page, int[] Rect, float[] Pivot, int[] MaskRect, float[] Skin, float[][] Tones,
-        Dictionary<string, PieceEntry> Pieces, string Name = null);
+        Dictionary<string, PieceEntry> Pieces, string Name = null, string Kind = null);
 
     /// <summary>One bone's piece of a part: where it is in the atlas, its part's socket in its own pixels, and its mask.</summary>
     /// <param name="Page">The atlas page it's on.</param>
@@ -94,6 +95,7 @@ public sealed record PartsFile(
     /// <param name="Base">The base its face and armor are painted on, made yet or not: till its face is, someone is that base's bare mannequin.</param>
     /// <param name="Tints">What its face and body are recoloured to, by swatch name (Swatches): "skin", "hair" and "eyes", any of them; the faces are shared, so this is what tells two who wear one apart.</param>
     /// <param name="Extras">Its facial parts and marks (a beard, earrings, a scar, pointed ears, horns), any number; null or empty for none.</param>
+    /// <param name="Offhand">The independent part in the far hand, or null for none.</param>
     public sealed record RecipeEntry(string Face, string Armor, string Cape, string Helm, string Weapon, float[] Morph, string Base,
-        Dictionary<string, string> Tints = null, string[] Extras = null);
+        Dictionary<string, string> Tints = null, string[] Extras = null, string Offhand = null);
 }

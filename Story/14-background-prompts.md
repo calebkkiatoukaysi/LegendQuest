@@ -4130,3 +4130,23 @@ and add one line per file to `ASSETS.md` in the style of the other supplied pict
 **The panels.** ChatGPT makes 1536 × 1024 pictures. A room W canvas px wide (1600 to 4800, 900 tall) is N panels: N = 1 for W ≤ 1600, else ceil((W − 1600) / 1400) + 1. Each covers 1600 canvas px; consecutive panels overlap by 200; the last is right-aligned, so a 3200 room's panels start at 0, 1400 and 1600, and its panel 3 overlaps panel 2 by 1400 px (87.5%) with only 200 px new, and the 2432 taproom's panel 2 starts at 832 and overlaps panel 1 by 768. `sourcekit.fade_window` cross-fades each panel into the one before across the middle 200 px of their overlap: room x 1400 to 1600 between panels 1 and 2 of a 3200 room, x 2200 to 2400 between panels 2 and 3, and x 1116 to 1316 in the taproom. Only the centre 1536 × 864 band of each picture is used (16:9, 0.96 image px to a canvas px); the top and bottom 80 px are bleed. So canvas y 600, the floor's back edge, is image y 656; the template's horizon (150 px above the floor's back edge, y 450 in most rooms) is image y 512; a 120 × 200 door is 115 × 192 image px.
 
 **If the owner's chat can't reproduce a long overlap,** the last panel can be made from the one before: shift that picture left by the panel offset in image px (192 for a 3200 room's panel 3), and ask ChatGPT to paint only the empty strip at the right.
+
+## Runtime fitting and import
+
+The 74 generated background panels under `art/rooms/generated` are the sources for all
+37 runtime rooms. `art/rooms/runtime-fit.json` records each painting's reviewed floor line,
+usable-door centres and exact source-pixel hash. Fitting uses monotone resampling to place
+the floor and door centres on the zone layout, then joins panels with a minimum-error seam
+and a narrow 12-pixel soft blend. Third panels have their own measurements. A changed source
+hash, missing measurement or excessive stretch fails the import.
+
+```text
+python tools/rooms/cut_room.py --sources art/rooms/generated --fit art/rooms/runtime-fit.json --background-only --painted-floor
+```
+
+This publishes `mid.png`, `doors.txt`, `thumb.png` and the explicit flat `layers.txt` descriptor for every room and updates Content.mgcb
+and ASSETS.md. The painted floors cover the existing tile strips; collision, footsteps,
+spawns, doors and triggers retain the zone files' coordinates. Original paintings remain
+untouched. The 22 foreground strips and 90 tile sources are separate candidates, still
+requiring fitting and edge/seam review. Do not import them just because backgrounds are ready.
+The runtime `--proof <folder> Rooms` gallery captures every room with a figure for scale.

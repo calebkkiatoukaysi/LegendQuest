@@ -1,8 +1,11 @@
 {
  "grip": [
-  238.0,
+  236.5,
   115.0
  ],
  "kind": "stick",
- "hand": "near"
+ "hand": "near",
+ "base": "base-male",
+ "column": 4,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-10.png"
 }

@@ -14,7 +14,7 @@ It fails with a list of problems if:
     thumbnail and doors.txt, and outdoors its sky and far layer; a layer too wide for one texture is
     there as pieces, <layer>-0.png and on), or a folder in Content/Rooms/ is for no room at all (but
     Content/Rooms/Life, the life loops' pictures, is for every room). A room the owner has painted
-    (its pictures in tools/source/rooms/<zone>/<room>/) is flat once tools/rooms/cut_room.py has cut
+    (its pictures in tools/source/rooms/<zone>/<room>/, or an explicit layers.txt) is flat once tools/rooms/cut_room.py has cut
     it: a mid layer, a thumbnail and doors.txt, a foreground only if it has one, and no sky or far
     layer, which it fails on as not cut yet
 
@@ -153,7 +153,16 @@ def room_problems(content_files):
     painted = set()
     for paint, street, key in rooms():
         painted.add(paint)
-        if os.path.isfile(os.path.join(ROOM_SOURCES, *key.split("/"), "bg-1.png")):
+        layout = os.path.join(CONTENT, "Rooms", *paint.split("/"), "layers.txt")
+        declared_flat = os.path.isfile(layout)
+        if declared_flat:
+            with open(layout, encoding="utf-8") as f:
+                settings = [line.strip() for line in f if line.strip() and not line.lstrip().startswith(";")]
+            if settings not in (["flat", "foreground yes"], ["flat", "foreground no"]):
+                problems.append("room " + paint + " has an invalid layers.txt (flat, then foreground yes/no)")
+            elif settings[-1] == "foreground yes" and layer_there("Content/Rooms/" + paint + "/fore.png") != 1:
+                problems.append("room " + paint + " declares a foreground but has no unique fore layer")
+        if declared_flat or os.path.isfile(os.path.join(ROOM_SOURCES, *key.split("/"), "bg-1.png")):
             for name in FLAT_FILES:
                 path = "Content/Rooms/" + paint + "/" + name
                 there = layer_there(path)
@@ -162,7 +171,7 @@ def room_problems(content_files):
                                     + ("" if there else path + " ") + "(run tools/rooms/cut_room.py " + key + ")")
             for name in STREET_FILES:
                 if layer_there("Content/Rooms/" + paint + "/" + name):
-                    problems.append("room " + paint + " is painted in tools/source/rooms/" + key + "/ but still has its "
+                    problems.append("room " + paint + " declares flat artwork but still has its "
                                     + name[:-4] + " layer: it isn't cut yet (run tools/rooms/cut_room.py " + key + ")")
             continue
         for name in ROOM_FILES + (STREET_FILES if street else ()):

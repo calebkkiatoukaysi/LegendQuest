@@ -562,6 +562,8 @@ def cut(png, sheet_id, force=False):
             if kind in ("cape", "weapon", "hair", "extra"):
                 out = only_changed(kind, out, b, tpl, x, y, ox, oy, s, near)
         notes = spills(kind, got, tpl, mine, x, y, dx, dy)
+        if any("runs off" in note for note in notes) and not force:
+            sys.exit("part_sheet: %s is clipped; repaint with a margin or use --force: %s" % (part, "; ".join(notes)))
         dest = os.path.join(folder, part + ".png")
         if os.path.exists(dest) and not force:
             report.append("  cell %d %s: kept the one already there (--force to replace it)" % (k + 1, part))
@@ -920,6 +922,8 @@ def fit_cut(png, sheet_id, force=False, check=None, record=None, write=True):
         own = [n for n in notes if "runs off" in n and (kind not in ("face", "helm") or "top" in n)]
         if own:
             redo.append("cell %d (%s) %s" % (k + 1, part, own[0]))
+            if write and not force:
+                sys.exit("part_sheet: %s is clipped; repaint with a margin or use --force: %s" % (part, own[0]))
         if not write:
             report.append("  cell %d %s: scale %.4f, at %+.1f, %+.1f, fit %.3f%s" % (k + 1, part, s, tx, ty, score,
                                                                                 ("; " + "; ".join(notes)) if notes else ""))

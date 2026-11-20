@@ -4,5 +4,8 @@
   630.0
  ],
  "kind": "held",
- "hand": "near"
+ "hand": "near",
+ "base": "base-male",
+ "column": 4,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-11.png"
 }

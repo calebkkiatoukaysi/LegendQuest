@@ -1,0 +1,52 @@
+[
+  {
+    "clip": "skill-wizard-fire-bolt",
+    "base": "base-male",
+    "largest_degrees_per_frame": 22.428
+  },
+  {
+    "clip": "skill-wizard-fire-bolt",
+    "base": "base-female",
+    "largest_degrees_per_frame": 22.428
+  },
+  {
+    "clip": "skill-warlock-hex",
+    "base": "base-male",
+    "largest_degrees_per_frame": 24.283
+  },
+  {
+    "clip": "skill-warlock-hex",
+    "base": "base-female",
+    "largest_degrees_per_frame": 24.283
+  },
+  {
+    "clip": "skill-warlock-hellish-rebuke",
+    "base": "base-male",
+    "largest_degrees_per_frame": 51.691
+  },
+  {
+    "clip": "skill-warlock-hellish-rebuke",
+    "base": "base-female",
+    "largest_degrees_per_frame": 51.691
+  },
+  {
+    "clip": "foe-hollowed-hexer-ashen-bolt",
+    "base": "base-male",
+    "largest_degrees_per_frame": 22.445
+  },
+  {
+    "clip": "foe-hollowed-hexer-ashen-bolt",
+    "base": "base-female",
+    "largest_degrees_per_frame": 22.445
+  },
+  {
+    "clip": "foe-hollowed-hexer-hex",
+    "base": "base-male",
+    "largest_degrees_per_frame": 6.407
+  },
+  {
+    "clip": "foe-hollowed-hexer-hex",
+    "base": "base-female",
+    "largest_degrees_per_frame": 6.407
+  }
+]

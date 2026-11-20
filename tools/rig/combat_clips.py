@@ -99,7 +99,7 @@ def arm_channels(side, spec, carried, hold):
         # spins round the long way between two keys.
         wrist = spec.swing + spec.bend + item_offset(side, keep[0]) - keep[1]
     if spec.item is not None:
-        wrist = _wrap(spec.swing + spec.bend + item_offset(side, spec.hold or hold) - spec.item)
+        wrist = spec.swing + spec.bend + item_offset(side, spec.hold or hold) - spec.item
     ch = ARMS[side].channels(spec.swing, spec.bend, wrist, carried)
     return {k: round(v, 2) for k, v in ch.items()}
 
@@ -902,12 +902,21 @@ def item_up(name, side="near", item=180, hold=None, shout=True, notes=None, rele
         dip = F(torso=8, look=4, legs=L(0, 4), near=A(-10, 30, item=item), far=A(30, 100), hold=hold)
         up = F(torso=6, look=18, legs=L(0, 3), near=A(55, 115, item=item), far=A(45, 125), hold=hold)
     elif style == "knelt":
-        up = F(torso=-4, look=-16, legs=L(-2, 16, near=8, far=-6), near=arm, far=A(40, 130), hold=hold)
+        near_leg = C.LEGS["near"]
+        ground = .5 * (near_leg.heel[1] + near_leg.toe[1])
+        hips_y = ground - 4 - near_leg.l1 * math.cos(math.radians(8)) - near_leg.hip[1]
+        legs = C.legs_at(0, hips_y, {"lean": 8, "bend": 120, "foot": 80}, {"ankle": (24, 0)})
+        up = F(torso=10, look=18, legs=legs, near=A(90, 100, item=0), far=A(45, 100), hold=hold)
+        # Reach the kneel during anticipation: an auto can follow the release in combat.
+        # Keep the planted blade and knee visible before that handoff, without retiming it.
+        dip = F(base=up, look=26)
     elif style != "high":
         raise ValueError(style)
     over = dict(up)
     over["arm_%s_up" % side] = up["arm_%s_up" % side] - 5
     over["torso.sy"] = 1.012
+    if style == "knelt":
+        over = dict(up)  # The planted sword does not bob through the floor.
     beats = [B(charge, dip, "out"), B(8, up, "back", ev=("release", ("fx", fx)) if fx else ("release",)),
              B(linger, over, "smooth")]
     return seq(name, beats, settle=settle, blend=0.06, notes=notes)
@@ -1010,9 +1019,9 @@ def throw(name, style="overhand", notes=None, settle=14, release_arg=None, frame
         f = F(base=o, torso=28)
         frames = (6, 2, 3, 6)
     elif style == "spike":
-        w = F(torso=-10, look=-6, legs=L(-2, 1, lift=(6, 0)), near=A(86, 6, item=90), far=A(165, 70, wrist=20))
-        c = F(base=w, torso=-12, far=A(172, 76, wrist=25))
-        o = F(torso=20, look=26, legs=L(3, 9, near=7), near=A(92, 6, item=94), far=A(25, 12, wrist=-40))
+        w = F(torso=-10, look=-6, legs=L(-2, 1, lift=(6, 0)), near=A(86, 6, item=90), far=A(-35, 35, wrist=20))
+        c = F(base=w, torso=-12, far=A(-45, 30, wrist=25))
+        o = F(torso=20, look=26, legs=L(3, 9, near=7), near=A(92, 6, item=94), far=A(50, 8, wrist=-40))
         f = F(base=o, torso=22, look=28)
         frames = (6, 2, 3, 6)
     elif style == "flip":
@@ -1425,9 +1434,9 @@ def examine(name, notes=None):
 def curse(name, notes=None):
     """A hex: hunched, the hand drawn back to the face, thrust out at the foe (the release), then
     wrenched back in to the chest and twisted there, as if tearing something out of it."""
-    draw = F(torso=20, look=-8, legs=L(-2, 6), near=STAFF_KEPT, far=A(40, 150, wrist=30))
-    thrust = F(torso=24, look=-4, legs=L(3, 7, near=5), near=STAFF_KEPT, far=A(92, 18, wrist=40))
-    wrench = F(torso=14, look=-10, legs=L(-2, 8), near=STAFF_KEPT, far=A(30, 140, wrist=-50))
+    draw = F(torso=20, look=-8, legs=L(-2, 6), near=STAFF_KEPT, far=A(-30, 70, wrist=30))
+    thrust = F(torso=24, look=-4, legs=L(3, 7, near=5), near=STAFF_KEPT, far=A(105, 4, wrist=40))
+    wrench = F(torso=14, look=-10, legs=L(-2, 8), near=STAFF_KEPT, far=A(65, 100, wrist=-70))
     back = F(base=wrench, torso=18, far=A(40, 128, wrist=35))
     beats = [B(8, draw, "out"), B(4, thrust, "back", ev=("release", ("fx", "glow-hand"))), B(6, wrench, "out"),
              B(6, back, "back")]
@@ -1449,11 +1458,11 @@ def shake_hive(name, notes=None, fx="smoke"):
 
 
 def high_guard(name, notes=None):
-    """Riposte: the weight rocked back and the blade lifted into a high hanging guard, the point
-    down at the foe (the release as it sets, a glint), and the point beckoning: miss me."""
+    """Riposte: rock back into a hanging parry, then drive the point out in a long thrust;
+    the release remains on the original beat, with the blade settling after it."""
     rock = F(torso=-8, look=-2, legs=L(-6, 6, far=-4), near=A(140, 60, item=110), far=A(70, 40))
-    guard = F(torso=-6, look=0, legs=L(-5, 7, far=-4), near=A(152, 40, item=62), far=A(75, 30))
-    beck = F(base=guard, near=A(150, 44, item=84))
+    guard = F(torso=14, look=0, legs=L(6, 7, near=10), near=A(96, 4, item=92), far=A(40, 50))
+    beck = F(base=guard, torso=16, near=A(100, 2, item=88))
     lower = F(torso=0, look=0, legs=L(-2, 4), near=A(95, 60, item=125), far=A(70, 40))
     beats = [B(8, rock, "out"), B(4, guard, "back", ev=("release", ("fx", "glint"))), B(6, beck, "smooth"),
              B(6, guard, "smooth"), B(7, lower, "smooth")]
@@ -1973,6 +1982,9 @@ def install(clips_module):
     generic()
     skills()
     foes()
+    # A curse's free arm must read against the chest; the staff stays in its own hand.
+    C.CLIPS["foe-hollowed-hexer-hex"]["front"] = ["arm_far_up", "arm_far_low", "hand_far"]
+    C.CLIPS["skill-warlock-armour-of-shadows"]["layer"] = {"cape": "before-head"}
 
 
 def combat_map():

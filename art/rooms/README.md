@@ -11,7 +11,7 @@ Original illustrations created with ChatGPT's built-in image generation for Cale
 | Floor textures, overlays and features | 90 | 90 |
 | Total | 186 | 186 |
 
-Source generation is complete. All 74 backgrounds use the richer detail direction; the 32 earlier panels received an additional edit pass. Rejected variants are excluded. Production fitting and runtime import remain pending.
+Source generation is complete. All 74 backgrounds use the richer detail direction; the 32 earlier panels received an additional edit pass. Rejected variants are excluded. All 74 backgrounds are now fitted and imported into the 37 runtime rooms. The 22 foreground strips and 90 tile sources remain separate candidates awaiting fitting.
 
 ## More detailed backgrounds
 
@@ -28,9 +28,9 @@ The detail pass adds scene-appropriate material texture, joinery, fasteners, mas
 
 ## Review and game import
 
-These are source-art candidates awaiting production fitting. They have not been copied into Content/Rooms or tools/source, so existing game art and runtime behavior are unchanged.
+The original backgrounds remain under `generated/`. Their fitted runtime layers, door metadata and map thumbnails are in `Content/Rooms/<zone>/<room>/`. `runtime-fit.json` binds floor-line and usable-door-centre measurements to the exact source pixels; monotone resampling fits them to the unchanged zone layouts. Minimum-error seams with narrow soft blends avoid broad doubled architecture. The illustrated floors cover the existing gameplay tile strips.
 
-Visual review found deviations in door size and position, threshold heights, the prescribed floor line at y=656, and adjoining-panel overlaps. Match every room to its layout templates and reconcile joins before import. The detail edits retain the source compositions; they do not certify template alignment.
+Fitting corrects floor lines and usable-door centres, with separate measurements for each third panel. Source architecture and door proportions retain their painted character; these are fitted illustrations rather than exact tracings of every template box. The runtime room-gallery proof checks their scale and joins through the actual scene loader. Explicit `layers.txt` files keep obsolete compiled sky and foreground layers from returning in an incremental development build.
 
 Foregrounds have transparent backgrounds, but some tree strips exceed the brief's sparse coverage and place trunks near the center. Fit placement and scale against the matching background, check the walking band and door clearance, and clean any soft edge spill before use.
 
@@ -38,7 +38,7 @@ All 90 tiles need normalization to the required 1024 x 1024 source size. Check o
 
 Integrity validation passed: all 186 planned sources exist, decode as PNG, have distinct hashes matching the completed manifest, and contain nonempty alpha where required. All 96 landscape sources match 1536 x 1024; the 90 square sources are 1254 x 1254. Integrity checks are separate from the outstanding visual fitting above.
 
-After fitting a complete room, copy panels to their manifest importDestination paths under tools/source/rooms, then use the existing cut_room.py and asset checks. Fit and normalize tiles before passing them to cut_tiles.py. Do not import an unfitted room as production art.
+Rebuild the backgrounds with `python tools/rooms/cut_room.py --sources art/rooms/generated --fit art/rooms/runtime-fit.json --background-only --painted-floor`, then run the asset checks and `--proof <folder> Rooms`. This uses the original sources directly, without duplicating them under tools/source. Fit and normalise tiles before passing them to cut_tiles.py; fit foreground placement separately before enabling it. Do not import the remaining unfitted foreground or tile candidates as production art.
 
 ## Background review sheets
 

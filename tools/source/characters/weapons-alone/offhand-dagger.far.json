@@ -4,5 +4,8 @@
   677.0
  ],
  "kind": "blade",
- "hand": "far"
+ "hand": "far",
+ "base": "base-male",
+ "column": 4,
+ "sheet": "tools/source/characters/weapon-sheets/weapons-05.png"
 }

@@ -1,6 +1,6 @@
 ; The painted doorway of each door in old-crown-vault/entrance: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/paint_room.py; a door that isn't
-; here has nothing painted for it, and the game uses its box.
-stair-up 1426 482 148 118
-outer 2075 350 170 250
-treasury 2815 350 170 250
+; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; painting, made over its guide, so each doorway is the door's box in the zone file.
+stair-up 1420 480 160 120
+outer 2010 300 300 300
+treasury 2750 300 300 300

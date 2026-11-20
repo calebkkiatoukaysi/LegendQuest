@@ -85,7 +85,7 @@ dotnet run -- --proof shots Docks # the same, but stop after that part of the ru
 dotnet run -- --proof shots Hud   # only the real-time HUD, drawn from made-up views, and its icons (see The real-time HUD)
 dotnet run -- --proof shots Arena   # story fights from the gulls to the sappers, and the fields, each a fresh game (Combat, On screen)
 dotnet run -- --proof shots Boss    # the Thornmother through her three phases, her Thorn Burst filmed frame by frame
-dotnet run -- --proof shots Classes # six classes in your place, each pressing its skills, two ultimates filmed
+dotnet run -- --proof shots Classes # seven classes in your place, each pressing its skills, three ultimates filmed
 ```
 
 Set `LQ_ARENA_ONLY` to part of a bout's shot path (`field/`, `sappers`) to run only those bouts of
@@ -409,6 +409,17 @@ The old top-down tile maps the zones were converted from are kept in `tools/room
 by the rooms alone.
 
 ## Rooms
+
+The detailed room paintings are fitted and imported from `art/rooms/generated` using
+`art/rooms/runtime-fit.json`: all 74 background panels become the flat runtime layers
+for 37 rooms. Their painted floors cover the existing gameplay tile strips. Each room’s
+`layers.txt` explicitly selects the flat layout and foreground presence, so stale compiled
+parallax layers cannot reappear after an incremental build. Door centres
+and floor lines fit the unchanged zone geometry; minimum-error seams avoid broad ghosted
+joins. Optional foreground and tile source collections still await their own fitting pass.
+Run `dotnet bin/Debug/net9.0/LegendQuest.dll --proof <folder> Rooms` to capture every room
+at its ends and middle through the actual scene loader, with a figure for scale.
+
 
 Since the third milestone the world is side on, the way AdventureQuest Worlds lays out its maps: a
 place is a zone, a chain of painted rooms you walk along, left and right and a little way in depth
@@ -1235,16 +1246,18 @@ after), and the pack back, on its own spots,
 a minute later; and, after a look at your character sheet (`field/construct-sheet.png`: the kit's icons,
 the rank locks, the class points), a vault construct pointed at (its red name, the hand) and clicked. **Boss** fights
 the Thornmother through all three phases with the Lodge's wardens on the lip, and films her first
-Thorn Burst every second frame into `seq/`. **Classes** puts six classes in your place (Swordhand,
-Arcanist, Lightbearer, Warden, Hemomancer, Lodge Ranger) at rank 5 in the raid on Thornbridge (the
+Thorn Burst every second frame into `seq/`. **Classes** puts seven classes in your place (Swordhand,
+Arcanist, Lightbearer, Warden, Hemomancer, Lodge Ranger, Hexblade) at rank 5 in the raid on Thornbridge (the
 longest of Act 1's fights), presses each of their four skills as soon as it can go, through the same
 code keys 2 to 5 use, with a shot of each, and
-films the first two classes' ultimates into `seq/`. It also films Riposte, Second Wind and Raise
-Shield for 1.5 s from the moment each starts (`ArenaPlan.FilmSkills`). When somebody stood level with
+films the Swordhand, Arcanist and Warden ultimates into `seq/`. It also films Riposte, Second Wind, Raise
+Shield, Unbroken Oath, Hex and Armour of Shadows for 1.5 s from the moment each starts (`ArenaPlan.FilmSkills`). When somebody stood level with
 or in front of the leader, drawn over the move, the next go with nobody there is filmed too (`-clear`). A foe move with no
 telegraph is filmed the same way from when a foe starts it (`ArenaPlan.FilmFoeSkills`). A bout that's lost is fought again on the next
 seed, three times at most, and one that runs past three minutes is given up on, each with a line on
 the error stream.
+Set `LQ_MOVE_ONLY=repaired-` when running Moves to isolate the repaired Oath, Riposte, Hex
+and Smoke Bomb takes through the runtime composer.
 
 | File | What it is |
 | --- | --- |
@@ -1547,7 +1560,28 @@ death, each creature's wind-up, attack and death, each ground marker, every scho
 numbers. It also writes `moves/samples.tsv`, the clips sampled every frame, to check the easing
 against the Python's.
 
+Held items retain their standalone alpha, grip and hold transform. Near and far
+columns become independent weapon and offhand parts, and recipes carry an Offhand column.
+Complete transparent cloaks retain their supplied alpha; legacy cloaks painted on the
+mannequin use the background-difference cut. Armour islands are reassigned along the
+painted figure. A hand's main component is the one at its wrist, so a larger detached
+blade or bow cannot replace the fist. A clipped sheet cell fails unless `--force` is given.
+
+`tools/rig/check_parts.py --json <file>` records raw measurements and findings. Its exact
+allow-list gives a visual reason and an RGBA fingerprint for each reviewed texture;
+changed pixels invalidate the exception. Dark outlines, ear pairs, freckles and painted
+coat gaps need review rather than being treated automatically as damaged art.
+
 ### The fight's clips
+
+Clips may declare `behind: [[start, end, [bone, ...]]]` in seconds. During each
+half-open window those bones and their attached items draw immediately before the head,
+in their original order; this takes priority over `front`. The near weapon also draws
+before the head at rest, so a tall staff cannot cover the face while its wrist is low.
+A forward cloak sweep uses `layer: {"cape": "before-head"}`; `clip_strip.py --cape <id>`
+honours the same field. These fields change draw order, keeping lengths and hit, release
+and recover event times intact.
+
 
 `tools/rig/combat_clips.py` makes the fight's clips, and `tools/rig/clips.py` adds them to
 everything else it writes into `clips.json`. There are three auto attacks for each of the nine kinds
@@ -2050,4 +2084,3 @@ which are never committed or shipped. See
 [ASSETS.md](ASSETS.md) for every file.
 
 ## Author's Note
-

@@ -132,7 +132,10 @@ def paper(rgba, light=232.0):
 
 def held_layer(base, item, side):
     """An item in a fist on the base's canvas, as a layer, or None if there's no such item."""
-    for name in (item, item + ".far"):
+    names = [item, item + ".far"]
+    if item.startswith("offhand-"):
+        names.append("weapon-" + item[len("offhand-"):] + ".far")
+    for name in names:
         path = os.path.join(CHARS, "weapons-alone", name + ".png")
         if os.path.exists(path):
             rgba = W.ic.read_png(path)[0].astype(np.float64)
@@ -147,19 +150,29 @@ def held_layer(base, item, side):
 _LAYERS = {}
 
 
-def figure(base, armor, near, far, n):
+def figure(base, armor, near, far, n, cape=None):
     """The dressed figure's layers at 1/n size."""
-    key = (base, armor, near, far, n)
+    key = (base, armor, near, far, n, cape)
     if key not in _LAYERS:
         bodies = D.body(base)
         layers = D.layers_of(base, os.path.join(CHARS, "armors", armor), bodies) if armor else dict(bodies)
+        layers = K.clean_pieces(layers, base)
+        if cape:
+            import import_parts as ip
+            source = os.path.join(CHARS, "capes", cape + ".png")
+            rgba, own_alpha = ip.ic.read_png(source)
+            if own_alpha and (rgba[:, :, 3] == 0).any():
+                c, a = rgba[:, :, :3], rgba[:, :, 3] / 255.0
+            else:
+                c, a, _, _ = ip.cape_layer(ip.Base(base), ip.load(source))
+            layers["cape"] = (c, a)
         for item, side in ((near, "near"), (far, "far")):
             if item:
                 got = held_layer(base, item, side)
                 if got is None:
                     print("clip_strip: no item called", item)
                 else:
-                    layers["hand_%s+" % side] = got
+                    layers["hand_%s%s" % (side, "^" if side in W.shields(item) else "+")] = got
         _LAYERS[key] = {k: shrink(c, a, n) for k, (c, a) in layers.items()}
     return _LAYERS[key]
 
@@ -192,17 +205,27 @@ def premultiplied(layers):
     return _PREMUL[key]
 
 
-def render(base, layers, pose, size, origin, scale, front=()):
+def render(base, layers, pose, size, origin, scale, front=(), behind=(), before_head=()):
     """skeleton.render(), the same picture, but each piece worked out only over the box it lands in."""
     w, h = size
     out = np.zeros((h, w, 4))
     pieces = premultiplied(layers)
     transforms = K.world(base, pose, scale)
-    order = [b for b in K.DRAW if b not in front]
+    transforms["cape"] = transforms["torso"]
+    order = [b for b in K.DRAW if b not in front and b not in behind]
     at = order.index("head") + 1
-    order[at:at] = [b for b in K.DRAW if b in front]
+    order[at:at] = [b for b in K.DRAW if b in front and b not in behind]
+    at = order.index("head")
+    order[at:at] = [b for b in K.DRAW if b in behind]
+    if "cape" in pieces:
+        order.insert(order.index("head") if "cape" in before_head else 0, "cape")
+    if "hand_near+" in pieces:
+        pieces = dict(pieces)
+        pieces["weapon"] = pieces.pop("hand_near+")
+        transforms["weapon"] = transforms["hand_near"]
+        order.insert(min(order.index("head"), order.index("hand_near")), "weapon")
     for bone in order:
-        for key in (bone + "+", bone) if bone.startswith("hand") else (bone,):
+        for key in (bone + "+", bone, bone + "^") if bone.startswith("hand") else (bone,):
             if key not in pieces:
                 continue
             pm, px, py = pieces[key]
@@ -234,12 +257,14 @@ def render(base, layers, pose, size, origin, scale, front=()):
 def render_clip(base, layers, clip, fps, n):
     """A clip's frames, premultiplied RGBA floats on one wide canvas each, and where the ground is."""
     h0, w0 = next(iter(layers.values()))[1].shape
-    size = (w0 * 3, int(h0 * 1.3))
-    origin = (w0, int(h0 * 0.3))
+    size = (w0 * 4, int(h0 * 2.4))
+    origin = (int(w0 * 1.5), int(h0 * 1.3))
     front = clip.get("front", ())
     out = []
     for t in frames_of(clip, fps):
-        out.append(render(base, layers, C.sample(clip, t), size, origin, 1.0 / n, front))
+        behind = {bone for a, b, bones in clip.get("behind", ()) if a <= t < b for bone in bones}
+        before_head = [key for key, order in clip.get("layer", {}).items() if order == "before-head"]
+        out.append(render(base, layers, C.sample(clip, t), size, origin, 1.0 / n, front, behind, before_head))
     ground = origin[1] + K.JOINTS[base]["root"][1] / n
     return out, ground
 
@@ -350,7 +375,7 @@ def main(argv):
             near = None if opts["--weapon"] == "-" else opts["--weapon"]
         if "--offhand" in opts:
             far = None if opts["--offhand"] == "-" else opts["--offhand"]
-        layers = figure(base, opts.get("--armor"), near, far, n)
+        layers = figure(base, opts.get("--armor"), near, far, n, opts.get("--cape"))
         shots, ground = render_clip(base, layers, clip, fps, n)
         bands.append(band(name, clip, shots, ground, fps, per_row))
         gif.append((shots, ground))

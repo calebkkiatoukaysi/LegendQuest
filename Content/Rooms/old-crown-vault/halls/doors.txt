@@ -1,6 +1,6 @@
 ; The painted doorway of each door in old-crown-vault/halls: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/paint_room.py; a door that isn't
-; here has nothing painted for it, and the game uses its box.
-halls-out 2395 350 170 250
-crown 1545 330 190 270
-crown-shut 1545 330 190 270
+; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; painting, made over its guide, so each doorway is the door's box in the zone file.
+halls-out 2330 300 300 300
+crown 1490 300 300 300
+crown-shut 1490 300 300 300

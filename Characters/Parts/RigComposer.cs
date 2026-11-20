@@ -20,8 +20,9 @@ namespace LegendQuest.Characters;
 /// <param name="SkinRatio">For a face, its skin against the base's; one for anything else.</param>
 /// <param name="Tones">The colour each of its two dye channels was painted, 0 to 1, or null for one it hasn't.</param>
 /// <param name="Bone">For one bone's piece of a body or an armor, the bone; null for a part that's whole.</param>
+/// <param name="HeldKind">The held item's kind from its source, or null for older parts.</param>
 public sealed record PartImage(string Id, PartSlot Slot, string Base, int Width, int Height, Color[] Pixels, Color[] Mask, Vector2 Pivot, Vector3 SkinRatio, Vector3?[] Tones,
-    string Bone = null);
+    string Bone = null, string HeldKind = null);
 
 /// <summary>How one part's coloured as it's put together: its skin multiplied by a ratio, and its two dye channels dyed to swatches.</summary>
 /// <param name="SkinRatio">What its skin's multiplied by, red, green and blue: one for as it is.</param>
@@ -157,7 +158,7 @@ public static class RigComposer
 
         // Back to front: the cape, then the bones as they're drawn, what each hand holds just under it.
         // A shield is the other way about: it's painted face on, so it goes over the fist that holds it.
-        bool shield = inOrder.Any(p => p.Slot == PartSlot.Offhand && IsShield(p.Id));
+        bool shield = inOrder.Any(p => p.Slot == PartSlot.Offhand && (p.HeldKind == "shield" || IsShield(p.Id)));
         var order = new List<string> { Cape };
         foreach (string bone in skeleton.Draw)
         {
