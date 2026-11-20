@@ -85,6 +85,25 @@ public class Nameplates
     /// <param name="plate">The plate.</param>
     public static float Top(HudKit kit, NameplateView plate) => plate.Telegraph is not null ? WarnIcon(kit, plate).Y : NameTop(kit, plate);
 
+    /// <summary>
+    /// Everything someone's plate draws on the screen: the target's chevron over it, the telegraph,
+    /// the name, the bar, and DOWN or the hit points under it; for the numbers and words that pop
+    /// up over the room to keep off.
+    /// </summary>
+    /// <param name="kit">The HUD's shared art.</param>
+    /// <param name="plate">The plate.</param>
+    public static Rectangle Bounds(HudKit kit, NameplateView plate)
+    {
+        Rectangle bar = Bar(kit, plate);
+        float wide = MathF.Max(TargetBarWidth, kit.Small.MeasureString(plate.Name ?? string.Empty).X);
+        string inBar = plate.IsDown ? Down : plate.Numbers;
+        if (inBar is not null) wide = MathF.Max(wide, kit.Small.MeasureString(inBar).X);
+        float top = Top(kit, plate) - (plate.IsTarget ? TargetMarker.ChevronRoom : 0);
+        float bottom = inBar is null ? bar.Bottom : bar.Bottom + 1 + kit.Small.LineSpacing;
+        float centre = Across(kit, plate);
+        return new Rectangle((int)MathF.Floor(centre - wide / 2f), (int)MathF.Floor(top), (int)MathF.Ceiling(wide), (int)MathF.Ceiling(bottom - top));
+    }
+
     /// <summary>Draws the bars, the target's brackets and the telegraphs. Goes in a point sampled batch.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, point-sampled.</param>
     /// <param name="kit">The HUD's shared art.</param>

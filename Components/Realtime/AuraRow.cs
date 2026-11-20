@@ -54,6 +54,23 @@ public static class AuraRow
         return boxes;
     }
 
+    /// <summary>What a row of so many auras covers on the screen, timers included, or an empty rectangle for none.</summary>
+    /// <param name="count">How many auras.</param>
+    /// <param name="at">The row's corner, as for Layout.</param>
+    /// <param name="perRow">How many to a row.</param>
+    /// <param name="timers">Whether each has its timer under it.</param>
+    /// <param name="rightToLeft">Whether the row runs leftward.</param>
+    public static Rectangle Area(int count, Point at, int perRow, bool timers, bool rightToLeft = false)
+    {
+        Rectangle area = Rectangle.Empty;
+        foreach (Rectangle box in Layout(count, at, perRow, timers, rightToLeft))
+        {
+            var room = new Rectangle(box.X, box.Y, box.Width, box.Height + (timers ? TimerRoom : 0));
+            area = area.IsEmpty ? room : Rectangle.Union(area, room);
+        }
+        return area;
+    }
+
     /// <summary>How tall a row of so many auras is, timers included.</summary>
     /// <param name="count">How many auras.</param>
     /// <param name="perRow">How many to a row.</param>

@@ -192,9 +192,19 @@ public class CombatHud
         Target.Top = view.Boss is null ? TargetFrame.DefaultTop : BossFrame.Bottom + TargetDrop;
     }
 
-    /// <summary>The pieces of the screen the HUD covers for a view, for what's drawn over the room (a support's banner) to keep clear of: your frame with its auras, the party's rows, the boss's frame and cast bar, the target's frame, and the hotbar with the swing and cast strips over it.</summary>
+    /// <summary>The pieces of the screen the HUD covers for a view, which the mouse can't point through at the room: your frame with its auras, the party's rows, the boss's frame and cast bar, the target's frame, and the hotbar with the swing and cast strips over it.</summary>
     /// <param name="view">What the HUD shows.</param>
-    public IEnumerable<Rectangle> Covered(HudView view)
+    public IEnumerable<Rectangle> Covered(HudView view) => Covered(view, false);
+
+    /// <summary>
+    /// The pieces of the screen the HUD covers for a view, with the rows of auras beside the party's
+    /// rows and under the boss's and the target's frames if <paramref name="auras"/>: for what's drawn
+    /// over the room (a support's banner, the numbers and words, a bark) to keep clear of. The mouse
+    /// still points through the gaps in an aura row, so finding what it's on goes without them.
+    /// </summary>
+    /// <param name="view">What the HUD shows.</param>
+    /// <param name="auras">Whether to take in the aura rows.</param>
+    public IEnumerable<Rectangle> Covered(HudView view, bool auras)
     {
         Arrange(view);
         if (view.Player is not null)
@@ -203,13 +213,22 @@ public class CombatHud
             yield return new Rectangle(you.X, you.Y, you.Width, System.Math.Max(you.Height, Player.AurasBottom(view.Player) - you.Y));
         }
         if (view.Party is not null)
+        {
             foreach (Rectangle row in Party.Rows(view.Party.Count)) yield return row;
+            if (auras)
+                foreach (Rectangle row in Party.AuraAreas(view.Party)) yield return row;
+        }
         if (view.Boss is not null)
         {
             yield return BossFrame.Bounds;
             yield return BossFrame.CastArea;
+            if (auras && BossFrame.AuraArea(view.Boss) is { IsEmpty: false } bossAuras) yield return bossAuras;
         }
-        if (view.Target is not null) yield return Target.Bounds;
+        if (view.Target is not null)
+        {
+            yield return Target.Bounds;
+            if (auras && Target.AuraArea(view.Target) is { IsEmpty: false } targetAuras) yield return targetAuras;
+        }
         yield return Hotbar.Panel;
         yield return Hotbar.SwingArea;
         yield return Hotbar.CastArea;

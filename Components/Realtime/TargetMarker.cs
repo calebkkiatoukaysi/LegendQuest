@@ -29,6 +29,9 @@ public static class TargetMarker
     private const float BobReach = 3f;
     private const float BobRate = 1.6f;
 
+    /// <summary>How far over the top of the plate the chevron reaches at the top of its bob, in screen pixels, for what's drawn over the room to keep clear of.</summary>
+    public const int ChevronRoom = ChevronLift + ChevronHeight + (int)BobReach + 1;
+
     /// <summary>Draws the ring under someone's feet. Goes in a point sampled batch, before the figures.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, point-sampled.</param>
     /// <param name="kit">The HUD's shared art.</param>

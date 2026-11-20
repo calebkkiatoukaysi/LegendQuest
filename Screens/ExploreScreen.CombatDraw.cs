@@ -40,8 +40,16 @@ public partial class ExploreScreen
     /// <summary>How far over the hotbar the line saying why something can't be done goes, in screen pixels.</summary>
     private const int RefusalRise = 16;
 
-    /// <summary>How far over someone's head a line they say goes, in screen pixels, clear of their nameplate.</summary>
-    private const float BarkOverPlate = 30f;
+    /// <summary>The widest a line said mid-fight runs in the barks' lane before it wraps, and the room between two lines there, in screen pixels.</summary>
+    private const float BarkLaneWidth = 640f;
+    private const int BarkLaneGap = 4;
+
+    /// <summary>How faint the supports' banners go while the banner's across the middle, which they'd otherwise show through.</summary>
+    private const float SupportsUnderBanner = 0.2f;
+
+    /// <summary>What the numbers and words over the room keep off this frame, and everyone's nameplate by their id; kept to save making them every frame.</summary>
+    private readonly List<Rectangle> _keepOff = new();
+    private readonly List<(string Id, Rectangle Box)> _plates = new();
 
     /// <summary>Whether a prop stands in front of anyone in the fight and covers them, so it's drawn faint the way the room's foreground is.</summary>
     private bool HidesAFighter(PropSprite prop)
@@ -107,23 +115,26 @@ public partial class ExploreScreen
         spriteBatch.End();
 
         // 4. The screen: the band across the top, then the HUD's art, the supports' banners, the
-        //    words, the numbers and the lines said.
+        //    words, the numbers (kept off everything else) and the lines said.
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
         spriteBatch.Draw(_band, new Rectangle(0, 0, LegendQuestGame.ScreenWidth, _band.Height), Color.White * alpha);
         spriteBatch.End();
 
         List<SupportBannerView> supports = SupportBanners();
+        float supportAlpha = alpha * MathHelper.Lerp(1f, SupportsUnderBanner, _banner.Showing);
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
-        DrawSupportBannersArt(spriteBatch, supports, alpha);
+        DrawSupportBannersArt(spriteBatch, supports, supportAlpha);
         _hud.DrawArt(spriteBatch, view, mouse, alpha);
         DrawLessonPulse(spriteBatch, alpha);
         spriteBatch.End();
 
+        List<(Rectangle Box, List<string> Rows, Color Colour, float Shown)> barks = PlaceBarks();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
-        _popups.Draw(spriteBatch, _camera.ToScreen, alpha);
-        DrawSupportBannersWords(spriteBatch, supports, alpha);
+        _popups.Draw(spriteBatch, _camera.ToScreen, alpha, KeepOff(view, supports, barks), _plates,
+            id => _fighters.TryGetValue(id, out WalkerSprite figure) ? figure.Position : null);
+        DrawSupportBannersWords(spriteBatch, supports, supportAlpha);
         _hud.DrawWords(spriteBatch, view, mouse, alpha);
-        DrawBubbles(spriteBatch, PlaceBarks(), alpha);
+        DrawBubbles(spriteBatch, barks, alpha);
         DrawHeading(spriteBatch, CombatHint, LegendQuestGame.ScreenWidth - Margin, true, alpha);
         _log.Draw(spriteBatch, alpha);
         DrawRefusal(spriteBatch, alpha);
@@ -148,42 +159,67 @@ public partial class ExploreScreen
         ScreenManager.FadeBackBufferToBlack(TransitionPosition);
     }
 
-    /// <summary>Where the lines said mid-fight go over the speakers' heads, each moved up out of the way of the last.</summary>
+    /// <summary>
+    /// Where the lines said mid-fight go: a lane of their own across the middle of the screen, under
+    /// the HUD's frames at the top (the boss's or the target's, with their cast bars and auras), each
+    /// under the one before, oldest at the top. Over the speaker's head a line sat on their nameplate
+    /// and their numbers, and a boss's on its own; every line says who's speaking, so it needn't be
+    /// over them. One still waiting for the banner to go isn't placed.
+    /// </summary>
     private List<(Rectangle Box, List<string> Rows, Color Colour, float Shown)> PlaceBarks()
     {
         var bubbles = new List<(Rectangle Box, List<string> Rows, Color Colour, float Shown)>();
-        var taken = new List<Rectangle>();
-        foreach ((WalkerSprite walker, string text, float clock, float length) in _barks)
+        int top = HudClear;
+        foreach ((WalkerSprite _, string text, float clock, float length) in _barks)
         {
-            Vector2 head = HeadOnScreen(walker) - new Vector2(0f, BarkOverPlate);
-            if (PlateTop(walker) is float plate) head.Y = MathF.Min(head.Y, plate - PromptGap);
-            if (!OnScreen(head)) continue;
-
-            List<string> rows = Text.Wrap(text, _detailFont, BubbleWidth);
+            if (clock < 0f) continue;
+            List<string> rows = Text.Wrap(text, _detailFont, BarkLaneWidth);
             float width = 0f;
             foreach (string row in rows) width = MathF.Max(width, _detailFont.MeasureString(row).X);
             float height = rows.Count * _detailFont.LineSpacing;
-            var box = new Rectangle((int)(head.X - width / 2f - LineSpread.X), (int)(head.Y - PromptGap - height - LineSpread.Y * 2f),
+            var box = new Rectangle((int)(LegendQuestGame.ScreenWidth / 2f - width / 2f - LineSpread.X), top,
                 (int)(width + LineSpread.X * 2f), (int)(height + LineSpread.Y * 2f));
-            box.X = Math.Clamp(box.X, (int)Margin, LegendQuestGame.ScreenWidth - (int)Margin - box.Width);
+            box = ClearOfHud(box);
 
             float shown = MathHelper.Clamp(MathF.Min(clock / BanterFadeInSeconds, (length - clock) / BanterFadeOutSeconds), 0f, 1f);
-            bubbles.Add((MakeRoom(box, taken), rows, Palette.Torch, shown));
+            bubbles.Add((box, rows, Palette.Torch, shown));
+            top = box.Bottom + BarkLaneGap;
         }
         return bubbles;
     }
 
-    /// <summary>The top of the HUD's nameplate over someone in the fight, telegraph and all, on screen; or null if they've none. A big creature's plate stands well over HeadOnScreen, and a line said under it covered it.</summary>
-    private float? PlateTop(WalkerSprite walker)
+    /// <summary>
+    /// What the numbers and words over the room keep off, on the screen: the HUD's frames and aura
+    /// rows, everyone's nameplate, the supports' banners, the barks, the banner while it's up, the log,
+    /// the hint in the corner and the line saying why something can't be done. Fills in _plates too.
+    /// </summary>
+    private List<Rectangle> KeepOff(HudView view, IReadOnlyList<SupportBannerView> supports, List<(Rectangle Box, List<string> Rows, Color Colour, float Shown)> barks)
     {
-        if (_hudView?.Plates is null) return null;
-        foreach ((string id, WalkerSprite figure) in _fighters)
+        _keepOff.Clear();
+        _plates.Clear();
+        _keepOff.AddRange(_hud.Covered(view, true));
+        if (view.Plates is not null)
+            foreach (NameplateView plate in view.Plates)
+            {
+                Rectangle bounds = Nameplates.Bounds(_hud.Kit, plate);
+                _keepOff.Add(bounds);
+                _plates.Add((plate.Id, bounds));
+            }
+        foreach (SupportBannerView support in supports)
+            if (_supportFigures.TryGetValue(support.Id, out WalkerSprite walker) && walker.Opacity > 0f) _keepOff.Add(SupportBannerOver(walker, support));
+        foreach ((Rectangle box, _, _, _) in barks) _keepOff.Add(box);
+        if (_banner.Area is Rectangle banner) _keepOff.Add(banner);
+        _keepOff.Add(_log.Bounds);
+
+        Vector2 hint = _detailFont.MeasureString(CombatHint);
+        _keepOff.Add(new Rectangle((int)(LegendQuestGame.ScreenWidth - Margin - hint.X), (int)(HeadingY - HeadingSpread.Y), (int)hint.X, (int)(hint.Y + HeadingSpread.Y * 2f)));
+        if (_refusalClock > 0f && _refusal is not null)
         {
-            if (figure != walker) continue;
-            foreach (NameplateView plate in _hudView.Plates)
-                if (plate.Id == id) return Nameplates.Top(_hud.Kit, plate);
+            Vector2 refusal = _detailFont.MeasureString(_refusal.ToUpperInvariant());
+            Rectangle over = Hotbar.CastArea;
+            _keepOff.Add(new Rectangle((int)(over.Center.X - refusal.X / 2f), over.Y - RefusalRise - _detailFont.LineSpacing, (int)refusal.X, _detailFont.LineSpacing));
         }
-        return null;
+        return _keepOff;
     }
 
     /// <summary>Why the last thing tried couldn't be done, over the hotbar, fading.</summary>
