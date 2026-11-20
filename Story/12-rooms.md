@@ -190,7 +190,7 @@ light corner-candle = 1378 700 160 0.8   ; x y reach [strength]; the id is optio
 
 ## 5. Fights in rooms
 
-When a fight starts, the slots (`11-combat.md` §1) are laid out on the room's floor inside its `fight` range: your side on the left third, theirs on the right, front rows at the middle. Anyone not in the fight (townsfolk, a merchant) steps back to the band's far edge and watches, or leaves by the nearest edge if the fight's lethal. In a wide room the camera centres on the fight. A fight across several rooms (`11-combat.md` §5.3) moves the party through the room's exit between waves.
+A fight is fought in real time where everyone stands (`11-combat.md` §1 and §2): there are no slots or rows, and nobody walks to a place when it starts. `World/Rooms/BattleFloor` makes the floor the engine keeps everyone on, the widest rectangle that stays on the room's floor band all the way across its `fight` range, a little in from the band's edges; `--validate` checks every room a fight is fought in has enough of it. Only those who turn up take places it gives: foes who aren't already in the room stand in lanes across the band ahead of the party, guests from nowhere behind it, waves walk in from the far end of the fight range on the foes' side, and supports stand on the back edge behind the party. Anyone not in the fight (townsfolk, a merchant, a member sitting it out) steps back to the band's far edge and watches, and comes back after. The camera follows you as it does outside fights. Every fight is fought in one room.
 
 ## 6. Every zone's rooms
 

@@ -181,10 +181,11 @@ public sealed partial class Battle
 
     // Times, with haste.
 
-    /// <summary>Someone's haste, in percent, from -50 to 50 (11-combat.md §3.3): 3 a point of their Dexterity (or their casting ability, for a caster) above 0, and whatever's on them.</summary>
+    /// <summary>Someone's haste, in percent, from -50 to 50 (11-combat.md §3.3): 3 a point of their Dexterity (or their casting ability, for a caster: one whose auto isn't a weapon's blow) above 0, and whatever's on them.</summary>
     internal int Haste(Fighter f)
     {
-        Ability ability = f.ClassId is ClassId id && ClassCatalog.Get(id).CastingAbility is Ability casting ? casting : Ability.Dexterity;
+        bool caster = f.Auto is { Weapon: false } && f.ClassId is ClassId id && ClassCatalog.Get(id).CastingAbility is not null;
+        Ability ability = caster ? ClassCatalog.Get(f.ClassId.Value).CastingAbility.Value : Ability.Dexterity;
         int fromStat = f.Side == Side.Foes && f.Kind == FighterKind.Foe ? 0 : 3 * Math.Max(0, f.Scores.Modifier(ability));
         return Math.Clamp(fromStat + (int)Sum(f, Stat.Haste, default), -50, 50);
     }
@@ -592,14 +593,17 @@ public sealed partial class Battle
             if (f.Chase && f.Order is null && CanMove(f)) Approach(f, target, RangeOf(f, f.Auto));
             return;
         }
-        if (f.Auto.CastMs > 0 && f.Goal is not null) return;
+        // A walk they were sent on (a click on the floor, a step out of a marker) isn't a chase: the
+        // swing waits until they get there, rather than stopping them where they are (§2.2).
+        if (f.Goal is not null && (!f.Chase || f.Auto.CastMs > 0)) return;
         StartAction(f, f.Auto, target, auto: true);
     }
 
-    /// <summary>Points the leader at a new foe when theirs is gone: the nearest attacking them, else the nearest (11-combat.md §2.3).</summary>
+    /// <summary>Points the leader at a new foe when theirs is gone: the nearest attacking them, else the nearest (11-combat.md §2.3). One who's only out of sight for now (in smoke) with nobody else to turn to stays the target, the swing held until they're back.</summary>
     private void Retarget(Fighter f)
     {
         Fighter next = NearestFoe(f, attackingMe: true) ?? NearestFoe(f, attackingMe: false);
+        if (next is null && f.Target is Fighter hidden && Hostile(f, hidden) && hidden.IsStanding) return;
         if (next != f.Target) f.Target = next;
         if (next is null) f.AutoAttackOn = false;
     }

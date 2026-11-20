@@ -45,7 +45,9 @@ public sealed partial class Battle
                 Emit(new BattleEvent { Kind = BattleEventKind.Bark, ActorId = guard.Id, TargetId = t.Id, Text = $"{guard.Name} takes the blow meant for {t.Name}." });
                 t = guard;
             }
-            if (kind != BlowKind.Melee)
+            // Refract only goes off if there's another foe to turn the attack onto; with the attacker
+            // alone (a duel, a lone construct) it stays armed rather than firing for nothing.
+            if (kind != BlowKind.Melee && _fighters.Exists(other => other.Side == a.Side && other.IsStanding && other != a && !other.Vanished))
             {
                 var (refractor, refract) = TakeArmed(t.Side, ReactionTrigger.RangedOnAlly);
                 if (refract is not null && Pick(a.Side, a) is Fighter turned)
@@ -178,7 +180,7 @@ public sealed partial class Battle
         foreach (Fighter other in _fighters)
         {
             if (other == a || other.Side != a.Side || !other.IsStanding) continue;
-            if (Vector2.Distance(other.Position, t.Position) <= Ranges.Melee + other.Size + t.Size) return true;
+            if (Reaching(other.Position, t.Position) <= Ranges.Melee + other.Size + t.Size) return true;
         }
         return false;
     }
@@ -327,13 +329,13 @@ public sealed partial class Battle
 /// <summary>How a blow reaches its target, for advantage and the mods that care.</summary>
 internal enum BlowKind
 {
-    /// <summary>A melee blow.</summary>
+    /// <summary>A melee blow: a weapon's, or any skill's at melee or reach range that doesn't fly (a Gaff, a Shield Bash, a Thorn Whip).</summary>
     Melee,
 
     /// <summary>A ranged weapon's shot, or a thrown thing.</summary>
     Ranged,
 
-    /// <summary>A spell, or any skill's attack that isn't a weapon's.</summary>
+    /// <summary>A spell, or any other skill's attack that isn't a weapon's: one that flies, or reaches further than a spear.</summary>
     Spell,
 }
 

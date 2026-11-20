@@ -193,6 +193,9 @@ public class WalkerSprite
     private float _knockLength = 1f, _knockClock = 1f;
     private bool _knockStays;
 
+    /// <summary>How long a fall's knock takes to come back under the feet as they get up, in seconds.</summary>
+    private const float GetUpSeconds = 0.4f;
+
     /// <summary>The springs on the skirt and the cape, how far each is swung off the body now (degrees), and where the hips were last update across the way the figure faces, for how fast they're going.</summary>
     private readonly Spring _skirt = new(SkirtHertz, SkirtDamping), _cape = new(CapeHertz, CapeDamping);
     private float _skirtSwing, _capeSwing, _lastHips;
@@ -368,8 +371,23 @@ public class WalkerSprite
         _poseLeft = seconds;
     }
 
-    /// <summary>Lets go of whatever pose or move they're in, back to standing or walking.</summary>
-    public void Release() => Play(WalkerPose.None);
+    /// <summary>Lets go of whatever pose or move they're in, back to standing or walking, on their own feet: a death's knock that stayed out is gone.</summary>
+    public void Release()
+    {
+        Play(WalkerPose.None);
+        _knockStays = false;
+        _knockClock = _knockLength;
+    }
+
+    /// <summary>Brings a knock that stayed out (a fall) back under the feet over a moment, for someone getting up.</summary>
+    private void RecoverKnock()
+    {
+        if (!_knockStays) return;
+        _knockStays = false;
+        // Out and held is the curve's first fifth; the rest of it eases back.
+        _knockLength = GetUpSeconds / 0.8f;
+        _knockClock = _knockLength * 0.2f;
+    }
 
     /// <summary>Whether they're a figure from parts that plays clips.</summary>
     public bool PlaysClips => Body is { Joints: not null } && Skeleton.Current is not null;
@@ -404,6 +422,7 @@ public class WalkerSprite
     public Clip PlayMove(string name, bool restart = true, float speed = 1f, bool hold = false)
     {
         Clip clip = PlaysClips ? ClipLibrary.Get(name, Body.Base) ?? Fallback(name) : Sheet is not null || Body is not null ? CreatureMotion.ClipFor(name) : null;
+        if (name is "getup" or "revive" or "stand") RecoverKnock();
         if (clip is null) return null;
         _gesture = null;
         _pose = WalkerPose.None;

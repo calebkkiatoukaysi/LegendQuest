@@ -159,6 +159,10 @@ public class DamagePopups
     /// <param name="colour">Its colour.</param>
     public void Word(Vector2 anchor, string text, Color colour) => Add(null, anchor, text, 0, PopupKind.Other, colour, false, WordScale, WordSeconds);
 
+    /// <summary>How wide and tall a word popped up with Word is when it starts, in screen pixels, for keeping it on the screen and off the HUD.</summary>
+    /// <param name="text">What it says.</param>
+    public Vector2 WordSize(string text) => _words is null ? Vector2.Zero : _words.MeasureString(text) * WordScale;
+
     /// <summary>Pops up damage over someone: white for damage your side deals, red for damage it takes, a critical gold (or a deeper red), bigger and bouncing.</summary>
     /// <param name="owner">Who it's over (their id in the fight), for the most at once; null for no limit.</param>
     /// <param name="anchor">The point it's over, in world pixels: the top of their head.</param>

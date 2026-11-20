@@ -677,7 +677,7 @@ public sealed partial class Battle
         bool weapon = e.Weapon;
         AttackProfile attack = weapon ? AttackOf(f, blow.Index, blow.Action?.Auto ?? skill.Kind == SkillKind.Auto) : null;
         BlowKind kind = weapon ? attack.Ranged ? BlowKind.Ranged : BlowKind.Melee
-            : skill.Class is null && skill.Range is SkillRange.Melee or SkillRange.Reach ? BlowKind.Melee : BlowKind.Spell;
+            : skill.Projectile is null && skill.Range is SkillRange.Melee or SkillRange.Reach ? BlowKind.Melee : BlowKind.Spell;
         DamageType type = e.Type ?? attack?.DamageType ?? f.MainAttack?.DamageType ?? DamageType.Bludgeoning;
 
         bool sneakReady = weapon && (e.ForceSneak || (e.Sneak || f.Enemy?.Abilities.Contains(AbilityId.SneakAttack) == true)

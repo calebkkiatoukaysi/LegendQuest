@@ -104,4 +104,15 @@ public static class ClassRanks
         }
         return RankOf(points);
     }
+
+    /// <summary>The CP the story would have given someone's own class by a game's flags, for a save from before ranks: the rank they joined at, and for every story fight won (its Victory flag up) what it's worth and a random fight beside it, as ExpectedRank counts them.</summary>
+    /// <param name="originId">Whose class.</param>
+    /// <param name="flags">The game's flags.</param>
+    public static int PointsFromStory(string originId, ISet<string> flags)
+    {
+        int points = PointsFor(JoiningRank(originId));
+        foreach (EncounterDefinition fight in EncounterCatalog.All)
+            if (fight.Victory is string won && flags.Contains(won)) points += Award(fight.Kind) + RandomFight;
+        return points;
+    }
 }

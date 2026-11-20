@@ -308,6 +308,7 @@ public sealed partial class Battle
         TickSwing(f);
         TickOrder(f);
         TickAuto(f);
+        Resettle(f);
         TickArmed(f);
         Walk(f);
         TickThreatHeld(f);

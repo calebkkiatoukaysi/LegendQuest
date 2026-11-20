@@ -59,7 +59,7 @@ public sealed record TelegraphView(string IconId, string Name, float Progress);
 /// </summary>
 /// <param name="Id">Who, by their id in the fight.</param>
 /// <param name="Name">What they're called.</param>
-/// <param name="Line">What they are, under the name: "LEVEL 3 BLADEMASTER", or a foe's kind.</param>
+/// <param name="Line">What they are, under the name: "LEVEL 3 SWORDHAND", or a foe's kind.</param>
 /// <param name="Portrait">Where their face comes from.</param>
 /// <param name="Foe">Whether they're on the other side: red health and a foe's frame.</param>
 /// <param name="Hp">Their hit points.</param>

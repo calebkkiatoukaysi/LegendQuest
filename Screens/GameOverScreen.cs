@@ -14,7 +14,7 @@ namespace LegendQuest.Screens;
 /// </summary>
 /// <remarks>
 /// A popup, so the fight stays drawn behind its veil. The pause menu's form, with the game over
-/// sting. RETRY THE FIGHT loads whichever slot was written last, which is the autosave from just
+/// sting outside a fight; a fight's end has played the defeat jingle under it. RETRY THE FIGHT loads whichever slot was written last, which is the autosave from just
 /// before the fight unless you've saved since, and a save made as a fight starts is that fight again,
 /// fresh, with the same allies; it's dead if no slot has a game in it. RETRY ON STORY does the same
 /// with the fight marked to be fought on Story (RetryState). WIN THIS FIGHT, which Story offers once
@@ -91,7 +91,7 @@ public class GameOverScreen : MenuScreen
         MenuEntries.Add(title);
     }
 
-    /// <summary>Loads the form, lays it out, deadens LOAD LAST SAVE if there's nothing to load, and plays the sting.</summary>
+    /// <summary>Loads the form, lays it out, deadens LOAD LAST SAVE if there's nothing to load, and plays the sting, unless it's a fight's: the fight's end has already played the defeat jingle.</summary>
     public override void Activate()
     {
         base.Activate();
@@ -104,7 +104,7 @@ public class GameOverScreen : MenuScreen
         if (!_load.Plate.Enabled) SelectedEntry = MenuEntries.Count - 1;
 
         LayOut();
-        Audio.Play(Sfx.GameOver);
+        if (_fight is null) Audio.Play(Sfx.GameOver);
     }
 
     /// <summary>Escape does nothing here: there's nowhere to go back to.</summary>

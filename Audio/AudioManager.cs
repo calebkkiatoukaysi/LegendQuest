@@ -281,7 +281,13 @@ public class AudioManager : GameComponent
 
         Track? zone = _zoneTrack;
         TimeSpan zoneAt = _zoneAt;
-        if (!_inBattle)
+        if (!_inBattle && _afterJingle is Track waiting)
+        {
+            // A second end (a lost fight won after all): the map's song still comes back after this jingle.
+            zone = waiting;
+            zoneAt = _afterJingleAt;
+        }
+        else if (!_inBattle)
         {
             zone = _current is Track now && !IsBattleSong(now) && !IsJingle(now) ? now : null;
             zoneAt = Position();

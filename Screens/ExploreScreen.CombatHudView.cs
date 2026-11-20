@@ -49,6 +49,7 @@ public partial class ExploreScreen
 
         Fighter aimed = leader?.Target is { Present: true, HasLeft: false } target && !(target.IsDead && target.Side == Side.Foes) ? target : null;
         BossView boss = null;
+        Fighter framed = aimed;
         foreach (Fighter fighter in _battle.Fighters)
         {
             if (!fighter.Present || fighter.IsDead || fighter.HasLeft || !_battle.IsBoss(fighter)) continue;
@@ -56,6 +57,9 @@ public partial class ExploreScreen
             var thresholds = new List<float>();
             for (int i = 1; i < phases.Shares.Count; i++) thresholds.Add((float)phases.Shares[i]);
             boss = new BossView(HudOf(fighter), null, phases.Current, thresholds, phases.Name?.ToUpperInvariant());
+            // The boss frame already shows its health, cast and auras, so a target frame of the same
+            // boss under it would only say it all again; an add you've targeted keeps its own.
+            if (framed == fighter) framed = null;
             break;
         }
 
@@ -74,7 +78,7 @@ public partial class ExploreScreen
                     Text: "When you and the Soul-Bound both land a hit on the same foe within 3 seconds, the bond charges. Twice charged, the two of you strike it as one: both weapons and 1d8 radiant, a sure hit.");
         }
 
-        return new HudView(player, party, aimed is null ? null : HudOf(aimed), boss, slots, sigil, Plates(leader, aimed));
+        return new HudView(player, party, framed is null ? null : HudOf(framed), boss, slots, sigil, Plates(leader, aimed));
     }
 
     /// <summary>Someone as the frames show them.</summary>
@@ -105,7 +109,7 @@ public partial class ExploreScreen
             fighter == _battle.Leader?.Target, fighter.IsDead || fighter.HasLeft);
     }
 
-    /// <summary>What someone is, under their name: "LEVEL 3 BLADEMASTER" for one of the party, a guest's class, or a foe's kind.</summary>
+    /// <summary>What someone is, under their name: "LEVEL 3 SWORDHAND" for one of the party, a guest's class, or a foe's kind.</summary>
     private static string LineOf(Fighter fighter)
     {
         if (fighter.Member is PartyMember member)

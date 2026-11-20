@@ -22,12 +22,18 @@ public sealed partial class Battle
     /// <summary>The charges the Soul-Link Strike needs.</summary>
     public const int SoulLinkCharges = 2;
 
+    /// <summary>How long a full Soul-Link is left for the player to spend (key 7), when they lead one of the duo, before the Soul-Bound's AI spends it.</summary>
+    public const int SoulLinkLeftToYouMs = 6000;
+
     /// <summary>How long a hit on someone is remembered, for Sneak Attack.</summary>
     private const int RememberHitsMs = 3000;
 
     private readonly Dictionary<string, int> _duoHits = new(StringComparer.Ordinal);
     private int _soulCharges;
     private int _soulNextChargeMs;
+
+    /// <summary>When the Soul-Link last filled.</summary>
+    private int _soulFullAtMs;
 
     // Hurting.
 
@@ -547,6 +553,7 @@ public sealed partial class Battle
         if (!_duoHits.TryGetValue(partner + "|" + foe.Id, out int at) || NowMs - at > SoulLinkWindowMs) return;
         _soulCharges++;
         _soulNextChargeMs = NowMs + SoulLinkWindowMs;
+        if (_soulCharges >= SoulLinkCharges) _soulFullAtMs = NowMs;
         Emit(new BattleEvent
         {
             Kind = BattleEventKind.SoulLinkCharged, ActorId = hitter.Id, TargetId = foe.Id, Amount = _soulCharges,
@@ -564,6 +571,18 @@ public sealed partial class Battle
         if (f.Action is { InMotion: true }) return "Busy";
         if (target is null || !Hostile(f, target) || !target.IsStanding || !Targetable(target, SkillCatalog.Get(SkillCatalog.SoulLinkStrike))) return "No target";
         return null;
+    }
+
+    /// <summary>
+    /// Whether a fighter's AI leaves a full Soul-Link alone for now: it's the player's to spend when
+    /// they lead one of the duo and can act, for SoulLinkLeftToYouMs after it fills, so the 7 on the
+    /// bar stays lit long enough to press. Down, stunned or slow to it, the Soul-Bound spends it.
+    /// </summary>
+    private bool LeavesSoulLink(Fighter f)
+    {
+        if (Leader is not Fighter leader || f == leader || !DrivenByPlayer(leader)) return false;
+        if (leader.Id is not (Origins.You or Origins.SoulBound) || !leader.IsStanding || !CanAct(leader)) return false;
+        return NowMs - _soulFullAtMs < SoulLinkLeftToYouMs;
     }
 
     /// <summary>The Soul-Link Strike: both of the duo strike the foe together (whichever of them can), with the duo's own clip.</summary>

@@ -20,7 +20,7 @@ public static partial class SkillCatalog
     /// <summary>The base classes' rows.</summary>
     private static IEnumerable<SkillDefinition> BaseClasses()
     {
-        // Blademaster (fighter): front-line damage, Momentum.
+        // Swordhand (fighter): front-line damage, Momentum.
         yield return new()
         {
             Id = "fighter-strike", Name = "Strike", Class = ClassId.Fighter, Kind = SkillKind.Auto, Weapon = true,

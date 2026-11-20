@@ -27,7 +27,7 @@ namespace LegendQuest.Combat.Realtime;
 /// </para>
 /// <para>
 /// Run r of a fight is seeded Pcg32.Mix(Seed, the fight's id's hash, r), so a single run can be
-/// replayed on its own. The party is the one the story would have there: you as a Blademaster, the
+/// replayed on its own. The party is the one the story would have there: you as a Swordhand, the
 /// Soul-Bound as a Shadowstep, and the companions with you by then, at the story's level and rank,
 /// with two healing potions in the bag.
 /// </para>
@@ -105,6 +105,14 @@ public static partial class BattleSimulator
                 return RunTrace(EncounterCatalog.Get(parts[0]), runs == DefaultRuns ? 0 : runs, difficulty, youAs?.Id);
         }
 
+        // <encounter>@<class code> fights one encounter with that class in your place.
+        ClassId? asClass = null;
+        if (what.Split('@') is [string fight, string code] && EncounterCatalog.Exists(fight) && ClassCatalog.ByCode(code) is ClassDefinition chosen)
+        {
+            what = fight;
+            asClass = chosen.Id;
+        }
+
         List<EncounterDefinition> fights;
         if (what == Everything) fights = EncounterCatalog.All.ToList();
         else if (EncounterCatalog.Exists(what)) fights = new List<EncounterDefinition> { EncounterCatalog.Get(what) };
@@ -120,13 +128,13 @@ public static partial class BattleSimulator
         var rows = new List<Verdict>();
         foreach (EncounterDefinition encounter in fights)
         {
-            Tally plain = Fights(encounter, runs, difficulty, flagged: false);
+            Tally plain = Fights(encounter, runs, difficulty, flagged: false, asClass);
             Verdict verdict = Judge(encounter, plain, difficulty);
             Detail(encounter, plain, verdict);
             rows.Add(verdict);
             if (Conditional(encounter).Count > 0)
             {
-                Tally with = Fights(encounter, runs, difficulty, flagged: true);
+                Tally with = Fights(encounter, runs, difficulty, flagged: true, asClass);
                 Verdict info = Judge(encounter, with, difficulty) with { Fight = "  with " + string.Join(", ", Conditional(encounter)), Info = true };
                 Console.WriteLine($"  with {string.Join(", ", Conditional(encounter))}: won {Pct(with.WinRate)}, {with.MeanSeconds:F0} s.");
                 rows.Add(info);
@@ -364,7 +372,7 @@ public static partial class BattleSimulator
     private static bool RunClasses(int runs, Difficulty difficulty, IReadOnlyCollection<string> only = null)
     {
         runs = Math.Max(1, runs / 4);
-        Console.WriteLine($"Every class in your place: {runs} runs a fight on {difficulty}. A class without its own kit yet fights with its base class's (interim).");
+        Console.WriteLine($"Every class in your place: {runs} runs a fight on {difficulty}. Each fights with its own kit (a class added without one would fight with its base class's, marked interim).");
         var lines = new List<ClassLine>();
         var usage = new List<(string Name, int TopRank, Dictionary<string, long> Used, List<string> Unused)>();
         foreach (ClassDefinition cls in ClassCatalog.All.Where(c => only is null || only.Contains(c.Code)))

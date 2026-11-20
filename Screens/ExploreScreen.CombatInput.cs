@@ -87,6 +87,12 @@ public partial class ExploreScreen
         }
 
         if (_toggleLog.Occurred(input)) _log.Shown = !_log.Shown;
+        if (click && !_log.Shown && _log.Bounds.Contains(_mouse))
+        {
+            // The closed log's tab opens it, rather than walking you to the floor behind it.
+            _log.Shown = true;
+            click = false;
+        }
         if (input.WheelTurn != 0 && _log.Shown && _log.Bounds.Contains(_mouse)) _log.Scroll(input.WheelTurn);
 
         Fighter leader = Driven;
@@ -139,8 +145,9 @@ public partial class ExploreScreen
 
         _hoverHud = _hud.At(_mouse, _hudView);
         if (_hoverHud.On != CombatHud.Part.None) return;
-        if (_log.Shown && _log.Bounds.Contains(_mouse)) return;
-        if (_hud.Player.Bounds.Contains(_mouse) || Hotbar.Panel.Contains(_mouse)) return;
+        if (_log.Bounds.Contains(_mouse)) return;
+        foreach (Rectangle covered in _hud.Covered(_hudView))
+            if (covered.Contains(_mouse)) return;
 
         Vector2 world = _camera.ToWorld(_mouse.ToVector2());
         _hoverFighter = FighterAt(world);
@@ -265,23 +272,41 @@ public partial class ExploreScreen
         Learn(TutorialCatalog.CombatAbility);
     }
 
-    /// <summary>Tab: the next foe, nearest first, round to the nearest again after the furthest.</summary>
+    /// <summary>How long after a Tab the next one carries on round the same order, in the fight's milliseconds, rather than sorting the foes by distance again.</summary>
+    private const float TabCycleMs = 3000f;
+
+    /// <summary>The order Tab is going round the foes in, by id, and when it was last pressed.</summary>
+    private readonly List<string> _tabCycle = new();
+    private float _tabAtMs = float.MinValue;
+
+    /// <summary>
+    /// Tab: the next foe, nearest first, round to the nearest again after the furthest. The order's
+    /// fixed when a run of presses starts (and kept while they come within TabCycleMs of each other), so
+    /// walking towards the one you picked doesn't make it the nearest and send the next press back to
+    /// the one before; anyone who joins goes on the end.
+    /// </summary>
     private void NextFoe(Fighter leader)
     {
-        List<Fighter> foes = _battle.Fighters
+        List<Fighter> standing = _battle.Fighters
             .Where(each => each.Side == Side.Foes && each.IsStanding && !each.Vanished)
             .OrderBy(each => System.Numerics.Vector2.Distance(each.Position, leader.Position))
             .ToList();
-        if (foes.Count == 0) return;
-        int at = leader.Target is null ? -1 : foes.IndexOf(leader.Target);
-        TargetOf(leader, foes[(at + 1) % foes.Count]);
+        if (standing.Count == 0) return;
+        if (_shownMs - _tabAtMs > TabCycleMs) _tabCycle.Clear();
+        _tabAtMs = _shownMs;
+        _tabCycle.RemoveAll(id => standing.All(each => each.Id != id));
+        foreach (Fighter foe in standing)
+            if (!_tabCycle.Contains(foe.Id)) _tabCycle.Add(foe.Id);
+        int at = leader.Target is null ? -1 : _tabCycle.IndexOf(leader.Target.Id);
+        string next = _tabCycle[(at + 1) % _tabCycle.Count];
+        TargetOf(leader, standing.First(each => each.Id == next));
     }
 
-    /// <summary>T: your target's own target, an ally's foe or a foe's victim.</summary>
+    /// <summary>T: your target's own target, an ally's foe or a foe's victim. A foe that's after you has nobody else to point you at.</summary>
     private void Assist(Fighter leader)
     {
         if (leader.Target?.Target is Fighter theirs && theirs != leader) TargetOf(leader, theirs);
-        else Refuse("Your target isn't aiming at anyone.");
+        else Refuse(leader.Target?.Target == leader ? "It's after you." : "Your target isn't aiming at anyone.");
     }
 
     /// <summary>The nearest foe still standing, or null.</summary>

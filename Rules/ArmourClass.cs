@@ -13,7 +13,7 @@ namespace LegendQuest.Rules;
 /// in light armour or none, up to +2 in medium, none at all in heavy), plus every AcBonus worn: a
 /// shield's +2, a magic cloak's or ring's +1. With nothing on the body it's 10 plus Dexterity.
 /// Wearing armour you aren't trained in doesn't change it; it costs you in combat instead. Class
-/// features that add to it, like the Blademaster's Defence, are the combat engine's.
+/// features that add to it, like the Swordhand's Defence, are the combat engine's.
 /// </remarks>
 public static class ArmourClass
 {

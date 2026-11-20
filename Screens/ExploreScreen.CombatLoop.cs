@@ -183,6 +183,7 @@ public partial class ExploreScreen
         _sigil.Update(time);
         _result.Update(time);
         _hudView = BuildHudView();
+        ChimeReady(_hudView);
         _hud.Update(time, _hudView);
         _camera.Follow(Leader.Position, gameTime);
 

@@ -225,6 +225,7 @@ public partial class ExploreScreen : GameScreen
         }
 
         if (HandleSwitching(input)) return;
+        if (HandleRestInput(input)) return;
 
         if (_use.Occurred(input) && UseNearest()) return;
 
@@ -265,6 +266,7 @@ public partial class ExploreScreen : GameScreen
 
         SettleStage(gameTime);
         _scene.Update(gameTime);
+        UpdateRest(gameTime);
         if (UpdateCombat(gameTime)) return;
 
         MoveTownsfolk(gameTime);
