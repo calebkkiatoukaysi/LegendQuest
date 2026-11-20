@@ -1129,10 +1129,71 @@ def needed():
     return names
 
 
+LIKENESS = 5.0
+"""How far apart (degrees) two skills' or foe moves' bodies must be, on average, to read as two
+different moves: likeness()."""
+LIKENESS_SAMPLES = 40
+
+
+def likeness(doc):
+    """The skill and foe clips that would look like one another on the screen: [(a, b, how far
+    apart)], with nought for two whose body tracks are the very same keys. Each clip is sampled at
+    LIKENESS_SAMPLES + 1 points through its own length; the hands (a fist's turn, or a smear,
+    doesn't change what the eye reads the move as) and the scales (a breath) are left out. How far
+    apart two poses are is the widest gap of any channel (a turn in degrees, an offset in rig px).
+    The two clips' samples are lined up by time warping, each pose of one matched with the poses
+    of the other that keep them in order and cost least, so two clips that go through the same
+    poses in the same order, one holding or hurrying where the other doesn't, are as far apart as
+    their poses are, whatever their timing. A pair whose matched gaps average under LIKENESS is
+    reported. A move that is one ability played by two foes is an alias of one clip, not two."""
+    import numpy as np
+    names = sorted(n for n in doc["clips"] if n.startswith(("skill-", "foe-")))
+
+    def body(c):
+        return {b: v for b, v in c["bones"].items() if not b.startswith("hand_")}
+
+    same, curves, chans = {}, {}, set()
+    for n in names:
+        c = doc["clips"][n]
+        same.setdefault(json.dumps(body(c), sort_keys=True), []).append(n)
+        curves[n] = []
+        for k in range(LIKENESS_SAMPLES + 1):
+            pose = sample(c, c["length"] * k / LIKENESS_SAMPLES)
+            curves[n].append({ch: v for ch, v in pose.items() if not ch.startswith("hand_")
+                              and not ch.endswith((".sx", ".sy"))})
+            chans |= set(curves[n][-1])
+    order = sorted(chans)
+    rows = {n: np.array([[p.get(ch, 0.0) for ch in order] for p in curves[n]]) for n in names}
+    out = [(g[0], other, 0.0) for g in same.values() for other in g[1:]]
+    exact = {(a, b) for a, b, _ in out}
+    m = LIKENESS_SAMPLES + 1
+    for i, a in enumerate(names[:-1]):
+        others = names[i + 1:]
+        # gap[k, x, y]: how far apart a's pose x and others[k]'s pose y are.
+        gap = np.abs(rows[a][None, :, None, :] - np.stack([rows[b] for b in others])[:, None, :, :]).max(-1)
+        # The cheapest path from the first poses to the last: a step on in one clip costs the gap
+        # it lands on, a step on in both twice that, so every path is weighed as 2m gaps.
+        cost = np.full((len(others), m, m), np.inf)
+        cost[:, 0, 0] = 2 * gap[:, 0, 0]
+        for x in range(m):
+            for y in range(m):
+                if x and y:
+                    cost[:, x, y] = np.minimum(np.minimum(cost[:, x - 1, y], cost[:, x, y - 1]) + gap[:, x, y],
+                                               cost[:, x - 1, y - 1] + 2 * gap[:, x, y])
+                elif x or y:
+                    cost[:, x, y] = (cost[:, x - 1, y] if x else cost[:, x, y - 1]) + gap[:, x, y]
+        for b, apart in zip(others, cost[:, -1, -1] / (2 * m)):
+            if (a, b) not in exact and apart < LIKENESS:
+                out.append((a, b, float(apart)))
+    return sorted(out, key=lambda r: r[2])
+
+
 def check():
     """Each clip played through on the bases averaged, at DRAG_FPS: how far a foot goes below the
     ground (rig px), how far an elbow or a knee bends the wrong way (degrees), and, for a clip that
-    moves the figure along, how far a planted foot slides. Prints the ones that do any of it."""
+    moves the figure along, how far a planted foot slides. Prints the ones that do any of it, and
+    those the fight needs that are missing, the blows with no hit or release, and the skills and
+    foe moves that look alike (likeness()). True if there are none of any."""
     legs = {s: G.Leg(s) for s in ("near", "far")}
     arms = {s: G.Arm(s) for s in ("near", "far")}
     doc = humanoid()
@@ -1187,14 +1248,18 @@ def check():
              and not any(e[1] in ("hit", "release") for e in doc["clips"][n].get("events", []))]
     for name in blows:
         print("  %-22s has no hit or release" % name)
+    alike = likeness(doc)
+    for a, b, gap in alike:
+        print("  %-22s %s %s" % (a, "the very same move as" if gap == 0 else "hardly differs from (%.1f degrees)" % gap, b))
     worst += [(n, 0.0, 0.0) for n in missing + blows]
     for name, sink, bend in sorted(worst, key=lambda w: -max(w[1], w[2] / 4)):
         if (name, 0.0, 0.0) in [(n, 0.0, 0.0) for n in missing + blows]:
             continue
         print("  %-22s foot %4.1f below the ground, a joint %5.1f degrees the wrong way" % (name, sink, bend))
     print("  %d clips, %d with a foot under the ground or a joint bent backward, %d of the fight's missing, %d blows "
-          "with no hit or release" % (len(doc["clips"]), len(worst) - len(missing) - len(blows), len(missing), len(blows)))
-    return not worst
+          "with no hit or release, %d pairs of skills or foe moves alike" % (len(doc["clips"]), len(worst) - len(missing) - len(blows),
+                                                                             len(missing), len(blows), len(alike)))
+    return not worst and not alike
 
 
 def dumps(doc):

@@ -215,13 +215,45 @@ def countered(keys):
     return out
 
 
+def unwound(keys):
+    """The keys with each hand's turn taken the shortest way round over the whole clip: a pose
+    gives a turn between -180 and 180 (arm_channels()), so a hand going from 170 to -170 would
+    otherwise spin the long way round, the weapon with it. Each key's turn may be put a whole turn
+    or two either way; the first key stays as it is, and so does the last if it is the first's
+    (the clip ends on the stance it started on, where the next clip picks up), and of the rest the
+    choice that turns the hand least in all is taken."""
+    out = [(k[0], dict(k[1])) + tuple(k[2:]) for k in keys]
+    turns = (-720.0, -360.0, 0.0, 360.0, 720.0)
+    for ch in ("hand_near", "hand_far"):
+        if not any(ch in k[1] for k in out):
+            continue
+        values = [k[1].get(ch, 0.0) for k in out]
+        home = abs(values[-1] - values[0]) < 1e-6
+        # Least turning to each key at each choice of whole turns: {offset: (cost, path)}.
+        best = {0.0: (0.0, [values[0]])}
+        for i, v in enumerate(values[1:], 1):
+            fixed = i == len(values) - 1 and home
+            step = {}
+            for o in ((0.0,) if fixed else turns):
+                here = v + o
+                cost, path = min(((c + abs(here - p[-1]), p) for c, p in best.values()), key=lambda r: r[0])
+                step[o] = (cost, path + [here])
+            best = step
+        short = min(best.values(), key=lambda r: r[0])[1]
+        for k, v, was in zip(out, short, values):
+            if abs(v - was) > 1e-6:
+                k[1][ch] = round(v, 2)
+    return out
+
+
 def seq(name, beats, start=None, first="out", settle=16, end=None, blend=0.04, loop=False, lead=None, notes=None,
-        recover=True, spring=True, fps=60, front=None, tracks=None, length=None):
+        recover=True, spring=True, fps=60, front=None, tracks=None, length=None, unwind=True):
     """A clip from beats: from `start` (the stance) eased `first`, through each beat, and `settle`
     frames back to `end` (the stance; settle 0 ends on the last beat). Each smear stretches its
     hand over the three frames either side of its beat, and opens a trail window over them unless
     the beats open and close their own; `recover` puts a recover event a little after the last hit
-    or release."""
+    or release. Each hand is taken the shortest way round over the clip (unwound()) unless
+    `unwind` is false, for a blow whose weapon is meant to go the long way round (OVER_THE_TOP)."""
     kind = _KIT["kind"]
     if start is None:
         start = stance(kind) if kind else C.READY
@@ -259,6 +291,8 @@ def seq(name, beats, start=None, first="out", settle=16, end=None, blend=0.04, l
         if not any(b.trail for b in beats):
             windows.append((max(0.0, when - 3 * FR), min(total, when + 3 * FR), "weapon"))
     tr.update(tracks or {})
+    if unwind:
+        keys = unwound(keys)
     if lead is None:
         lead = {b: v for b, v in LEAD.items() if b not in countered(keys)}
     blows = [e[0] for e in events if e[1] in ("hit", "release")]
@@ -272,6 +306,13 @@ def seq(name, beats, start=None, first="out", settle=16, end=None, blend=0.04, l
 # --------------------------------------------------------------------------- #
 # The auto attacks: three swings for each kind of weapon
 # --------------------------------------------------------------------------- #
+
+OVER_THE_TOP = {("dagger", 3)}
+"""The swings whose weapon goes the long way round, kept as their keys say rather than unwound():
+the dagger's third is wound back behind the head and brought forward over the top and down, the
+blade turning more than half a circle in the strike, which the shortest way round would turn back
+the other way, past the face."""
+
 
 def swings():
     """{kind: [(wind, coil, contact, follow, frames, smear, step back?), ...]}: each kind's three
@@ -481,7 +522,7 @@ def autos():
                 # ribbon over the whole sweep is a half-disc over the head: it opens at the contact.
                 beats[1].trail, beats[2].trail = None, "start"
             seq("auto-%s-%d" % (kind, n), beats, settle=settle, blend=0.04, start=stance(kind), end=stance(kind),
-                notes="auto attack %d of 3 with a %s weapon" % (n, kind))
+                notes="auto attack %d of 3 with a %s weapon" % (n, kind), unwind=(kind, n) not in OVER_THE_TOP)
     for kind in ("bow", "crossbow"):
         for n, (aim, quick) in enumerate(((0.0, False), (0.0, True), (22.0, False)), 1):
             p = bow_poses(kind, aim)
@@ -713,7 +754,8 @@ def combo(name, parts, notes=None, settle=18, glint=False, start_fx=None, ultima
         beats += [B(frames[2], contact, "back", ev=("hit",), smear=side), B(4, follow, "smooth")]
         first = False
     beats[-1].f = 9
-    return seq(name, beats, settle=settle, blend=0.04, notes=notes)
+    return seq(name, beats, settle=settle, blend=0.04, notes=notes,
+               unwind=not any((kind, n) in OVER_THE_TOP for kind, n, _ in parts))
 
 
 def hand_cast(name, style="push", side="near", charge=10, hold=3, release_ev="release", notes=None, aim=0.0,
@@ -722,7 +764,15 @@ def hand_cast(name, style="push", side="near", charge=10, hold=3, release_ev="re
     foe in two or three frames, the release on that frame. style: "push" (the palm shoved out),
     "flick" (thrown from the shoulder like a dart), "point" (a finger jabbed), "lash" (a whip
     cracked over the top), "snap" (a fist snapped shut), "sky" (raised, brought down on the foe),
-    "sweep" (swept wide and low), "up" (thrown up at the sky)."""
+    "sweep" (swept wide and low), "up" (thrown up at the sky), "shoo" (cocked back at the hip and
+    flung up and out, shooing something off), "heart" (from the heart, the forearm opened out and up),
+    "backhand" (from across the chest, flung out the back of the hand first), "halt" (drawn in to
+    the chest, then raised high and flat at the foe, the body leant back from it), "spear" (drawn
+    back by the ear, elbow high, and driven out straight), "scoop" (hunched low, swept up from
+    behind the knee and flung up at the foe), "blow" (lifted to the lips, then sent out from
+    them), "dart" (cocked at the shoulder, elbow down, and thrown out like a dart), "down"
+    (straight up at the sky, then pulled down in front at the foe's feet), "brow" (the hand to the
+    brow, the head bowed to it, then opened out low)."""
     other = "far" if side == "near" else "near"
     keep = {other: A(30, 100, wrist=-10)}
     styles = {
@@ -734,6 +784,16 @@ def hand_cast(name, style="push", side="near", charge=10, hold=3, release_ev="re
         "sky": (A(165, 15, wrist=-30), A(70 + aim, 10, wrist=-50), -10, 14),
         "sweep": (A(-30, 40, wrist=20), A(60, 20, wrist=-40), 6, 4),
         "up": (A(20, 100, wrist=-10), A(150, 15, wrist=-50), -2, -10),
+        "shoo": (A(-25, 80, wrist=35), A(112 + aim, 12, wrist=-35), 4, -4),
+        "heart": (A(40, 145, wrist=-40), A(72 + aim, 28, wrist=-80), 4, 6),
+        "backhand": (A(55, 150, wrist=40), A(102 + aim, 8, wrist=-10), 6, -8),
+        "halt": (A(35, 130, wrist=-20), A(128 + aim, 18, wrist=-70), -2, -8),
+        "spear": (A(150, 115, wrist=10), A(86 + aim, 0, wrist=-50), -10, 14),
+        "scoop": (A(-60, 15, wrist=30), A(72 + aim, 30, wrist=-40), 22, 2),
+        "blow": (A(110, 140, wrist=-60), A(82 + aim, 18, wrist=-40), 2, 8),
+        "dart": (A(40, 150, wrist=20), A(90 + aim, 4, wrist=-30), -4, 10),
+        "down": (A(175, 8, wrist=-30), A(25 + aim, 10, wrist=-60), -12, 14),
+        "brow": (A(135, 160, wrist=-60), A(62 + aim, 20, wrist=-50), 10, -4),
     }
     back_arm, out_arm, t0, t1 = styles[style]
     p = {"near": None, "far": None}
@@ -759,7 +819,11 @@ def two_hand_cast(name, style="push", charge=14, hold=4, release_ev="release", n
     """A spell from both hands: "push" (gathered at the chest, shoved out), "fan" (thumbs together,
     fingers fanned at the foe), "overhead" (raised over the head, hurled forward), "sky" (both
     raised high to the sky and held), "ground" (raised, then driven down at the floor), "spread"
-    (gathered in, then flung wide), "wave" (palms shoved out with a stamp)."""
+    (gathered in, then flung wide), "wave" (palms shoved out with a stamp), "clock" (both straight
+    up at twelve, then flung to three and six like a clock's hands), "offer" (cupped low at the
+    belly, then lifted up and opened out, giving), "tide" (both low behind, then heaved up and
+    over at the foe like a wave), "hug" (hugged in to the chest, hunched, then flung up high),
+    "jaws" (held out together like shut jaws, then torn open, one up and one down)."""
     look = -2
     if style == "push":
         g = F(torso=-6, look=-2, legs=L(-2, 2), near=A(10, 120, wrist=-30), far=A(15, 115, wrist=-30))
@@ -779,6 +843,21 @@ def two_hand_cast(name, style="push", charge=14, hold=4, release_ev="release", n
     elif style == "spread":
         g = F(torso=12, look=8, legs=L(0, 6), near=A(10, 130, wrist=-20), far=A(10, 130, wrist=-20))
         o = F(torso=-12, look=-14, legs=L(-1, 0), near=A(120, 10, wrist=-60), far=A(60, 10, wrist=-60))
+    elif style == "clock":
+        g = F(torso=-6, look=-16, legs=L(-1, 2), near=A(172, 6, wrist=-20), far=A(168, 8, wrist=-20))
+        o = F(torso=6, look=0, legs=L(3, 7, near=6, far=-6), near=A(92, 4, wrist=-60), far=A(-2, 4, wrist=-20))
+    elif style == "offer":
+        g = F(torso=12, look=14, legs=L(-1, 5), near=A(25, 118, wrist=-40), far=A(30, 116, wrist=-40))
+        o = F(torso=-6, look=-14, legs=L(1, 1, near=3), near=A(122, 28, wrist=-75), far=A(116, 30, wrist=-75))
+    elif style == "tide":
+        g = F(torso=14, look=6, legs=L(-3, 8), near=A(-45, 30, wrist=10), far=A(-40, 30, wrist=10))
+        o = F(torso=-6, look=-8, legs=L(4, 2, near=6), near=A(110, 10, wrist=-60), far=A(104, 12, wrist=-60))
+    elif style == "hug":
+        g = F(torso=16, look=10, legs=L(0, 6), near=A(70, 135, wrist=-30), far=A(65, 135, wrist=-30))
+        o = F(torso=-10, look=-22, legs=L(-1, 0), near=A(150, 25, wrist=-50), far=A(135, 25, wrist=-50))
+    elif style == "jaws":
+        g = F(torso=6, look=2, legs=L(-1, 3), near=A(85, 25, wrist=-40), far=A(80, 25, wrist=-40))
+        o = F(torso=8, look=4, legs=L(3, 4, near=5), near=A(140, 15, wrist=-40), far=A(25, 15, wrist=-40))
     elif style == "wave":
         g = F(torso=-8, look=-4, legs=L(-3, 2, lift=(6, 0)), near=A(20, 120, wrist=-30), far=A(25, 115, wrist=-30))
         o = F(torso=14, look=4, legs=L(5, 6, near=8), near=A(86, 4, wrist=-70), far=A(80, 6, wrist=-70))
@@ -800,15 +879,32 @@ def two_hand_cast(name, style="push", charge=14, hold=4, release_ev="release", n
 
 
 def item_up(name, side="near", item=180, hold=None, shout=True, notes=None, release_at=1, kneel=False, settle=16,
-            charge=10, linger=18, fx="burst-self", grip=None):
+            charge=10, linger=18, fx="burst-self", grip=None, style="high"):
     """A buff called out: what's in the hand raised to the sky (a sword, a lantern, a fist), the
-    chest out, the head back: the release when it's at the top."""
+    chest out, the head back: the release when it's at the top. style: "high" (straight up at
+    the sky), "level" (from low at the hip up to the sky in front, leant in at the foe), "low"
+    (lifted to the chest, then set low before the ally, crouched over it), "face" (lifted before
+    the face, the head bowed to it), "knelt" (raised high from a kneel, the body kept crouched
+    low, the other hand to the heart)."""
     hold = hold or ("blade", "blade")
     dip = F(torso=10, look=6, legs=L(0, 6 if not kneel else 10), near=A(10, 100, item=120) if side == "near" else None,
             far=A(10, 100) if side == "far" else None, hold=hold)
     arm = A(170, 6, item=item)
     up = F(torso=-8, look=-18, legs=L(-1, 0), near=arm if side == "near" else A(30, 60, item=150),
            far=arm if side == "far" else A(40, 50), hold=hold, grip=grip)
+    if style == "level":
+        dip = F(torso=4, look=4, legs=L(-2, 5), near=A(-30, 40, item=150), far=A(30, 80), hold=hold)
+        up = F(torso=8, look=-10, legs=L(3, 3, near=5), near=A(128, 4, item=item - 50), far=A(-20, 50), hold=hold)
+    elif style == "low":
+        dip = F(torso=-2, look=0, legs=L(0, 3), near=A(100, 70, item=item), far=A(40, 100), hold=hold)
+        up = F(torso=20, look=12, legs=L(1, 12, near=4), near=A(55, 8, item=item), far=A(70, 40), hold=hold)
+    elif style == "face":
+        dip = F(torso=8, look=4, legs=L(0, 4), near=A(-10, 30, item=item), far=A(30, 100), hold=hold)
+        up = F(torso=6, look=18, legs=L(0, 3), near=A(55, 115, item=item), far=A(45, 125), hold=hold)
+    elif style == "knelt":
+        up = F(torso=-4, look=-16, legs=L(-2, 16, near=8, far=-6), near=arm, far=A(40, 130), hold=hold)
+    elif style != "high":
+        raise ValueError(style)
     over = dict(up)
     over["arm_%s_up" % side] = up["arm_%s_up" % side] - 5
     over["torso.sy"] = 1.012
@@ -820,7 +916,8 @@ def item_up(name, side="near", item=180, hold=None, shout=True, notes=None, rele
 def guard_up(name, style="shield", notes=None, crouch=6, settle=14, linger=14, release="release"):
     """A defensive set: "shield" (the shield brought up and planted in front), "wall" (down behind
     it, braced), "brace" (both fists clenched, the body tensed and set), "cross" (the forearms
-    crossed, then thrown open)."""
+    crossed, then thrown open), "cloak" (ducked behind the far arm raised across the face, then
+    that arm swept down and round like a cloak thrown about)."""
     if style == "shield":
         set_ = F(torso=4, look=0, legs=L(-1, crouch, near=4), near=A(20, 100, item=140), far=A(80, 20))
         jolt = F(base=set_, torso=6, legs=L(0, crouch + 1, near=4))
@@ -830,6 +927,9 @@ def guard_up(name, style="shield", notes=None, crouch=6, settle=14, linger=14, r
     elif style == "brace":
         set_ = F(torso=12, look=4, legs=L(-1, crouch + 4, near=4, far=-4), near=A(20, 120, wrist=-20), far=A(25, 120))
         jolt = F(base=set_, torso=14, torso__sy=0.97, legs=L(-1, crouch + 6, near=4, far=-4))
+    elif style == "cloak":
+        set_ = F(torso=14, look=14, legs=L(-1, crouch + 3), near=A(30, 110, wrist=-20), far=A(140, 120))
+        jolt = F(torso=-4, look=-6, legs=L(1, 2, near=3), near=A(20, 100, wrist=-20), far=A(-30, 30))
     elif style == "cross":
         set_ = F(torso=10, look=6, legs=L(0, crouch + 2), near=A(60, 110, wrist=-30), far=A(65, 105))
         jolt = F(torso=-8, look=-10, legs=L(0, 1), near=A(110, 20, wrist=-40), far=A(30, 20))
@@ -842,7 +942,9 @@ def guard_up(name, style="shield", notes=None, crouch=6, settle=14, linger=14, r
 def reach_out(name, style="palm", notes=None, settle=14, charge=10, linger=10, fx="glow-hand"):
     """A heal or a gift reached out to an ally: "palm" (the open hand held out), "both" (both
     hands, low and gentle), "toss" (an underhand toss of something), "chest" (the hand to the heart,
-    then out), "circle" (the hand turning a slow circle backwards)."""
+    then out), "circle" (the hand turning a slow circle backwards), "cut" (the near hand drawn
+    across the far one before the chest, then the far arm thrust out to the ally), "open" (both
+    hands to the heart, then opened out low to either side)."""
     if style == "palm":
         g = F(torso=-2, look=0, near=A(20, 100, wrist=-30), far=A(30, 90))
         o = F(torso=8, look=4, legs=L(2, 2, near=3), near=A(80, 15, wrist=-70), far=A(10, 80))
@@ -855,6 +957,12 @@ def reach_out(name, style="palm", notes=None, settle=14, charge=10, linger=10, f
     elif style == "chest":
         g = F(torso=6, look=8, near=A(40, 140, wrist=-40), far=A(30, 120))
         o = F(torso=-2, look=-4, legs=L(2, 2, near=3), near=A(90, 10, wrist=-70), far=A(20, 80))
+    elif style == "cut":
+        g = F(torso=6, look=12, legs=L(-1, 2), near=A(40, 110, item=95), far=A(60, 90, wrist=-60))
+        o = F(torso=10, look=2, legs=L(3, 3, near=5), near=A(0, 80, item=110), far=A(88, 4, wrist=-70))
+    elif style == "open":
+        g = F(torso=6, look=8, near=A(40, 140, wrist=-40), far=A(35, 135, wrist=-40))
+        o = F(torso=-6, look=-6, legs=L(0, 2), near=A(60, 8, wrist=-70), far=A(-30, 8, wrist=-70))
     elif style == "circle":
         g = F(torso=0, look=0, near=A(120, 30, wrist=-20), far=A(30, 90))
         o = F(torso=6, look=2, near=A(70, 20, wrist=-60), far=A(30, 90))
@@ -872,7 +980,8 @@ def reach_out(name, style="palm", notes=None, settle=14, charge=10, linger=10, f
 def throw(name, style="overhand", notes=None, settle=14, release_arg=None, frames=None):
     """Something thrown: "overhand" (wound back behind the head and hurled), "net" (both hands,
     swung round and flung wide), "lob" (underhand, high), "drop" (dashed down at the feet), "flip"
-    (flicked up off the thumb). `frames` (anticipation, hold, throw, follow-through) stretches the
+    (flicked up off the thumb), "spike" (the free hand's, up behind the head and hurled down at the
+    floor in front, the blade kept levelled at the foe). `frames` (anticipation, hold, throw, follow-through) stretches the
     style's own."""
     rel = ("release",) if release_arg is None else (("release", release_arg),)
     given = frames
@@ -899,6 +1008,12 @@ def throw(name, style="overhand", notes=None, settle=14, release_arg=None, frame
         c = F(base=w, near=A(140, 50))
         o = F(torso=26, look=20, legs=L(-2, 12), near=A(10, 10, wrist=-40), far=A(60, 60))
         f = F(base=o, torso=28)
+        frames = (6, 2, 3, 6)
+    elif style == "spike":
+        w = F(torso=-10, look=-6, legs=L(-2, 1, lift=(6, 0)), near=A(86, 6, item=90), far=A(165, 70, wrist=20))
+        c = F(base=w, torso=-12, far=A(172, 76, wrist=25))
+        o = F(torso=20, look=26, legs=L(3, 9, near=7), near=A(92, 6, item=94), far=A(25, 12, wrist=-40))
+        f = F(base=o, torso=22, look=28)
         frames = (6, 2, 3, 6)
     elif style == "flip":
         w = F(torso=4, look=6, legs=L(0, 3), near=A(30, 90, wrist=-10), far=A(30, 80))
@@ -988,7 +1103,7 @@ def dash_strike(name, kind="dagger", n=1, notes=None, dash=18, settle=18, glow=N
         beats += [B(4, F(base=coil, root__x=dash, legs=L(2, 8, near=10)), "in"), B(3, lunge, "back", ev=("hit",), smear=side)]
     beats += [B(8, F(base=follow, root__x=dash, legs=L(6, 6, near=10)), "smooth", trail="end"),
               B(10, F(base=C.READY, root__x=dash * 0.3, legs=L(0, 4, near=4, lift=(6, 0))), "smooth")]
-    return seq(name, beats, settle=settle, blend=0.04, notes=notes)
+    return seq(name, beats, settle=settle, blend=0.04, notes=notes, unwind=(kind, n) not in OVER_THE_TOP)
 
 
 def rope_swing(name, notes=None):
@@ -1176,6 +1291,340 @@ def shield_slam(name, notes=None):
 
 
 # --------------------------------------------------------------------------- #
+# Skills with a move of their own: each says what it does, where an archetype would have made two
+# different skills look alike (clips.py --check's likeness test). Each keeps the archetype's
+# frames to its release and its length, which the fight times its effect by.
+# --------------------------------------------------------------------------- #
+
+def shield_rap(name, notes=None):
+    """Raise Shield: the sword's flat rapped twice on the shield to draw every eye (the release on
+    the first rap), then the shield brought up high, the Warden peering over its rim."""
+    back = F(torso=-6, look=-6, legs=L(-2, 3), near=A(150, 70, item=215), far=A(55, 70))
+    deep = F(base=back, torso=-8, near=A(158, 72, item=228), far=A(55, 70))
+    rap = F(torso=8, look=0, legs=L(1, 5, near=2), near=A(70, 70, item=118), far=A(60, 64))
+    lift = F(base=rap, torso=4, near=A(118, 72, item=200))
+    up = F(torso=-4, look=-8, legs=L(-1, 6, near=4, far=-2), near=A(25, 120, item=165), far=A(118, 42))
+    held = F(base=up, torso=-5, look=-9, torso__sy=1.01)
+    beats = [B(7, back, "out"), B(2, deep, "in"), B(3, rap, "back", ev=("release", ("fx", "burst-self"))),
+             B(4, lift, "out"), B(3, rap, "in", ev=(("fx", "spark"),)), B(8, up, "back"), B(6, held, "smooth")]
+    return seq(name, beats, settle=7, blend=0.05, notes=notes)
+
+
+def plant_line(name, notes=None):
+    """Hold the Line: the near foot lifted and stamped down into a wide, low stance (the release
+    and the land on the stamp), the shield thrust out square and the cudgel laid over its rim at
+    the front row, held there daring them."""
+    lift = F(torso=-6, look=-4, legs=L(-3, 2, near=4, lift=(20, 0)), near=A(60, 115, item=175), far=A(40, 80))
+    stamp = F(torso=16, look=-4, legs=L(5, 13, near=16, far=-8), near=A(100, 50, item=96), far=A(88, 12))
+    sink = F(base=stamp, torso=18, legs=L(5, 14.5, near=16, far=-8))
+    dare = F(base=stamp, torso=15, look=-7, legs=L(5, 13.5, near=16, far=-8), near=A(102, 46, item=92))
+    beats = [B(8, lift, "out"), B(4, stamp, "back", ev=("release", "land", ("fx", "dust"), ("fx", "burst-self"))),
+             B(5, sink, "out"), B(9, dare, "smooth")]
+    return seq(name, beats, settle=14, blend=0.05, notes=notes)
+
+
+def kneel_vigil(name, notes=None):
+    """Vigil: down on one knee, the sword planted point down before it and the shield lifted high
+    and out over the ally (the release as the knee meets the floor), the head bowed; and up."""
+    step = F(legs=C.KNEEL_STEP, torso=12, look=6, near=A(40, 60, item=60), far=A(80, 50))
+    down = F(base=C.KNEEL, torso=8, look=16, near=A(72, 40, item=2), far=A(140, 30))
+    bowed = F(base=down, torso=10, look=20, far=A(144, 28), torso__sy=1.01)
+    rise = F(legs=C.KNEEL_RISE, torso=10, look=6, near=A(40, 60, item=60), far=A(90, 40))
+    beats = [B(6, step, "out"), B(6, down, "back", ev=("release", ("fx", "burst-self"))), B(12, bowed, "smooth"),
+             B(8, rise, "smooth")]
+    return seq(name, beats, settle=8, blend=0.05, notes=notes)
+
+
+def rally_call(name, notes=None):
+    """Rally: the blade swept low behind, then up through a great arc to the sky with a step on and
+    the free arm thrown up to lift them (the release at the top), and pumped twice: up, all of you."""
+    low = F(torso=16, look=4, legs=L(-2, 6), near=A(-40, 20, item=-75), far=A(20, 60))
+    up = F(torso=-10, look=-20, legs=L(4, 2, near=8), near=A(172, 6, item=182), far=A(130, 30, wrist=-50))
+    pump = F(base=up, torso=-3, look=-14, near=A(125, 62, item=140), far=A(100, 60, wrist=-50))
+    top = F(base=up, torso=-12, look=-22, torso__sy=1.012)
+    beats = [B(12, low, "out"), B(8, up, "back", ev=("release", ("fx", "burst-self"))), B(6, pump, "out"),
+             B(6, top, "back"), B(12, F(base=top, torso=-11), "smooth")]
+    return seq(name, beats, settle=16, blend=0.06, notes=notes)
+
+
+def salute_call(name, notes=None):
+    """Call the Order: heels together and the blade brought up before the face in a knight's salute
+    (the release), then swept out and down to the side, the shield low at the side: the Order is
+    called, and comes."""
+    draw = F(torso=4, look=2, legs=L(0, 3, near=-6, far=3), near=A(10, 60, item=60), far=A(15, 30))
+    salute = F(torso=-5, look=-3, legs=L(0, 0.5, near=-6, far=3), near=A(35, 140, item=180), far=A(10, 25))
+    sweep = F(torso=2, look=0, legs=L(1, 1.5, near=-6, far=3), near=A(70, 18, item=28), far=A(10, 25))
+    held = F(base=sweep, torso=0, look=-2, torso__sy=1.01)
+    beats = [B(12, draw, "out"), B(8, salute, "back", ev=("release", ("fx", "glint"))), B(10, sweep, "back"),
+             B(14, held, "smooth")]
+    return seq(name, beats, settle=16, blend=0.06, notes=notes)
+
+
+def swig_and_toss(name, notes=None):
+    """Rum Ration: the flask to the lips and the head thrown back for a swig, then tossed on to the
+    ally underhand (the release), and the mouth wiped on the back of the hand."""
+    swig = F(torso=-14, look=-36, legs=L(-2, 2), near=A(15, 40, item=120), far=A(105, 150, wrist=-40))
+    deep = F(base=swig, torso=-17, look=-42)
+    toss = F(torso=6, look=-4, legs=L(2, 3, near=4), near=A(15, 40, item=120), far=A(105, 10, wrist=-40))
+    wipe = F(torso=2, look=-4, legs=L(1, 3, near=3), near=A(15, 40, item=120), far=A(60, 140, wrist=-10))
+    beats = [B(6, swig, "out", ev=(("fx", "glow-hand"),)), B(4, deep, "smooth"), B(5, toss, "back", ev=("release",)),
+             B(6, F(base=toss, far=A(112, 8, wrist=-50)), "smooth"), B(4, wipe, "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+#: The hivekeeper's smoker held low and out of the way while the free hand works.
+SMOKER_LOW = A(5, 45, item=140, hold="held")
+
+
+def smear_salve(name, notes=None):
+    """Honey Salve: the hand dipped down into the pot at the hip, then the arm reached out to the
+    ally and drawn down in a stroke, smearing it on (the release as the hand meets them)."""
+    dip = F(torso=16, look=22, legs=L(-1, 4), near=SMOKER_LOW, far=A(-25, 50, wrist=30))
+    scoop = F(base=dip, torso=18, far=A(-18, 60, wrist=-10))
+    reach = F(torso=10, look=4, legs=L(3, 4, near=5), near=SMOKER_LOW, far=A(82, 15, wrist=-75))
+    stroke = F(torso=14, look=10, legs=L(3.5, 5, near=5), near=SMOKER_LOW, far=A(55, 25, wrist=-85))
+    beats = [B(6, dip, "out", ev=(("fx", "glow-hand"),)), B(4, scoop, "smooth"), B(5, reach, "back", ev=("release",)),
+             B(6, stroke, "linear"), B(4, F(base=stroke, far=A(50, 30, wrist=-80)), "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+#: The staff's hand while the free hand makes a gesture: low at the side, the staff kept upright
+#: (arm_channels()).
+STAFF_KEPT = A(25, 95)
+
+
+def quicken(name, notes=None):
+    """Haste: the free arm winds a big circle before the chest like a clock's key, up, out, down
+    and in, and flicks it at the ally (the release), then rolls on round, over and over, while the
+    staff ticks on the floor: faster, faster."""
+    a = F(torso=-4, look=-8, legs=L(-1, 2), near=STAFF_KEPT, far=A(150, 70, wrist=-20))
+    b = F(base=a, torso=-2, look=-4, far=A(112, 12, wrist=-40))
+    c = F(base=a, torso=2, look=2, far=A(48, 20, wrist=-10))
+    d = F(base=a, torso=2, look=0, far=A(20, 120, wrist=-10))
+    flick = F(torso=6, look=2, legs=L(2, 2, near=3), near=STAFF_KEPT, far=A(100, 6, wrist=-70))
+    roll_in = F(base=flick, torso=2, look=-4, legs=L(1.5, 3, near=3), near=A(34, 112), far=A(145, 75, wrist=-30))
+    roll_out = F(base=flick, torso=8, look=4, near=A(22, 86), far=A(55, 15, wrist=-65))
+    beats = [B(3, a, "out", ev=(("fx", "glow-hand"),)), B(2, b, "linear"), B(2, c, "linear"), B(1, d, "linear"),
+             B(4, flick, "back", ev=("release",)), B(4, roll_in, "smooth"), B(4, roll_out, "smooth"),
+             B(4, roll_in, "smooth"), B(4, roll_out, "smooth")]
+    return seq(name, beats, settle=10, blend=0.06, notes=notes)
+
+
+def examine(name, notes=None):
+    """Read the Wound: leant in with the head down, the hand at the chin, studying; a short jab at
+    the weak place (the release), and the hand back at the chin; then the head tilted one way and
+    the other, reading it."""
+    lean = F(torso=24, look=34, legs=L(4, 5, near=5), near=STAFF_KEPT, far=A(62, 150, wrist=-30))
+    jab = F(torso=28, look=26, legs=L(5, 6, near=5), near=STAFF_KEPT, far=A(40, 62, wrist=-25))
+    tilt = F(base=lean, torso=25, look=38)
+    tilt2 = F(base=lean, torso=22, look=24)
+    beats = [B(8, lean, "out"), B(4, jab, "back", ev=("release",)), B(8, tilt, "smooth"), B(6, tilt2, "smooth")]
+    return seq(name, beats, settle=12, blend=0.06, notes=notes)
+
+
+def curse(name, notes=None):
+    """A hex: hunched, the hand drawn back to the face, thrust out at the foe (the release), then
+    wrenched back in to the chest and twisted there, as if tearing something out of it."""
+    draw = F(torso=20, look=-8, legs=L(-2, 6), near=STAFF_KEPT, far=A(40, 150, wrist=30))
+    thrust = F(torso=24, look=-4, legs=L(3, 7, near=5), near=STAFF_KEPT, far=A(92, 18, wrist=40))
+    wrench = F(torso=14, look=-10, legs=L(-2, 8), near=STAFF_KEPT, far=A(30, 140, wrist=-50))
+    back = F(base=wrench, torso=18, far=A(40, 128, wrist=35))
+    beats = [B(8, draw, "out"), B(4, thrust, "back", ev=("release", ("fx", "glow-hand"))), B(6, wrench, "out"),
+             B(6, back, "back")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def shake_hive(name, notes=None, fx="smoke"):
+    """Angry Hive: the smoker hoisted overhead and shaken hard, side to side, then thrust down at
+    the row as the bees pour out of it (the hit), the arm carried on past and back."""
+    hold = ("held", "blade")
+    up = F(torso=-8, look=-16, legs=L(-1, 3), near=A(160, 25, item=180), far=A(40, 70), hold=hold)
+    left = F(base=up, torso=-6, near=A(148, 35, item=145), hold=hold)
+    right = F(base=up, torso=-10, near=A(172, 15, item=215), hold=hold)
+    thrust = F(torso=16, look=4, legs=L(5, 5, near=7), near=A(96, 10, item=100), far=A(-10, 50), hold=hold)
+    past = F(base=thrust, torso=18, near=A(80, 10, item=78), hold=hold)
+    beats = [B(5, up, "out"), B(3, left, "back"), B(3, right, "back"), B(2, left, "in"),
+             B(3, thrust, "back", ev=("hit", ("fx", fx))), B(10, past, "smooth")]
+    return seq(name, beats, settle=16, blend=0.04, notes=notes)
+
+
+def high_guard(name, notes=None):
+    """Riposte: the weight rocked back and the blade lifted into a high hanging guard, the point
+    down at the foe (the release as it sets, a glint), and the point beckoning: miss me."""
+    rock = F(torso=-8, look=-2, legs=L(-6, 6, far=-4), near=A(140, 60, item=110), far=A(70, 40))
+    guard = F(torso=-6, look=0, legs=L(-5, 7, far=-4), near=A(152, 40, item=62), far=A(75, 30))
+    beck = F(base=guard, near=A(150, 44, item=84))
+    lower = F(torso=0, look=0, legs=L(-2, 4), near=A(95, 60, item=125), far=A(70, 40))
+    beats = [B(8, rock, "out"), B(4, guard, "back", ev=("release", ("fx", "glint"))), B(6, beck, "smooth"),
+             B(6, guard, "smooth"), B(7, lower, "smooth")]
+    return seq(name, beats, settle=7, blend=0.06, notes=notes)
+
+
+def order_point(name, notes=None):
+    """Command: the blade at the shoulder, chin up, the free hand drawn in and thrown out straight,
+    pointing the ally on (the release), and held: go."""
+    draw = F(torso=-4, look=-4, legs=L(-1, 2), near=A(20, 125, item=178), far=A(30, 132, wrist=-10))
+    point = F(torso=8, look=0, legs=L(3, 3, near=5), near=A(20, 125, item=178), far=A(96, 2, wrist=-12))
+    held = F(base=point, torso=4, look=-4)
+    beats = [B(8, draw, "out"), B(4, point, "back", ev=("release", ("fx", "glow-hand"))), B(12, held, "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def lantern_out(name, notes=None):
+    """Reveal: the lantern swung up and thrust high out into the dark (the release), the free hand
+    shading the eyes, peering, and the light swept across the foes."""
+    hold = ("carried", "blade")
+    low = F(torso=8, look=4, legs=L(-2, 4), near=A(-10, 60, item=180), far=A(30, 80), hold=hold)
+    out = F(torso=10, look=-6, legs=L(4, 4, near=6), near=A(148, 6, item=180), far=A(55, 145, wrist=-60), hold=hold)
+    left = F(base=out, near=A(136, 12, item=180), torso=12, hold=hold)
+    right = F(base=out, near=A(158, 4, item=180), torso=9, hold=hold)
+    beats = [B(8, low, "out"), B(4, out, "back", ev=("release", ("fx", "glow-hand"))), B(6, left, "smooth"),
+             B(6, right, "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def fencer_bound(name, notes=None):
+    """A fencer's bound back out of reach: down, then off both feet back and low with the blade
+    kept levelled at the foe and the free arm up behind for balance (the release as it leaves the
+    floor), down on the back foot, and the guard taken again."""
+    crouch = F(torso=6, look=2, legs=L(-2, 9), near=A(84, 8, item=90), far=A(200, 50))
+    bound = F(torso=-6, look=0, legs=C.legs_at(-2, -4, {"lean": 30, "bend": 50}, {"lean": -10, "bend": 60}),
+              near=A(88, 4, item=92), far=A(215, 40), root__y=-16, root__x=-24)
+    land = F(torso=4, look=2, legs=L(-4, 11, far=-8), near=A(86, 8, item=90), far=A(205, 50), root__x=-22)
+    beats = [B(8, crouch, "out"), B(3, crouch, "in"), B(10, bound, "out", ev=("release", ("fx", "smoke"))),
+             B(8, F(base=bound, root__y=-10, root__x=-26), "in"), B(8, land, "back", ev=("land",)),
+             B(10, F(base=C.READY, root__x=-8, legs=L(-1, 4, far=-4)), "smooth")]
+    return seq(name, beats, settle=14, blend=0.05, notes=notes)
+
+
+def edge_wipe(name, notes=None):
+    """Poisoned Edge: the dagger held up level before the chest and the off hand drawn along its
+    edge from the hilt to the point, wiping the venom on (the release at the point), and the blade
+    turned to the light."""
+    level = A(55, 85, item=95)
+    hilt = F(torso=6, look=14, legs=L(-1, 3), near=level, far_to=at_near_wrist(2, -2))
+    point = F(torso=7, look=12, legs=L(-1, 3), near=level, far_to=at_near_wrist(20, -4))
+    turn = F(base=point, near=A(62, 80, item=125), far=A(30, 90), look=4)
+    beats = [B(10, hilt, "out", ev=(("fx", "glow-weapon"),)), B(5, point, "back", ev=("release",)),
+             B(10, turn, "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def sigil(name, notes=None):
+    """Ward: the free hand traces a sigil in the air, low across the body, out and up, and sets it
+    up over the ally, the arm high and the head back (the release)."""
+    up = F(torso=8, look=6, legs=L(-1, 3), near=STAFF_KEPT, far=A(50, 110, wrist=-20))
+    across = F(base=up, torso=2, look=-2, far=A(96, 30, wrist=-40))
+    set_ = F(torso=-8, look=-20, legs=L(0, 1, near=3), near=STAFF_KEPT, far=A(158, 14, wrist=-75))
+    beats = [B(5, up, "out", ev=(("fx", "glow-hand"),)), B(5, across, "linear"), B(5, set_, "back", ev=("release",)),
+             B(10, F(base=set_, torso=5), "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def press_burn(name, notes=None):
+    """Cauterise: the hand drawn back glowing, pressed down on the wound with the weight behind
+    it, crouched over it (the release), pressed harder, and snatched up off it, hot, to the
+    shoulder."""
+    draw = F(torso=-4, look=0, legs=L(-1, 2), near=STAFF_KEPT, far=A(25, 120, wrist=-40))
+    press = F(torso=26, look=16, legs=L(4, 10, near=6), near=STAFF_KEPT, far=A(50, 8, wrist=-85))
+    harder = F(base=press, torso=30, legs=L(5, 12, near=6), far=A(46, 4, wrist=-88))
+    off = F(torso=-4, look=-2, legs=L(0, 3, near=3), near=STAFF_KEPT, far=A(120, 140, wrist=-20))
+    beats = [B(12, draw, "out", ev=(("fx", "glow-hand"),)), B(5, press, "back", ev=("release",)),
+             B(8, harder, "smooth"), B(6, off, "out")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def rub_hands(name, notes=None):
+    """Warm Hands: the hands rubbed together before the chest, hunched over them, then the arms
+    flung wide, one forward and one back, the chest open and the warmth given off them (the
+    release)."""
+    together = F(torso=12, look=14, legs=L(0, 5), near=A(52, 108, wrist=-30), far=A(48, 112, wrist=-30))
+    rub = F(base=together, near=A(48, 114, wrist=-20), far=A(56, 102, wrist=-40))
+    spread = F(torso=-8, look=-8, legs=L(1, 3, near=3), near=A(112, 8, wrist=-75), far=A(-55, 10, wrist=-75))
+    beats = [B(5, together, "out", ev=(("fx", "glow-hands"),)), B(5, rub, "smooth"), B(5, spread, "back", ev=("release",)),
+             B(10, F(base=spread, torso=-5), "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def seize(name, notes=None):
+    """Arrest: a step in with the cudgel raised, the foe's wrist seized high (the hit), and twisted
+    down and round behind it, the cudgel held over it."""
+    step = F(torso=8, look=0, legs=L(3, 4, near=8), near=A(150, 50, item=205), far=A(60, 40))
+    grab = F(torso=10, look=-2, legs=L(6, 5, near=10), near=A(155, 45, item=210), far=A(96, 6, wrist=-20))
+    twist = F(torso=20, look=12, legs=L(5, 9, near=10), near=A(140, 60, item=190), far=A(35, 50, wrist=60))
+    beats = [B(6, step, "out"), B(3, grab, "back", ev=("hit",)), B(5, twist, "out")]
+    return seq(name, beats, settle=14, blend=0.04, notes=notes)
+
+
+def mocking_bow(name, notes=None):
+    """Vicious Mockery: the blade swept out wide and down into a deep, mocking bow, the free hand
+    on the heart (the release), held, then up with the head cocked one way and the other."""
+    sweep = F(torso=-4, look=-6, legs=L(-1, 2, near=4), near=A(120, 20, item=150), far=A(30, 90))
+    bow = F(torso=34, look=26, legs=L(-3, 6, near=10, far=-6), near=A(70, 10, item=40), far=A(30, 150, wrist=-40))
+    up = F(torso=-6, look=-12, legs=L(-1, 3, near=6), near=A(40, 60, item=120), far=A(-15, 40))
+    cock = F(base=up, look=-4, torso=-4)
+    beats = [B(8, sweep, "out"), B(4, bow, "back", ev=("release",)), B(12, F(base=bow, torso=36), "smooth"),
+             B(6, up, "out"), B(6, cock, "smooth"), B(6, up, "smooth")]
+    return seq(name, beats, settle=14, blend=0.06, notes=notes)
+
+
+def pommel(name, notes=None):
+    """Belaying Pin: the sword turned in the hand and hoisted, the blade back over the shoulder,
+    and the pommel clubbed down on the foe's head (the hit), the weight dropping into it."""
+    hoist = F(torso=-8, look=-8, legs=L(-3, 2), near=A(150, 90, item=250), far=A(60, 50))
+    coil = F(base=hoist, torso=-10, near=A(158, 92, item=258))
+    clout = F(torso=22, look=6, legs=L(6, 6, near=6), near=A(78, 40, item=170), far=A(-10, 40))
+    past = F(base=clout, torso=25, legs=L(6.5, 7, near=6), near=A(66, 46, item=160))
+    beats = [B(7, hoist, "linear"), B(2, coil, "in", ev=(("fx", "glint"),)), B(3, clout, "back", ev=("hit",)),
+             B(8, past, "smooth")]
+    return seq(name, beats, settle=14, blend=0.04, notes=notes)
+
+
+def second_wind(name, notes=None):
+    """Second Wind: bent right over, leant on the sword with its point on the floor and the other
+    hand on the knee, then up with a great breath in, the chest swelling and the head back (the
+    release), and let out, the guard taken again."""
+    # The hand comes down close in front first, so the blade drops point first rather than
+    # sweeping out level like a cut.
+    drop = F(torso=30, look=16, legs=L(-2, 9), near=A(20, 70, item=70), far=A(20, 20))
+    bent = F(torso=48, look=24, legs=L(-2, 14), near=A(58, 32, item=10), far=A(14, 12))
+    heave = F(base=bent, torso=50, look=26, torso__sy=0.97)
+    breath = F(torso=-10, look=-14, legs=L(-1, 2), near=A(30, 70, item=120), far=A(40, 60), torso__sy=1.035,
+               torso__sx=1.02)
+    out = F(base=C.READY, torso=10, look=0, torso__sy=0.99)
+    beats = [B(3, drop, "out"), B(3, bent, "smooth"), B(2, heave, "smooth"),
+             B(4, breath, "back", ev=("release", ("fx", "burst-self"))), B(8, breath, "smooth"),
+             B(6, out, "smooth")]
+    return seq(name, beats, settle=14, blend=0.05, notes=notes)
+
+
+def flourish(name, notes=None):
+    """Inspiration: the blade drawn up before the face, whirled over forward and pointed at the
+    ally (the release), and a nod to them."""
+    up = F(torso=-2, look=-2, legs=L(-1, 2), near=A(30, 130, item=172), far=A(-10, 30))
+    whirl = F(torso=2, look=0, legs=L(0, 2), near=A(66, 72, item=50), far=A(-10, 30))
+    point = F(torso=6, look=2, legs=L(2, 3, near=4), near=A(92, 8, item=96), far=A(-15, 30))
+    nod = F(base=point, torso=8, look=12)
+    beats = [B(8, up, "out"), B(4, whirl, "linear"), B(4, point, "back", ev=("release",)), B(10, nod, "smooth")]
+    return seq(name, beats, settle=12, blend=0.06, notes=notes)
+
+
+def hymn(name, notes=None):
+    """Battle Hymn: the head bowed and the free hand on the heart, a breath drawn in, then the chest
+    up and the head back, the free arm opened wide and the blade lifted (the release on the first
+    note), beating the hymn's time with it like a baton, swaying, while it rings out."""
+    bow = F(torso=12, look=16, legs=L(-1, 5), near=A(30, 20, item=50), far=A(40, 145, wrist=-40))
+    breath = F(base=bow, torso=8, look=10, torso__sy=1.02)
+    sing = F(torso=-12, look=-26, legs=L(0, -1.5), near=A(152, 18, item=152), far=A(100, 10, wrist=-70))
+    sway = F(base=sing, torso=-8, look=-22, near=A(136, 30, item=128))
+    sway2 = F(base=sing, torso=-14, look=-27, near=A(164, 12, item=176), torso__sy=1.012)
+    beats = [B(14, bow, "out", ev=(("fx", "glow-body"),)), B(10, breath, "linear"),
+             B(5, sing, "back", ev=("release", ("fx", "burst-self"))), B(7, sway, "smooth"), B(10, sway2, "smooth"),
+             B(10, sway, "smooth")]
+    return seq(name, beats, settle=20, blend=0.06, notes=notes)
+
+
+# --------------------------------------------------------------------------- #
 # Every class's skills (skill-ids.md; the weapon autos play auto-<kind>-n)
 # --------------------------------------------------------------------------- #
 
@@ -1184,14 +1633,14 @@ def skills():
     # Swordhand
     kit("one-hand")
     spin(S + "fighter-cleave", "one-hand", turns=1, notes="Cleave: one wide sweep round through the foe and its neighbours")
-    guard_up(S + "fighter-second-wind", "brace", notes="Second Wind: braced, a deep breath, back on the feet")
-    point_at(S + "fighter-riposte", item=170, notes="Riposte: the blade set in a high guard, waiting for the miss", fx="glint")
+    second_wind(S + "fighter-second-wind", notes="Second Wind: bent over, leant on the sword, a great breath in, back on the feet")
+    high_guard(S + "fighter-riposte", notes="Riposte: rocked back into a high hanging guard, the point beckoning the miss")
     war_cry(S + "fighter-action-surge", item=185, notes="Action Surge: down, gathering, and up with the blade at the sky, again")
     # Shadowstep
     kit("dagger")
     dash_strike(S + "rogue-backstab", "dagger", 3, notes="Backstab: in low behind the foe, the dagger driven down")
     throw(S + "rogue-smoke-step", "drop", notes="Smoke Step: a pellet dashed at the feet, gone in the smoke")
-    reach_out(S + "rogue-poisoned-edge", "palm", fx="glow-weapon", notes="Poisoned Edge: the blade's edge wiped with venom")
+    edge_wipe(S + "rogue-poisoned-edge", notes="Poisoned Edge: the off hand drawn along the blade's edge, wiping on the venom")
     combo(S + "rogue-shadow-dance", [("dagger", 1, 8), ("dagger", 2, 12), ("dagger", 3, 14)], start_fx="smoke", ultimate=True,
           travel=(14, 26, 8), hop_fx="smoke",
           notes="Shadow Dance: three backstabs out of the smoke, each on another foe")
@@ -1206,12 +1655,12 @@ def skills():
     # Arcanist
     kit("staff")
     hand_cast(S + "wizard-fire-bolt", "flick", side="far", notes="Fire Bolt: a mote of fire flicked at the foe")
-    hand_cast(S + "wizard-magic-missile", "flick", side="far", charge=8, hold=2,
+    hand_cast(S + "wizard-magic-missile", "dart", side="far", charge=8, hold=2,
               after=lambda o: [B(4, F(base=o, arm_far_up=o["arm_far_up"] + 30, arm_far_low=o["arm_far_low"] - 30), "in"),
                                B(3, o, "back", ev=(("release", "hand_far"),)),
                                B(4, F(base=o, arm_far_up=o["arm_far_up"] + 30, arm_far_low=o["arm_far_low"] - 30), "in"),
                                B(3, o, "back", ev=(("release", "hand_far"),))],
-              notes="Magic Missile: three darts, one after another")
+              notes="Magic Missile: the hand cocked at the shoulder and three darts thrown, one after another")
     two_hand_cast(S + "wizard-burning-hands", "fan", charge=10, notes="Burning Hands: thumbs together, fingers fanned, fire")
     guard_up(S + "wizard-shield", "cross", crouch=2, linger=8, settle=10, notes="Shield: a ward thrown up against the blow")
     two_hand_cast(S + "wizard-fireball", "overhead", charge=34, hold=8, settle=24,
@@ -1221,39 +1670,41 @@ def skills():
     heavy(S + "paladin-divine-smite", "one-hand", 1, timing=(8, 3, 3, 10, 16), fx="glow-weapon",
           notes="Divine Smite: the blade bright with radiance, brought down")
     reach_out(S + "paladin-lay-on-hands", "both", charge=12, linger=14, notes="Lay on Hands: both hands on the ally")
-    guard_up(S + "paladin-raise-shield", "shield", notes="Raise Shield: the shield set, every foe's eye on the Warden")
-    item_up(S + "paladin-unbroken-oath", item=180, kneel=True, charge=26, linger=28, settle=20,
-            notes="Unbroken Oath: from a kneel to the blade raised, the oath held over everyone")
+    shield_rap(S + "paladin-raise-shield", notes="Raise Shield: the sword rapped on the shield, every foe's eye on the Warden")
+    item_up(S + "paladin-unbroken-oath", item=180, kneel=True, charge=26, linger=28, settle=20, style="knelt",
+            notes="Unbroken Oath: from a kneel the blade raised high, still crouched low, the shield to the heart, the oath held over everyone")
     # Wildcaller
     kit("staff")
     hand_cast(S + "druid-thorn-whip", "lash", notes="Thorn Whip: the vine cracked out and the foe hauled in")
     two_hand_cast(S + "druid-entangle", "ground", notes="Entangle: the hands driven down, the roots rise")
-    hand_cast(S + "druid-healing-word", "point", side="far", charge=6, hold=2, follow_frames=6, settle=10, fx=None,
-              notes="Healing Word: a word and a gesture toward the ally")
-    hand_cast(S + "druid-moonbeam", "sky", side="far", charge=12, hold=4, notes="Moonbeam: the light called down out of the sky")
+    hand_cast(S + "druid-healing-word", "brow", side="far", charge=6, hold=2, follow_frames=6, settle=10, fx=None,
+              notes="Healing Word: the hand to the brow, a word, and the hand opened out to the ally")
+    hand_cast(S + "druid-moonbeam", "down", side="far", charge=12, hold=4,
+              notes="Moonbeam: the arm straight up at the sky, then the light pulled down on the foe")
     transform(S + "druid-wild-shape-bear", notes="Wild Shape: Bear: hunched, gathering, and up as the bear")
     # Hexblade
     kit("dagger")
-    hand_cast(S + "warlock-eldritch-blast", "push", side="far", notes="Eldritch Blast: a beam from the open palm")
+    hand_cast(S + "warlock-eldritch-blast", "spear", side="far",
+              notes="Eldritch Blast: the hand drawn back by the ear and driven out, the beam along the arm")
     point_at(S + "warlock-hex", notes="Hex: the finger levelled and the curse laid", fx="glow-hand")
-    hand_cast(S + "warlock-hellish-rebuke", "snap", side="far", charge=4, hold=1, follow_frames=6, settle=10,
-              notes="Hellish Rebuke: a snap of the fist and the striker burns")
-    guard_up(S + "warlock-armour-of-shadows", "cross", notes="Armour of Shadows: the arms crossed, then the shadows thrown about")
-    two_hand_cast(S + "warlock-void-maw", "spread", charge=30, hold=10, settle=24,
-                  notes="Void Maw: drawn in, then the dark flung open over every foe")
+    hand_cast(S + "warlock-hellish-rebuke", "backhand", side="far", charge=4, hold=1, follow_frames=6, settle=10,
+              notes="Hellish Rebuke: a backhand flung at the striker, and it burns")
+    guard_up(S + "warlock-armour-of-shadows", "cloak",
+             notes="Armour of Shadows: ducked behind the arm, then the shadows swept round like a cloak")
+    two_hand_cast(S + "warlock-void-maw", "jaws", charge=30, hold=10, settle=24,
+                  notes="Void Maw: the hands held out together like shut jaws, then torn open over every foe")
     # Skald
     kit("one-hand")
-    point_at(S + "bard-vicious-mockery", taunt=True, fx=None, notes="Vicious Mockery: a pointed word and a beckon")
-    item_up(S + "bard-inspiration", item=150, charge=8, linger=10, settle=12, fx=None,
-            notes="Inspiration: a flourish of the blade and a word to the ally")
-    hand_cast(S + "bard-healing-word", "point", side="far", charge=6, hold=2, follow_frames=6, settle=10, fx=None,
-              notes="Healing Word: a sung word and a gesture")
+    mocking_bow(S + "bard-vicious-mockery", notes="Vicious Mockery: a deep, mocking bow, and the head cocked")
+    flourish(S + "bard-inspiration", notes="Inspiration: a flourish of the blade, pointed at the ally, and a nod")
+    hand_cast(S + "bard-healing-word", "heart", side="far", charge=6, hold=2, follow_frames=6, settle=10, fx=None,
+              notes="Healing Word: a sung word, the hand from the heart opened out to the ally")
     two_hand_cast(S + "bard-thunderwave", "wave", charge=10, notes="Thunderwave: a stamp and both palms shoved out")
-    war_cry(S + "bard-battle-hymn", item=200, notes="Battle Hymn: gathered in, then up with the blade high and the hymn sung out")
+    hymn(S + "bard-battle-hymn", notes="Battle Hymn: a hand on the heart, then the head back and the hymn sung out, swaying")
     # Watchblade
     kit("one-hand")
-    guard_up(S + "watchblade-hold-the-line", "shield", notes="Hold the Line: the shield set and the front row dared")
-    snatch(S + "watchblade-arrest", notes="Arrest: in, the wrist seized and twisted")
+    plant_line(S + "watchblade-hold-the-line", notes="Hold the Line: stamped down wide behind the shield, the front row dared")
+    seize(S + "watchblade-arrest", notes="Arrest: in with the cudgel raised, the wrist seized and twisted down")
     whistle(S + "watchblade-whistle-for-the-watch", notes="Whistle for the Watch: a whistle and a wave; a Watchman comes")
     shield_slam(S + "watchblade-shield-wall", notes="Shield Wall: the shield heaved up and slammed down, everyone behind it")
     # Netcaster
@@ -1266,8 +1717,8 @@ def skills():
                   notes="High Tide: the sea raised with both arms and brought down on every foe")
     # Deckhand
     kit("one-hand")
-    heavy(S + "deckhand-belaying-pin", "one-hand", 1, timing=(7, 2, 3, 8, 14), notes="Belaying Pin: a clout over the head")
-    reach_out(S + "deckhand-rum-ration", "toss", notes="Rum Ration: a flask tossed to the ally")
+    pommel(S + "deckhand-belaying-pin", notes="Belaying Pin: the pommel clubbed down on the foe's head")
+    swig_and_toss(S + "deckhand-rum-ration", notes="Rum Ration: a swig from the flask, and the flask tossed to the ally")
     rope_swing(S + "deckhand-swing-across", notes="Swing Across: over on a rope, a cut on the way")
     signal(S + "deckhand-broadside", notes="Broadside: the order given, the ship's guns land from off the screen")
     # Lodge Ranger
@@ -1289,7 +1740,7 @@ def skills():
     # Guild Battlemage
     kit("staff")
     hand_cast(S + "battlemage-force-bolt", "push", side="far", charge=8, notes="Force Bolt: a shove of force from the palm")
-    reach_out(S + "battlemage-ward", "palm", notes="Ward: a sigil set over the ally")
+    sigil(S + "battlemage-ward", notes="Ward: a sigil traced in the air and set over the ally")
     hand_cast(S + "battlemage-counterspell", "snap", side="far", charge=4, hold=1, follow_frames=6, settle=10, fx=None,
               notes="Counterspell: the fist shut on the foe's spell")
     heavy(S + "battlemage-chain-lightning", "staff", 3, timing=(12, 3, 2, 10, 16), fx="glow-weapon",
@@ -1317,12 +1768,13 @@ def skills():
             notes="Nobody Left Behind: from a kneel by the fallen, up with the shield raised over them, every one of them up")
     # Ember Mender
     kit("staff")
-    hand_cast(S + "ember-mender-cinder", "flick", side="far", charge=8, notes="Cinder: an ember flicked at the foe")
-    reach_out(S + "ember-mender-cauterise", "palm", charge=12, linger=14, notes="Cauterise: the hot palm pressed to the wound")
-    point_at(S + "ember-mender-read-the-wound", fx=None, notes="Read the Wound: a hard look and the weak place pointed out")
-    reach_out(S + "ember-mender-warm-hands", "both", notes="Warm Hands: both hands out, warmth on the row")
-    two_hand_cast(S + "ember-mender-rekindle", "sky", charge=28, hold=8, settle=22,
-                  notes="Rekindle: cupped hands raised, the fire given back to everyone")
+    hand_cast(S + "ember-mender-cinder", "blow", side="far", charge=8,
+              notes="Cinder: the hand lifted to the lips, and the ember sent off it at the foe")
+    press_burn(S + "ember-mender-cauterise", notes="Cauterise: the hot hand pressed down on the wound, crouched over it, and snatched up off it")
+    examine(S + "ember-mender-read-the-wound", notes="Read the Wound: leant in, studying, and the weak place jabbed at")
+    rub_hands(S + "ember-mender-warm-hands", notes="Warm Hands: the hands rubbed together and spread warm over the row")
+    two_hand_cast(S + "ember-mender-rekindle", "offer", charge=28, hold=8, settle=22,
+                  notes="Rekindle: cupped hands lifted from the belly and opened, the fire given back to everyone")
     # Lanerunner
     kit("dagger")
     combo(S + "lanerunner-twin-cuts", [("dagger", 1, 6), ("dagger", 2, 9)], settle=14,
@@ -1333,8 +1785,8 @@ def skills():
     seq_pocket(S + "lanerunner-everyones-pocket")
     # Wayfarer
     kit("staff")
-    heavy(S + "wayfarer-walking-stick", "staff", 2, timing=(6, 2, 3, 8, 14), glint=False,
-          notes="Walking Stick: a whack with the stick")
+    heavy(S + "wayfarer-walking-stick", "staff", 1, timing=(6, 2, 3, 8, 14), glint=False,
+          notes="Walking Stick: a whack over the top with the stick")
     throw(S + "wayfarer-throw-anything", "overhand", notes="Throw Anything: whatever comes out of the bag, hurled")
     seq(S + "wayfarer-duchess-kicks", [B(8, F(torso=-4, look=-8, near=A(70, 130, wrist=-40), far=A(30, 70)), "out"),
                                        B(10, F(torso=-6, look=-10, near=A(70, 130, wrist=-40), far=A(30, 70)), "smooth"),
@@ -1346,10 +1798,10 @@ def skills():
     throw(S + "wayfarer-lucky-stone", "flip", settle=22, frames=(14, 6, 3, 26), notes="Lucky Stone: the stone flipped high for luck")
     # Gilded Knight
     kit("one-hand")
-    item_up(S + "gilded-knight-sunburst", item=190, charge=10, linger=10, settle=14,
-            notes="Sunburst: the blade raised and the sun breaks off it at the foe")
-    guard_up(S + "gilded-knight-vigil", "shield", notes="Vigil: the shield held out over the ally")
-    item_up(S + "gilded-knight-call-the-order", item=180, charge=12, linger=24, settle=16, notes="Call the Order: the blade up, the call")
+    item_up(S + "gilded-knight-sunburst", item=190, charge=10, linger=10, settle=14, style="level",
+            notes="Sunburst: the blade swept up from the hip to the sky before the foe, and the sun breaks off it")
+    kneel_vigil(S + "gilded-knight-vigil", notes="Vigil: on one knee, the sword planted, the shield held out over the ally")
+    salute_call(S + "gilded-knight-call-the-order", notes="Call the Order: a knight's salute, and the blade swept out: the Order comes")
     leap_slam(S + "gilded-knight-gilded-dawn", "one-hand", height=30, glow="glow-weapon",
               notes="Gilded Dawn: up into the light and down, the dawn over every foe")
     # Hemomancer
@@ -1359,19 +1811,19 @@ def skills():
               after=lambda o: [B(10, F(base=o, torso=-6, arm_far_low=o["arm_far_low"] - 50, arm_far_up=o["arm_far_up"] + 25), "out"),
                                B(10, F(base=o, torso=-8, arm_far_low=o["arm_far_low"] - 60, arm_far_up=o["arm_far_up"] + 30), "smooth")],
               notes="Drain: the hand out, clutching, and the life pulled back into it")
-    reach_out(S + "hemomancer-blood-shield", "chest", notes="Blood Shield: a cut palm, the blood sent to the ally as a shield")
+    reach_out(S + "hemomancer-blood-shield", "cut",
+              notes="Blood Shield: the dagger drawn across the other hand, and that arm thrust out to the ally")
     reach_out(S + "hemomancer-given-freely", "chest", charge=14, linger=14, notes="Given Freely: from the heart to the ally")
-    two_hand_cast(S + "hemomancer-crimson-tide", "overhead", charge=30, hold=8, release_ev="hit", settle=24,
-                  notes="Crimson Tide: raised over the head and brought down, a tide of blood over every foe")
+    two_hand_cast(S + "hemomancer-crimson-tide", "tide", charge=30, hold=8, release_ev="hit", settle=24,
+                  notes="Crimson Tide: both hands low behind, then heaved up and over, a tide of blood over every foe")
     # Hivekeeper
     kit("one-hand")
-    hand_cast(S + "hivekeeper-swarm", "flick", side="far", charge=8, fx=None, notes="Swarm: the bees sent off with a flick")
-    reach_out(S + "hivekeeper-honey-salve", "toss", notes="Honey Salve: a dab of salve tossed to the ally")
+    hand_cast(S + "hivekeeper-swarm", "shoo", side="far", charge=8, fx=None, notes="Swarm: the bees shooed off at the foe")
+    smear_salve(S + "hivekeeper-honey-salve", notes="Honey Salve: the hand dipped in the pot and the salve smeared on the ally")
     throw(S + "hivekeeper-smoke-pot", "lob", notes="Smoke Pot: lobbed into the row")
-    heavy(S + "hivekeeper-angry-hive", "one-hand", 2, timing=(10, 3, 3, 10, 16), glint=False, fx="smoke",
-          notes="Angry Hive: the smoker swung up and the hive let loose on the row")
-    two_hand_cast(S + "hivekeeper-the-whole-hive", "spread", charge=26, hold=8, settle=24,
-                  notes="The Whole Hive: arms flung wide, every bee out")
+    shake_hive(S + "hivekeeper-angry-hive", notes="Angry Hive: the smoker shaken hard overhead and the hive let loose on the row")
+    two_hand_cast(S + "hivekeeper-the-whole-hive", "hug", charge=26, hold=8, settle=24,
+                  notes="The Whole Hive: hunched over, the arms hugged in, then flung up high, every bee out")
     # Glasswright
     kit("one-hand")
     hand_cast(S + "glasswright-prism-ray", "point", side="far", charge=10,
@@ -1389,23 +1841,23 @@ def skills():
     hand_cast(S + "glasswright-refract", "sweep", side="far", charge=3, hold=1, follow_frames=6, settle=10, fx=None,
               notes="Refract: a sweep of the hand and the shot turned aside")
     two_hand_cast(S + "glasswright-glasshouse", "spread", charge=12, notes="Glasshouse: the hands drawn in and the glass flung open")
-    reach_out(S + "glasswright-given-in-love", "chest", charge=28, linger=26, settle=20,
-              notes="Given in Love: from the heart out to every ally")
+    reach_out(S + "glasswright-given-in-love", "open", charge=28, linger=26, settle=20,
+              notes="Given in Love: both hands to the heart, then opened out low to every ally")
     # Lamplighter
     kit("one-hand")
     heavy(S + "lamplighter-lantern-swing", "one-hand", 2, timing=(6, 2, 3, 8, 14), glint=False,
           notes="Lantern Swing: the lantern swung up into the foe")
-    item_up(S + "lamplighter-sanctuary", item=180, hold=("carried", "blade"), charge=10, linger=14,
-            notes="Sanctuary: the lantern raised over the ally")
-    item_up(S + "lamplighter-vespers", item=180, hold=("carried", "blade"), charge=14, linger=24,
-            notes="Vespers: the lantern held high, the evening prayer")
-    point_at(S + "lamplighter-reveal", item=90, hold=("carried", "blade"), notes="Reveal: the lantern thrust out at the dark")
+    item_up(S + "lamplighter-sanctuary", item=180, hold=("carried", "blade"), charge=10, linger=14, style="low",
+            notes="Sanctuary: the lantern lifted, then set low before the ally, crouched over it")
+    item_up(S + "lamplighter-vespers", item=180, hold=("carried", "blade"), charge=14, linger=24, style="face",
+            notes="Vespers: the lantern lifted before the bowed head, the evening prayer")
+    lantern_out(S + "lamplighter-reveal", notes="Reveal: the lantern thrust high into the dark, the eyes shaded, peering")
     ring_bell(S + "lamplighter-the-bell", rings=4, notes="The Bell: rung high, and every ally comes clear")
     # Crownsworn
     kit("one-hand")
-    point_at(S + "crownsworn-command", item=90, notes="Command: the blade levelled, an order to an ally")
+    order_point(S + "crownsworn-command", notes="Command: the blade at the shoulder and the ally pointed on")
     point_at(S + "crownsworn-told-rudely", item=90, taunt=True, fx=None, notes="Told Rudely: the blade levelled and a beckon")
-    item_up(S + "crownsworn-rally", item=180, charge=12, linger=24, notes="Rally: the blade up, the call to rise")
+    rally_call(S + "crownsworn-rally", notes="Rally: the blade swept up from low to the sky and pumped, the call to rise")
     combo(S + "crownsworn-my-fathers-sword", [("one-hand", 2, 7), ("one-hand", 3, 8), ("one-hand", 2, 8),
                                               ("two-hand", 1, 14)], start_fx="glow-weapon", ultimate=True, settle=14,
           notes="My Father's Sword: three cuts and the blade brought down")
@@ -1413,11 +1865,11 @@ def skills():
     kit("staff")
     seq_second_hand(S + "hourwarden-second-hand")
     reach_out(S + "hourwarden-rewind", "circle", notes="Rewind: the hand turned back round the clock")
-    point_at(S + "hourwarden-haste", fx="glow-hand", notes="Haste: a tap of the finger toward the ally")
-    hand_cast(S + "hourwarden-stop", "push", side="far", charge=10, hold=4, follow_frames=18,
-              notes="Stop: the palm held up flat at the foe")
-    two_hand_cast(S + "hourwarden-bleed-the-clock", "spread", charge=30, hold=10, settle=24,
-                  notes="Bleed the Clock: drawn in, and every foe's time flung out of it")
+    quicken(S + "hourwarden-haste", notes="Haste: a hand wound like a clock's key and flicked at the ally, rolling on")
+    hand_cast(S + "hourwarden-stop", "halt", side="far", charge=10, hold=4, follow_frames=18,
+              notes="Stop: the arm drawn in, then raised high and held flat at the foe, leant back from it")
+    two_hand_cast(S + "hourwarden-bleed-the-clock", "clock", charge=30, hold=10, settle=24,
+                  notes="Bleed the Clock: the arms up at twelve, then flung to three and six like a clock's hands")
 
 
 def seq_pocket(name):
@@ -1468,16 +1920,19 @@ def foes():
                                 B(2, contact, "back", ev=("hit",), smear=("near", "x")), B(9, follow, "smooth", trail="end"),
                                 B(9, F(base=follow, legs=L(3, 2, near=5, lift=(5, 0))), "smooth")],
         settle=10, blend=0.04, notes="a lunge that stops short, and the stab that doesn't")
-    combo("foe-kael-duel-multiattack", [("dagger", 1, 7), ("dagger", 2, 10)], notes="the rapier and the off-hand dagger")
-    throw("foe-kael-duel-smoke-bomb", "drop", notes="a smoke bomb dashed at the feet")
-    leap_away("foe-kael-duel-cunning-disengage", notes="out of reach in a bound")
+    combo("foe-kael-duel-multiattack", [("dagger", 1, 7), ("one-hand", 3, 10)], notes="a quick cut, then the rapier's lunge")
+    throw("foe-kael-duel-smoke-bomb", "spike", notes="a smoke bomb hurled down at the floor, the rapier kept on the foe")
+    fencer_bound("foe-kael-duel-cunning-disengage", notes="a fencer's bound back out of reach, the rapier still levelled")
     # The Hollowed Hexer's bolt of ash from the staff, and its hex.
     kit("staff")
-    hand_cast("foe-hollowed-hexer-ashen-bolt", "push", side="far", charge=14, hold=4, notes="a bolt of ash from the palm")
-    point_at("foe-hollowed-hexer-hex", fx="glow-hand", notes="the curse laid with a pointed finger")
+    hand_cast("foe-hollowed-hexer-ashen-bolt", "scoop", side="far", charge=14, hold=4,
+              notes="hunched low, ash swept up from behind the knee and flung at the foe")
+    curse("foe-hollowed-hexer-hex", notes="the curse laid with the hand thrust out, then wrenched back in to the chest")
     kit(None)
     # The sappers light a charge and lob it.
-    for foe in ("hollowed-sapper", "sapper-chief"):
+    # One ability for both sappers, so one clip: the chief's is an alias of it (clips.py's
+    # likeness() reads two clips as two moves).
+    for foe in ("hollowed-sapper",):
         light = F(torso=14, look=16, legs=L(0, 6), near=A(-10, 60, item=170), far=A(30, 110, wrist=-20))
         seq("foe-%s-blasting-charge" % foe,
             [B(10, light, "out", ev=(("fx", "spark"),)), B(12, F(base=light, torso=16), "smooth"),
@@ -1487,7 +1942,9 @@ def foes():
                ev=(("release", "hand_far"),)),
              B(8, F(torso=-8, look=-12, legs=L(3, 1, near=4), near=A(-10, 60, item=170), far=A(135, 10, wrist=-40)), "smooth")],
             settle=16, blend=0.05, notes="a blasting charge lit and lobbed over the front row")
-    heavy("foe-sapper-chief-lantern", "one-hand", 2, timing=(10, 3, 3, 10, 16), fx="spark", notes="the lantern swung into the foe")
+    C.alias("foe-hollowed-sapper-blasting-charge", "foe-sapper-chief-blasting-charge")
+    heavy("foe-sapper-chief-lantern", "one-hand", 3, timing=(10, 3, 3, 10, 16), fx="spark",
+          notes="the lantern rammed into the foe")
     heavy("foe-vault-construct-gilded-slam", "unarmed", 2, timing=(14, 4, 3, 10, 20), notes="a slow, heavy slam of the fist")
     # The Hollowed footman's telegraphed chop: the rusted blade taken up in both hands and brought
     # down over the top, harder than its auto.

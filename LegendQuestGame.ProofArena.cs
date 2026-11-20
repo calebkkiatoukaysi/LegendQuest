@@ -163,12 +163,17 @@ public partial class LegendQuestGame
         ProofStage.Arena => new List<ArenaBout>
         {
             // The story's fights, each in its own room with the party it has by then; the gulls' melee filmed
-            // from Grell's first Hook Pull, to see how a crowd stands round its targets.
+            // from Grell's first Hook Pull, to see how a crowd stands round its targets, and the raid's Hex.
             new("a1-c1-01-gulls", "docks", "harbourside", new Vector2(700, 770), null, new ArenaPlan { Prefix = "arena/gulls", FilmMove = "foe-hook-pull" }, Array.Empty<string>()),
             new("a1-c2-01-gloomfangs", "mirewood", "edge", new Vector2(1400, 760), null, new ArenaPlan { Prefix = "arena/gloomfangs" },
                 new[] { Act1Chapter1.GullsBeaten }),
-            new("a1-c3-02-raid", "thornbridge", "river-edge", new Vector2(620, 740), null, new ArenaPlan { Prefix = "arena/raid" },
+            new("a1-c3-02-raid", "thornbridge", "river-edge", new Vector2(620, 740), null,
+                new ArenaPlan { Prefix = "arena/raid", FilmFoeSkills = new[] { "foe-hex" } },
                 new[] { Act1Chapter1.GullsBeaten, Act1Chapter2.GloomfangsBeaten, Act1Chapter2.ThornmotherBeaten, Act1Chapter3.SuppliesDone }),
+            // Kael's duel on his shelf, his Smoke Bomb (from his second phase) and Cunning Disengage filmed.
+            new("a1-c4-02-kael", "old-crown-vault", "strongroom", new Vector2(2200, 740), null,
+                new ArenaPlan { Prefix = "arena/kael", FilmFoeSkills = new[] { "foe-smoke-bomb", "foe-cunning-disengage" } },
+                new[] { Act1Chapter1.GullsBeaten, Act1Chapter2.GloomfangsBeaten, Act1Chapter2.ThornmotherBeaten, Act1Chapter3.RaidBeaten }),
             new("a1-c4-02-sappers", "old-crown-vault", "strongroom", new Vector2(2200, 740), null, new ArenaPlan { Prefix = "arena/sappers" },
                 new[] { Act1Chapter1.GullsBeaten, Act1Chapter2.GloomfangsBeaten, Act1Chapter2.ThornmotherBeaten, Act1Chapter3.RaidBeaten, Act1Chapter4.KaelTruce }),
 
@@ -193,10 +198,21 @@ public partial class LegendQuestGame
 
         // Six classes in your place in the raid on Thornbridge (the longest of Act 1's fights, with the
         // most to hit and Mira and the Watch beside you), at rank 5 so the ultimate's on the bar, each
-        // pressing its four skills as soon as each can go; the first two classes' ultimates filmed.
+        // pressing its four skills as soon as each can go; the first two classes' ultimates filmed, and
+        // the skills whose moves were made their own (a guard, a breath, a shield rapped), and again on a
+        // go with nobody stood over the leader if the first had somebody.
         ProofStage.Classes => new[] { ClassId.Fighter, ClassId.Wizard, ClassId.Cleric, ClassId.Paladin, ClassId.Hemomancer, ClassId.LodgeRanger }
             .Select((cls, i) => new ArenaBout("a1-c3-02-raid", "thornbridge", "river-edge", new Vector2(620, 740), null,
-                new ArenaPlan { Prefix = "classes/" + Rules.ClassCatalog.Get(cls).Code, PressSkills = true, FilmUltimate = i < 2 },
+                new ArenaPlan
+                {
+                    Prefix = "classes/" + Rules.ClassCatalog.Get(cls).Code, PressSkills = true, FilmUltimate = i < 2,
+                    FilmSkills = cls switch
+                    {
+                        ClassId.Fighter => new[] { "fighter-riposte", "fighter-second-wind" },
+                        ClassId.Paladin => new[] { "paladin-raise-shield" },
+                        _ => Array.Empty<string>(),
+                    },
+                },
                 new[] { Act1Chapter1.GullsBeaten, Act1Chapter2.GloomfangsBeaten, Act1Chapter2.ThornmotherBeaten, Act1Chapter3.SuppliesDone }, cls, 5))
             .ToList(),
 
