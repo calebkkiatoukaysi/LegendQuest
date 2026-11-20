@@ -337,7 +337,9 @@ public static partial class PartCatalog
         if (hair is not null && !hair.StartsWith("hair-", StringComparison.Ordinal)) hair = DefaultHair(member.Id, face);
         if (member.Look.HideHelm) return hair;
         if (member.Equipment.ContainsKey(EquipmentSlot.Head)) return Wears(member, recipe, EquipmentSlot.Head, onBase, null) ?? hair;
-        return OwnHead(member.Id, entry, face) is string own && own != Outfit.HairOf(face) && Has(own) ? own : hair;
+        // A recipe's own piece is a hood or a helm. Its hair is only where their hair starts from
+        // (above): a hair picked on the creation screen, or none, is what they have.
+        return OwnHead(member.Id, entry, face) is string own && !own.StartsWith("hair-", StringComparison.Ordinal) && own != Outfit.HairOf(face) && Has(own) ? own : hair;
     }
 
     /// <summary>

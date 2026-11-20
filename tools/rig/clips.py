@@ -215,6 +215,29 @@ def _led(times, lead, length):
     return [out[i] for i in keep], keep
 
 
+#: A skirt with the hips lowered: it can't hang its full length, so it's gathered. It's as much
+#: shorter as the hips have come down of their height (never under SKIRT_LEAST of itself), as much
+#: wider as SKIRT_SPREAD of that, and swung SKIRT_FORWARD degrees a full drop towards the knees.
+SKIRT_LEAST, SKIRT_SPREAD, SKIRT_FORWARD = 0.42, 0.35, 14.0
+#: The hips' bob in a stride or a fight stance isn't that: this many rig px down is nothing.
+SKIRT_SLACK = 6.0
+
+
+def gathered(pose):
+    """A pose with its skirt gathered for how far its hips are down (kneeling, sitting, crouching,
+    fallen), unless the pose says how its skirt is itself. A skirt hangs from the hips and stays
+    plumb, so with the hips at a knee's height a gown would hang through the floor."""
+    drop = pose.get("hips.y", 0.0) - SKIRT_SLACK
+    if drop <= 0.0 or "skirt.sy" in pose:
+        return pose
+    share = min(1.0, drop / HIP)
+    out = dict(pose)
+    out["skirt.sy"] = round(max(SKIRT_LEAST, 1.0 - share), 3)
+    out.setdefault("skirt.sx", round(1.0 + SKIRT_SPREAD * share, 3))
+    out["skirt"] = round(pose.get("skirt", 0.0) - SKIRT_FORWARD * share, 2)
+    return out
+
+
 def clip(name, length, keys, loop=False, events=(), swaps=(), layer=None, ease="smooth", partner=None,
          fx=(), face=None, expr=None, notes=None, front=None, speed=None, drag=True, blend=None, trail=None,
          lead=None, tracks=None, plant_fps=None, spring=False):
@@ -228,6 +251,7 @@ def clip(name, length, keys, loop=False, events=(), swaps=(), layer=None, ease="
     skirt after the hips (spring_skirt())."""
     if loop and keys[-1][0] < length:
         keys = list(keys) + [(length, keys[0][1])]
+    keys = [(k[0], gathered(k[1])) + tuple(k[2:]) for k in keys]
     bones = {}
     lead = lead or {}
     for bone, ch in channels([k[:2] for k in keys]):

@@ -156,12 +156,15 @@ public static class RigComposer
             jointAt[skeleton.Names[i]] = morph.Move(joints[skeleton.Joints[i]], root) - at0;
 
         // Back to front: the cape, then the bones as they're drawn, what each hand holds just under it.
+        // A shield is the other way about: it's painted face on, so it goes over the fist that holds it.
+        bool shield = inOrder.Any(p => p.Slot == PartSlot.Offhand && IsShield(p.Id));
         var order = new List<string> { Cape };
         foreach (string bone in skeleton.Draw)
         {
             if (bone == NearHand) order.Add(Weapon);
-            if (bone == FarHand) order.Add(Offhand);
+            if (bone == FarHand && !shield) order.Add(Offhand);
             order.Add(bone);
+            if (bone == FarHand && shield) order.Add(Offhand);
         }
         var layers = new List<Layer>();
         var canvas = new Color[canvasWidth * canvasHeight];
@@ -282,6 +285,9 @@ public static class RigComposer
 
     /// <summary>How bright a colour is, 0 to 1, as the dyes shade by it.</summary>
     public static float Luma(Vector3 colour) => 0.299f * colour.X + 0.587f * colour.Y + 0.114f * colour.Z;
+
+    /// <summary>Whether what the far hand holds is a shield, by its id (as tools/weapon_alone.py tells one): its face is towards us, so the fist is behind it.</summary>
+    public static bool IsShield(string id) => id is not null && (id.Contains("shield", StringComparison.Ordinal) || id.Contains("buckler", StringComparison.Ordinal));
 
     /// <summary>The ids of the marks on the skin begin with this: freckles, scars, soot, a tattoo.</summary>
     private const string SkinMark = "skin-";

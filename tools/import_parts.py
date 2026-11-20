@@ -178,6 +178,14 @@ GAP = 400
 #: wide are closed, and its holes up to HAIR_HOLE pixels within HAIR_NEAR of the head's outline,
 #: with HAIR_RING of their edge on the hair, are filled, both in the hair's own colour round them.
 HAIR_CLOSE, HAIR_HOLE, HAIR_NEAR, HAIR_RING = 3, 3000, 30, 0.85
+#: A gap between a hair and who it's on (hair_slivers): HAIR_SLIVER pixels or fewer enclosed by the
+#: two, or HAIR_CRACKED or fewer in a pocket between hair and head with a mouth narrower than twice HAIR_CRACK.
+HAIR_SLIVER, HAIR_CRACK, HAIR_CRACKED = 2500, 12, 2500
+#: A fleck of the head left in a hair (hair_flecks): this many pixels or fewer, this deep inside the
+#: hair, and within this of the blank head's own colour there in every channel.
+HAIR_FLECK, HAIR_FLECK_IN, HAIR_FLECK_SAME = 260, 3, 18
+#: How dark what fills such a gap is, against the hair's edge beside it.
+HAIR_UNDER = 0.88
 #: Specks of near black (brightest channel HAIR_SPECK_DARK or less, HAIR_SPECK pixels or fewer)
 #: with the hair all round them are ChatGPT's bigger head showing through, never the hair (its
 #: lines are a deep brown): they take the hair's colour round them too.
@@ -931,6 +939,8 @@ def head_piece(base, rgb, hair):
         kept |= np.isin(holes, small[(small > 0) & ~np.isin(small, edge)])
     if hair is True:
         colour, alpha, kept = hair_mend(base, rgb, colour, alpha, kept)
+        colour, alpha, kept = hair_flecks(base, rgb, colour, alpha, kept)
+        colour, alpha, kept = hair_slivers(base, colour, alpha, kept)
     alpha = keep_near_main(alpha * kept)
     return piece_masks(rgb, colour, alpha, hair)
 
@@ -1021,6 +1031,94 @@ def hair_mend(base, rgb, colour, alpha, kept):
     alpha = alpha.copy()
     alpha[fill] = 1.0
     return colour, alpha, kept | fill
+
+
+def hair_flecks(base, rgb, colour, alpha, kept):
+    """A hair's flecks of the head painted out: where the hair covers the head, a scrap of the head's
+    own skin or outline can come through the cut with it (it's inside the hair, so nothing takes it
+    away), and a black speck where the sheet's cut keyed a bit of that outline. Deep inside the hair
+    (HAIR_FLECK_IN pixels from its edge), a piece of HAIR_FLECK pixels or fewer that's the blank
+    head's own colour there (within HAIR_FLECK_SAME), or near black, takes the mean of the hair's
+    colours round it. Returns (colour, alpha, kept)."""
+    there = kept & (alpha > 0.5)
+    inside = erode(there, HAIR_FLECK_IN)
+    head = base.above & (base.alpha > 0.5)
+    same = (np.abs(rgb.astype(np.float64) - base.rgb).max(axis=2) <= HAIR_FLECK_SAME) & head
+    black = rgb.max(axis=2) <= HAIR_SPECK_DARK
+    suspect = there & (same | black)
+    labels, count = ic.components(suspect)
+    if not count:
+        return colour, alpha, kept
+    sizes = np.bincount(labels.ravel(), minlength=count + 1)
+    deep = np.bincount(labels.ravel(), weights=inside.ravel().astype(np.float64), minlength=count + 1)
+    fleck = (sizes <= HAIR_FLECK) & (deep == sizes)
+    fleck[0] = False
+    fill = fleck[labels]
+    if not fill.any():
+        return colour, alpha, kept
+    near = ic.local_mean(colour, (there & ~ic.grow(suspect, 1)).astype(np.float64), (2, 4, 8, 16))
+    fill &= ~np.isnan(near[:, :, 0])
+    colour = colour.copy()
+    colour[fill] = near[fill]
+    return colour, alpha, kept
+
+
+def hair_slivers(base, colour, alpha, kept):
+    """A hair's slivers of nothing against the head closed: where the hair was painted over the
+    head's own outline it's the base's colour there and was cut away with it, which leaves a crack
+    between the two that the sky shows through. A gap that the hair and the figure enclose between
+    them (HAIR_SLIVER pixels or fewer), or a pocket the hair and the head both touch whose mouth is
+    narrower than twice HAIR_CRACK (HAIR_CRACKED or fewer), is the hair's, in the colour of the
+    hair's own edge beside it. Returns (colour, alpha, kept)."""
+    head = base.above & (base.alpha > 0.5)
+    # What's really there of the hair: a pixel kept but keyed out with the black is a gap too.
+    mine_, kept = kept, kept & (alpha > 0.5)
+    # Enclosed by the hair and the figure: under the ear, behind the neck, a parting above the brow.
+    figure = kept | (base.alpha > 0.5)
+    gaps, count = ic.components(~figure)
+    sliver = np.zeros(kept.shape, bool)
+    if count:
+        sizes = np.bincount(gaps.ravel(), minlength=count + 1)
+        outside = np.unique(np.concatenate([gaps[0], gaps[-1], gaps[:, 0], gaps[:, -1]]))
+        inside = sizes <= HAIR_SLIVER
+        inside[0] = False
+        inside[outside] = False
+        sliver |= inside[gaps]
+    # And a pocket between the hair and the head whose mouth is narrower than twice HAIR_CRACK: what
+    # the open air can't reach through a gap that wide.
+    solid = kept | head
+    wide, count = ic.components(erode(~solid, HAIR_CRACK))
+    open_air = np.zeros(kept.shape, bool)
+    if count:
+        rim = np.unique(np.concatenate([wide[0], wide[-1], wide[:, 0], wide[:, -1]]))
+        open_air = ic.grow(np.isin(wide, rim[rim > 0]), HAIR_CRACK + 1)
+    cracks = ~solid & ~open_air & ~sliver & ~(base.alpha > 0.5)
+    labels, count = ic.components(cracks)
+    if count:
+        sizes = np.bincount(labels.ravel(), minlength=count + 1)
+        by_hair = np.zeros(count + 1, bool)
+        by_head = np.zeros(count + 1, bool)
+        by_hair[np.unique(labels[ic.grow(kept, 1) & cracks])] = True
+        by_head[np.unique(labels[ic.grow(head, 1) & cracks])] = True
+        mine = by_hair & by_head & (sizes <= HAIR_CRACKED)
+        mine[0] = False
+        sliver |= mine[labels]
+    # Only beside the hair, and never over the head.
+    hairs, count = ic.components(sliver)
+    if count:
+        touching = np.zeros(count + 1, bool)
+        touching[np.unique(hairs[ic.grow(kept, 1) & sliver])] = True
+        touching[0] = False
+        sliver &= touching[hairs]
+    if not sliver.any():
+        return colour, alpha, mine_
+    near = ic.local_mean(colour, (kept & ic.grow(sliver, 2)).astype(np.float64), (2, 4, 8, 16, 32))
+    fill = sliver & ~np.isnan(near[:, :, 0])
+    colour, alpha = colour.copy(), alpha.copy()
+    # A little darker than the edge it's taken from: it's the hair's underside, in its own shade.
+    colour[fill] = near[fill] * HAIR_UNDER
+    alpha[fill] = 1.0
+    return colour, alpha, mine_ | fill
 
 
 def card_names(text):
@@ -1252,12 +1350,13 @@ def cape_layer(base, rgb):
     return colour, alpha, np.stack([nothing, base_mask, trim_mask], axis=2), tones
 
 
-def hand_layer(base, rgb):
+def hand_layer(base, rgb, shield=False):
     """A weapon's or an off-hand item's layer on its base: the changed pieces that reach a hand,
     without the base's own fingers where ChatGPT redrew them (skin painted where the base had skin),
-    so a gloved hand never gets a bare fist drawn over it. Nothing on it is dyed: (colour, alpha,
-    None, None)."""
-    fingers = (skin_weight(rgb) > 0.5) & (base.skin > 0.5)
+    so a gloved hand never gets a bare fist drawn over it. A `shield` is over its fist
+    (tools/weapon_alone.py), and wood there is as warm as skin: all of it is kept. Nothing on it is
+    dyed: (colour, alpha, None, None)."""
+    fingers = (skin_weight(rgb) > 0.5) & (base.skin > 0.5) & (not shield)
     colour, alpha, kept = changed_pieces(base, rgb, ~fingers)
     hands = np.zeros(alpha.shape, bool)
     for socket in ("hand.near", "hand.far"):
@@ -1918,8 +2017,8 @@ def build(check, vector=VECTOR):
             base = base_of(pid, edits)
             if base is None:
                 fail("tools/source/characters/%s/%s.png isn't a %s in Story/13-art-prompts.md §6, or what it edits isn't" % (FOLDERS[slot], pid, slot))
-            cutter = cape_layer if slot == "cape" else hand_layer
-            colour, alpha, mask, tones = cutter(bases[base], load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png")))
+            source = load(os.path.join(SOURCE, FOLDERS[slot], pid + ".png"))
+            colour, alpha, mask, tones = cape_layer(bases[base], source) if slot == "cape" else hand_layer(bases[base], source, "shield" in pid or "buckler" in pid)
             colour, alpha = drawn(pid, colour, alpha)
             layers[pid] = (slot, base, shrink(colour, alpha, mask), {"tones": tones} if tones else {})
             report.append("  %-24s %s" % (pid, base))

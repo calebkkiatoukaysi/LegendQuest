@@ -5,6 +5,7 @@ Weapons painted on their own, with no hand, and put in the figure's fist here.
     python tools/weapon_alone.py cut <painted.png> <base> <id[/hand[/kind]]> ...   # a sheet's columns, each in its fist (- for an empty one)
     python tools/weapon_alone.py preview <base> <out.png> <id> [<id> ...]   # each held, at rest and in a few poses
     python tools/weapon_alone.py assets                                     # just rewrite its section of ASSETS.md
+    python tools/weapon_alone.py restand <base> <id> [<id> ...]             # the held pictures again, from the items as cut
 
 The owner's call (2026-11-18): ChatGPT, asked to put an item through a fist, redraws the hand with
 it. So an item is painted alone, upright, with nothing holding it, and the game does the holding:
@@ -28,6 +29,9 @@ the hand's own piece: tools/source/characters/weapons/<id>.png, the base with th
 fist, which tools/import_parts.py takes as it does any item painted on the base. An id starting
 "offhand-" goes in the far hand, and so does a column given as <id>/far; the same id in two columns
 is two things held at once, one a hand (a spear and a shield), drawn into the one picture.
+A shield is the one thing drawn over its hand, not under it (2026-11-19): it's painted face on, so
+the fist that holds it is behind it. `restand` makes the held pictures again from weapons-alone
+when how something's held changes.
 
 `preview` draws each on the body at rest and in a few of the game's poses, the item moving with the
 hand.
@@ -232,18 +236,50 @@ def held(base, colour, alpha, grip, side, kind):
     return np.clip(D.warp(D.premul(colour, alpha), m, (h, w)), 0.0, 1.0)
 
 
-def stood(base, bodies, parts):
-    """The base stood up from its pieces, each item ({hand: premultiplied}) under the hand that holds it."""
+def stood(base, bodies, parts, over=()):
+    """The base stood up from its pieces, each item ({hand: premultiplied}) under the hand that
+    holds it; or, for a hand in `over`, over it: a shield is painted face on, so the fist that holds
+    it is behind it."""
     w, h = D.CANVAS
     figure = np.zeros((h, w, 4))
     for bone in K.DRAW:
         for side, pm in parts.items():
-            if bone == HANDS[side]:
+            if bone == HANDS[side] and side not in over:
                 figure = pm + figure * (1.0 - pm[:, :, 3:])
         if bone in bodies:
             layer = D.premul(*bodies[bone])
             figure = layer + figure * (1.0 - layer[:, :, 3:])
+        for side, pm in parts.items():
+            if bone == HANDS[side] and side in over:
+                figure = pm + figure * (1.0 - pm[:, :, 3:])
     return figure
+
+
+def shields(item):
+    """The hands whose part of an item is a shield, from the notes its cut left: they go over the fist."""
+    out = set()
+    for name in (item, item + ".far"):
+        path = os.path.join(CHARS, "weapons-alone", name + ".json")
+        if os.path.exists(path):
+            note = json.load(open(path, encoding="utf-8"))
+            if note["kind"] == "shield":
+                out.add(note["hand"])
+    return out
+
+
+def restand(base, ids):
+    """The held pictures (weapons/<id>.png) made again from the items as they were cut
+    (weapons-alone), after how they're held has changed."""
+    bodies = D.body(base)
+    w, h = D.CANVAS
+    for item in ids:
+        parts = alone(base, item)
+        if not parts:
+            sys.exit("weapon_alone: tools/source/characters/weapons-alone has no %s" % item)
+        figure = stood(base, bodies, parts, shields(item))
+        rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)
+        ic.write_png(os.path.join(CHARS, "weapons", item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
+        print("  %-28s stood again%s" % (item, ", its shield over the fist" if shields(item) else ""))
 
 
 def cut(painted, base, specs):
@@ -275,7 +311,7 @@ def cut(painted, base, specs):
         whole.setdefault(item, {})[side] = held(base, colour, alpha, grip, side, kind)
         print("  %-28s a %s, in the %s hand; its grip at %.0f, %.0f" % (item, kind, side, grip[0], grip[1]))
     for item, parts in whole.items():
-        figure = stood(base, bodies, parts)
+        figure = stood(base, bodies, parts, shields(item))
         rgb = np.rint(np.clip(figure[:, :, :3], 0, 1) * 255).astype(np.uint8)
         ic.write_png(os.path.join(held_dir, item + ".png"), np.dstack([rgb, np.full((h, w), 255, np.uint8)]))
     write_assets()
@@ -420,6 +456,8 @@ def main(argv):
         template()
     elif len(argv) >= 4 and argv[0] == "cut":
         cut(argv[1], argv[2], argv[3:])
+    elif len(argv) >= 3 and argv[0] == "restand":
+        restand(argv[1], argv[2:])
     elif len(argv) >= 4 and argv[0] == "preview":
         preview(argv[1], argv[2], argv[3:])
     elif argv == ["assets"]:

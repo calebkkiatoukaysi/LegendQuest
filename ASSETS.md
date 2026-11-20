@@ -2477,7 +2477,7 @@ Content/Characters/Parts/face-0.png - an atlas page of 20 parts (face-f01, face-
 
 Content/Characters/Parts/facial-0.png - an atlas page of 72 parts (beard-01, beard-02, beard-03, beard-04, beard-05, beard-06, beard-07, beard-08, beard-09, beard-10, beard-11, beard-12, jewel-01, jewel-01-f, jewel-02, jewel-02-f, jewel-03, jewel-03-f, jewel-04, jewel-04-f, jewel-05, jewel-05-f, jewel-06, jewel-06-f, jewel-07, jewel-07-f, jewel-08, jewel-08-f, jewel-09, jewel-09-f, jewel-10, jewel-10-f, jewel-11, jewel-11-f, jewel-12, jewel-12-f, jewel-13, jewel-13-f, jewel-14, jewel-14-f, jewel-15, jewel-15-f, jewel-16, jewel-16-f, jewel-17, jewel-17-f, jewel-18, jewel-18-f, jewel-19, jewel-19-f, jewel-20, jewel-20-f, jewel-21, jewel-21-f, jewel-22, jewel-22-f, jewel-23, jewel-23-f, jewel-24, jewel-24-f, skin-01, skin-01-f, skin-02, skin-02-f, skin-03, skin-03-f, skin-04, skin-04-f, skin-05, skin-05-f, skin-06, skin-06-f) and 72 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT, but for the parts tools/source/characters/generated.json lists, made with Google's Gemini image model at his request; cut by tools/import_parts.py
 
-Content/Characters/Parts/helm-0.png - an atlas page of 95 parts (hair-01, hair-01-f, hair-02, hair-02-f, hair-03, hair-03-f, hair-04, hair-04-f, hair-05, hair-05-f, hair-06, hair-06-f, hair-07, hair-07-f, hair-08, hair-08-f, hair-09-f, hair-10, hair-10-f, hair-11, hair-11-f, hair-12, hair-12-f, hair-13, hair-13-f, hair-14, hair-14-f, hair-15, hair-15-f, hair-16, hair-16-f, hair-17, hair-17-f, hair-18, hair-18-f, hair-19, hair-19-f, hair-20, hair-20-f, hair-21, hair-21-f, hair-22, hair-22-f, hair-23, hair-23-f, hair-24, hair-24-f, hair-25, hair-25-f, hair-26, hair-26-f, hair-27, hair-27-f, hair-28, hair-28-f, hair-29, hair-29-f, hair-30, hair-30-f, hair-31, hair-31-f, hair-32, hair-32-f, hair-33, hair-33-f, hair-34, hair-34-f, hair-35, hair-35-f, hair-36, hair-36-f, hair-37, hair-37-f, hair-38, hair-38-f, hair-39, hair-39-f, hair-40, hair-40-f, hair-41, hair-41-f, hair-42, hair-42-f, hair-43, hair-43-f, hair-44, hair-44-f, hair-45, hair-45-f, hair-46, hair-46-f, hair-47, hair-47-f, hair-48, hair-48-f) and 95 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
+Content/Characters/Parts/helm-0.png - an atlas page of 95 parts (hair-01, hair-01-f, hair-02, hair-02-f, hair-03, hair-03-f, hair-04, hair-04-f, hair-05, hair-05-f, hair-06, hair-06-f, hair-07, hair-07-f, hair-08, hair-08-f, hair-09-f, hair-10, hair-10-f, hair-11, hair-11-f, hair-12, hair-12-f, hair-13, hair-13-f, hair-14, hair-14-f, hair-15, hair-15-f, hair-16, hair-16-f, hair-17, hair-17-f, hair-18, hair-18-f, hair-19, hair-19-f, hair-20, hair-20-f, hair-21, hair-21-f, hair-22, hair-22-f, hair-23, hair-23-f, hair-24, hair-24-f, hair-25, hair-25-f, hair-26, hair-26-f, hair-27, hair-27-f, hair-28, hair-28-f, hair-29, hair-29-f, hair-30, hair-30-f, hair-31, hair-31-f, hair-32, hair-32-f, hair-33, hair-33-f, hair-34, hair-34-f, hair-35, hair-35-f, hair-36, hair-36-f, hair-37, hair-37-f, hair-38, hair-38-f, hair-39, hair-39-f, hair-40, hair-40-f, hair-41, hair-41-f, hair-42, hair-42-f, hair-43, hair-43-f, hair-44, hair-44-f, hair-45, hair-45-f, hair-46, hair-46-f, hair-47, hair-47-f, hair-48, hair-48-f) and 95 masks, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT, but for the parts tools/source/characters/generated.json lists, made with Google's Gemini image model at his request; cut by tools/import_parts.py
 
 Content/Characters/Parts/helm-1.png - an atlas page of 1 part (hair-09) and 1 mask, cut from tools/source/characters; supplied by Caleb Kiatoukaysi, made in ChatGPT; cut by tools/import_parts.py
 
@@ -2522,6 +2522,8 @@ tools/source/characters/weapon-sheet-female.png - the blank weapon sheet: four c
 
 tools/source/characters/weapon-sheet-male.png - the blank weapon sheet: four copies of its two fists, each with a stub of forearm, where they are on the figure, at 0.56 scale, side by side, the rest of the figure left out, from tools/source/characters/base-male.png, with grey lines between them; built by tools/part_sheet.py
 
+tools/source/characters/extra-sheet-faces.png - the extra sheet with a face on every head (face-m03 on the man, face-f03 on the woman), for piercings: painted on it they land on the ear, the brow, the nose and the lips, and `tools/part_sheet.py unface` takes the faces back out before the sheet's cut; built by tools/part_sheet.py from the blank extra sheet and tools/source/characters/faces
+
 tools/source/characters/sheets/extra-sheet-01.png - extra sheet extra-sheet-01 (beard-01, beard-02, beard-03, beard-04, beard-05, beard-06, beard-07, beard-08, beard-09, beard-10, beard-11, beard-12), painted on tools/source/characters/extra-sheet-male.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
 tools/source/characters/sheets/extra-sheet-02.png - extra sheet extra-sheet-02 (jewel-01, jewel-02, jewel-03, jewel-04, jewel-05, jewel-06), painted on tools/source/characters/extra-sheet.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
@@ -2552,7 +2554,7 @@ tools/source/characters/sheets/hair-sheet-04.png - hair sheet hair-sheet-04 (hai
 
 tools/source/characters/sheets/hair-sheet-05.png - hair sheet hair-sheet-05 (hair-33, hair-34, hair-35, hair-36, hair-37, hair-38, hair-39, hair-40), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
-tools/source/characters/sheets/hair-sheet-06.png - hair sheet hair-sheet-06 (hair-41, hair-42, hair-43, hair-44, hair-45, hair-46, hair-47, hair-48), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+tools/source/characters/sheets/hair-sheet-06.png - hair sheet hair-sheet-06 (hair-41, hair-42, hair-43, hair-44, hair-45, hair-46, hair-47, hair-48), painted on tools/source/characters/hair-sheet.png; supplied by Caleb Kiatoukaysi, made in ChatGPT, but for hair-47-f, hair-48-f, painted again with Google's Gemini image model by Claude at his request (2026-11-19)
 
 tools/source/characters/extras/beard-01.png - beard-01 on its base's canvas, cut by tools/part_sheet.py from cell 1 of tools/source/characters/sheets/extra-sheet-01.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
@@ -2974,9 +2976,9 @@ tools/source/characters/hairs/hair-45-f.png - hair-45-f on its base's canvas, cu
 
 tools/source/characters/hairs/hair-46-f.png - hair-46-f on its base's canvas, cut by tools/part_sheet.py from cell 14 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
 
-tools/source/characters/hairs/hair-47-f.png - hair-47-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+tools/source/characters/hairs/hair-47-f.png - hair-47-f on its base's canvas, cut by tools/part_sheet.py from cell 15 of tools/source/characters/sheets/hair-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
-tools/source/characters/hairs/hair-48-f.png - hair-48-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-06.png; supplied by Caleb Kiatoukaysi, made in ChatGPT
+tools/source/characters/hairs/hair-48-f.png - hair-48-f on its base's canvas, cut by tools/part_sheet.py from cell 16 of tools/source/characters/sheets/hair-sheet-06.png; made with Google's Gemini image model by Claude, at Caleb Kiatoukaysi's request (2026-11-19), from the art brief's prompt
 
 <!-- end part sheets -->
 
@@ -5190,3 +5192,194 @@ Icon.ico - MonoGame project icon, unmodified from the MonoGame DesktopGL project
 Icon.bmp - MonoGame project icon, unmodified from the MonoGame DesktopGL project template, created by the MonoGame Team (https://www.monogame.net/) and distributed under the Microsoft Public License (https://licenses.nuget.org/MS-PL)
 
 app.manifest - the Windows application manifest, unmodified from the MonoGame DesktopGL project template, created by the MonoGame Team (https://www.monogame.net/) and distributed under the Microsoft Public License (https://licenses.nuget.org/MS-PL)
+
+## Room artwork source illustrations (November 2026)
+
+Original artwork made with ChatGPT built-in image generation from the room brief, supplied by Caleb Kiatoukaysi for Legend Quest. All 186 source candidates are saved; production fitting remains pending. See art/rooms/README.md for prompts, previews and review notes.
+
+- `art/rooms/generated/gulls-wager/deck/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gulls-wager/deck/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gulls-wager/deck/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/fish-market/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/fish-market/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/fish-market/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/pier/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/lantern-market/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/lantern-market/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/lantern-market/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/sunspire-steps/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/thornbridge-gate/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gilded-flagon/taproom/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/gilded-flagon/taproom/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/shop/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/forge/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/bakery/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/chapel/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/cottage-a/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/cottage-b/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/warehouse/inside/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/steps/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/hall/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/hall/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/hall/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/barrow/side-room/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/camp/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/lip/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/lip/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/lip/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/cut/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/floor/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/floor/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood-quarry/floor/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/thornbridge/camp-gate/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/thornbridge/tents/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/thornbridge/tents/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/thornbridge/tents/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/thornbridge/river-edge/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/entrance/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/entrance/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/entrance/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/halls/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/halls/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/halls/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/strongroom/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/strongroom/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/strongroom/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/old-crown-vault/treasury/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/sunspire-keep/great-hall/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/sunspire-keep/great-hall/bg-2.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/sunspire-keep/great-hall/bg-3.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/rusty-anvil/bar/bg-1.png` - detailed background illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/fg-2.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/docks/harbourside/fg-3.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/gate-plaza/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/fg-2.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/festival-square/fg-3.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/lantern-market/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/questeria/thornbridge-gate/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/fg-2.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/farmland/fg-3.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/fg-2.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/road/fork/fg-3.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/edge/fg-3.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/fg-2.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/deep/fg-3.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/mirewood/camp/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/generated/thornbridge/river-edge/fg-1.png` - transparent foreground illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/questeria/plaza.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/questeria/terrace.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/questeria/cobble.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/questeria/grass.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/questeria/water.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/questeria/planks.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/ship/deck.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/ship/sea.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/ship/rail-n.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/ship/rail-s.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/interior/floor-wood.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/interior/floor-stone.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/interior/rug.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/interior/wall-top.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/interior/wall-face.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/interior/wall-base.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/crypt/floor.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/crypt/steps.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/crypt/wall-top.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/crypt/bones.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/grass.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/long-grass.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/path.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/road.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/soil.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/stream.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/wall.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/ruts.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/reeds.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/crops.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/petals.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/flowers.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/clover.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/pebbles.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/tuft.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/meadow/lilies.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/grass.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/grass-wilt.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/grass-rot.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/leaves.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/leaves-blackvein.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/gloom-moss.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/trail.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/tar-stream.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/undergrowth.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/undergrowth-rot.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/tuft.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/flowers.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/fern.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/pebbles.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/roots.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/litter.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/veins.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/tuft-dead.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/toadstools.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/tar-spatter.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/brambles.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/mirewood/tar-slick.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/floor.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/root-floor.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/ramp.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/wall-top.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/tar-seep.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/gravel.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/roots.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/fungus.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/tools.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/quarry/shards.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/floor.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/inlay.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/tunnel.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/steps.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/wall-top.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/earth.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/earth-top.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/pressure-plate.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/debris.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/coins.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/darts.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/vault/bones.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/marble.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/carpet.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/dais.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/steps.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/wall-top.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/wall-high.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/wall-face.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/wall-base.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/window-high.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
+- `art/rooms/tiles/keep/window.png` - tile source illustration; supplied by Caleb Kiatoukaysi.
