@@ -199,9 +199,42 @@
     196,
     197,
     198,
-    199
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229,
+    230,
+    231,
+    232
   ],
-  "next_number": 200,
+  "next_number": 233,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -4623,6 +4656,732 @@
       "source_sha256": "153242d6157444f93dd20c6222e1687350c474cec0ecb42e649662d50db33c42",
       "export_sha256": "142638a8834f0832dc5aaffdb7286cbbf09ce8eed6021fa0271baa4c5e869eb9",
       "prompt": "docs/pixel-art-portraits/199-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 200,
+      "filename": "portrait-brenna-protectorate.neutral.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.neutral.png",
+      "original": "art/pixel-portraits/originals/brenna/200-portrait-brenna-protectorate.neutral.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ad81d666c9d37b24c2d52a896bfd8e440fb8e87ba7beb5840b7accdc851f2093",
+      "export_sha256": "87dd47113cfc9200df48058385e6b27b92f5c73f698fc8f5bfc9f4e9412e0bbc",
+      "prompt": "docs/pixel-art-portraits/200-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 201,
+      "filename": "portrait-brenna-protectorate.angry.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.angry.png",
+      "original": "art/pixel-portraits/originals/brenna/201-portrait-brenna-protectorate.angry.png",
+      "reference_number": 200,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.neutral.png",
+      "reference_sha256": "87dd47113cfc9200df48058385e6b27b92f5c73f698fc8f5bfc9f4e9412e0bbc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "257bb5415bfb71fa30511e314ff8f4b9dfc0cf3a16504b9c0bfb3502633bd2c0",
+      "export_sha256": "86055320ffda3cfaaba93d3535de8ecfc19c1e61d9974b9cbb1c234ea3cc8879",
+      "prompt": "docs/pixel-art-portraits/201-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 202,
+      "filename": "portrait-brenna-protectorate.cold.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.cold.png",
+      "original": "art/pixel-portraits/originals/brenna/202-portrait-brenna-protectorate.cold.png",
+      "reference_number": 200,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.neutral.png",
+      "reference_sha256": "87dd47113cfc9200df48058385e6b27b92f5c73f698fc8f5bfc9f4e9412e0bbc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7a629a37ec888aae52f9234c76ce4dbf56c4125b3da9629b451f4fe0ab9ee6e7",
+      "export_sha256": "c564feb038110325764079a76a73aa700c7230c8612a8d1d46f3ff18a2a2ac23",
+      "prompt": "docs/pixel-art-portraits/202-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 203,
+      "filename": "portrait-brenna-protectorate.smirk.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.smirk.png",
+      "original": "art/pixel-portraits/originals/brenna/203-portrait-brenna-protectorate.smirk.png",
+      "reference_number": 200,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna-protectorate.neutral.png",
+      "reference_sha256": "87dd47113cfc9200df48058385e6b27b92f5c73f698fc8f5bfc9f4e9412e0bbc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ff6b3a23df7a956025b3f40c80e577b4441de467dd73138f7527e6d52ea361af",
+      "export_sha256": "c65813aece033e3c4d2cc9f98072d3b82decaf4caa5f1e861c371f2e9aa6db32",
+      "prompt": "docs/pixel-art-portraits/203-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 204,
+      "filename": "portrait-corwin.neutral.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "original": "art/pixel-portraits/originals/corwin/204-portrait-corwin.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ee8b5305bd585fd1fad7fca4d42c13acd610d2abf3f66a0e1ec3f5b80c6c039f",
+      "export_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "prompt": "docs/pixel-art-portraits/204-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 205,
+      "filename": "portrait-corwin.angry.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.angry.png",
+      "original": "art/pixel-portraits/originals/corwin/205-portrait-corwin.angry.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d4629e49ceb573ee225a08498f27a89bd380dd1f985acfe11e06a0bc72ae1d26",
+      "export_sha256": "67984fa021cc2c138d53f7dc8185e926d08a6fbf0baf6f4bd68c352f42c6c70c",
+      "prompt": "docs/pixel-art-portraits/205-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 206,
+      "filename": "portrait-corwin.disgust.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.disgust.png",
+      "original": "art/pixel-portraits/originals/corwin/206-portrait-corwin.disgust.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "65d28796b45e38d0739ee1eaebaa6d5df83954383c2195cb1d472f432c1bb644",
+      "export_sha256": "1528b35daeb1108fc65a3b4e4719bc7b9febea585f67c5ea892b009e6863de59",
+      "prompt": "docs/pixel-art-portraits/206-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 207,
+      "filename": "portrait-corwin.smile.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.smile.png",
+      "original": "art/pixel-portraits/originals/corwin/207-portrait-corwin.smile.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d9a266646831d5ee40dd56f093611c10e8eb737d0bd4627904c85e93f4efa008",
+      "export_sha256": "e487a9b3219c0e0fff536e2b8059ff2c92cc9ea5a622feadf222d99e2c84d90a",
+      "prompt": "docs/pixel-art-portraits/207-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 208,
+      "filename": "portrait-corwin.laugh.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.laugh.png",
+      "original": "art/pixel-portraits/originals/corwin/208-portrait-corwin.laugh.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "116384f909c38659ed0459164c03d4475664d9cce1313c1d52d87119333ebf83",
+      "export_sha256": "27ad1ac5fda6131d81c7514af63aa7ab1be6ca8f6b36070993502281a4dcf701",
+      "prompt": "docs/pixel-art-portraits/208-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 209,
+      "filename": "portrait-corwin.sad.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.sad.png",
+      "original": "art/pixel-portraits/originals/corwin/209-portrait-corwin.sad.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "dab8f1e76d8da2e2b320dbc07d59eccb190e56a184feb0c5c29a4a645aa18b30",
+      "export_sha256": "8389cceafd9e8a2213b83b237cabadb2135acfd491a6d5bb2c6919dd50034c0b",
+      "prompt": "docs/pixel-art-portraits/209-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 210,
+      "filename": "portrait-corwin.grin.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.grin.png",
+      "original": "art/pixel-portraits/originals/corwin/210-portrait-corwin.grin.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "41e6b176a178f6c12be99d0330af59689f61796ee6d9740416a00a81ceda780a",
+      "export_sha256": "f6f431eaa1306f02d7886a91be1e0ec92ba481da047fa3f4d389235023354c74",
+      "prompt": "docs/pixel-art-portraits/210-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 211,
+      "filename": "portrait-corwin.smirk.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.smirk.png",
+      "original": "art/pixel-portraits/originals/corwin/211-portrait-corwin.smirk.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6c24625f39d353389f3afef9fad1f8142514d3bea11abb2dc4b61a12daab1da6",
+      "export_sha256": "2868f3e1d96c83df28d95e47700559a0cc3108dfadf241c55d298964a0b37a93",
+      "prompt": "docs/pixel-art-portraits/211-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 212,
+      "filename": "portrait-corwin.worried.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.worried.png",
+      "original": "art/pixel-portraits/originals/corwin/212-portrait-corwin.worried.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "723457f71755c0aa85ebb1f8b0d9c1980013ecdaa12cd16f9c4bc1dcbd9f72f1",
+      "export_sha256": "8d1141e92a68c78095c18219d2a76a6894e7bb4a5dec3dcd225dcb78953fc393",
+      "prompt": "docs/pixel-art-portraits/212-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 213,
+      "filename": "portrait-corwin.afraid.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.afraid.png",
+      "original": "art/pixel-portraits/originals/corwin/213-portrait-corwin.afraid.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a6cd15aa3d3de946e1499feb658c4cbffb20c7d3c3ac173f1fe44afd9dbd8ca3",
+      "export_sha256": "01ae3a52f0ea99192c17f937fb1f3bffceac7a1a0676033813f9a869a9917495",
+      "prompt": "docs/pixel-art-portraits/213-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 214,
+      "filename": "portrait-corwin.cold.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.cold.png",
+      "original": "art/pixel-portraits/originals/corwin/214-portrait-corwin.cold.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "15f287ffe3210c189df8e33df97c13958b695917c129b815e1baa3bb47f3795e",
+      "export_sha256": "a3ff09b42382602c9f74a746e19d61481d4be86a6f797281717c639183f7d3eb",
+      "prompt": "docs/pixel-art-portraits/214-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 215,
+      "filename": "portrait-corwin.tired.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.tired.png",
+      "original": "art/pixel-portraits/originals/corwin/215-portrait-corwin.tired.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0507ccb1c0df81535a100a6b2079ec70d508638ced9848f20ee759c63303867e",
+      "export_sha256": "6a26173c5794e4fc737324218e22b678b9aa3951d6920307c2a5c3fe33dbe0ae",
+      "prompt": "docs/pixel-art-portraits/215-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 216,
+      "filename": "portrait-corwin.shock.png",
+      "path": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.shock.png",
+      "original": "art/pixel-portraits/originals/corwin/216-portrait-corwin.shock.png",
+      "reference_number": 204,
+      "reference": "tools/source/pixel/portraits/corwin/front-facing/portrait-corwin.neutral.png",
+      "reference_sha256": "f8d94f9b8c53d3abf533de6750e78b47155b5bf7d8ad251c1d344ea9b201b351",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "75f612a27b2bab4b7587835d48632ea88f17d51b33ab6fc53067920c0171f71d",
+      "export_sha256": "685bd59f7962ea93d790c9a126663816be2224049863ac4f4da0168a636f8443",
+      "prompt": "docs/pixel-art-portraits/216-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 217,
+      "filename": "portrait-davin.neutral.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "original": "art/pixel-portraits/originals/davin/217-portrait-davin.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "938afc839e7971532fe904971cdbda906152dc8792244181588eb021c6e9c3de",
+      "export_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "prompt": "docs/pixel-art-portraits/217-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 218,
+      "filename": "portrait-davin.angry.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.angry.png",
+      "original": "art/pixel-portraits/originals/davin/218-portrait-davin.angry.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "856a15e28f5362bbc06a0b72d03841d27d285273be57c994fbbac43318dca13e",
+      "export_sha256": "039acab4d2fba78f0fde32d1333f6f2be4b5aa6dc1f52fa1737e2e703ee5f867",
+      "prompt": "docs/pixel-art-portraits/218-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 219,
+      "filename": "portrait-davin.disgust.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.disgust.png",
+      "original": "art/pixel-portraits/originals/davin/219-portrait-davin.disgust.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c5e738c9d8ce2eef7f8b2ac8e56b3e3d89ac5b20ca9467ee0821178c39fda2f2",
+      "export_sha256": "66252a11b19be166ff9d9841beeae06a7c50c2a2aaa586b946f2c5bda304775c",
+      "prompt": "docs/pixel-art-portraits/219-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 220,
+      "filename": "portrait-davin.smile.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.smile.png",
+      "original": "art/pixel-portraits/originals/davin/220-portrait-davin.smile.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f33b799b1fc15b97e56b48248f37fab1cc07682d624226cf31555bc542fe71e6",
+      "export_sha256": "debda82f031bd3d2651c94be2ca5459dbb50a186fe6e36655875886d62c5f565",
+      "prompt": "docs/pixel-art-portraits/220-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 221,
+      "filename": "portrait-davin.laugh.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.laugh.png",
+      "original": "art/pixel-portraits/originals/davin/221-portrait-davin.laugh.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3c5bfed3aeea274806b198a25003a50fd263ea1bcdf3eeeb5ba83e2efef74326",
+      "export_sha256": "37a1fb818f0bf16317dacf37309a76735bdf4d663da113108d892f3efb61e111",
+      "prompt": "docs/pixel-art-portraits/221-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 222,
+      "filename": "portrait-davin.sad.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.sad.png",
+      "original": "art/pixel-portraits/originals/davin/222-portrait-davin.sad.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e439542689edf3a623d4da3b8f78b355de0e4ca904c56fc4f64efec85fc0469e",
+      "export_sha256": "300158a5f85aea5b5c78a90f26dfc45c52c9385a8fc9bf2301e09fc36ce5e10f",
+      "prompt": "docs/pixel-art-portraits/222-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 223,
+      "filename": "portrait-davin.shock.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.shock.png",
+      "original": "art/pixel-portraits/originals/davin/223-portrait-davin.shock.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "70960505d68f8d73eaccf259604e1dd3f80a8a06eee4472ea37eed3f1452c78f",
+      "export_sha256": "67d98feb216003f84340f3027894ad9f8a4d969de60f84aa74ab68e2077a630a",
+      "prompt": "docs/pixel-art-portraits/223-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 224,
+      "filename": "portrait-davin.worried.png",
+      "path": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.worried.png",
+      "original": "art/pixel-portraits/originals/davin/224-portrait-davin.worried.png",
+      "reference_number": 217,
+      "reference": "tools/source/pixel/portraits/davin/front-facing/portrait-davin.neutral.png",
+      "reference_sha256": "365c84d3c8fdead013844aaa7042c71ed24bb21b576333c5f94601ec299d1af1",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3e024d60f7a5ad0dc49d78f79e22d7fbfc15bb406fdd70dced8275d2e05292fc",
+      "export_sha256": "e8f08c56105440f2d6148765475b0ccd1ee497ede7cf482368c42e5556a235a9",
+      "prompt": "docs/pixel-art-portraits/224-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 225,
+      "filename": "portrait-anselle.neutral.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "original": "art/pixel-portraits/originals/anselle/225-portrait-anselle.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d13f48ee35d466282e82912189cec5fd2ef79805085de9a1a2dcedf07d099319",
+      "export_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "prompt": "docs/pixel-art-portraits/225-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 226,
+      "filename": "portrait-anselle.angry.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.angry.png",
+      "original": "art/pixel-portraits/originals/anselle/226-portrait-anselle.angry.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3bdbf20dff223ff809fbad2d65158ade97f4529d6babe3cfe870b2d63955203d",
+      "export_sha256": "19abba434fd17bc1edd39647ee2e47a0f6053853ad90a4457928b7b84658814e",
+      "prompt": "docs/pixel-art-portraits/226-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 227,
+      "filename": "portrait-anselle.disgust.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.disgust.png",
+      "original": "art/pixel-portraits/originals/anselle/227-portrait-anselle.disgust.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b6544cc5ce6f7e0109eb987ad220ade8e91af9bb225814bc93fdbfa82b7a310b",
+      "export_sha256": "e9cdcdb49af7fadc4a73a7a92d76baeaf5bb5750567f5a17f54522c24d1c1083",
+      "prompt": "docs/pixel-art-portraits/227-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 228,
+      "filename": "portrait-anselle.smile.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.smile.png",
+      "original": "art/pixel-portraits/originals/anselle/228-portrait-anselle.smile.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b0993345e336192b3ada3e46dc9556af30ce6e45ca94e131aeb1a92cacc54526",
+      "export_sha256": "6374f106543ad1b40b3d3c8b2fd5c83e10cda20a8d211df0ae19a4bc0a8f3767",
+      "prompt": "docs/pixel-art-portraits/228-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 229,
+      "filename": "portrait-anselle.laugh.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.laugh.png",
+      "original": "art/pixel-portraits/originals/anselle/229-portrait-anselle.laugh.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bafb70976d1c6e4146b9444fd6b11b6db359bbfc7a8a6a74e849ac0b1932a051",
+      "export_sha256": "970aefa38e5fe435f543225521a0935c5930dad1f43e640c06f14779edda20e1",
+      "prompt": "docs/pixel-art-portraits/229-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 230,
+      "filename": "portrait-anselle.sad.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.sad.png",
+      "original": "art/pixel-portraits/originals/anselle/230-portrait-anselle.sad.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e20b87c51f82c1fd34540f68cc814ad942835f35fad6b617fb1a690612faeeb1",
+      "export_sha256": "13ced21f24ab01369f58b0e72861ead84bc527662eb70f4440815dafc5b231cd",
+      "prompt": "docs/pixel-art-portraits/230-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 231,
+      "filename": "portrait-anselle.shock.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.shock.png",
+      "original": "art/pixel-portraits/originals/anselle/231-portrait-anselle.shock.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c6dfd9c8f22b97de981ab1a650bb5c4f210c00b60e9723ca7c3953f09d5f2e22",
+      "export_sha256": "a1dd8782bbafb9cdb0496b945055f58fa6667cbc8dcb94d16fb8938cfb919c09",
+      "prompt": "docs/pixel-art-portraits/231-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 232,
+      "filename": "portrait-anselle.worried.png",
+      "path": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.worried.png",
+      "original": "art/pixel-portraits/originals/anselle/232-portrait-anselle.worried.png",
+      "reference_number": 225,
+      "reference": "tools/source/pixel/portraits/anselle/front-facing/portrait-anselle.neutral.png",
+      "reference_sha256": "3b7982cf8fa99ca86daaa88d0c43bcf4d0b5c46654fcbfe296d93dfb4878bee6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "62acdd73d1c4a908f915e9247ab70ac9c3760c2c28e63546bb99fe0690ca2e2b",
+      "export_sha256": "64f6c149bb12c8ed1a0422179f9809cf20a47be645d8956dc7da096018b20590",
+      "prompt": "docs/pixel-art-portraits/232-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
