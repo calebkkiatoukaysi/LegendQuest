@@ -389,9 +389,43 @@
     386,
     387,
     388,
-    389
+    389,
+    390,
+    391,
+    392,
+    393,
+    394,
+    395,
+    396,
+    397,
+    398,
+    399,
+    400,
+    401,
+    402,
+    403,
+    404,
+    405,
+    406,
+    407,
+    408,
+    409,
+    410,
+    411,
+    412,
+    413,
+    414,
+    415,
+    416,
+    417,
+    418,
+    419,
+    420,
+    421,
+    422,
+    423
   ],
-  "next_number": 390,
+  "next_number": 424,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -9039,6 +9073,1066 @@
       "source_sha256": "897f50d2e7d733b080ea2f2d828f3b14527ea13d95d8c14c90b0a4e417c3e60a",
       "export_sha256": "5eacc44b836462d1a1c8974e8f093ea0d24e09def088e92d88de47a2779a673a",
       "prompt": "docs/pixel-art-portraits/389-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 390,
+      "filename": "portrait-tomas.neutral.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "original": "art/pixel-portraits/originals/tomas/390-portrait-tomas.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "72ffe128a1d019b8d97da7f9685195b67bd7e2db74fee6014881f24277c6fe4a",
+      "export_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "prompt": "docs/pixel-art-portraits/390-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 391,
+      "filename": "portrait-tomas.angry.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.angry.png",
+      "original": "art/pixel-portraits/originals/tomas/391-portrait-tomas.angry.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "17471b7b88189021587c72e1cbde212cca0c9fff7dfb76c5e6af1f73a19216c8",
+      "export_sha256": "d829805570fd249c1a2df33a44067784b71f12233a70f4e6eedf438a435c45b7",
+      "prompt": "docs/pixel-art-portraits/391-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 392,
+      "filename": "portrait-tomas.disgust.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.disgust.png",
+      "original": "art/pixel-portraits/originals/tomas/392-portrait-tomas.disgust.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "31103f1dfa91fa6c16c81aa089f4bc81c264254101796aeef3b02c9787835eec",
+      "export_sha256": "3ed0ac3741e5e66e3c2f77e7cd28c040fb7a72ba59f048e69f6712f6b8218f42",
+      "prompt": "docs/pixel-art-portraits/392-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 393,
+      "filename": "portrait-tomas.smile.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.smile.png",
+      "original": "art/pixel-portraits/originals/tomas/393-portrait-tomas.smile.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "05d6c09f1d1ab5060c5537ef6ab80154d27b99e40d008b49048a7cb942d2644b",
+      "export_sha256": "d1a03305a26959a5347cfd6a2f8199312bab879db32870cf1c8a2ea5cf2eec8c",
+      "prompt": "docs/pixel-art-portraits/393-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 394,
+      "filename": "portrait-tomas.laugh.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.laugh.png",
+      "original": "art/pixel-portraits/originals/tomas/394-portrait-tomas.laugh.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3de5028069f9b4e4ea4b77a00becfcd055c31a12b6181524ad84924adc9a1130",
+      "export_sha256": "e5008670d6b0bcb85ba57e1cc521b38061326c2fa8101bf49ddcae557d108a8c",
+      "prompt": "docs/pixel-art-portraits/394-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 395,
+      "filename": "portrait-tomas.sad.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.sad.png",
+      "original": "art/pixel-portraits/originals/tomas/395-portrait-tomas.sad.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4a8c25fa1c0c75e594e3ef5be95498e0a8cf15f1d332167426e6f5016318230e",
+      "export_sha256": "d7eb062276f61672b8d2304d583871406fd437ebd51cf60fbf4c69755bca0d7f",
+      "prompt": "docs/pixel-art-portraits/395-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 396,
+      "filename": "portrait-tomas.shock.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.shock.png",
+      "original": "art/pixel-portraits/originals/tomas/396-portrait-tomas.shock.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "422ee04409c1b4699d52ab394ca927d8b986f98410bd0f4e2d5f6553de687611",
+      "export_sha256": "4c19fc893d805db7b2e52e90db4740a919f7529510a7aac0d7cc8cf6394855ee",
+      "prompt": "docs/pixel-art-portraits/396-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 397,
+      "filename": "portrait-tomas.worried.png",
+      "path": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.worried.png",
+      "original": "art/pixel-portraits/originals/tomas/397-portrait-tomas.worried.png",
+      "reference_number": 390,
+      "reference": "tools/source/pixel/portraits/tomas/front-facing/portrait-tomas.neutral.png",
+      "reference_sha256": "bea6588e057902d2524dcd38f6184bc2bb7d1f74d418af78d003b81b7223a4dd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "1835033f4b704b8e62c9f6f9d32a3f3fd4156f775a461aa3a695f86d6dc738ac",
+      "export_sha256": "71647112d0930093da02e36a3dce8eaaf53d00e922efc86ee471ba140f363b67",
+      "prompt": "docs/pixel-art-portraits/397-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 398,
+      "filename": "portrait-odelle.neutral.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "original": "art/pixel-portraits/originals/odelle/398-portrait-odelle.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d05e884e05f9862c4f07854259501704c6f90a74af51e4322791ac8c7e33bbbe",
+      "export_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "prompt": "docs/pixel-art-portraits/398-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 399,
+      "filename": "portrait-odelle.angry.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.angry.png",
+      "original": "art/pixel-portraits/revisions/399-b1a75593527b.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b1a75593527b696588e95f2f94a3dbf1e206f9ce1403fe0333a1129c081e622c",
+      "export_sha256": "44e610d31685baebf00e04d2ca50730a6ecb3bd7e26e05a5c884a63010f56acd",
+      "prompt": "docs/pixel-art-portraits/odelle-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 399,
+          "filename": "portrait-odelle.angry.png",
+          "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.angry.png",
+          "original": "art/pixel-portraits/originals/odelle/399-portrait-odelle.angry.png",
+          "reference_number": 398,
+          "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+          "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "de7803b764a44a8ada7f703d61226bb778e4489e760160026e536355b87a26aa",
+          "export_sha256": "992b80ed8e430418e54655f9c62aeb64a57da8581a5a340c249ffc86251103de",
+          "prompt": "docs/pixel-art-portraits/399-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 400,
+      "filename": "portrait-odelle.disgust.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.disgust.png",
+      "original": "art/pixel-portraits/originals/odelle/400-portrait-odelle.disgust.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ccc0a6d8278edeb8fb630fc03d94e6b955d4ff54427460aeebfc90da398a64d6",
+      "export_sha256": "3598b310462e6841b5e7a2c7af39427a55ec40fb8b0ddf38dd936ff5e831b683",
+      "prompt": "docs/pixel-art-portraits/400-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 401,
+      "filename": "portrait-odelle.smile.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.smile.png",
+      "original": "art/pixel-portraits/revisions/401-354b93ce0fab.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "354b93ce0fab4734503f2864f267b079a7c16520459a374d5b9aad39b9f27b0f",
+      "export_sha256": "321b0b1aa06a7ceb7c08574422b925bc76070034661f82d321918fbfff83d391",
+      "prompt": "docs/pixel-art-portraits/odelle-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 401,
+          "filename": "portrait-odelle.smile.png",
+          "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.smile.png",
+          "original": "art/pixel-portraits/originals/odelle/401-portrait-odelle.smile.png",
+          "reference_number": 398,
+          "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+          "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "8e8d5a81911edaec3c1426cbd96c8d2fd2ea8f23077bf2ec34761ff0668b5bef",
+          "export_sha256": "cc23bd087969a14149d85ef25b0d0ddcf720159a061bf2a917b6156e438544f8",
+          "prompt": "docs/pixel-art-portraits/401-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 402,
+      "filename": "portrait-odelle.laugh.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.laugh.png",
+      "original": "art/pixel-portraits/revisions/402-9f20d522c410.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9f20d522c41053a84f7de3180dffb9cd16cc4ae4de4e102e26dec44279db88e5",
+      "export_sha256": "9662404e3d32feb147d1c97ad587e93aed39496bc475d0059c273cd4e1a6e38d",
+      "prompt": "docs/pixel-art-portraits/odelle-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 402,
+          "filename": "portrait-odelle.laugh.png",
+          "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.laugh.png",
+          "original": "art/pixel-portraits/originals/odelle/402-portrait-odelle.laugh.png",
+          "reference_number": 398,
+          "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+          "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "bd7dc514884218f6073537b4e22bec8d21d8d0404695d8bbef8dde6694b96edd",
+          "export_sha256": "7f9022b705f05ba4c5b3087b6446acbbf8aaad9995ed5b128da62393960f15f7",
+          "prompt": "docs/pixel-art-portraits/402-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 403,
+      "filename": "portrait-odelle.sad.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.sad.png",
+      "original": "art/pixel-portraits/revisions/403-c2ac1f52d5d4.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c2ac1f52d5d437866899f98a624d653d2f0fefdf69e066a0774f3e93ff9d7848",
+      "export_sha256": "22edc8057b2f98609be0f29c22b946a034514b603bc63a22f2632e36f29ab61e",
+      "prompt": "docs/pixel-art-portraits/odelle-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 403,
+          "filename": "portrait-odelle.sad.png",
+          "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.sad.png",
+          "original": "art/pixel-portraits/originals/odelle/403-portrait-odelle.sad.png",
+          "reference_number": 398,
+          "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+          "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "920d0029ac73f7a106c098a288b1e88af798d3510e3e46fea309dac4287c34f9",
+          "export_sha256": "53221785082516fce30072d5b26b04ebbbfe78b3bc5477c4139faf4e71eb3921",
+          "prompt": "docs/pixel-art-portraits/403-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 404,
+      "filename": "portrait-odelle.shock.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.shock.png",
+      "original": "art/pixel-portraits/revisions/404-ccc39e9dcc75.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ccc39e9dcc75570dc1f02617574ab2450f401c0229f7ea0e55fff5e0932cc2b1",
+      "export_sha256": "7163c7421792eae5f5f32eb129aa1b3d4995b38c4d11c7446ad4336b0c754314",
+      "prompt": "docs/pixel-art-portraits/odelle-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 404,
+          "filename": "portrait-odelle.shock.png",
+          "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.shock.png",
+          "original": "art/pixel-portraits/originals/odelle/404-portrait-odelle.shock.png",
+          "reference_number": 398,
+          "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+          "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "b18972d4c443d3f69db17213ad8b1fc9160c7ff569d1b7405d6da5911eaa88de",
+          "export_sha256": "4b934dc3d7c51a10be51bc6b357d8febdc0fb8fe74af9d65a693ce0fa73f220a",
+          "prompt": "docs/pixel-art-portraits/404-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 405,
+      "filename": "portrait-odelle.worried.png",
+      "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.worried.png",
+      "original": "art/pixel-portraits/revisions/405-61e67d6b1051.png",
+      "reference_number": 398,
+      "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+      "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "61e67d6b1051ebe86f84788f8b355f55de378527449eb9dc8555f4314e0a0a28",
+      "export_sha256": "aa95ac8f00aa11fa1418e0331f4845c32011e2aa38a9ec46d8fceed243be917f",
+      "prompt": "docs/pixel-art-portraits/odelle-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 405,
+          "filename": "portrait-odelle.worried.png",
+          "path": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.worried.png",
+          "original": "art/pixel-portraits/originals/odelle/405-portrait-odelle.worried.png",
+          "reference_number": 398,
+          "reference": "tools/source/pixel/portraits/odelle/front-facing/portrait-odelle.neutral.png",
+          "reference_sha256": "32d16abb9e8973ae8c7b7c1916527c6498b0e2c4f1055af3578743b89e6d9a6b",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "dd67453f5d06c993c023e9b3a2773586470b81236e03993a32b9c4054f6e7ccc",
+          "export_sha256": "61fe64a6c2456fdaab89f8dafaf8db7dde34d1792c1ad77e42afcad55f1ffa05",
+          "prompt": "docs/pixel-art-portraits/405-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 406,
+      "filename": "portrait-ruck.neutral.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "original": "art/pixel-portraits/originals/ruck/406-portrait-ruck.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5fbaa6bc7c0e9062db9938a679b0f00527225cb0fd8cf3ac1fe162215a589528",
+      "export_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "prompt": "docs/pixel-art-portraits/406-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 407,
+      "filename": "portrait-ruck.angry.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.angry.png",
+      "original": "art/pixel-portraits/originals/ruck/407-portrait-ruck.angry.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ec0d99fcf8f1f021377ce0c22521ad4cbf6d37d51499725f077fcb6e2e40c83f",
+      "export_sha256": "e79971fe9c53387fe47ee485ae2ddb191b66aae940395faa3b2870a66df16017",
+      "prompt": "docs/pixel-art-portraits/407-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 408,
+      "filename": "portrait-ruck.disgust.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.disgust.png",
+      "original": "art/pixel-portraits/originals/ruck/408-portrait-ruck.disgust.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0434eda52b92e7a02d1b212a8dcfa09e7b09e9ed9a0438c061422bf336dfb190",
+      "export_sha256": "bb1a29dc71f7bbc29ecea0a5666e3127cfd0e49583ada266a3fb1f82266a8cde",
+      "prompt": "docs/pixel-art-portraits/408-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 409,
+      "filename": "portrait-ruck.smile.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.smile.png",
+      "original": "art/pixel-portraits/originals/ruck/409-portrait-ruck.smile.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "40e33a20caeeae13fa924cd52dcd2c776cfd93df421239c8806d5f821d1fb6c5",
+      "export_sha256": "c1a7c02dd8f01c09d268d162a3b426731584f2238856124eefb5fd05cd670d43",
+      "prompt": "docs/pixel-art-portraits/409-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 410,
+      "filename": "portrait-ruck.laugh.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.laugh.png",
+      "original": "art/pixel-portraits/originals/ruck/410-portrait-ruck.laugh.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3f80999af1d0abed540fd4077a2c0f7ff7f3dc734e5d167bccd14b6192cede44",
+      "export_sha256": "2de69316c434c30e7c49abe41d7c3cf5441f2c801fc3fb874b417e967c5a0bb3",
+      "prompt": "docs/pixel-art-portraits/410-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 411,
+      "filename": "portrait-ruck.sad.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.sad.png",
+      "original": "art/pixel-portraits/originals/ruck/411-portrait-ruck.sad.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "746afb4140e057089062ed0c0fe4fc0c7fd25acdefc2fb568628ea79c8671c9d",
+      "export_sha256": "e0654b074b9ab8d69f5816177b3bf2c9aaf359893e97063f42f23f52b23f33a3",
+      "prompt": "docs/pixel-art-portraits/411-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 412,
+      "filename": "portrait-ruck.shock.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.shock.png",
+      "original": "art/pixel-portraits/originals/ruck/412-portrait-ruck.shock.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "380cfffe96de53f9866778fd044e3e2f32c3d717ee0192f48be00622bbcd56ea",
+      "export_sha256": "253d05b1bbf092ad62fe571e3c07a6aef9cea14befbd9853756ab6bdd6f7968a",
+      "prompt": "docs/pixel-art-portraits/412-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 413,
+      "filename": "portrait-ruck.worried.png",
+      "path": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.worried.png",
+      "original": "art/pixel-portraits/originals/ruck/413-portrait-ruck.worried.png",
+      "reference_number": 406,
+      "reference": "tools/source/pixel/portraits/ruck/front-facing/portrait-ruck.neutral.png",
+      "reference_sha256": "15f70d7b52920e2aac4cec43825753e764b6ae1efe54bcb12a6d2675ae1957eb",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "98ad47143c30180bd362f9dc63ceced4b3c4d5ae79e0c27aaf66226ad0d8ca1c",
+      "export_sha256": "ba7514c6dfbd50ea3a1828f292f42bc9b8780743308781940cd49e49f9d208c4",
+      "prompt": "docs/pixel-art-portraits/413-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 414,
+      "filename": "portrait-fennick.neutral.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "original": "art/pixel-portraits/originals/fennick/414-portrait-fennick.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6cc057bc1f39261f72fb8d1f87c4f7768f9098ef16eb676e4e5de2071e1c7404",
+      "export_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "prompt": "docs/pixel-art-portraits/414-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 415,
+      "filename": "portrait-fennick.angry.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.angry.png",
+      "original": "art/pixel-portraits/revisions/415-c2ee1822d435.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c2ee1822d4353ce18606cac40451f25b84a58a7aca35782d7364a6985541d5d8",
+      "export_sha256": "f572ac808b7082920fe52ad875c611f44d3c39f88f12911844aa90b4eb54a278",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 415,
+          "filename": "portrait-fennick.angry.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.angry.png",
+          "original": "art/pixel-portraits/originals/fennick/415-portrait-fennick.angry.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "58d29422f64a3e8862f71c6cf2d3004907c445a726b4d83393e059c98a9bb1ba",
+          "export_sha256": "103c5112233caf424d2a5e0d3784dac243018af07531e2d9d95a88b6540b5c6b",
+          "prompt": "docs/pixel-art-portraits/415-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 416,
+      "filename": "portrait-fennick.disgust.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.disgust.png",
+      "original": "art/pixel-portraits/revisions/416-1dcdbe040485.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "1dcdbe0404853c873c3e662a1baafa60f864102beba5c62ec0c64eda22f359ee",
+      "export_sha256": "439d637b40ca2f9f85a000af51bdd1fb0379dd7a9daf17775f7e8652cb7873eb",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 416,
+          "filename": "portrait-fennick.disgust.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.disgust.png",
+          "original": "art/pixel-portraits/originals/fennick/416-portrait-fennick.disgust.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "6ba9a10ab26a372af63205255600bdefa57ebce1f144fba98ba0979c11216cd8",
+          "export_sha256": "1574b1a7d623838e30d384c9373b3d203d20318bddd1c22ff0881a8e7a50a47c",
+          "prompt": "docs/pixel-art-portraits/416-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 417,
+      "filename": "portrait-fennick.smile.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.smile.png",
+      "original": "art/pixel-portraits/revisions/417-40644d1be83d.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "40644d1be83dff72e872cfe8f2e03dd5f99c024cc709d9cc6d78fbd674619d0d",
+      "export_sha256": "d4b271f837ab7e8e77205f0fa798b225e1f90ffeccbeee6f93c37a46fbb7d81d",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 417,
+          "filename": "portrait-fennick.smile.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.smile.png",
+          "original": "art/pixel-portraits/originals/fennick/417-portrait-fennick.smile.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "5ee340c23bfb631482462956bef033853effeff27ca256ea6e331ccbef067b1c",
+          "export_sha256": "02f0f12c4f70c03cc9b63a95c4d48fcbe1e59122c1f886efe05cd8172b1bb9e3",
+          "prompt": "docs/pixel-art-portraits/417-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 418,
+      "filename": "portrait-fennick.laugh.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.laugh.png",
+      "original": "art/pixel-portraits/revisions/418-92ee75809d9b.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "92ee75809d9b373fad224e973034f7970a52423693a2dde6e02675e48e1f80f2",
+      "export_sha256": "ad43957924218e4c699c2b16b2885f240461158256f98ac3e4f5cb495300a6d2",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 418,
+          "filename": "portrait-fennick.laugh.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.laugh.png",
+          "original": "art/pixel-portraits/originals/fennick/418-portrait-fennick.laugh.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "d5fd9dce9d71805bda1a3b13747c8c119b130ec051ec5205bbcb34e13ee90f4b",
+          "export_sha256": "2917f6eb6c22b8e665eac5fb5f00ef9478f3ef41b86a7997f854da9c09dc5db6",
+          "prompt": "docs/pixel-art-portraits/418-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 419,
+      "filename": "portrait-fennick.sad.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.sad.png",
+      "original": "art/pixel-portraits/revisions/419-0fd3656a2e7f.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0fd3656a2e7f71c9654785670c9337614f0ff7661e9cc29ffdfc99662097d5c0",
+      "export_sha256": "fe141afba9af5ab3b8b52ac051e90e1cf0d5131e5826d4a41d08ddcb2eabb88b",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 419,
+          "filename": "portrait-fennick.sad.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.sad.png",
+          "original": "art/pixel-portraits/originals/fennick/419-portrait-fennick.sad.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "35e5c0a4353f137fdfbc17ce7c836d60b71d33f1f04a7789a404c7a80aa75ca2",
+          "export_sha256": "9cd29cd313f3199f4144c3dd539053139c24ee8ae2f96dfdf53c55a85744bf25",
+          "prompt": "docs/pixel-art-portraits/419-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 420,
+      "filename": "portrait-fennick.shock.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.shock.png",
+      "original": "art/pixel-portraits/revisions/420-03af7f5bce8e.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "03af7f5bce8e264e08a1c24fb906fe3ec39a4a743cb8ee55619ce5484b3c5ed0",
+      "export_sha256": "c62b1395835425a9663decf6757fb35693b311a66264863efcf81ce2ec9e8373",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 420,
+          "filename": "portrait-fennick.shock.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.shock.png",
+          "original": "art/pixel-portraits/originals/fennick/420-portrait-fennick.shock.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "a4a2920c681b1a2764212ab1196f1324e04ec0555db04a4bda550c757073bd73",
+          "export_sha256": "6fe2085b39d4441029becf5b6f7dc320fcf6bebc05b481e7c99e62c80e553102",
+          "prompt": "docs/pixel-art-portraits/420-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 421,
+      "filename": "portrait-fennick.worried.png",
+      "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.worried.png",
+      "original": "art/pixel-portraits/revisions/421-5cad1b30b74a.png",
+      "reference_number": 414,
+      "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+      "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5cad1b30b74a2892ee089789d46cd79813472a4a1d0fbfcebdd4fe39f1b40f1c",
+      "export_sha256": "cb3cd8571290f4df5a63b14c0614b9caba7b53e6392c2c93a4f9a11e389c4d0e",
+      "prompt": "docs/pixel-art-portraits/fennick-detail-revision.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 421,
+          "filename": "portrait-fennick.worried.png",
+          "path": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.worried.png",
+          "original": "art/pixel-portraits/originals/fennick/421-portrait-fennick.worried.png",
+          "reference_number": 414,
+          "reference": "tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.neutral.png",
+          "reference_sha256": "bb7529438a04e579e926d697cae9bb5be0aa15e8d773118d52555f5c45bdadbf",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "1394fa8e6894d3f01e90b8ac32089dd84b42bb7287b7e2ead5524f8a5da2330e",
+          "export_sha256": "417a5103e6870ec9a9a7975a03a6f0e3974e2ffd38926fae37011abdfe695f32",
+          "prompt": "docs/pixel-art-portraits/421-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 422,
+      "filename": "portrait-brisk.neutral.png",
+      "path": "tools/source/pixel/portraits/brisk/front-facing/portrait-brisk.neutral.png",
+      "original": "art/pixel-portraits/originals/brisk/422-portrait-brisk.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3a95d2086b22d67636e03876c1d9a2a1638be47155aeadfcf7216edbcd127896",
+      "export_sha256": "371e246dc44df1c6cafff1e8cc358f9a36a00b7ddfc36ce5dc6edae5259ed8f5",
+      "prompt": "docs/pixel-art-portraits/422-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 423,
+      "filename": "portrait-brisk.angry.png",
+      "path": "tools/source/pixel/portraits/brisk/front-facing/portrait-brisk.angry.png",
+      "original": "art/pixel-portraits/originals/brisk/423-portrait-brisk.angry.png",
+      "reference_number": 422,
+      "reference": "tools/source/pixel/portraits/brisk/front-facing/portrait-brisk.neutral.png",
+      "reference_sha256": "371e246dc44df1c6cafff1e8cc358f9a36a00b7ddfc36ce5dc6edae5259ed8f5",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4d4680c3572da983c938419e0959fe23828069f6eb6d412758d4388b4c0f6a8b",
+      "export_sha256": "3729c1e1a3934fb6c08dacae2c555d9f5867fab3a6dc91a1030de8eb9ff5ff58",
+      "prompt": "docs/pixel-art-portraits/423-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
