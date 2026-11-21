@@ -4485,7 +4485,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "angry, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Angry: brows pulled hard down and together with a deep crease between them, eyes narrowed and glaring, nostrils flared, teeth gritted, the jaw set.\nI'll save it as portrait-vesk.angry.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey angry. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows narrow fiercely and intensify. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.angry.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.angry.png"
   },
   {
@@ -4498,7 +4498,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "disgust, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Disgusted: eyes narrowed into a flat, unimpressed look, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side in a sneer, the head drawn slightly back.\nI'll save it as portrait-vesk.disgust.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey disgust. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows become flat narrow unimpressed slits, with a very slight backwards head movement. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.disgust.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.disgust.png"
   },
   {
@@ -4511,7 +4511,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "smile, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Warm: eyes softened, cheeks lifted, a gentle closed-mouth smile.\nI'll save it as portrait-vesk.smile.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey smile. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows soften into gently upward-curved arcs. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.smile.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.smile.png"
   },
   {
@@ -4524,7 +4524,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "laugh, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Laughing: eyes squeezed shut into happy upside-down arcs, brows raised, mouth wide open showing the upper teeth and tongue, cheeks high, the head tipped back a little.\nI'll save it as portrait-vesk.laugh.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey laugh. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows close into amused upward-curved arcs, and the helmet tips back just slightly. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.laugh.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.laugh.png"
   },
   {
@@ -4537,7 +4537,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "sad, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Sad: eyes lowered and glistening with a wet line along the lower lids, the inner ends of the brows raised, the corners of the small mouth turned down, the head dipped a little.\nI'll save it as portrait-vesk.sad.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey sad. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows droop and dim a little; the helmet dips slightly. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.sad.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.sad.png"
   },
   {
@@ -4550,7 +4550,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "shock, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Shocked: eyes wide, brows raised high, mouth dropped open.\nI'll save it as portrait-vesk.shock.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey shock. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows widen and brighten in surprise. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.shock.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.shock.png"
   },
   {
@@ -4563,7 +4563,7 @@
     "parent": 342,
     "template": "male",
     "instructions": "worried, an edit of #342",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Worried for someone else: eyes open, brows knit and tilted up in the middle, mouth flat and tight.\nI'll save it as portrait-vesk.worried.png.",
+    "prompt": "Edit the attached Vesk neutral portrait to convey worried. His face is NEVER seen: preserve the exact rigid, CLOSED black metal wolf-head helmet with its snout-shaped visor, pointed metal ears and wine-red trim, plus the armour, cape, colours, framing and coarse pixel-art style. Do not reveal skin, hair, a human face, teeth or tongue. Do not animate or reshape the rigid metal wolf muzzle into a living animal mouth, or open the visor. Express the mood using ONLY the two existing red eye glows and minimal head movement. Both red eye glows open attentively with their inner edges subtly raised. Keep the same pixel grid and flat #00FF00 background. No text, emote symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-vesk.worried.png.",
     "path": "tools/source/pixel/portraits/vesk/front-facing/portrait-vesk.worried.png"
   },
   {
@@ -4693,7 +4693,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "angry, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Angry: brows pulled hard down and together with a deep crease between them, eyes narrowed and glaring, nostrils flared, teeth gritted, the jaw set.\nI'll save it as portrait-mordain.angry.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey angry. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Narrow the red light inside the fixed round lenses into intense glaring slits. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.angry.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.angry.png"
   },
   {
@@ -4706,7 +4706,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "disgust, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Disgusted: eyes narrowed into a flat, unimpressed look, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side in a sneer, the head drawn slightly back.\nI'll save it as portrait-mordain.disgust.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey disgust. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Flatten and dim the red light inside the fixed round lenses into unimpressed slits; draw the head back slightly. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.disgust.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.disgust.png"
   },
   {
@@ -4719,7 +4719,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "smile, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Warm: eyes softened, cheeks lifted, a gentle closed-mouth smile.\nI'll save it as portrait-mordain.smile.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey smile. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Soften the light inside the fixed round lenses into gently upward-curved shapes. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.smile.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.smile.png"
   },
   {
@@ -4732,7 +4732,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "laugh, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Laughing: eyes squeezed shut into happy upside-down arcs, brows raised, mouth wide open showing the upper teeth and tongue, cheeks high, the head tipped back a little.\nI'll save it as portrait-mordain.laugh.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey laugh. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Curve the light inside the fixed round lenses into amused arcs; tip the helmet back just slightly. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.laugh.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.laugh.png"
   },
   {
@@ -4745,7 +4745,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "sad, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Sad: eyes lowered and glistening with a wet line along the lower lids, the inner ends of the brows raised, the corners of the small mouth turned down, the head dipped a little.\nI'll save it as portrait-mordain.sad.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey sad. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Dim and droop the light inside the fixed round lenses and dip the helmet slightly. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.sad.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.sad.png"
   },
   {
@@ -4758,7 +4758,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "shock, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Shocked: eyes wide, brows raised high, mouth dropped open.\nI'll save it as portrait-mordain.shock.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey shock. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Brighten the red light inside both fixed round lenses, conveying surprise. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.shock.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.shock.png"
   },
   {
@@ -4771,7 +4771,7 @@
     "parent": 358,
     "template": "male",
     "instructions": "worried, an edit of #358",
-    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\nEXPRESSION. Worried for someone else: eyes open, brows knit and tilted up in the middle, mouth flat and tight.\nI'll save it as portrait-mordain.worried.png.",
+    "prompt": "Edit the attached Mordain neutral portrait to convey worried. His face is NEVER seen. Preserve the exact rigid closed black metal beaked helmet, round red-glass eyepieces and wine-red trim, narrow shoulders, armour, cape, colours, framing and coarse pixel-art style. Never reveal skin, hair, human facial features, a mouth, teeth or tongue. Keep the beak completely closed and rigid, not a living bird. Keep the outer glass eyepieces circular and fixed. Express the mood only through light within the lenses and minimal head movement. Make the red light inside the fixed round lenses attentive and subtly raised at the inner edges. Keep the flat #00FF00 background and same pixel grid. No text, symbols, scenery or new props. Exactly 1024 by 1024 pixels. Save as portrait-mordain.worried.png.",
     "path": "tools/source/pixel/portraits/mordain/front-facing/portrait-mordain.worried.png"
   },
   {
