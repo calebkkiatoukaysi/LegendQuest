@@ -97,9 +97,57 @@
     94,
     95,
     96,
-    97
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145
   ],
-  "next_number": 98,
+  "next_number": 146,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -2277,6 +2325,1062 @@
       "source_sha256": "0c48807e41727c29aa10409f7306952ed2e0f401bc6e592fb2da213be55e2e6e",
       "export_sha256": "1d9b83f0f542571745e3dbec27a5808eccff9a55b1b7c4c57f2e7375327ae05b",
       "prompt": "docs/pixel-art-portraits/097-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 98,
+      "filename": "portrait-elara.neutral.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "original": "art/pixel-portraits/originals/elara/098-portrait-elara.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f79e48e96c19c2986d007ef2067360f37d42d74cfb00d8a4c1197fb8a54ed639",
+      "export_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "prompt": "docs/pixel-art-portraits/098-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 99,
+      "filename": "portrait-elara.angry.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.angry.png",
+      "original": "art/pixel-portraits/originals/elara/099-portrait-elara.angry.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d6c1f9567010b7ee48fe0d9f080c69f3021d2c0c9756c7f837e5b6572cd01cfe",
+      "export_sha256": "1e8f6279a5e354b8d7895935e24e0c9e2ce7ddea9974bfd7db0e6566684f3fd6",
+      "prompt": "docs/pixel-art-portraits/099-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 100,
+      "filename": "portrait-elara.disgust.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.disgust.png",
+      "original": "art/pixel-portraits/originals/elara/100-portrait-elara.disgust.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "771eeaa96d01e4c4660225ec65fc7c8e6a077ed3e225616f83fe549fb3612aa5",
+      "export_sha256": "cd3c95f6d39a9ab941ca26e94d6414b4800e543bd6bddc4c5d88d575e3effa97",
+      "prompt": "docs/pixel-art-portraits/100-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 101,
+      "filename": "portrait-elara.smile.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.smile.png",
+      "original": "art/pixel-portraits/originals/elara/101-portrait-elara.smile.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8d92df52bef0ff08cc2ae039618e5cfc3dca8034ee44fe16caa1accff492b3dc",
+      "export_sha256": "3cf27bc471e16daae88de61d066e4ff8c5315edb6d1a9e5ea1fa7c68f9b58176",
+      "prompt": "docs/pixel-art-portraits/101-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 102,
+      "filename": "portrait-elara.laugh.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.laugh.png",
+      "original": "art/pixel-portraits/originals/elara/102-portrait-elara.laugh.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c5bcd742ba5111fe7fe4d0265bbfd33cab975212f0b31465a4c88cf4447fd7b0",
+      "export_sha256": "63f23d64d63b8052e89da1b262da89f3b866051c3a92c5ebf29e49db1a0d4b4f",
+      "prompt": "docs/pixel-art-portraits/102-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 103,
+      "filename": "portrait-elara.sad.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.sad.png",
+      "original": "art/pixel-portraits/originals/elara/103-portrait-elara.sad.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "94a6b4434d59ac59dae3105b89a6a8c0a6b0a65000e2139cd96b4111e9566b51",
+      "export_sha256": "50ee82abc009e234a10d4d813f392d7cc32c9fa53d4fb89fb31a3d6bdf68573a",
+      "prompt": "docs/pixel-art-portraits/103-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 104,
+      "filename": "portrait-elara.grin.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.grin.png",
+      "original": "art/pixel-portraits/originals/elara/104-portrait-elara.grin.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b4f968897980cb6059d7ecfdfeb8b94ad9f38a40eff0194c7da14d27af449e45",
+      "export_sha256": "7f8366dfa9039e3fad7b46e3611e23baa6c598e7c47f342bfb095c841486f4a8",
+      "prompt": "docs/pixel-art-portraits/104-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 105,
+      "filename": "portrait-elara.smirk.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.smirk.png",
+      "original": "art/pixel-portraits/originals/elara/105-portrait-elara.smirk.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4b08aeb831e2cd309df8ce725e6baa60ed2fc5d4b69a0131cf41796cd7a219fe",
+      "export_sha256": "65b7be8ff9500a96c3d6280c1f4a413c6c5e4dcf14766ed40eba3ed314e8dbc0",
+      "prompt": "docs/pixel-art-portraits/105-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 106,
+      "filename": "portrait-elara.worried.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.worried.png",
+      "original": "art/pixel-portraits/originals/elara/106-portrait-elara.worried.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "63d81bbd7c4ef0fb01bd62067f963cf3e64483784c2c3f29218cd302850bc92f",
+      "export_sha256": "680e55876fac8e3226986706201d5324a5800a3f30501cb129c3b2e071d34e94",
+      "prompt": "docs/pixel-art-portraits/106-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 107,
+      "filename": "portrait-elara.afraid.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.afraid.png",
+      "original": "art/pixel-portraits/originals/elara/107-portrait-elara.afraid.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ebd9794c2cf9a3b029693ae02064f71cbd62fcf8f1defd5d0b896eeac1356a54",
+      "export_sha256": "d481e6cd16bc8628de89fed80c3f7e149abb777244c7f9fbbe084f140312d87c",
+      "prompt": "docs/pixel-art-portraits/107-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 108,
+      "filename": "portrait-elara.cold.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.cold.png",
+      "original": "art/pixel-portraits/originals/elara/108-portrait-elara.cold.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5e909658ece42efef7291c7b52a90a675e57f8d6a2ebb28d1913c175240e735f",
+      "export_sha256": "60bd42b96412768c5a87ba8a1d05fa414c058b25783742a79caa7ace01910aea",
+      "prompt": "docs/pixel-art-portraits/108-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 109,
+      "filename": "portrait-elara.tired.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.tired.png",
+      "original": "art/pixel-portraits/originals/elara/109-portrait-elara.tired.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "40f964ec9a444d17e17f877ce0c768f9b1c6d1c6682e779080fe0140cab64de1",
+      "export_sha256": "57db7ccd0ff7a7b1fc28d3386b392e14601f1d691445062905546a6cad457389",
+      "prompt": "docs/pixel-art-portraits/109-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 110,
+      "filename": "portrait-elara.shock.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.shock.png",
+      "original": "art/pixel-portraits/originals/elara/110-portrait-elara.shock.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0b7b486e7566da34b877e3b4c0847dde171dc1b67b3d3bbabf18643873c54a3f",
+      "export_sha256": "a9dc2c8986125480364aab08c6fd8380e8f76187c02dd3001a6843d25c81a943",
+      "prompt": "docs/pixel-art-portraits/110-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 111,
+      "filename": "portrait-elara-hooded.neutral.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.neutral.png",
+      "original": "art/pixel-portraits/originals/elara/111-portrait-elara-hooded.neutral.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ee310e88a19583493065ac2096a4091719ff7294059a6e7dea0531f7ddc260ab",
+      "export_sha256": "3c18cb23f90e079d7aa9434c3c36a91f5f443f42f36bada3b78aa2de99900783",
+      "prompt": "docs/pixel-art-portraits/111-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 112,
+      "filename": "portrait-elara-hooded.smile.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.smile.png",
+      "original": "art/pixel-portraits/originals/elara/112-portrait-elara-hooded.smile.png",
+      "reference_number": 111,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.neutral.png",
+      "reference_sha256": "3c18cb23f90e079d7aa9434c3c36a91f5f443f42f36bada3b78aa2de99900783",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ad4a5fe55dcd3ec656b89d35027a794646be7a2af63ca6c48fd9bca80bd2fa21",
+      "export_sha256": "74b87c735d22767ad6dfb5af356fb8e12880c48d6541d1c1ee0a4a3454896715",
+      "prompt": "docs/pixel-art-portraits/112-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 113,
+      "filename": "portrait-elara-hooded.smirk.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.smirk.png",
+      "original": "art/pixel-portraits/originals/elara/113-portrait-elara-hooded.smirk.png",
+      "reference_number": 111,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.neutral.png",
+      "reference_sha256": "3c18cb23f90e079d7aa9434c3c36a91f5f443f42f36bada3b78aa2de99900783",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ad3a481573263fab33b317a3d14e8a18defdb5b754783191afce9e1a88f89efe",
+      "export_sha256": "a3512dabe099e0caab7782c3adc285e81c2a83fe9e3c37ed49bcdafdb4238c69",
+      "prompt": "docs/pixel-art-portraits/113-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 114,
+      "filename": "portrait-elara-hooded.angry.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.angry.png",
+      "original": "art/pixel-portraits/originals/elara/114-portrait-elara-hooded.angry.png",
+      "reference_number": 111,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.neutral.png",
+      "reference_sha256": "3c18cb23f90e079d7aa9434c3c36a91f5f443f42f36bada3b78aa2de99900783",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "976af15d504f23a2c2d3051cdf4dd449838c489237d59ce634ed24687f7b2116",
+      "export_sha256": "3cb090f05054891a3e0638895610b449fede1766086294c88e09d5e4d8c2b4ff",
+      "prompt": "docs/pixel-art-portraits/114-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 115,
+      "filename": "portrait-elara-hooded.worried.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.worried.png",
+      "original": "art/pixel-portraits/originals/elara/115-portrait-elara-hooded.worried.png",
+      "reference_number": 111,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.neutral.png",
+      "reference_sha256": "3c18cb23f90e079d7aa9434c3c36a91f5f443f42f36bada3b78aa2de99900783",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7aa2cbb583b1b210c9762c97301a36db5af917defae99cbc54c2e1577cd10506",
+      "export_sha256": "d333141d451434890aaef2b7dea370134bf33ca603665d5cbb214f4a89e85846",
+      "prompt": "docs/pixel-art-portraits/115-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 116,
+      "filename": "portrait-elara-hooded.shock.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.shock.png",
+      "original": "art/pixel-portraits/originals/elara/116-portrait-elara-hooded.shock.png",
+      "reference_number": 111,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-hooded.neutral.png",
+      "reference_sha256": "3c18cb23f90e079d7aa9434c3c36a91f5f443f42f36bada3b78aa2de99900783",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8e102cb49ded70804d439eabdae64b24763d13f06547a67f4b8c283b9aba6d1e",
+      "export_sha256": "a16364b13cfe473f6c287e9126329597b570d1014abad80d9ba2a37137b8bf13",
+      "prompt": "docs/pixel-art-portraits/116-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 117,
+      "filename": "portrait-elara-field.neutral.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "original": "art/pixel-portraits/originals/elara/117-portrait-elara-field.neutral.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c21c7505b9a36a4f882bea2c41ea490c69746e96655c037a7ae4e97a6dd49099",
+      "export_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "prompt": "docs/pixel-art-portraits/117-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 118,
+      "filename": "portrait-elara-field.angry.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.angry.png",
+      "original": "art/pixel-portraits/originals/elara/118-portrait-elara-field.angry.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6d5e0aa38c1654b3c296a7773bb85e892c57dee8c53d348bcad5488b147c2c28",
+      "export_sha256": "c9bf4c469c48037d15c901a6cfd2e8edfa9579bb7d8e239559c5664262f83777",
+      "prompt": "docs/pixel-art-portraits/118-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 119,
+      "filename": "portrait-elara-field.sad.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.sad.png",
+      "original": "art/pixel-portraits/originals/elara/119-portrait-elara-field.sad.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "14b3f80b607945ccf31b114b5dd54d33d35a20048723ee6a8f1b5857159f822a",
+      "export_sha256": "32950ced301c7839430c790bbc1b3954d433fdba4e1adbdbbe5f70a2d2c16293",
+      "prompt": "docs/pixel-art-portraits/119-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 120,
+      "filename": "portrait-elara-field.worried.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.worried.png",
+      "original": "art/pixel-portraits/originals/elara/120-portrait-elara-field.worried.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3a0018cb5839fae961f57464046a123f6a0a7a28d656df9acf18a904d8a06c2e",
+      "export_sha256": "fd207bb849ceed019bf20b35e14b7ae00b98b3286b16284daccb6eeb406fb28b",
+      "prompt": "docs/pixel-art-portraits/120-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 121,
+      "filename": "portrait-elara-field.tired.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.tired.png",
+      "original": "art/pixel-portraits/originals/elara/121-portrait-elara-field.tired.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8303bd80516d22fd5bd35c9fe6f40ad23279a2a41406e5c8449bc6a42cfaf8bd",
+      "export_sha256": "d9ba1c50cc882ea60725a39e77d689ac1fe9f99e40229ea5f235b3f1c7250062",
+      "prompt": "docs/pixel-art-portraits/121-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 122,
+      "filename": "portrait-elara-field.smile.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.smile.png",
+      "original": "art/pixel-portraits/originals/elara/122-portrait-elara-field.smile.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4801c58362c7d5e8d44a0ea8775730bdb8e50b7d1fe0ebc7f3b0f71418b5ef04",
+      "export_sha256": "630ca1ad9652e8c27146575c6cd3ab94b5f3178cd1462d6f69bdd3807fc993fb",
+      "prompt": "docs/pixel-art-portraits/122-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 123,
+      "filename": "portrait-elara-field.shock.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.shock.png",
+      "original": "art/pixel-portraits/originals/elara/123-portrait-elara-field.shock.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "55d4f50d431cfb6de1f45c8d2bdeff22ef78937a1eb0616296353a9ebc2a9028",
+      "export_sha256": "edb7281b4b9b2ea32089fa59465b483700d898eac5072c1e53e2a82d3054fe99",
+      "prompt": "docs/pixel-art-portraits/123-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 124,
+      "filename": "portrait-elara-field.disgust.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.disgust.png",
+      "original": "art/pixel-portraits/originals/elara/124-portrait-elara-field.disgust.png",
+      "reference_number": 117,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-field.neutral.png",
+      "reference_sha256": "50970ed7f972a0eda07f5df4a6ab2f64c35346b594f5b24309fb11061444a353",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9d36f2fef29887f77286ab4363dbc9f77be71cc9fe6b210ed8107f0cb5c9aeeb",
+      "export_sha256": "8e245889f8d39e41fac57fbf0d308d33d54916ff2f06a55af1dd2fcf40fe2a03",
+      "prompt": "docs/pixel-art-portraits/124-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 125,
+      "filename": "portrait-elara-crowned.neutral.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-crowned.neutral.png",
+      "original": "art/pixel-portraits/originals/elara/125-portrait-elara-crowned.neutral.png",
+      "reference_number": 98,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara.neutral.png",
+      "reference_sha256": "9901d38988392690ed370eafd8b6229a3f7e9b03d53ff11135cb843667d3e8ef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6f6d8cd2c48e1891bc727a584d5820660adfc7ffd464c64779042b43e3cd218f",
+      "export_sha256": "f5ba039cad321aa418056c6af1a9705e0cb71f628e9599ee63cb6086d50b91bf",
+      "prompt": "docs/pixel-art-portraits/125-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 126,
+      "filename": "portrait-elara-crowned.smile.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-crowned.smile.png",
+      "original": "art/pixel-portraits/originals/elara/126-portrait-elara-crowned.smile.png",
+      "reference_number": 125,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-crowned.neutral.png",
+      "reference_sha256": "f5ba039cad321aa418056c6af1a9705e0cb71f628e9599ee63cb6086d50b91bf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e5f1bca93ca3c6660c8d2bf3ee789bbb624768d692f23d5e93cd841a17504a81",
+      "export_sha256": "be5b6c1ffbf98b3b0415e734bd0e5735261c24ce7826c0a28ec4720a032db3a5",
+      "prompt": "docs/pixel-art-portraits/126-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 127,
+      "filename": "portrait-elara-crowned.sad.png",
+      "path": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-crowned.sad.png",
+      "original": "art/pixel-portraits/originals/elara/127-portrait-elara-crowned.sad.png",
+      "reference_number": 125,
+      "reference": "tools/source/pixel/portraits/elara/front-facing/portrait-elara-crowned.neutral.png",
+      "reference_sha256": "f5ba039cad321aa418056c6af1a9705e0cb71f628e9599ee63cb6086d50b91bf",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a1d000d5443df3fe758dc0313f811acc6801168b5b37b6cf1652ec11b3751242",
+      "export_sha256": "9d94a8b2a89ef4da6b71d72c33803426619709f48916bc2053d9930d7c90b34a",
+      "prompt": "docs/pixel-art-portraits/127-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 128,
+      "filename": "portrait-leon.neutral.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "original": "art/pixel-portraits/originals/leon/128-portrait-leon.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "113bea528ba8df33a28044bf5f78ae5220fcd292eb6a51f6fa12f69b68d05912",
+      "export_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "prompt": "docs/pixel-art-portraits/128-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 129,
+      "filename": "portrait-leon.angry.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.angry.png",
+      "original": "art/pixel-portraits/originals/leon/129-portrait-leon.angry.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0f97548baca606ad6166a0ac69aca9ef5a9d7a36ae208028ded829d6da7d408e",
+      "export_sha256": "32bdf4337bc900520e04301bd0e80b0dae00ca51984b3122db181608797f74d4",
+      "prompt": "docs/pixel-art-portraits/129-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 130,
+      "filename": "portrait-leon.disgust.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.disgust.png",
+      "original": "art/pixel-portraits/originals/leon/130-portrait-leon.disgust.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "cfeadcf64bcea1362f5d06532dcc803e2387def7ee281bd92c533a2a3dc9c8d4",
+      "export_sha256": "2d57f5487929bb36f56d5645e29ada656c5016050f7a7163ae97955154d6575b",
+      "prompt": "docs/pixel-art-portraits/130-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 131,
+      "filename": "portrait-leon.smile.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.smile.png",
+      "original": "art/pixel-portraits/originals/leon/131-portrait-leon.smile.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "05b7785e7f178771c06554a06681630cb2a1592f3f8179b285992b1207273511",
+      "export_sha256": "59513b8377f54a7226f67191ec70f1f36475beb76c595b87ddfea8c6dcb535c9",
+      "prompt": "docs/pixel-art-portraits/131-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 132,
+      "filename": "portrait-leon.laugh.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.laugh.png",
+      "original": "art/pixel-portraits/originals/leon/132-portrait-leon.laugh.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a87361fec44000517c1c7fec9898ecfd00f55458dd07ffe6c459ea25cf99574f",
+      "export_sha256": "69170d1c740ae8ac33d045e382ceedbfc3f2065d96458e798ebb278f9b108332",
+      "prompt": "docs/pixel-art-portraits/132-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 133,
+      "filename": "portrait-leon.sad.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.sad.png",
+      "original": "art/pixel-portraits/originals/leon/133-portrait-leon.sad.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a13b424602879c03180cc339ef26c46b6486182505821dcb8eaef878d0f90ab8",
+      "export_sha256": "d61a2ffc3d00b67b9ca238016eceff60e1723bb7d016c444b376bdf2182df1f3",
+      "prompt": "docs/pixel-art-portraits/133-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 134,
+      "filename": "portrait-leon.grin.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.grin.png",
+      "original": "art/pixel-portraits/originals/leon/134-portrait-leon.grin.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0e11a087924e4c9205e271eaf1b27c1f396bd94f940dae3f23e7c6a3a679badf",
+      "export_sha256": "3f5857064d25595ab589fe4487edaa34d63742662440505e17a6d35c4b5bd189",
+      "prompt": "docs/pixel-art-portraits/134-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 135,
+      "filename": "portrait-leon.smirk.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.smirk.png",
+      "original": "art/pixel-portraits/originals/leon/135-portrait-leon.smirk.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "de4667746ddcced6348e10e650fb46009a0c4cd32e926d3389ee1b6f9cce30d9",
+      "export_sha256": "be044e6472fe25daab813c826ef7b34b5629addf5b08252abbd3dbcf64f18e25",
+      "prompt": "docs/pixel-art-portraits/135-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 136,
+      "filename": "portrait-leon.worried.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.worried.png",
+      "original": "art/pixel-portraits/originals/leon/136-portrait-leon.worried.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3283eee991b25450fdd019b3a2e345e2bf50cdb0505b22819cc23401fbe41ddd",
+      "export_sha256": "13cd00c661618b5a1f911072589e7a7dc74b0e5cf87da52d64d20be15d251727",
+      "prompt": "docs/pixel-art-portraits/136-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 137,
+      "filename": "portrait-leon.afraid.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.afraid.png",
+      "original": "art/pixel-portraits/originals/leon/137-portrait-leon.afraid.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "dc3de98ed9acd57ca8a52111fa037715167e01d25fc13f9cf4d973987ca570e5",
+      "export_sha256": "383630d83e405e8e5acdcc2b8c792ee78d791f2eef4258e31b4891d185f857f3",
+      "prompt": "docs/pixel-art-portraits/137-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 138,
+      "filename": "portrait-leon.cold.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.cold.png",
+      "original": "art/pixel-portraits/originals/leon/138-portrait-leon.cold.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5f5822617c5c93702e7e66aa7ca066a3afc14a8191c97e1f116b954007a9aed5",
+      "export_sha256": "1198a8ce9770f7cacc65d2812398ea89cd4eaffdb007e19e7373377351d34171",
+      "prompt": "docs/pixel-art-portraits/138-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 139,
+      "filename": "portrait-leon.tired.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.tired.png",
+      "original": "art/pixel-portraits/originals/leon/139-portrait-leon.tired.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "376d67080ef7860d4f3e5d72a6ebc1212a8bacd66e66af531b50eaafc1e53a9d",
+      "export_sha256": "60005f57a909bd599e68eee078412e2994a0f2bbe614ceb2e3ef2b408cf43ab4",
+      "prompt": "docs/pixel-art-portraits/139-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 140,
+      "filename": "portrait-leon.shock.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.shock.png",
+      "original": "art/pixel-portraits/originals/leon/140-portrait-leon.shock.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c979550fb3cdfe70b8dcc7a4d6c5cc12e21205cf2337a85036c572079b630808",
+      "export_sha256": "d8823e23d4b33d6a8fe3980b321c578f5b80f4929d5dbd1a4e4fc6605cc17e46",
+      "prompt": "docs/pixel-art-portraits/140-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 141,
+      "filename": "portrait-leon-furs.neutral.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.neutral.png",
+      "original": "art/pixel-portraits/originals/leon/141-portrait-leon-furs.neutral.png",
+      "reference_number": 128,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon.neutral.png",
+      "reference_sha256": "744ba8e0d2be4f643152de3e4c3d962e9056a40998d5a5e5d84b5113f6cce438",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0f231e5b7218014471f13880eb226fc6ecaafff353126355b7741920dddefb96",
+      "export_sha256": "b602c2afef1392df294e3ea13750c1f8b3702ff120dcedeab131f00aa762a524",
+      "prompt": "docs/pixel-art-portraits/141-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 142,
+      "filename": "portrait-leon-furs.tired.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.tired.png",
+      "original": "art/pixel-portraits/originals/leon/142-portrait-leon-furs.tired.png",
+      "reference_number": 141,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.neutral.png",
+      "reference_sha256": "b602c2afef1392df294e3ea13750c1f8b3702ff120dcedeab131f00aa762a524",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "606102bc93c2ba9c7ed0d1a37ad422e4e9a3855d22f6a2a68c02a8d216b841cc",
+      "export_sha256": "99ea61f0d856c82f73a12eee04af85e9bd48a18987e8251c6ecec160189dee11",
+      "prompt": "docs/pixel-art-portraits/142-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 143,
+      "filename": "portrait-leon-furs.sad.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.sad.png",
+      "original": "art/pixel-portraits/originals/leon/143-portrait-leon-furs.sad.png",
+      "reference_number": 141,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.neutral.png",
+      "reference_sha256": "b602c2afef1392df294e3ea13750c1f8b3702ff120dcedeab131f00aa762a524",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "65750a88420b823f35314b108093ea28d50fca6519082c75a4a5139811466cde",
+      "export_sha256": "73265b6872ba4e57856e613c869e41c091705f733eb3e505f30d66892940528f",
+      "prompt": "docs/pixel-art-portraits/143-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 144,
+      "filename": "portrait-leon-furs.smile.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.smile.png",
+      "original": "art/pixel-portraits/originals/leon/144-portrait-leon-furs.smile.png",
+      "reference_number": 141,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.neutral.png",
+      "reference_sha256": "b602c2afef1392df294e3ea13750c1f8b3702ff120dcedeab131f00aa762a524",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e08da1755adfe6c5df14dcc3e2aa92e8c488588039ef8559b443280f7002b8a9",
+      "export_sha256": "12ea8ca3ef7bbf17d3db5bc8634a8514419f7ff03da97d2cf2e318922eca48eb",
+      "prompt": "docs/pixel-art-portraits/144-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 145,
+      "filename": "portrait-leon-furs.worried.png",
+      "path": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.worried.png",
+      "original": "art/pixel-portraits/originals/leon/145-portrait-leon-furs.worried.png",
+      "reference_number": 141,
+      "reference": "tools/source/pixel/portraits/leon/front-facing/portrait-leon-furs.neutral.png",
+      "reference_sha256": "b602c2afef1392df294e3ea13750c1f8b3702ff120dcedeab131f00aa762a524",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9239c0e67ac1581b3d115c85c8ce114b059f840bc625b81e7ccb8b57b472883b",
+      "export_sha256": "95023ebf5984b3064392ea26332af46b0fa1e607cebe1db958ad19246d56c982",
+      "prompt": "docs/pixel-art-portraits/145-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
