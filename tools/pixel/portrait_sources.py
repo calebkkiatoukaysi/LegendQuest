@@ -74,6 +74,11 @@ def plan():
             jobs.append(dict(number=number, filename=filename, character=character, title=title,
                              kind=kind, expression=expression, parent=parent, template=template,
                              instructions=instructions, prompt=prompt, path=destination))
+    overrides_path = DOCS / "design-overrides.json"
+    if overrides_path.exists():
+        overrides = read(overrides_path)
+        for job in jobs:
+            job.update(overrides.get(str(job["number"]), {}))
     assert [j["number"] for j in jobs] == list(range(1, 627)), "Numbering changed or parser lost a row"
     assert len({j["path"] for j in jobs}) == 626, "Duplicate destination"
     assert all(j["parent"] is None or j["parent"] < j["number"] for j in jobs), "Forward reference"
@@ -90,7 +95,8 @@ def save(number, source):
     if number != state["next_number"]:
         raise ValueError("Out of order: next is " + str(state["next_number"]))
     source = Path(source)
-    original = ROOT / f"art/pixel-portraits/originals/{job['character']}/{number:03}-{job['filename']}"
+    original_dir = job.get("original_dir", f"art/pixel-portraits/originals/{job['character']}")
+    original = ROOT / original_dir / f"{number:03}-{job['filename']}"
     dest = ROOT / job["path"]
     original.parent.mkdir(parents=True, exist_ok=True)
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -109,6 +115,7 @@ def save(number, source):
         reference = parent["path"]
     else:
         reference = f"tools/source/pixel/templates/front-facing/portrait-template-{job['template']}.png"
+    reference = job.get("reference_override", reference)
     record = dict(number=number, filename=dest.name, path=job["path"],
                   original=original.relative_to(ROOT).as_posix(), reference_number=job["parent"],
                   reference=reference, reference_sha256=digest(ROOT/reference), native_size=native,
@@ -180,15 +187,20 @@ def revise(number, source, prompt_file):
 def check():
     state = read(STATE)
     problems = []
-    for row in state["portraits"]:
+    archived = []
+    for design in state.get("design_history", []):
+        archived.extend(read(ROOT / design["archive"]))
+    for row in state["portraits"] + archived:
         path, original = ROOT/row["path"], ROOT/row["original"]
         if digest(path) != row["export_sha256"] or digest(original) != row["source_sha256"]:
             problems.append(f"#{row['number']} changed pixels")
         with Image.open(path) as im:
             if im.format != "PNG" or im.size != (1024, 1024):
                 problems.append(f"#{row['number']} invalid export")
+        if "reference_sha256" in row and digest(ROOT / row["reference"]) != row["reference_sha256"]:
+            problems.append(f"#{row['number']} reference changed")
     write(DOCS/"source-check.json", dict(completed=len(state["portraits"]), total=626,
-                                        next_number=state["next_number"], problems=problems,
+                                        next_number=state["next_number"], retained_alternates=len(archived), problems=problems,
                                         runtime_imported=False, pixel_conversion_accepted=False))
     print(f"{len(state['portraits'])}/626 exports; {len(problems)} file/dimension/fingerprint problems")
     for problem in problems:
@@ -212,7 +224,7 @@ def ready():
             break
         reference = jobs[job["parent"]-1]["path"] if job["parent"] is not None else (
             f"tools/source/pixel/templates/front-facing/portrait-template-{job['template']}.png")
-        selected.append(dict(job, reference=reference))
+        selected.append(dict(job, reference=job.get("reference_override", reference)))
         if job["kind"] != "expression":
             break
     if not selected:

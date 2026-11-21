@@ -1,7 +1,8 @@
 {
-  "completed": 68,
+  "completed": 97,
   "total": 626,
-  "next_number": 69,
+  "next_number": 98,
+  "retained_alternates": 13,
   "problems": [],
   "runtime_imported": false,
   "pixel_conversion_accepted": false

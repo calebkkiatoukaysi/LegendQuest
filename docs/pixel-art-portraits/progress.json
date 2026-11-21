@@ -68,9 +68,38 @@
     65,
     66,
     67,
-    68
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97
   ],
-  "next_number": 69,
+  "next_number": 98,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -1612,8 +1641,668 @@
       "prompt": "docs/pixel-art-portraits/068-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 69,
+      "filename": "portrait-valencia.neutral.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/069-portrait-valencia.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+      "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c02b9bd81815d1d4bb935365dbb48e71331018a1f6c0721efa9fa0d6aafdce6e",
+      "export_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "prompt": "docs/pixel-art-portraits/069-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 70,
+      "filename": "portrait-valencia.angry.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.angry.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/070-portrait-valencia.angry.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5b3ecbd7d1d5d37e5985d7d9813dadd5d7514ec3d8286d9004d8f9d9fefb8691",
+      "export_sha256": "4f7ea1a2a44ff6bd5567f6ad44835f1a79255b474e2041d46ccc8e2fba0400a4",
+      "prompt": "docs/pixel-art-portraits/070-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 71,
+      "filename": "portrait-valencia.disgust.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.disgust.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/071-portrait-valencia.disgust.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9ddb446544ba4bcc205fd75b8611f32505c662affeb1dafbbeee578a463e8ddb",
+      "export_sha256": "2d872a05752fa99e1ea52bee5b4af90e522ab5b6b2b9d650e956330c25c78aba",
+      "prompt": "docs/pixel-art-portraits/071-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 72,
+      "filename": "portrait-valencia.smile.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.smile.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/072-portrait-valencia.smile.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8c406e5b84ec760f161bcd456ad1c7793bebb24760305f5dd0e96e31fc4ba231",
+      "export_sha256": "24a0eac3db82048f6021a6188df882038db31692657b54ef7ba48323ec548100",
+      "prompt": "docs/pixel-art-portraits/072-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 73,
+      "filename": "portrait-valencia.laugh.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.laugh.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/073-portrait-valencia.laugh.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "47e17fa0d58db9d508fc0ccba2591a336fcde29121f9e320c6fa9ec7512b1f68",
+      "export_sha256": "e3f81528a6068a8b480037963edbc10cd61c94dbeb82ef34f9c1382dc9dafdb0",
+      "prompt": "docs/pixel-art-portraits/073-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 74,
+      "filename": "portrait-valencia.sad.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.sad.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/074-portrait-valencia.sad.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e2d210e51e7bdb175d80bf5433779666bd030c8a98dafcbe0ad99e2231280c43",
+      "export_sha256": "0f926aba345d7dde1c8f4327c5d6eff437fb05f176d519327cee5554fa7ff13b",
+      "prompt": "docs/pixel-art-portraits/074-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 75,
+      "filename": "portrait-valencia.grin.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.grin.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/075-portrait-valencia.grin.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a6492148620ca4e04e88ccc33edbf7473eca30af9d4168fc558f8ebc2becea72",
+      "export_sha256": "5423f29e6c3ee6243f9f480e25c7cc239d919828f40d4c71cc9e4d6f77cc70a8",
+      "prompt": "docs/pixel-art-portraits/075-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 76,
+      "filename": "portrait-valencia.smirk.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.smirk.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/076-portrait-valencia.smirk.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a2d1f30eb626d10d1d36c9b19f3004058a16bf0bbba7b863e38045a84c08a4c3",
+      "export_sha256": "67e61ac20fa9167ab73d0a02250547fa7912ace148266d82cf55b95179c02e7c",
+      "prompt": "docs/pixel-art-portraits/076-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 77,
+      "filename": "portrait-valencia.worried.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.worried.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/077-portrait-valencia.worried.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b4e2bb7ed7397febcc72ed4cafe10b0d677af3fdf39a0b6fd53329282bcb5c70",
+      "export_sha256": "610adecfaa759e1b77e81f71435cb921b161d41aa9c58073fb2771e36fd6d39b",
+      "prompt": "docs/pixel-art-portraits/077-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 78,
+      "filename": "portrait-valencia.afraid.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.afraid.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/078-portrait-valencia.afraid.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e97cedcbc333d63562f0cb44bff4e0b8c8958c7cd191d4bcdecb18f493f27905",
+      "export_sha256": "2cc3ea423f4205d5d6f3b436686a66e1f4e6d02e27b0b8216d535e8f761baa75",
+      "prompt": "docs/pixel-art-portraits/078-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 79,
+      "filename": "portrait-valencia.cold.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.cold.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/079-portrait-valencia.cold.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "59450b31b141c6f9d281860595398e221404c7c2b8180a367eceaee092af072a",
+      "export_sha256": "cf4273e34739a68e598ad27655b7d6e138541e7fef0c8225702cf22ae009c087",
+      "prompt": "docs/pixel-art-portraits/079-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 80,
+      "filename": "portrait-valencia.tired.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.tired.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/080-portrait-valencia.tired.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8ddd7fc3bad8611804f4586890e92eba09423cdb249f68798d72e43d3eea838a",
+      "export_sha256": "f0f020706ac061eb426bdd322525c686ad73f29c249af294d2311ff47c181fee",
+      "prompt": "docs/pixel-art-portraits/080-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 81,
+      "filename": "portrait-valencia.shock.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.shock.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/081-portrait-valencia.shock.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3f1ebc80b78e9b511aeb8a3e018ff7694bbd616850d31d66d780bb1b25c215f9",
+      "export_sha256": "c819b967442926abba3f271ed2a71c94f20af488e6ac20b1398d5aaff841b70a",
+      "prompt": "docs/pixel-art-portraits/081-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 82,
+      "filename": "portrait-sister-vale.neutral.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/082-portrait-sister-vale.neutral.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "79cc7917ba66ed2e27061f9b8a5287487471795fefa8b480fdd9a2172d3e2e78",
+      "export_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "prompt": "docs/pixel-art-portraits/082-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 83,
+      "filename": "portrait-sister-vale.smile.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.smile.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/083-portrait-sister-vale.smile.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "38e672df2befee69b373c07b82c66592d9a4fd5a7a4e5ce8c60926aa3a6ae97b",
+      "export_sha256": "ccc31e1f1c20eab913a1ca3c19788ae7120bbdfa3c2df494948e79a2f96e6e6e",
+      "prompt": "docs/pixel-art-portraits/083-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 84,
+      "filename": "portrait-sister-vale.laugh.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.laugh.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/084-portrait-sister-vale.laugh.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d048fed74d6b0d89817f67c5859078a6b4405fded24a33726ffd00a44556c145",
+      "export_sha256": "2e92793f06a6fd918454ab513d98b03634d2ebeb97990f77e7b815813df6ea39",
+      "prompt": "docs/pixel-art-portraits/084-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 85,
+      "filename": "portrait-sister-vale.sad.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.sad.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/085-portrait-sister-vale.sad.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b9ade48bca73a7fbddb2d2623690135a62e6cf1efafee30360926ad109d32935",
+      "export_sha256": "7fac44e6ac3f3bacdd03128ea6a07b7c4da8141c28225e50242498bd739635af",
+      "prompt": "docs/pixel-art-portraits/085-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 86,
+      "filename": "portrait-sister-vale.worried.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.worried.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/086-portrait-sister-vale.worried.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "14b692462438e681dade439b3d6e262795a1eee57d5299355e4fbc04ff7ad3d8",
+      "export_sha256": "96e4c512c03595a748d7f394575a6a014e822af9fedb967e033101a83a9cf545",
+      "prompt": "docs/pixel-art-portraits/086-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 87,
+      "filename": "portrait-sister-vale.angry.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.angry.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/087-portrait-sister-vale.angry.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6584f7fc4fe522305c9ff3fa579607e41a3acc4f41cb5ec6cfc34abb838c9e11",
+      "export_sha256": "be666039ce87ca5d14e29370d20ba44dfc347306be2b692fbba6e1c3a397d1ba",
+      "prompt": "docs/pixel-art-portraits/087-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 88,
+      "filename": "portrait-sister-vale.shock.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.shock.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/088-portrait-sister-vale.shock.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f44dd22f536bd78ec7254f5b66f57b2e1df6a12e80171f15b9b4caf8730b323b",
+      "export_sha256": "b51eea9fa4a47bf470234209a85d32cc5694be76e16cbada29ddd183254971f7",
+      "prompt": "docs/pixel-art-portraits/088-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 89,
+      "filename": "portrait-sister-vale.disgust.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.disgust.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/089-portrait-sister-vale.disgust.png",
+      "reference_number": 82,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-sister-vale.neutral.png",
+      "reference_sha256": "643956d0f8f30f751228639d87bfdb59ede940fc5541dd183bfc298022689fb0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "dcfdba2b29d2f040214002d17e876f410b7c418d1d9ce8946786f38b02d3ca0f",
+      "export_sha256": "0504dcecd1815715d40eaebf4a180f0f0d1b6b1b0ba6c06d3503f6e8588642bf",
+      "prompt": "docs/pixel-art-portraits/089-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 90,
+      "filename": "portrait-valencia-unhooded.neutral.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.neutral.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/090-portrait-valencia-unhooded.neutral.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a71a2a566b22b79ded5fd5963411e6efc9a6436074f6b794423709b6fdced849",
+      "export_sha256": "cb5c637e125899148802fef359b1dc31f4bf90cde5b97d37facab06d761aa86d",
+      "prompt": "docs/pixel-art-portraits/090-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 91,
+      "filename": "portrait-valencia-unhooded.angry.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.angry.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/091-portrait-valencia-unhooded.angry.png",
+      "reference_number": 90,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.neutral.png",
+      "reference_sha256": "cb5c637e125899148802fef359b1dc31f4bf90cde5b97d37facab06d761aa86d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d76387613ebf78e7984fb0cc65f58962fdb22421cae2a38e36d45251a439e7d2",
+      "export_sha256": "d3d8b5e76d63c476128a2a320f9e66dbb0d1230475bdc99b33830a3259b33dc0",
+      "prompt": "docs/pixel-art-portraits/091-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 92,
+      "filename": "portrait-valencia-unhooded.sad.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.sad.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/092-portrait-valencia-unhooded.sad.png",
+      "reference_number": 90,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.neutral.png",
+      "reference_sha256": "cb5c637e125899148802fef359b1dc31f4bf90cde5b97d37facab06d761aa86d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "675b214db8bb00da09fb46e4937b99e3691ef865b4b7de587387ea426d9e5885",
+      "export_sha256": "fd0455b6e3aa0b30475816c57e6ba7f53c414a0c5328793d1c760771ceecea43",
+      "prompt": "docs/pixel-art-portraits/092-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 93,
+      "filename": "portrait-valencia-unhooded.shock.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.shock.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/093-portrait-valencia-unhooded.shock.png",
+      "reference_number": 90,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.neutral.png",
+      "reference_sha256": "cb5c637e125899148802fef359b1dc31f4bf90cde5b97d37facab06d761aa86d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e1a1e7dfd76a2cdc9c5ce577fc1e9c6fe887535960a4b3662fe098e33d2f14a4",
+      "export_sha256": "21a4b46a77b3a0d918cf11b9f5bc277f74d7e22dc3162bb81a0408e58f6765ff",
+      "prompt": "docs/pixel-art-portraits/093-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 94,
+      "filename": "portrait-valencia-unhooded.cold.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.cold.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/094-portrait-valencia-unhooded.cold.png",
+      "reference_number": 90,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-unhooded.neutral.png",
+      "reference_sha256": "cb5c637e125899148802fef359b1dc31f4bf90cde5b97d37facab06d761aa86d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "975ec2b16d72a18cf40c6f35b29404647a7aa76eb4b248b670d1bc7d1a43f100",
+      "export_sha256": "307881e09714696fb84a417ee7c39ac10255cc4f8a6af767aa57ba0d4fa591af",
+      "prompt": "docs/pixel-art-portraits/094-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 95,
+      "filename": "portrait-valencia-child.neutral.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-child.neutral.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/095-portrait-valencia-child.neutral.png",
+      "reference_number": 69,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia.neutral.png",
+      "reference_sha256": "262bac28a610d4da7eedf3510bedfe177398ff2160da53bb12bf3b8fc5008a4b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "dbe2b290852771b0b67112d22b8a357eff9ec130cd5e8333ebe69b088940697f",
+      "export_sha256": "06f9ddc7fc164a735daa17d44934ffb68c825f024022d33d549aea04e33707a0",
+      "prompt": "docs/pixel-art-portraits/095-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 96,
+      "filename": "portrait-valencia-child.smile.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-child.smile.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/096-portrait-valencia-child.smile.png",
+      "reference_number": 95,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-child.neutral.png",
+      "reference_sha256": "06f9ddc7fc164a735daa17d44934ffb68c825f024022d33d549aea04e33707a0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bc07686799d2020db83ca1dbcc8ab67443f7dfbbff81716c154ba236253c948f",
+      "export_sha256": "8905518eb5cbf10d36e90e7efe2046f97c98de0fb54c668f942efe97001df12e",
+      "prompt": "docs/pixel-art-portraits/096-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 97,
+      "filename": "portrait-valencia-child.sad.png",
+      "path": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-child.sad.png",
+      "original": "art/pixel-portraits/originals/valencia/black-hair-red-eyes/097-portrait-valencia-child.sad.png",
+      "reference_number": 95,
+      "reference": "tools/source/pixel/portraits/valencia/front-facing/black-hair-red-eyes/portrait-valencia-child.neutral.png",
+      "reference_sha256": "06f9ddc7fc164a735daa17d44934ffb68c825f024022d33d549aea04e33707a0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0c48807e41727c29aa10409f7306952ed2e0f401bc6e592fb2da213be55e2e6e",
+      "export_sha256": "1d9b83f0f542571745e3dbec27a5808eccff9a55b1b7c4c57f2e7375327ae05b",
+      "prompt": "docs/pixel-art-portraits/097-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
     }
   ],
   "automatic": true,
-  "review_note": "Owner requested automatic progress through the document; visual review remains part of the run"
+  "review_note": "Owner requested automatic progress through the document; visual review remains part of the run",
+  "design_history": [
+    {
+      "character": "valencia",
+      "reason": "Owner requested black hair, red eyes and fangs while keeping existing art",
+      "archive": "docs/pixel-art-portraits/design-history/valencia-silver-hair/portraits.json",
+      "retained_numbers": [
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81
+      ]
+    }
+  ]
 }

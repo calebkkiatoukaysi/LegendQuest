@@ -1,0 +1,288 @@
+[
+  {
+    "number": 69,
+    "filename": "portrait-valencia.neutral.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "original": "art/pixel-portraits/originals/valencia/069-portrait-valencia.neutral.png",
+    "reference_number": null,
+    "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+    "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "5495605217c1b85a4223b666b2f0fe5ed47aed3bdbaab29ca94b1d3260dc3755",
+    "export_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/069-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 70,
+    "filename": "portrait-valencia.angry.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.angry.png",
+    "original": "art/pixel-portraits/originals/valencia/070-portrait-valencia.angry.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "b588c1f3a0e2300991d48ef726c5427c29f92548ac81276081b5a3af2f8e78f2",
+    "export_sha256": "cacd9360a7dfbc7adf37ffe2abb1d9bb4ac5ecc8bd8615cab5dba9e1485867b8",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/070-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 71,
+    "filename": "portrait-valencia.disgust.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.disgust.png",
+    "original": "art/pixel-portraits/originals/valencia/071-portrait-valencia.disgust.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "a8e0b75cb8cf076205936a3641fe31cec36ba708a5873202778484789ddda32d",
+    "export_sha256": "ffeb1667b414d3fe5a61f5538c8e7855e9025e16e26e9166eefea8ebdd734af1",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/071-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 72,
+    "filename": "portrait-valencia.smile.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.smile.png",
+    "original": "art/pixel-portraits/originals/valencia/072-portrait-valencia.smile.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "cb490664ecd6ad93fed1e082cc152932107c82896463421e03a9bc77b58f19be",
+    "export_sha256": "709e79a61324cfdeb739bc3a0af13e9fc1b41027123548252a4c197be2c5c84e",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/072-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 73,
+    "filename": "portrait-valencia.laugh.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.laugh.png",
+    "original": "art/pixel-portraits/originals/valencia/073-portrait-valencia.laugh.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "f7b4ee67092fe98d78bb455672c45be86047cc396fe0574486a4e68f150c1d5d",
+    "export_sha256": "34a222963794f69e0c85967a177c5fedf0a124b9b58d82de37fee531f82af6ed",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/073-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 74,
+    "filename": "portrait-valencia.sad.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.sad.png",
+    "original": "art/pixel-portraits/originals/valencia/074-portrait-valencia.sad.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "e7e29d9ef914fed4662fce3edbb1946e7d70899161d432e7c1a55b8b4603a65f",
+    "export_sha256": "44367a9c26e3698b374977243c29d7a688dd213c29951e4c7b9e6afbc7d0a87f",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/074-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 75,
+    "filename": "portrait-valencia.grin.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.grin.png",
+    "original": "art/pixel-portraits/originals/valencia/075-portrait-valencia.grin.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "db8ac0de3819b4f2300c5e2d5e435e3e0c7d65109163749148ebe4d9df170470",
+    "export_sha256": "0b025e64c137915e798462f4123bd3f94edcfd18f36f9d57fde479324c02ede1",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/075-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 76,
+    "filename": "portrait-valencia.smirk.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.smirk.png",
+    "original": "art/pixel-portraits/originals/valencia/076-portrait-valencia.smirk.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "73e6352c282a8443da7fd7b1653cb47c16604d7fcf0eda000f6ee0fff8368802",
+    "export_sha256": "6db58f5c48df8c4d12c34a7912f9afb68c3e6e5ab8b7794d9bde111fa1f493d5",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/076-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 77,
+    "filename": "portrait-valencia.worried.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.worried.png",
+    "original": "art/pixel-portraits/originals/valencia/077-portrait-valencia.worried.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "369cce3ec773e3df59a33049ca5f9b48f8d928baa00b26707c66258a42121664",
+    "export_sha256": "37468685fa3f58c7ed97ed7a5ca9ce281f1d20860a43ba7a4aef7560278be1e8",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/077-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 78,
+    "filename": "portrait-valencia.afraid.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.afraid.png",
+    "original": "art/pixel-portraits/originals/valencia/078-portrait-valencia.afraid.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "aba7be1a7cdf194e3f3a2158995b3f50e25fef87e5f3dd7daec5bccf825d065a",
+    "export_sha256": "72d600c5247c8f1036a58b00af269030be721aa23591a480fe26a7a59dd3831b",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/078-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 79,
+    "filename": "portrait-valencia.cold.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.cold.png",
+    "original": "art/pixel-portraits/originals/valencia/079-portrait-valencia.cold.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "ecd7a7c9bbfa84cec878a00a2c18f46ce0042427ee1618322ec7b3d416512961",
+    "export_sha256": "4cd7f9371c9ee2f5b339cc417fb0a56818a91fe12af2543d201704599b6b7a5c",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/079-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 80,
+    "filename": "portrait-valencia.tired.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.tired.png",
+    "original": "art/pixel-portraits/originals/valencia/080-portrait-valencia.tired.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "87901aaccb20dd6bdbc715f7788648b30dfd8dac41f050e038cf1a0983160e16",
+    "export_sha256": "e339dd6c12cf466135c3a75d6a54f139f964840b11e7bf77a89357499289699d",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/080-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  },
+  {
+    "number": 81,
+    "filename": "portrait-valencia.shock.png",
+    "path": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.shock.png",
+    "original": "art/pixel-portraits/originals/valencia/081-portrait-valencia.shock.png",
+    "reference_number": 69,
+    "reference": "tools/source/pixel/portraits/valencia/front-facing/portrait-valencia.neutral.png",
+    "reference_sha256": "ba64a867e7ecf2417d5ebbfd74698cd15beaadb4afe72f54bc7e2246529c6106",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "export_size": [
+      1024,
+      1024
+    ],
+    "source_sha256": "e493ea094886b3592c84a179673ddc04793001de01f3a7dde7055750b02e63c9",
+    "export_sha256": "e2dc1000ed5a2b9fad23eb87570972230a31e9a47b60188af82126c5f9ae2938",
+    "prompt": "docs/pixel-art-portraits/design-history/valencia-silver-hair/081-prompt.txt",
+    "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+    "status": "source draft; exact grid, palette and registration require conversion review"
+  }
+]
