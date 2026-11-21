@@ -145,9 +145,63 @@
     142,
     143,
     144,
-    145
+    145,
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    174,
+    175,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199
   ],
-  "next_number": 146,
+  "next_number": 200,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -3381,6 +3435,1194 @@
       "source_sha256": "9239c0e67ac1581b3d115c85c8ce114b059f840bc625b81e7ccb8b57b472883b",
       "export_sha256": "95023ebf5984b3064392ea26332af46b0fa1e607cebe1db958ad19246d56c982",
       "prompt": "docs/pixel-art-portraits/145-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 146,
+      "filename": "portrait-thessaly.neutral.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "original": "art/pixel-portraits/originals/thessaly/146-portrait-thessaly.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6396984f40d3ff7eb36232708cde73392cece2aa84cf6224c07ccc9362393551",
+      "export_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "prompt": "docs/pixel-art-portraits/146-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 147,
+      "filename": "portrait-thessaly.angry.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.angry.png",
+      "original": "art/pixel-portraits/originals/thessaly/147-portrait-thessaly.angry.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "59619bcad067799a968f60f5b0f5c78c44c76d1168b1f115b8cef2c25fa0d2f0",
+      "export_sha256": "fb3e35da9942128dd7c9362a9105944f5f057fecd4fa5a40691b80bb5a8b99af",
+      "prompt": "docs/pixel-art-portraits/147-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 148,
+      "filename": "portrait-thessaly.disgust.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.disgust.png",
+      "original": "art/pixel-portraits/originals/thessaly/148-portrait-thessaly.disgust.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5cabf3e36e7e9a1bb1db77f925c5879cac496dd8570bbad164bcaf6eebf7df59",
+      "export_sha256": "6367e67c6055607922837bb27a305ab8890ee39b114ef0be63b0f545fda8a248",
+      "prompt": "docs/pixel-art-portraits/148-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 149,
+      "filename": "portrait-thessaly.smile.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.smile.png",
+      "original": "art/pixel-portraits/originals/thessaly/149-portrait-thessaly.smile.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b2ed9cad7e57f4ea49b38ff2acffa126c82a36eba753f340e9d64a51b08473a4",
+      "export_sha256": "596666fe35fcf116fa1a58c24975feeab8eae9598655eb7904215a6ff3cf9874",
+      "prompt": "docs/pixel-art-portraits/149-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 150,
+      "filename": "portrait-thessaly.laugh.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.laugh.png",
+      "original": "art/pixel-portraits/originals/thessaly/150-portrait-thessaly.laugh.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5f5b0c1203d75e327faf20d3dcf6385b67e5b47c4b66ba65ed3cf6484d73210d",
+      "export_sha256": "8c2b62847a3cb9783b604d7f24197b89b0bdbcbc3d6643556a1efc1523c2bbf1",
+      "prompt": "docs/pixel-art-portraits/150-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 151,
+      "filename": "portrait-thessaly.sad.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.sad.png",
+      "original": "art/pixel-portraits/originals/thessaly/151-portrait-thessaly.sad.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "25bd86e3d6429ebaeb81714b8557c8aadbfa2047f057cca10de83dfbd438f279",
+      "export_sha256": "cf4b5e09ce9aa864d9bcc8d89a8cfbcad2860c367fca30777eec71831f5332f6",
+      "prompt": "docs/pixel-art-portraits/151-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 152,
+      "filename": "portrait-thessaly.grin.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.grin.png",
+      "original": "art/pixel-portraits/originals/thessaly/152-portrait-thessaly.grin.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ce088fd66569fd1296c66521fc93d05363f6b42c39f1da0b30865e5b6ee15020",
+      "export_sha256": "92a0c272381f17abf3a571d5119cc5b93d5d3544bec38df23b7e4449b6b8c3c1",
+      "prompt": "docs/pixel-art-portraits/152-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 153,
+      "filename": "portrait-thessaly.smirk.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.smirk.png",
+      "original": "art/pixel-portraits/originals/thessaly/153-portrait-thessaly.smirk.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f7538f08d5cf68e0ac800726d7f9bb8eaa70b5642df24bdb1331f17b918682ed",
+      "export_sha256": "acc5f0944fd1b39c226690152ebb3d0b3091a1b2fba65fe49d37b6514ed24dc3",
+      "prompt": "docs/pixel-art-portraits/153-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 154,
+      "filename": "portrait-thessaly.worried.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.worried.png",
+      "original": "art/pixel-portraits/originals/thessaly/154-portrait-thessaly.worried.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bf80189924ea7fb61207d3305a3df9c9c86742f9eceb97f8f4c38420a97248e8",
+      "export_sha256": "f2d2046f21b2cf567831afe85a22c70d0e669bb3cde3418c94b4e577959a9209",
+      "prompt": "docs/pixel-art-portraits/154-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 155,
+      "filename": "portrait-thessaly.afraid.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.afraid.png",
+      "original": "art/pixel-portraits/originals/thessaly/155-portrait-thessaly.afraid.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "68da288c8cd92b39b53c3b5977a60728ddf664a3bb783a60dcf4c598db0d6173",
+      "export_sha256": "e076ad29005662f5c0ccecc566547d36129de1f8b0bd0de16462fa67eaeae1ee",
+      "prompt": "docs/pixel-art-portraits/155-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 156,
+      "filename": "portrait-thessaly.cold.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.cold.png",
+      "original": "art/pixel-portraits/originals/thessaly/156-portrait-thessaly.cold.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "febb2019ebb20b39db63f49b7184d324df337f57d808fcd3703ea2102bd35d50",
+      "export_sha256": "0e09a7d5872bda285a0f92d0f924cec5531c94a27acf1b5beee6278b62e27abe",
+      "prompt": "docs/pixel-art-portraits/156-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 157,
+      "filename": "portrait-thessaly.tired.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.tired.png",
+      "original": "art/pixel-portraits/originals/thessaly/157-portrait-thessaly.tired.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "cc98ce7494b9a8a2d84a927adfb81ceea4f1295b2c0d417a0a8d3a6ca9b6fb35",
+      "export_sha256": "4e96283d66be26dff8d9b496f51f1415a6e1cf89edc3bd9986cb4fc2e1528a19",
+      "prompt": "docs/pixel-art-portraits/157-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 158,
+      "filename": "portrait-thessaly.shock.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.shock.png",
+      "original": "art/pixel-portraits/originals/thessaly/158-portrait-thessaly.shock.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e137a2c548cb90c40bd1ae11b7ff2620399a0cda53980f5aa43ab2d8c2344ccd",
+      "export_sha256": "e8b2f812b6976da111e59cd1d4a838c4d7fc0db5b94a57e5ba84b21323d433ca",
+      "prompt": "docs/pixel-art-portraits/158-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 159,
+      "filename": "portrait-thessaly-crystal.neutral.png",
+      "path": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly-crystal.neutral.png",
+      "original": "art/pixel-portraits/originals/thessaly/159-portrait-thessaly-crystal.neutral.png",
+      "reference_number": 146,
+      "reference": "tools/source/pixel/portraits/thessaly/front-facing/portrait-thessaly.neutral.png",
+      "reference_sha256": "46c39f83bfaa7783cc713657017ef41074a7819fdc404c0df97d30b629adceef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8a9a60ea858ebbeabd6b7eb5a2bf6145cdb68427ac487f325d001cb11b5aef50",
+      "export_sha256": "3dcecb64b95f8413f11557c5f53e3cfc888595cb425e227807733515a6b28996",
+      "prompt": "docs/pixel-art-portraits/159-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 160,
+      "filename": "portrait-hale.neutral.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "original": "art/pixel-portraits/originals/hale/160-portrait-hale.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d54ea17cdd8b1ac2385414acb313f9e49e739592cb06e74194d5f0584d0fc918",
+      "export_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "prompt": "docs/pixel-art-portraits/160-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 161,
+      "filename": "portrait-hale.angry.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.angry.png",
+      "original": "art/pixel-portraits/originals/hale/161-portrait-hale.angry.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8fcdcbec39d062692f0faae6401644472c052a83c8e310f112268a191aa05d72",
+      "export_sha256": "fe32f4162063e227625a2bb0af0a08a90959c067ff15b2349f0cfa68aff87f8c",
+      "prompt": "docs/pixel-art-portraits/161-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 162,
+      "filename": "portrait-hale.disgust.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.disgust.png",
+      "original": "art/pixel-portraits/originals/hale/162-portrait-hale.disgust.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3335f4e2cb2b2ea6dd483eae4c2c1da300bdd3ca3f17a8fe51ac83ace3323ae0",
+      "export_sha256": "6448ab2b8a85ebf24a1909e11d9f82a9ba85fa5658455596e3e7a0f14b80ffb7",
+      "prompt": "docs/pixel-art-portraits/162-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 163,
+      "filename": "portrait-hale.smile.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.smile.png",
+      "original": "art/pixel-portraits/originals/hale/163-portrait-hale.smile.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "46cc76965147367bdb73dfb189924ad0f2216450dd5006dbdbe19396e2167b09",
+      "export_sha256": "82f9e4459b8bfcdaa7a9627f03595f4f0cc1d84242a83b354c87a0413d379e24",
+      "prompt": "docs/pixel-art-portraits/163-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 164,
+      "filename": "portrait-hale.laugh.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.laugh.png",
+      "original": "art/pixel-portraits/originals/hale/164-portrait-hale.laugh.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ac8383e7840bec17fafc750c16119223f4e0c60665d00d967c7524612eb4cd64",
+      "export_sha256": "8accbe1dba9524a74273ef3daa0f105f62272bbc556c71d3b96e91da576524a8",
+      "prompt": "docs/pixel-art-portraits/164-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 165,
+      "filename": "portrait-hale.sad.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.sad.png",
+      "original": "art/pixel-portraits/originals/hale/165-portrait-hale.sad.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f952b205814e7d00aa87c8b4431e72283ca85ef7b1870e0c028e6b886cc4b27a",
+      "export_sha256": "63c50885a421466927c2a98cadac5f4b83650b5f3457dc847f531646d4995776",
+      "prompt": "docs/pixel-art-portraits/165-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 166,
+      "filename": "portrait-hale.grin.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.grin.png",
+      "original": "art/pixel-portraits/originals/hale/166-portrait-hale.grin.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9fbbe217f696cff55c12ef501553fd6b8260d852457668563af100d871b9fd61",
+      "export_sha256": "faafd24801ef284b376659130ded65d9afbd8c2ac5cbcf6139a43a2b86b1cce9",
+      "prompt": "docs/pixel-art-portraits/166-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 167,
+      "filename": "portrait-hale.smirk.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.smirk.png",
+      "original": "art/pixel-portraits/originals/hale/167-portrait-hale.smirk.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7498bd9291d6fe34ba2914ad563c588578eb81d77d4c45f67071b140468bd632",
+      "export_sha256": "ac35cb29e9d190ca7ef5d12b83cd699fbccbdeb5933e734bc6eff6c48bae7202",
+      "prompt": "docs/pixel-art-portraits/167-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 168,
+      "filename": "portrait-hale.worried.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.worried.png",
+      "original": "art/pixel-portraits/originals/hale/168-portrait-hale.worried.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2d052200a2008545bab00045767f8cccaf1a7e5a1550b5139d617e46bb8fb713",
+      "export_sha256": "9891c673670d5b9f7b1dbcf5413ac8d55268668f4e2cafd628349535ed68f9d5",
+      "prompt": "docs/pixel-art-portraits/168-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 169,
+      "filename": "portrait-hale.afraid.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.afraid.png",
+      "original": "art/pixel-portraits/originals/hale/169-portrait-hale.afraid.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "49184686ba3ba07c7c710ace2c69db12e25f67ce9c12b95037e27bde8adad7ef",
+      "export_sha256": "37db0f69e56656d341d837c50f53f50e8ad64b509ee5135250f8d416c9754184",
+      "prompt": "docs/pixel-art-portraits/169-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 170,
+      "filename": "portrait-hale.cold.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.cold.png",
+      "original": "art/pixel-portraits/originals/hale/170-portrait-hale.cold.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8ced3998a6884b770573d33e3b5a42df95bd0cfe35a55943a4c2326949c01cd6",
+      "export_sha256": "c8c83bd261ff14cd291918e7ebe181503b28c4168c222368762be599c647ceba",
+      "prompt": "docs/pixel-art-portraits/170-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 171,
+      "filename": "portrait-hale.tired.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.tired.png",
+      "original": "art/pixel-portraits/originals/hale/171-portrait-hale.tired.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "914992a066580bdeba7afe94d70c7513fb0ef6f65e6f6ebc9382cfb5bb3a2dca",
+      "export_sha256": "77b97d0055e253b36d98bf3554827f01cdb79515b1d0e4ae30df634d20aa88c7",
+      "prompt": "docs/pixel-art-portraits/171-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 172,
+      "filename": "portrait-hale.shock.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.shock.png",
+      "original": "art/pixel-portraits/originals/hale/172-portrait-hale.shock.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "369ec51f55daf180c8a7109cc0eafec86ee08334715feef9d900e0ccf4746dda",
+      "export_sha256": "76b3458b59682f47ae6ce4d05b991705822b7491a364408c3f8e24e1defcc972",
+      "prompt": "docs/pixel-art-portraits/172-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 173,
+      "filename": "portrait-hale-protectorate.neutral.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.neutral.png",
+      "original": "art/pixel-portraits/originals/hale/173-portrait-hale-protectorate.neutral.png",
+      "reference_number": 160,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale.neutral.png",
+      "reference_sha256": "b1530d4025813217011def7b0cd2059a10527bdc472a0e2d2a4ec9c98733771d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7e217d865aec930134b6e7d504204e8809074e8482d66c6b0cf3595297d3a446",
+      "export_sha256": "59e1d290277760840c064ed40a89f7f8a4fe8bc8f1bd292a663b4d6f146cc618",
+      "prompt": "docs/pixel-art-portraits/173-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 174,
+      "filename": "portrait-hale-protectorate.angry.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.angry.png",
+      "original": "art/pixel-portraits/originals/hale/174-portrait-hale-protectorate.angry.png",
+      "reference_number": 173,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.neutral.png",
+      "reference_sha256": "59e1d290277760840c064ed40a89f7f8a4fe8bc8f1bd292a663b4d6f146cc618",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ac452ee9fcbe42ee9fd88957bf1f6623d8409d0e610a80faa9d5e6ade725d30f",
+      "export_sha256": "88423fc1b77526bae5eb5982de1527f5a0384d78081ca549b288f67e98eca622",
+      "prompt": "docs/pixel-art-portraits/174-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 175,
+      "filename": "portrait-hale-protectorate.cold.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.cold.png",
+      "original": "art/pixel-portraits/originals/hale/175-portrait-hale-protectorate.cold.png",
+      "reference_number": 173,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.neutral.png",
+      "reference_sha256": "59e1d290277760840c064ed40a89f7f8a4fe8bc8f1bd292a663b4d6f146cc618",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "430ace02c5d05fa333e160e38a0ceae24cba5a530c45324e6cc08ba25ca1606a",
+      "export_sha256": "580caea8141e710f151aa0af008a977330a89ca12ac1396afe07734fbc875174",
+      "prompt": "docs/pixel-art-portraits/175-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 176,
+      "filename": "portrait-hale-protectorate.worried.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.worried.png",
+      "original": "art/pixel-portraits/originals/hale/176-portrait-hale-protectorate.worried.png",
+      "reference_number": 173,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.neutral.png",
+      "reference_sha256": "59e1d290277760840c064ed40a89f7f8a4fe8bc8f1bd292a663b4d6f146cc618",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0eaa536ee2b5469db274f97ba4f06bf585139886438ae6386328070a7529576f",
+      "export_sha256": "7311949d87d34a613436609aca11ac491f3e4250f6253c0f489a7fcee3177144",
+      "prompt": "docs/pixel-art-portraits/176-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 177,
+      "filename": "portrait-hale-protectorate.sad.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.sad.png",
+      "original": "art/pixel-portraits/originals/hale/177-portrait-hale-protectorate.sad.png",
+      "reference_number": 173,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.neutral.png",
+      "reference_sha256": "59e1d290277760840c064ed40a89f7f8a4fe8bc8f1bd292a663b4d6f146cc618",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "710ae8b88b325e825b6fbc5fd3d50c329c5b219c50ce6f33bf04a27550212774",
+      "export_sha256": "a45367f09fa1c5818c4e273b76a75dd43d736d60a96c6489bf15d960ec83db3e",
+      "prompt": "docs/pixel-art-portraits/177-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 178,
+      "filename": "portrait-hale-protectorate.shock.png",
+      "path": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.shock.png",
+      "original": "art/pixel-portraits/originals/hale/178-portrait-hale-protectorate.shock.png",
+      "reference_number": 173,
+      "reference": "tools/source/pixel/portraits/hale/front-facing/portrait-hale-protectorate.neutral.png",
+      "reference_sha256": "59e1d290277760840c064ed40a89f7f8a4fe8bc8f1bd292a663b4d6f146cc618",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "70a8ecebb1e9bc6cf344a527afc924a24481baec16ebb6ef8b9760c1cfdd37bd",
+      "export_sha256": "b6425def5ef012bab30bb8bdac1e236f07e11cec828a65b0614c1ec7c3a196f3",
+      "prompt": "docs/pixel-art-portraits/178-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 179,
+      "filename": "portrait-aldric.neutral.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "original": "art/pixel-portraits/originals/aldric/179-portrait-aldric.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2a418d98dcceeda250ed041d6ec8d9aff7560900e8578a201148e70eba34436f",
+      "export_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "prompt": "docs/pixel-art-portraits/179-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 180,
+      "filename": "portrait-aldric.angry.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.angry.png",
+      "original": "art/pixel-portraits/originals/aldric/180-portrait-aldric.angry.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "882e4a94ccb156f6605ff0a85b2dd6b5f63e6b92e1baf1fe8a2d19b0c988ab52",
+      "export_sha256": "5c8a325109254a8baf1cd625bdc18c3a78653cd85249b744a884a9be49fe9a41",
+      "prompt": "docs/pixel-art-portraits/180-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 181,
+      "filename": "portrait-aldric.disgust.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.disgust.png",
+      "original": "art/pixel-portraits/originals/aldric/181-portrait-aldric.disgust.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3983c46c6f9667ddd42b37baac7851cab9019807a64cd9f534e875c1b112cca7",
+      "export_sha256": "2efc1aa051a2a45335a64b2a9a5af731ba3c65ef4e2186115798215c559d6b70",
+      "prompt": "docs/pixel-art-portraits/181-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 182,
+      "filename": "portrait-aldric.smile.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.smile.png",
+      "original": "art/pixel-portraits/originals/aldric/182-portrait-aldric.smile.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "1db69b8553b5809c4f14857ade4bdf3a2f276c066b9665ab1007ff807aa403a5",
+      "export_sha256": "c0c55e7db71ed790e51c41d10ea402431a9bf806c67982cc305d94dc279f2b84",
+      "prompt": "docs/pixel-art-portraits/182-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 183,
+      "filename": "portrait-aldric.laugh.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.laugh.png",
+      "original": "art/pixel-portraits/originals/aldric/183-portrait-aldric.laugh.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "998e2aaf24b96b08173761eba698e2b81e404d01018281f83ced4074dc50cda7",
+      "export_sha256": "aae9d8b4c2d7ea645506336cf005e188253413b4f6a788fc9d933c0c805a227b",
+      "prompt": "docs/pixel-art-portraits/183-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 184,
+      "filename": "portrait-aldric.sad.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.sad.png",
+      "original": "art/pixel-portraits/originals/aldric/184-portrait-aldric.sad.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "820acacbdd80cae6b1f923d610870ba1052d56d5580f6cf03c8543bdc625ff12",
+      "export_sha256": "a5d37eae5a74a929862f97563506d90d3d560a84031f7d0065576d6887904f36",
+      "prompt": "docs/pixel-art-portraits/184-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 185,
+      "filename": "portrait-aldric.shock.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.shock.png",
+      "original": "art/pixel-portraits/originals/aldric/185-portrait-aldric.shock.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4a24c2afdfb009d66b2256f6c22993d8b97c2251924c6b411cc924875ff83b2e",
+      "export_sha256": "6499744b510e8dcd7cc4f7a0f57f4697193455f7896a81ed7de7730441868763",
+      "prompt": "docs/pixel-art-portraits/185-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 186,
+      "filename": "portrait-aldric.worried.png",
+      "path": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.worried.png",
+      "original": "art/pixel-portraits/originals/aldric/186-portrait-aldric.worried.png",
+      "reference_number": 179,
+      "reference": "tools/source/pixel/portraits/aldric/front-facing/portrait-aldric.neutral.png",
+      "reference_sha256": "cb60b704abc5fbff3834ed33c740d8eed8ec5be6cceb8bde58717b4101e1c148",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "903843c6e64b34bd547a4a28ea0d2fc7e9176afb4eb53ffb1318304cc60b6c97",
+      "export_sha256": "d6b8bec9848aa1882083d0febf5a82fe05d9bff766b307449758cd067698ce0c",
+      "prompt": "docs/pixel-art-portraits/186-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 187,
+      "filename": "portrait-brenna.neutral.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "original": "art/pixel-portraits/originals/brenna/187-portrait-brenna.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ed0b782f2b3a9b43b4840a1288232d2b10952131509f29114ad4a4f5291a7a4e",
+      "export_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "prompt": "docs/pixel-art-portraits/187-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 188,
+      "filename": "portrait-brenna.angry.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.angry.png",
+      "original": "art/pixel-portraits/originals/brenna/188-portrait-brenna.angry.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0f0c26efd9c991929e9b88fba505ea0819ce622f70828ce125be3e1abeb16913",
+      "export_sha256": "a3f7eb19ce34cea08d330bf52aea537a1d7487f4b71133277676b49b9bff920f",
+      "prompt": "docs/pixel-art-portraits/188-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 189,
+      "filename": "portrait-brenna.disgust.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.disgust.png",
+      "original": "art/pixel-portraits/originals/brenna/189-portrait-brenna.disgust.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d188673d0d8963c7db95f41b3e3e4f8d93f9b8f869fc198fafe8c4f079f847d4",
+      "export_sha256": "641f8e20d44307f3d4e0f1443d29cda3ba3c7c9753cb1e089f83c9ab58253c92",
+      "prompt": "docs/pixel-art-portraits/189-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 190,
+      "filename": "portrait-brenna.smile.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.smile.png",
+      "original": "art/pixel-portraits/originals/brenna/190-portrait-brenna.smile.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "278b3c702256db3d234005587e7dbb71bf2f6d974e124ea9eb70afcfd2b2b6b5",
+      "export_sha256": "1195e4bc454c01839049918aa0689705fa98be4d7370bf662268081404b7d531",
+      "prompt": "docs/pixel-art-portraits/190-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 191,
+      "filename": "portrait-brenna.laugh.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.laugh.png",
+      "original": "art/pixel-portraits/originals/brenna/191-portrait-brenna.laugh.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e8f1972b0795ac916e4987a2a83fe001361bfdfb753ba695d5ac8d03e841759b",
+      "export_sha256": "0bcc24c5553e6532b3841468bb0bbbad4693dcc79bf781b701dcd62f0da5cf6e",
+      "prompt": "docs/pixel-art-portraits/191-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 192,
+      "filename": "portrait-brenna.sad.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.sad.png",
+      "original": "art/pixel-portraits/originals/brenna/192-portrait-brenna.sad.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d96416c2cd1b824e59d275c9f836708d217a3c6127ec626c0707f9924925d394",
+      "export_sha256": "f8b900ecde39157f7dd97aa02416655cf6992594ad94177e753beb7cd7b027e5",
+      "prompt": "docs/pixel-art-portraits/192-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 193,
+      "filename": "portrait-brenna.grin.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.grin.png",
+      "original": "art/pixel-portraits/originals/brenna/193-portrait-brenna.grin.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9056a1cd3bf3ff4865982af3fae99f8f3912ec6b874b1b174adc96aff950b5ea",
+      "export_sha256": "8951bb8e0cae3181ad496adf826f0e9ada755f68324d1587bd217a2b0b225b48",
+      "prompt": "docs/pixel-art-portraits/193-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 194,
+      "filename": "portrait-brenna.smirk.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.smirk.png",
+      "original": "art/pixel-portraits/originals/brenna/194-portrait-brenna.smirk.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7a4b531afc8b5cb39a4c0e02af28002644158afc81466e5c0efbbb23ae5a0111",
+      "export_sha256": "26c48dcbef99c7081ebb500d4ed796c11f1d07b2476ab8c52c2190afdb951371",
+      "prompt": "docs/pixel-art-portraits/194-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 195,
+      "filename": "portrait-brenna.worried.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.worried.png",
+      "original": "art/pixel-portraits/originals/brenna/195-portrait-brenna.worried.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a27c02daec84d4ed09139dbe79adc61a9b23644b128022e2b157ec806409bdb3",
+      "export_sha256": "4a208fe65e5cd3e925ed0c8ea024760d549e420d0faa3f6bbd7bb57d1f8ee0bd",
+      "prompt": "docs/pixel-art-portraits/195-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 196,
+      "filename": "portrait-brenna.afraid.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.afraid.png",
+      "original": "art/pixel-portraits/originals/brenna/196-portrait-brenna.afraid.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bd0f3595d749037b01cc1b849a5b90b42dd3eddf39460502d0577fec3dc585fe",
+      "export_sha256": "94fbab31ddf52b9265c4b052d00b7c927ae976e917a0904a6cfa82db183b93c2",
+      "prompt": "docs/pixel-art-portraits/196-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 197,
+      "filename": "portrait-brenna.cold.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.cold.png",
+      "original": "art/pixel-portraits/originals/brenna/197-portrait-brenna.cold.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bb9d6453746a605ab82efb6c2a8ccef123bdf461f5682a270547ae4063d85da5",
+      "export_sha256": "162b9074b0cc0b5391c5f5005a517876779e7cc20e84a6316904efc444ac6de0",
+      "prompt": "docs/pixel-art-portraits/197-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 198,
+      "filename": "portrait-brenna.tired.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.tired.png",
+      "original": "art/pixel-portraits/originals/brenna/198-portrait-brenna.tired.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "93d03612b653673abc3e4a210e99e8eb5394a32bfc8345a4d33ed5de1466708d",
+      "export_sha256": "b61d55416c010151e5ac56963eceb4c77ce1d63f1f0e403ebf28da0244ffdd84",
+      "prompt": "docs/pixel-art-portraits/198-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 199,
+      "filename": "portrait-brenna.shock.png",
+      "path": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.shock.png",
+      "original": "art/pixel-portraits/originals/brenna/199-portrait-brenna.shock.png",
+      "reference_number": 187,
+      "reference": "tools/source/pixel/portraits/brenna/front-facing/portrait-brenna.neutral.png",
+      "reference_sha256": "2e31a5946d105ce806ed2c90adfde01a5584beffdd25e55ed3e5b28e721222bd",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "153242d6157444f93dd20c6222e1687350c474cec0ecb42e649662d50db33c42",
+      "export_sha256": "142638a8834f0832dc5aaffdb7286cbbf09ce8eed6021fa0271baa4c5e869eb9",
+      "prompt": "docs/pixel-art-portraits/199-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }

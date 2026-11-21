@@ -1,0 +1,3 @@
+Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.
+EXPRESSION. Cold: eyes narrowed and still, brows level, mouth a flat line, no warmth at all.
+I'll save it as portrait-hale.cold.png.
