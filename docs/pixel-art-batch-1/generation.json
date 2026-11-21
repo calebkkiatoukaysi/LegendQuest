@@ -1,0 +1,758 @@
+[
+  {
+    "index": 0,
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png",
+    "original": "art/pixel-batch-1/originals/portraits/brannock/portrait-brannock.neutral.png",
+    "generator_file": "C:/Users/Owner/.codex/generated_images/01a1f986-bb2d-7532-a72d-1c789d6567fb/exec-1bf2fa3f-3d34-4100-84c8-1bd10a3e5436.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "947170b9e29c0c132a599e132290d84da9e69fb8ff2d243c1b0725589db7cb9d",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "f5540007f470d4c005435ae67f4b48431a08557f3e5f42946a30fbdf9b2caf57",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 1,
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.angry.png",
+    "original": "art/pixel-batch-1/originals/portraits/brannock/portrait-brannock.angry.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-424b04f7-3f6b-472e-81ed-91d0adba408f.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "bc425c8423bcaef4236f1878b2f885f1c2b811b82100b7b654b39abc06408a4f",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "da2e213ed4825c0a772a6c4f5c9584d3be5e6574a0e21302c108222e785a83f0",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 2,
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.disgust.png",
+    "original": "art/pixel-batch-1/originals/portraits/brannock/portrait-brannock.disgust.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-c08d48ef-076e-47e8-bd5a-94e1bd57dfdd.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "3428eea48c52f8c642b234871db2c72f4c6ceac4269292d09c2b91819cc91a05",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "583e592ee9b47e2ad57d7ea0f3a33ed47c8039741905a02fd40a06189ce9868e",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 3,
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.smile.png",
+    "original": "art/pixel-batch-1/originals/portraits/brannock/portrait-brannock.smile.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-8d163172-2ce9-4e81-b55b-026a09cb0f04.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "9a8aaa8428f67d8adecbd3b012c056ea0fc700912d5ce109dbe673a30f52b3ce",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "90f8e1634b79bfd82023dce08f55223dca37342dedc2a595f2ae5d7c9c5a6dde",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 4,
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.laugh.png",
+    "original": "art/pixel-batch-1/originals/portraits/brannock/portrait-brannock.laugh.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-a130fc33-95df-4d58-b296-37739da33fea.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "9b7b765d10ffa9b201b7f70da9c272990f96c96c7d91f4f1bd955464559e1d25",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "e902530cf83ac1e70768a6e74ffa461b05a403a112a65b916180bbb893bf9301",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 5,
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.sad.png",
+    "original": "art/pixel-batch-1/originals/portraits/brannock/portrait-brannock.sad.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-64fd703f-05a5-42f4-b85b-f296a03db2fc.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "ebae1b4b4b3df4f3f43fc07473cf2ef1b135fdc185496f6435a919a8861103ce",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "a7bdd15bbae56f869c5194e7ec3bbdeeeb0a1c0a62a967ef18d27e1f601a9888",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 6,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-m01.neutral.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-46794ea3-6c32-48aa-886a-89e6b281a562.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "f13ed296c4e605f20b3d73947a65ea990682716403bdd4f272f43f1b07569d22",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "e3c7bdfb6e6fc73d9e05cfbf1bbecc0cbef54538039fe9ad4b35ea486e77bf5d",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 7,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.angry.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-m01.angry.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-66e1613a-2420-46b0-9a86-94799923ead2.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "1ecf67e2a44ac70df9fbb979fb00d7eb37cfe7e17c3dcdf2f13e6f64e1452a9a",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "6d7ab3bc85d0b721d034fc022bc5fafe7da8d4ec4a4e2a13e280649108f89c00",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 8,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.disgust.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-m01.disgust.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-5f5ebf07-2b9b-4938-b13b-21c90b2dff9c.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "2c60caa1abdea7df0c20d801105e1b75bcbd3f329b6a671e745be5a87d7f0894",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "eeab719c0e7689a8d1dd80008a328c032e4bf647c67b24007c0c06b8be3f96ee",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 9,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.smile.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-m01.smile.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-a898a484-35cf-41c4-b006-bf2dfde5e279.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "6afb9e26495067436e0aed212a6bd3f0065e797a0aebeeed1355a74be35efaac",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "afd2ac57c0a722d86ab2c02a50cd2f274d6e75c145530a02b771d390ea01106c",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 10,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.laugh.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-m01.laugh.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-7e89ad11-624d-4f3d-9448-eb6101b64513.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "7bf951761bee6a1cb1519a0b5bd82ce15dee2ca4101002ccb61fadefa2895428",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "36cca933adc84b8e01286edff11345004f193f8f4c7a5a480fe63fc1f920ae4b",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 11,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.sad.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-m01.sad.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-8c87dee3-4c2e-4d6a-9de5-9416cfd09a8a.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "36ee2facef1b5b361d7ece7f9d8c19db08d9f310bc0c53b637755ef72e8cb6d5",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "49ba6e46a9ffd5930f59395dd2b2dfb0e7e33e4a4e05c2981d95d702a079b2e8",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 12,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-f01.neutral.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-9eb2c55b-e906-4f9c-bf7c-736092296bd2.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "ecd997086169b3d34c72c4cd2cfe7a3808c9f670c5e25101036bcd71fb7bf77a",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "ce2acdfc72fa76fca9bd8dde147854ba76ee0c8a1935b6c68a0e9f14da06a8aa",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 13,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.angry.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-f01.angry.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-971b620f-2756-4772-bbf3-90f7bf739c52.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "329114f074c5b6d777fc6c14e7ffdab2d5433ec5a6a2d3ed3e29ae3ccea96a0c",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "4bdcddd7df6c4b093964be53c6cf7c87b41ea39ae7b25221d2767c31f7fc0b55",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 14,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.disgust.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-f01.disgust.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-ae173294-c184-4696-bd7b-65db2710121e.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "9247214398cb6ef755e69f469aaac23ffd4ee6b97316dda4e90ff200f361f52c",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "076aaec25d5229b6c92b66830b55a2e9087dbf50196c72c63aaa3bb09ff18fa4",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 15,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.smile.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-f01.smile.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-fcefb49e-cdb7-400e-83f6-381dbf882df5.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "549467849dade0684f287d519d5f37b573bb0a53ee165713e8e06d643e8bc05b",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "ee831a6774db56445d285f52e04e3cc5b26d5e35a648fcbf0c1eb5226a7afb09",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 16,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.laugh.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-f01.laugh.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-f747cdd1-b6fc-45d6-ac69-35663356e0ca.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "bb24c84bcacf9f7bd642c53bd7cf040a79a394e25a98358cd924a8c9521b6f31",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "eb407f43f3f92de5c21e7136224d432d184aa3f6366f7057295ae1ca10a28773",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 17,
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.sad.png",
+    "original": "art/pixel-batch-1/originals/portrait-kit/faces/pface-f01.sad.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-8becba5e-b10b-48ba-abe5-a087f667f035.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "4ef3c4a4b2821715a0b548b5fe2028d5d374c5ba32cc14f45563087d56129812",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "26781cb249c63ed713ce97ba18985dd21e8354e2af3184b6676564b57dc86342",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 18,
+    "path": "tools/source/pixel/portrait-kit/hair/phair-04.png",
+    "original": "art/pixel-batch-1/revisions/18-a389d179ffd0.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-a1b9ccf5-142f-488b-a668-a4cb1cdcd36e.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "a389d179ffd08e2783f264681171a7c44761ecfff8f43c3b80d7b04f14943e0f",
+    "status": "source pilot; conversion and registration review pending",
+    "attempts": [
+      {
+        "index": 18,
+        "path": "tools/source/pixel/portrait-kit/hair/phair-04.png",
+        "original": "art/pixel-batch-1/originals/portrait-kit/hair/phair-04.png",
+        "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-b2ffd631-2fc6-46f9-b2cf-b3fa888b95bb.png",
+        "native_size": [
+          1254,
+          1254
+        ],
+        "expected_size": [
+          1024,
+          1024
+        ],
+        "sha256": "10042f733af9f3910603d45b9d537f0d1e4b4230cc330ff55ea4354f077809cc",
+        "status": "candidate; native export, pending validation"
+      }
+    ],
+    "exported_sha256": "0ec3beec22cd52be36e7acedbaf98dda4caeba8d56da396d3f8103c055916a17",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 19,
+    "path": "tools/source/pixel/portrait-kit/collars/pcollar-armor-brannock.png",
+    "original": "art/pixel-batch-1/revisions/19-dc4d80c7a79f.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-5eb40045-2608-4776-8817-f5ce7a5e14c3.png",
+    "native_size": [
+      1254,
+      1254
+    ],
+    "expected_size": [
+      1024,
+      1024
+    ],
+    "sha256": "dc4d80c7a79f75865d497e48a3c0dbf235b7aeca282dbeee1b026881f6f389d1",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "c7ff55cb594f31b80ff1dac04ae6241c1b2f3776e08a74392830c3157b2d0183",
+    "export_size": [
+      1024,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion",
+    "attempts": [
+      {
+        "index": 19,
+        "path": "tools/source/pixel/portrait-kit/collars/pcollar-armor-brannock.png",
+        "original": "art/pixel-batch-1/originals/portrait-kit/collars/pcollar-armor-brannock.png",
+        "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-1bbb4a78-2d4b-4f0d-a6a5-6a0c2c4cdf67.png",
+        "native_size": [
+          1254,
+          1254
+        ],
+        "expected_size": [
+          1024,
+          1024
+        ],
+        "sha256": "cefdd24507475804debbf221ba194f65c0d6c12d7a7d9d1a267c797457e861b6",
+        "status": "source pilot; conversion and registration review pending",
+        "exported_sha256": "7f8b6415fdf654458ec1b272d4a094431bd927ebb977d621425e8719cae17ce2",
+        "export_size": [
+          1024,
+          1024
+        ],
+        "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+      }
+    ]
+  },
+  {
+    "index": 20,
+    "path": "tools/source/pixel/repaints/armor-brannock.png",
+    "original": "art/pixel-batch-1/originals/repaints/armor-brannock.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-ef5a1508-7007-4367-bf02-cc0b0011a136.png",
+    "native_size": [
+      1024,
+      1536
+    ],
+    "expected_size": [
+      1024,
+      1536
+    ],
+    "sha256": "f5d9c6b2ab6b1ab44e1f3a1aae4f049054296e327134d6b58888f90a4513771c",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "035595bc9bb975494c1bef600cfc02498ee4fadeea2ef2550f1d1e6c8fcb2948",
+    "export_size": [
+      1024,
+      1536
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 21,
+    "path": "tools/source/pixel/creatures/gloomfang/creature-gloomfang.look.png",
+    "original": "art/pixel-batch-1/originals/creatures/gloomfang/creature-gloomfang.look.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-00430e25-e19f-43bd-b8c1-30da852f87ad.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "e3fe3cc14d27d573857614a6cdec6a9359d1358a187dbb43eb1257e14493ddf4",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "3e034174622a66e374e3877af29c1f5a35e3c7131e6844d8cb9daf4268d400fd",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 22,
+    "path": "tools/source/pixel/emotes/emotes-01.png",
+    "original": "art/pixel-batch-1/revisions/22-f6fc1e732c4c.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-c22db050-8fab-4add-aa51-07db625e46b9.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "f6fc1e732c4cf285cc1c11c8a901576b3f85f28d0e2f3fae5244f1fb3b17a637",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "92d4bb3e923550a1e57e5eca913c96f29db6f5ab4394d1d2a0105f74dec10b8e",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion",
+    "attempts": [
+      {
+        "index": 22,
+        "path": "tools/source/pixel/emotes/emotes-01.png",
+        "original": "art/pixel-batch-1/originals/emotes/emotes-01.png",
+        "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-ba8e1556-09de-4b7b-b9cc-d5dbe6ea1186.png",
+        "native_size": [
+          1536,
+          1024
+        ],
+        "expected_size": [
+          1536,
+          1024
+        ],
+        "sha256": "97a70e24f913210681e3a708e4f87bd61d9040b9526800d157712d27f1eef342",
+        "status": "source pilot; conversion and registration review pending",
+        "exported_sha256": "32f06d68193dc9bd4f3a9998372d159a0c0bf1d4e151ccf52c18d3355c6a31eb",
+        "export_size": [
+          1536,
+          1024
+        ],
+        "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+      }
+    ]
+  },
+  {
+    "index": 23,
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+    "original": "art/pixel-batch-1/revisions/23-672cd67f684b.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-bcb6a89b-c96d-49f6-86ea-9d0c4489f4c5.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "672cd67f684b7055d4981eb7b14af7712ae546f2f50109ce2a9eca0a475bfd9e",
+    "status": "source pilot; conversion and registration review pending",
+    "attempts": [
+      {
+        "index": 23,
+        "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+        "original": "art/pixel-batch-1/originals/rooms/gulls-wager/deck/bg-1.png",
+        "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-0ad8228d-fe88-4be4-a7c6-e29ea65a52e7.png",
+        "native_size": [
+          1536,
+          1024
+        ],
+        "expected_size": [
+          1536,
+          1024
+        ],
+        "sha256": "50c17ba71c70487ccaf17d7cea1d6aab78cb8eb0192bc3864ed92f90d6e2ff2f",
+        "status": "candidate; native export, pending validation"
+      },
+      {
+        "index": 23,
+        "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+        "original": "art/pixel-batch-1/revisions/23-0e0852ae8686.png",
+        "generator_file": "C:/Users/Owner/.codex/generated_images/01a1f986-bb2d-7532-a72d-1c789d6567fb/exec-01f39fc2-0875-44bc-9fad-98f5da5077ea.png",
+        "native_size": [
+          1536,
+          1024
+        ],
+        "expected_size": [
+          1536,
+          1024
+        ],
+        "sha256": "0e0852ae8686dab448313ba76e8ae1e170913007a83442f1ce3c274a3304a0f9",
+        "status": "candidate; pending validation"
+      }
+    ],
+    "exported_sha256": "f14a3851aba2a8f144b6242ed394951186e90cedd002affea5108b89d28ebd31",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 24,
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png",
+    "original": "art/pixel-batch-1/originals/rooms/gulls-wager/deck/bg-1.sky.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-688f084d-9131-431d-bb7f-40978bb27be5.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "4e6f652a571a043424e25751f1599f317b89f336ca11be37abab352bad8325c2",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "3092c5e9b97b73564af9923578d0585fe95258b55d0db1453e91866c36ec2b9c",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 25,
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png",
+    "original": "art/pixel-batch-1/originals/rooms/gulls-wager/deck/bg-1.far.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-f21e3843-9e35-41a2-bd67-e34a3d56a612.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "8b70a479b9aef8003a7a9c192c58b65c7ed05d5b825e3efa7e7f88fd4e7e8706",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "52ddf072a1dbbe82623a64691f399583ba6520037fd7c04a8ca9a6bfc782570f",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 26,
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png",
+    "original": "art/pixel-batch-1/originals/rooms/gulls-wager/deck/bg-1.mid.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-eb9088ef-ce7b-4503-85ee-f6c467bf3d8c.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "48c389a22652786eb6fab5b33bd3e48aba01c1c9e918f2953ea7d02497c2f5cc",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "f969bcbfb3b66416c47e7ff890df81e8173e44d7da2c25674c79789f28998830",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 27,
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png",
+    "original": "art/pixel-batch-1/originals/rooms/gulls-wager/deck/bg-1.fg.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-726bd5c2-d2e2-48c2-9988-5d4408fc9384.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "d24a8e4b48e28d721934e4f345d9ca8b5495d2fe214c3e3ea139c284a526d7a4",
+    "status": "source pilot; conversion and registration review pending",
+    "exported_sha256": "062dffaadf12491b0efc83583626eebee8442eda199368a24aaab5f2f98635bc",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  },
+  {
+    "index": 28,
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/life-1.png",
+    "original": "art/pixel-batch-1/revisions/28-81c811d49d22.png",
+    "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-6db09fd6-5819-4954-9e6d-0b3ed1571fc4.png",
+    "native_size": [
+      1536,
+      1024
+    ],
+    "expected_size": [
+      1536,
+      1024
+    ],
+    "sha256": "81c811d49d22aef68ac60036741f674a69619ea2078ed1e97c885ff4cec00428",
+    "status": "source pilot; conversion and registration review pending",
+    "attempts": [
+      {
+        "index": 28,
+        "path": "tools/source/pixel/rooms/gulls-wager/deck/life-1.png",
+        "original": "art/pixel-batch-1/originals/rooms/gulls-wager/deck/life-1.png",
+        "generator_file": "C:\\Users\\Owner\\.codex\\generated_images\\01a1f986-bb2d-7532-a72d-1c789d6567fb\\exec-230f942a-6f8d-4676-9acd-ba744ee3c673.png",
+        "native_size": [
+          1536,
+          1024
+        ],
+        "expected_size": [
+          1536,
+          1024
+        ],
+        "sha256": "c6e4463d73b42fbf95ffb7891fd01b2fa72dfb2c61cb91bcb828ee9ea9e60671",
+        "status": "candidate; native export, pending validation"
+      }
+    ],
+    "exported_sha256": "9acd45762f0e5bf84a3c4d5395dbd616543d1dddd46fd3ff968252150c3e20a5",
+    "export_size": [
+      1536,
+      1024
+    ],
+    "export_method": "nearest-neighbour size-only; no crop, palette, keying, registration or grid conversion"
+  }
+]

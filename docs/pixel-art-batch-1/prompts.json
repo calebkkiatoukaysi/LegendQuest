@@ -1,0 +1,350 @@
+[
+  {
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png",
+    "prompt": "STYLE. A detailed, semi-realistic fantasy pixel-art portrait for a role-playing game's conversation window, head and shoulders. Real pixel art: the picture is a grid of 128 by 128 art pixels, each drawn as an 8 by 8 block of one flat colour, with no anti-aliasing, blur or gradient inside a block. About 32 colours in hue-shifted ramps: shadows cooler and more violet, highlights warmer and more golden. A selective dark outline in deep brown-violet, never pure black. Deliberate single-pixel highlights in the eyes, on the lips, on metal and on gems; dithering only on soft cloth or fur. Expressive, semi-realistic faces with real bone structure, honest age and character, eyes that are not oversized, and hair in clean, clumped locks with two or three tones. High-fantasy costume detail at the collar and shoulders. Three-quarter view facing the right-hand side of the picture, both eyes showing, lit from above and slightly in front. Plain, flat background in exactly #00FF00 green.\n\nAVOID. Blurry, soft or painterly rendering; airbrushed gradients; photographic texture, film grain or noise; glossy 3D-render shading; pure-black outlines; tiny hairline detail. Chibi or super-deformed proportions, huge anime eyes. A front view, a flat profile or a back view. Scenery, a frame or a border. Any text, letters, numbers, signature or watermark. Anything copied from an existing game, film, comic or brand.\n\nSIZE. The first attached picture is the template, exactly 1024 by 1024 pixels. Give it back at exactly 1024 by 1024. Paint the character over the grey mannequin exactly where it is: the eyes on the dashed line across the middle of the head, the jaw on the dashed line just under the chin, the base of the neck on the dotted line below that, the shoulders filling the bottom edge, and the top of the head and hair inside the dashed box. The dashed lines are only guides: paint over them, and make the background flat #00FF00 green everywhere else. Don't crop, zoom, re-centre or re-frame it.\n\nCHARACTER. Brannock Ironvein, a Stoneborn veteran soldier and smith of about fifty-five: short, very broad and powerfully built, a thick neck and heavy shoulders. Golden-tan, weathered skin. A craggy, lined face with deep-set brown eyes and crow's feet under thick, fierce copper brows; a crooked, once-broken nose with an old pale scar across its bridge; an old nick through one brow; a firm, weathered mouth. Short, tight copper curls close to the head. A full copper beard with a moustache, gathered into one thick braid that falls down his chest, bound with two tarnished-gold clasps. At the collar and shoulders, as in the second picture: a charcoal padded work shirt, a chain-mail shirt over it, a battered iron breastplate edged in tarnished gold, dented and scratched, and one heavy iron pauldron on the near shoulder. Gruff and steady, a kind man who doesn't show it.\n\nEXPRESSION. Neutral: calm, eyes open looking ahead, brows level, mouth closed and relaxed.\n\nI'll save it as portrait-brannock.neutral.png.",
+    "references": [
+      "tools/source/pixel/templates/portrait-template-male.png",
+      "tools/source/characters/sheets/armor-brannock.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "portrait"
+  },
+  {
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.angry.png",
+    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, the beard, the clothes, the colours, the pixel grid, the size and the position of everything else stay exactly the same. Keep it real pixel art on the same 128 by 128 grid, on the same flat #00FF00 background. Give it back at exactly 1024 by 1024.\nEXPRESSION: Angry: brows pulled hard down and together with a deep crease between them, eyes narrowed and glaring, nostrils flared, teeth gritted, the jaw set.\nI'll save it as portrait-brannock.angry.png.",
+    "references": [
+      "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.disgust.png",
+    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, the beard, the clothes, the colours, the pixel grid, the size and the position of everything else stay exactly the same. Keep it real pixel art on the same 128 by 128 grid, on the same flat #00FF00 background. Give it back at exactly 1024 by 1024.\nEXPRESSION: Disgusted: eyes narrowed, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side, the head drawn slightly back.\nI'll save it as portrait-brannock.disgust.png.",
+    "references": [
+      "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.smile.png",
+    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, the beard, the clothes, the colours, the pixel grid, the size and the position of everything else stay exactly the same. Keep it real pixel art on the same 128 by 128 grid, on the same flat #00FF00 background. Give it back at exactly 1024 by 1024.\nEXPRESSION: Happy: eyes softened, cheeks lifted, a warm closed-mouth smile under the moustache.\nI'll save it as portrait-brannock.smile.png.",
+    "references": [
+      "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.laugh.png",
+    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, the beard, the clothes, the colours, the pixel grid, the size and the position of everything else stay exactly the same. Keep it real pixel art on the same 128 by 128 grid, on the same flat #00FF00 background. Give it back at exactly 1024 by 1024.\nEXPRESSION: Laughing: eyes squeezed shut in happy curves, brows raised, mouth wide open in a belly laugh showing teeth, cheeks high.\nI'll save it as portrait-brannock.laugh.png.",
+    "references": [
+      "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portraits/brannock/portrait-brannock.sad.png",
+    "prompt": "Edit the attached neutral portrait: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The hair, the beard, the clothes, the colours, the pixel grid, the size and the position of everything else stay exactly the same. Keep it real pixel art on the same 128 by 128 grid, on the same flat #00FF00 background. Give it back at exactly 1024 by 1024.\nEXPRESSION: Sad: eyes lowered and wet along the lower lids, the inner ends of the brows raised, the corners of the mouth turned down.\nI'll save it as portrait-brannock.sad.png.",
+    "references": [
+      "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png",
+    "prompt": "STYLE. A detailed, semi-realistic fantasy pixel-art portrait for a role-playing game's conversation window. Real pixel art: the picture is a grid of 128 by 128 art pixels, each drawn as an 8 by 8 block of one flat colour, with no anti-aliasing, blur or gradient inside a block. About 32 colours in hue-shifted ramps: shadows cooler and more violet, highlights warmer and more golden. A selective dark outline in deep brown-violet, never pure black. Deliberate single-pixel highlights in the eyes and on the lips. Expressive, semi-realistic faces with real bone structure, eyes that are not oversized. Three-quarter view facing the right-hand side of the picture, both eyes showing, lit from above and slightly in front. Plain, flat background in exactly #00FF00 green.\n\nAVOID. Blurry, soft or painterly rendering; airbrushed gradients; photographic texture or noise; glossy 3D-render shading; pure-black outlines. Chibi proportions, huge anime eyes. A front view or a flat profile. Any hair on the head, any beard, any clothes, any jewellery. Any text, letters, numbers, signature or watermark. Anything copied from an existing game, film, comic or brand.\n\nSIZE. The attached template is exactly 1024 by 1024 pixels. Give it back at exactly 1024 by 1024. Paint over the grey mannequin's head and neck exactly where they are, at exactly their size and angle: the eyes on the dashed line across the middle of the head, the jaw on the dashed line just under the chin. The dashed lines are only guides: paint over them. Don't crop, zoom, re-centre or re-frame it.\n\nPAINT ONLY a head and neck: the head completely bald and smooth, no hair at all (the hair is a separate layer), only the eyebrows; the neck ends at the dotted line. Make everything below the dotted line, and all of the background, flat #00FF00 green. The skin is a plain warm tan, the eyes mid brown, the brows mid brown: the game recolours them for each player.\n\nFACE. A young man of about twenty-four: an open, likeable oval face, a straight nose, steady eyes under straight, expressive brows, a firm, friendly mouth, clean-shaven, a strong but not heavy jaw. A hero's face.\n\nEXPRESSION. Neutral: calm, eyes open looking ahead, brows level, mouth closed and relaxed.\n\nI'll save it as pface-m01.neutral.png.",
+    "references": [
+      "tools/source/pixel/templates/portrait-template-male.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "portrait"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.angry.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Angry: brows pulled hard down and together with a deep crease between them, eyes narrowed and glaring, nostrils flared, teeth gritted, the jaw set.\nI'll save it as pface-m01.angry.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.disgust.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Disgusted: eyes narrowed, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side, the head drawn slightly back.\nI'll save it as pface-m01.disgust.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.smile.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Happy: eyes softened, cheeks lifted, a warm closed-mouth smile.\nI'll save it as pface-m01.smile.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.laugh.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Laughing: eyes squeezed shut in happy curves, brows raised, mouth wide open showing teeth, cheeks high.\nI'll save it as pface-m01.laugh.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-m01.sad.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Sad: eyes lowered and wet along the lower lids, the inner ends of the brows raised, the corners of the mouth turned down.\nI'll save it as pface-m01.sad.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png",
+    "prompt": "STYLE. A detailed, semi-realistic fantasy pixel-art portrait for a role-playing game's conversation window. Real pixel art: the picture is a grid of 128 by 128 art pixels, each drawn as an 8 by 8 block of one flat colour, with no anti-aliasing, blur or gradient inside a block. About 32 colours in hue-shifted ramps: shadows cooler and more violet, highlights warmer and more golden. A selective dark outline in deep brown-violet, never pure black. Deliberate single-pixel highlights in the eyes and on the lips. Expressive, semi-realistic faces with real bone structure, eyes that are not oversized. Three-quarter view facing the right-hand side of the picture, both eyes showing, lit from above and slightly in front. Plain, flat background in exactly #00FF00 green.\n\nAVOID. Blurry, soft or painterly rendering; airbrushed gradients; photographic texture or noise; glossy 3D-render shading; pure-black outlines. Chibi proportions, huge anime eyes. A front view or a flat profile. Any hair on the head, any beard, any clothes, any jewellery. Any text, letters, numbers, signature or watermark. Anything copied from an existing game, film, comic or brand.\n\nSIZE. The attached template is exactly 1024 by 1024 pixels. Give it back at exactly 1024 by 1024. Paint over the grey mannequin's head and neck exactly where they are, at exactly their size and angle: the eyes on the dashed line across the middle of the head, the jaw on the dashed line just under the chin. The dashed lines are only guides: paint over them. Don't crop, zoom, re-centre or re-frame it.\n\nPAINT ONLY a head and neck: the head completely bald and smooth, no hair at all (the hair is a separate layer), only the eyebrows; the neck ends at the dotted line. Make everything below the dotted line, and all of the background, flat #00FF00 green. The skin is a plain warm tan, the eyes mid brown, the brows mid brown: the game recolours them for each player.\n\nFACE. A young woman of about twenty-four: an open, likeable oval face, a straight nose, warm eyes with defined lashes, straight brows, a friendly mouth, high cheekbones. A hero's face.\n\nEXPRESSION. Neutral: calm, eyes open looking ahead, brows level, mouth closed and relaxed.\n\nI'll save it as pface-f01.neutral.png.",
+    "references": [
+      "tools/source/pixel/templates/portrait-template-female.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "portrait"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.angry.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Angry: brows pulled hard down and together with a deep crease between them, eyes narrowed and glaring, nostrils flared, teeth gritted, the jaw set.\nI'll save it as pface-f01.angry.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.disgust.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Disgusted: eyes narrowed, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side, the head drawn slightly back.\nI'll save it as pface-f01.disgust.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.smile.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Happy: eyes softened, cheeks lifted, a warm closed-mouth smile.\nI'll save it as pface-f01.smile.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.laugh.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Laughing: eyes squeezed shut in happy curves, brows raised, mouth wide open showing teeth, cheeks high.\nI'll save it as pface-f01.laugh.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/faces/pface-f01.sad.png",
+    "prompt": "Edit the attached neutral picture: change ONLY the expression, to the one below. Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. The bald head, the skin colour, the pixel grid, the size and the position of everything else stay exactly the same, and everything that isn't the head and neck stays flat #00FF00 green. Keep it real pixel art on the same 128 by 128 grid. Give it back at exactly 1024 by 1024.\nEXPRESSION: Sad: eyes lowered and wet along the lower lids, the inner ends of the brows raised, the corners of the mouth turned down.\nI'll save it as pface-f01.sad.png.",
+    "references": [
+      "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "expression"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/hair/phair-04.png",
+    "prompt": "STYLE. Detailed fantasy pixel art. Real pixel art: the picture is a grid of 128 by 128 art pixels, each drawn as an 8 by 8 block of one flat colour, with no anti-aliasing, blur or gradient inside a block. Hue-shifted ramps: shadows cooler and more violet, highlights warmer and more golden. A selective dark outline in deep brown-violet, never pure black. Hair drawn in clean, clumped locks with three tones and a few single-pixel highlights. Lit from above and slightly in front.\n\nAVOID. Blur, gradients, noise, painterly rendering, pure-black outlines. A face, a beard, clothes. Any text or watermark.\n\nSIZE. The attached template is exactly 1024 by 1024 pixels. Give it back at exactly 1024 by 1024, with the hair fitted to the grey mannequin's head exactly where it is, at exactly its size and angle. Don't crop, zoom, re-centre or re-frame it.\n\nPAINT ONLY this hairstyle on the head: short, tight curls close to the head, the hairline natural at the forehead, the temples and around the ears, which show. Paint it a plain mid brown with its shading: the game recolours it for each player. Make EVERYTHING that isn't hair flat #FF00FF magenta: the face, the ears, the neck, the shoulders and the background.\n\nI'll save it as phair-04.png.",
+    "references": [
+      "tools/source/pixel/templates/portrait-template-male.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "hair"
+  },
+  {
+    "path": "tools/source/pixel/portrait-kit/collars/pcollar-armor-brannock.png",
+    "prompt": "STYLE. Detailed high-fantasy pixel art. Real pixel art: the picture is a grid of 128 by 128 art pixels, each drawn as an 8 by 8 block of one flat colour, with no anti-aliasing, blur or gradient inside a block. Hue-shifted ramps: shadows cooler and more violet, highlights warmer and more golden. A selective dark outline in deep brown-violet, never pure black. Single-pixel highlights on metal and rivets. Lit from above and slightly in front.\n\nAVOID. Blur, gradients, noise, painterly rendering, pure-black outlines. A head, a face, hair. Any text or watermark.\n\nSIZE. The first attached picture is the template, exactly 1024 by 1024 pixels. Give it back at exactly 1024 by 1024, the clothes fitted to the grey mannequin's shoulders and chest exactly where they are, at exactly their size and angle. Don't crop, zoom, re-centre or re-frame it.\n\nPAINT ONLY what this armour shows at the neck, shoulders and upper chest, from the dotted line down to the bottom edge, matching the second picture's design, colours and trims: a charcoal padded work shirt with its collar, a chain-mail shirt over it, a battered iron breastplate edged in tarnished gold, dented and scratched, and one heavy iron pauldron on the near shoulder (on the left of the picture). Make EVERYTHING else flat #FF00FF magenta: the head, the neck above the dotted line, and the background.\n\nI'll save it as pcollar-armor-brannock.png.",
+    "references": [
+      "tools/source/pixel/templates/portrait-template-male.png",
+      "tools/source/characters/sheets/armor-brannock.png"
+    ],
+    "size": [
+      1024,
+      1024
+    ],
+    "kind": "collar"
+  },
+  {
+    "path": "tools/source/pixel/repaints/armor-brannock.png",
+    "prompt": "STYLE. Original high-fantasy art for a 2D side-view role-playing game, painted to be converted into detailed pixel art, so it must be made of large, clean, flat areas of colour with hard edges, like a master pixel artist's design blown up. Bold, even outlines in deep brown-violet, never pure black, about 12 to 16 pixels thick on the outer silhouette and half that inside. Cel shading with hard-edged shapes only: for each material a base tone, two shadow tones that shift toward cool violet-blue, one highlight tone that shifts toward warm gold, and a thin, bright rim light along the top and back edges; polished metal gets a few crisp, bright highlights. No gradients, no brush texture, no noise, no grain, no soft airbrushing, no hairline scratches; nothing smaller than about one hundredth of the figure's height. Show detail with a few bold shapes instead: plate edges, rivets as single round dots, trims as solid bands, stitching as short dashes, one engraved motif. Rich, saturated high-fantasy colour: deep jewel tones, burnished gold and steel, cool shadows and warm light. Lit from above and slightly in front, never from the left or right.\n\nAVOID. Blurry, soft or painterly rendering; airbrushed gradients; photographic texture, film grain or noise; glossy 3D-render shading; pure-black outlines; tiny hairline detail. Any text, letters, numbers, signature or watermark. Anything copied from an existing game, film, comic or brand.\n\nSIZE. The attached picture is exactly 1024 by 1536 pixels. Give it back at exactly 1024 by 1536, laid out exactly as it is: every piece in exactly the same place, at exactly the same size and the same angle. Don't crop, pad, zoom, stretch, squash, rotate, flip, re-centre or re-frame the picture, add no border or frame, and draw nothing bigger, smaller, longer or shorter than it is: paint over the shapes that are there, and keep the solid black background between them.\n\nDress the pieces in Brannock's soldier-smith kit: a charcoal padded work shirt with the sleeves pushed up; a chain-mail shirt over it to the hips, its rings shown as a bold, regular pattern of dark and light; a battered iron breastplate with tarnished-gold edging, the dents shown as a few bold highlight-and-shadow shapes; one heavy iron pauldron on the near shoulder; a thick dark-leather apron-like skirt to the knees over dark trousers, like a smith's; a wide belt with a big iron buckle and a battered metal flask; heavy iron-capped boots. Any bare skin keeps the body's warm tan.\n\nI'll save it as armor-brannock.png.",
+    "references": [
+      "tools/source/characters/armor-parts-man.png"
+    ],
+    "size": [
+      1024,
+      1536
+    ],
+    "kind": "armour"
+  },
+  {
+    "path": "tools/source/pixel/creatures/gloomfang/creature-gloomfang.look.png",
+    "prompt": "STYLE. Original high-fantasy art for a 2D side-view role-playing game, painted to be converted into detailed pixel art, so it must be made of large, clean, flat areas of colour with hard edges, like a master pixel artist's design blown up. Bold, even outlines in deep brown-violet, never pure black, about 12 to 16 pixels thick on the outer silhouette and half that inside. Cel shading with hard-edged shapes only: a base tone, two shadow tones that shift toward cool violet-blue, one highlight tone that shifts toward warm gold, and a thin, bright rim light along the top and back edges. No gradients, no brush texture, no noise, no grain, no soft airbrushing; nothing smaller than about one hundredth of the creature's length. Fur drawn as bold, clumped, spiky locks, a few big shapes rather than many strands. Lit from above and slightly in front.\n\nAVOID. Blurry, soft or painterly rendering; airbrushed gradients; photographic texture or noise; glossy 3D-render shading; pure-black outlines. Scenery, a floor, a ground shadow, a frame. Any text or watermark. Anything copied from an existing game, film, comic or brand.\n\nCREATURE. A gloomfang, a forest wolf twisted by dark magic: a gaunt, rangy wolf, long-legged and narrow-hipped, its ribs showing under its coat, standing in a low, stalking stance with its head down and forward, in a three-quarter side view facing the right-hand side of the picture. Fur: dark grey-brown with a cold navy cast and a paler, dusty underside, bristling into a ragged mane along the neck, shoulders and spine. Head: a long, narrow muzzle with the lips drawn back over long yellowed fangs; ears flat back; pale violet glowing eyes with thin trails of black smoke drifting back over the head. Long, dark claws on big feet. A thin, ragged tail held low. Hungry, silent, about to lunge.\n\nOUTPUT. One landscape PNG, exactly 1536 by 1024, on a solid black background, the whole creature centred with its feet near the bottom, filling about 85% of the width, nothing cropped. In the game its shoulder comes to a standard adult's hip, and nose to tail it's a little longer than an adult is tall.\n\nI'll save it as creature-gloomfang.look.png.",
+    "references": [],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "creature"
+  },
+  {
+    "path": "tools/source/pixel/emotes/emotes-01.png",
+    "prompt": "STYLE. Original fantasy game art painted to be converted into pixel art: bold, simple, flat shapes with hard edges, bold deep brown-violet outlines (never pure black), one shadow tone and one highlight tone per colour, no gradients, no texture, no noise.\n\nAVOID. Blur, gradients, noise, pure-black outlines, any text or letters other than the question and exclamation marks, a frame, a watermark.\n\nSIZE. The attached picture is exactly 1536 by 1024 pixels: a 4 by 3 grid of cells on flat #FF00FF magenta. Give it back at exactly 1536 by 1024, laid out exactly as it is. Paint one mark in each cell, centred, inside the cell's dashed margin, filling about two thirds of the cell; keep the background flat #FF00FF magenta, with the grid lines and dashed margins painted over in the same magenta.\n\nThe marks, left to right, top row first: 1 an anger vein mark, four bulging red curves in a cross; 2 a sweat drop, pale blue with a white highlight; 3 a single falling tear, pale blue; 4 a blush, two soft pink ovals each with three short diagonal lines; 5 a four-pointed gold sparkle; 6 three wavy gloom lines falling, violet-grey; 7 a bold question mark, white with a dark outline; 8 a bold exclamation mark, white with a dark outline; 9 a small white puff of sigh breath; 10 a small red heart; 11 a dark, tangled scribble cloud of frustration; 12 three rising sleep marks shaped like the letter Z, pale blue, getting smaller.\n\nI'll save it as emotes-01.png.",
+    "references": [
+      "tools/source/pixel/templates/emote-sheet.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "emotes"
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+    "prompt": "STYLE. An original background painting for a side-on 2D fantasy role-playing game, painted to be converted into detailed pixel art, so it must be made of clean, flat areas of colour with hard edges. Bold, even outlines in deep brown-violet, never pure black, on every building, prop and plank. Cel shading with hard-edged shapes: a base tone, two shadow tones that shift toward cool violet-blue, one highlight tone that shifts toward warm gold; the sky in a few broad, flat bands of colour rather than a smooth gradient. Detail shown with bold shapes: plank seams, rivets as dots, coiled rope as a few bold loops, sails as a few big folds. No brush texture, no noise, no grain, no soft airbrushing, no tiny detail. Rich high-fantasy colour: deep navy and violet night, burnished gold and brass, warm lamplight against cool moonlight. The distance is paler, cooler and simpler. The camera is side-on at a standing person's eye level, looking straight at the scene: the horizon straight and level, nothing vanishing into the distance.\n\nROOM. The Gull's Wager: The Main Deck. This is panel 1 of 3, the left part of a room that scrolls sideways; the scene carries on past its right edge.\n\nLAYOUT, as the attached guide shows it. The floor line is straight and level about 64% of the way down the picture (y 656 of 1024). Below it, down to the bottom of the picture, is the open floor band, with nothing standing on it: plain, even deck planks running left to right. A person standing on the floor would be about 185 pixels tall. The far horizon is a straight, level line about halfway down the picture (y 512 of 1024). The room's left end is closed.\n\nSCENE, left to right. The Gull's Wager, a trim merchant ship, two days out at sea at night. From the left edge to about 20%: the bow, the forecastle's raised deck behind the floor with a short ladder up to it, its rail sweeping up to the left, and the bowsprit angling up out of the top-left corner with its stays. Along the whole back of the floor runs the ship's far bulwark, about waist-high to a person: dark planks between stanchions under a varnished cap rail trimmed in navy and gold, pin rails hung with neatly coiled ropes, and a small brass lamp on a bracket at about 79%, lit. At about 50% the foremast rises from behind the bulwark out of the top of the picture, its sails furled tight on two yards, its shrouds and ratlines slanting down to the rail either side. Keep the right edge, around 95% to 100%, clear of masts. Over the bulwark: a calm, dark sea with long, soft swells to a level horizon, and a full moon high at about 25% across, silver-white, its path of broken light lying on the water under it. Sky: deep navy shading to violet at the horizon in flat bands, scattered stars, two or three long clouds edged in moonlight. Quiet, lonely, a little uneasy; the sea is very big. Paint at clear, readable mid values: the game darkens the room and adds the lamp's glow itself.\n\nOUTPUT. One landscape PNG, exactly 1536 by 1024: the whole scene from sky to floor, edge to edge, painted right through the top and bottom 80 pixels of bleed.\n\nAVOID. People, animals, birds, creatures. Text, letters, numbers, runes, labels, signatures, watermarks. Frames, borders, vignettes. Perspective: vanishing points, a view from above or below, a tilted horizon. Anything on the open floor band. Painterly blur, smooth gradients, airbrushing, glossy 3D-render shading, photorealism, grain, lens flare, dense noise or tiny texture. Pure-black outlines. The layout guide's flat colours, lines or labels. Anything copied from an existing game, film, comic or brand.\n\nI'll save it as bg-1.png.",
+    "references": [
+      "tools/source/pixel/templates/gulls-wager-deck-1.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "room"
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png",
+    "prompt": "Edit the attached picture (bg-1.png, the whole panel): keep ONLY the sky: the night sky, the stars, the clouds and the moon, exactly as they are, pixel for pixel. Make everything else flat #FF00FF magenta. Where the ship, the sea and the masts hid part of the sky, continue the sky naturally behind them, down to the horizon. Same size, exactly 1536 by 1024. I'll save it as bg-1.sky.png.",
+    "references": [
+      "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "room-layer"
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png",
+    "prompt": "Edit the attached picture (bg-1.png, the whole panel): keep ONLY the distant scenery: the sea from the horizon down to the top of the bulwark, with the moon's path of light on it, exactly as it is, pixel for pixel. Make everything else flat #FF00FF magenta, including the sky. Where the bulwark, the masts and the rigging hid part of the sea, continue the sea naturally behind them. Same size, exactly 1536 by 1024. I'll save it as bg-1.far.png.",
+    "references": [
+      "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "room-layer"
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png",
+    "prompt": "Edit the attached picture (bg-1.png, the whole panel): keep ONLY the ship: the deck, the bulwark, the forecastle and its ladder, the bowsprit, the foremast with its sails and rigging, the coiled ropes and the lamp, exactly as they are, pixel for pixel. Make the sky and the sea flat #FF00FF magenta. Same size, exactly 1536 by 1024. I'll save it as bg-1.mid.png.",
+    "references": [
+      "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "room-layer"
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png",
+    "prompt": "Edit the attached picture (bg-1.png, the whole panel): is there anything that would stand in front of people walking on the deck, at the very bottom edge (the near rail's top, a coil of rope, the edge of a hatch)? If so, add one or two such things along the bottom edge only, low and dark, covering no more than a tenth of the floor band, and make everything else flat #FF00FF magenta. If not, return a picture that is entirely flat #FF00FF magenta. Same size, exactly 1536 by 1024. I'll save it as bg-1.fg.png.",
+    "references": [
+      "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "room-layer"
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/life-1.png",
+    "prompt": "STYLE. Original high-fantasy art for a 2D side-view role-playing game's ship at night, painted to be converted into detailed pixel art: clean, flat areas of colour with hard edges, bold deep brown-violet outlines (never pure black), a base tone, two shadow tones shifting toward violet-blue and one highlight tone shifting toward warm gold, no gradients, no texture, no noise. Lit from above and slightly in front; the lamplight warm, the moonlight cool.\n\nAVOID. Blur, gradients, noise, pure-black outlines, people, any text or watermark, a frame.\n\nSIZE. The attached picture is exactly 1536 by 1024 pixels: a 4 by 3 grid of cells on flat #FF00FF magenta. Give it back at exactly 1536 by 1024, laid out exactly as it is. Paint one item in each cell, alone, centred, inside the cell's dashed margin, uncropped; keep the background flat #FF00FF magenta, with the grid lines and dashed margins painted over in the same magenta. Paint each item at the size it would be on a ship where a person stands about 185 pixels tall.\n\nThe items, left to right, top row first: 1 a small brass ship's lamp hanging from a short iron bracket, lit, its glass glowing warm; 2 the same lamp's flame alone, a teardrop of warm yellow and white; 3 a navy-and-gold pennant flag on a short rope, flying out to the right; 4 a furled sail's loose corner of canvas with its tie, hanging; 5 a single coil of rope hanging from a belaying pin; 6 a long, thin strip of the moon's reflected light on dark water, a broken line of silver flecks; 7, 8 and 9 the same small seagull in flight, seen from the side facing right, in three wing positions, wings up, level, and down, the same size and in the same place in each cell; 10 a wisp of grey-blue sea mist, a soft flat shape; 11 a wooden block-and-tackle pulley on a short rope; 12 a small tied bundle of canvas sacks.\n\nI'll save it as life-1.png.",
+    "references": [
+      "tools/source/pixel/templates/life-sheet.png"
+    ],
+    "size": [
+      1536,
+      1024
+    ],
+    "kind": "life"
+  }
+]

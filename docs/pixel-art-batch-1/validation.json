@@ -1,0 +1,929 @@
+{
+  "files": 29,
+  "errors": [],
+  "conversion_warnings": [
+    "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.angry.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.angry.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.disgust.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.disgust.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.smile.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.smile.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.laugh.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.laugh.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.sad.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portraits/brannock/portrait-brannock.sad.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.angry.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.angry.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.disgust.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.disgust.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.smile.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.smile.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.laugh.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.laugh.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.sad.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-m01.sad.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.angry.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.angry.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.disgust.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.disgust.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.smile.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.smile.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.laugh.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.laugh.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.sad.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/faces/pface-f01.sad.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/hair/phair-04.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/hair/phair-04.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/portrait-kit/collars/pcollar-armor-brannock.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/portrait-kit/collars/pcollar-armor-brannock.png: not yet a strict 128x128 grid; converter must snap it",
+    "tools/source/pixel/emotes/emotes-01.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png: near-key colour noise; converter must flatten/key it",
+    "tools/source/pixel/rooms/gulls-wager/deck/life-1.png: near-key colour noise; converter must flatten/key it"
+  ],
+  "strict_pixel_art_accepted": false,
+  "runtime_imported": false,
+  "measurements": [
+    {
+      "index": 0,
+      "path": "tools/source/pixel/portraits/brannock/portrait-brannock.neutral.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "f5540007f470d4c005435ae67f4b48431a08557f3e5f42946a30fbdf9b2caf57",
+      "unique_colours": 139559,
+      "key_region_fraction": 0.541278,
+      "off_key_pixels_in_key_region": 567570,
+      "art_bounds": [
+        33,
+        136,
+        942,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 1,
+      "path": "tools/source/pixel/portraits/brannock/portrait-brannock.angry.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "da2e213ed4825c0a772a6c4f5c9584d3be5e6574a0e21302c108222e785a83f0",
+      "unique_colours": 139488,
+      "key_region_fraction": 0.541765,
+      "off_key_pixels_in_key_region": 568066,
+      "art_bounds": [
+        33,
+        136,
+        942,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 2,
+      "path": "tools/source/pixel/portraits/brannock/portrait-brannock.disgust.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "583e592ee9b47e2ad57d7ea0f3a33ed47c8039741905a02fd40a06189ce9868e",
+      "unique_colours": 142845,
+      "key_region_fraction": 0.542755,
+      "off_key_pixels_in_key_region": 569117,
+      "art_bounds": [
+        33,
+        136,
+        941,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 3,
+      "path": "tools/source/pixel/portraits/brannock/portrait-brannock.smile.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "90f8e1634b79bfd82023dce08f55223dca37342dedc2a595f2ae5d7c9c5a6dde",
+      "unique_colours": 148140,
+      "key_region_fraction": 0.54107,
+      "off_key_pixels_in_key_region": 567350,
+      "art_bounds": [
+        33,
+        136,
+        942,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 4,
+      "path": "tools/source/pixel/portraits/brannock/portrait-brannock.laugh.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "e902530cf83ac1e70768a6e74ffa461b05a403a112a65b916180bbb893bf9301",
+      "unique_colours": 151432,
+      "key_region_fraction": 0.541965,
+      "off_key_pixels_in_key_region": 568287,
+      "art_bounds": [
+        34,
+        136,
+        942,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 5,
+      "path": "tools/source/pixel/portraits/brannock/portrait-brannock.sad.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "a7bdd15bbae56f869c5194e7ec3bbdeeeb0a1c0a62a967ef18d27e1f601a9888",
+      "unique_colours": 140272,
+      "key_region_fraction": 0.542814,
+      "off_key_pixels_in_key_region": 569171,
+      "art_bounds": [
+        34,
+        136,
+        942,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 6,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-m01.neutral.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "e3c7bdfb6e6fc73d9e05cfbf1bbecc0cbef54538039fe9ad4b35ea486e77bf5d",
+      "unique_colours": 37539,
+      "key_region_fraction": 0.892837,
+      "off_key_pixels_in_key_region": 936203,
+      "art_bounds": [
+        341,
+        144,
+        672,
+        581
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 7,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-m01.angry.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "6d7ab3bc85d0b721d034fc022bc5fafe7da8d4ec4a4e2a13e280649108f89c00",
+      "unique_colours": 39111,
+      "key_region_fraction": 0.89306,
+      "off_key_pixels_in_key_region": 936441,
+      "art_bounds": [
+        341,
+        144,
+        673,
+        581
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 8,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-m01.disgust.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "eeab719c0e7689a8d1dd80008a328c032e4bf647c67b24007c0c06b8be3f96ee",
+      "unique_colours": 38933,
+      "key_region_fraction": 0.894102,
+      "off_key_pixels_in_key_region": 937533,
+      "art_bounds": [
+        339,
+        146,
+        661,
+        581
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 9,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-m01.smile.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "afd2ac57c0a722d86ab2c02a50cd2f274d6e75c145530a02b771d390ea01106c",
+      "unique_colours": 38666,
+      "key_region_fraction": 0.89313,
+      "off_key_pixels_in_key_region": 936514,
+      "art_bounds": [
+        341,
+        144,
+        670,
+        581
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 10,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-m01.laugh.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "36cca933adc84b8e01286edff11345004f193f8f4c7a5a480fe63fc1f920ae4b",
+      "unique_colours": 40773,
+      "key_region_fraction": 0.892993,
+      "off_key_pixels_in_key_region": 936357,
+      "art_bounds": [
+        342,
+        144,
+        671,
+        581
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 11,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-m01.sad.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "49ba6e46a9ffd5930f59395dd2b2dfb0e7e33e4a4e05c2981d95d702a079b2e8",
+      "unique_colours": 37597,
+      "key_region_fraction": 0.89379,
+      "off_key_pixels_in_key_region": 937198,
+      "art_bounds": [
+        341,
+        144,
+        666,
+        581
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 12,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-f01.neutral.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "ce2acdfc72fa76fca9bd8dde147854ba76ee0c8a1935b6c68a0e9f14da06a8aa",
+      "unique_colours": 38369,
+      "key_region_fraction": 0.895292,
+      "off_key_pixels_in_key_region": 938767,
+      "art_bounds": [
+        347,
+        140,
+        667,
+        600
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 13,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-f01.angry.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "4bdcddd7df6c4b093964be53c6cf7c87b41ea39ae7b25221d2767c31f7fc0b55",
+      "unique_colours": 38422,
+      "key_region_fraction": 0.895229,
+      "off_key_pixels_in_key_region": 938706,
+      "art_bounds": [
+        348,
+        141,
+        668,
+        600
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 14,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-f01.disgust.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "076aaec25d5229b6c92b66830b55a2e9087dbf50196c72c63aaa3bb09ff18fa4",
+      "unique_colours": 39249,
+      "key_region_fraction": 0.897239,
+      "off_key_pixels_in_key_region": 940804,
+      "art_bounds": [
+        341,
+        145,
+        658,
+        599
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 15,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-f01.smile.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "ee831a6774db56445d285f52e04e3cc5b26d5e35a648fcbf0c1eb5226a7afb09",
+      "unique_colours": 38167,
+      "key_region_fraction": 0.895811,
+      "off_key_pixels_in_key_region": 939289,
+      "art_bounds": [
+        348,
+        141,
+        668,
+        599
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 16,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-f01.laugh.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "eb407f43f3f92de5c21e7136224d432d184aa3f6366f7057295ae1ca10a28773",
+      "unique_colours": 40978,
+      "key_region_fraction": 0.895642,
+      "off_key_pixels_in_key_region": 939126,
+      "art_bounds": [
+        348,
+        140,
+        669,
+        599
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 17,
+      "path": "tools/source/pixel/portrait-kit/faces/pface-f01.sad.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "26781cb249c63ed713ce97ba18985dd21e8354e2af3184b6676564b57dc86342",
+      "unique_colours": 37917,
+      "key_region_fraction": 0.896504,
+      "off_key_pixels_in_key_region": 939974,
+      "art_bounds": [
+        348,
+        141,
+        666,
+        599
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 18,
+      "path": "tools/source/pixel/portrait-kit/hair/phair-04.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "0ec3beec22cd52be36e7acedbaf98dda4caeba8d56da396d3f8103c055916a17",
+      "unique_colours": 25404,
+      "key_region_fraction": 0.957592,
+      "off_key_pixels_in_key_region": 1004101,
+      "art_bounds": [
+        328,
+        114,
+        673,
+        451
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 19,
+      "path": "tools/source/pixel/portrait-kit/collars/pcollar-armor-brannock.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "native_size": [
+        1254,
+        1254
+      ],
+      "sha256": "c7ff55cb594f31b80ff1dac04ae6241c1b2f3776e08a74392830c3157b2d0183",
+      "unique_colours": 108423,
+      "key_region_fraction": 0.704098,
+      "off_key_pixels_in_key_region": 738276,
+      "art_bounds": [
+        38,
+        562,
+        810,
+        1024
+      ],
+      "constant_8x8_block_fraction": 0.0
+    },
+    {
+      "index": 20,
+      "path": "tools/source/pixel/repaints/armor-brannock.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "native_size": [
+        1024,
+        1536
+      ],
+      "sha256": "035595bc9bb975494c1bef600cfc02498ee4fadeea2ef2550f1d1e6c8fcb2948",
+      "unique_colours": 90050
+    },
+    {
+      "index": 21,
+      "path": "tools/source/pixel/creatures/gloomfang/creature-gloomfang.look.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "3e034174622a66e374e3877af29c1f5a35e3c7131e6844d8cb9daf4268d400fd",
+      "unique_colours": 68468
+    },
+    {
+      "index": 22,
+      "path": "tools/source/pixel/emotes/emotes-01.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "92d4bb3e923550a1e57e5eca913c96f29db6f5ab4394d1d2a0105f74dec10b8e",
+      "unique_colours": 66840,
+      "key_region_fraction": 0.764217,
+      "off_key_pixels_in_key_region": 1202010,
+      "art_bounds": [
+        58,
+        46,
+        1499,
+        989
+      ],
+      "cells": [
+        {
+          "cell": 1,
+          "bounds": [
+            61,
+            50,
+            330,
+            307
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 2,
+          "bounds": [
+            99,
+            46,
+            285,
+            306
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 3,
+          "bounds": [
+            129,
+            64,
+            258,
+            304
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 4,
+          "bounds": [
+            36,
+            131,
+            347,
+            267
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 5,
+          "bounds": [
+            72,
+            50,
+            315,
+            308
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 6,
+          "bounds": [
+            74,
+            50,
+            317,
+            308
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 7,
+          "bounds": [
+            87,
+            39,
+            297,
+            313
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 8,
+          "bounds": [
+            137,
+            39,
+            258,
+            313
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 9,
+          "bounds": [
+            58,
+            76,
+            327,
+            279
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 10,
+          "bounds": [
+            59,
+            65,
+            326,
+            296
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 11,
+          "bounds": [
+            40,
+            43,
+            333,
+            307
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 12,
+          "bounds": [
+            47,
+            56,
+            335,
+            293
+          ],
+          "inside_margin": true
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "f14a3851aba2a8f144b6242ed394951186e90cedd002affea5108b89d28ebd31",
+      "unique_colours": 215020
+    },
+    {
+      "index": 24,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "3092c5e9b97b73564af9923578d0585fe95258b55d0db1453e91866c36ec2b9c",
+      "unique_colours": 18151,
+      "key_region_fraction": 0.5,
+      "off_key_pixels_in_key_region": 786432,
+      "art_bounds": [
+        0,
+        0,
+        1536,
+        512
+      ]
+    },
+    {
+      "index": 25,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "52ddf072a1dbbe82623a64691f399583ba6520037fd7c04a8ca9a6bfc782570f",
+      "unique_colours": 15099,
+      "key_region_fraction": 0.954111,
+      "off_key_pixels_in_key_region": 1500687,
+      "art_bounds": [
+        0,
+        506,
+        1536,
+        554
+      ]
+    },
+    {
+      "index": 26,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "f969bcbfb3b66416c47e7ff890df81e8173e44d7da2c25674c79789f28998830",
+      "unique_colours": 260728,
+      "key_region_fraction": 0.371321,
+      "off_key_pixels_in_key_region": 584027,
+      "art_bounds": [
+        0,
+        0,
+        1536,
+        1024
+      ]
+    },
+    {
+      "index": 27,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "062dffaadf12491b0efc83583626eebee8442eda199368a24aaab5f2f98635bc",
+      "unique_colours": 325,
+      "key_region_fraction": 1.0,
+      "off_key_pixels_in_key_region": 1572864,
+      "art_bounds": null
+    },
+    {
+      "index": 28,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/life-1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "native_size": [
+        1536,
+        1024
+      ],
+      "sha256": "9acd45762f0e5bf84a3c4d5395dbd616543d1dddd46fd3ff968252150c3e20a5",
+      "unique_colours": 88918,
+      "key_region_fraction": 0.935155,
+      "off_key_pixels_in_key_region": 1470866,
+      "art_bounds": [
+        128,
+        98,
+        1438,
+        936
+      ],
+      "cells": [
+        {
+          "cell": 1,
+          "bounds": [
+            144,
+            130,
+            245,
+            237
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 2,
+          "bounds": [
+            180,
+            153,
+            205,
+            200
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 3,
+          "bounds": [
+            108,
+            110,
+            286,
+            246
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 4,
+          "bounds": [
+            94,
+            98,
+            275,
+            256
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 5,
+          "bounds": [
+            143,
+            78,
+            245,
+            271
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 6,
+          "bounds": [
+            70,
+            157,
+            315,
+            192
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 7,
+          "bounds": [
+            123,
+            81,
+            266,
+            219
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 8,
+          "bounds": [
+            94,
+            144,
+            286,
+            212
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 9,
+          "bounds": [
+            128,
+            129,
+            265,
+            235
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 10,
+          "bounds": [
+            71,
+            135,
+            315,
+            195
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 11,
+          "bounds": [
+            152,
+            72,
+            231,
+            254
+          ],
+          "inside_margin": true
+        },
+        {
+          "cell": 12,
+          "bounds": [
+            102,
+            106,
+            278,
+            222
+          ],
+          "inside_margin": true
+        }
+      ]
+    }
+  ]
+}

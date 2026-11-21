@@ -1977,6 +1977,8 @@ hang over the road the way the city's trees do.
 
 ## Supplied art
 
+The detailed pixel-art source pilot is documented in [pixel art batch 1](docs/pixel-art-batch-1/README.md): 29 paintings, preserved originals, exact-size exports, review sheets and explicit conversion/registration findings. The current painted runtime remains available while that pilot is converted and reviewed.
+
 After the fourth milestone the look changed to a brighter, more mystical fantasy, from pictures I
 made with ChatGPT: the title, the capital, Questeria, and the people in it. They're in
 `tools/source/`, and `tools/cut_supplied.py` cuts them into the game's layouts, the way The Black

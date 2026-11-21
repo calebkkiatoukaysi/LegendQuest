@@ -1,0 +1,13 @@
+{
+  "layer_stack_mean_absolute_rgb_difference": 7.444099426269531,
+  "layer_stack_fraction_over_32": 0.04485638936360677,
+  "layer_stack_uncovered_pixels": 0,
+  "registration_notes": [
+    "Deck floor begins approximately y688 rather than guide y656 after generator fit retries; fit before runtime import.",
+    "Horizon approximately y508, guide y512.",
+    "Male neck ends y581 rather than guide collar line600; register neck and collar together.",
+    "Collar has a raised upper edge; use actual mask rather than assuming all paint is below600.",
+    "Seagull body/head positions and drawn sizes need registration before animation; cells are all safely bounded.",
+    "Layer extraction preserves the visual composition but is not pixel-identical; see numeric difference and diagnostic stack."
+  ]
+}
