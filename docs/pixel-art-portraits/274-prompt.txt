@@ -1,0 +1,5 @@
+Edit the attached neutral portrait for this character. Change ONLY the variant described below, keeping the same person's identity, neutral expression, pixel grid, size, position and front-facing framing. Paint new clothing and details on the same coarse96by96 grid of big square pixels, with flat three-or-four-tone cel shading and dark brown-violet outlines. No fine texture, fabric weave, grain, gradients, smoothing or smaller pixels. Keep the flat #00FF00 background. Give it back at exactly1024by1024pixels.
+
+VARIANT. An echo of the teacher Mira knew. Change: dark-brown hair, a short dark beard, a firmer veteran's face, plain brown-and-charcoal scholar's robes with the sleeves pushed up, ink on his fingers, oil-lamp light. An echo from the past: paint him solid and in full colour; the game tints echoes.
+
+I'll save it as portrait-maleficio-young.neutral.png.
