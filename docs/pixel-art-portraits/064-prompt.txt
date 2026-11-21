@@ -1,0 +1,5 @@
+Edit the attached neutral portrait for this character. Change ONLY the variant described below, keeping the same person's identity, neutral expression, pixel grid, size, position and front-facing framing. Paint new clothing and details on the same coarse96by96 grid of big square pixels, with flat three-or-four-tone cel shading and dark brown-violet outlines. No fine texture, fabric weave, grain, gradients, smoothing or smaller pixels. Keep the flat #00FF00 background. Give it back at exactly1024by1024pixels.
+
+VARIANT. Act 3, if Kael joins the Protectorate. Change: hood down, short messy black hair; finer black leathers with violet piping, a long high-collared black coat, a violet sash with a gold crown badge, a black leather half-mask pulled down round the neck; colder eyes.
+
+I'll save it as portrait-kael-shadow.neutral.png.

@@ -1,0 +1,5 @@
+Edit the attached neutral portrait for this character. Change ONLY the variant described below, keeping the same person's identity, neutral expression, pixel grid, size, position and front-facing framing. Keep the flat #00FF00 background. Give it back at exactly1024by1024pixels.
+
+VARIANT. The epilogue. Change: his left arm in a plain linen sling across his chest; everything else the same.
+
+I'll save it as portrait-brannock-sling.neutral.png.

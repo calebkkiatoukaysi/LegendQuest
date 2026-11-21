@@ -1,0 +1,5 @@
+Edit the attached neutral portrait for this character. Change ONLY the variant described below, keeping the same person's identity, neutral expression, pixel grid, size, position and front-facing framing. Keep the flat #00FF00 background. Give it back at exactly1024by1024pixels.
+
+VARIANT. From Act 3, Chapter 2. Change: the beard braid hangs loose with no clasps; everything else the same.
+
+I'll save it as portrait-brannock-clasps-gone.neutral.png.
