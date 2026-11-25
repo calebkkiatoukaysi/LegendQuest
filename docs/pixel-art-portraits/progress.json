@@ -513,9 +513,46 @@
     510,
     511,
     512,
-    513
+    513,
+    514,
+    515,
+    516,
+    517,
+    518,
+    519,
+    520,
+    521,
+    522,
+    523,
+    524,
+    525,
+    526,
+    527,
+    528,
+    529,
+    530,
+    531,
+    532,
+    533,
+    534,
+    535,
+    536,
+    537,
+    538,
+    539,
+    540,
+    541,
+    542,
+    543,
+    544,
+    545,
+    546,
+    547,
+    548,
+    549,
+    550
   ],
-  "next_number": 514,
+  "next_number": 551,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -12275,6 +12312,820 @@
       "source_sha256": "21a4905ae22098335a96114fab85ce34cd6a6576e9a775a90119a5ebc63e6557",
       "export_sha256": "93fad2fc37d9ac975f752acc1fdd12097b630ae74b9a843617feba3c626600d9",
       "prompt": "docs/pixel-art-portraits/513-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 514,
+      "filename": "portrait-tobin.neutral.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "original": "art/pixel-portraits/originals/tobin/514-portrait-tobin.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3f2a78f7e071530447be6febbf0999c8734ab61b73e7fc0cd41910706bb6d163",
+      "export_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "prompt": "docs/pixel-art-portraits/514-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 515,
+      "filename": "portrait-tobin.angry.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.angry.png",
+      "original": "art/pixel-portraits/originals/tobin/515-portrait-tobin.angry.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "220cd2f7f3aadf1c8ad230e205628843d534ee8b48152c41c1868b1563cdf2c9",
+      "export_sha256": "36a93365a47539c77222b5b9e1c14edb7861800809448e65feeff9ceb08e9bca",
+      "prompt": "docs/pixel-art-portraits/515-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 516,
+      "filename": "portrait-tobin.disgust.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.disgust.png",
+      "original": "art/pixel-portraits/originals/tobin/516-portrait-tobin.disgust.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "49567d92218d36800711de4f6989b98ec80041c703acb6ceedb747b8d8d67009",
+      "export_sha256": "48c280ee68a2cf9b02fecfa30a1a1af0fecda9df41044d5b054d9af7de7f78e0",
+      "prompt": "docs/pixel-art-portraits/516-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 517,
+      "filename": "portrait-tobin.smile.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.smile.png",
+      "original": "art/pixel-portraits/originals/tobin/517-portrait-tobin.smile.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9ff1424cdec947711cbe05ca9f0e151626e6548b1f36c7bb7a2228d1a9db2b13",
+      "export_sha256": "4ffc127ba4588e89fec4ff6020b40c4d8dffa83fedf614b201812d800a074cc8",
+      "prompt": "docs/pixel-art-portraits/517-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 518,
+      "filename": "portrait-tobin.laugh.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.laugh.png",
+      "original": "art/pixel-portraits/originals/tobin/518-portrait-tobin.laugh.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5cb2a39baf6d67906649e6c067c7e6812706f8daa838e4673d6003c9eddda91e",
+      "export_sha256": "03b1a8bd5b3db84ca46acb90064ca258f6e975bc3dffd59861bb25053bea3649",
+      "prompt": "docs/pixel-art-portraits/518-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 519,
+      "filename": "portrait-tobin.sad.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.sad.png",
+      "original": "art/pixel-portraits/originals/tobin/519-portrait-tobin.sad.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ce8c3a7dbd0f7d369f22049e406a1d2dafc03e1aaa0ad487539d1d1558006a2a",
+      "export_sha256": "f26e3f8e6a2ea91a9b51e13fde2ae8f8f10114d81fcb8ce323d98590b5637a42",
+      "prompt": "docs/pixel-art-portraits/519-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 520,
+      "filename": "portrait-tobin.shock.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.shock.png",
+      "original": "art/pixel-portraits/originals/tobin/520-portrait-tobin.shock.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ee903dfac1c4c7d6f71d45485335aa38bc4b02699bc8c8a07523556d2b841264",
+      "export_sha256": "ea65349c46904a9334eefc6d747aab13014a3a11c7e60d16c274547e04cd3453",
+      "prompt": "docs/pixel-art-portraits/520-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 521,
+      "filename": "portrait-tobin.worried.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.worried.png",
+      "original": "art/pixel-portraits/originals/tobin/521-portrait-tobin.worried.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7e4290a910924c9f1cebc4b58f283577491668fbe4c57d8ad0e2eb4c2eff65f0",
+      "export_sha256": "8da3aa61af6b4a56eccccff17578e8c382973ded678d87bd4fe6d9da2c254637",
+      "prompt": "docs/pixel-art-portraits/521-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 522,
+      "filename": "portrait-tobin-levy.neutral.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.neutral.png",
+      "original": "art/pixel-portraits/originals/tobin/522-portrait-tobin-levy.neutral.png",
+      "reference_number": 514,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin.neutral.png",
+      "reference_sha256": "a4fa83c006c49ab997b4fbf857c61d78e223e91157cb5d5cf7cab024f09961e0",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3247571ff8a1a92567a43c0f4557eab20731941c44cf3b90f22291c2ace8470c",
+      "export_sha256": "0ccf59f07c6c0bc66ae0f97b7106e3ffc90b8f3525852fcd411c84d4f0ffb132",
+      "prompt": "docs/pixel-art-portraits/522-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 523,
+      "filename": "portrait-tobin-levy.tired.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.tired.png",
+      "original": "art/pixel-portraits/originals/tobin/523-portrait-tobin-levy.tired.png",
+      "reference_number": 522,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.neutral.png",
+      "reference_sha256": "0ccf59f07c6c0bc66ae0f97b7106e3ffc90b8f3525852fcd411c84d4f0ffb132",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3e53458edcca89ee4570455e16fbc3a13842fc90b7bca17dbed8fe2cd4a9008a",
+      "export_sha256": "11da439a166b230cfae1b8364fbec3fd6db275ab099d791680616b1e06ff41f3",
+      "prompt": "docs/pixel-art-portraits/523-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 524,
+      "filename": "portrait-tobin-levy.sad.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.sad.png",
+      "original": "art/pixel-portraits/originals/tobin/524-portrait-tobin-levy.sad.png",
+      "reference_number": 522,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.neutral.png",
+      "reference_sha256": "0ccf59f07c6c0bc66ae0f97b7106e3ffc90b8f3525852fcd411c84d4f0ffb132",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a316b8e1262417adcc63ae08deb3c6fc508e1b9b471770e268fb0f9d779d70aa",
+      "export_sha256": "8552a1e45a3b507ea3a7242647d9111bd85e7e6ff3be91f428ab149b4c8816d2",
+      "prompt": "docs/pixel-art-portraits/524-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 525,
+      "filename": "portrait-tobin-levy.shock.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.shock.png",
+      "original": "art/pixel-portraits/originals/tobin/525-portrait-tobin-levy.shock.png",
+      "reference_number": 522,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.neutral.png",
+      "reference_sha256": "0ccf59f07c6c0bc66ae0f97b7106e3ffc90b8f3525852fcd411c84d4f0ffb132",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8e3610ae973f5f8c1ef1730fe29c88a6bc2bd63a8cded1fffd5a3e2983d1b00c",
+      "export_sha256": "19dd5df62a124724b4acc5df30004d1e2f1e1fe60ebe8336070174b6bf37d98b",
+      "prompt": "docs/pixel-art-portraits/525-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 526,
+      "filename": "portrait-tobin-levy.smile.png",
+      "path": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.smile.png",
+      "original": "art/pixel-portraits/originals/tobin/526-portrait-tobin-levy.smile.png",
+      "reference_number": 522,
+      "reference": "tools/source/pixel/portraits/tobin/front-facing/portrait-tobin-levy.neutral.png",
+      "reference_sha256": "0ccf59f07c6c0bc66ae0f97b7106e3ffc90b8f3525852fcd411c84d4f0ffb132",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d5ffec830fe8666ea21f6ce87343659230567701faa867b3fb872ee758494624",
+      "export_sha256": "84328736964c9b68ab07b5ae6ba13535ecc62c05a3841eb71ac40c75b0e2e186",
+      "prompt": "docs/pixel-art-portraits/526-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 527,
+      "filename": "portrait-hobb.neutral.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "original": "art/pixel-portraits/originals/hobb/527-portrait-hobb.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7f9e76ed696cc57e0d06087f6706e8014faf5fa5375b57f57b56d2d4267711e6",
+      "export_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "prompt": "docs/pixel-art-portraits/527-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 528,
+      "filename": "portrait-hobb.angry.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.angry.png",
+      "original": "art/pixel-portraits/originals/hobb/528-portrait-hobb.angry.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a4af25fe0801134927f1ef79e2f1762215011c04c0a0b6f8edb9549f1e83b420",
+      "export_sha256": "3689137c763d81c31a874b989e2d88c8935a68c525bd807fbf1fa711a7ea1f4c",
+      "prompt": "docs/pixel-art-portraits/528-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 529,
+      "filename": "portrait-hobb.disgust.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.disgust.png",
+      "original": "art/pixel-portraits/originals/hobb/529-portrait-hobb.disgust.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c73728c311bda8fb1d2b8555c6da56adddc3004f614dfb495168e1f0b0146ae4",
+      "export_sha256": "74f177b094a364cc523684220f00bb613205ef19cc9e9ac0077e3f3fffc4009d",
+      "prompt": "docs/pixel-art-portraits/529-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 530,
+      "filename": "portrait-hobb.smile.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.smile.png",
+      "original": "art/pixel-portraits/originals/hobb/530-portrait-hobb.smile.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7741fc4c3589603c620038aac70d5f0217064250fa3342ce436c948822dd3c48",
+      "export_sha256": "867f2de2d029b694a30054ec7d1c21c199de456ed2d5780a4723c5c8c0bb404e",
+      "prompt": "docs/pixel-art-portraits/530-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 531,
+      "filename": "portrait-hobb.laugh.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.laugh.png",
+      "original": "art/pixel-portraits/originals/hobb/531-portrait-hobb.laugh.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d798992d66b4874f03fcd4a0d1992d5a9ed1f102df8c00c0c4fefb728d1db57c",
+      "export_sha256": "b2e89800d70739f4bda9bf6a06a4331028acf55dc5fcad719bce3881fb6d4edb",
+      "prompt": "docs/pixel-art-portraits/531-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 532,
+      "filename": "portrait-hobb.sad.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.sad.png",
+      "original": "art/pixel-portraits/originals/hobb/532-portrait-hobb.sad.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7b6085641ff296ab5a24b79ac2ef09fb9fe8bcbbec4b405d0db834ddb89d9251",
+      "export_sha256": "84463af19140103c385d6e81a5ed4517e9941f9367c13c641ae3d10d72151f17",
+      "prompt": "docs/pixel-art-portraits/532-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 533,
+      "filename": "portrait-hobb.shock.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.shock.png",
+      "original": "art/pixel-portraits/originals/hobb/533-portrait-hobb.shock.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3b65b5bffa41a1e47f5d8252a60ae9f25f1bd1c25a6e4210dd873db458b3ba1b",
+      "export_sha256": "2bc2faa4f18ea3d98be14a3ff1c3a34e97af4792c7a3113e1fbcf592e8adbec1",
+      "prompt": "docs/pixel-art-portraits/533-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 534,
+      "filename": "portrait-hobb.worried.png",
+      "path": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.worried.png",
+      "original": "art/pixel-portraits/originals/hobb/534-portrait-hobb.worried.png",
+      "reference_number": 527,
+      "reference": "tools/source/pixel/portraits/hobb/front-facing/portrait-hobb.neutral.png",
+      "reference_sha256": "e6e741da027fe9e19f73d59bba587af6f884d0fc8d2151c58612aba2eae36001",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c63d4e904efbd28d065f89c0144f8c7ef41d71090fcb622df9b22e8e7ba9c1d6",
+      "export_sha256": "70a5ea47a3f15ae53945cad5187a063df6048b34e4797130f10788f473edcbc4",
+      "prompt": "docs/pixel-art-portraits/534-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 535,
+      "filename": "portrait-mags.neutral.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "original": "art/pixel-portraits/originals/mags/535-portrait-mags.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "89178f0db2e4555e69f14e936d14093a292ab9b818ba45d4c598bc12bdb77fe1",
+      "export_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "prompt": "docs/pixel-art-portraits/535-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 536,
+      "filename": "portrait-mags.angry.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.angry.png",
+      "original": "art/pixel-portraits/originals/mags/536-portrait-mags.angry.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7a1078ed4c834ee5ecf39c3f8b15182b1ed52ff2405dd8d4fbad7c39021cb583",
+      "export_sha256": "e9df60713def23ad54cb9c99b98c0b78282fff800ec85727ae792b05fc428f61",
+      "prompt": "docs/pixel-art-portraits/536-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 537,
+      "filename": "portrait-mags.disgust.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.disgust.png",
+      "original": "art/pixel-portraits/originals/mags/537-portrait-mags.disgust.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0f41d119c4f1b09439aa07094b14a200e556d18ce7f0267d47f46516c510dc4a",
+      "export_sha256": "3319e90f1036b43c0b4e75b59a8ea936ef66eb4fe5fb9291aaad520f85313757",
+      "prompt": "docs/pixel-art-portraits/537-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 538,
+      "filename": "portrait-mags.smile.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.smile.png",
+      "original": "art/pixel-portraits/originals/mags/538-portrait-mags.smile.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2cda109c59d9ceba3b8a71d409515fe2a6232b20c98daaa068cf8040bbca8495",
+      "export_sha256": "9d9e216263ea4ffd1be53cdb4a181f0b9bc925a3a522946f8fe856d97a8e9045",
+      "prompt": "docs/pixel-art-portraits/538-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 539,
+      "filename": "portrait-mags.laugh.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.laugh.png",
+      "original": "art/pixel-portraits/originals/mags/539-portrait-mags.laugh.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2d07d0e6800a7b113dbfceec5b04f0055ebdfd80a0a80d9b33e2c7742d326c8a",
+      "export_sha256": "8817818e384b1cd07d76a68fcc759f13133b2e6d5aa72665eaed7f7789505173",
+      "prompt": "docs/pixel-art-portraits/539-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 540,
+      "filename": "portrait-mags.sad.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.sad.png",
+      "original": "art/pixel-portraits/originals/mags/540-portrait-mags.sad.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "40178165143d37f271271f9657a274a1f744a4596d42faf8cf4474426db35096",
+      "export_sha256": "1b942d982a41e1a09b42c81d84c576c4da1a93afecacecca2df7f3cf9719535a",
+      "prompt": "docs/pixel-art-portraits/540-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 541,
+      "filename": "portrait-mags.shock.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.shock.png",
+      "original": "art/pixel-portraits/originals/mags/541-portrait-mags.shock.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d4cd2efdeab430747c7900b84b9b799e114bd62e2a4fb9ceaf2751aad3146d4a",
+      "export_sha256": "aee5ba66176b44d4095d31a8dca4087a5cfa2179127d260c99bfd424b8a815c3",
+      "prompt": "docs/pixel-art-portraits/541-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 542,
+      "filename": "portrait-mags.worried.png",
+      "path": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.worried.png",
+      "original": "art/pixel-portraits/originals/mags/542-portrait-mags.worried.png",
+      "reference_number": 535,
+      "reference": "tools/source/pixel/portraits/mags/front-facing/portrait-mags.neutral.png",
+      "reference_sha256": "536f1b68c5a7d0b38bb8d6c50bcb0ff57b5c9afd292ca2dea779f72eb3a7ff10",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "11792734a3e32e51ad233b1a2a5ad5bf131899e2ad03a6ac9a96de6af648b537",
+      "export_sha256": "f0a90679d76b2341fc7ccc636b754f0c5698ed6ec4204b117242bbf43e91e3d5",
+      "prompt": "docs/pixel-art-portraits/542-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 543,
+      "filename": "portrait-pell.neutral.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "original": "art/pixel-portraits/originals/pell/543-portrait-pell.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c73485b2e0ff5e2efb5b1b967a44c61152707c840aeb6725fb49e5d99a609f19",
+      "export_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "prompt": "docs/pixel-art-portraits/543-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 544,
+      "filename": "portrait-pell.angry.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.angry.png",
+      "original": "art/pixel-portraits/originals/pell/544-portrait-pell.angry.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "665af9234b2d036f3a9099d1de26e55544ffecaf01806491bf1b37e51641abde",
+      "export_sha256": "1ba063ea278a4b71a16cced9cd68dcca2d3a5b37d0808c83aff4658f18fafd70",
+      "prompt": "docs/pixel-art-portraits/544-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 545,
+      "filename": "portrait-pell.disgust.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.disgust.png",
+      "original": "art/pixel-portraits/originals/pell/545-portrait-pell.disgust.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0156036624e9a162d36f426c2e5114146d3de42251cf3afbeb122991770addcd",
+      "export_sha256": "cf72dade6f53232fbddcef7be9ce05900fdbdc1c81867523b134a4d8bb6ef70f",
+      "prompt": "docs/pixel-art-portraits/545-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 546,
+      "filename": "portrait-pell.smile.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.smile.png",
+      "original": "art/pixel-portraits/originals/pell/546-portrait-pell.smile.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "361d3cab89b6b09968df7bf124e0ad2d93dc054393c64ba51e4cf3fad45a9628",
+      "export_sha256": "46c8775cb49596ab7e1d417200e39eb0c5a122d7d23d940877104cbdc29676f1",
+      "prompt": "docs/pixel-art-portraits/546-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 547,
+      "filename": "portrait-pell.laugh.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.laugh.png",
+      "original": "art/pixel-portraits/originals/pell/547-portrait-pell.laugh.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a7c31c327c52b45c31acd0c1734ff05d60964b5874fb44e432e19197486a8331",
+      "export_sha256": "14b32c1741648ea03af6124beca5aa8e2ba0178ab1b9f370568b5d0642d15759",
+      "prompt": "docs/pixel-art-portraits/547-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 548,
+      "filename": "portrait-pell.sad.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.sad.png",
+      "original": "art/pixel-portraits/originals/pell/548-portrait-pell.sad.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8ee4de6d22a9e970552b50f1b9f4e28acfa103d0b7f60e0d503c2bee64eda444",
+      "export_sha256": "0ffaeffe917059075a41ca98a64d17cd46c6a5e90a899792c2f7181bf7d70756",
+      "prompt": "docs/pixel-art-portraits/548-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 549,
+      "filename": "portrait-pell.shock.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.shock.png",
+      "original": "art/pixel-portraits/originals/pell/549-portrait-pell.shock.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f84ae63e6958c36e9955d8b7821d53020e3b1bba94400090523f7816976bf08d",
+      "export_sha256": "f1893092da99e789df0578ed35f5f5d2cb004841238285f7b5e1c640f87e6670",
+      "prompt": "docs/pixel-art-portraits/549-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 550,
+      "filename": "portrait-pell.worried.png",
+      "path": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.worried.png",
+      "original": "art/pixel-portraits/originals/pell/550-portrait-pell.worried.png",
+      "reference_number": 543,
+      "reference": "tools/source/pixel/portraits/pell/front-facing/portrait-pell.neutral.png",
+      "reference_sha256": "e37f09cb6983b809d77e3921414829f2416cee743fee9c02c2ed767ce1f069de",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ea799094e41fa1341ffb0be81f5ecef1c93f7efe84104b6992d4545eca8ff28c",
+      "export_sha256": "10a12265ec9b05a85c1fe3c0281047bad78f683a0f9d3c80ed886879e00acd28",
+      "prompt": "docs/pixel-art-portraits/550-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
