@@ -16,13 +16,18 @@ namespace LegendQuest.Characters;
 /// main thread (their textures), as many as fit in WarmBudgetMs, and kept with the rest (Built). By the
 /// time a player is through the title and the creation screen they're all made. A figure asked for
 /// before its turn is made at once, as before, or, if it's being put together already, waited for. The
-/// proof run makes them all at once as it starts (Synchronous), in parallel, so its shots and timings
-/// don't depend on how fast it got through the menus.
+/// proof run makes them all as it starts (Synchronous), in parallel, so its shots and timings don't
+/// depend on how fast it got through the menus: a few at a time (WarmBatch), each made into its figure
+/// before the next few are put together, since a figure at the parts' full size is ten or twenty
+/// megabytes and all of them at once came to more than three gigabytes.
 /// </remarks>
 public static partial class PartCatalog
 {
     /// <summary>How many recipes are put together at once in the background.</summary>
     private const int MostWarming = 2;
+
+    /// <summary>How many recipes the proof run puts together at once before making them into figures.</summary>
+    private const int WarmBatch = 4;
 
     /// <summary>How long a frame may spend making finished figures' textures.</summary>
     private const double WarmBudgetMs = 3.0;
@@ -45,11 +50,18 @@ public static partial class PartCatalog
             if (!Built.ContainsKey(outfit.Key)) outfits.Add(outfit);
         if (Synchronous)
         {
-            var made = new (RigComposer.Result Result, bool HasBody, float RigPx, string Base)?[outfits.Count];
-            Parallel.For(0, outfits.Count, new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, Math.Min(4, Environment.ProcessorCount)) },
-                i => made[i] = Composed(outfits[i]));
-            for (int i = 0; i < outfits.Count; i++)
-                if (!Built.ContainsKey(outfits[i].Key)) Keep(outfits[i], made[i]);
+            var made = new (RigComposer.Result Result, bool HasBody, float RigPx, string Base)?[WarmBatch];
+            var options = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, Math.Min(WarmBatch, Environment.ProcessorCount)) };
+            for (int start = 0; start < outfits.Count; start += WarmBatch)
+            {
+                int count = Math.Min(WarmBatch, outfits.Count - start);
+                Parallel.For(0, count, options, i => made[i] = Composed(outfits[start + i]));
+                for (int i = 0; i < count; i++)
+                {
+                    if (!Built.ContainsKey(outfits[start + i].Key)) Keep(outfits[start + i], made[i]);
+                    made[i] = null;
+                }
+            }
             return;
         }
         foreach (Outfit outfit in outfits) ToWarm.Enqueue(outfit);
