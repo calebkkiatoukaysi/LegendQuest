@@ -111,7 +111,8 @@ public partial class ExploreScreen
     /// <summary>
     /// The harbour: the ship sailing in with the two of you on deck, the sail coming in, tied up, the
     /// plank going out, the walk ashore and Act 1's card, each on the arrival's own clock; then the red
-    /// "!" over the Red Gulls and a walk east into them (talked down, with the dice, and Grell let
+    /// "!" over the Red Gulls, a rest (R) to get back what the sea-wraiths took, as a player would
+    /// before walking into a fight, and a walk east into them (talked down, with the dice, and Grell let
     /// off), the fight, Captain Hale, and on through the fish market and up into the city.
     /// </summary>
     private IEnumerable<ProofBeat> DocksBeats()
@@ -141,6 +142,8 @@ public partial class ExploreScreen
             Answer(1, 0),
             Wait(30),
             Shot("docks-event.png"),
+            Do(() => { if (AnyoneHurt()) StartResting(); }),
+            WaitFor(() => !_resting),
             Walk(ProofIntoTheGulls),
             ReadUntil(() => _game.Flags.Contains(Act1Chapter1.DocksDone), (Thrown, "docks-throw.png"), (Rolled, "docks-check.png"), ("red-gull", "docks-gulls.png"), ("hale", "docks-hale.png")),
             Wait(40),

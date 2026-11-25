@@ -236,7 +236,7 @@ A buff, debuff, damage or healing over time is an **aura**: an icon with its tim
 
 ### 4.5 Ranks
 
-A class's rank, 1 to 10, unlocks its slots as `10-classes.md` §1.3 says. Class points come from fights: a random fight 15, a story fight 35, a boss 80. The rank is kept per person per class in the save.
+A class's rank, 1 to 10, unlocks its slots as `10-classes.md` §1.3 says. Class points come from fights: a random fight 15, a story fight 35 (the tutorial at sea 40, so you reach the docks at rank 2), a boss 80. The rank is kept per person per class in the save.
 
 ---
 

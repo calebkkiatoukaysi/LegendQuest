@@ -25,6 +25,13 @@ public static class ClassRanks
     /// <summary>What a story fight's worth.</summary>
     public const int StoryFight = 35;
 
+    /// <summary>
+    /// What the tutorial at sea is worth: exactly rank 2, so you come ashore with your second skill.
+    /// There's no random fight between it and the docks, and the Red Gulls are tuned for rank 2
+    /// (at rank 1 a Shadowstep wins them about one time in five on Balanced).
+    /// </summary>
+    public const int TutorialFight = 40;
+
     /// <summary>What a boss is worth: a mini-boss, a boss or the Sovereign.</summary>
     public const int BossFight = 80;
 
@@ -67,6 +74,7 @@ public static class ClassRanks
     public static int Award(EncounterKind kind) => kind switch
     {
         EncounterKind.Random => RandomFight,
+        EncounterKind.Tutorial => TutorialFight,
         EncounterKind.MiniBoss or EncounterKind.Boss or EncounterKind.Sovereign => BossFight,
         _ => StoryFight,
     };

@@ -28,14 +28,18 @@ namespace LegendQuest.Combat.Realtime;
 /// <para>
 /// Run r of a fight is seeded Pcg32.Mix(Seed, the fight's id's hash, r), so a single run can be
 /// replayed on its own. The party is the one the story would have there: you as a Swordhand, the
-/// Soul-Bound as a Shadowstep, and the companions with you by then, at the story's level and rank,
-/// with two healing potions in the bag.
+/// Soul-Bound as a Shadowstep (or the classes given after an "@", yours and then, after a "+", the
+/// Soul-Bound's), and the companions with you by then, at the story's level and rank, with two
+/// healing potions in the bag.
 /// </para>
 /// </remarks>
 public static partial class BattleSimulator
 {
     /// <summary>How many runs --simulate does when it isn't told.</summary>
     public const int DefaultRuns = 200;
+
+    /// <summary>The class the Soul-Bound fights as, when --simulate was given one after a "+"; null for the usual Shadowstep.</summary>
+    private static ClassId? SoulBoundAs;
 
     /// <summary>What --simulate takes for every encounter.</summary>
     public const string Everything = "all";
@@ -98,19 +102,26 @@ public static partial class BattleSimulator
             return SelfTests.TraceSkill(SkillCatalog.Get(what.Substring(SkillTrace.Length)));
         if (what.StartsWith(Trace, StringComparison.Ordinal))
         {
-            // trace:<encounter>, or trace:<encounter>@<class code> to put that class in your place.
+            // trace:<encounter>, or trace:<encounter>@<class code> to put that class in your place
+            // (and @<class code>+<class code> the second in the Soul-Bound's).
             string[] parts = what.Substring(Trace.Length).Split('@');
-            ClassDefinition youAs = parts.Length > 1 ? ClassCatalog.ByCode(parts[1]) : null;
+            string[] traced = parts.Length > 1 ? parts[1].Split('+') : Array.Empty<string>();
+            ClassDefinition youAs = traced.Length > 0 ? ClassCatalog.ByCode(traced[0]) : null;
+            if (traced.Length == 2 && ClassCatalog.ByCode(traced[1]) is ClassDefinition bound) SoulBoundAs = bound.Id;
             if (EncounterCatalog.Exists(parts[0]) && (parts.Length == 1 || youAs is not null))
                 return RunTrace(EncounterCatalog.Get(parts[0]), runs == DefaultRuns ? 0 : runs, difficulty, youAs?.Id);
         }
 
-        // <encounter>@<class code> fights one encounter with that class in your place.
+        // <encounter>@<class code> fights one encounter with that class in your place, and
+        // <encounter>@<class code>+<class code> puts the second in the Soul-Bound's.
         ClassId? asClass = null;
-        if (what.Split('@') is [string fight, string code] && EncounterCatalog.Exists(fight) && ClassCatalog.ByCode(code) is ClassDefinition chosen)
+        if (what.Split('@') is [string fight, string code] && EncounterCatalog.Exists(fight)
+            && code.Split('+') is var codes && codes.Length <= 2 && ClassCatalog.ByCode(codes[0]) is ClassDefinition chosen
+            && (codes.Length == 1 || ClassCatalog.ByCode(codes[1]) is not null))
         {
             what = fight;
             asClass = chosen.Id;
+            SoulBoundAs = codes.Length == 2 ? ClassCatalog.ByCode(codes[1]).Id : null;
         }
 
         List<EncounterDefinition> fights;
@@ -180,6 +191,13 @@ public static partial class BattleSimulator
         }
         PartyMember soulBound = Origins.Create(Origins.SoulBound);
         soulBound.Name = "Soul-Bound";
+        if (SoulBoundAs is ClassId bound && bound != soulBound.Class)
+        {
+            soulBound.Class = bound;
+            soulBound.Scores = ClassCatalog.Get(bound).Recommended;
+            soulBound.Equipment.Clear();
+            soulBound.PutOn(Origins.KitFor(Origins.SoulBound, bound));
+        }
 
         var party = new List<PartyMember> { you, soulBound };
         if (Companions.TryGetValue(encounter.Id, out string[] companions))

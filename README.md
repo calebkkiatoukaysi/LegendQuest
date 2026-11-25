@@ -812,6 +812,7 @@ dotnet run -- --simulate selftest                 # the engine's own checks
 dotnet run -- --simulate trace:a1-c3-02-raid 3    # run 3 of a fight, its whole log
 dotnet run -- --simulate trace:a1-c4-02-sappers@hourwarden   # the same with a class in your place
 dotnet run -- --simulate a1-c1-01-gulls@rogue 400 # one fight with a class in your place, a line a member
+dotnet run -- --simulate a1-c1-01-gulls@rogue+druid # the same with a class in the Soul-Bound's place too
 dotnet run -- --simulate skill:glasswright-refract # the self-test's scripted fight for one skill, its whole log
 ```
 

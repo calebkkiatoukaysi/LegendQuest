@@ -43,6 +43,7 @@ The equipped class earns **class points** (CP) from every fight it's equipped fo
 | Source | CP |
 | --- | --- |
 | A random fight | 15 |
+| The tutorial at sea | 40 (exactly rank 2, so you come ashore with your second skill) |
 | A story fight | 35 |
 | A boss | 80 |
 | A class trial (§4) | 60 |
