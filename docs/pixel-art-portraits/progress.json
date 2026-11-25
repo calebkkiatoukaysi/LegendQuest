@@ -656,9 +656,39 @@
     653,
     654,
     655,
-    656
+    656,
+    657,
+    658,
+    659,
+    660,
+    661,
+    662,
+    663,
+    664,
+    665,
+    666,
+    667,
+    668,
+    669,
+    670,
+    671,
+    672,
+    673,
+    674,
+    675,
+    676,
+    677,
+    678,
+    679,
+    680,
+    681,
+    682,
+    683,
+    684,
+    685,
+    686
   ],
-  "next_number": 657,
+  "next_number": null,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -15588,6 +15618,666 @@
       "source_sha256": "fbf84205f37260b3d218037bd007384e5848d92ec78c1a95f0f45f3e2e7cece2",
       "export_sha256": "d34f37e95061fc7a26be6f118001cfc9d46939ed6cdce010320175f8e3b49c55",
       "prompt": "docs/pixel-art-portraits/656-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 657,
+      "filename": "portrait-flower-seller.neutral.png",
+      "path": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.neutral.png",
+      "original": "art/pixel-portraits/originals/flower-seller/657-portrait-flower-seller.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ac7938c858f0b5df377011b0c1af72dd9b92032300f1182d39d66d13d807e986",
+      "export_sha256": "1c1ca94dfa8676321c0203a5dd845da46bf4d286e0c1214de7d1299d6764b91b",
+      "prompt": "docs/pixel-art-portraits/657-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 658,
+      "filename": "portrait-flower-seller.angry.png",
+      "path": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.angry.png",
+      "original": "art/pixel-portraits/originals/flower-seller/658-portrait-flower-seller.angry.png",
+      "reference_number": 657,
+      "reference": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.neutral.png",
+      "reference_sha256": "1c1ca94dfa8676321c0203a5dd845da46bf4d286e0c1214de7d1299d6764b91b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "1c5164a9574c5b3773c7038bfe8cf9620f170938a7ba74848fb8278c931b38d6",
+      "export_sha256": "afc7441ad5503b425c1cac86b7a0fd94a7cffe8c8d1893cb56842215508c9efa",
+      "prompt": "docs/pixel-art-portraits/658-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 659,
+      "filename": "portrait-flower-seller.disgust.png",
+      "path": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.disgust.png",
+      "original": "art/pixel-portraits/originals/flower-seller/659-portrait-flower-seller.disgust.png",
+      "reference_number": 657,
+      "reference": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.neutral.png",
+      "reference_sha256": "1c1ca94dfa8676321c0203a5dd845da46bf4d286e0c1214de7d1299d6764b91b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b34e4a8cc19732b2af5245eb872c502995c7f5384788aa944b2957f553ff3c97",
+      "export_sha256": "2c3ecc48218935c9e7b803e26627e2ee4ee6179e18186641517a76b12481248f",
+      "prompt": "docs/pixel-art-portraits/659-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 660,
+      "filename": "portrait-flower-seller.smile.png",
+      "path": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.smile.png",
+      "original": "art/pixel-portraits/originals/flower-seller/660-portrait-flower-seller.smile.png",
+      "reference_number": 657,
+      "reference": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.neutral.png",
+      "reference_sha256": "1c1ca94dfa8676321c0203a5dd845da46bf4d286e0c1214de7d1299d6764b91b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "87110861645424fc7c3225f5f39f5589f1fd355d07ceea8070731d0055b37d67",
+      "export_sha256": "ed052d41c7dcf7f5498253cd03f4d83b99ca421ade775984f60dc00ab882f40e",
+      "prompt": "docs/pixel-art-portraits/660-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 661,
+      "filename": "portrait-flower-seller.laugh.png",
+      "path": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.laugh.png",
+      "original": "art/pixel-portraits/originals/flower-seller/661-portrait-flower-seller.laugh.png",
+      "reference_number": 657,
+      "reference": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.neutral.png",
+      "reference_sha256": "1c1ca94dfa8676321c0203a5dd845da46bf4d286e0c1214de7d1299d6764b91b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8938be82bd5e645143bd0bfc45a6c28af3a9d778785d30482261d27de11cc09a",
+      "export_sha256": "e931c99bffe9d17b70262a06b96d54ec14f34583372e98590bba8630abd9c90f",
+      "prompt": "docs/pixel-art-portraits/661-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 662,
+      "filename": "portrait-flower-seller.sad.png",
+      "path": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.sad.png",
+      "original": "art/pixel-portraits/originals/flower-seller/662-portrait-flower-seller.sad.png",
+      "reference_number": 657,
+      "reference": "tools/source/pixel/portraits/flower-seller/front-facing/portrait-flower-seller.neutral.png",
+      "reference_sha256": "1c1ca94dfa8676321c0203a5dd845da46bf4d286e0c1214de7d1299d6764b91b",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3a7398518407e4599ed93fbe4956c3ab74cbaeef6cbc790eeeaa88e2e362e71f",
+      "export_sha256": "e906a94eb9f108e3ac46ea416f52a604f6d395a7dc4ff7941e35d2e8fd666134",
+      "prompt": "docs/pixel-art-portraits/662-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 663,
+      "filename": "portrait-lookout.neutral.png",
+      "path": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.neutral.png",
+      "original": "art/pixel-portraits/originals/lookout/663-portrait-lookout.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2d77b74d28b63116ee2195ecea1fd322a8f72242c1bd201c0212682f3986227d",
+      "export_sha256": "b0bf46bc7fc62702e6d275fc6903b734626cad4f54a2ae658bfae19683276b3a",
+      "prompt": "docs/pixel-art-portraits/663-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 664,
+      "filename": "portrait-lookout.angry.png",
+      "path": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.angry.png",
+      "original": "art/pixel-portraits/originals/lookout/664-portrait-lookout.angry.png",
+      "reference_number": 663,
+      "reference": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.neutral.png",
+      "reference_sha256": "b0bf46bc7fc62702e6d275fc6903b734626cad4f54a2ae658bfae19683276b3a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "aac91972fa551d9f13d86c56747e31ca3a7f252ca1e52255d306f1f2cf4150c6",
+      "export_sha256": "54e472691a0b64af9566f6d2641f4be6b0be2d586e65e8019bc9611ab3ef084d",
+      "prompt": "docs/pixel-art-portraits/664-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 665,
+      "filename": "portrait-lookout.disgust.png",
+      "path": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.disgust.png",
+      "original": "art/pixel-portraits/originals/lookout/665-portrait-lookout.disgust.png",
+      "reference_number": 663,
+      "reference": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.neutral.png",
+      "reference_sha256": "b0bf46bc7fc62702e6d275fc6903b734626cad4f54a2ae658bfae19683276b3a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "1a9ec4ff1f7a82b6e353167300ba79a5e47a1aece423313587f8042ff867595c",
+      "export_sha256": "751619c893513b44a43357189fc36f781ebbb4fc4bd5620c2ec009b73d376570",
+      "prompt": "docs/pixel-art-portraits/665-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 666,
+      "filename": "portrait-lookout.smile.png",
+      "path": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.smile.png",
+      "original": "art/pixel-portraits/originals/lookout/666-portrait-lookout.smile.png",
+      "reference_number": 663,
+      "reference": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.neutral.png",
+      "reference_sha256": "b0bf46bc7fc62702e6d275fc6903b734626cad4f54a2ae658bfae19683276b3a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d6f9335022805b7119d1d3ba600a8ad7d47875e4996e00d137c27a9d2c23b813",
+      "export_sha256": "da7e439d9fca493e47c03c6f933f36d9a7c4464d451d0c263437eddfee1faf13",
+      "prompt": "docs/pixel-art-portraits/666-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 667,
+      "filename": "portrait-lookout.laugh.png",
+      "path": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.laugh.png",
+      "original": "art/pixel-portraits/originals/lookout/667-portrait-lookout.laugh.png",
+      "reference_number": 663,
+      "reference": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.neutral.png",
+      "reference_sha256": "b0bf46bc7fc62702e6d275fc6903b734626cad4f54a2ae658bfae19683276b3a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4febe84deff7b02d63721bda725bb6186ee60f80aacfa797c0441e0b8d44e191",
+      "export_sha256": "ff881e53c5e5023dd7f816b20cf6385992b5b169de127282bb8b03474e566682",
+      "prompt": "docs/pixel-art-portraits/667-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 668,
+      "filename": "portrait-lookout.sad.png",
+      "path": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.sad.png",
+      "original": "art/pixel-portraits/originals/lookout/668-portrait-lookout.sad.png",
+      "reference_number": 663,
+      "reference": "tools/source/pixel/portraits/lookout/front-facing/portrait-lookout.neutral.png",
+      "reference_sha256": "b0bf46bc7fc62702e6d275fc6903b734626cad4f54a2ae658bfae19683276b3a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "58bd008feb854e254fda36dd865ed6ba7a85c9ffad5156315f13272cb84992e7",
+      "export_sha256": "76726abf8e2132d9d19a5fc7714f8bc02c9ec0204041d66536b82dd7624409c5",
+      "prompt": "docs/pixel-art-portraits/668-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 669,
+      "filename": "portrait-red-gull.neutral.png",
+      "path": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.neutral.png",
+      "original": "art/pixel-portraits/originals/red-gull/669-portrait-red-gull.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d70cd27f54aaee7feaaa4cf243f8daeb32c015ba3fc3fba43ee328d44b465340",
+      "export_sha256": "d852bde478e2d72c3214ae64d2eb0bf5e696f5cdf251a54043530dbc4f6e9ec3",
+      "prompt": "docs/pixel-art-portraits/669-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 670,
+      "filename": "portrait-red-gull.angry.png",
+      "path": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.angry.png",
+      "original": "art/pixel-portraits/originals/red-gull/670-portrait-red-gull.angry.png",
+      "reference_number": 669,
+      "reference": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.neutral.png",
+      "reference_sha256": "d852bde478e2d72c3214ae64d2eb0bf5e696f5cdf251a54043530dbc4f6e9ec3",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "15231d1c093c5c6d5d0b6be4eeec80956b361ada5f3f85e91a5f52c564681233",
+      "export_sha256": "25632a0ddaf436e406f2e4f93370fa40a663fbaa1db04c054059e73072896f09",
+      "prompt": "docs/pixel-art-portraits/670-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 671,
+      "filename": "portrait-red-gull.disgust.png",
+      "path": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.disgust.png",
+      "original": "art/pixel-portraits/originals/red-gull/671-portrait-red-gull.disgust.png",
+      "reference_number": 669,
+      "reference": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.neutral.png",
+      "reference_sha256": "d852bde478e2d72c3214ae64d2eb0bf5e696f5cdf251a54043530dbc4f6e9ec3",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "104afe2feb9baec3b23044f78b602ef930a4d8c8e3f37d564f2a7fb08a5c38b2",
+      "export_sha256": "c1e159e72e1f07165360e46e78720e6a5e3e0094df6fd59ba9abe6e962eda7cb",
+      "prompt": "docs/pixel-art-portraits/671-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 672,
+      "filename": "portrait-red-gull.smile.png",
+      "path": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.smile.png",
+      "original": "art/pixel-portraits/originals/red-gull/672-portrait-red-gull.smile.png",
+      "reference_number": 669,
+      "reference": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.neutral.png",
+      "reference_sha256": "d852bde478e2d72c3214ae64d2eb0bf5e696f5cdf251a54043530dbc4f6e9ec3",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6c298e8aa5157813261cfaa4e15d931f731dda9283c833c4653320fba7ded662",
+      "export_sha256": "86a39ac975986f90734ae22777d75574b35ef0d4508c769fde9a1b821a62b242",
+      "prompt": "docs/pixel-art-portraits/672-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 673,
+      "filename": "portrait-red-gull.laugh.png",
+      "path": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.laugh.png",
+      "original": "art/pixel-portraits/originals/red-gull/673-portrait-red-gull.laugh.png",
+      "reference_number": 669,
+      "reference": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.neutral.png",
+      "reference_sha256": "d852bde478e2d72c3214ae64d2eb0bf5e696f5cdf251a54043530dbc4f6e9ec3",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c83f1fcd78bace42c5e2225b490b92838cfb7495bd4ef93be30509113e8e15c5",
+      "export_sha256": "deea44592477fd4a6a15bcb30d5f89cb7573961dd9de863f92b66a2fdc08c497",
+      "prompt": "docs/pixel-art-portraits/673-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 674,
+      "filename": "portrait-red-gull.sad.png",
+      "path": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.sad.png",
+      "original": "art/pixel-portraits/originals/red-gull/674-portrait-red-gull.sad.png",
+      "reference_number": 669,
+      "reference": "tools/source/pixel/portraits/red-gull/front-facing/portrait-red-gull.neutral.png",
+      "reference_sha256": "d852bde478e2d72c3214ae64d2eb0bf5e696f5cdf251a54043530dbc4f6e9ec3",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "393dad8c24d6f82ef19f24ab7931fa1e7d7670803349e95c2de4620375be5a4c",
+      "export_sha256": "493fa53741ef4d43e47237e0a75afb2100a64f1679f991d1e618b4fd7f4e0c2b",
+      "prompt": "docs/pixel-art-portraits/674-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 675,
+      "filename": "portrait-royal-messenger.neutral.png",
+      "path": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.neutral.png",
+      "original": "art/pixel-portraits/originals/royal-messenger/675-portrait-royal-messenger.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "43989b92882809f0937715c68b4a65cde3d5c0871d96730c5f8efd3a972c08a3",
+      "export_sha256": "95daf31378beeb5dcdcb9c6852b2864daa37b14baa5d20c7df7be5d68591ab6e",
+      "prompt": "docs/pixel-art-portraits/675-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 676,
+      "filename": "portrait-royal-messenger.angry.png",
+      "path": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.angry.png",
+      "original": "art/pixel-portraits/originals/royal-messenger/676-portrait-royal-messenger.angry.png",
+      "reference_number": 675,
+      "reference": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.neutral.png",
+      "reference_sha256": "95daf31378beeb5dcdcb9c6852b2864daa37b14baa5d20c7df7be5d68591ab6e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b1fed242e43fa0c39d117e34e5b0523b0aaf25923484242395981ee688421a8b",
+      "export_sha256": "2fc8dea0171ea5223c4a729c2ef04317eb39b1e447cdb800d79ded186c2cd4cd",
+      "prompt": "docs/pixel-art-portraits/676-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 677,
+      "filename": "portrait-royal-messenger.disgust.png",
+      "path": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.disgust.png",
+      "original": "art/pixel-portraits/originals/royal-messenger/677-portrait-royal-messenger.disgust.png",
+      "reference_number": 675,
+      "reference": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.neutral.png",
+      "reference_sha256": "95daf31378beeb5dcdcb9c6852b2864daa37b14baa5d20c7df7be5d68591ab6e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "18182ad407be5e63b9d5cea46792ceb49fe3411cc8b67209a86b819d7e409541",
+      "export_sha256": "b2402d34470636306051c874b2b46d5d5b56e4db17c0297b101918336be124ed",
+      "prompt": "docs/pixel-art-portraits/677-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 678,
+      "filename": "portrait-royal-messenger.smile.png",
+      "path": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.smile.png",
+      "original": "art/pixel-portraits/originals/royal-messenger/678-portrait-royal-messenger.smile.png",
+      "reference_number": 675,
+      "reference": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.neutral.png",
+      "reference_sha256": "95daf31378beeb5dcdcb9c6852b2864daa37b14baa5d20c7df7be5d68591ab6e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "90ecb34686f6e1bb27dff0aca29d2c3b49ed65b2aef5305e67bc343c03397e65",
+      "export_sha256": "36396865850d9df8a288533f3ee327f4db43b459108d6766385494960a3706d3",
+      "prompt": "docs/pixel-art-portraits/678-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 679,
+      "filename": "portrait-royal-messenger.laugh.png",
+      "path": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.laugh.png",
+      "original": "art/pixel-portraits/originals/royal-messenger/679-portrait-royal-messenger.laugh.png",
+      "reference_number": 675,
+      "reference": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.neutral.png",
+      "reference_sha256": "95daf31378beeb5dcdcb9c6852b2864daa37b14baa5d20c7df7be5d68591ab6e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3964095b42baeff3cd11b9d36e3e6c9cb882480e40fd5da23398305236ee626a",
+      "export_sha256": "6e50df8b8dbb3f4571fb9e0d2437052fe3cdf4f869f98137183f489491b55923",
+      "prompt": "docs/pixel-art-portraits/679-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 680,
+      "filename": "portrait-royal-messenger.sad.png",
+      "path": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.sad.png",
+      "original": "art/pixel-portraits/originals/royal-messenger/680-portrait-royal-messenger.sad.png",
+      "reference_number": 675,
+      "reference": "tools/source/pixel/portraits/royal-messenger/front-facing/portrait-royal-messenger.neutral.png",
+      "reference_sha256": "95daf31378beeb5dcdcb9c6852b2864daa37b14baa5d20c7df7be5d68591ab6e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "893925915233b66796f304616b89a19811c2cbc142c1649dd5418b0ab1287b39",
+      "export_sha256": "24c6a58867d744eb916f0a0bc5f847217efaad6981992bf3b4ffec1db72e6483",
+      "prompt": "docs/pixel-art-portraits/680-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 681,
+      "filename": "portrait-royal-guard.neutral.png",
+      "path": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.neutral.png",
+      "original": "art/pixel-portraits/originals/royal-guard/681-portrait-royal-guard.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5e386c7bac6d52e5a0475346c532a30aaf5ad34f635b81690296e4165f62258c",
+      "export_sha256": "eeef0d671439fafb34fe0e0c6fc48cae3bee311052343d7a8e220bccdba70bef",
+      "prompt": "docs/pixel-art-portraits/681-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 682,
+      "filename": "portrait-royal-guard.angry.png",
+      "path": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.angry.png",
+      "original": "art/pixel-portraits/originals/royal-guard/682-portrait-royal-guard.angry.png",
+      "reference_number": 681,
+      "reference": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.neutral.png",
+      "reference_sha256": "eeef0d671439fafb34fe0e0c6fc48cae3bee311052343d7a8e220bccdba70bef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e065696ac45a7b33b4f504337f14696b2d313620d69f737594f4e94b36566f60",
+      "export_sha256": "68ff7ac67fca3af043a3636eb1f1c55c20cecfc417910de38ef10aacf2ca3726",
+      "prompt": "docs/pixel-art-portraits/682-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 683,
+      "filename": "portrait-royal-guard.disgust.png",
+      "path": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.disgust.png",
+      "original": "art/pixel-portraits/originals/royal-guard/683-portrait-royal-guard.disgust.png",
+      "reference_number": 681,
+      "reference": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.neutral.png",
+      "reference_sha256": "eeef0d671439fafb34fe0e0c6fc48cae3bee311052343d7a8e220bccdba70bef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "04b9af0476336f9f0a1623c0b15b408870fc4515c74504eebc9e96040580434b",
+      "export_sha256": "8c9638b9494e6b92d274884b828002e4cfa224d6bef58c2b71f5a8f495eb876f",
+      "prompt": "docs/pixel-art-portraits/683-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 684,
+      "filename": "portrait-royal-guard.smile.png",
+      "path": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.smile.png",
+      "original": "art/pixel-portraits/originals/royal-guard/684-portrait-royal-guard.smile.png",
+      "reference_number": 681,
+      "reference": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.neutral.png",
+      "reference_sha256": "eeef0d671439fafb34fe0e0c6fc48cae3bee311052343d7a8e220bccdba70bef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9dd80940fe3f6de7fc5e6be683f296dcb08346adba5d9f6817b57232c90f77fa",
+      "export_sha256": "4721ebf65a63c0dfe60840165faa15a7617197b9199c68df4bf079556a09c761",
+      "prompt": "docs/pixel-art-portraits/684-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 685,
+      "filename": "portrait-royal-guard.laugh.png",
+      "path": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.laugh.png",
+      "original": "art/pixel-portraits/originals/royal-guard/685-portrait-royal-guard.laugh.png",
+      "reference_number": 681,
+      "reference": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.neutral.png",
+      "reference_sha256": "eeef0d671439fafb34fe0e0c6fc48cae3bee311052343d7a8e220bccdba70bef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "844f0a25791ef8459ad861d6636248b82aea572fb3a57afe5b7e85d90f216e6c",
+      "export_sha256": "f227befb29e4596b069cd35802d8b5c295c416777366043432dca845ae2dab73",
+      "prompt": "docs/pixel-art-portraits/685-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 686,
+      "filename": "portrait-royal-guard.sad.png",
+      "path": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.sad.png",
+      "original": "art/pixel-portraits/originals/royal-guard/686-portrait-royal-guard.sad.png",
+      "reference_number": 681,
+      "reference": "tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.neutral.png",
+      "reference_sha256": "eeef0d671439fafb34fe0e0c6fc48cae3bee311052343d7a8e220bccdba70bef",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "875c99b6fd12b369cf6dd5d37f84c72a66b214e64e5f5794d7ebb9b9f4d52967",
+      "export_sha256": "9a4388c09b95e148eab87ac3b3af95aec036f3dea0bbdbfa6f610d07e418342f",
+      "prompt": "docs/pixel-art-portraits/686-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
