@@ -13,3 +13,5 @@ Checkpoint: 30/265 room source pictures saved and reviewed through Saltwind Harb
 Checkpoint: 45/265 saved and reviewed through Fish Market. Corrected panel 1 water depth to fill extraction gaps; retained the panel-specific Sunspire positions in panels 2 and 3; moved panel 3 foreground lamp to the left to clear the staircase. File, dimension and fingerprint checks passed. Next: Saltwind Pier.
 
 Checkpoint: 50/265 saved and reviewed through Saltwind Pier. Its foreground bollard was shifted to the central berth to clear the warehouse doors. Next: Questeria Gate Plaza.
+
+Checkpoint: 65/265 saved and reviewed through Gate Plaza. Removed spire ornament from first sky, extended distance water behind the gate, and narrowed foreground planters to clear doors and the festival arch. The third distance layer retains an arch-shaped patch of the festival view: its edges and fill behind the arch still need registration/parallax review. Exact key colour and palette remain pending as above. Next: Festival Square.

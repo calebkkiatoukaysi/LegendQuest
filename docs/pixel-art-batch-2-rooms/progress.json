@@ -1516,8 +1516,497 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 51,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e",
+      "export_sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/gate-plaza/bg-1.png",
+          "sha256": "d2ae2afb290842b91a076bbca0b9e570270ae3717627146f5301b6e36ab6ed25"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 52,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/revisions/052-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "2346ca9237a5c20c51480e4cfa2e5120b6996c968b0375fb16fff95b0d47b03f",
+      "export_sha256": "2346ca9237a5c20c51480e4cfa2e5120b6996c968b0375fb16fff95b0d47b03f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+          "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/052-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 52,
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.sky.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-1.sky.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "4e368637dec764135147461a53726d93ab6a0e7df85837abed97e493669ab009",
+          "export_sha256": "4e368637dec764135147461a53726d93ab6a0e7df85837abed97e493669ab009",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+              "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-1.sky.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/053-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "abcd6560b27dfb10863257b4bde560abb43e4467a905d1327a27f9fd246570d0",
+      "export_sha256": "abcd6560b27dfb10863257b4bde560abb43e4467a905d1327a27f9fd246570d0",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+          "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/053-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 53,
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "e12c2e046afb575946a0186b1babfe38e01cce4ea46e2b55cc7bc360ac12e3ab",
+          "export_sha256": "e12c2e046afb575946a0186b1babfe38e01cce4ea46e2b55cc7bc360ac12e3ab",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+              "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 54,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0f547104580985c1978e6e0fb1792bf7164dc55c9cea37423b96247ebd63ee4c",
+      "export_sha256": "0f547104580985c1978e6e0fb1792bf7164dc55c9cea37423b96247ebd63ee4c",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+          "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 55,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/055-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "748c85284fb3ddd43b0a34eb8a3faed8c9010b7f039505df1308c4d10e77c695",
+      "export_sha256": "748c85284fb3ddd43b0a34eb8a3faed8c9010b7f039505df1308c4d10e77c695",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+          "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/055-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 55,
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "35c41b5195b66294860b994e8801e83306e25797e807d71adfdf7073f5c888cf",
+          "export_sha256": "35c41b5195b66294860b994e8801e83306e25797e807d71adfdf7073f5c888cf",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+              "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 56,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981",
+      "export_sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/gate-plaza/bg-2.png",
+          "sha256": "c27e4341ea9cb142ce09ac0c89751702c8c77b5e6adc8a6c0a0d282f6b01771a"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.png",
+          "sha256": "a5ca26c7def66d5fa5dd0a52457cb56487ee6edb3b7d345c1663370177e0751e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 57,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "c800d5fddaafd8f54ec5584dfd3a3fd28bbb743280ecb88d4e824ffcc27b3637",
+      "export_sha256": "c800d5fddaafd8f54ec5584dfd3a3fd28bbb743280ecb88d4e824ffcc27b3637",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.png",
+          "sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.sky.png",
+          "sha256": "2346ca9237a5c20c51480e4cfa2e5120b6996c968b0375fb16fff95b0d47b03f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 58,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-2.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9e6d275ec861f9be476cc2c2695170dec7c459e48794b1bc6574cc70827547a0",
+      "export_sha256": "9e6d275ec861f9be476cc2c2695170dec7c459e48794b1bc6574cc70827547a0",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.png",
+          "sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.far.png",
+          "sha256": "abcd6560b27dfb10863257b4bde560abb43e4467a905d1327a27f9fd246570d0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-2.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 59,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "c14be337543890ab58cdd0dfdd354a4e6d29b821c7432ff59435b8b88799423f",
+      "export_sha256": "c14be337543890ab58cdd0dfdd354a4e6d29b821c7432ff59435b8b88799423f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.png",
+          "sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.mid.png",
+          "sha256": "0f547104580985c1978e6e0fb1792bf7164dc55c9cea37423b96247ebd63ee4c"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 60,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-2.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "3d01b4601756b2ea08cfa7d6608934891ed688e87f781158884a40cf34383ee6",
+      "export_sha256": "3d01b4601756b2ea08cfa7d6608934891ed688e87f781158884a40cf34383ee6",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.png",
+          "sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.fg.png",
+          "sha256": "748c85284fb3ddd43b0a34eb8a3faed8c9010b7f039505df1308c4d10e77c695"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-2.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 61,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6",
+      "export_sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/gate-plaza/bg-3.png",
+          "sha256": "ad0f60a896478f2e363008aa5b911de16808336c501c49cb1da7ed0af111a8b2"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.png",
+          "sha256": "9acde1b8bce557259a4f4a17324bec6afe797662b0b276b92431f6560f6cc981"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 62,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "32001a02167d7935b7dde7ee82a7b7b1f9f9adeb0ed6b40fb0e056b2d2cb3364",
+      "export_sha256": "32001a02167d7935b7dde7ee82a7b7b1f9f9adeb0ed6b40fb0e056b2d2cb3364",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.png",
+          "sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.sky.png",
+          "sha256": "c800d5fddaafd8f54ec5584dfd3a3fd28bbb743280ecb88d4e824ffcc27b3637"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 63,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "1d95bb875ea1b653466d0470c35a7aeee64b5943aaf8b3bf72beacf3705e9216",
+      "export_sha256": "1d95bb875ea1b653466d0470c35a7aeee64b5943aaf8b3bf72beacf3705e9216",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.png",
+          "sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.far.png",
+          "sha256": "9e6d275ec861f9be476cc2c2695170dec7c459e48794b1bc6574cc70827547a0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 64,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "eba2cb627ae53eee929b08627033135a5a6cb1678ff19e2a009446cf1e9690cc",
+      "export_sha256": "eba2cb627ae53eee929b08627033135a5a6cb1678ff19e2a009446cf1e9690cc",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.png",
+          "sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.mid.png",
+          "sha256": "c14be337543890ab58cdd0dfdd354a4e6d29b821c7432ff59435b8b88799423f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 65,
+      "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/065-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "46751fbb2963b3c81bf65b3238a3a171662affb761b692c41d2d6575617c3868",
+      "export_sha256": "46751fbb2963b3c81bf65b3238a3a171662affb761b692c41d2d6575617c3868",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.png",
+          "sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.fg.png",
+          "sha256": "3d01b4601756b2ea08cfa7d6608934891ed688e87f781158884a40cf34383ee6"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/065-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 65,
+          "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/gate-plaza/bg-3.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "fa8a7ce90bc5bbfa787655895eb85e76813e48d7da4973fcffba2274fa630627",
+          "export_sha256": "fa8a7ce90bc5bbfa787655895eb85e76813e48d7da4973fcffba2274fa630627",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.png",
+              "sha256": "9a78a7e733e65050f7728854b335864484b20802db0a1de1d4aecc42ced63dd6"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.fg.png",
+              "sha256": "3d01b4601756b2ea08cfa7d6608934891ed688e87f781158884a40cf34383ee6"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/gate-plaza/bg-3.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 51,
+  "next_number": 66,
   "runtime_imported": false
 }

@@ -42,6 +42,8 @@ def plan():
             filename = filename[1]
             match = re.fullmatch(r'bg-(\d+)(?:\.(sky|far|mid|fg))?\.png', filename)
             panel, kind = int(match[1]), match[2] or 'panel'
+            if kind == 'sky':
+                prompt += '\n\nSKY BOUNDARY. Building ornaments, gold sun emblems mounted on spires, crosses, finials, flags, chimney smoke and their halos are not celestial objects: remove them with their buildings. Retain an actual visible sun/moon only if it exists in this panel; never copy one from a preceding panel.'
             if kind == 'far':
                 prompt += '\n\nEXTRACTION COMPLETENESS. Retain every visible distant detail in the scene, including distant boats, ships, lighthouses, harbour walls and far banks if present. Carry water or distant terrain behind all removed near objects down to the walking floor line, so it cannot leave gaps when combined with the middle ground. Do not invent objects or shift anything.'
             path = f'tools/source/pixel/rooms/{room}/{filename}'
@@ -64,6 +66,22 @@ def plan():
                     prompt += '\n\nNo visible sun in this panel: remove the gold emblem and halo at x1232,y56 with the castle spire. Keep only sky and clouds from IMAGE 1. No emblem, sun, castle or scenery may remain.'
                 elif kind == 'far':
                     prompt += '\n\nPANEL 3 POSITION LOCK: the main gold sun-tipped castle spire is centered at x1232 (not x1357 as in image 2), from y28 to y260. Keep IMAGE 1 castle and hill geometry unchanged. The castle begins behind the tree at x870. Carry sea down to y731. Remove all near stairs, trees, bushes, buildings, lamps, fish rack and sailboats. No sky, clouds or new sun; keep the castle emblem attached to its spire. Magenta above hill/castle and below y731.'
+            if room == 'questeria/gate-plaza' and panel == 2:
+                if kind == 'sky':
+                    prompt += '\n\nThis panel has no visible sun. Remove Sunspire and its gold ornament at x1384,y84 completely. Keep only image 1 sky and clouds, not the round sun from the previous panel.'
+                elif kind == 'far':
+                    prompt += '\n\nThe far Sunspire remains at x1384 on the RIGHT with its gold ornament at y84. Retain image 1 distant city, hills and water in their exact positions. Continue the far scenery down to y670 behind removed near buildings. Remove all sky and clouds to magenta; do not copy the preceding panel\'s sea/lighthouse into the left side. No near houses, shop, well, bench, lamps, barrels or floor.'
+                elif kind == 'fg':
+                    prompt += '\n\nDOOR CLEARANCE. All foreground objects must fit in a clear space such as x820-1020, clear of shop door x300-380, green door x685-780 and red door x1070-1160. Make the overlay small enough to fit, no wider than195 pixels and no taller than140 pixels from the bottom edge.'
+            if room == 'questeria/gate-plaza' and panel == 3:
+                if kind == 'sky':
+                    prompt += '\n\nNo actual visible sun: remove the castle ornament at x1337,y84. Retain only image 1 sky/clouds, no tents, buildings or flags.'
+                elif kind == 'far':
+                    prompt += '\n\nIMAGE 1 GEOMETRY: tallest Sunspire is at x1337,y84, not x1384 in image 2. Keep its distant hillside/city and the festival tents and distant bunting visible through the RIGHT arch at x1320-1458,y490-614. Retain the view through that arch and continue its distant plaza paving down to y670 behind the arch. No near arch masonry, houses, doors, well, barrels, lamps or walking floor. Keep the upper sky magenta and fill below the far shore as needed behind removed near objects, down to y670, then magenta below. Never copy preceding-panel scenery over image 1 positions.'
+                elif kind == 'mid':
+                    prompt += '\n\nThe distant festival tents and plaza view through the arch belong in the distance layer: remove that view inside the arch to magenta. Keep the near arch masonry, flowers, purple banners and the near triangular bunting fastened across the arch opening at y452-481. Keep every near house, door, lamp, well and street.'
+                elif kind == 'fg':
+                    prompt += '\n\nKeep foreground clear of the right arch x1320-1460 and all doors x180-260, x535-625, x890-965. Place a small overlay in the clear span x680-810, with its entire silhouette within that span. Do not cover an entrance.'
             jobs.append(dict(room=room, title=title, outdoor=outdoor, panel=panel,
                              kind=kind, filename=filename, path=path,
                              references=references, prompt=prompt))
