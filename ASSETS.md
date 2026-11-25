@@ -6997,3 +6997,33 @@ tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.smile
 tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.laugh.png - picture685, Royal Guard laugh, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation from the ordered portrait brief. Original and reference/export fingerprints retained in art/pixel-portraits and docs/pixel-art-portraits; owner-approved nearest-neighbour export sizing only. Source draft for pixel conversion; released for Legend Quest by its owner.
 
 tools/source/pixel/portraits/royal-guard/front-facing/portrait-royal-guard.sad.png - picture686, Royal Guard sad, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation from the ordered portrait brief. Original and reference/export fingerprints retained in art/pixel-portraits and docs/pixel-art-portraits; owner-approved nearest-neighbour export sizing only. Source draft for pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-1.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-2.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-2.sky.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-2.far.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-2.mid.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-2.fg.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-3.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-3.sky.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-3.far.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-3.mid.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/gulls-wager/deck/bg-3.fg.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.

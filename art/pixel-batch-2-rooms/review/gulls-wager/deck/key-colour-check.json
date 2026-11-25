@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.23532231648763022,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png",
+    "dominant_color": [
+      251,
+      2,
+      250
+    ],
+    "dominant_fraction": 0.056629180908203125,
+    "exact_magenta_pixels": 20
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.2596079508463542,
+    "exact_magenta_pixels": 2
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.far.png",
+    "dominant_color": [
+      252,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.1956354777018229,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.mid.png",
+    "dominant_color": [
+      252,
+      3,
+      251
+    ],
+    "dominant_fraction": 0.054454803466796875,
+    "exact_magenta_pixels": 28
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.24569574991861978,
+    "exact_magenta_pixels": 5
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.far.png",
+    "dominant_color": [
+      250,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.23553021748860678,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.mid.png",
+    "dominant_color": [
+      252,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.040547688802083336,
+    "exact_magenta_pixels": 45
+  },
+  {
+    "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.25554974873860675,
+    "exact_magenta_pixels": 0
+  }
+]

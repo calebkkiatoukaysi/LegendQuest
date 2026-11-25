@@ -1,0 +1,391 @@
+{
+  "images": [
+    {
+      "number": 1,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858",
+      "export_sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858",
+      "references": [
+        {
+          "path": "art/rooms/generated/gulls-wager/deck/bg-1.png",
+          "sha256": "517db275f079e81c3470c2b55e7c4197cdccc5d1f39888b882338e3c5161f685"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 2,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "72cb90c24ad84b1626c5e14eabd7b668dade13013da308b472dd342d12a3aee5",
+      "export_sha256": "72cb90c24ad84b1626c5e14eabd7b668dade13013da308b472dd342d12a3aee5",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+          "sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 3,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-1.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "38bc8c922757cc5e1f58ec9e1b8f40c5e0e86d6dd5b0d086e170ba9846ff201d",
+      "export_sha256": "38bc8c922757cc5e1f58ec9e1b8f40c5e0e86d6dd5b0d086e170ba9846ff201d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+          "sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-1.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 4,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "8ca8097cc3ed0da8cdfa29ebe34464c34b3a1e827571fddf5904bfb416f5010e",
+      "export_sha256": "8ca8097cc3ed0da8cdfa29ebe34464c34b3a1e827571fddf5904bfb416f5010e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+          "sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 5,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-1.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9380e5faf2531c3c145b73b9a817b3b0e35078fc1cd5069825d1b9e56eea196e",
+      "export_sha256": "9380e5faf2531c3c145b73b9a817b3b0e35078fc1cd5069825d1b9e56eea196e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+          "sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-1.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 6,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d",
+      "export_sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d",
+      "references": [
+        {
+          "path": "art/rooms/generated/gulls-wager/deck/bg-2.png",
+          "sha256": "fc590519e33fd16fc38c588cb5f83fad192637d05e0d0282864a60e098f02fc5"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.png",
+          "sha256": "1a990d79473aa539cd5d46c2e64dad9a326e75d6cf7f37ff7d539e22659a3858"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 7,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e5af9f6008eef32fc4747f863e774eec887543cf8fa1c9181ca31e7de7d6e9e9",
+      "export_sha256": "e5af9f6008eef32fc4747f863e774eec887543cf8fa1c9181ca31e7de7d6e9e9",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.png",
+          "sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.sky.png",
+          "sha256": "72cb90c24ad84b1626c5e14eabd7b668dade13013da308b472dd342d12a3aee5"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 8,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-2.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "f659cd948f43ec99b9f70b36b54ade8acd76b0c103b44ed2bff046a63b3ef0cc",
+      "export_sha256": "f659cd948f43ec99b9f70b36b54ade8acd76b0c103b44ed2bff046a63b3ef0cc",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.png",
+          "sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png",
+          "sha256": "38bc8c922757cc5e1f58ec9e1b8f40c5e0e86d6dd5b0d086e170ba9846ff201d"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-2.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 9,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d4b2bc0fe58fc00e567da1e982312841d3c00d34e51baada0882f88629975187",
+      "export_sha256": "d4b2bc0fe58fc00e567da1e982312841d3c00d34e51baada0882f88629975187",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.png",
+          "sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.mid.png",
+          "sha256": "8ca8097cc3ed0da8cdfa29ebe34464c34b3a1e827571fddf5904bfb416f5010e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 10,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-2.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "ec3cbb81a9ca547f87247321d65e43c8820a6f388a9723095e4eab486cdd7da4",
+      "export_sha256": "ec3cbb81a9ca547f87247321d65e43c8820a6f388a9723095e4eab486cdd7da4",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.png",
+          "sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-1.fg.png",
+          "sha256": "9380e5faf2531c3c145b73b9a817b3b0e35078fc1cd5069825d1b9e56eea196e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-2.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 11,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d89eb8ac72c6e9392b69aa057789ce274f595ad1f56db9e2155330cff99d70ea",
+      "export_sha256": "d89eb8ac72c6e9392b69aa057789ce274f595ad1f56db9e2155330cff99d70ea",
+      "references": [
+        {
+          "path": "art/rooms/generated/gulls-wager/deck/bg-3.png",
+          "sha256": "b749d2a78ad21d2eea84d386cbb62f03308be5476f4bb2800bb58698ba053041"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.png",
+          "sha256": "0780bacc163199a273b46d00ec1d1923b9f6bc9dcdc304187e8e5841706f193d"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 12,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "2412843d9968117115134a5edf830e6160db5c0239a99340b00df6ad993bc798",
+      "export_sha256": "2412843d9968117115134a5edf830e6160db5c0239a99340b00df6ad993bc798",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.png",
+          "sha256": "d89eb8ac72c6e9392b69aa057789ce274f595ad1f56db9e2155330cff99d70ea"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.sky.png",
+          "sha256": "e5af9f6008eef32fc4747f863e774eec887543cf8fa1c9181ca31e7de7d6e9e9"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 13,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "2a03ab49b652f92dfea42b99ce9e496a97e23def41fac37cdd6a2de5938f441c",
+      "export_sha256": "2a03ab49b652f92dfea42b99ce9e496a97e23def41fac37cdd6a2de5938f441c",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.png",
+          "sha256": "d89eb8ac72c6e9392b69aa057789ce274f595ad1f56db9e2155330cff99d70ea"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.far.png",
+          "sha256": "f659cd948f43ec99b9f70b36b54ade8acd76b0c103b44ed2bff046a63b3ef0cc"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 14,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "b27c3266160d8c55b68ab54f57675c1b0d18b71e522a632495d9e44e39dec89a",
+      "export_sha256": "b27c3266160d8c55b68ab54f57675c1b0d18b71e522a632495d9e44e39dec89a",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.png",
+          "sha256": "d89eb8ac72c6e9392b69aa057789ce274f595ad1f56db9e2155330cff99d70ea"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.mid.png",
+          "sha256": "d4b2bc0fe58fc00e567da1e982312841d3c00d34e51baada0882f88629975187"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 15,
+      "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/gulls-wager/deck/bg-3.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "455cb0ab4312090388fc28b8a709f0691f04fef5b6e443a57b6a646ee8797155",
+      "export_sha256": "455cb0ab4312090388fc28b8a709f0691f04fef5b6e443a57b6a646ee8797155",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-3.png",
+          "sha256": "d89eb8ac72c6e9392b69aa057789ce274f595ad1f56db9e2155330cff99d70ea"
+        },
+        {
+          "path": "tools/source/pixel/rooms/gulls-wager/deck/bg-2.fg.png",
+          "sha256": "ec3cbb81a9ca547f87247321d65e43c8820a6f388a9723095e4eab486cdd7da4"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-3.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    }
+  ],
+  "next_number": 16,
+  "runtime_imported": false
+}
