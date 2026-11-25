@@ -1,0 +1,1 @@
+Move the entire potted topiary horizontally LEFT from center x680 to center x380. Keep its exact size, colours, shape and vertical position. Its full silhouette must be entirely left of x500 to clear the gate at x595-795. Fill the entire old location with perfectly flat #FF00FF magenta. Exactly one topiary, no duplication, no floor, scenery, shadows or text. Exactly1536 by1024.

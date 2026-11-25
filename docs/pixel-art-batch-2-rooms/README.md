@@ -15,3 +15,5 @@ Checkpoint: 45/265 saved and reviewed through Fish Market. Corrected panel 1 wat
 Checkpoint: 50/265 saved and reviewed through Saltwind Pier. Its foreground bollard was shifted to the central berth to clear the warehouse doors. Next: Questeria Gate Plaza.
 
 Checkpoint: 65/265 saved and reviewed through Gate Plaza. Removed spire ornament from first sky, extended distance water behind the gate, and narrowed foreground planters to clear doors and the festival arch. The third distance layer retains an arch-shaped patch of the festival view: its edges and fill behind the arch still need registration/parallax review. Exact key colour and palette remain pending as above. Next: Festival Square.
+
+Checkpoint: 80/265 saved and reviewed through Festival Square. Extended city/terrain behind removed near objects; connected castle bases, corrected panel 3 castle positions, and moved foreground topiaries to clear stairs and gates. All 80 current exports passed file/dimension/fingerprint checks. Pixel registration, exact keying and composite acceptance remain pending. Next: Lantern Market.

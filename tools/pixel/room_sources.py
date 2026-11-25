@@ -82,6 +82,24 @@ def plan():
                     prompt += '\n\nThe distant festival tents and plaza view through the arch belong in the distance layer: remove that view inside the arch to magenta. Keep the near arch masonry, flowers, purple banners and the near triangular bunting fastened across the arch opening at y452-481. Keep every near house, door, lamp, well and street.'
                 elif kind == 'fg':
                     prompt += '\n\nKeep foreground clear of the right arch x1320-1460 and all doors x180-260, x535-625, x890-965. Place a small overlay in the clear span x680-810, with its entire silhouette within that span. Do not cover an entrance.'
+            if room == 'questeria/festival-square' and panel == 2:
+                if kind == 'sky':
+                    prompt += '\n\nThis panel has NO actual sun: the gold star at x494,y44 is mounted on a castle and must be removed, along with all bunting, buildings and trees.'
+                elif kind == 'far':
+                    prompt += '\n\nIMAGE 1 POSITION LOCK. Keep tall Sunspire at x494,y44 on the LEFT and the smaller pale castle at x1130,y225 on the RIGHT. No central dome from image 2. Keep the countryside visible through the open gate at x735-855,y535-675 and continue its green fields, far trees and distant hills naturally behind all removed near objects down to y695. Do not retain the gate shape or door leaves: fill the hidden terrain without a cutout border. All sky is magenta, including above the far terrain inside the gate. Remove near masonry, towers, banners, bunting, trees, crystal, houses and floor. Keep the gold ornament on Sunspire only, not in the sky.'
+                elif kind == 'mid':
+                    prompt += '\n\nRemove the entire distant landscape through the central gate opening to magenta. Keep both open wooden gate leaves, masonry, near flowers, banners, bunting, near trees, crystal pedestal, houses and floor exactly unchanged. Remove distant castles too.'
+                elif kind == 'fg':
+                    prompt += '\n\nEntrance clearance: place small foreground objects only in x320-520, clear of the open gate x680-915, red door x1215-1280 and purple door x1430-1535. Keep the entire overlay silhouette outside those entrances.'
+            if room == 'questeria/festival-square' and panel == 3:
+                if kind == 'sky':
+                    prompt += '\n\nNo actual sun in this panel. Remove the castle ornament at x468,y44 and all bunting. Keep image 1 clouds and sky only.'
+                elif kind == 'far':
+                    prompt += '\n\nIMAGE 1 GEOMETRY ONLY. Sunspire is at x468,y44 on the LEFT; smaller distant castle at x1000,y225; another far tower at x1445,y225. Keep all three exactly in place, not at the previous panel\'s positions. Join their existing foliage bases downward with distant cool blue-green wooded hills into the countryside band; no floating cutouts or magenta gaps below castles. Keep landscape through gate x648-744,y535-675 unchanged and extend it behind removed near objects down to y695. All sky and clouds are magenta. No near buildings, gate leaves/masonry, bunting, trees, crystal or floor. Keep castle ornaments attached to castles.'
+                elif kind == 'mid':
+                    prompt += '\n\nRemove the distant countryside through the open gate to magenta, retaining both open wooden leaves and near gate masonry. Remove all distant castles and hills. Keep nearby trees, crystal, houses, flowers, bunting, banners and the entire walking floor.'
+                elif kind == 'fg':
+                    prompt += '\n\nForeground entrance clearance: keep every overlay object in clear span x300-450, away from open gate x595-795, red door x1055-1135 and purple door x1230-1340. No part may cross these entrance spans. Keep each object slim, and retain bottom-edge anchoring.'
             jobs.append(dict(room=room, title=title, outdoor=outdoor, panel=panel,
                              kind=kind, filename=filename, path=path,
                              references=references, prompt=prompt))

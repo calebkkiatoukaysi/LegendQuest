@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.far.png",
+    "dominant_color": [
+      249,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.13780848185221353,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.mid.png",
+    "dominant_color": [
+      250,
+      3,
+      251
+    ],
+    "dominant_fraction": 0.020102818806966145,
+    "exact_magenta_pixels": 4
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.fg.png",
+    "dominant_color": [
+      250,
+      8,
+      251
+    ],
+    "dominant_fraction": 0.11625417073567708,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.far.png",
+    "dominant_color": [
+      251,
+      8,
+      251
+    ],
+    "dominant_fraction": 0.13725153605143228,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.mid.png",
+    "dominant_color": [
+      253,
+      3,
+      252
+    ],
+    "dominant_fraction": 0.031068801879882812,
+    "exact_magenta_pixels": 6
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.fg.png",
+    "dominant_color": [
+      251,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.16390609741210938,
+    "exact_magenta_pixels": 5
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.far.png",
+    "dominant_color": [
+      250,
+      16,
+      250
+    ],
+    "dominant_fraction": 0.07671165466308594,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.mid.png",
+    "dominant_color": [
+      252,
+      3,
+      252
+    ],
+    "dominant_fraction": 0.03389867146809896,
+    "exact_magenta_pixels": 13
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.fg.png",
+    "dominant_color": [
+      250,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.15860430399576822,
+    "exact_magenta_pixels": 0
+  }
+]

@@ -2005,8 +2005,559 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 66,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0",
+      "export_sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/festival-square/bg-1.png",
+          "sha256": "839b5c09a0b0b0243b9eba8d8c994b928d10d239df790458c271fe974542d576"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 67,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d8b9f49fb408f0c96ea7367b1b8bdcfe87bd76be16903ee5b1d4792d25616d5e",
+      "export_sha256": "d8b9f49fb408f0c96ea7367b1b8bdcfe87bd76be16903ee5b1d4792d25616d5e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+          "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 68,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/068-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0fbbb28736b78eb1d81be6a380165b717ffb1d7a0d200b2738c1df161647d953",
+      "export_sha256": "0fbbb28736b78eb1d81be6a380165b717ffb1d7a0d200b2738c1df161647d953",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+          "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/068-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 68,
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "f66e9a8a4a586e7f5a670bb25bdc7a2ffd9de90e860044fdc9a4953866274fb1",
+          "export_sha256": "f66e9a8a4a586e7f5a670bb25bdc7a2ffd9de90e860044fdc9a4953866274fb1",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+              "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 69,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d79eb517bbf307ae3ee6456edf8497439d85b32aa67729def31836dc15b10322",
+      "export_sha256": "d79eb517bbf307ae3ee6456edf8497439d85b32aa67729def31836dc15b10322",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+          "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 70,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/070-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "09bd9ecd1a4077588270c077e14136315874ca462bcf11795061d8a91739caf0",
+      "export_sha256": "09bd9ecd1a4077588270c077e14136315874ca462bcf11795061d8a91739caf0",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+          "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/070-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 70,
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "816cc4bdf12aaf6fe7c5bc1997a0183a429def9c45afb100ebd3ea72df61f32a",
+          "export_sha256": "816cc4bdf12aaf6fe7c5bc1997a0183a429def9c45afb100ebd3ea72df61f32a",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+              "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 71,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe",
+      "export_sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/festival-square/bg-2.png",
+          "sha256": "eb2d507f1b092de13e2f796540f1bc00056b5d77762e92107a5a0f89d22b1963"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.png",
+          "sha256": "24b7c94df904606bd581acc406bff32ab09bb42c48b928abfb34d72d10ffebd0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 72,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a995e62381051f05dc6d7bccd3de2b7c2d19bf861259ea50a0c8c094216ee0c1",
+      "export_sha256": "a995e62381051f05dc6d7bccd3de2b7c2d19bf861259ea50a0c8c094216ee0c1",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+          "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.sky.png",
+          "sha256": "d8b9f49fb408f0c96ea7367b1b8bdcfe87bd76be16903ee5b1d4792d25616d5e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 73,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/073-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "42fe68788f9f3b65e51c6efb81559fcfa1ee9e7cf443458e5f25784bfd4970b1",
+      "export_sha256": "42fe68788f9f3b65e51c6efb81559fcfa1ee9e7cf443458e5f25784bfd4970b1",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+          "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.far.png",
+          "sha256": "0fbbb28736b78eb1d81be6a380165b717ffb1d7a0d200b2738c1df161647d953"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/073-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 73,
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-2.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "c56e343741ceb8d0ad28c7db4c1077bc06845208fc20d6e6826d125d5445475f",
+          "export_sha256": "c56e343741ceb8d0ad28c7db4c1077bc06845208fc20d6e6826d125d5445475f",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+              "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.far.png",
+              "sha256": "0fbbb28736b78eb1d81be6a380165b717ffb1d7a0d200b2738c1df161647d953"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-2.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 74,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "091d4e4d39ed30ce48fd614da010ce2ed7e6de4f47378f2742ae3559ff018488",
+      "export_sha256": "091d4e4d39ed30ce48fd614da010ce2ed7e6de4f47378f2742ae3559ff018488",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+          "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.mid.png",
+          "sha256": "d79eb517bbf307ae3ee6456edf8497439d85b32aa67729def31836dc15b10322"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 75,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/075-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "5e08e3bd89f561fece04380ad58475468a790e1d3de1c330c797cfb27c3c1187",
+      "export_sha256": "5e08e3bd89f561fece04380ad58475468a790e1d3de1c330c797cfb27c3c1187",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+          "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.fg.png",
+          "sha256": "09bd9ecd1a4077588270c077e14136315874ca462bcf11795061d8a91739caf0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/075-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 75,
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-2.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "8bdd7263a6671b6d271e6a52433effa444cd79de5023877bf7403e79b60274d4",
+          "export_sha256": "8bdd7263a6671b6d271e6a52433effa444cd79de5023877bf7403e79b60274d4",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+              "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-1.fg.png",
+              "sha256": "09bd9ecd1a4077588270c077e14136315874ca462bcf11795061d8a91739caf0"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-2.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 76,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420",
+      "export_sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/festival-square/bg-3.png",
+          "sha256": "f11288264bb4e95b3554ea4e048ff95db55999a6a172726c149d833ecfaeeae4"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.png",
+          "sha256": "b7f29a068efb5bfaae81607c254787da1f8f6702488569b7646ef3a35ff5bbbe"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 77,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "fe86640fe304bbd1b7d03f26b343eef1815b48c85edbabcb20e7562a34e7fb6e",
+      "export_sha256": "fe86640fe304bbd1b7d03f26b343eef1815b48c85edbabcb20e7562a34e7fb6e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+          "sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.sky.png",
+          "sha256": "a995e62381051f05dc6d7bccd3de2b7c2d19bf861259ea50a0c8c094216ee0c1"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 78,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/078-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0f7d77bd3cc6ec1dea50a2ef31e8db3ea81ba27c49919b3f8cdaad66f0ec03d5",
+      "export_sha256": "0f7d77bd3cc6ec1dea50a2ef31e8db3ea81ba27c49919b3f8cdaad66f0ec03d5",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+          "sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.far.png",
+          "sha256": "42fe68788f9f3b65e51c6efb81559fcfa1ee9e7cf443458e5f25784bfd4970b1"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/078-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 78,
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-3.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "e747883bd93e381639c72e9c2f94d498ceb88cd4dd0d67dbfe505f70cbba7492",
+          "export_sha256": "e747883bd93e381639c72e9c2f94d498ceb88cd4dd0d67dbfe505f70cbba7492",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+              "sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.far.png",
+              "sha256": "42fe68788f9f3b65e51c6efb81559fcfa1ee9e7cf443458e5f25784bfd4970b1"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-3.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 79,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "ac4a7f780f9085978aa7a553b031437ef74b72a3d8fb19728fd22266b551bf7d",
+      "export_sha256": "ac4a7f780f9085978aa7a553b031437ef74b72a3d8fb19728fd22266b551bf7d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+          "sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.mid.png",
+          "sha256": "091d4e4d39ed30ce48fd614da010ce2ed7e6de4f47378f2742ae3559ff018488"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 80,
+      "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/080-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d2c4e820810004fc26be5a25bdf0fba60a82626c411c0f7514e1c8e301b1c5b3",
+      "export_sha256": "d2c4e820810004fc26be5a25bdf0fba60a82626c411c0f7514e1c8e301b1c5b3",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+          "sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.fg.png",
+          "sha256": "5e08e3bd89f561fece04380ad58475468a790e1d3de1c330c797cfb27c3c1187"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/080-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 80,
+          "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/festival-square/bg-3.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "2160ff823a07531e6399a9602af7d9c3db198d21884dcf2bf321349ca8c5d6bf",
+          "export_sha256": "2160ff823a07531e6399a9602af7d9c3db198d21884dcf2bf321349ca8c5d6bf",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-3.png",
+              "sha256": "44e1b1278936c669f71b580451224893e951780d85bbd92453053b45c62ac420"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/festival-square/bg-2.fg.png",
+              "sha256": "5e08e3bd89f561fece04380ad58475468a790e1d3de1c330c797cfb27c3c1187"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/festival-square/bg-3.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 66,
+  "next_number": 81,
   "runtime_imported": false
 }
