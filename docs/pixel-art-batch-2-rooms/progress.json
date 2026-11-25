@@ -3122,8 +3122,246 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 96,
+      "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/sunspire-steps/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f",
+      "export_sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/sunspire-steps/bg-1.png",
+          "sha256": "b13dd42f8e1ecd78395e6132d5740d5210c226a6e73106ab86baecac5a6b18d0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/sunspire-steps/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 97,
+      "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/sunspire-steps/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "922f8fa706a89fbd846b22bd2dd368af345a17e17ea78c4e360e9735664e09fb",
+      "export_sha256": "922f8fa706a89fbd846b22bd2dd368af345a17e17ea78c4e360e9735664e09fb",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+          "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/sunspire-steps/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 98,
+      "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/098-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "246c4d21093c8be2f573d539b2d6ce9567432fd49c2783caff46621895b8b531",
+      "export_sha256": "246c4d21093c8be2f573d539b2d6ce9567432fd49c2783caff46621895b8b531",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+          "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/098-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 98,
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/sunspire-steps/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "82db025a9de7159628c6105d24bd110b9afce3dff320c6a1d14093294602a8d2",
+          "export_sha256": "82db025a9de7159628c6105d24bd110b9afce3dff320c6a1d14093294602a8d2",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+              "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/sunspire-steps/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 99,
+      "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/revisions/099-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7a1a9ab0331db58f82583eb96facdf09fa4d147cbc50be1cd0510bc70a4b1ee7",
+      "export_sha256": "7a1a9ab0331db58f82583eb96facdf09fa4d147cbc50be1cd0510bc70a4b1ee7",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+          "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/099-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 99,
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.mid.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/sunspire-steps/bg-1.mid.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "0ada01843b48ccaf6efd8cf374639ba43f2b69e622cf2e5e9ea5f1bb98968561",
+          "export_sha256": "0ada01843b48ccaf6efd8cf374639ba43f2b69e622cf2e5e9ea5f1bb98968561",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+              "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/sunspire-steps/bg-1.mid.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 100,
+      "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/100-revision-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e1d08cd58f281b0544ad065e82b05d33e1963aa1f1d61043d1b0bd8f6a99cfc9",
+      "export_sha256": "e1d08cd58f281b0544ad065e82b05d33e1963aa1f1d61043d1b0bd8f6a99cfc9",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+          "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/100-revision-2.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 100,
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/sunspire-steps/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "f930eb04e2186c2aae47fd777bae55a1b23c8d2be287db292aee699be037363d",
+          "export_sha256": "f930eb04e2186c2aae47fd777bae55a1b23c8d2be287db292aee699be037363d",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+              "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/sunspire-steps/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        },
+        {
+          "number": 100,
+          "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/revisions/100-revision-1.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "db0e92299ea6e84aafa4cdffa3eff01c74a1cf5185e127466841be3b51b24c7a",
+          "export_sha256": "db0e92299ea6e84aafa4cdffa3eff01c74a1cf5185e127466841be3b51b24c7a",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+              "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/revisions/100-revision-1.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending",
+          "earlier_attempts": [
+            {
+              "number": 100,
+              "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.fg.png",
+              "original": "art/pixel-batch-2-rooms/originals/questeria/sunspire-steps/bg-1.fg.png",
+              "native_size": [
+                1536,
+                1024
+              ],
+              "export_size": [
+                1536,
+                1024
+              ],
+              "source_sha256": "f930eb04e2186c2aae47fd777bae55a1b23c8d2be287db292aee699be037363d",
+              "export_sha256": "f930eb04e2186c2aae47fd777bae55a1b23c8d2be287db292aee699be037363d",
+              "references": [
+                {
+                  "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.png",
+                  "sha256": "c06486329784c188369f1fc5200051c4802f5f57dcaa61f022b7150acae5762f"
+                }
+              ],
+              "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/sunspire-steps/bg-1.fg.png.txt",
+              "status": "source draft; alignment, pixel conversion and runtime registration pending"
+            }
+          ]
+        }
+      ]
     }
   ],
-  "next_number": 96,
+  "next_number": 101,
   "runtime_imported": false
 }

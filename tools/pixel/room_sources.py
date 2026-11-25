@@ -125,6 +125,11 @@ def plan():
     assert len({j['path'] for j in jobs}) == 265
     for n, job in enumerate(jobs, 1):
         job['number'] = n
+    overrides = read(DOCS/'prompt-additions.json') if (DOCS/'prompt-additions.json').exists() else {}
+    for job in jobs:
+        addition = overrides.get(job['room']+'/'+job['filename'])
+        if addition:
+            job['prompt'] += '\n\n'+addition
     write(DOCS / 'jobs.json', jobs)
     if not (DOCS / 'progress.json').exists():
         write(DOCS / 'progress.json', dict(images=[], next_number=1, runtime_imported=False))

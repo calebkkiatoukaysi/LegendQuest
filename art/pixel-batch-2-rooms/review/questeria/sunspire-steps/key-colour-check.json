@@ -1,0 +1,32 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.far.png",
+    "dominant_color": [
+      249,
+      8,
+      250
+    ],
+    "dominant_fraction": 0.09935188293457031,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.mid.png",
+    "dominant_color": [
+      252,
+      7,
+      252
+    ],
+    "dominant_fraction": 0.03426361083984375,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/sunspire-steps/bg-1.fg.png",
+    "dominant_color": [
+      251,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.1800816853841146,
+    "exact_magenta_pixels": 15
+  }
+]

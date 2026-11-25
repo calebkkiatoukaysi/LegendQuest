@@ -1,0 +1,5 @@
+{
+  "questeria/sunspire-steps/bg-1.sky.png": "No actual visible sun. Remove the gold star ornament and halo at x875,y28 with Sunspire. Remove all near gold finials and ornaments too. Keep only sky bands and ordinary clouds.",
+  "questeria/sunspire-steps/bg-1.far.png": "Keep the tall distant Sunspire at x875,y28 and the far city on both sides. Keep its mounted gold star with its spire. Remove the near twin round gate towers, huge gate, chapel on left, right building, near trees, banners and street. Continue pale distant city and cool foliage downward behind removed near objects to y732 across the whole width, without gaps. Sky above the far skyline and area below y732 magenta. Do not move or resize distant landmarks.",
+  "questeria/sunspire-steps/bg-1.fg.png": "Keep the pillar slim on the far left, wholly within x0-90, clear of the chapel stairs beginning at x100. Keep topiary wholly within x1320-1520 and no taller than256pixels, clear of the side passage at x1070-1200 and central gate x665-900. Do not copy any gate, stair, building or floor."
+}
