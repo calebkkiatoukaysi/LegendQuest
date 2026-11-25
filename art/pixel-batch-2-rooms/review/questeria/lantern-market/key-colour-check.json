@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.far.png",
+    "dominant_color": [
+      251,
+      7,
+      251
+    ],
+    "dominant_fraction": 0.07019742329915364,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.mid.png",
+    "dominant_color": [
+      251,
+      3,
+      249
+    ],
+    "dominant_fraction": 0.026121775309244793,
+    "exact_magenta_pixels": 2
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.fg.png",
+    "dominant_color": [
+      251,
+      15,
+      250
+    ],
+    "dominant_fraction": 0.12198702494303386,
+    "exact_magenta_pixels": 3
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.far.png",
+    "dominant_color": [
+      252,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.12313143412272136,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.mid.png",
+    "dominant_color": [
+      252,
+      13,
+      251
+    ],
+    "dominant_fraction": 0.026994069417317707,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.fg.png",
+    "dominant_color": [
+      251,
+      5,
+      251
+    ],
+    "dominant_fraction": 0.156829833984375,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.far.png",
+    "dominant_color": [
+      248,
+      4,
+      252
+    ],
+    "dominant_fraction": 0.08089319864908855,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.mid.png",
+    "dominant_color": [
+      252,
+      3,
+      251
+    ],
+    "dominant_fraction": 0.03771845499674479,
+    "exact_magenta_pixels": 12
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.fg.png",
+    "dominant_color": [
+      251,
+      7,
+      251
+    ],
+    "dominant_fraction": 0.1537609100341797,
+    "exact_magenta_pixels": 0
+  }
+]

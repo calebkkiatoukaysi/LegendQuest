@@ -100,6 +100,22 @@ def plan():
                     prompt += '\n\nRemove the distant countryside through the open gate to magenta, retaining both open wooden leaves and near gate masonry. Remove all distant castles and hills. Keep nearby trees, crystal, houses, flowers, bunting, banners and the entire walking floor.'
                 elif kind == 'fg':
                     prompt += '\n\nForeground entrance clearance: keep every overlay object in clear span x300-450, away from open gate x595-795, red door x1055-1135 and purple door x1230-1340. No part may cross these entrance spans. Keep each object slim, and retain bottom-edge anchoring.'
+            if room == 'questeria/lantern-market' and panel == 2:
+                if kind == 'sky':
+                    prompt += '\n\nNo actual sun here. Remove the gold star and halo at x218,y38 with its castle. Remove all chimney smoke at upper right with the chimney. Keep only sunset sky bands and ordinary clouds from image 1.'
+                elif kind == 'far':
+                    prompt += '\n\nIMAGE 1 GEOMETRY: the only tall Sunspire is on the LEFT at x218,y38, not on the right as in image 2. Keep the distant city visible on the left, remove all near lantern strings, buildings, trees, chimney and smoke. Naturally continue the same distant city roofs, pale walls and cool distant foliage across the width and DOWN TO y680 with no gaps or floating cutout band. Sky above the city is magenta, bottom below y680 magenta. Do not copy image 2\'s right-hand castle or move any existing image 1 landmark.'
+                elif kind == 'fg':
+                    prompt += '\n\nDoor clearance: small foreground props may occupy the clear span x805-905 in front of the pink tree only, or the far-left stall area x130-280. Keep clear of doors x415-485, x675-745, x940-1055, x1220-1295 and x1450-1535. Place the whole silhouette within clear spans, not just its center. Keep ground props small and bottom-edge anchored.'
+            if room == 'questeria/lantern-market' and panel == 3:
+                if kind == 'sky':
+                    prompt += '\n\nRemove the castle gold star/halo at x218,y38 and all chimney smoke. There is no actual sun in this panel. Keep image 1 ordinary sunset clouds and bands only.'
+                elif kind == 'far':
+                    prompt += '\n\nIMAGE 1 LANDMARKS: Sunspire on left at x218,y38, clifftop buildings at x620-860,y110-200 and far aqueduct at x800-900,y180-240 and x1390-1535,y180-240. Keep all visible far landmarks in exactly their own image 1 positions. Continue distant city roofs and cool blue-violet foliage down to y680 behind all removed near objects, with no floating cutout strip. Do not substitute image 2\'s skyline. No near trees, roofs, lanterns, smoke, chimney, shop, forge, bench, well or floor. Sky above skyline and area below y680 magenta.'
+                elif kind == 'mid':
+                    prompt += '\n\nKeep the forge chimney smoke from image 1 as a near element: it rises from x920,y160 and curves upward to the right out of the top edge around x1150. Remove ordinary sky clouds and distant city/aqueduct/castle only. Keep smoke, chimneys, lantern strings, near trees, buildings, doors, bench, well and floor unchanged.'
+                elif kind == 'fg':
+                    prompt += '\n\nDoor clearance: ground props may be entirely within clear span x600-700 in front of the pink tree or x900-990 in front of a window. Keep clear of doors x240-310, x500-565, x750-865, x1010-1090 and x1240-1345. Hanging foreground objects should stay within top200pixels and leave all entrances clear.'
             jobs.append(dict(room=room, title=title, outdoor=outdoor, panel=panel,
                              kind=kind, filename=filename, path=path,
                              references=references, prompt=prompt))

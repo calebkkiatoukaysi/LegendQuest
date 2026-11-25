@@ -2556,8 +2556,574 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 81,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182",
+      "export_sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/lantern-market/bg-1.png",
+          "sha256": "1d86261aefc0eac5bc99010ccf1a97e1932a3db5523973ab6c8a0369cc8ab408"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 82,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/revisions/082-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9fe1feb5f69341dd62723caece8068d35a03d93eed0d39492174529079dbff83",
+      "export_sha256": "9fe1feb5f69341dd62723caece8068d35a03d93eed0d39492174529079dbff83",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+          "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/082-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 82,
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.sky.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-1.sky.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "035f56aa2f3181f5ed362d00eebb7190f2d4123af5dbef3eb53b64c3d6f30bc9",
+          "export_sha256": "035f56aa2f3181f5ed362d00eebb7190f2d4123af5dbef3eb53b64c3d6f30bc9",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+              "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-1.sky.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 83,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/083-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "14ddd7179cdfb175ab345e7e19bd1246e946eaff6afc976c9b3744d0d3340d9c",
+      "export_sha256": "14ddd7179cdfb175ab345e7e19bd1246e946eaff6afc976c9b3744d0d3340d9c",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+          "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/083-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 83,
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "f7f489a498425aa07eacaeabb9ceff93ec376056269f70be3ed71c5e60901ab7",
+          "export_sha256": "f7f489a498425aa07eacaeabb9ceff93ec376056269f70be3ed71c5e60901ab7",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+              "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 84,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "634cacee8b825fc06c0f11dfc1beeb2135f75cef2173943112e06661f38c48b8",
+      "export_sha256": "634cacee8b825fc06c0f11dfc1beeb2135f75cef2173943112e06661f38c48b8",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+          "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 85,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/085-revision-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0568803a87f64459ae9596cc47713327f3fcbd8331720a210640730e7af2a649",
+      "export_sha256": "0568803a87f64459ae9596cc47713327f3fcbd8331720a210640730e7af2a649",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+          "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/085-revision-2.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 85,
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "3651c0de35c846945abf92ad38d8e2fedffcbf13162ac439142a6338d01555ad",
+          "export_sha256": "3651c0de35c846945abf92ad38d8e2fedffcbf13162ac439142a6338d01555ad",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+              "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        },
+        {
+          "number": 85,
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/revisions/085-revision-1.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "5eb0134106a62e1501512c6d9ef5ccc2a6ff2ab3700b1a753977cd1200976fbe",
+          "export_sha256": "5eb0134106a62e1501512c6d9ef5ccc2a6ff2ab3700b1a753977cd1200976fbe",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+              "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/revisions/085-revision-1.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending",
+          "earlier_attempts": [
+            {
+              "number": 85,
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.fg.png",
+              "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-1.fg.png",
+              "native_size": [
+                1536,
+                1024
+              ],
+              "export_size": [
+                1536,
+                1024
+              ],
+              "source_sha256": "3651c0de35c846945abf92ad38d8e2fedffcbf13162ac439142a6338d01555ad",
+              "export_sha256": "3651c0de35c846945abf92ad38d8e2fedffcbf13162ac439142a6338d01555ad",
+              "references": [
+                {
+                  "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+                  "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+                }
+              ],
+              "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-1.fg.png.txt",
+              "status": "source draft; alignment, pixel conversion and runtime registration pending"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 86,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7",
+      "export_sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/lantern-market/bg-2.png",
+          "sha256": "c5a2e8d5e38a22d8324183ad50668f7b6d9fdd5b042024441f1f0d36ef13f70a"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.png",
+          "sha256": "33e637e6fd60f90d77a0785950bb1653dc7581df96688a1ba19fc23dc62af182"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 87,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "11b63565afc4dd61a807257e144b18e2e20f44b6d48f9c43db15ff74acfa7983",
+      "export_sha256": "11b63565afc4dd61a807257e144b18e2e20f44b6d48f9c43db15ff74acfa7983",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+          "sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.sky.png",
+          "sha256": "9fe1feb5f69341dd62723caece8068d35a03d93eed0d39492174529079dbff83"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 88,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-2.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7f871cce5084a6c03237a95e21a13b6dd628483b751a80f7f5d262ba77163fca",
+      "export_sha256": "7f871cce5084a6c03237a95e21a13b6dd628483b751a80f7f5d262ba77163fca",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+          "sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.far.png",
+          "sha256": "14ddd7179cdfb175ab345e7e19bd1246e946eaff6afc976c9b3744d0d3340d9c"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-2.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 89,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/revisions/089-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "38e5591b5155ec4234bde81e38829d97f67d41846526ac6e31d8be78a4d07e54",
+      "export_sha256": "38e5591b5155ec4234bde81e38829d97f67d41846526ac6e31d8be78a4d07e54",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+          "sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.mid.png",
+          "sha256": "634cacee8b825fc06c0f11dfc1beeb2135f75cef2173943112e06661f38c48b8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/089-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 89,
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.mid.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-2.mid.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "7960827f64cc099b8ed01942d8454a233d1e43de5ede1ece14effb1f4e14680a",
+          "export_sha256": "7960827f64cc099b8ed01942d8454a233d1e43de5ede1ece14effb1f4e14680a",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+              "sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.mid.png",
+              "sha256": "634cacee8b825fc06c0f11dfc1beeb2135f75cef2173943112e06661f38c48b8"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-2.mid.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 90,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-2.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "4d7ee22e1170d08810e930079cc9c4df911849e0ee116f3ecd330a45b00d7fb8",
+      "export_sha256": "4d7ee22e1170d08810e930079cc9c4df911849e0ee116f3ecd330a45b00d7fb8",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+          "sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-1.fg.png",
+          "sha256": "0568803a87f64459ae9596cc47713327f3fcbd8331720a210640730e7af2a649"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-2.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 91,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b",
+      "export_sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/lantern-market/bg-3.png",
+          "sha256": "2897779be08704702596910389f2ccd3956b06ed4d411f0015fb24bc49cd349e"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.png",
+          "sha256": "53a6c13e05d257b578a6e570a81b5db1df73e3eaac5a499dcaed22e0c29776c7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 92,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "bd028306b834615e23e7e4de4adaec1e24428c2aff674ca2a286120b198c5bb8",
+      "export_sha256": "bd028306b834615e23e7e4de4adaec1e24428c2aff674ca2a286120b198c5bb8",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.png",
+          "sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.sky.png",
+          "sha256": "11b63565afc4dd61a807257e144b18e2e20f44b6d48f9c43db15ff74acfa7983"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 93,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7698d3a8ba29add82bef8a82feb53618be7851241db79539683c7ef86d2f4476",
+      "export_sha256": "7698d3a8ba29add82bef8a82feb53618be7851241db79539683c7ef86d2f4476",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.png",
+          "sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.far.png",
+          "sha256": "7f871cce5084a6c03237a95e21a13b6dd628483b751a80f7f5d262ba77163fca"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 94,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "413c6332ee813411266a2ceeb5dca1c29625e75faf0a9df2ae26e335f2d4a607",
+      "export_sha256": "413c6332ee813411266a2ceeb5dca1c29625e75faf0a9df2ae26e335f2d4a607",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.png",
+          "sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.mid.png",
+          "sha256": "38e5591b5155ec4234bde81e38829d97f67d41846526ac6e31d8be78a4d07e54"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 95,
+      "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/095-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e0ddc2a4125d9b505cc2c0763dd75bcc96f618aea58c020637604896d78dc097",
+      "export_sha256": "e0ddc2a4125d9b505cc2c0763dd75bcc96f618aea58c020637604896d78dc097",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.png",
+          "sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b"
+        },
+        {
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.fg.png",
+          "sha256": "4d7ee22e1170d08810e930079cc9c4df911849e0ee116f3ecd330a45b00d7fb8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/095-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 95,
+          "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/lantern-market/bg-3.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "2274628514c6ddf7de60a6e5a24104bb24537606a2c350d452445c20d0c57b50",
+          "export_sha256": "2274628514c6ddf7de60a6e5a24104bb24537606a2c350d452445c20d0c57b50",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-3.png",
+              "sha256": "5bad35a7f61db3454527a07cf588d9f8c11a9c85bd898aaa82cccdeb5b9c211b"
+            },
+            {
+              "path": "tools/source/pixel/rooms/questeria/lantern-market/bg-2.fg.png",
+              "sha256": "4d7ee22e1170d08810e930079cc9c4df911849e0ee116f3ecd330a45b00d7fb8"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/lantern-market/bg-3.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 81,
+  "next_number": 96,
   "runtime_imported": false
 }
