@@ -55,6 +55,9 @@ public class ZoneMapScreen : GameScreen
     /// <summary>How thick the edge round a thumbnail is, in screen pixels.</summary>
     private const int FrameWidth = 3;
 
+    /// <summary>The most rows a room's name wraps to under its thumbnail.</summary>
+    private const int NameRowsMost = 2;
+
     /// <summary>The gap between a thumbnail and the writing under it, and between its badges and its bottom edge.</summary>
     private const float NameGap = 6f;
     private const float BadgeInset = 2f;
@@ -395,7 +398,12 @@ public class ZoneMapScreen : GameScreen
             Rectangle thumb = _thumbBounds[i];
             Color colour = i == _selectedRoom ? Palette.Torch : room == _here ? Palette.Heading : Visited(room) ? Palette.Bone : Palette.Note;
             float y = thumb.Bottom + FrameWidth + NameGap;
-            Text.Draw(spriteBatch, _detailFont, room.Name.ToUpperInvariant(), thumb.Center.X, y, colour * alpha, Palette.FormShadow * alpha, centred: true);
+            // A name wider than its room and half the gaps either side wraps, so it doesn't run into the next one's.
+            foreach (string row in NameRows(room, thumb))
+            {
+                Text.Draw(spriteBatch, _detailFont, row, thumb.Center.X, y, colour * alpha, Palette.FormShadow * alpha, centred: true);
+                y += _detailFont.LineSpacing;
+            }
 
             foreach (RoomExit exit in room.Exits)
             {
@@ -403,7 +411,7 @@ public class ZoneMapScreen : GameScreen
 
                 bool west = exit.Side == ExitSide.West;
                 string text = string.Format(CultureInfo.InvariantCulture, west ? WestLeaving : EastLeaving, LeavingTo(exit).ToUpperInvariant());
-                Text.Draw(spriteBatch, _detailFont, text, west ? thumb.Left : thumb.Right, y + _detailFont.LineSpacing,
+                Text.Draw(spriteBatch, _detailFont, text, west ? thumb.Left : thumb.Right, y,
                     Palette.Note * alpha, Palette.FormShadow * alpha, rightAligned: !west);
             }
         }
@@ -630,6 +638,14 @@ public class ZoneMapScreen : GameScreen
         LayOutRooms();
     }
 
+    /// <summary>A room's name under its thumbnail, in as many rows as it takes to stay within the thumbnail and half the gap either side (two at most, as LayOutRooms leaves room for).</summary>
+    private List<string> NameRows(RoomDefinition room, Rectangle thumb)
+    {
+        List<string> rows = Text.Wrap(room.Name.ToUpperInvariant(), _detailFont, thumb.Width + RoomGap.X - FrameWidth * 2);
+        if (rows.Count > NameRowsMost) rows = new List<string> { string.Join(" ", rows.GetRange(0, NameRowsMost - 1)), string.Join(" ", rows.GetRange(NameRowsMost - 1, rows.Count - NameRowsMost + 1)) };
+        return rows;
+    }
+
     /// <summary>Works out how big the thumbnails go, the biggest whole scale up to ThumbMaxScale that fits the area or as small as it takes, and where each goes, the grid centred in the area.</summary>
     private void LayOutRooms()
     {
@@ -640,7 +656,8 @@ public class ZoneMapScreen : GameScreen
             rows = Math.Max(rows, cell.Y + 1);
         }
 
-        float writing = FrameWidth + NameGap + _detailFont.LineSpacing * 2f;
+        // Up to two rows of name, and the way out under them.
+        float writing = FrameWidth + NameGap + _detailFont.LineSpacing * (NameRowsMost + 1);
         float spareWidth = _area.Width - (columns - 1) * RoomGap.X - columns * FrameWidth * 2f;
         float spareHeight = _area.Height - (rows - 1) * RoomGap.Y - rows * (writing + FrameWidth);
         float fit = MathF.Min(spareWidth / (columns * ThumbSize.X), spareHeight / (rows * ThumbSize.Y));

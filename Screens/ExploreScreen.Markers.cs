@@ -111,6 +111,8 @@ public partial class ExploreScreen
     {
         _plated.Clear();
         var plates = new List<(string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile)>();
+        // Whoever you're next to has their name in the prompt over them already (DrawPrompt), so not a plate too.
+        Npc prompted = _nearNpc is Npc near && Prompting() is not null ? near : null;
         foreach (Npc npc in _npcs)
         {
             bool hostile = Hostile(npc);
@@ -118,7 +120,7 @@ public partial class ExploreScreen
             MarkerKind marker = MarkerKind.None;
             foreach ((WalkerSprite walker, _, MarkerKind kind) in _marked)
                 if (walker == npc.Walker) marker = kind;
-            plates.Add((npc.Definition.Name, HeadOf(npc.Walker), marker, npc.Definition.Badge, named, hostile));
+            if (npc != prompted) plates.Add((npc.Definition.Name, HeadOf(npc.Walker), marker, npc.Definition.Badge, named, hostile));
             if (named || _showAll || NpcAt(_mouseWorld) == npc) _plated.Add(npc.Walker);
         }
 

@@ -147,7 +147,7 @@ public class DamagePopups
     /// <summary>How far down and right the shadow sits, at a number's size.</summary>
     private static readonly Vector2 ShadowOffset = new(3f, 3f);
 
-    private static readonly Color ShadowColour = Color.Black * 0.75f;
+    private static readonly Color ShadowColour = Palette.LabelShadow;
 
     /// <summary>The colours: damage dealt, a critical, damage taken, healing, and a word for what missed.</summary>
     public static readonly Color DealtColour = new(250, 248, 240);

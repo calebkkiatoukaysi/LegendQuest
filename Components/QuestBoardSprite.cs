@@ -27,7 +27,7 @@ public class QuestBoardSprite
     private const int NotesTop = 56;
     private const int NoteInset = 12;
 
-    /// <summary>The colours: the frame, the cork, the paper, the pin, and the main quest's glow.</summary>
+    /// <summary>The colours: the frame, the cork, the paper, the pin, the main quest's glow, and who posted a note, in a sepia that's quieter than the ink but still reads on the paper.</summary>
     private static readonly Color Wood = new(78, 48, 36);
     private static readonly Color WoodLight = new(132, 88, 58);
     private static readonly Color Cork = new(166, 122, 82);
@@ -35,6 +35,7 @@ public class QuestBoardSprite
     private static readonly Color PaperShadow = new Color(40, 24, 20) * 0.45f;
     private static readonly Color Pin = new(196, 52, 60);
     private static readonly Color Glow = new(255, 214, 110);
+    private static readonly Color GiverInk = new(138, 88, 64);
 
     /// <summary>How fast the main quest's glow pulses, in pulses a second.</summary>
     private const float PulseRate = 0.8f;
@@ -92,7 +93,7 @@ public class QuestBoardSprite
             float y = note.Y + NoteInset + 6f;
             Text.Draw(spriteBatch, _detailFont, posting.Title, note.X + NoteInset, y, Palette.Ink * alpha, Color.Transparent);
             y += _detailFont.LineSpacing + 2f;
-            Text.Draw(spriteBatch, _detailFont, posting.Giver, note.X + NoteInset, y, Palette.Note * alpha, Color.Transparent);
+            Text.Draw(spriteBatch, _detailFont, posting.Giver, note.X + NoteInset, y, GiverInk * alpha, Color.Transparent);
             y += _detailFont.LineSpacing + 4f;
             foreach (string row in rows)
             {

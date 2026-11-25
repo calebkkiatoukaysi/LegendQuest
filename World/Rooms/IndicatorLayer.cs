@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -122,8 +123,15 @@ public sealed class IndicatorLayer
     private static readonly Color OutlineLight = new(255, 226, 170);
 
     /// <summary>The smudge under the writing, and how far it spreads past it.</summary>
-    private static readonly Color Backing = Color.Black * 0.6f;
+    private static readonly Color Backing = Palette.Shadow;
     private static readonly Vector2 BackingSpread = new(14f, 6f);
+
+    /// <summary>How far apart two name plates stacked to clear each other are, and how many plates a name goes up past at most before it's left where it is.</summary>
+    private const int PlateStack = 2;
+    private const int MostLifts = 4;
+
+    /// <summary>The name plates laid out this frame, smudge and all, so the next one clears them.</summary>
+    private readonly List<Rectangle> _plates = new();
 
     /// <summary>This frame's layout: the smudges, the nine-sliced plaques and outlines, the rest of the art, and the writing.</summary>
     private readonly List<Rectangle> _backings = new();
@@ -158,6 +166,7 @@ public sealed class IndicatorLayer
         _slices.Clear();
         _sprites.Clear();
         _lines.Clear();
+        _plates.Clear();
         float time = (float)gameTime.TotalGameTime.TotalSeconds;
 
         RoomExit pointedExit = ChevronAt(frame.Room, frame.Flags, frame.Mouse);
@@ -167,7 +176,8 @@ public sealed class IndicatorLayer
             if (exit.Presence.Holds(frame.Flags)) LayOutExit(camera, frame, exit, exit == pointedExit, time);
         foreach (RoomDoor door in frame.Room.Doors)
             if (door.Presence.Holds(frame.Flags)) LayOutDoor(camera, frame, door, door == pointedDoor, time);
-        foreach ((string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile) plate in frame.Plates)
+        // The nearest first (lowest on the floor), so it's the one further back whose name moves up.
+        foreach ((string Name, Vector2 Head, MarkerKind Marker, BadgeKind? Badge, bool Named, bool Hostile) plate in frame.Plates.OrderByDescending(p => p.Head.Y))
             LayOutPlate(camera, frame, plate);
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
@@ -383,13 +393,27 @@ public sealed class IndicatorLayer
         float height = plate.Badge is not null || plate.Marker != MarkerKind.None ? Cell * InlineScale : _font.LineSpacing;
 
         Vector2 head = camera.ToScreen(plate.Head);
-        float left = head.X - width / 2f, top = head.Y - PlateGap - BackingSpread.Y - height;
+        float left = Math.Clamp(head.X - width / 2f, LabelInset, Math.Max(LabelInset, LegendQuestGame.ScreenWidth - LabelInset - width));
+        float top = head.Y - PlateGap - BackingSpread.Y - height;
+        // A name that would sit on one already laid out goes up over it, a few at most.
+        for (int lift = 0; lift < MostLifts; lift++)
+        {
+            Rectangle box = PlateBox(left, top, width, height);
+            int hit = _plates.FindIndex(placed => placed.Intersects(box));
+            if (hit < 0) break;
+            top = _plates[hit].Top - PlateStack - BackingSpread.Y - height;
+        }
+        _plates.Add(PlateBox(left, top, width, height));
         AddLine(name, left, top, width, height, bang + badge, colour);
         if (plate.Marker != MarkerKind.None)
             AddBang(plate.Marker, new Vector2(MathF.Round(left) + BangWidth * InlineScale / 2f, MathF.Round(top) + height / 2f + MarkerCell * InlineScale / 2f), 0f);
         if (plate.Badge is BadgeKind kind)
             _sprites.Add((_sheet, CellOf((int)kind, BadgeRow), new Vector2(MathF.Round(left + bang), MathF.Round(top)), InlineScale, Color.White));
     }
+
+    /// <summary>The room a name plate takes with its smudge, as AddLine lays it out, and half the smudge's soft spread either side so two names never touch.</summary>
+    private static Rectangle PlateBox(float left, float top, float width, float height) =>
+        new((int)MathF.Round(left - BackingSpread.X / 2f), (int)(MathF.Round(top) - BackingSpread.Y), (int)MathF.Ceiling(width + BackingSpread.X), (int)(height + BackingSpread.Y * 2f));
 
     /// <summary>Adds a line of writing on its smudge, its words after room left for icons in front of them, set in the middle of the height.</summary>
     private void AddLine(string text, float left, float top, float width, float height, float icons, Color colour)
