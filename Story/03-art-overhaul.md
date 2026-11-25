@@ -378,7 +378,7 @@ Each head kit has these slots and pictures:
 - `brows`: `level`, `raised`, `knit`, `sad`, `one-up`
 - `mouth`: `closed`, `smile`, `grin`, `open`, `frown`, `grit`, `smirk`, `flat`, plus `talk-a` and `talk-b` for each of `closed`, `smile` and `frown`
 
-### 5.2 The twelve expressions
+### 5.2 The thirteen expressions
 
 These are every `(expr)` used in the scripts. `afraid` and `worried` are kept separate: worried is for someone else; afraid is for yourself.
 
@@ -396,6 +396,7 @@ These are every `(expr)` used in the scripts. `afraid` and `worried` are kept se
 | `cold` | narrow | level | flat | The {sb} of Act 3. No blink while it's held |
 | `tired` | half | level | flat | |
 | `shock` | wide | raised | open | |
+| `disgust` | narrow, flat | low, knit | sneer | Added for the pixel portraits (`docs/pixel-art-brief.md` §4.2) |
 
 A missing picture falls back down this chain: the expression's own, then `neutral`'s for that slot. A kit that only has `open`, `closed`, `level`, `closed` (mouth) and `smile` still works.
 
@@ -405,7 +406,15 @@ While a line types, the mouth alternates the current shape with its `talk-a` and
 
 ### 5.4 Portraits
 
-The dialogue box's portrait is the speaker's rig, drawn live into a 320x320 render target, cropped from the top of the head to mid-chest, at the expression the line asks for, with talking and blinking. Speakers on the left of the box face right; on the right, they're mirrored. Held items show if they're in the crop (the shard in {sb}'s hand on the roof, the letter in Corra's). `VOICE(x)` uses `x`'s portrait tinted violet at 70% with a 2-texel echo offset and no name. A speaker with no rig on the map (`CORRA [letter]`, `NARRATOR`) uses their rig if they have one and no portrait if they don't.
+**Now (2026-11-25):** a speaker with a pixel-art portrait (`Content/Portraits/<id>.png`, converted from ChatGPT's
+front-facing paintings by `tools/pixel/portrait_kit.py`) shows it in a 288 px well (96 art pixels at ×3) at the line's
+expression, or the nearest one it has (`Expressions.Nearest`). It breathes, bobs an art pixel with the words while a
+line types, and dips when the expression changes; `cold` holds still (`Components/PortraitKit.cs`). Blink and talking
+frames aren't drawn yet: finding the eyes and mouth automatically wasn't reliable enough, so they wait for painted
+frames. Anyone without a pixel portrait (the player, {sb}, generic townsfolk) keeps the portrait below, drawn in the
+same well.
+
+The plan before the pixel portraits: the dialogue box's portrait is the speaker's rig, drawn live into a 320x320 render target, cropped from the top of the head to mid-chest, at the expression the line asks for, with talking and blinking. Speakers on the left of the box face right; on the right, they're mirrored. Held items show if they're in the crop (the shard in {sb}'s hand on the roof, the letter in Corra's). `VOICE(x)` uses `x`'s portrait tinted violet at 70% with a 2-texel echo offset and no name. A speaker with no rig on the map (`CORRA [letter]`, `NARRATOR`) uses their rig if they have one and no portrait if they don't.
 
 ## 6. Live items
 

@@ -2,7 +2,8 @@
 
 The owner's direction (2026-11-20): move LegendQuest from smooth painted art to **detailed, fantasy pixel art** while
 keeping everything else: the side-view rooms, the jointed skeleton and its animations, mix-and-match armour, and the
-heroic high-fantasy feel. Add **detailed, animated conversation portraits** with many expressions, keep the player's
+heroic high-fantasy feel. Add **animated, front-facing close-up portraits** for conversations (warm, anime-flavoured
+pixel portraits in the manner of cosy farming-RPG dialogue faces) with many expressions, keep the player's
 custom look in **cutscenes**, and make sure **monsters, enemies and backgrounds all move**.
 
 The work is split between two assistants:
@@ -26,7 +27,9 @@ kind. §8 is Claude's implementation plan. §9 lists every file and where it goe
 ## 0. Rules
 
 1. **Original content only.** LegendQuest takes the *feel* of AdventureQuest Worlds (side-view rooms, the
-   three-quarter character angle, heroic fantasy gear, real-time skills) and nothing it owns. **No prompt ever names a
+   three-quarter character angle, heroic fantasy gear, real-time skills) and nothing it owns. The portraits take the
+   *feel* of cosy farming-RPG dialogue faces (front-facing, chunky pixels, big expressive eyes) the same way: the
+   style blocks describe the look in words. **No prompt ever names a
    game, studio, artist or company**, and no other game's pictures are ever attached to a prompt or traced.
 2. **Templates first.** Every part, portrait and creature is painted on a template Claude makes (§8, step 2), so the
    pieces line up. A picture painted on a blank canvas can't be cut. If a template a card asks for doesn't exist yet,
@@ -51,7 +54,7 @@ kind. §8 is Claude's implementation plan. §9 lists every file and where it goe
 | **World resolution** | The world (rooms, characters, monsters, effects) is drawn at **800 × 450 art pixels** and blown up ×2, with hard edges, to the 1600 × 900 screen | Big enough for detail; a whole-number scale, so every pixel is a clean square |
 | **HUD and text** | Drawn on top at full 1600 × 900, sharp | Readability; the HUD is not pixelated |
 | **Standard character** | **98 art pixels** tall, feet to crown (the same on-screen size as now, 196 screen px) | Room for real armour detail: plate edges, trims, a face |
-| **Conversation portrait** | **128 × 128 art pixels**, drawn ×2 (256 px) in the dialogue box, ×3 (384 px) in cutscene close-ups | Detailed faces with readable expressions |
+| **Conversation portrait** | **96 × 96 art pixels**, front-facing, chest up; drawn ×3 (288 px) in the dialogue box, ×4 (384 px) in cutscene close-ups | Chunky, warm, anime-flavoured faces whose expressions read at a glance (64 × 64 is the fallback if the owner wants them chunkier still) |
 | **Animation** | Poses step at **12 frames a second**, like hand-drawn sprites; movement across the floor stays smooth; limbs turn in 64 fixed angle steps with a pixel-art rotation filter | Keeps the pixel look crisp while the skeleton drives everything |
 | **Palette** | About 32 colours per character, 48 per room, chosen per picture by the converter; shadows shift toward violet-blue, highlights toward warm gold, by fixed amounts | Consistent, rich colour; the standard pixel-art ramp |
 | **Outlines** | One dark pixel, deep brown-violet (`#2a1f3d` mixed with the colour it borders), never pure black; lighter inside the figure | A clean read against detailed rooms |
@@ -84,23 +87,38 @@ pixel look.** Their old avoid list says "Pixel art"; don't use it with these car
 > believable proportions: an adult is about five and a quarter heads tall, with real hands and fingers; not chibi.
 > Lit from above and slightly in front of the subject, never from the left or right.
 
-### 2.2 Pixel portrait style block (conversation portraits only)
+### 2.2 Portrait style block (conversation close-ups only; paste both paragraphs, and not §2.3)
 
-> STYLE. A detailed, semi-realistic fantasy pixel-art portrait for a role-playing game's conversation window, head and
-> shoulders. Real pixel art: the picture is a grid of 128 by 128 art pixels, each drawn as an 8 by 8 block of one flat
-> colour, with no anti-aliasing, blur or gradient inside a block. About 32 colours in hue-shifted ramps: shadows cooler
-> and more violet, highlights warmer and more golden. A selective dark outline in deep brown-violet, never pure black.
-> Deliberate single-pixel highlights in the eyes, on the lips, on metal and on gems; dithering only on soft cloth or
-> fur. Expressive, semi-realistic faces with real bone structure, honest age and character, eyes that are not
-> oversized, and hair in clean, clumped locks with two or three tones. High-fantasy costume detail at the collar and
-> shoulders. Three-quarter view facing the right-hand side of the picture, both eyes showing, lit from above and
-> slightly in front. Plain, flat background in the exact colour I name.
+The look: a warm, charming, anime-flavoured pixel portrait, the face square to the camera, as in cosy farming RPGs'
+dialogue boxes, dressed in this game's high-fantasy gear. Chunky pixels, big readable eyes, clear mouths, bold hair
+shapes, a small palette. The block below says all of that in words (rule 1: no game is named).
 
-### 2.3 Avoid list (paste after either style block)
+> STYLE. A pixel-art character portrait for a cosy high-fantasy role-playing game's dialogue box: a chest-up close-up
+> with the face looking straight at the viewer, the head and shoulders square to the camera and centred. Anime-flavoured
+> and charming: large, expressive eyes with a big coloured iris, a dark pupil and one or two bright square highlights;
+> clear, bold eyebrows; a small, simple nose shown with a pixel or two of shadow; a small mouth whose shape changes
+> clearly with the mood; hair in big, clean, chunky locks with a bright highlight band. Real low-resolution pixel art:
+> the whole picture is a grid of about 96 by 96 big square pixels, each about 10 to 11 image pixels wide, every one a
+> single flat colour, with no anti-aliasing, blur, gradient or texture inside it. A small palette of about 24 to 32
+> colours in ramps of three or four tones per material: shadows cooler and more violet, highlights warmer and more
+> golden. A one-pixel outline in dark brown-violet, never pure black, around the hair, face and shoulders, with lighter
+> coloured lines inside. Soft, colourful cel shading, lit from above and slightly in front. Normal proportions for a
+> bust (not chibi): the age, people and personality of the character obvious at a glance, and the high-fantasy
+> costume shown at the collar and shoulders as bold, simple shapes (trims, clasps, gems, armour edges, fur). Plain,
+> flat background in exactly the colour I name, right up to the edges.
+>
+> AVOID. Smooth, painterly, vector or high-resolution rendering; small or uneven pixels; gradients; photographic
+> texture or noise; glossy 3D-render shading; pure-black outlines. Chibi or super-deformed proportions; a huge head on a
+> tiny body. A three-quarter view, a profile, a tilted head or eyes looking away, unless the expression asks for it.
+> Sweat drops, anger marks, blush lines or tear streams drawn beside the face (the game adds those). Scenery, a frame,
+> a border, a name plate, a speech bubble. Any text, letters, numbers, signature or watermark. Anything copied from an
+> existing game, film, comic or brand.
+
+### 2.3 Avoid list (paste after §2.1; portraits have their own in §2.2)
 
 > AVOID. Blurry, soft or painterly rendering; airbrushed gradients; photographic texture, film grain or noise;
-> glossy 3D-render shading; pure-black outlines; tiny hairline detail. Chibi or super-deformed proportions, huge anime
-> eyes. A front view, a flat profile or a back view unless I ask. Scenery, a floor, a ground shadow, a frame or a border,
+> glossy 3D-render shading; pure-black outlines; tiny hairline detail. Chibi or super-deformed proportions. A front
+> view, a flat profile or a back view unless I ask. Scenery, a floor, a ground shadow, a frame or a border,
 > unless I ask. Any text, letters, numbers, signature or watermark. Extra or missing fingers. Anything copied from an
 > existing game, film, comic or brand.
 
@@ -156,11 +174,19 @@ faces needs a disgust edit using Story/13's **Expressions** follow-up (§1.2), w
 
 ### 4.1 What a portrait is
 
-A **portrait kit** is a set of 128 × 128 pixel busts (top of the head to mid-chest) of one character: one picture per
-expression, all lined up exactly, so the game can swap between them and animate them. They're painted on the
-**portrait template** (`portrait-template-male.png`, `portrait-template-female.png`, 1024 × 1024; Claude makes them).
-The template shows the bald mannequin's head and shoulders in grey, with guide lines for the eye line, the chin, the
-collar line and the safe area. Speakers on the left of the dialogue box face right; on the right they're mirrored.
+A **portrait kit** is a set of 96 × 96 pixel close-ups (top of the hair to mid-chest) of one character, **facing the
+camera**: one picture per expression, all lined up exactly, so the game can swap between them and animate them.
+They're painted on the **portrait template** (`portrait-template-male.png`, `portrait-template-female.png`,
+1024 × 1024; `tools/pixel/templates.py` makes them). The template is a front-facing grey mannequin bust, with dashed
+guide lines for the eye line, the chin, the collar line, the face's centre line and the safe area. Both templates
+share the eye, chin and collar lines, so hair, collars and helms fit either.
+
+Because the faces look straight out, nothing is mirrored: a speaker on either side of the dialogue box uses the same
+picture. In cutscene close-ups (§5.2) the portrait fills a third of the screen at ×4.
+
+**Who gets one.** Every character with a personal quest or real dialogue: the companions, the main story characters,
+the villains and bosses who speak, and the named supporting cast. The roster, with every character's look filled in,
+is `docs/pixel-art-portraits/`.
 
 ### 4.2 The expressions
 
@@ -171,25 +197,26 @@ list (anger, disgust, happy, laughing, sadness) maps onto them, with **disgust**
 | --- | --- | --- |
 | `neutral` | | Calm: eyes open, brows level, mouth closed and relaxed |
 | `smile` | **happy** | Warm: eyes softened, cheeks lifted, a gentle closed-mouth smile |
-| `grin` | happy (big) | Delighted: brows raised, eyes half closed with crinkles at the corners, a wide grin showing the upper teeth |
-| `laugh` | **laughing** | Laughing: eyes squeezed shut in happy curves, brows raised, mouth wide open showing teeth and tongue, cheeks high |
+| `grin` | happy (big) | Delighted: brows raised, eyes bright and slightly narrowed with crinkles at the corners, a wide grin showing the upper teeth |
+| `laugh` | **laughing** | Laughing: eyes squeezed shut into happy upside-down arcs, brows raised, mouth wide open showing the upper teeth and tongue, cheeks high, the head tipped back a little |
 | `smirk` | | Knowing: eyes narrowed, one brow raised, one corner of the mouth pulled up |
-| `sad` | **sadness** | Sad: eyes lowered and wet along the lower lids, the inner ends of the brows raised, the corners of the mouth turned down |
+| `sad` | **sadness** | Sad: eyes lowered and glistening with a wet line along the lower lids, the inner ends of the brows raised, the corners of the small mouth turned down, the head dipped a little |
 | `worried` | | Worried for someone else: eyes open, brows knit and tilted up in the middle, mouth flat and tight |
 | `afraid` | | Afraid for yourself: eyes wide with the whites showing, brows tilted up, mouth open, the face pale |
 | `angry` | **anger** | Angry: brows pulled hard down and together with a deep crease between them, eyes narrowed and glaring, nostrils flared, teeth gritted, the jaw set |
 | `cold` | | Cold: eyes narrowed and still, brows level, mouth a flat line, no warmth at all |
 | `tired` | | Tired: eyes half closed with heavy lids, brows level, mouth slack, faint shadows under the eyes |
 | `shock` | | Shocked: eyes wide, brows raised high, mouth dropped open |
-| `disgust` | **disgust** (new) | Disgusted: eyes narrowed, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side, the head drawn slightly back |
+| `disgust` | **disgust** (new) | Disgusted: eyes narrowed into a flat, unimpressed look, brows lowered and pulled together, nose wrinkled, the upper lip raised on one side in a sneer, the head drawn slightly back |
 
-**Who gets which** (keeps the number of pictures sensible):
+**Who gets which** (keeps the number of pictures sensible; `docs/pixel-art-portraits/` gives each character's tier):
 
 | Tier | Who | Expressions |
 | --- | --- | --- |
-| Main | The player's and {sb}'s face presets (§4.6), the companions and the major characters of `Story/03` §7.4 (Sera, Mira, Kael, Brannock, Valencia, Elara, Maleficio, Varkhul, Severin, Crane, Thessaly, Vorlaith) | All 13 |
-| Named | Every other named speaker (Corra, Tomas, Grell, Gannet, Hester, Tobin and the rest) | `neutral`, `smile`, `sad`, `angry`, `shock`, `disgust` (others fall back to the nearest) |
-| Generic | Unnamed townsfolk, guards, cultists | Built from the shared kit (§4.6), `neutral`, `smile` and `angry` |
+| Main | The companions, the main story characters and the villains and bosses who speak; the player's and {sb}'s face presets (§4.6) | All 13 |
+| Named | Named characters with a personal quest, a side quest or several scenes | 8: `neutral`, `smile`, `laugh`, `sad`, `angry`, `disgust`, `shock`, `worried` |
+| Minor | Named townspeople with a conversation of their own | 6: `neutral` and the owner's five (`smile`, `laugh`, `sad`, `angry`, `disgust`) |
+| Generic | Unnamed townsfolk, guards, cultists | Built from the shared kit (§4.6): `neutral`, `smile` and `angry` |
 
 A missing expression falls back down a chain (`grin` → `smile` → `neutral`, `afraid` → `worried` → `sad`, and so on),
 so a kit works before it's finished.
@@ -208,24 +235,30 @@ the expressions:
 | **Per-expression motion** | | `laugh`: the head bobs a pixel, twice. `angry`: a 1-pixel shake as it lands. `shock`: the head jumps up 2 pixels and settles. `afraid`: a faint tremble. `sad`: the head sinks a pixel. `disgust`: the head draws back a pixel. `cold`: perfectly still |
 | **Emote marks** | One painted sheet (§4.7), animated by Claude | Small marks by the head: anger vein (pulses), sweat drop (slides), tears (drip), blush, sparkle, gloom lines, a question or exclamation mark, a sigh puff |
 
-If a derived blink or talking mouth looks wrong on a face (an unusual face such as Vorlaith's glass, a veil, a beard
-over the mouth), ChatGPT paints that frame as an edit (§4.5), and the painted one wins.
+Front-facing faces make this easier: the eyes sit either side of the centre line on the eye line, and the mouth sits
+on the centre line between the eye line and the chin. If a derived blink or talking mouth looks wrong on a face (an
+unusual face such as Vorlaith's glass, a veil, a beard over the mouth), ChatGPT paints that frame as an edit (§4.5),
+and the painted one wins.
 
 ### 4.4 Card: a character's portrait · `portrait-<character>.neutral.png`
 
+`docs/pixel-art-portraits/` has this card filled in for every character, ready to paste. Its shape:
+
 Attach `portrait-template-male.png` or `portrait-template-female.png`.
 
-> [§2.2 pixel portrait style block, background #00FF00] [§2.3 avoid list]
+> [§2.2, both paragraphs, background #00FF00]
 >
 > SIZE. The attached picture is exactly 1024 × 1024 pixels. Give it back at exactly 1024 × 1024. Paint the character
-> over the grey mannequin exactly where it is: the eyes on the eye line, the chin on the chin line, the shoulders
-> filling the bottom edge, the top of the head (or hair, or hat) inside the safe area. Don't crop, zoom, re-centre or
-> re-frame it.
+> over the grey mannequin exactly where it is, facing straight out: the eyes on the dashed line across the middle of
+> the head, either side of the dashed centre line; the chin on the dashed line just under the face; the base of the
+> neck on the dotted line below that; the shoulders filling the bottom edge; the top of the hair (or hat, hood or helm)
+> inside the dashed box. The dashed lines are only guides: paint over them. Don't crop, zoom, re-centre or re-frame it.
 >
-> Paint this character with a neutral expression (calm: eyes open, brows level, mouth closed and relaxed):
-> [the character's description: age, build, people (Sylvan, Emberkin, Stoneborn, Wildkin or human), skin, hair, eyes,
-> scars and marks, and what shows at the collar and shoulders. Take it from `Story/03-art-overhaul.md` §7.4 and the
-> character's card in `Story/13-art-prompts.md` §7, so the portrait matches the figure in the world.]
+> CHARACTER. [age, build, people (Sylvan, Emberkin, Stoneborn, Wildkin, Hearthling or human), skin, face, eyes, brows,
+> hair, facial hair, ears and horns, scars and marks, hat or hood, and what shows at the collar and shoulders, so the
+> portrait matches the figure in the world]
+>
+> EXPRESSION. Neutral: calm, eyes open looking straight at the viewer, brows level, mouth closed and relaxed.
 >
 > I'll save it as `portrait-<character>.neutral.png`.
 
@@ -235,8 +268,8 @@ Attach `portrait-template-male.png` or `portrait-template-female.png`.
 
 > Edit the attached portrait: change ONLY the expression, to the one I name below. Move only the eyes, eyebrows, nose,
 > mouth and cheeks, and the head no more than the expression needs. The hair, the clothes, the colours, the pixel grid,
-> the size and the position of everything else stay exactly the same. Keep it real pixel art on the same 128 by 128
-> grid, on the same flat #00FF00 background. Give it back at exactly 1024 × 1024.
+> the size and the position of everything else stay exactly the same, and the face keeps looking straight at the
+> viewer. Keep it real pixel art on the same 96 by 96 grid of big pixels, on the same flat #00FF00 background. Give it back at exactly 1024 × 1024.
 > The expression: [the row's description from §4.2]. I'll save it as `portrait-<character>.<expression>.png`.
 
 **Blink override** (only if Claude asks) · `portrait-<character>.<expression>.blink.png`
@@ -284,7 +317,7 @@ Cards for the kit (all on the portrait template, background `#00FF00` for faces 
 
 **Face preset** · `pface-<m|f><nn>.<expression>.png`
 
-> [§2.2] [§2.3] [the size lock of §4.4]
+> [§2.2, both paragraphs] [the SIZE paragraph of §4.4]
 >
 > Paint only a head and neck over the grey mannequin, exactly where it is: no hair at all (the head is bald, smooth),
 > no clothes (the neck ends at the collar line), warm tan skin. [The face's description: age, face shape, nose, eyes,
@@ -294,7 +327,7 @@ Then the **Expression** follow-up (§4.5) for each of the 13.
 
 **Hairstyle** · `phair-<id>.png`
 
-> [§2.2] [§2.3] [the size lock of §4.4]
+> [§2.2, both paragraphs] [the SIZE paragraph of §4.4]
 >
 > On the attached template, paint only this hairstyle on the bald mannequin's head, in plain mid-brown with its
 > shading, and make everything that isn't hair flat #FF00FF magenta, including the face and the neck. [The hairstyle's
@@ -304,7 +337,7 @@ Claude splits each hairstyle into `hair-back` and `hair-front` at the head's out
 
 **Collar** · `pcollar-<armor-id>.png`, attach the template and a picture of the armour
 
-> [§2.2] [§2.3] [the size lock of §4.4]
+> [§2.2, both paragraphs] [the SIZE paragraph of §4.4]
 >
 > On the attached template, paint only what this armour shows at the neck, shoulders and upper chest, matching the
 > second picture's design, colours and trims, and make everything else (the head, the neck above the collar line, the
@@ -343,7 +376,7 @@ Attach `emote-sheet.png` (1536 × 1024, a grid of 12 cells; Claude makes it).
 
 | Feature | What it does |
 | --- | --- |
-| **Close-ups** | A cue puts a speaker's portrait large (×3) in the middle of the screen with letterbox bars, for big moments (a confession, a betrayal, a death). It uses the same kit, so the player's close-up is their own face |
+| **Close-ups** | A cue puts a speaker's front-facing portrait large (×4) in the middle of the screen with letterbox bars, for big moments (a confession, a betrayal, a death). It uses the same kit, so the player's close-up is their own face |
 | **Emotes in the world** | A cue puts an emote mark (§4.7) over a figure's head in the room, animated |
 | **Faces in the world** | The figure's small face takes the line's expression, as the portrait does |
 | **Animated story paintings** | Each backdrop is painted in 3 to 5 layers that drift at different speeds, with moving details (rain, sea, smoke, flicker, drifting embers), made as in §7 |
@@ -517,12 +550,12 @@ the owner asks.
 
 ### Step 4: Portraits
 
-- `tools/pixel/portrait_kit.py` builds each kit: keys the green, snaps to the 128 grid, finds the eyes and mouth against
+- `tools/pixel/portrait_kit.py` builds each kit: keys the green, snaps to the 96 grid, finds the eyes and mouth against
   the template, draws the blink and talk frames, splits head from body at the collar line, and builds the layered kit's
   ramps. Painted overrides win.
 - C#: a `PortraitKit` that draws a speaker's portrait from their kit at the line's expression, with the blink, talking,
   breathing, expression change and per-expression motion of §4.3, and emote marks. `Screens/DialogueScreen.cs`'s
-  portrait grows from 120 to 256 pixels. The layered kit builds the player's, {sb}'s and generic NPCs' portraits from
+  portrait grows from 120 to 288 pixels (96 art pixels at ×3). The layered kit builds the player's, {sb}'s and generic NPCs' portraits from
   their look and armour.
 - Add `disgust` to `Dialogue/Expressions.cs`, the script check and `Story/03` §5.2, so scripts can use `(disgust)`.
 - **Check:** every expression of the P0 kits, filmed talking and blinking, in `shots/pixel/portraits/`; a dialogue
@@ -583,7 +616,8 @@ the existing art. The owner looks at the converted game and decides which parts 
 
 1. Six face presets per body, all 13 expressions (the player and {sb}), and the hairstyles, collars and helms the
    creation screen offers.
-2. Portraits for the P0 cast: Brannock, Sera, Mira, Kael, Corra, Tomas, Grell and the Prologue's speakers.
+2. Portraits for the P0 cast: Brannock, Sera, Mira, Kael, Corra, Tomas, Grell and the Prologue's speakers, then the
+   rest of `docs/pixel-art-portraits/` in its order (companions, main story, villains, supporting cast).
 3. The emote sheet.
 4. Repaints of the P0 armours the converter flags, worst first.
 5. Gloomfang and the Thornmother, look and pieces.

@@ -47,12 +47,12 @@ public class DialogueScreen : GameScreen
     private const int PanelBottom = 870;
     private const int Inset = 30;
 
-    /// <summary>The face: how much bigger than art pixels, and the frame round it.</summary>
-    private const float PortraitScale = 5f;
+    /// <summary>The face's well: a pixel portrait's 96 art pixels three times over (docs/pixel-art-brief.md §1), and the frame round it.</summary>
+    private const int PortraitSize = PortraitKit.Grid * 3;
     private const int PortraitFrame = 14;
 
     /// <summary>Where the words start, past the face, and how wide they wrap.</summary>
-    private const int TextLeft = 210;
+    private const int TextLeft = Inset + PortraitSize + PortraitFrame + 26;
     private const int TextWidth = PanelWidth - TextLeft - Inset;
 
     /// <summary>An option's row: how tall, how far its words start past the number and the icon, and the icon's size on screen.</summary>
@@ -115,6 +115,7 @@ public class DialogueScreen : GameScreen
     private readonly QuestBoardSprite _board = new();
     private readonly ChapterCard _chapterCard = new();
     private readonly Toast _toast = new();
+    private PortraitKit _portraits;
 
     private ContentManager _content;
     private AudioManager _audio;
@@ -172,6 +173,7 @@ public class DialogueScreen : GameScreen
         _director = new CutsceneDirector(_stage, _game, _audio, _runner.Script.Id);
         _director.Backdrop += ShowBackdrop;
         _panel.LoadContent(_content, ScreenManager.GraphicsDevice);
+        _portraits = new PortraitKit(_content);
         _paintings.LoadContent(_content);
         if (ShowsFigures()) BakeFigures();
         _board.LoadContent(_content, ScreenManager.GraphicsDevice);
@@ -253,6 +255,7 @@ public class DialogueScreen : GameScreen
         _paintings.Update(gameTime);
         _board.Update(gameTime);
         _toast.Update(gameTime);
+        _portraits.Update(seconds);
 
         float target = _painting is null ? 0f : 1f;
         _paintingAlpha = MathHelper.Clamp(_paintingAlpha + Math.Sign(target - _paintingAlpha) * seconds / PaintingFade, 0f, 1f);
@@ -594,21 +597,28 @@ public class DialogueScreen : GameScreen
         int rows = node.Painting is null && !node.Board ? Math.Max(3, _wrapped.Count) : Math.Max(1, _wrapped.Count);
         int options = _options.Count == 0 ? 0 : 12 + _options.Count * OptionRow;
         int height = Inset + 4 + LineTop(node) + rows * _font.LineSpacing + options + _detailFont.LineSpacing;
-        int portrait = (int)(Bust.Height * PortraitScale) + Inset * 2;
+        int portrait = PortraitSize + Inset * 2;
         if (node.Speaker != Speakers.Narrator) height = Math.Max(height, portrait);
         return new Rectangle(PanelLeft, PanelBottom - height, PanelWidth, height);
     }
 
-    /// <summary>The speaker's face, in its frame, on the left of the panel: the bust off their sheet, or an imported picture's portrait at the frame's size. A voice's is tinted.</summary>
+    /// <summary>
+    /// The speaker's face, in its frame, on the left of the panel: their pixel portrait at the line's
+    /// expression, bobbing while the words type out (PortraitKit), or for someone without one the
+    /// bust off their sheet or an imported picture's portrait at the frame's size. A voice's is tinted.
+    /// </summary>
     private void DrawPortrait(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
         if (node.Speaker == Speakers.Narrator) return;
 
-        (_, Texture2D sheet, ImportedFigure art) = _speaker(node.Speaker);
-        int size = (int)(Bust.Width * PortraitScale);
+        int size = PortraitSize;
         var face = new Rectangle(panel.Left + Inset, panel.Top + Inset, size, size);
         _panel.Draw(spriteBatch, new Rectangle(face.X - PortraitFrame, face.Y - PortraitFrame, size + PortraitFrame * 2, size + PortraitFrame * 2), alpha);
-        Color tint = Speakers.VoiceOf(node.Speaker) is null ? Color.White : VoiceTint;
+        string voice = Speakers.VoiceOf(node.Speaker);
+        Color tint = voice is null ? Color.White : VoiceTint;
+        if (_portraits.Draw(spriteBatch, voice ?? node.Speaker, node.Expression, face, _shown < Length(), tint * alpha)) return;
+
+        (_, Texture2D sheet, ImportedFigure art) = _speaker(node.Speaker);
         if (art is not null) spriteBatch.Draw(art.Portrait(face.Size), face, tint * alpha);
         else if (sheet is not null) spriteBatch.Draw(sheet, face, Bust, tint * alpha);
     }
@@ -620,7 +630,7 @@ public class DialogueScreen : GameScreen
         for (int i = 0; i < _options.Count; i++)
         {
             if (IconFor(_options[i]) is not Icon icon) continue;
-            var at = new Rectangle(panel.Left + TextLeft + 34, OptionTop(panel, node) + i * OptionRow + (OptionRow - IconSize) / 2, IconSize, IconSize);
+            var at = new Rectangle(panel.Left + WordsLeft(node) + 34, OptionTop(panel, node) + i * OptionRow + (OptionRow - IconSize) / 2, IconSize, IconSize);
             var source = new Rectangle((int)icon * IconCell, 0, IconCell, IconCell);
             spriteBatch.Draw(_icons, at, source, Color.White * (_options[i].Open ? alpha : alpha * 0.5f));
         }
@@ -639,7 +649,7 @@ public class DialogueScreen : GameScreen
     private void DrawWords(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
         bool narrator = node.Speaker == Speakers.Narrator;
-        float left = panel.Left + (narrator ? Inset * 2 : TextLeft), top = panel.Top + Inset - 4f;
+        float left = panel.Left + WordsLeft(node), top = panel.Top + Inset - 4f;
 
         if (!narrator)
         {
@@ -674,11 +684,11 @@ public class DialogueScreen : GameScreen
                 float rowY = OptionTop(panel, node) + i * OptionRow + (OptionRow - _detailFont.LineSpacing) / 2f;
                 Color colour = !option.Open ? Palette.Note : i == _selected ? Palette.Torch : Palette.Bone;
                 string text = (i + 1) + ".";
-                Text.Draw(spriteBatch, _detailFont, text, panel.Left + TextLeft, rowY, colour * alpha, Palette.FormShadow * alpha);
+                Text.Draw(spriteBatch, _detailFont, text, panel.Left + WordsLeft(node), rowY, colour * alpha, Palette.FormShadow * alpha);
                 string said = TextTokens.Fill(option.Option.Text, _game);
                 if (!option.Open) said += "   [" + option.Reason + "]";
                 else if (option.Option.Check is DialogueCheck check) said = "[" + check.Label + " DC " + check.Dc + "]  " + said;
-                Text.Draw(spriteBatch, _detailFont, said, panel.Left + TextLeft + OptionIndent, rowY, colour * alpha, Palette.FormShadow * alpha);
+                Text.Draw(spriteBatch, _detailFont, said, panel.Left + WordsLeft(node) + OptionIndent, rowY, colour * alpha, Palette.FormShadow * alpha);
             }
         }
 
@@ -730,6 +740,9 @@ public class DialogueScreen : GameScreen
         return Inset - 4 + (named ? _detailFont.LineSpacing + 8 : 0);
     }
 
+    /// <summary>How far into the panel the words and the options start: past the face, or near the edge for the narrator, who has none.</summary>
+    private static int WordsLeft(DialogueNode node) => node.Speaker == Speakers.Narrator ? Inset * 2 : TextLeft;
+
     /// <summary>Where the options start on the panel: under the line.</summary>
     private int OptionTop(Rectangle panel, DialogueNode node) =>
         panel.Top + LineTop(node) + Math.Max(1, _wrapped.Count) * _font.LineSpacing + 12;
@@ -741,7 +754,7 @@ public class DialogueScreen : GameScreen
         Rectangle panel = PanelBounds(_shownNode);
         int top = OptionTop(panel, _shownNode);
         for (int i = 0; i < _options.Count; i++)
-            if (new Rectangle(panel.Left + TextLeft, top + i * OptionRow, TextWidth, OptionRow).Contains(mouse)) return i;
+            if (new Rectangle(panel.Left + WordsLeft(_shownNode), top + i * OptionRow, TextWidth, OptionRow).Contains(mouse)) return i;
         return -1;
     }
 

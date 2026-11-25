@@ -1,0 +1,957 @@
+[
+ {
+  "id": "sera",
+  "name": "Sera Vantis",
+  "role": "Sylvan warden of the Mirewood's western reach. Joins A1-C2 with her kestrel Burr. Romanceable. Personal quest **The Last Silverbark** (A1-C7)",
+  "group": "Companions",
+  "tier": "main",
+  "template": "female",
+  "look": "Sera Vantis: Sylvan (a long-lived fantasy people with long, pointed ears), about 140; looks late twenties. Porcelain skin; fine oval face, high cheekbones, narrow nose, composed unsmiling mouth; clear green eyes under straight, elegant honey brows. Long pointed Sylvan ears. Honey-blonde hair in one long braid brought over the left shoulder to the waist. Faint squint-lines from weather. Collar: moss-green ranger's coat with a stand collar and thin cream piping over an oatmeal shirt; short dark-moss-green wool shoulder cape, hood down, fastened with a wooden toggle; undyed-leather quiver strap across the chest; the longbow's tip rising past the right shoulder. Keep their signature colours clear: moss green, undyed leather.",
+  "mood": "watchful, flat, dry, quietly guarded"
+ },
+ {
+  "id": "mira",
+  "name": "Mira Ashgrove",
+  "role": "Human archivist-healer from Orrin's Reach, Maleficio's old apprentice (she read the Box's lid aloud). Joins A1-C3 (Thornbridge). Romanceable. Personal quest **The Ember Index** (A1-C7 to A1-C8)",
+  "group": "Companions",
+  "tier": "main",
+  "template": "female",
+  "look": "Mira Ashgrove: human, 26. Fair skin, a dusting of freckles; soft rounded face, rounded cheeks, small kind mouth; gentle brown eyes under softly worried copper brows. Copper hair twisted into a messy bun with a pen pushed through it, loose strands at the temples; an ink smudge on one cheekbone. Collar: cream blouse with full sleeves under a fitted ink-blue laced waistcoat-bodice with dark-blue piping; the broad brown strap of a battered satchel across the chest, capped scroll tubes showing at one shoulder. Keep their signature colours clear: ink blue, parchment.",
+  "mood": "gentle, earnest, careful, quietly haunted",
+  "variants": [
+   {
+    "id": "mira-young",
+    "when": "An echo of Mira at thirteen.",
+    "change": "change the look: round child's face, copper hair in two plaits, oversized parchment smock with ink-blue cuffs. An echo from the past: paint her solid and in full colour; the game tints echoes.",
+    "expressions": [
+     "smile",
+     "sad",
+     "afraid"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kael",
+  "name": "Kael Duskmantle",
+  "role": "Emberkin thief from Tallow Lane in the Low Ring. Joins A1-C4 (the Vault). Romanceable. Personal quest **A Name on a Door** (A1-C7). Can turn and become the Protectorate's Shadow, an Act 3 boss",
+  "group": "Companions",
+  "tier": "main",
+  "template": "male",
+  "look": "Kael Duskmantle: Emberkin (a fantasy people with horns that sweep back from the temples), 23. Warm tan skin; narrow, sharp-featured face, high cheekbones, thin nose; keen, narrowed amber eyes under angled black brows; one corner of the mouth lifted in a knowing half-smile; clean-shaven. A charcoal hood worn up, ending in a soft point, shading the edge of his face; two dark, ridged horns sweep back from the temples through the hood, pale like old ivory at the tips; black locks escape at the brow. Collar: close-fitting dark leather coat in layered panels, straps and buckles across the chest; charcoal half-cloak; a thin ember-red cord at the throat echoing his sash. Keep their signature colours clear: charcoal, ember red.",
+  "mood": "wry, quick, guarded charm, restless",
+  "variants": [
+   {
+    "id": "kael-shadow",
+    "when": "Act 3, if Kael joins the Protectorate.",
+    "change": "change the look: hood down, short messy black hair; finer black leathers with violet piping, a long high-collared black coat, a violet sash with a gold crown badge, a black leather half-mask pulled down round the neck; colder eyes.",
+    "expressions": [
+     "angry",
+     "cold",
+     "smirk",
+     "sad"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "brannock",
+  "name": "Brannock Ironvein",
+  "role": "Stoneborn former captain of the Royal Guard who held Greywatch's gate with forty men. Joins A1-C4 (the Rusty Anvil). Not romanceable. Personal quest **Forty Letters** (A1-C7).",
+  "group": "Companions",
+  "tier": "main",
+  "template": "male",
+  "look": "Brannock Ironvein: Stoneborn (a short, very broad, sturdy mountain people), nearly 200; looks about 55, build stout. Golden-tan weathered skin; craggy lined face, deep-set brown eyes with crow's feet under thick, fierce copper brows; crooked, once-broken nose with an old pale scar across the bridge; a nick through one brow; firm weathered mouth. Short tight copper curls. Full copper beard and moustache in one thick braid down the chest, bound with two tarnished-gold clasps. Thick neck, heavy shoulders. Collar: charcoal padded work shirt, chain-mail shirt, battered iron breastplate edged in tarnished gold, one heavy iron pauldron on the left shoulder. Keep their signature colours clear: iron grey, tarnished gold.",
+  "mood": "gruff, steady, kind but hides it",
+  "variants": [
+   {
+    "id": "brannock-clasps-gone",
+    "when": "From Act 3, Chapter 2.",
+    "change": "change the look: the beard braid hangs loose with no clasps; everything else the same.",
+    "expressions": [
+     "sad",
+     "angry",
+     "smile"
+    ]
+   },
+   {
+    "id": "brannock-sling",
+    "when": "The epilogue.",
+    "change": "change the look: his left arm in a plain linen sling across his chest; everything else the same.",
+    "expressions": [
+     "smile",
+     "sad"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "valencia",
+  "name": "Valencia Morvaine",
+  "role": "Dawnborn vampire, Severin's daughter, who hid forty years as Sister Vale at Saint Lumen's Abbey. Joins A2-C2. Romanceable. Personal quest **The Willing** (saving Sister Orla, Act 2)",
+  "group": "Companions",
+  "tier": "main",
+  "template": "female",
+  "look": "Valencia Morvaine: Dawnborn vampire (born, not turned), of Morvaine, 68; looks 25. Porcelain skin, cool and bloodless; heart-shaped face, small pointed chin; sharp, bright grey eyes under arched silver brows; one corner of the mouth lifted as if about to tease. Long, straight silver hair under a slender silver circlet with a tiny dark-red stone. Fangs hidden at rest. Collar: bone-white gown with a very high, stiff standing collar that frames the jaw, thin wine-red trim on the seams; a long charcoal-black cape lined in wine red over both shoulders. Keep their signature colours clear: bone white, wine red.",
+  "mood": "dry, elegant, amused, sad underneath",
+  "variants": [
+   {
+    "id": "sister-vale",
+    "when": "Early Act 2, at the abbey.",
+    "change": "change the look: a stiff, square-cornered grey hood worn up with a white linen band, hiding all her hair and shading her eyes; grey wool habit with a white linen collar; a small carved wooden bee on a cord.",
+    "expressions": [
+     "smile",
+     "laugh",
+     "sad",
+     "worried",
+     "angry",
+     "shock",
+     "disgust"
+    ]
+   },
+   {
+    "id": "valencia-unhooded",
+    "when": "The reveal.",
+    "change": "change the look: the habit without its hood, silver hair loose, eyes red.",
+    "expressions": [
+     "angry",
+     "sad",
+     "shock",
+     "cold"
+    ]
+   },
+   {
+    "id": "valencia-child",
+    "when": "An echo of Valencia at about eight.",
+    "change": "change the look: silver hair straight to the shoulders, a plain dark-blue dress with a white collar. An echo from the past: paint her solid and in full colour; the game tints echoes.",
+    "expressions": [
+     "smile",
+     "sad"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "elara",
+  "name": "Princess Elara Aurelian",
+  "role": "Leon's only child and heir. Ally from A1-C4 (hooded in the Gilded Flagon), leads the resistance in Act 3, crowned at A3-C5-06. Not romanceable and no personal quest of her own; she has an arc, a part in The Heron's Due, and teaches Crownsworn",
+  "group": "Companions",
+  "tier": "main",
+  "template": "female",
+  "look": "Princess Elara Aurelian: human (the Aurelian royal line), 24. Fair skin; fine oval face, high cheekbones, narrow nose, composed unsmiling mouth; clear, cool grey eyes under straight, elegant black brows. Black hair, long and pinned back at the nape for riding with a few strands loose, under a slim gold circlet with a small sapphire at the brow. Collar: a fitted deep royal-blue riding coat with a high collar trimmed in sun gold and a double row of small gold buttons; a white shirt at the throat; a short royal-blue cape over the left shoulder only, fastened with a gold sun-shaped clasp. Keep their signature colours clear: royal blue, sun gold.",
+  "mood": "quick, commanding, impatient, sharp-witted",
+  "variants": [
+   {
+    "id": "elara-hooded",
+    "when": "Act 1, Chapter 4, in the Gilded Flagon.",
+    "change": "change the look: a deep charcoal wool hood pulled forward with the upper face in shadow, a plain charcoal waistcoat over a white shirt, a plain charcoal cloak, no gold anywhere.",
+    "expressions": [
+     "smile",
+     "smirk",
+     "angry",
+     "worried",
+     "shock"
+    ]
+   },
+   {
+    "id": "elara-field",
+    "when": "Act 3, leading the resistance.",
+    "change": "change the look: black hair hacked into a short choppy cut, her blue coat muddy and torn with dulled gold, a travelling cloak, Leon's sword across her back with its blue leather grip and small gold sun crossguard over the left shoulder.",
+    "expressions": [
+     "angry",
+     "sad",
+     "worried",
+     "tired",
+     "smile",
+     "shock",
+     "disgust"
+    ]
+   },
+   {
+    "id": "elara-crowned",
+    "when": "Act 3's ending, crowned.",
+    "change": "change the look: Leon's small plain gold crown with one ruby, a white-and-gold mantle over both shoulders.",
+    "expressions": [
+     "smile",
+     "sad"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "leon",
+  "name": "King Leon",
+  "role": "King of Fable and Elara's father. Speaks through Acts 1-3; spoke for Brannock forty-one years ago. In furs and ill in Act 3; killed by {sb} at A3-C2-03",
+  "group": "Main story",
+  "tier": "main",
+  "template": "male",
+  "look": "King Leon: human (Aurelian), early sixties. Fair skin; deeply lined, gentle face, drooping lids over kind grey eyes, bushy silver brows, big nose, hollowed cheeks, thin gentle mouth. Silver hair swept back to the collar and a short, neat silver beard. A small, plain gold crown, a simple band with low points and one ruby at the front. Collar: a broad ermine collar (white fur with small black tips) over a white robe-coat trimmed in sun gold, a gold sash across it; a heavy navy cloak falling behind. Keep their signature colours clear: white, sun gold.",
+  "mood": "tired, courteous, plain-spoken, kind",
+  "variants": [
+   {
+    "id": "leon-furs",
+    "when": "Act 3, ill.",
+    "change": "change the look: grey-pale, drawn skin; a heavy fur-lined navy-and-white robe with a thick fur collar and a wool blanket round the shoulders; crown still on.",
+    "expressions": [
+     "tired",
+     "sad",
+     "smile",
+     "worried"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "thessaly",
+  "name": "Archmage Thessaly Varn",
+  "role": "Head of the Mages Guild at the Arcanum Spire. Briefs the Doomward mission (A1-C7-02) and guards the Deepvault. Sealed in crystal by {sb} (A3-C2-02), freed at A3-C4-03. Trainer (Guild Battlemage, later Hourwarden)",
+  "group": "Main story",
+  "tier": "main",
+  "template": "female",
+  "look": "Archmage Thessaly Varn: human, 60. Fair skin; lean, sharp face, deep lines round the mouth, long nose, thin lips pressed together; steady, piercing grey eyes under thin grey brows. Grey hair cropped close to the skull. A single plain steel ear stud. Collar: a short deep-cobalt mantle with a high collar over a cobalt robe, both banded with a plain repeated geometric motif in pale silver thread; a slim book on a chain at the chest. the left hand is missing its ring and little fingers, healed long ago. Keep their signature colours clear: Guild cobalt.",
+  "mood": "clipped, exacting, unflappable, bone-dry",
+  "variants": [
+   {
+    "id": "thessaly-crystal",
+    "when": "Act 3, sealed in crystal.",
+    "change": "change the look: the same, frozen mid-cast inside clear faceted crystal with a cold blue-white sheen, facet edges crossing her face.",
+    "expressions": []
+   }
+  ]
+ },
+ {
+  "id": "hale",
+  "name": "Captain Roderic Hale",
+  "role": "Captain of the City Watch: the docks in Act 1, trainer (Watchblade). In Act 3 he serves the Protectorate, and SQ3-Hale can turn him",
+  "group": "Main story",
+  "tier": "main",
+  "template": "male",
+  "look": "Captain Roderic Hale: human, mid-fifties, build broad. Fair skin; craggy, lined, tired face, deep-set grey eyes with crow's feet under thick, fierce silver brows; crooked nose; an old nick through one brow; firm weathered mouth; silver stubble. An open-faced steel helm with a brass rim and a short, stiff crest of navy horsehair running front to back; silver hair at the temples. Collar: navy Watch coat with brass buttons and a large brass lantern badge over chain mail; a navy cloak fastened at one shoulder with a brass clasp; broad, heavy shoulders. Keep their signature colours clear: Watch navy and brass.",
+  "mood": "tired, decent, wary working man",
+  "variants": [
+   {
+    "id": "hale-protectorate",
+    "when": "Act 3, serving the Protectorate.",
+    "change": "change the look: a violet tabard with a gold border and a gold stylised crown over the same navy coat, a violet armband.",
+    "expressions": [
+     "angry",
+     "cold",
+     "worried",
+     "sad",
+     "shock"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "aldric",
+  "name": "Commander Aldric Voss",
+  "role": "Commander at Greywatch, old comrade of Brannock and Leon. Dies holding the inner gate (A1-C6-01); his bier starts Brannock's names (A1-C6-03)",
+  "group": "Main story",
+  "tier": "named",
+  "template": "male",
+  "look": "Commander Aldric Voss: human, about 65. Fair, weathered skin; craggy lined veteran's face, deep-set sky-blue eyes with crow's feet, thick brows, crooked nose, a nick through one brow; silver hair buzzed to the scalp; silver stubble; a gallows-humour crease at one corner of the mouth. Collar: worn, mismatched, dented steel plate (breastplate and rounded pauldrons) over chain mail and a padded jack; an old campaign cloak in faded brick red, patched and singed. Keep their signature colours clear: steel, faded red.",
+  "mood": "wry, worn, gallows-humoured, fond"
+ },
+ {
+  "id": "brenna",
+  "name": "Brenna of Ashfall",
+  "role": "Leader of Doomward's Ashfall fighters and Varkhul's daughter. Guides the party through the Thornwall (A1-C7-05). Trainer (Ashwalker). SQ3-Ashfall turns her, or you fight her",
+  "group": "Main story",
+  "tier": "main",
+  "template": "female",
+  "look": "Brenna of Ashfall: human (Doomward), about 40. Peach skin smudged with grey ash across the cheek and brow; an old burn scar along the jaw; lean, strong face, firm jaw, straight nose, set mouth, a small old scar on the chin; level, steady grey eyes under straight dark brows. Dark-brown hair pulled up into a warrior's topknot. Collar: black-dyed leather jerkin over a mail shirt; one old, cracked knight's pauldron on the left shoulder, finer than the rest, its engraved crest worn; a long ash-grey cloak, hood down, ragged and singed. Keep their signature colours clear: ash grey, Doomward black.",
+  "mood": "hard, terse, smoke-weary, proud",
+  "variants": [
+   {
+    "id": "brenna-protectorate",
+    "when": "Act 3, if Ashfall sides with {sb}.",
+    "change": "change the look: a violet sash from the left shoulder to the right hip fixed with a gold crown badge; also her boss look.",
+    "expressions": [
+     "angry",
+     "cold",
+     "smirk"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "corwin",
+  "name": "Sir Corwin Halbeck",
+  "role": "Commander of the Order of the Gilded Morning, who hunts the Dawnborn in Act 2. Dies (A2-C5-02) or is saved; trainer (Gilded Knight); leads SQ3-Gilded if he lives",
+  "group": "Main story",
+  "tier": "main",
+  "template": "male",
+  "look": "Sir Corwin Halbeck: human, about 50. Fair skin; square-jawed, steady face, broad straight nose, firm mouth, clean-shaven; level blue eyes under a strong, straight brow. Short silver hair at the temples under an open-faced gilded helm with a tall white plume rising from the crest. Collar: polished steel plate with gold-leaf edging, a small sun engraved on each pauldron; a long white tabard with a large gold sun on the chest; a white cloak edged in gold. Keep their signature colours clear: gold-white.",
+  "mood": "certain, devout, stern, unbending"
+ },
+ {
+  "id": "davin",
+  "name": "Davin",
+  "role": "Corwin's squire, who carries Corwin's sword. Leads SQ3-Gilded if Corwin died; trainer (Gilded Knight)",
+  "group": "Main story",
+  "tier": "named",
+  "template": "male",
+  "look": "Davin: human, about 17. Tan skin; smooth, eager young face, soft jaw not yet filled out, straight nose a little big for it, clean-shaven; wide-open brown eyes. Short, messy dark-brown hair, no helm, no plume. Collar: a mail shirt a little big for him; over it a white tabard with a large gold sun, plainly cut down from a bigger man's and re-hemmed by hand in uneven stitches; the hilt of Corwin's too-big sword at one shoulder. Keep their signature colours clear: gold-white.",
+  "mood": "earnest, grieving, trying to stand tall"
+ },
+ {
+  "id": "anselle",
+  "name": "Mother Superior Anselle",
+  "role": "Head of Saint Lumen's Abbey, which sheltered Sister Vale (A2-C2-01). Trainer (Lamplighter)",
+  "group": "Main story",
+  "tier": "named",
+  "template": "female",
+  "look": "Mother Superior Anselle: human, about 75. Fair skin; soft, round, kindly face with many fine wrinkles, small nose, sweet tired smile; gentle hazel eyes in deep creases. Silver hair in a neat low bun, no hood. Collar: plain grey wool habit with a white linen collar; a small carved wooden bee on a cord round the neck; the top of a heavy iron key ring at the belt. Keep their signature colours clear: grey, white.",
+  "mood": "kind, knowing, gently evasive"
+ },
+ {
+  "id": "orla",
+  "name": "Sister Orla",
+  "role": "Saint Lumen's beekeeper and Valencia's willing donor for thirty years. Arrested by the Order in **The Willing**; trainer (Hivekeeper) if saved",
+  "group": "Main story",
+  "tier": "named",
+  "template": "female",
+  "look": "Sister Orla: human, about 60. Peach skin, freckled and sun-browned; broad, weathered face, apple cheeks, broad nose, wide good-humoured mouth; crinkled blue eyes with deep laugh lines. Silver hair under a wide-brimmed straw hat with a fine honey-coloured mesh bee veil, pinned up at the front and hanging at the back and sides. Collar: brown wool habit, sleeves rolled; a honey-yellow canvas smock-apron over it, sticky at the front; a hive tool on a cord. Keep their signature colours clear: honey yellow, brown.",
+  "mood": "practical, unembarrassed, warm, plain"
+ },
+ {
+  "id": "isadora",
+  "name": "Lady Isadora",
+  "role": "Severin's late wife and Valencia's mother. Seen only as an echo (A2-C3-03) and through her journal; the journal teaches Glasswright",
+  "group": "Main story",
+  "tier": "named",
+  "template": "female",
+  "look": "Lady Isadora: a Morvaine noblewoman, about 35, as she was forty years ago. Fair skin; soft, round face, small kind mouth; gentle brown eyes under softly worried brows. Dark-brown hair in a braided updo. Collar: a deep midnight-blue gown with fitted sleeves and a modest square neckline, fine silver embroidery of small night-flowers; a sprig of night-flowers raised near her chin. Keep their signature colours clear: midnight blue.",
+  "mood": "warm, practical, urgent, loving",
+  "note": "Paint her solid and in full colour; the game tints her as a ghostly echo."
+ },
+ {
+  "id": "corra",
+  "name": "Corra",
+  "role": "{sb}'s mother, a net-mender of Kettle Cove. Speaks in P-03 (\"Well. Now you've got each other.\") and in her three letters (A1-C7, A2, A3)",
+  "group": "Main story",
+  "tier": "named",
+  "template": "female",
+  "look": "Corra: human (southern isles), early fifties now; about 36 in the flashback. Tan, salt-weathered skin; broad, weathered face, apple cheeks, broad nose, wide mouth; crinkled grey eyes with deep laugh lines. Chestnut hair, grey at the temples, in a messy bun. Collar: a thick, cove-blue (soft sea-grey blue) knitted shawl round the shoulders, knotted at the front; an oatmeal blouse; a faded blue kerchief at the throat. No ring: she paid it as {sb}'s fine. Keep their signature colours clear: cove blue, oiled brown.",
+  "mood": "warm, tough, unsentimental, steady",
+  "variants": [
+   {
+    "id": "corra-young",
+    "when": "The Prologue's flashback, sixteen years younger.",
+    "change": "change the look: a lean, strong face with a small chin scar; chestnut hair loose and soaked by rain; the same shawl dark with water.",
+    "expressions": [
+     "smile",
+     "worried",
+     "sad"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "maleficio",
+  "name": "Maleficio",
+  "role": "The Doomward council scholar who fed the famine children, then took the Box. Mira's teacher. Act 1's villain; boss at A1-C8-02 (the Sovereign), then the Hungering",
+  "group": "Villains and bosses",
+  "tier": "main",
+  "template": "male",
+  "look": "Maleficio: human, about 70. Fair skin; deeply lined, gentle face, drooping lids over kind brown eyes, bushy silver brows, big nose, hollowed cheeks, thin gentle mouth. Silver hair receding from a high forehead; a short, neat silver beard. Collar: long, layered charcoal scholar's robes with a tall, stiff, fan-shaped collar rising behind the head; the collar's edge and the hems glow faintly ember orange, like paper just starting to burn; a dark sash with archivist's keys; a faint ember underglow on the chin from the Box floating below. Keep their signature colours clear: charcoal, ember orange.",
+  "mood": "mild, patient, reasonable, disappointed",
+  "variants": [
+   {
+    "id": "maleficio-young",
+    "when": "An echo of the teacher Mira knew.",
+    "change": "change the look: dark-brown hair, a short dark beard, a firmer veteran's face, plain brown-and-charcoal scholar's robes with the sleeves pushed up, ink on his fingers, oil-lamp light. An echo from the past: paint him solid and in full colour; the game tints echoes.",
+    "expressions": [
+     "smile",
+     "laugh",
+     "worried"
+    ]
+   },
+   {
+    "id": "maleficio-sovereign",
+    "when": "His boss fight, as the Sovereign.",
+    "change": "change the look: robes and high collar lifted as if in a hot updraught, every ember edge burning bright with sparks, fine ember cracks across his skin.",
+    "expressions": [
+     "angry",
+     "laugh",
+     "cold"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "varkhul",
+  "name": "Varkhul, the Hollow Knight",
+  "role": "Brenna's father, Hollowed twelve years ago. Boss of Greywatch (A1-C6-01); unmasked, he dies asking to be remembered as a knight",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "male",
+  "look": "Varkhul, the Hollow Knight: human (Hollowed), about 70, build tall, wide. No face shows: a closed great helm of blackened iron, its visor cracked down the middle, one burning ember-orange eye in the crack. Massive, tall shoulders. Collar: blackened full plate, ash grey at the edges, old and fine under the corruption, with a faded engraved crest on the breastplate; cracked seams leak a dull ember-orange glow; a ragged ash-grey surcoat and a tattered, scorched ash-grey cloak hang in strips. The shard in his greatsword hilt glows violet-black if the hilt is in frame. Keep their signature colours clear: ash, ember.",
+  "mood": "hollow, halting, menacing, mournful",
+  "note": "His face is hidden by the helm: show each expression through the burning eye in the visor's crack (narrowed, flaring, dimmed), the tilt of the head and the set of the shoulders.",
+  "variants": [
+   {
+    "id": "varkhul-unmasked",
+    "when": "Unmasked, dying.",
+    "change": "change the look: a grey-haired old man: stone-grey, dead-pale skin, a deeply lined gentle face, long wild silver hair, a short silver beard, amber eyes now clear; the armour split open with its ember light gone, a stained padded jack showing; at peace, dying.",
+    "expressions": [
+     "sad",
+     "tired",
+     "smile"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "severin",
+  "name": "Lord Severin Morvaine",
+  "role": "The Blood Sovereign of Morvaine and Valencia's father. Act 2's villain, who blinds the sun with the Eye. Boss at A2-C4-04 and A2-C6-03; spared or killed; a prisoner in SQ3-Sunward",
+  "group": "Villains and bosses",
+  "tier": "main",
+  "template": "male",
+  "look": "Lord Severin Morvaine: vampire (a Morvaine lord), centuries; looks about fifty, build tall, lean. Porcelain skin, bloodless; long, narrow, refined face, high cheekbones, long straight nose, thin lips in a polite, guarded line, clean-shaven; cool, heavy-lidded red eyes under finely arched silver brows. Silver hair falling straight to the shoulders under a circlet of black iron wrought into thorns. Collar: a long black velvet coat with a high collar lined in wine red and tarnished silver clasps; a wine-red waistcoat; a black cravat with a dark-red stone pin; a black velvet cape lined in wine red hanging from the shoulders. Keep their signature colours clear: black, wine red.",
+  "mood": "slow, elegant, grieving, coldly courteous",
+  "variants": [
+   {
+    "id": "severin-unbound",
+    "when": "His boss fight, unbound.",
+    "change": "change the look: the cape spread wide like a bat's wings with ragged points, fangs bared, blood-magic glow as an effect.",
+    "expressions": [
+     "angry",
+     "laugh",
+     "cold"
+    ]
+   },
+   {
+    "id": "severin-cell",
+    "when": "Act 3, a prisoner.",
+    "change": "change the look: thin, grey stone-pale skin, no crown, lank silver hair, a plain stained linen shirt, iron cuffs, daylight on him.",
+    "expressions": [
+     "sad",
+     "tired",
+     "cold",
+     "smirk"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vorlaith",
+  "name": "Vorlaith, the Unmade King",
+  "role": "An ancient thing that comes through the time-tear. Speaks four times in Act 3 (A3-C5-02, A3-C5-07); Act 4's threat",
+  "group": "Villains and bosses",
+  "tier": "main",
+  "template": "male",
+  "look": "Vorlaith, the Unmade King: other (a being of living glass), ancient. A head of clear, colourless glass cracked with fine branching fractures, a cold white light drifting inside it like smoke in a bottle; smooth, calm, faintly amused features; two points of white light for eyes; no hair, only a faint glassy brow ridge. A crown of broken clock-hands, old dark iron and brass of different sizes, pointing every way. Collar: the same cracked glass forming a high collar and long, still robes, the light brightest in the chest. Keep their signature colours clear: colourless glass, white light.",
+  "mood": "calm, ancient, faintly amused",
+  "note": "The face is glass: show each expression in the glass features and in the light inside, which brightens, dims or flickers with the mood."
+ },
+ {
+  "id": "crane",
+  "name": "Lord Chancellor Vesper Crane",
+  "role": "Lord Chancellor (his father stalled Greywatch's relief) and secretly the traitor paying in black-iron marks; his signet is the cube. A1-C4 to A2-C5; {sb} can use him (Heron's Due, the fast way) or execute him",
+  "group": "Villains and bosses",
+  "tier": "main",
+  "template": "male",
+  "look": "Lord Chancellor Vesper Crane: human, about 50, build tall, very thin. Porcelain skin; long, narrow, refined face, high cheekbones, long straight nose, thin lips held in a polite, guarded line; cool, heavy-lidded grey eyes under finely arched black brows; a thin, precise black moustache. Glossy black hair slicked straight back. Collar: a floor-length plum coat, close at the chest, with a high standing collar, silver trim and a column of small silver buttons; a dark-grey waistcoat; a white stock at the throat. silver rings, one a signet set with a small black cube. Keep their signature colours clear: plum, silver.",
+  "mood": "smooth, courteous, calculating, faintly amused"
+ },
+ {
+  "id": "vesk",
+  "name": "Vesk",
+  "role": "Severin's formal thrall-knight. Dies in A2-C1-02, coming apart into mist",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "male",
+  "look": "Vesk: vampire thrall-knight, unknown, build big. Helm closed: black, with thin wine-red trim, shaped like a snarling wolf's head with the snout as the visor; two red points of light in the eye slits. Collar: full plate of glossy black steel, wine-red trim on every edge, sharp but elegant, layered black cloth between the plates; a black cape lined in wine red, ragged at the hem. Under the helm (never seen): porcelain skin, copper hair, red eyes. Keep their signature colours clear: black, wine red.",
+  "mood": "formal, mocking, haughty",
+  "note": "His face is hidden by the wolf helm: show each expression through the red eye lights (narrowed, flaring, dimmed) and the tilt of the head."
+ },
+ {
+  "id": "vreya",
+  "name": "Vreya",
+  "role": "Severin's sing-song thrall-knight. Leads the raid on the abbey (A2-C2-02)",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "female",
+  "look": "Vreya: vampire thrall-knight, looks mid-twenties. Porcelain skin; heart-shaped face, small pointed chin, a mouth curled as if about to tease; sharp, bright red eyes under arched white brows; a few strands of white hair at the cheeks. An open-faced black helm with thin wine-red trim, crowned with a ring of tall, sharp points that frame the face. Collar: glossy black plate trimmed wine red, layered black cloth showing between the plates; a black cape lined in wine red. Keep their signature colours clear: black, wine red.",
+  "mood": "sing-song, gleeful, cruel, playful"
+ },
+ {
+  "id": "mordain",
+  "name": "Mordain",
+  "role": "Severin's whispering thrall-knight. Seen in Isadora's echo (A2-C3-03)",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "male",
+  "look": "Mordain: vampire thrall-knight, unknown, build tall, thin. Helm closed: black, with thin wine-red trim, drawn out into a long, curved beak like a carrion bird's, with round red-glass eyepieces. Narrow shoulders. Collar: glossy black plate trimmed wine red, layered black cloth showing between the plates; a black cape lined in wine red. Under the helm (never seen): porcelain skin, copper hair, red eyes. Keep their signature colours clear: black, wine red.",
+  "mood": "whispering, patient, predatory",
+  "note": "His face is hidden by the beaked helm: show each expression through the red eyepieces' glow and the tilt of the head."
+ },
+ {
+  "id": "grell",
+  "name": "Bosun Grell",
+  "role": "The Red Gulls' bosun, squeezing the Saltwind docks. The first fight, with {sb}'s blade at his throat (A1-C1-01)",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "male",
+  "look": "Bosun Grell: Stoneborn (a short, very broad, sturdy mountain people), about 45, build stout, very wide. Tan, tar-stained skin; broad, blunt face, a thick brow ridge over small, hard brown eyes, a flattened nose broken more than once, a heavy square jaw; a thin pale scar through one brow and down the cheek; bald as an egg; a full, bushy copper beard. Almost no neck. Collar: an open raspberry-red bosun's coat with frayed cuffs, tar stains and tarnished brass buttons over an oatmeal shirt half unlaced; a steel hook strapped to the right wrist raised into frame. Keep their signature colours clear: Red Gull red.",
+  "mood": "brutish, sneering, swaggering bully"
+ },
+ {
+  "id": "gannet",
+  "name": "Mother Gannet",
+  "role": "Owns every door on Tallow Lane and is doubling the rents; changes Doomward marks for Crane's people. The antagonist of Kael's **A Name on a Door**",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "female",
+  "look": "Mother Gannet: human, about 60, build wide. Fair skin; broad face, apple cheeks, broad nose, a wide mouth that smiles without warmth; shrewd brown eyes with crinkles. Silver hair under a small white lace cap pinned on top. Wide shoulders. Collar: a heavy mustard-yellow wool shawl pinned with a large brass brooch over a brown wool dress; ringed fingers holding a pen over a ledger. Keep their signature colours clear: mustard, brown.",
+  "mood": "shrewd, cold, grasping, matronly"
+ },
+ {
+  "id": "harrow",
+  "name": "Lord Harrow of Heronsgate",
+  "role": "Holds the southern isles' fishing rights and once took Kettle Cove's nets. The antagonist of {sb}'s **The Heron's Due** (A1-C7)",
+  "group": "Villains and bosses",
+  "tier": "named",
+  "template": "male",
+  "look": "Lord Harrow of Heronsgate: human, about 55. Fair skin; long, narrow, refined face, high cheekbones, long straight nose, thin lips; cool, heavy-lidded grey eyes looking slightly past the viewer; silver hair receding from the brow; silver side-whiskers. Collar: a long heron-green (deep grey-green) frock coat with a grey heron embroidered on the breast; a grey silk waistcoat; a white cravat. Keep their signature colours clear: heron green and grey.",
+  "mood": "bored, polite, indifferent, aloof"
+ },
+ {
+  "id": "tomas",
+  "name": "Old Tomas",
+  "role": "The Saltwind fisherman the Red Gulls bully (A1-C1-01). Speaks for the fishers in The Heron's Due; trainer (Netcaster); an Act 3 cameo",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Old Tomas: human, about 70 (fifty years a fisherman). Tan, wind-burned skin; deeply lined, gentle face, drooping lids over kind sky-blue eyes, bushy white brows, big nose, hollowed cheeks, thin gentle mouth; white stubble. White hair under a snug, dark-blue knitted fisherman's cap rolled at the brim. Collar: a thick grey knitted jumper, darned, under a sleeveless mustard oilskin smock, cracked and patched.",
+  "mood": "grateful, shy, weathered, gentle"
+ },
+ {
+  "id": "odelle",
+  "name": "Captain Odelle Marsh",
+  "role": "Captain of the *Gull's Wager*, which carries you to Fable (P-04/P-05). Trainer (Deckhand) until she sails in Act 2",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Captain Odelle Marsh: human, about 40. Deep umber skin; lean, strong face, firm jaw, straight nose, set mouth with a cheeky twist, small old scar on the chin; level brown eyes under straight brows; a small gold hoop in one ear. Black hair tied back in a tail under a weathered black tricorn with thin gold trim. Collar: a white linen shirt open at the neck, a fitted crimson waistcoat with brass buttons, a long charcoal sea-coat with the cuffs turned back.",
+  "mood": "salty, cheeky, confident, amused"
+ },
+ {
+  "id": "ruck",
+  "name": "Ruck",
+  "role": "Odelle's bosun, who takes over Deckhand training in Act 2",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Ruck: human, about 55. Brown skin; craggy lined face, deep-set grey eyes with crow's feet, thick brows, crooked nose, a nick through one brow; bald on the crown with a silver fringe; a silver goatee. Collar: a navy-and-cream striped knitted jersey with the sleeves pushed up, a sleeveless brown oilskin waistcoat, a rope lanyard.",
+  "mood": "dry, steady, apologetic, salty"
+ },
+ {
+  "id": "fennick",
+  "name": "Questmaster Fennick",
+  "role": "Keeps the Lantern Market's quest board and posts the Mirewood contract (A1-C1-02)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Questmaster Fennick: human, about 45. Fair skin; round, pleasant face, soft cheeks, short nose, small contented smile; kind grey eyes with laugh lines behind small round spectacles; a neat silver moustache. Silver hair with a tidy side parting, a quill tucked behind one ear. Collar: an oatmeal shirt with black sleeve garters, a mustard-ochre waistcoat with a watch chain; ink-stained fingers.",
+  "mood": "pedantic, kindly, pleased, fussy"
+ },
+ {
+  "id": "brisk",
+  "name": "Sergeant Brisk",
+  "role": "Watch sergeant at the city gate (A1-C3). Gives side quest SQ-Tollroad",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Sergeant Brisk: human, about 45. Brown skin; round, pleasant face gone tired, soft cheeks, short nose; brown eyes; a drooping black moustache. Black hair under an open-faced steel Watch helm with a brass rim and no crest. Collar: a navy Watch coat with brass buttons and a small brass lantern badge, a short navy cape with a brass clasp. Keep their signature colours clear: Watch navy and brass.",
+  "mood": "harried, dutiful, deadpan, decent"
+ },
+ {
+  "id": "pip",
+  "name": "Pip the Potboy",
+  "role": "The Gilded Flagon's potboy. Gives side quest SQ-Cellar (the black-eyed rats)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Pip the Potboy: Hearthling (a small, round-faced, child-sized folk), about 17, build small. Fair, freckled skin; smooth, eager face, soft jaw, straight nose a little big for it; wide-open brown eyes darting sideways. Short, messy copper hair. Small build. Collar: a cream shirt with rolled sleeves under a charcoal waistcoat; the bib of a long, stained leather apron.",
+  "mood": "jumpy, conspiratorial, nervous, cheeky"
+ },
+ {
+  "id": "osric",
+  "name": "Osric Penhallow",
+  "role": "A cloth merchant in the Lantern Market. Gives side quest SQ-Ledger (a stolen green ledger with brass corners)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Osric Penhallow: human, about 45. Porcelain skin; round, pleasant face, soft cheeks, short nose; anxious brown eyes; a neat black moustache. Black hair with a careful side parting. Collar: a white shirt with full sleeves, an embroidered dusty-plum waistcoat (keep it dusty, away from Crane's plum), a tailor's tape round his neck, a short lavender cape with a small silver clasp.",
+  "mood": "flustered, effusive, anxious, evasive"
+ },
+ {
+  "id": "maud",
+  "name": "Maud Tolley",
+  "role": "The bellringer's widow on the jetty. Gives side quest SQ-Widow (her ring, engraved \"Ring true\", lost in the harbour shallows)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Maud Tolley: human, about 75. Fair skin; soft, round, kindly face with many fine wrinkles, small nose, sweet tired smile; gentle grey eyes in deep creases. Silver hair in a low bun. Collar: a plain grey-brown wool dress with a muted mauve-grey knitted shawl crossed over both shoulders; her late husband Edric's flat cap held to her chest.",
+  "mood": "wistful, apologetic, gentle, grieving"
+ },
+ {
+  "id": "wren",
+  "name": "Wren",
+  "role": "A Low Ring pickpocket and one of Kael's crew: tries your belt in the Lantern Market, turns up in Kael's kitchen",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Wren: Hearthling (a small, round-faced, child-sized folk), drawn child-sized, about 11, build small. Brown skin with freckles; round child's face, small snub nose, full cheeks, a quick, cheeky look; big bright amber eyes. Black hair scraped back into a scruffy short tail. Collar: an oatmeal shirt under a charcoal waistcoat far too big for her; a scrap of grey cloak round the shoulders; a coin walking across her knuckles.",
+  "mood": "cheeky, quick, streetwise, bold"
+ },
+ {
+  "id": "tamsin",
+  "name": "Ranger Tamsin",
+  "role": "A ranger of the Rangers' Lodge, which posted the Mirewood contract. Trainer (Lodge Ranger); a hawk rides on her shoulder",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Ranger Tamsin: Wildkin (hawk), about 40. Tan skin; lean, strong face, firm jaw, straight nose, set mouth, small chin scar, a thin pale scar through one brow and down the cheek; level amber eyes. Two swept-back tufts of barred brown-and-cream feathers rise from the top of her head in place of ears. Chestnut hair pulled back tight. Collar: an olive ranger's coat with a moss-green collar over a forest-green leather jerkin and an oatmeal shirt; a short teal ranger's cloak; the Lodge's hawk on her shoulder (optional). Keep their signature colours clear: the Lodge's moss green.",
+  "mood": "brisk, wry, outdoorsy, steady"
+ },
+ {
+  "id": "imra-vell",
+  "name": "Master Imra Vell",
+  "role": "Master of the Proving Hall, who teaches the eight base classes",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Master Imra Vell: Stoneborn (a short, very broad, sturdy mountain people), sixties. Deep umber skin; lean, strong face, firm jaw, a patient set mouth; a nose broken long ago, with an old scar across the bridge; level brown eyes. Black hair in a short pixie crop, well flecked with grey. Broad Stoneborn shoulders. Collar: a fitted, quilted fencing doublet in cream with navy panels and brass buckles down one side.",
+  "mood": "patient, dry, firm, teacherly"
+ },
+ {
+  "id": "hedda",
+  "name": "Hedda",
+  "role": "A Doomward refugee mother at Thornbridge (A1-C3-01) who walked three weeks with her daughter Lise",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Hedda: human (Doomward), about 40. Tan skin, gaunt with hunger; lean, strong face, firm jaw, straight nose, set mouth, small old chin scar; level brown eyes. Chestnut hair pulled back tight. Collar: an oatmeal shirt patched with sacking, a charcoal wool waistcoat, a coarse blanket worn round the shoulders as a cloak. \"Sacking, charcoal and oat.\"",
+  "mood": "exhausted, fierce, protective, proud"
+ },
+ {
+  "id": "refugee-child",
+  "name": "Lise",
+  "role": "Hedda's daughter. Aged by the time-tear at Thornbridge in Act 3: \"I'm forty-six... I was twelve on Tuesday\" (Story/08-random-encounters.md:617)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Lise: human (Doomward), 12 (the aged variant is 46), build child. Tan skin with freckles; round child's face, small snub nose, full cheeks, a shy, wary look; big bright brown eyes. Chestnut hair in two plaits. Collar: an oversized oatmeal smock belted with rope, a small charcoal shawl round the shoulders; a rag doll held under her chin.",
+  "mood": "shy, hungry, wary, small",
+  "variants": [
+   {
+    "id": "lise-aged",
+    "when": "Act 3, aged to forty-six overnight by the time-tear.",
+    "change": "change the look: a lean, strong adult face with a small chin scar, loose, unkempt chestnut hair, the child's smock tight on her, bewildered eyes.",
+    "expressions": [
+     "shock",
+     "afraid",
+     "sad"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "garrick",
+  "name": "Garrick",
+  "role": "Caravan master on the road to Greywatch and the ford ambush (A1-C5-01)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Garrick: human, about 55. Tan, road-dusted skin; craggy lined face, crooked nose, a thin pale scar through one brow and down the cheek; deep-set brown eyes with crow's feet; a bushy black moustache. Black hair under a wide-brimmed tan felt hat with a braided cord band. Collar: an open, oiled-brown duster coat, a faded grey scarf against the road dust, a leather waistcoat over a grey shirt.",
+  "mood": "gruff, practical, laconic, weary"
+ },
+ {
+  "id": "hester",
+  "name": "Hester Hollis",
+  "role": "Pim Hollis's sister at Kestrel Ford, at the heart of Brannock's **Forty Letters**",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Hester Hollis: human, late sixties. Porcelain skin; soft, round, kindly face with many fine wrinkles, small nose, sweet tired smile; gentle sky-blue eyes in deep creases. White hair in a low bun. Collar: a plain grey-brown wool dress with a soft heather knitted shawl crossed over both shoulders; a folded shawl held in her hands. Keep their signature colours clear: heather.",
+  "mood": "gentle, forgiving, steady, wry"
+ },
+ {
+  "id": "tobin",
+  "name": "Tobin Ashgrove",
+  "role": "Mira's father, a cider-presser from Orrin's Reach, found digging ditches in Doomward's levy (`mira-tobin`, part of The Ember Index)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Tobin Ashgrove: human, mid-fifties. Fair, freckled skin; round, pleasant face, soft cheeks, short nose; kind brown eyes with laugh lines; a short copper beard; thin copper hair, bald on the crown. Collar: an apple-green work shirt with rolled sleeves under the bib of a heavy, stained brown leather presser's apron. If his left hand shows: a wide old burn scar across its back. Keep their signature colours clear: apple green, brown.",
+  "mood": "mild, bewildered, tender, worn",
+  "variants": [
+   {
+    "id": "tobin-levy",
+    "when": "How you meet him, in the levy.",
+    "change": "change the look: a patched grey levy coat, mud everywhere, a rope belt, thinner and grimier, dazed.",
+    "expressions": [
+     "tired",
+     "sad",
+     "shock",
+     "smile"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hobb",
+  "name": "Hobb",
+  "role": "Boss of the woodcutters felling the last silverbark for the Admiralty, in Sera's **The Last Silverbark**",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Hobb: human, about 50, build big. Fair, ruddy, freckled skin; craggy lined face, crooked nose, a nick through one brow; deep-set blue eyes with crow's feet; a full copper beard with sawdust in it. Copper hair under a dark-blue knitted cap. Big shoulders. Collar: a faded brown-and-ochre checked flannel shirt with rolled sleeves, a leather waistcoat, braces.",
+  "mood": "blunt, hard-working, defensive, practical"
+ },
+ {
+  "id": "mags",
+  "name": "Pedlar Mags",
+  "role": "A roadside pedlar with her donkey Duchess (`enc-mags`). Trainer (Wayfarer)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Pedlar Mags: unstated; Stoneborn, about 55. Tan, sun-browned skin; broad, weathered face, apple cheeks, broad nose, wide good-humoured mouth; crinkled brown eyes with deep laugh lines. Silver hair under a battered wide straw hat. Collar: a man's old green coat with deep pockets, a striped scarf, a smooth grey stone with a hole in it on a cord at the neck, pack-frame straps over the shoulders.",
+  "mood": "chatty, shrewd, cheerful, unbothered"
+ },
+ {
+  "id": "pell",
+  "name": "Pell",
+  "role": "A Hollowmere lad whose sister went up to the blood-house. Gives side quest SQ-Pell (A2-C3-02); lives in Questeria in Act 3",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "male",
+  "look": "Pell: human (the Morvaine valley), about 18. Porcelain, wind-chapped skin with freckles; smooth, eager face, soft jaw, straight nose a little big; wide-open brown eyes. Shaggy copper hair. Collar: a high-collared coat of dark grey wool buttoned to the chin, too thin for the weather; a black knitted scarf.",
+  "mood": "desperate, earnest, frightened, loyal"
+ },
+ {
+  "id": "ide",
+  "name": "Ide",
+  "role": "Pell's sister, kept as a \"reserve\" in the blood-house cellar; rescued in SQ-Pell",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Ide: human (the Morvaine valley), about 22. Porcelain, very pale skin with shadows under the eyes; heart-shaped face, small pointed chin, a mouth about to say something tart; sharp, bright brown eyes under arched brows. Long, wild, tangled copper hair. Collar: a plain greyish linen shift with a dark wool shawl round the shoulders; a linen bandage inside one elbow if an arm shows.",
+  "mood": "tart, worn-thin, defiant, brave"
+ },
+ {
+  "id": "maren-elder",
+  "name": "Maren",
+  "role": "Hollowmere's elder, who defends the blood Tithe (A2-C3-02)",
+  "group": "Named supporting",
+  "tier": "named",
+  "template": "female",
+  "look": "Maren: human (the Morvaine valley), about 60. Porcelain skin; lean, sharp face, deep lines round the mouth, long nose, thin pressed lips; steady, piercing grey eyes under thin brows. White hair in a braided crown. Collar: a high-collared dark grey wool dress, a black wool shawl pinned with a pewter brooch; a small pewter cup on a chain.",
+  "mood": "stern, proud, pragmatic, defensive"
+ },
+ {
+  "id": "netty",
+  "name": "Netty the Net-Mender",
+  "role": "A net-mender on the harbour boardwalk; knows the Red Gulls' rackets",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "Netty the Net-Mender: human, about 55. Tan, freckled skin; broad, weathered face, apple cheeks, wide good-humoured mouth; crinkled green eyes. Silver hair in a braided crown. Collar: a cream blouse, a teal laced bodice-waistcoat.",
+  "mood": "chatty, shrewd, motherly"
+ },
+ {
+  "id": "lark",
+  "name": "Lark the Busker",
+  "role": "The fountain busker who gives every new face a verse",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "Lark the Busker: Sylvan (a long-lived fantasy people with long, pointed ears), looks mid-twenties. Porcelain skin; narrow, sharp-featured face, high cheekbones, a knowing half-smile; keen hazel eyes. Pointed Sylvan ears; straight copper hair to the shoulders. Collar: a blush-pink shirt with billowing sleeves, a rose waistcoat, a short lavender cape with a silver clasp; a lute's neck over one shoulder.",
+  "mood": "showy, playful, teasing"
+ },
+ {
+  "id": "ilsa",
+  "name": "Ilsa Fenwright",
+  "role": "An apprentice of the Arcanum Spire, juggling scrolls for the guildhall",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "Ilsa Fenwright: human, about 24. Golden skin; open, likeable oval face, straight nose, friendly mouth; warm green eyes. Copper hair in a braid down the back. Collar: a cream blouse, a teal laced bodice-waistcoat; an armful of scrolls up to her chin.",
+  "mood": "flustered, gossipy, bright"
+ },
+ {
+  "id": "oswin",
+  "name": "Guardsman Oswin",
+  "role": "Royal Guard on the palace terrace, who gossips about the King and the Princess who keeps riding out",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "Guardsman Oswin: human, about 24. Fair skin; open, likeable oval face, straight nose, steady blue eyes; copper hair under a polished steel helm with a gold-trimmed brim and a short navy plume. Collar: a navy tabard with a large gold sun over polished mail, steel pauldrons edged in gold, a white sash, an ochre-gold cloak.",
+  "mood": "earnest, chatty, loyal"
+ },
+ {
+  "id": "hesper",
+  "name": "Sister Hesper",
+  "role": "A temple sister on the temple steps: the quiet bells, the bellringer who died",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "Sister Hesper: human, about 75. Deep umber skin; soft, round, kindly face with fine wrinkles, small nose, sweet tired smile; gentle brown eyes. Long, straight silver hair. Collar: a white blouse, an ochre tabard-tunic with a small gold sun embroidered on the chest, an ochre shawl.",
+  "mood": "serene, kind, melancholy"
+ },
+ {
+  "id": "anvil-barkeep",
+  "name": "Hessa the Barkeep",
+  "role": "Barkeep of the Rusty Anvil, where Brannock drinks (A1-C4-05)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "Hessa the Barkeep: Wildkin (bear), about 55, build big. Golden skin; broad, weathered face, apple cheeks, wide mouth; crinkled brown eyes; a thin pale scar through one brow and down the cheek. Two small, round, furry bear's ears on top of the head; black hair pulled back tight. Collar: a cream shirt with rolled sleeves, a charcoal waistcoat, the bib of a long, stained leather apron.",
+  "mood": "unflappable, gruff, amused"
+ },
+ {
+  "id": "refugee-1",
+  "name": "Old Aurek",
+  "role": "An old orchard farmer among the Thornbridge refugees, one of the three sick that Mira's remedies go to (A1-C3)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "Old Aurek: human (Doomward), about 70. Tan skin; deeply lined, gentle face, hollowed cheeks, big nose; kind grey eyes under bushy white brows. Bald, with wisps of white; a long white beard. Collar: a faded black wool coat with mismatched patches, a charcoal scarf, a blanket round the shoulders.",
+  "mood": "weary, gentle, patient"
+ },
+ {
+  "id": "refugee-2",
+  "name": "Teodor",
+  "role": "The fevered young refugee at Thornbridge (A1-C3)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "Teodor: human (Doomward), about 17. Brown skin, fever-flushed and sweaty; smooth young face, soft jaw; brown eyes; short, messy black hair; patchy stubble. Collar: a faded black patched wool coat, a charcoal scarf, a blanket round the shoulders; a tin cup.",
+  "mood": "feverish, polite, frightened"
+ },
+ {
+  "id": "refugee-3",
+  "name": "Yselle the Glassblower",
+  "role": "A refugee glassblower with burned hands at Thornbridge (A1-C3)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "Yselle the Glassblower: Stoneborn (a short, very broad, sturdy mountain people), about 35, build stout. Golden, freckled skin with a smudge of ash across the cheek and brow; soft, round face, small kind mouth; amber eyes. Copper hair in a braid down the back. Collar: a blush-pink linen shirt with rolled sleeves, a teal waistcoat, a scorched leather apron bib; hands bandaged to the wrist in clean linen.",
+  "mood": "stoic, pained, kind"
+ },
+ {
+  "id": "recruit",
+  "name": "The recruit",
+  "role": "A young winter recruit at the banners' call (A1-C7-01). Unnamed, but on 03's named-minor list",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "The recruit: human, about 17. Fair skin; smooth, eager face, soft jaw; wide blue eyes; gold hair under a plain steel kettle helm, a size too big and tipped back. Collar: a quilted navy gambeson with brass buttons, a grey woollen scarf, snow on the shoulders.",
+  "mood": "eager, nervous, green"
+ },
+ {
+  "id": "trader",
+  "name": "The Trader",
+  "role": "Keeps the blue stall in Questeria's Lantern Market; sells potions, road gear and curios (Shops)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "The Trader: human, about 45, plump. Olive skin; round, cheerful face, full cheeks, a waxed black moustache curled at the ends; bright, quick brown eyes. Dark curly hair under a soft sky-blue velvet cap with a short pheasant feather. Collar: a mustard silk shirt, a sky-blue brocade waistcoat with brass buttons, a cloth measuring tape hung round the neck.",
+  "mood": "beaming, salesy, quick-witted"
+ },
+ {
+  "id": "smith",
+  "name": "The Smith of Halden's Forge",
+  "role": "The smith at Halden's Forge in Questeria, who sells and mends arms (Shops)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "The smith: human, about 40, broad and heavy-shouldered. Ruddy skin with smudges of soot on one cheek; square face, a broken nose, a short dark beard; steady grey eyes under heavy brows. Close-cropped dark hair. Collar: a sleeveless charcoal work shirt, the bib and straps of a scorched brown leather apron, a red neckerchief knotted at the throat.",
+  "mood": "blunt, proud of the work, gruffly kind"
+ },
+ {
+  "id": "shopkeeper",
+  "name": "The Chandler",
+  "role": "Keeps the chandler's shop down by Questeria's south canal: candles, rope, lamp oil and sundries (Shops)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "The Chandler: human, about 60, thin and upright. Pale, fine-lined skin; narrow face, a sharp nose with round wire spectacles on it, thin lips; pale blue eyes. Grey hair in a neat bun stuck through with a pencil. Collar: a high-necked cream blouse with a cameo brooch, a dark green knitted shawl, a ring of iron keys on a cord round the neck.",
+  "mood": "precise, dry, secretly fond"
+ },
+ {
+  "id": "innkeeper",
+  "name": "The Innkeeper",
+  "role": "Keeps the inn in Questeria; sends you for the flower seller's rosewater (Questeria)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "The innkeeper: human, about 55, stout. Rosy, weathered skin; round face, ruddy cheeks, a bushy grey moustache; twinkling hazel eyes. Bald on top with grey hair round the sides. Collar: a cream shirt with the collar open and sleeves rolled, a wine-red waistcoat, a checked linen towel thrown over one shoulder.",
+  "mood": "warm, tired, kindly"
+ },
+ {
+  "id": "spice-seller",
+  "name": "The Spice Seller",
+  "role": "Keeps the teal spice stall in Questeria, and the apothecary's shelf while her sister's away (Shops)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "The spice seller: human, about 30. Warm brown skin; oval face, high cheekbones, a small gold nose stud, a wide smile; dark, lively eyes lined with kohl. Black hair wrapped in a teal headscarf hung with small gold coins along its edge; gold hoop earrings. Collar: a saffron-yellow blouse, a teal shawl embroidered with gold leaves.",
+  "mood": "brisk, warm, teasing"
+ },
+ {
+  "id": "flower-seller",
+  "name": "The Flower Seller",
+  "role": "Sells flowers from a cart at the bottom of the Lantern Market; owes the innkeeper rosewater (Questeria)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "female",
+  "look": "The flower seller: human, about 20. Fair, freckled skin; heart-shaped face, a small nose, pink cheeks; soft green eyes. Strawberry-blonde hair in a loose side braid with a white daisy tucked in, a straw sun hat pushed back on the head. Collar: a pink cotton dress with a square neck, the bib of a cream apron, a sprig of lavender pinned at the chest.",
+  "mood": "sunny, shy, flustered"
+ },
+ {
+  "id": "lookout",
+  "name": "The Lookout",
+  "role": "The Gull's Wager's lookout, who sees the sea-wraiths first (P-05)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "The lookout: human, about 19, wiry. Sun-browned skin; long face, a sunburnt nose, a gap in his front teeth; wide blue eyes. Wind-tangled sandy hair under a knitted navy watch cap. Collar: a cream-and-navy striped sailor's shirt, a salt-stained short canvas jacket, a brass spyglass on a strap across the chest.",
+  "mood": "jumpy, alarmed, earnest"
+ },
+ {
+  "id": "red-gull",
+  "name": "Red Gull Thug",
+  "role": "A Red Gull enforcer shaking down Old Tomas on the docks (A1-C1)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "A Red Gull thug: human, about 30, heavy-set. Tan skin; blunt face, a crooked broken nose, three days' stubble, a small scar on the lip; hard, narrow dark eyes. Greasy dark hair under a knotted blood-red bandana with a grey gull feather stuck in it. Collar: a sleeveless red-dyed leather jerkin over a dirty undyed shirt, a brass knuckle-duster hung on a cord at the neck.",
+  "mood": "sneering, menacing, lazy"
+ },
+ {
+  "id": "royal-messenger",
+  "name": "Royal Messenger",
+  "role": "Princess Elara's messenger, who brings you to the Gilded Flagon (A1-C4)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "The royal messenger: human, about 22, slight. Fair skin; boyish face, a pointed chin, freckles; anxious light-brown eyes. Neat brown hair in a short bob under a navy cap with a gold sun badge. Collar: a navy-and-gold royal livery tabard with a gold sun on the chest, a short navy shoulder cape, the strap of a leather dispatch satchel across the chest.",
+  "mood": "flustered, eager, out of breath"
+ },
+ {
+  "id": "royal-guard",
+  "name": "Royal Guard",
+  "role": "Guards the Sunspire's great hall door; Princess Elara's guard, officially (A1-C4)",
+  "group": "Minor speakers",
+  "tier": "minor",
+  "template": "male",
+  "look": "A royal guard: human, about 45, solid. Tan skin; square, weathered face, a short greying beard; patient grey eyes. A polished steel helm with cheek guards and a navy plume, a little hair showing at the temples. Collar: a steel gorget and the top of a breastplate edged in gold, a navy cloak fastened with a gold sun clasp.",
+  "mood": "stiff, dry, loyal"
+ }
+]

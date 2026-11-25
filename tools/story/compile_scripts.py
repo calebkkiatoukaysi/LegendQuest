@@ -39,7 +39,7 @@ The rules (build plan §4.1 and §5.3, the notation table in 04, and the M1 team
   speakers    upper-case words up to the first ( [ or :. YOU, SB, NARRATOR, CARD, CHAPTER, VOICE(x),
               ECHO-X, or a cast or origin id in capitals (RED GULL is red-gull)
   nodes       SPEAKER (expr) [direction]: text  ~ effects  → jump   [CALLBACK x]. expr is one of the
-              twelve faces; the callback is stripped; → end ends the script
+              thirteen faces; the callback is stripped; → end ends the script
   effects     ~ a · b: set f, clear f, m +n, m -n, m =n, gold ±n, give x, take x, join x, fight x,
               objective "…", travel map spawn, rest, voice v, shop x, swap a b, leave x, rejoin x
               (rejoin valencia also adds affinity-valencia +5 if mc-claimed-valencia), xp +n,
@@ -90,7 +90,7 @@ EMIT_SCOPE = {
     "04-script-prologue-act1.md": "## Chapter 5",   # M1: the Prologue and Chapters 1 to 4
 }
 
-EXPRESSIONS = ("neutral", "smile", "grin", "laugh", "smirk", "sad", "worried", "afraid", "angry", "cold", "tired", "shock")
+EXPRESSIONS = ("neutral", "smile", "grin", "laugh", "smirk", "sad", "worried", "afraid", "angry", "cold", "tired", "shock", "disgust")
 CUE_VERBS = ("place", "walk", "face", "travel-actor", "anim", "hold", "drop", "light", "sigil", "show", "hide", "swap",
              "echo", "reflection", "trail", "backdrop", "tint", "camera", "fade", "shake", "slow", "sfx", "music", "wait",
              "board")
@@ -685,7 +685,7 @@ def parse_script(s, tables):
             if expression.strip() in EXPRESSIONS:
                 node.expression = expression.strip()
             else:
-                s.note(n, f"({expression}) isn't one of the twelve expressions: {', '.join(EXPRESSIONS)}")
+                s.note(n, f"({expression}) isn't one of the thirteen expressions: {', '.join(EXPRESSIONS)}")
         if sm.group("dir") is not None:
             node.direction = sm.group("dir").strip()
             if not node.direction:

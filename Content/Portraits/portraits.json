@@ -1,0 +1,537 @@
+{
+ "grid": 96,
+ "portraits": {
+  "aldric": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "anselle": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "brannock": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "brannock-clasps-gone": [
+   "neutral",
+   "smile",
+   "sad",
+   "angry"
+  ],
+  "brannock-sling": [
+   "neutral",
+   "smile",
+   "sad"
+  ],
+  "brenna": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "brenna-protectorate": [
+   "neutral",
+   "smirk",
+   "angry",
+   "cold"
+  ],
+  "brisk": [
+   "neutral",
+   "angry"
+  ],
+  "corra": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "corra-young": [
+   "neutral",
+   "smile",
+   "sad",
+   "worried"
+  ],
+  "corwin": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "crane": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "davin": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "elara": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "elara-crowned": [
+   "neutral",
+   "smile",
+   "sad"
+  ],
+  "elara-field": [
+   "neutral",
+   "smile",
+   "sad",
+   "worried",
+   "angry",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "elara-hooded": [
+   "neutral",
+   "smile",
+   "smirk",
+   "worried",
+   "angry",
+   "shock"
+  ],
+  "fennick": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "gannet": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "grell": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "hale": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "hale-protectorate": [
+   "neutral",
+   "sad",
+   "worried",
+   "angry",
+   "cold",
+   "shock"
+  ],
+  "harrow": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "isadora": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "kael": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "kael-shadow": [
+   "neutral",
+   "smirk",
+   "sad",
+   "angry",
+   "cold"
+  ],
+  "leon": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "leon-furs": [
+   "neutral",
+   "smile",
+   "sad",
+   "worried",
+   "tired"
+  ],
+  "maleficio": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "maleficio-sovereign": [
+   "neutral",
+   "laugh",
+   "angry",
+   "cold"
+  ],
+  "maleficio-young": [
+   "neutral",
+   "smile",
+   "laugh",
+   "worried"
+  ],
+  "mira": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "mira-young": [
+   "neutral",
+   "smile",
+   "sad",
+   "afraid"
+  ],
+  "mordain": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "odelle": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "orla": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "ruck": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "sera": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "severin": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "severin-cell": [
+   "neutral",
+   "smirk",
+   "sad",
+   "cold",
+   "tired"
+  ],
+  "severin-unbound": [
+   "neutral",
+   "laugh",
+   "angry",
+   "cold"
+  ],
+  "sister-vale": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "thessaly": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "thessaly-crystal": [
+   "neutral"
+  ],
+  "tomas": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "valencia": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "valencia-child": [
+   "neutral",
+   "smile",
+   "sad"
+  ],
+  "valencia-unhooded": [
+   "neutral",
+   "sad",
+   "angry",
+   "cold",
+   "shock"
+  ],
+  "varkhul": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "varkhul-unmasked": [
+   "neutral",
+   "smile",
+   "sad",
+   "tired"
+  ],
+  "vesk": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "vorlaith": [
+   "neutral",
+   "smile",
+   "grin",
+   "laugh",
+   "smirk",
+   "sad",
+   "worried",
+   "afraid",
+   "angry",
+   "cold",
+   "tired",
+   "shock",
+   "disgust"
+  ],
+  "vreya": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ]
+ },
+ "aliases": {
+  "refugee-mother": "hedda"
+ }
+}

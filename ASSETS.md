@@ -5611,6 +5611,9 @@ tools/source/pixel/portraits/brannock/front-facing/portrait-brannock.laugh.png -
 tools/source/pixel/portraits/brannock/front-facing/portrait-brannock.sad.png - picture6, Brannock Ironvein sad, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation from the ordered portrait brief. Original and reference/export fingerprints retained in art/pixel-portraits and docs/pixel-art-portraits; owner-approved nearest-neighbour export sizing only. Source draft for pixel conversion; released for Legend Quest by its owner.
 
 tools/pixel/portrait_sources.py - written by Caleb Kiatoukaysi for Legend Quest; parses the626-picture portrait brief, records sequential source exports and provenance, replays approved size normalization, and makes diagnostic contact sheets; public domain.
+tools/pixel/portrait_prompts.py - written by Caleb Kiatoukaysi for Legend Quest, writes the ChatGPT prompts for every character's front-facing portrait (docs/pixel-art-portraits/) from tools/pixel/portrait_cast.json and the pixel-art brief's style block; public domain.
+tools/pixel/portrait_cast.json - written by Caleb Kiatoukaysi for Legend Quest, every speaking character's look, mood, tier and template for the portrait prompts; public domain.
+tools/pixel/batch_2_prompts.py - written by Caleb Kiatoukaysi for Legend Quest, writes docs/pixel-art-batch-2-for-ChatGPT.md, pixel-art batch 2's ChatGPT prompts: the portraits still to paint, every character source redrawn pixel-ready, and every room panel redrawn pixel-ready with its sky, distance and middle-ground layers and its foreground; public domain.
 
 tools/source/pixel/portraits/brannock/front-facing/portrait-brannock.grin.png - picture7, Brannock Ironvein grin, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation from the ordered portrait brief. Original and reference/export fingerprints retained in art/pixel-portraits and docs/pixel-art-portraits; owner-approved nearest-neighbour export sizing only. Source draft for pixel conversion; released for Legend Quest by its owner.
 
@@ -6471,3 +6474,67 @@ tools/source/pixel/portraits/fennick/front-facing/portrait-fennick.worried.png -
 tools/source/pixel/portraits/brisk/front-facing/portrait-brisk.neutral.png - picture422, Sergeant Brisk neutral, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation from the ordered portrait brief. Original and reference/export fingerprints retained in art/pixel-portraits and docs/pixel-art-portraits; owner-approved nearest-neighbour export sizing only. Source draft for pixel conversion; released for Legend Quest by its owner.
 
 tools/source/pixel/portraits/brisk/front-facing/portrait-brisk.angry.png - picture423, Sergeant Brisk angry, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation from the ordered portrait brief. Original and reference/export fingerprints retained in art/pixel-portraits and docs/pixel-art-portraits; owner-approved nearest-neighbour export sizing only. Source draft for pixel conversion; released for Legend Quest by its owner.
+
+<!-- conversation portraits: written by tools/pixel/portrait_kit.py; don't edit between these two lines -->
+## Conversation portraits
+
+The pixel-art faces in the dialogue box, converted by tools/pixel/portrait_kit.py from the front-facing portraits supplied by Caleb Kiatoukaysi, made in ChatGPT (their sources and prompts are credited under tools/source/pixel/portraits above and recorded in docs/pixel-art-portraits/): keyed, given one 32-colour palette per portrait, shrunk to a 96 x 96 grid by majority colour. Released for Legend Quest by its owner.
+
+Content/Portraits/aldric.png - aldric's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/anselle.png - anselle's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/brannock.png - brannock's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/brannock-clasps-gone.png - brannock-clasps-gone's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad, angry.
+Content/Portraits/brannock-sling.png - brannock-sling's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad.
+Content/Portraits/brenna.png - brenna's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/brenna-protectorate.png - brenna-protectorate's conversation portrait, one 96 x 96 face per expression: neutral, smirk, angry, cold.
+Content/Portraits/brisk.png - brisk's conversation portrait, one 96 x 96 face per expression: neutral, angry.
+Content/Portraits/corra.png - corra's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/corra-young.png - corra-young's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad, worried.
+Content/Portraits/corwin.png - corwin's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/crane.png - crane's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/davin.png - davin's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/elara.png - elara's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/elara-crowned.png - elara-crowned's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad.
+Content/Portraits/elara-field.png - elara-field's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad, worried, angry, tired, shock, disgust.
+Content/Portraits/elara-hooded.png - elara-hooded's conversation portrait, one 96 x 96 face per expression: neutral, smile, smirk, worried, angry, shock.
+Content/Portraits/fennick.png - fennick's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/gannet.png - gannet's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/grell.png - grell's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/hale.png - hale's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/hale-protectorate.png - hale-protectorate's conversation portrait, one 96 x 96 face per expression: neutral, sad, worried, angry, cold, shock.
+Content/Portraits/harrow.png - harrow's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/isadora.png - isadora's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/kael.png - kael's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/kael-shadow.png - kael-shadow's conversation portrait, one 96 x 96 face per expression: neutral, smirk, sad, angry, cold.
+Content/Portraits/leon.png - leon's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/leon-furs.png - leon-furs's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad, worried, tired.
+Content/Portraits/maleficio.png - maleficio's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/maleficio-sovereign.png - maleficio-sovereign's conversation portrait, one 96 x 96 face per expression: neutral, laugh, angry, cold.
+Content/Portraits/maleficio-young.png - maleficio-young's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, worried.
+Content/Portraits/mira.png - mira's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/mira-young.png - mira-young's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad, afraid.
+Content/Portraits/mordain.png - mordain's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/odelle.png - odelle's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/orla.png - orla's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/ruck.png - ruck's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/sera.png - sera's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/severin.png - severin's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/severin-cell.png - severin-cell's conversation portrait, one 96 x 96 face per expression: neutral, smirk, sad, cold, tired.
+Content/Portraits/severin-unbound.png - severin-unbound's conversation portrait, one 96 x 96 face per expression: neutral, laugh, angry, cold.
+Content/Portraits/sister-vale.png - sister-vale's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/thessaly.png - thessaly's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/thessaly-crystal.png - thessaly-crystal's conversation portrait, one 96 x 96 face per expression: neutral.
+Content/Portraits/tomas.png - tomas's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/valencia.png - valencia's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/valencia-child.png - valencia-child's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad.
+Content/Portraits/valencia-unhooded.png - valencia-unhooded's conversation portrait, one 96 x 96 face per expression: neutral, sad, angry, cold, shock.
+Content/Portraits/varkhul.png - varkhul's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/varkhul-unmasked.png - varkhul-unmasked's conversation portrait, one 96 x 96 face per expression: neutral, smile, sad, tired.
+Content/Portraits/vesk.png - vesk's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+Content/Portraits/vorlaith.png - vorlaith's conversation portrait, one 96 x 96 face per expression: neutral, smile, grin, laugh, smirk, sad, worried, afraid, angry, cold, tired, shock, disgust.
+Content/Portraits/vreya.png - vreya's conversation portrait, one 96 x 96 face per expression: neutral, smile, laugh, sad, worried, angry, shock, disgust.
+
+Content/Portraits/portraits.json - which expressions each portrait sheet has, in row order; written by tools/pixel/portrait_kit.py.
+
+tools/pixel/portrait_kit.py - written by Caleb Kiatoukaysi for Legend Quest, converts the painted portraits above into the game's pixel-art portrait sheets; public domain.
+<!-- end conversation portraits -->

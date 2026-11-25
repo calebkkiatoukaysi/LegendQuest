@@ -79,8 +79,9 @@ def plan():
         overrides = read(overrides_path)
         for job in jobs:
             job.update(overrides.get(str(job["number"]), {}))
-    assert [j["number"] for j in jobs] == list(range(1, 627)), "Numbering changed or parser lost a row"
-    assert len({j["path"] for j in jobs}) == 626, "Duplicate destination"
+    # The first 626 are the original series (2026-11-20); later pictures are only ever appended after them.
+    assert [j["number"] for j in jobs] == list(range(1, len(jobs) + 1)) and len(jobs) >= 626,         "Numbering changed or parser lost a row"
+    assert len({j["path"] for j in jobs}) == len(jobs), "Duplicate destination"
     assert all(j["parent"] is None or j["parent"] < j["number"] for j in jobs), "Forward reference"
     write(PLAN, jobs)
     print(f"{len(jobs)} jobs; {len(set(j['character'] for j in jobs))} character groups")

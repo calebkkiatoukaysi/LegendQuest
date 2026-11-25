@@ -673,6 +673,7 @@ someone's wearing comes off in the inventory first.
 | `Items/BagOrder` | The order the bag's shown in |
 | `Components/ItemIcons`, `ItemGrid`, `ItemTooltip` | The icons and the slots they sit in, a scrolling grid of them, and the card |
 | `Components/PortraitRail`, `StatTiles`, `CharacterSheet` | The faces down the left, the tiles with a number on, and the sheet |
+| `Components/PortraitKit` | The pixel-art conversation portraits (`Content/Portraits`, from `tools/pixel/portrait_kit.py`): a speaker's face at the line's expression or the nearest they have, breathing and bobbing as they talk |
 | `Dialogue/Scripts/Shops` | The four shopkeepers' conversations |
 
 Anything out of a chest goes in the bag with a toast that says so, and the first time anything

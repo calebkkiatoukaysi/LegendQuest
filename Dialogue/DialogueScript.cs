@@ -75,7 +75,7 @@ public sealed class DialogueScript
     /// Throws on purpose, like the Black Box's. Every fault here is a typo that would otherwise only
     /// show up halfway through a conversation in front of a player: a Next pointing nowhere, a
     /// question with one option, a check with nowhere to go, an effect naming a meter that isn't one,
-    /// a face that isn't one of the twelve, a cue with a verb nothing knows.
+    /// a face that isn't one of the thirteen, a cue with a verb nothing knows.
     /// </remarks>
     /// <exception cref="InvalidOperationException">If it couldn't be played as written.</exception>
     public void Validate()
@@ -103,7 +103,7 @@ public sealed class DialogueScript
             CheckAll(where, node.Conditions, node.Effects);
             CheckCues(where, node.Cues);
             if (node.Painting is not null && !Paintings.Exists(node.Painting)) throw Fail($"{where} shows a painting, {node.Painting}, that doesn't exist");
-            if (node.Expression is not null && !Expressions.Exists(node.Expression)) throw Fail($"{where} is said with a face, {node.Expression}, that isn't one of the twelve");
+            if (node.Expression is not null && !Expressions.Exists(node.Expression)) throw Fail($"{where} is said with a face, {node.Expression}, that isn't one of the thirteen");
 
             if (node.Options.Count > 0 && (node.Options.Count < FewestOptions || node.Options.Count > MostOptions))
                 throw Fail($"{where} has {node.Options.Count} options; a question has {FewestOptions} to {MostOptions}");
