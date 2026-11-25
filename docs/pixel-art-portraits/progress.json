@@ -445,9 +445,41 @@
     442,
     443,
     444,
-    445
+    445,
+    446,
+    447,
+    448,
+    449,
+    450,
+    451,
+    452,
+    453,
+    454,
+    455,
+    456,
+    457,
+    458,
+    459,
+    460,
+    461,
+    462,
+    463,
+    464,
+    465,
+    466,
+    467,
+    468,
+    469,
+    470,
+    471,
+    472,
+    473,
+    474,
+    475,
+    476,
+    477
   ],
-  "next_number": 446,
+  "next_number": 478,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -10639,6 +10671,734 @@
       "source_sha256": "e89e8cc97b4ad6158f88e504d98f8bdb59c51faf93be5152080ea0b5d10f2667",
       "export_sha256": "f05c14029ff9bac34ee762bc49bd2531d5bb9ee92b97f9f6ec40933dcb33e0a6",
       "prompt": "docs/pixel-art-portraits/445-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 446,
+      "filename": "portrait-maud.neutral.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "original": "art/pixel-portraits/originals/maud/446-portrait-maud.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "cdedef56f83c03eeca49035713cd40add647bceae3d1d68950e5663ee3040bf1",
+      "export_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "prompt": "docs/pixel-art-portraits/446-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 447,
+      "filename": "portrait-maud.angry.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.angry.png",
+      "original": "art/pixel-portraits/originals/maud/447-portrait-maud.angry.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "094a949107d344ac6ccf6cd41e07ef5d26ddcbee571ba1e06a872eb5d176fa65",
+      "export_sha256": "e021747b74f6039eeb71c42e8c3059fd3e0aa82e85d7b98653dde27da46792d5",
+      "prompt": "docs/pixel-art-portraits/447-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 448,
+      "filename": "portrait-maud.disgust.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.disgust.png",
+      "original": "art/pixel-portraits/originals/maud/448-portrait-maud.disgust.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "3f0c924d0ebf29d227809a3e05fbba9b042053cc2a7c1f2d387d5bf082ff6fe0",
+      "export_sha256": "baccbdd655379eb0ad8f5d57b9e45c8440265405a5ef2087bf98c06fef2115e5",
+      "prompt": "docs/pixel-art-portraits/448-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 449,
+      "filename": "portrait-maud.smile.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.smile.png",
+      "original": "art/pixel-portraits/originals/maud/449-portrait-maud.smile.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a857f9ecead584a0edc446aba79083342910f0ab55362041f72b8aafecaa23e3",
+      "export_sha256": "bb0e77cdc7819fb2d45a2f740aba3183ec3fabb76053ca6ed207864f89eb9f0c",
+      "prompt": "docs/pixel-art-portraits/449-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 450,
+      "filename": "portrait-maud.laugh.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.laugh.png",
+      "original": "art/pixel-portraits/originals/maud/450-portrait-maud.laugh.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "cf5f52741f157c926a889851242cfa3bcff344b61dac8a7ad6fb073984ef8ddb",
+      "export_sha256": "920e2693964cf9588e8c6a56f6d895761f4dae8af0a1fa4faeeed01062678835",
+      "prompt": "docs/pixel-art-portraits/450-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 451,
+      "filename": "portrait-maud.sad.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.sad.png",
+      "original": "art/pixel-portraits/originals/maud/451-portrait-maud.sad.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9a202cd8fa72a08bef9dd4b9f1368262cf37c58adf7c1555e8b498a2b5d12bd6",
+      "export_sha256": "596c646963d019aeb714f98bf48dde387b6b98a68e73e059412c02f8b9c8bc4f",
+      "prompt": "docs/pixel-art-portraits/451-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 452,
+      "filename": "portrait-maud.shock.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.shock.png",
+      "original": "art/pixel-portraits/originals/maud/452-portrait-maud.shock.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d10989ad916c6351ed151f97a022d85fdf441adcad0089aaed75810962c648d7",
+      "export_sha256": "2347e5b3c4012a55e21f52d9ceca1c2f4124e863ad6574cff7ed081ef53c5b96",
+      "prompt": "docs/pixel-art-portraits/452-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 453,
+      "filename": "portrait-maud.worried.png",
+      "path": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.worried.png",
+      "original": "art/pixel-portraits/originals/maud/453-portrait-maud.worried.png",
+      "reference_number": 446,
+      "reference": "tools/source/pixel/portraits/maud/front-facing/portrait-maud.neutral.png",
+      "reference_sha256": "862e15bf71bc3d7b05d37b9c6aa0729ddc95beb2c0c5a4ca54f61713020269cc",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "73dd92394043f66cd478a6573dc5411aaab39f2a8bbe7cce5cb74d91a5d959de",
+      "export_sha256": "bdca784b541021bd67f03bf93fdb5122e5757ae50cbe74fbda658d1b84d8ee47",
+      "prompt": "docs/pixel-art-portraits/453-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 454,
+      "filename": "portrait-wren.neutral.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "original": "art/pixel-portraits/originals/wren/454-portrait-wren.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "fdf9f23be4f54753dbf8220a694d0b351e48accaa974f0e627605392655dbaad",
+      "export_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "prompt": "docs/pixel-art-portraits/454-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 455,
+      "filename": "portrait-wren.angry.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.angry.png",
+      "original": "art/pixel-portraits/originals/wren/455-portrait-wren.angry.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8210983b88b6a3d2eef64f1468d0e821044b2e9d4c42f68be20d2dea927981cd",
+      "export_sha256": "2b995070c036326c6a81d0c90b46d1e9f99a787d9593d2c8b584f4c3f7c962f5",
+      "prompt": "docs/pixel-art-portraits/455-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 456,
+      "filename": "portrait-wren.disgust.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.disgust.png",
+      "original": "art/pixel-portraits/originals/wren/456-portrait-wren.disgust.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ea1d55549bcce60496ae6b9ec1b052eb823bf0074470f294ea05970222f1dbd5",
+      "export_sha256": "c40678a2e2d3b5139f38abcd91b8e6ec1f086c973b0b2366841459833a45a35a",
+      "prompt": "docs/pixel-art-portraits/456-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 457,
+      "filename": "portrait-wren.smile.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.smile.png",
+      "original": "art/pixel-portraits/originals/wren/457-portrait-wren.smile.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5b66649c966bd3f3b020c903674f6519eb5d430db805a8a9d3ad85ab6ce9c45c",
+      "export_sha256": "e22f4a81ec7e664c367580e22f158f5ca43b7bb740d09126dc74089dc5fd6952",
+      "prompt": "docs/pixel-art-portraits/457-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 458,
+      "filename": "portrait-wren.laugh.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.laugh.png",
+      "original": "art/pixel-portraits/originals/wren/458-portrait-wren.laugh.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "a5ed264cdf5dc5b4ad3ba7eced8030d8985455edc242a2671d9a1f3f023a7b39",
+      "export_sha256": "3a3804cf7855fc481602bec16bb4a26369c82210233c1d9e0a72e5697450bade",
+      "prompt": "docs/pixel-art-portraits/458-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 459,
+      "filename": "portrait-wren.sad.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.sad.png",
+      "original": "art/pixel-portraits/originals/wren/459-portrait-wren.sad.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e9595c9f344fc150bb7064334900442cdebc8fb9ec4b4a4fe1a8dec7de719ecf",
+      "export_sha256": "fa8ee0e55200408365c2bae24d2fa95bf30e50fffa7b4a5cefc7ed589e999aee",
+      "prompt": "docs/pixel-art-portraits/459-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 460,
+      "filename": "portrait-wren.shock.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.shock.png",
+      "original": "art/pixel-portraits/originals/wren/460-portrait-wren.shock.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ac2872007908e22a63cda118b2d392505d3c055ad93879e0361bae789bdd8df5",
+      "export_sha256": "83a9a0476afbf4970ebc6dec55448ccce15a9912eca18e49bb4afe6d8402e5a2",
+      "prompt": "docs/pixel-art-portraits/460-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 461,
+      "filename": "portrait-wren.worried.png",
+      "path": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.worried.png",
+      "original": "art/pixel-portraits/originals/wren/461-portrait-wren.worried.png",
+      "reference_number": 454,
+      "reference": "tools/source/pixel/portraits/wren/front-facing/portrait-wren.neutral.png",
+      "reference_sha256": "f5721ce1bfefa2b7977d65360f141bcaf2cf6651c72c2b1d4ca089d52948864f",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "18f942257a17937430f61abf7cb6e691b96239d5ef1b01187b709112f29e3511",
+      "export_sha256": "f201d67484f6825432cb77daf4fd885ddd6a3e1412d40a556fcc853f63cbd529",
+      "prompt": "docs/pixel-art-portraits/461-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 462,
+      "filename": "portrait-tamsin.neutral.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "original": "art/pixel-portraits/revisions/462-7024589a27e2.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "7024589a27e20b7f4708b8453d83150f63bfde8660fe87420c1be230da4d4b8b",
+      "export_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "prompt": "docs/pixel-art-portraits/462-revision-1.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review",
+      "attempts": [
+        {
+          "number": 462,
+          "filename": "portrait-tamsin.neutral.png",
+          "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+          "original": "art/pixel-portraits/originals/tamsin/462-portrait-tamsin.neutral.png",
+          "reference_number": null,
+          "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+          "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+          "native_size": [
+            1254,
+            1254
+          ],
+          "export_size": [
+            1024,
+            1024
+          ],
+          "source_sha256": "1d4b0be7f5f1e48ced0ebaed01cb45757e4bf80a4bde318c4957fbdecf2697b1",
+          "export_sha256": "3398b8933173dc957be98a4e1f4005728f308d50243ae6acef9d6d8117b92aa9",
+          "prompt": "docs/pixel-art-portraits/462-prompt.txt",
+          "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+          "status": "source draft; exact grid, palette and registration require conversion review"
+        }
+      ]
+    },
+    {
+      "number": 463,
+      "filename": "portrait-tamsin.angry.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.angry.png",
+      "original": "art/pixel-portraits/originals/tamsin/463-portrait-tamsin.angry.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5eb387453a18c646967d43c240ff7cd542a4ab212ce9bd22064d6fac88b2df76",
+      "export_sha256": "58993fbed12950aedde418d7e84825c196245027a0ad435bac8af0bcd6ec156d",
+      "prompt": "docs/pixel-art-portraits/463-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 464,
+      "filename": "portrait-tamsin.disgust.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.disgust.png",
+      "original": "art/pixel-portraits/originals/tamsin/464-portrait-tamsin.disgust.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "d65bc2cd2713082007afc6fa2e9ac53ecaaa6f6f99bbe238014e1c767d687abd",
+      "export_sha256": "21b02afe2b5e140303743db6b02d5ed486b48543df45426436c4b0bfab8df5aa",
+      "prompt": "docs/pixel-art-portraits/464-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 465,
+      "filename": "portrait-tamsin.smile.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.smile.png",
+      "original": "art/pixel-portraits/originals/tamsin/465-portrait-tamsin.smile.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "6911b7b1de2025983f8e176519dae93cf3c21f7e1be03a4b7ada70b15408df31",
+      "export_sha256": "b990a8320cda90dd7db16cc0a81ee339261b1a7a164a1bac862567522f13eef5",
+      "prompt": "docs/pixel-art-portraits/465-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 466,
+      "filename": "portrait-tamsin.laugh.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.laugh.png",
+      "original": "art/pixel-portraits/originals/tamsin/466-portrait-tamsin.laugh.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "0cbec902c3224df3066365b7f5098c9f80aa2cfedb9b3c6b7217d053f1abaca2",
+      "export_sha256": "9287352d97b76b2df522daf83738165cf294ba49e20a87a613c3b486b51fedc9",
+      "prompt": "docs/pixel-art-portraits/466-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 467,
+      "filename": "portrait-tamsin.sad.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.sad.png",
+      "original": "art/pixel-portraits/originals/tamsin/467-portrait-tamsin.sad.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "1442ffa009ced6b3f95650cee545059102fb955affa182ce757bd77d44930fdc",
+      "export_sha256": "702a966e95a1d8231d5768611ce11ea1d48d230d414df38294e17984e2aa1875",
+      "prompt": "docs/pixel-art-portraits/467-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 468,
+      "filename": "portrait-tamsin.shock.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.shock.png",
+      "original": "art/pixel-portraits/originals/tamsin/468-portrait-tamsin.shock.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4c027dd0f34644ef6cae1e9c7eac637e973f8f04b665c3dda5b00527be672342",
+      "export_sha256": "737cf8ec5baa708182800daf389d1268c59164131941a7c4f0ddd0e50a47dab4",
+      "prompt": "docs/pixel-art-portraits/468-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 469,
+      "filename": "portrait-tamsin.worried.png",
+      "path": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.worried.png",
+      "original": "art/pixel-portraits/originals/tamsin/469-portrait-tamsin.worried.png",
+      "reference_number": 462,
+      "reference": "tools/source/pixel/portraits/tamsin/front-facing/portrait-tamsin.neutral.png",
+      "reference_sha256": "42ecd0e3b841557f78b55a9b11f64b544a786853dfe232de5c49a28ed30f9faa",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "921695246170c6f57f7b9f54b6408af99e0c22d62da46481401cbfa3458e128d",
+      "export_sha256": "65c9fbf179a869e93531673646c1f1b418277fbd9b3b5227a72c150f51cfd57d",
+      "prompt": "docs/pixel-art-portraits/469-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 470,
+      "filename": "portrait-imra-vell.neutral.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "original": "art/pixel-portraits/originals/imra-vell/470-portrait-imra-vell.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bf64809becd8145722fc79c494798dc5730d94581c622ef52df2cb6ec85f0cb8",
+      "export_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "prompt": "docs/pixel-art-portraits/470-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 471,
+      "filename": "portrait-imra-vell.angry.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.angry.png",
+      "original": "art/pixel-portraits/originals/imra-vell/471-portrait-imra-vell.angry.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ddbf1b416825d95362d5d3ffc16b6bda3b01a4053872dd18e4a2d4a38c319cc0",
+      "export_sha256": "ccb7f9a36366378da05554bca16f3aa9b95486924cc5141ba08b17fa7dfc87b9",
+      "prompt": "docs/pixel-art-portraits/471-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 472,
+      "filename": "portrait-imra-vell.disgust.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.disgust.png",
+      "original": "art/pixel-portraits/originals/imra-vell/472-portrait-imra-vell.disgust.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "5c89b3755553d16ebc870d43eb9f55d4c8bf0823a00a723ad848ec56fdd0c400",
+      "export_sha256": "7074501c050c3f947999cbfb254c134fdb0ee79db0ba17435414641f6d8c54e8",
+      "prompt": "docs/pixel-art-portraits/472-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 473,
+      "filename": "portrait-imra-vell.smile.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.smile.png",
+      "original": "art/pixel-portraits/originals/imra-vell/473-portrait-imra-vell.smile.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4751dd0aaf9cc82a5281a893460632486ffb320222e2f1513a0443297bd80a25",
+      "export_sha256": "43931e70c095284d5900d0b42843099a546b29edf816c0eea51548fd2e3532f1",
+      "prompt": "docs/pixel-art-portraits/473-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 474,
+      "filename": "portrait-imra-vell.laugh.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.laugh.png",
+      "original": "art/pixel-portraits/originals/imra-vell/474-portrait-imra-vell.laugh.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "dc435e3cb5b3eb7b0c22e4d7d94109e21de2e279b49d4c3586cbc70329144ccd",
+      "export_sha256": "77aadcd5a3af02696a59a9bc6009384741f5b66615ab5f39cb34fed80af2919c",
+      "prompt": "docs/pixel-art-portraits/474-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 475,
+      "filename": "portrait-imra-vell.sad.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.sad.png",
+      "original": "art/pixel-portraits/originals/imra-vell/475-portrait-imra-vell.sad.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "aefae072b2dcc96f909d7bf167b44516c27df2bcb1369b442da176fe63da674a",
+      "export_sha256": "380929f7c5fbce022d5634f7a2b3e700b97b0c449bbed8dfaa5a5f0a74843014",
+      "prompt": "docs/pixel-art-portraits/475-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 476,
+      "filename": "portrait-imra-vell.shock.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.shock.png",
+      "original": "art/pixel-portraits/originals/imra-vell/476-portrait-imra-vell.shock.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8e5c87592843cb35fe54a771522b993b97b85e91bd6988744c5009779b0a5805",
+      "export_sha256": "fc08e9505e74ee43746938104de51fdd89314128ab10e54d9be0738b9d58ccc6",
+      "prompt": "docs/pixel-art-portraits/476-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 477,
+      "filename": "portrait-imra-vell.worried.png",
+      "path": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.worried.png",
+      "original": "art/pixel-portraits/originals/imra-vell/477-portrait-imra-vell.worried.png",
+      "reference_number": 470,
+      "reference": "tools/source/pixel/portraits/imra-vell/front-facing/portrait-imra-vell.neutral.png",
+      "reference_sha256": "94e9208dae3e313bfa8ecd195a005e09f485675e847006123e5254453e21ebac",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "14d26ea615020cb1d6cda6b31673e9e6c0b15a2bcacc2900171ee0735a3d4ae6",
+      "export_sha256": "0a1ac2ffc540da4c38a02fe408a856a17c42c5b86a5363fc383814ceec94028e",
+      "prompt": "docs/pixel-art-portraits/477-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
