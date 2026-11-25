@@ -1,0 +1,32 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.far.png",
+    "dominant_color": [
+      251,
+      9,
+      251
+    ],
+    "dominant_fraction": 0.09274673461914062,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.mid.png",
+    "dominant_color": [
+      252,
+      2,
+      251
+    ],
+    "dominant_fraction": 0.04778607686360677,
+    "exact_magenta_pixels": 10
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.27660051981608075,
+    "exact_magenta_pixels": 28
+  }
+]

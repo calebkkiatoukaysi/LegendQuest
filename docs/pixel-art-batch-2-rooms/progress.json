@@ -3360,8 +3360,148 @@
           ]
         }
       ]
+    },
+    {
+      "number": 101,
+      "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/thornbridge-gate/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8",
+      "export_sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8",
+      "references": [
+        {
+          "path": "art/rooms/generated/questeria/thornbridge-gate/bg-1.png",
+          "sha256": "76bae71f783c76f4e3e885012137c7743bf717ac7fcd980b1b9eb3ddff4aee28"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/thornbridge-gate/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 102,
+      "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/thornbridge-gate/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "b4e955663c106fa7e43942f97b8e30a4b5c15251e48eafc7784a24fd1475582e",
+      "export_sha256": "b4e955663c106fa7e43942f97b8e30a4b5c15251e48eafc7784a24fd1475582e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.png",
+          "sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/thornbridge-gate/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 103,
+      "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/103-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "dee684eba925c130614ab402178c5a314b2738b21b624a996ee1ae419d8d6a28",
+      "export_sha256": "dee684eba925c130614ab402178c5a314b2738b21b624a996ee1ae419d8d6a28",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.png",
+          "sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/103-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 103,
+          "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/questeria/thornbridge-gate/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "b54b2258a2fae59a903ee6817a5b948377dfae3346c7b4ef49745fe2ade260e0",
+          "export_sha256": "b54b2258a2fae59a903ee6817a5b948377dfae3346c7b4ef49745fe2ade260e0",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.png",
+              "sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/thornbridge-gate/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 104,
+      "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/thornbridge-gate/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a8eb9fd05d7c7fbefa3147c68f40bb4b7c66b2cc639ff4b2304f3298eaedc7e0",
+      "export_sha256": "a8eb9fd05d7c7fbefa3147c68f40bb4b7c66b2cc639ff4b2304f3298eaedc7e0",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.png",
+          "sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/thornbridge-gate/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 105,
+      "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/questeria/thornbridge-gate/bg-1.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "675516238e2afefe7e43cd46745e63711961bbe1e027ba0fea2fe6c8ef720a85",
+      "export_sha256": "675516238e2afefe7e43cd46745e63711961bbe1e027ba0fea2fe6c8ef720a85",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/questeria/thornbridge-gate/bg-1.png",
+          "sha256": "22f4d4adb2ec7c0f7ff188518d59b5bc74457009c8123fb3dab49a642fe704d8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/thornbridge-gate/bg-1.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
     }
   ],
-  "next_number": 101,
+  "next_number": 106,
   "runtime_imported": false
 }

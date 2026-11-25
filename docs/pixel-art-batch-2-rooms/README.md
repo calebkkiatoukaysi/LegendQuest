@@ -21,3 +21,5 @@ Checkpoint: 80/265 saved and reviewed through Festival Square. Extended city/ter
 Checkpoint: 95/265 saved and reviewed through Lantern Market. Removed spire ornament from first sky; continued distant city below the skyline; restored forge smoke to panel 2 middle ground; moved/shrank planter and moved final lamp to clear doors. All 95 exports passed file/dimension/fingerprint checks. Exact magenta, palette, registration and runtime import remain pending. Next: Sunspire Steps.
 
 Checkpoint: 100/265 saved and reviewed through Sunspire Steps. Extended far fill; restored near green foliage in middle ground; narrowed foreground pillar to clear chapel stairs, removed its added banner, and reduced the plain topiary below the quarter-height limit. File/dimension/fingerprint and asset-credit checks passed. Next: Questeria Thornbridge Gate.
+
+Checkpoint: 105/265 saved and reviewed through Questeria Thornbridge Gate. Kept the camp/bridge/river through the arch in the far layer, restored continuous far fill to the street line, and kept foreground lamp clear of entrances. Next: Old Road Farmland.
