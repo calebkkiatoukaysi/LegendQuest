@@ -68,8 +68,8 @@ public class DialogueScreen : GameScreen
     private enum Icon { Die, Heart, Lock, Honorable, Pragmatic, Witty }
 
     /// <summary>How dark the scene goes behind the panel, and behind a card.</summary>
-    private static readonly Color Veil = Color.Black * 0.38f;
-    private static readonly Color CardVeil = Color.Black * 0.82f;
+    private static readonly Color Veil = new Color(44, 30, 82) * 0.3f;
+    private static readonly Color CardVeil = new Color(36, 24, 70) * 0.84f;
 
     /// <summary>A card's words: the short ones are drawn in the title's face, the long ones wrap in the UI face.</summary>
     private const int ShortCard = 26;

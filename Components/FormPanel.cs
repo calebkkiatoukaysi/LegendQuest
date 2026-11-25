@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace LegendQuest.Components;
 
 /// <summary>
-/// The iron panel the forms sit on, and the veil that darkens whatever is behind them.
+/// The marble-and-enamel panel the forms sit on, the soft shadow under it, and the veil that dims whatever is behind them.
 /// </summary>
 /// <remarks>The options, the save slots and the pause menu all use this, so the panel numbers only live in one place.</remarks>
 public class FormPanel
@@ -19,11 +19,15 @@ public class FormPanel
     /// <summary>Scaled up by the same amount as the buttons on it.</summary>
     private const float Scale = 3f;
 
-    /// <summary>How dark the veil is. Dark enough to read the panel, but you can still see the torches.</summary>
-    private const float VeilOpacity = 0.62f;
+    /// <summary>How strong the veil is. Enough to lift the panel off the room, not so much the room goes dark.</summary>
+    private const float VeilOpacity = 0.5f;
 
-    /// <summary>How dark the veil is behind a screen that fills most of the canvas, the inventory or a shop, so nothing of the map's own words shows round its edges.</summary>
-    public const float FullVeil = 0.92f;
+    /// <summary>How strong the veil is behind a screen that fills most of the canvas, the inventory or a shop, so nothing of the map's own words shows round its edges.</summary>
+    public const float FullVeil = 0.86f;
+
+    /// <summary>How far down the panel's shadow falls, and how dark it is.</summary>
+    private const int ShadowDrop = 8;
+    private const float ShadowStrength = 0.38f;
 
     /// <summary>Padding inside the panel. The forms lay things out from this.</summary>
     public const int Padding = 40;
@@ -58,6 +62,10 @@ public class FormPanel
     /// <param name="opacity">How far the form has faded in, 0 to 1.</param>
     public void Draw(SpriteBatch spriteBatch, Rectangle bounds, float opacity)
     {
+        // The shadow is the panel itself, tinted plum and dropped, so it has the same rounded corners.
+        var shadow = new Rectangle(bounds.X, bounds.Y + ShadowDrop, bounds.Width, bounds.Height);
+        NineSlice.Draw(spriteBatch, _panel, shadow, Point.Zero,
+            FrameSize, CornerSize, Scale, new Color(20, 8, 36) * (ShadowStrength * opacity), Layers.PanelShadow);
         NineSlice.Draw(spriteBatch, _panel, bounds, Point.Zero,
             FrameSize, CornerSize, Scale, Color.White * opacity, Layers.PanelPlate);
     }

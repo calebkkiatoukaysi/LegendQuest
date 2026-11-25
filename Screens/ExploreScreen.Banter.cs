@@ -58,7 +58,7 @@ public partial class ExploreScreen
 
     /// <summary>How far the smudge behind what someone's saying reaches past it, across and up and down.</summary>
     private static readonly Vector2 LineSpread = new(14f, 10f);
-    private static readonly Color LineBacking = Color.Black * 0.85f;
+    private static readonly Color LineBacking = new Color(48, 42, 108) * 0.88f;
 
     /// <summary>The banter playing, which of its lines is up, how long it's been up and how long it stays, and what it says with its tokens filled.</summary>
     private Banter _banter;
@@ -299,7 +299,7 @@ public partial class ExploreScreen
         return box;
     }
 
-    /// <summary>Writes each line over someone's head on its dark smudge, fading in and out. Party lines are in torchlight, the colour a speaker's name is in a conversation.</summary>
+    /// <summary>Writes each line over someone's head on its smudge, fading in and out. Party lines are in torchlight, the colour a speaker's name is in a conversation.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, linear-sampled, back to front.</param>
     /// <param name="bubbles">Where each goes, from LayOutOverheads.</param>
     /// <param name="alpha">How faded in the screen is.</param>

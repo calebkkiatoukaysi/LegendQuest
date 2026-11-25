@@ -48,7 +48,7 @@ public static class Text
         spriteBatch.DrawString(font, text, position, color, 0f, Vector2.Zero, scale, SpriteEffects.None, Layers.Text);
     }
 
-    /// <summary>Draws a soft dark smudge round some text, so it reads over bright grass as well as the dark.</summary>
+    /// <summary>Draws a soft smudge round some text, so it reads over bright grass as well as the dark.</summary>
     /// <remarks>
     /// The glow texture drawn in the backing colour, cut in three: a round end each side and the
     /// middle stretched between them, so a long line doesn't fade out at its ends the way one

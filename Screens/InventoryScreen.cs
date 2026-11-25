@@ -65,7 +65,7 @@ public class InventoryScreen : GameScreen
     private const float FeetTop = 518f;
     private static readonly Vector2 FigureFeet = new(MemberPanel.Center.X, MemberPanel.Top + FeetTop);
     private static readonly Point ShadowSize = new(140, 30);
-    private static readonly Color ShadowColor = Color.Black * 0.45f;
+    private static readonly Color ShadowColor = new Color(30, 14, 50) * 0.45f;
 
     /// <summary>A paperdoll frame and the point in it that's their feet, in art pixels. Has to match the paperdoll's sheets (spec 6.5).</summary>
     private const int FrameWidth = 32;

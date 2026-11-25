@@ -38,8 +38,8 @@ public class ItemGrid
     private const float DimAlpha = 0.4f;
 
     /// <summary>The bar's track and the part that says where you are: the well's dark and the slots' bronze.</summary>
-    private static readonly Color BarTrack = new(14, 16, 36);
-    private static readonly Color BarThumb = new(206, 162, 82);
+    private static readonly Color BarTrack = new(48, 42, 108);
+    private static readonly Color BarThumb = new(246, 198, 96);
 
     private readonly List<GridEntry> _entries = new();
     private readonly Point _origin;

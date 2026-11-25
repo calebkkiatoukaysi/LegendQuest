@@ -4256,9 +4256,9 @@ Content/Props/Painted/anvil.png, Content/Props/Painted/armchair.png, Content/Pro
 
 ## UI
 
-Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron plate every button is drawn with and the light in its groove, drawn procedurally by tools/generate_ui.py, released under public domain
+Content/button.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced plate every button is drawn with (cream marble and gold round banner-blue enamel, a sky gem in each corner) and the light along its gold line, drawn procedurally by tools/generate_ui.py, released under public domain
 
-Content/panel.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced iron panel the forms sit on, drawn procedurally by tools/generate_ui.py, released under public domain
+Content/panel.png - created by Caleb Kiatoukaysi for Legend Quest, the nine-sliced panel the forms sit on (cream marble with rounded corners, a gold line, periwinkle enamel, a sky gem in a gold diamond in each corner), drawn procedurally by tools/generate_ui.py, released under public domain
 
 Content/map-marks.png - created by Caleb Kiatoukaysi for Legend Quest, the marks on the map screen (places, where you are, waypoints, roads), drawn procedurally by tools/generate_ui.py, released under public domain
 
@@ -4805,7 +4805,7 @@ Content/spectral-small.spritefont - written by Caleb Kiatoukaysi for Legend Ques
 
 ## The scripts
 
-tools/pixels.py, tools/generate_ui.py, tools/generate_world.py, tools/generate_harbour.py, tools/generate_interiors.py, tools/generate_paintings.py, tools/generate_audio.py - every asset above that says "drawn procedurally" or "synthesised" comes out of these; pixels.py is the PNG writer and colour helpers the art scripts share. They need nothing but CPython (3.12 or newer for generate_audio.py), and every one is seeded, so a rerun gives the same files
+tools/pixels.py, tools/generate_ui.py, tools/generate_world.py, tools/generate_harbour.py, tools/generate_interiors.py, tools/generate_paintings.py, tools/generate_audio.py - every asset above that says "drawn procedurally" or "synthesised" comes out of these; pixels.py is the PNG writer and colour helpers the art scripts share, and tools/ui_theme.py the UI's colours, which generate_ui.py, generate_items.py and generate_combat_art.py draw the panel, the buttons, the slots and the hotbar's frames in. They need nothing but CPython (3.12 or newer for generate_audio.py), and every one is seeded, so a rerun gives the same files
 
 tools/generate_paperdoll.py - written by Caleb Kiatoukaysi for Legend Quest, takes the youth off tools/source/npc-townsperson.png (through cut_supplied.py) apart into the paperdoll: sorts every pixel of him into what it's part of, cuts each part down to key shades, and draws the other hair, the faces, the beards, the skirt and the cape onto his frames. It needs nothing but CPython, and there's nothing random in it, so a rerun gives the same files
 

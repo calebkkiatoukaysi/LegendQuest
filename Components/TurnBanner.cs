@@ -38,7 +38,7 @@ public class TurnBanner
     /// <summary>How long a rule is, against the words.</summary>
     private const float RuleShare = 1.2f;
 
-    private static readonly Color BackingColour = Color.Black * 0.82f;
+    private static readonly Color BackingColour = new Color(48, 42, 108) * 0.88f;
 
     /// <summary>How bright the gold rules are, against the heading.</summary>
     private const float RuleStrength = 0.8f;

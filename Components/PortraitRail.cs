@@ -58,8 +58,8 @@ public class PortraitRail
     /// <summary>What the line over the camp's cards says.</summary>
     private const string CampLine = "AT CAMP";
 
-    private static readonly Color BarBack = new(24, 18, 18);
-    private static readonly Color BarFill = new(168, 52, 40);
+    private static readonly Color BarBack = new(44, 36, 92);
+    private static readonly Color BarFill = new(232, 84, 96);
 
     private Texture2D _panel;
     private Texture2D _pixel;

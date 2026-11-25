@@ -7,8 +7,9 @@ Run it from the repo root:
     python tools/generate_ui.py
 
 The plates and the panel are nine-sliced in the game, so they follow the same rule The Black Box's did: anything that
-varies has to be in a corner or vary only along the edge it sits on, and the middle is flat. Same
-muted look, with dark iron instead of concrete. Only needs CPython, and it's seeded, so a rerun
+varies has to be in a corner or vary only along the edge it sits on, and the middle is flat. The
+plates and the panel take their colours from ui_theme.py: cream marble, gold and sky gems round
+bright enamel, the title painting's colours. Only needs CPython, and it's seeded, so a rerun
 writes the same bytes.
 """
 
@@ -19,6 +20,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pixels import OUT, new_image, put, tone, write_png  # noqa: E402
+from ui_theme import (BANNER, BANNER_DK, BANNER_HI, ENAMEL_DEEP, ENAMEL_DK, ENAMEL_HI,  # noqa: E402
+                      GEM_SKY, GOLD, GOLD_DK, GOLD_HI, MARBLE, MARBLE_DK, MARBLE_HI, MARBLE_SH)
+from ui_theme import ENAMEL as WELL_FILL, OUTLINE as PLUM  # noqa: E402
 
 
 # --------------------------------------------------------------------------- #
@@ -64,11 +68,11 @@ BUTTON_FRAMES = {
     ],
 }
 
-# Twilight blue enamel with gold studs, the colours of the title's banners, so the menus sit with
-# the bright art instead of the old dark iron.
-IRON = (44, 54, 96)
-IRON_LT = (86, 104, 164)
-IRON_DK = (18, 22, 46)
+# The badges' enamel (ui_theme.py's violet, deep enough that a blue or gold emblem stands out on it)
+# and studs, and the black outline the world's marks are drawn with. The plaques are banner blue.
+IRON = ENAMEL_DK
+IRON_LT = ENAMEL_HI
+IRON_DK = ENAMEL_DEEP
 GROOVE = (10, 12, 28)
 RIVET = (222, 182, 98)
 OUTLINE = (0, 0, 0, 255)
@@ -81,71 +85,72 @@ def _button_falloff(distance, spread):
     return pow(1.0 - distance / spread, 1.6)
 
 
+def _rounded(S, x, y, cut):
+    """How a pixel sits against a frame's rounded corner: 'out' if it's cut away, 'edge' if it's on
+    the outline, else None. `cut` is how many pixels the corner loses along each side."""
+    cx, cy = min(x, S - 1 - x), min(y, S - 1 - y)
+    if cx + cy < cut:
+        return "out"
+    if cx == 0 or cy == 0 or cx + cy == cut:
+        return "edge"
+    return None
+
+
+def _lit(S, x, y, ring):
+    """Whether a pixel on a ring is on the lit side (top and left) of it."""
+    return (x == ring or y == ring) and not (x == S - 1 - ring or y == S - 1 - ring)
+
+
 def _button_plate(img, ox, oy, face_mul, inverted, dead, rng):
-    """Draws one frame of the iron plate into the top band."""
+    """Draws one frame of the plate into the top band: a cream marble rim round a gold line round
+    banner-blue enamel, with a gloss along its top and a sky gem in each corner."""
     S = BUTTON_FRAME
-    C = BUTTON_CORNER
+    g = BUTTON_GROOVE
 
     def shade(rgb, extra=1.0):
-        r, g, b = (c * face_mul * extra for c in rgb)
+        r, g_, b = (c * face_mul * extra for c in rgb)
         if dead:
-            # Disabled loses its warmth too, so it reads as switched off and not just dark.
-            grey = (r + g + b) / 3.0
-            r, g, b = (c * 0.35 + grey * 0.65 for c in (r, g, b))
-        return tone((r, g, b), 1.0)
+            # Disabled loses most of its colour too, to a soft lavender grey, so it reads as
+            # switched off and not just dark.
+            grey = (r + g_ + b) / 3.0
+            r, g_, b = (c * 0.25 + grey * 0.75 * k for c, k in zip((r, g_, b), (0.96, 0.94, 1.08)))
+        return tone((r, g_, b), 1.0)
 
-    # 1. Face, hammered. The grain has to be constant along whichever axis a region gets
-    #    stretched, or the nine-slice smears one row of speckle across the whole button.
-    row_grain = [rng.randint(-3, 3) for _ in range(S)]
-    col_grain = [rng.randint(-3, 3) for _ in range(S)]
     for y in range(S):
-        edge_y = y < C or y >= S - C
         for x in range(S):
-            edge_x = x < C or x >= S - C
-            if edge_x and edge_y:
-                n = rng.randint(-4, 4)
-            elif edge_y:
-                n = row_grain[y]
-            elif edge_x:
-                n = col_grain[x]
+            corner = _rounded(S, x, y, 2)
+            if corner == "out":
+                continue
+            if corner == "edge":
+                put(img, ox + x, oy + y, PLUM + (255,))
+                continue
+            ring = min(x, y, S - 1 - x, S - 1 - y)
+            lit = _lit(S, x, y, ring) != inverted
+            if ring == 1:
+                c = MARBLE_HI if lit else MARBLE_SH
+            elif ring == 2:
+                c = MARBLE if lit else MARBLE_DK
+            elif ring == g:
+                c = GOLD_HI if lit else GOLD_DK
             else:
-                n = 0
-            put(img, ox + x, oy + y, shade((IRON[0] + n, IRON[1] + n, IRON[2] + n)))
+                # The enamel: a gloss along the top two rows (the top edge only stretches sideways,
+                # so a row can differ from the next), a shadow along the bottom one.
+                top, bottom = y - (g + 1), (S - 2 - g) - y
+                if inverted:
+                    top, bottom = bottom, top
+                c = BANNER_HI if top == 0 else _mix(BANNER_HI, BANNER, 0.5) if top == 1 else BANNER_DK if bottom == 0 else BANNER
+            put(img, ox + x, oy + y, shade(c))
 
-    hi, lo = (IRON_DK, IRON_LT) if inverted else (IRON_LT, IRON_DK)
-
-    # 2. Hard silhouette, then two rings of bevel. The low side goes down first, so the top-left
-    #    corner ends up lit and the bottom-right one doesn't.
-    for i in range(S):
-        put(img, ox + i, oy, OUTLINE)
-        put(img, ox + i, oy + S - 1, OUTLINE)
-        put(img, ox, oy + i, OUTLINE)
-        put(img, ox + S - 1, oy + i, OUTLINE)
-
-    for i in (2, 1):
-        f = 1.0 - (i - 1) * 0.35
-        for x in range(i, S - i):
-            put(img, ox + x, oy + S - 1 - i, shade(lo, f))
-            put(img, ox + x, oy + i, shade(hi, f))
-        for y in range(i, S - i):
-            put(img, ox + S - 1 - i, oy + y, shade(lo, f * 0.90))
-            put(img, ox + i, oy + y, shade(hi, f * 0.85))
-
-    # 3. The groove, cut all the way round at a fixed inset so the nine-slice can stretch it.
-    g = BUTTON_GROOVE
-    for x in range(g, S - g):
-        put(img, ox + x, oy + g, shade(GROOVE))
-        put(img, ox + x, oy + S - 1 - g, shade(GROOVE))
-    for y in range(g, S - g):
-        put(img, ox + g, oy + y, shade(GROOVE))
-        put(img, ox + S - 1 - g, oy + y, shade(GROOVE))
-
-    # 4. A round rivet in each corner, inside the groove: lit on top, a shadow under it.
+    # A sky gem in each corner of the enamel, set in gold.
     for bx, by in ((g + 2, g + 2), (S - 1 - g - 3, g + 2), (g + 2, S - 1 - g - 3), (S - 1 - g - 3, S - 1 - g - 3)):
-        put(img, ox + bx, oy + by, shade(RIVET, 1.15))
-        put(img, ox + bx + 1, oy + by, shade(RIVET, 0.85))
-        put(img, ox + bx, oy + by + 1, shade(RIVET, 0.80))
-        put(img, ox + bx + 1, oy + by + 1, shade(IRON_DK))
+        put(img, ox + bx, oy + by, shade(GEM_SKY[2]))
+        put(img, ox + bx + 1, oy + by, shade(GEM_SKY[1]))
+        put(img, ox + bx, oy + by + 1, shade(GEM_SKY[1]))
+        put(img, ox + bx + 1, oy + by + 1, shade(GEM_SKY[0]))
+
+
+def _mix(a, b, t):
+    return tuple(int(round(a[i] + (b[i] - a[i]) * t)) for i in range(3))
 
 
 def _button_accent(img, ox, oy, alpha, spread):
@@ -181,98 +186,79 @@ def build_button(seed=3301):
 # panel.png -- the nine-sliceable iron slab every form is built on
 # --------------------------------------------------------------------------- #
 #
-# One frame. A form doesn't react to the cursor, the controls on it do. Same enamel as the buttons, a
-# shade darker and hollowed out, with a thin line of gold inside the lip.
+# One frame. A form doesn't react to the cursor, the controls on it do. A cream marble rim with
+# rounded corners, a gold line inside it, then the periwinkle enamel, sunk a little so its top and
+# left lips are in shadow; and in each corner a sky gem in a gold diamond, like the title's banners.
 
 PANEL_FRAME = 32
 
-#: Fixed corner of the nine-slice. Has to stay bigger than PANEL_WELL or the well's lip shears.
+#: Fixed corner of the nine-slice. Has to stay bigger than the gems and the well's lip.
 PANEL_CORNER = 12
 
-#: How far in from the border the recessed well is cut.
-PANEL_WELL = 7
+#: How many pixels each rounded corner loses along a side.
+PANEL_CUT = 3
 
-#: How far in from the border the bronze line runs. Between the rivets and the well.
-PANEL_TRIM = 5
+#: The rings, counted in from the border: the marble (1 to 3), the gold line, a dark line inside
+#: it, and the shadowed lip of the well. Everything further in is the well.
+PANEL_TRIM = 4
+PANEL_SEAM = 5
+PANEL_WELL = 6
 
-#: How far in from the border the corner rivets sit, just inside the bevel.
-PANEL_RIVET = 3
-
-SHELL = (38, 46, 84)
-SHELL_LT = (80, 96, 152)
-SHELL_DK = (14, 16, 36)
-WELL = (20, 24, 50)
-WELL_LT = (34, 40, 76)
-BRONZE = (206, 162, 82)
+#: Where the corner gems' middles are, in from the border, and how far their diamonds reach.
+PANEL_GEM = 5
+PANEL_GEM_REACH = 3
 
 
 def build_panel(seed=4472):
     S = PANEL_FRAME
-    C = PANEL_CORNER
-    rng = random.Random(seed)
     img = new_image(S, S)
 
-    # 1. Face. Same stretch-safe grain rule as the button.
-    row_grain = [rng.randint(-2, 2) for _ in range(S)]
-    col_grain = [rng.randint(-2, 2) for _ in range(S)]
     for y in range(S):
-        edge_y = y < C or y >= S - C
         for x in range(S):
-            edge_x = x < C or x >= S - C
-            if edge_x and edge_y:
-                n = rng.randint(-2, 2)
-            elif edge_y:
-                n = row_grain[y]
-            elif edge_x:
-                n = col_grain[x]
+            corner = _rounded(S, x, y, PANEL_CUT)
+            if corner == "out":
+                continue
+            if corner == "edge":
+                put(img, x, y, PLUM + (255,))
+                continue
+            ring = min(x, y, S - 1 - x, S - 1 - y)
+            lit = _lit(S, x, y, ring)
+            if ring == 1:
+                c = MARBLE_HI if lit else MARBLE_SH
+            elif ring == 2:
+                c = MARBLE if lit else MARBLE_SH
+            elif ring == 3:
+                c = MARBLE if lit else MARBLE_DK
+            elif ring == PANEL_TRIM:
+                c = GOLD_HI if lit else GOLD_DK
+            elif ring == PANEL_SEAM:
+                c = ENAMEL_DEEP
+            elif ring == PANEL_WELL:
+                # Sunk: the far lips catch the light, the near ones are in shadow.
+                c = ENAMEL_DK if lit else ENAMEL_HI
             else:
-                n = 0
-            put(img, x, y, tone((SHELL[0] + n, SHELL[1] + n, SHELL[2] + n), 1.0))
+                c = WELL_FILL
+            put(img, x, y, tone(c, 1.0))
 
-    # 2. Silhouette and the outer bevel, lit from the top-left like everything else.
-    for i in range(S):
-        put(img, i, 0, OUTLINE)
-        put(img, i, S - 1, OUTLINE)
-        put(img, 0, i, OUTLINE)
-        put(img, S - 1, i, OUTLINE)
-
-    for i in (2, 1):
-        f = 1.0 - (i - 1) * 0.40
-        for x in range(i, S - i):
-            put(img, x, i, tone(SHELL_LT, f))
-            put(img, x, S - 1 - i, tone(SHELL_DK, f))
-        for y in range(i, S - i):
-            put(img, i, y, tone(SHELL_LT, f * 0.85))
-            put(img, S - 1 - i, y, tone(SHELL_DK, f * 0.90))
-
-    # 3. The bronze line, lit along the top and left, dull along the bottom and right.
-    t = PANEL_TRIM
-    for x in range(t, S - t):
-        put(img, x, t, tone(BRONZE, 1.15))
-        put(img, x, S - 1 - t, tone(BRONZE, 0.70))
-    for y in range(t, S - t):
-        put(img, t, y, tone(BRONZE, 1.0))
-        put(img, S - 1 - t, y, tone(BRONZE, 0.75))
-
-    # 4. The well: the slab hollowed out, so the lighting inverts (far lip lit, near lip in shadow).
-    w = PANEL_WELL
-    for y in range(w, S - w):
-        for x in range(w, S - w):
-            put(img, x, y, tone(WELL, 1.0))
-    for x in range(w, S - w):
-        put(img, x, w, tone(SHELL_DK, 1.0))
-        put(img, x, S - 1 - w, tone(WELL_LT, 1.0))
-    for y in range(w, S - w):
-        put(img, w, y, tone(SHELL_DK, 0.90))
-        put(img, S - 1 - w, y, tone(WELL_LT, 0.85))
-
-    # 5. Rivets in the corners of the lip, outside the bronze line.
-    b = PANEL_RIVET
-    for bx, by in ((b, b), (S - 1 - b - 1, b), (b, S - 1 - b - 1), (S - 1 - b - 1, S - 1 - b - 1)):
-        put(img, bx, by, tone(RIVET, 1.1))
-        put(img, bx + 1, by, tone(RIVET, 0.8))
-        put(img, bx, by + 1, tone(RIVET, 0.75))
-        put(img, bx + 1, by + 1, tone(SHELL_DK, 1.0))
+    # The gems, in their gold diamonds.
+    g, r = PANEL_GEM, PANEL_GEM_REACH
+    for mx, my in ((g, g), (S - 1 - g, g), (g, S - 1 - g), (S - 1 - g, S - 1 - g)):
+        for dy in range(-r, r + 1):
+            for dx in range(-r, r + 1):
+                d = abs(dx) + abs(dy)
+                if d > r:
+                    continue
+                if d == r:
+                    c = PLUM
+                elif d == r - 1:
+                    c = GOLD_HI if dx + dy < 0 else GOLD if dx + dy == 0 else GOLD_DK
+                elif dx == -1 and dy == 0 or dx == 0 and dy == -1:
+                    c = GEM_SKY[2] if (dx, dy) == (0, -1) else GEM_SKY[1]
+                elif dx + dy > 0:
+                    c = GEM_SKY[0]
+                else:
+                    c = GEM_SKY[1]
+                put(img, mx + dx, my + dy, tone(c, 1.0))
 
     write_png(os.path.join(OUT, "panel.png"), img)
 
@@ -1071,7 +1057,7 @@ def build_indicators():
     for frame, (reach, strengths) in enumerate(GLINT):
         _glint(img, (GLINT_COLUMN + frame) * INDICATOR, INDICATOR * 2, reach, strengths)
 
-    _plaque(img, PLAQUE_COLUMN * INDICATOR, INDICATOR * 2, RIVET, ENAMEL)
+    _plaque(img, PLAQUE_COLUMN * INDICATOR, INDICATOR * 2, RIVET, (BANNER_HI, BANNER, BANNER_DK))
     _plaque(img, PLAQUE_COLUMN * INDICATOR, INDICATOR * 3, BADGE_GREY[3], ENAMEL_GREY)
     _door_outline(img, DOOR_OUTLINE_COLUMN * INDICATOR, INDICATOR * 2)
 

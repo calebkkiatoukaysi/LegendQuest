@@ -44,7 +44,7 @@ public class TitleScreen : MenuScreen
 
     /// <summary>The hint along the bottom, and the soft dark it sits on so it reads on the pale terrace: how dark, and how far it reaches past the line.</summary>
     private static readonly Color HintColor = new(236, 224, 214);
-    private static readonly Color HintBacking = Color.Black * 0.6f;
+    private static readonly Color HintBacking = new Color(44, 30, 82) * 0.6f;
     private static readonly Vector2 HintSpread = new(30f, 8f);
 
     private readonly MenuEntry _continue;

@@ -13,7 +13,7 @@ namespace LegendQuest.Components;
 /// <remarks>
 /// One at a time, in the order they came in, and a new one cuts short the one that's up, so a run of
 /// them doesn't make the last one wait. A long one (a trigger describing a room) wraps onto more
-/// rows, each centred, rather than running off the sides. It sits on the soft dark smudge from
+/// rows, each centred, rather than running off the sides. It sits on the soft smudge from
 /// Text.DrawBacking, so it reads over bright grass as well as the dark.
 /// </remarks>
 public class Toast
@@ -35,7 +35,7 @@ public class Toast
     /// <summary>How far the smudge reaches past the line, across and up and down, in screen pixels.</summary>
     private static readonly Vector2 Spread = new(70f, 26f);
 
-    private static readonly Color BackingColor = Color.Black * 0.8f;
+    private static readonly Color BackingColor = new Color(48, 42, 108) * 0.88f;
 
     private readonly Queue<string> _waiting = new();
 

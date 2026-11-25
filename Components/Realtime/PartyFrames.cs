@@ -46,7 +46,7 @@ public class PartyFrames
     private const float OutDim = 0.5f;
 
     /// <summary>The faces' frames: the party's blue, and gold for your target.</summary>
-    private static readonly Color FaceFrame = new(86, 104, 164);
+    private static readonly Color FaceFrame = new(246, 198, 96);
 
     /// <summary>A downed row's health bar: grey, full, with DOWN on it.</summary>
     private static readonly Color DownBar = new(64, 58, 66);

@@ -6,7 +6,7 @@ namespace LegendQuest.Components;
 
 /// <summary>
 /// The card a chapter opens on: the act it's in, in small gold capitals, and the chapter's name big under it,
-/// on a soft dark smudge across the middle of the screen.
+/// on a soft smudge across the middle of the screen.
 /// </summary>
 /// <remarks>
 /// The ship coming in ends on Chapter 1's, and every chapter after it opens on a conversation line
@@ -31,7 +31,7 @@ public class ChapterCard
     private const float Breadth = 2f;
 
     /// <summary>The smudge behind it, and how wide its soft round ends are, in screen pixels.</summary>
-    private static readonly Color Backing = Color.Black * 0.55f;
+    private static readonly Color Backing = new Color(44, 30, 82) * 0.6f;
     private const int Ends = 90;
 
     private SpriteFont _small;

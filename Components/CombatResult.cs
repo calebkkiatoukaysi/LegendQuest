@@ -110,7 +110,7 @@ public class CombatResult
         if (!Showing) return;
         float shown = Shown(alpha);
 
-        spriteBatch.Draw(_pixel, new Rectangle(0, 0, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight), Color.Black * (Veil * shown));
+        spriteBatch.Draw(_pixel, new Rectangle(0, 0, LegendQuestGame.ScreenWidth, LegendQuestGame.ScreenHeight), Palette.Veil * (Veil * shown));
         Rectangle panel = Panel();
         CombatStyle.DrawPanel(spriteBatch, _pixel, panel, shown);
 

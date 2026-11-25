@@ -90,11 +90,11 @@ public class ZoneMapScreen : GameScreen
     private static readonly Vector2 WaypointOver = new(0f, -34f);
 
     /// <summary>What a room you haven't been in is multiplied by, and the plate a room without a thumbnail is.</summary>
-    private static readonly Color Unvisited = new(58, 58, 74);
-    private static readonly Color Blank = new(28, 32, 60);
+    private static readonly Color Unvisited = new(96, 88, 140);
+    private static readonly Color Blank = new(48, 42, 108);
 
     /// <summary>The edge round a thumbnail: yours, the one picked, and the rest.</summary>
-    private static readonly Color OtherEdge = Color.Black * 0.8f;
+    private static readonly Color OtherEdge = Palette.Plum * 0.9f;
 
     private const string WorldName = "THE WORLD";
 

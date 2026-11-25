@@ -22,9 +22,10 @@ public static class CombatStyle
     /// <summary>The thing that flies for a weapon attack made from range.</summary>
     public const string Arrow = "arrow";
 
-    /// <summary>How thick a panel's rim is, in screen pixels, and how bright its gold.</summary>
-    private const int RimThickness = 2;
-    private const float RimStrength = 0.7f;
+    /// <summary>A panel's rim, in screen pixels from its edge in: the plum outline, the marble, the gold line.</summary>
+    private const int OutlineThickness = 2;
+    private const int MarbleThickness = 2;
+    private const int GoldThickness = 1;
 
     /// <summary>Hit points on the party's side: a fresh green.</summary>
     public static readonly Color PartyHealth = new(110, 206, 104);
@@ -41,16 +42,20 @@ public static class CombatStyle
     /// <summary>The colour of the vines and weeds of a spell that holds someone where they stand.</summary>
     public static readonly Color Nature = new(132, 204, 92);
 
-    /// <summary>The navy the fight's panels are filled with (the log, the cards, the frame round whoever's turn it is), see-through enough to keep the map under them.</summary>
-    public static readonly Color PanelFill = new Color(12, 18, 38) * 0.86f;
+    /// <summary>The enamel the fight's panels are filled with (the log, the cards, the frames), the forms' periwinkle, see-through enough to keep the map under them.</summary>
+    public static readonly Color PanelFill = new Color(78, 72, 160) * 0.9f;
 
-    /// <summary>The gold rim round those panels, the hotbar's gold.</summary>
-    public static readonly Color PanelRim = new(214, 172, 84);
+    /// <summary>The gold line inside those panels' marble rim, the hotbar's gold.</summary>
+    public static readonly Color PanelRim = Palette.Trim;
+
+    /// <summary>The marble rim's lit top and left, and its shaded bottom and right.</summary>
+    private static readonly Color MarbleLit = new(255, 251, 240);
+    private static readonly Color MarbleShade = new(216, 196, 182);
 
     /// <summary>What a foe's lines in the log are written in: a soft red, so the eye can tell whose turn did what.</summary>
     public static readonly Color FoeLine = new(240, 164, 150);
 
-    /// <summary>What Focus is written in (a skill's cost, the Focus left): the Focus bar's cool blue, light enough to read on the navy.</summary>
+    /// <summary>What Focus is written in (a skill's cost, the Focus left): the Focus bar's cool blue, light enough to read on the enamel.</summary>
     public static readonly Color FocusText = new(150, 200, 255);
 
     /// <summary>The ember the opportunist's ring under a foe is drawn in, and the tint over a slot a skill would catch.</summary>
@@ -157,18 +162,35 @@ public static class CombatStyle
     /// <param name="condition">The condition.</param>
     public static bool Helps(ConditionId condition) => Helpful[condition];
 
-    /// <summary>Draws one of the fight's panels: the navy fill and a thin gold rim round it.</summary>
+    /// <summary>Draws one of the fight's panels: the enamel fill in a rim like the forms' panel, a plum outline with its corners rounded off, cream marble, and a gold line.</summary>
     /// <param name="spriteBatch">The SpriteBatch to render with, in screen space, deferred.</param>
     /// <param name="pixel">One white pixel: the screen manager's BlankTexture.</param>
     /// <param name="area">Where, in screen pixels.</param>
     /// <param name="alpha">How faded in it is.</param>
     public static void DrawPanel(SpriteBatch spriteBatch, Texture2D pixel, Rectangle area, float alpha)
     {
-        spriteBatch.Draw(pixel, area, PanelFill * alpha);
-        Color rim = PanelRim * (RimStrength * alpha);
-        spriteBatch.Draw(pixel, new Rectangle(area.Left, area.Top, area.Width, RimThickness), rim);
-        spriteBatch.Draw(pixel, new Rectangle(area.Left, area.Bottom - RimThickness, area.Width, RimThickness), rim);
-        spriteBatch.Draw(pixel, new Rectangle(area.Left, area.Top, RimThickness, area.Height), rim);
-        spriteBatch.Draw(pixel, new Rectangle(area.Right - RimThickness, area.Top, RimThickness, area.Height), rim);
+        int o = OutlineThickness, m = MarbleThickness, g = GoldThickness;
+        Ring(spriteBatch, pixel, area, o, Palette.Plum * alpha, Palette.Plum * alpha, o);
+        Rectangle marble = Deflate(area, o);
+        Ring(spriteBatch, pixel, marble, m, MarbleLit * alpha, MarbleShade * alpha, 0);
+        // The outline's rounded corners step in one more pixel over the marble.
+        foreach (Point corner in new[] { new Point(marble.Left, marble.Top), new Point(marble.Right - 1, marble.Top), new Point(marble.Left, marble.Bottom - 1), new Point(marble.Right - 1, marble.Bottom - 1) })
+            spriteBatch.Draw(pixel, new Rectangle(corner.X, corner.Y, 1, 1), Palette.Plum * alpha);
+        Rectangle gold = Deflate(marble, m);
+        Ring(spriteBatch, pixel, gold, g, PanelRim * alpha, Color.Lerp(PanelRim, new Color(150, 90, 40), 0.45f) * alpha, 0);
+        spriteBatch.Draw(pixel, Deflate(gold, g), PanelFill * alpha);
+    }
+
+    /// <summary>A rectangle brought in by the same amount on every side.</summary>
+    private static Rectangle Deflate(Rectangle area, int by) => new(area.X + by, area.Y + by, area.Width - by * 2, area.Height - by * 2);
+
+    /// <summary>Draws a ring just inside a rectangle: its top and left in one colour, its bottom and right in another, the corners of its outer edge cut back by a few pixels.</summary>
+    private static void Ring(SpriteBatch spriteBatch, Texture2D pixel, Rectangle area, int thickness, Color lit, Color shade, int cut)
+    {
+        int side = Math.Max(cut, thickness);
+        spriteBatch.Draw(pixel, new Rectangle(area.Left + cut, area.Top, area.Width - cut * 2, thickness), lit);
+        spriteBatch.Draw(pixel, new Rectangle(area.Left, area.Top + side, thickness, area.Height - side * 2), lit);
+        spriteBatch.Draw(pixel, new Rectangle(area.Left + cut, area.Bottom - thickness, area.Width - cut * 2, thickness), shade);
+        spriteBatch.Draw(pixel, new Rectangle(area.Right - thickness, area.Top + side, thickness, area.Height - side * 2), shade);
     }
 }

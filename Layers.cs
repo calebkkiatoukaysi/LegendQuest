@@ -12,8 +12,11 @@ public static class Layers
     /// <summary>The dimming pane a form is laid over. Back of the form's batch.</summary>
     public const float Veil = 0.60f;
 
-    /// <summary>The iron slab a form is built on, over the veil. The party's cards are too.</summary>
+    /// <summary>The panel a form is built on, over the veil. The party's cards are too.</summary>
     public const float PanelPlate = 0.50f;
+
+    /// <summary>The soft shadow under a panel: over the veil, under the panel.</summary>
+    public const float PanelShadow = 0.55f;
 
     /// <summary>The torchlit edge round the card of whoever you're controlling.</summary>
     public const float Selection = 0.45f;
@@ -27,7 +30,7 @@ public static class Layers
     /// <summary>The full part of a bar, over the empty part.</summary>
     public const float BarFill = 0.25f;
 
-    /// <summary>The iron plate of a button.</summary>
+    /// <summary>The plate of a button.</summary>
     public const float ButtonPlate = 0.18f;
 
     /// <summary>The light coming out of a button's groove, over its own plate.</summary>
@@ -39,7 +42,7 @@ public static class Layers
     /// <summary>A button's label.</summary>
     public const float ButtonLabel = 0.15f;
 
-    /// <summary>A soft dark smudge behind a line of text, so it reads over anything.</summary>
+    /// <summary>A soft smudge behind a line of text, so it reads over anything.</summary>
     public const float TextBacking = 0.14f;
 
     /// <summary>Offset drop shadow sitting just behind a line of text.</summary>

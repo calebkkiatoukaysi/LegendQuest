@@ -49,8 +49,8 @@ public class PartyStrip
     /// <summary>The edge round the card of whoever you're controlling, in screen pixels.</summary>
     private const int LeaderEdge = 2;
 
-    private static readonly Color BarBack = new(24, 18, 18);
-    private static readonly Color BarFill = new(168, 52, 40);
+    private static readonly Color BarBack = new(44, 36, 92);
+    private static readonly Color BarFill = new(232, 84, 96);
 
     private Texture2D _panel;
     private Texture2D _pixel;

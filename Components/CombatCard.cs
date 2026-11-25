@@ -13,7 +13,7 @@ namespace LegendQuest.Components;
 /// you've picked would do to them), or a piece of the screen.
 /// </summary>
 /// <remarks>
-/// Built a row at a time each frame by whoever's showing it, then drawn: a navy panel with the gold
+/// Built a row at a time each frame by whoever's showing it, then drawn: an enamel panel with the marble-and-gold
 /// rim, as wide as its widest row up to a limit, rows wrapping past that. It goes above the thing
 /// it's about when that's on the hotbar, and below and to the right of the mouse on the map, flipped
 /// to stay on the screen. Every number on it says what it is, so nothing has to be guessed.

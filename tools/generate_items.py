@@ -36,6 +36,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pixels import OUT, ROOT, new_image, put, write_png  # noqa: E402
+import ui_theme  # noqa: E402
 
 
 # --------------------------------------------------------------------------- #
@@ -1350,17 +1351,17 @@ def build_icons():
 # the item, so a slot is: the well, then the outline if it's empty or the rim if what's in it is
 # magic, then the icon.
 
-#: The panel's colours (generate_ui.py's SHELL_DK, WELL, WELL_LT and BRONZE), and a brighter well
-#: so an icon's outline still shows against it.
-SLOT_EDGE = (14, 16, 36)
-SLOT_WELL = (30, 36, 70)
-SLOT_SHADOW = (20, 24, 50)
-SLOT_LIP = (52, 62, 108)
-SLOT_BRONZE = (206, 162, 82)
-SLOT_GOLD = (246, 204, 114)
+#: The panel's colours (ui_theme.py's plum outline, enamel and gold), the well a shade deeper than
+#: the panel so an icon stands out in it.
+SLOT_EDGE = ui_theme.OUTLINE
+SLOT_WELL = (70, 64, 150)
+SLOT_SHADOW = ui_theme.ENAMEL_DEEP
+SLOT_LIP = ui_theme.ENAMEL_HI
+SLOT_BRONZE = ui_theme.GOLD
+SLOT_GOLD = ui_theme.GOLD_HI
 
-#: The faint outline of what goes in an empty slot: two shades of the well, lit and unlit.
-SILHOUETTE = ((54, 64, 112), (70, 82, 136))
+#: The faint outline of what goes in an empty slot: two shades lighter than the well, unlit and lit.
+SILHOUETTE = ((90, 84, 174), (108, 102, 194))
 
 #: An uncommon thing's rim and a rare one's: green and blue, like every RPG's.
 RIM_UNCOMMON = (142, 196, 92)

@@ -71,7 +71,7 @@ public partial class ExploreScreen : GameScreen
     private const string HeadingJoin = "  ·  ";
 
     /// <summary>The smudge behind the heading, and how far it spreads round the text, so it reads on a bright sky as well as in the barrow.</summary>
-    private static readonly Color HeadingBacking = Color.Black * 0.8f;
+    private static readonly Color HeadingBacking = new Color(44, 30, 82) * 0.78f;
     private static readonly Vector2 HeadingSpread = new(28f, 12f);
 
     /// <summary>The soft dark band across the top of the screen that the heading, the keys and the objective sit on, so they read over a busy sky: how dark it is, how far down it stays that dark (past the objective), and how far under that it takes to fade to nothing. Screen pixels.</summary>
@@ -551,7 +551,7 @@ public partial class ExploreScreen : GameScreen
         for (int y = 0; y < texels.Length; y++)
         {
             float t = MathHelper.Clamp((y - BandSolid) / (float)BandFade, 0f, 1f);
-            texels[y] = Color.Black * (BandDarkness * (1f - t * t * (3f - 2f * t)));
+            texels[y] = new Color(30, 18, 56) * (BandDarkness * (1f - t * t * (3f - 2f * t)));
         }
 
         var band = new Texture2D(ScreenManager.GraphicsDevice, 1, texels.Length);

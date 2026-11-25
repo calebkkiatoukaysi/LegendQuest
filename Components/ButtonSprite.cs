@@ -7,7 +7,7 @@ using LegendQuest.StateManagement;
 namespace LegendQuest.Components;
 
 /// <summary>
-/// A clickable iron plate with light coming out of the groove round its edge. Every menu entry is one.
+/// A clickable plate (cream marble and gold round banner-blue enamel) with light coming off the gold line round its edge. Every menu entry is one.
 /// </summary>
 /// <remarks>
 /// The Black Box's button with the concrete swapped for iron. button.png has two bands on the same
@@ -18,8 +18,8 @@ namespace LegendQuest.Components;
 public class ButtonSprite
 {
     /// <summary>The label before any light falls on it, live and greyed out, and how far it warms toward the accent when lit.</summary>
-    private static readonly Color LabelCold = new(200, 190, 180);
-    private static readonly Color LabelDisabled = new(98, 92, 88);
+    private static readonly Color LabelCold = new(252, 246, 236);
+    private static readonly Color LabelDisabled = new(170, 166, 190);
     private const float LabelLitBlend = 0.55f;
 
     /// <summary>The detail line: dimmer than the label, and it warms less and later.</summary>
@@ -288,9 +288,10 @@ public class ButtonSprite
         Color lit = Color.Lerp(cold, Color.Lerp(Accent, Color.White, LabelLitBlend), _kindle);
 
         // Centre the whole block, so a detail line pushes the label up instead of hanging off it.
-        float fit = LabelFit;
+        float fit = Fit(_font, Label);
+        float detailFit = Fit(_detailFont, Sublabel);
         Vector2 label = _font.MeasureString(Label) * fit;
-        float height = string.IsNullOrEmpty(Sublabel) ? label.Y : label.Y + SublabelGap + _detailFont.MeasureString(Sublabel).Y;
+        float height = string.IsNullOrEmpty(Sublabel) ? label.Y : label.Y + SublabelGap + _detailFont.MeasureString(Sublabel).Y * detailFit;
         float top = MathF.Round(plate.Y + (plate.Height - height) / 2f);
 
         DrawLine(spriteBatch, _font, Label, plate, top, lit, fit, Opacity);
@@ -299,19 +300,16 @@ public class ButtonSprite
 
         // Dimmer than the label so it doesn't compete with it.
         Color detail = Color.Lerp(cold * DetailDim, Color.Lerp(Accent, Color.White, DetailLitBlend), _kindle * DetailKindle);
-        DrawLine(spriteBatch, _detailFont, Sublabel, plate, top + label.Y + SublabelGap, detail, 1f, Opacity);
+        DrawLine(spriteBatch, _detailFont, Sublabel, plate, top + label.Y + SublabelGap, detail, detailFit, Opacity);
     }
 
-    /// <summary>How far a label may be shrunk to fit a fixed-size plate, so a long one never runs off the edges.</summary>
-    /// <remarks>The margin is the corner art, which a label shouldn't sit over, and a little clearance either side of it.</remarks>
-    private float LabelFit
+    /// <summary>How far a line (the label or the detail under it) is shrunk to fit a fixed-size plate, so a long one never runs off the edges.</summary>
+    /// <remarks>The margin is the corner art, which a line shouldn't sit over, and a little clearance either side of it.</remarks>
+    private float Fit(SpriteFont font, string text)
     {
-        get
-        {
-            float room = Size.X - (CornerSize * DrawScale + LabelClearance) * 2;
-            float width = _font.MeasureString(Label ?? string.Empty).X;
-            return width > room ? room / width : 1f;
-        }
+        float room = Size.X - (CornerSize * DrawScale + LabelClearance) * 2;
+        float width = font.MeasureString(text ?? string.Empty).X;
+        return width > room ? room / width : 1f;
     }
 
     /// <summary>Draws one line of text centred across the plate, with a shadow.</summary>

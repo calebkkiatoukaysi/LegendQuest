@@ -611,7 +611,7 @@ public partial class ExploreScreen
         return new Rectangle((int)(prompt.Top.X - width / 2f), (int)(prompt.Top.Y - PromptGap - height), (int)width, (int)height);
     }
 
-    /// <summary>Writes the name of whoever or whatever you're next to over them, and the key and the word for using it, on the same dark smudge as what people say.</summary>
+    /// <summary>Writes the name of whoever or whatever you're next to over them, and the key and the word for using it, on the same smudge as what people say.</summary>
     private void DrawPrompt(SpriteBatch spriteBatch, float alpha)
     {
         if (Prompting() is not { } prompt || PromptBox() is not Rectangle box) return;

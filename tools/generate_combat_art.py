@@ -917,19 +917,21 @@ HUD_HEIGHT = 132
 # and a well in the middle the icon or the face sits in (24x24 or 24x26, three pixels in). Each
 # state's colours: bevel lit and dark, trim lit and dark, the well's top and bottom.
 
-#: How far in from a frame's edge its well is, and the black of the edge itself (the buttons').
+#: How far in from a frame's edge its well is, and the plum of the edge itself (the buttons').
 FRAME_INSET = 3
-FRAME_EDGE = (0, 0, 0)
+FRAME_EDGE = items.ui_theme.OUTLINE
 
-#: Each frame's colours, by the name of its piece.
+#: Each frame's colours, by the name of its piece: ui_theme.py's marble and gold round an enamel
+#: well, sky for the party, rose for a foe, all gold for whoever's turn it is or the slot picked.
+_T = items.ui_theme
 FRAMES = {
-    "hotbar-normal": ((86, 104, 164), (18, 22, 46), (206, 162, 82), (144, 108, 56), (20, 24, 50), (30, 36, 70)),
-    "hotbar-hover": ((116, 136, 200), (28, 34, 68), (250, 216, 139), (206, 150, 80), (26, 32, 64), (40, 48, 90)),
-    "hotbar-disabled": ((74, 76, 90), (20, 20, 28), (112, 108, 104), (72, 70, 70), (14, 14, 22), (20, 20, 30)),
-    "hotbar-selected": ((250, 216, 139), (167, 101, 58), (255, 248, 222), (238, 184, 88), (34, 40, 80), (50, 58, 104)),
-    "portrait-party": ((86, 104, 164), (18, 22, 46), (206, 162, 82), (144, 108, 56), (40, 48, 92), (20, 24, 50)),
-    "portrait-foe": ((176, 64, 76), (54, 14, 26), (220, 96, 92), (140, 44, 54), (64, 26, 42), (30, 12, 24)),
-    "portrait-current": ((250, 216, 139), (167, 101, 58), (255, 248, 222), (238, 184, 88), (52, 62, 112), (24, 28, 58)),
+    "hotbar-normal": (_T.MARBLE, _T.MARBLE_DK, _T.GOLD, _T.GOLD_DK, (100, 94, 188), (62, 56, 136)),
+    "hotbar-hover": (_T.MARBLE_HI, _T.MARBLE_SH, _T.GOLD_HI, _T.GOLD, (118, 112, 210), (76, 70, 156)),
+    "hotbar-disabled": ((168, 164, 178), (104, 98, 118), (164, 154, 142), (120, 112, 108), (82, 78, 108), (58, 54, 82)),
+    "hotbar-selected": (_T.GOLD_HI, _T.GOLD_DK, _T.MARBLE_HI, _T.GOLD, (124, 116, 218), (80, 72, 162)),
+    "portrait-party": (_T.MARBLE, _T.MARBLE_DK, _T.GOLD, _T.GOLD_DK, (118, 170, 236), (72, 100, 190)),
+    "portrait-foe": ((250, 170, 186), (156, 70, 100), (244, 118, 132), (172, 62, 86), (150, 84, 140), (96, 46, 98)),
+    "portrait-current": (_T.GOLD_HI, _T.GOLD_DK, _T.MARBLE_HI, _T.GOLD, (132, 160, 236), (78, 86, 176)),
 }
 
 
@@ -1243,7 +1245,7 @@ def shift_chevron(img, ox, oy):
 
 BANNER_WIDTH = 12
 BANNER_HEIGHT = 16
-BANNER_CLOTH = ((40, 48, 92), (20, 24, 50))
+BANNER_CLOTH = (items.ui_theme.BANNER, items.ui_theme.BANNER_DK)
 BANNER_TRIM = ((250, 216, 139), (167, 101, 58))
 
 
@@ -1273,7 +1275,7 @@ def support_banner(img, ox, oy):
 
 RING = 16
 PROGRESS_FRAMES = 9
-PROGRESS_TRACK = (34, 40, 76)
+PROGRESS_TRACK = items.ui_theme.ENAMEL_DEEP
 PROGRESS_FILL = ((180, 152, 238), (234, 222, 255))
 
 

@@ -26,8 +26,8 @@ public class HudKit
     public const string HeadingFont = "spectral-ui";
 
     /// <summary>A bar's dark back and its edge.</summary>
-    public static readonly Color BarBack = new(12, 10, 20);
-    public static readonly Color BarEdge = new(4, 4, 8);
+    public static readonly Color BarBack = new(44, 36, 92);
+    public static readonly Color BarEdge = new(42, 22, 62);
 
     /// <summary>What the bars are filled with: the party's health, a foe's, Focus, temporary hit points, and the lag that shows what was just lost.</summary>
     public static readonly Color PartyHealth = CombatStyle.PartyHealth;
@@ -174,7 +174,7 @@ public class HudKit
         if (string.IsNullOrEmpty(text)) return;
         Vector2 size = font.MeasureString(text);
         var position = new Vector2(MathF.Round(at.X - size.X * align), MathF.Round(at.Y - (middle ? font.LineSpacing / 2f : 0f)));
-        Color outline = Color.Black * (0.85f * alpha);
+        Color outline = new Color(30, 14, 50) * (0.85f * alpha);
         for (int dy = -1; dy <= 1; dy++)
             for (int dx = -1; dx <= 1; dx++)
                 if (dx != 0 || dy != 0)

@@ -154,7 +154,7 @@ public class CharacterCreationScreen : MenuScreen
     /// <summary>A row's words: how far in from the plate's ends, the room for its name, the room for each arrow, and how big the name and what's picked are written (a share of the font).</summary>
     private const float RowEnds = 30f, RowLabelWidth = 150f, RowArrowGap = 24f;
     private const float RowLabelSize = 0.62f, RowValueSize = 0.78f;
-    private static readonly Color ShadowColor = Color.Black * 0.45f;
+    private static readonly Color ShadowColor = new Color(30, 14, 50) * 0.45f;
 
     /// <summary>How long they face each way before turning, and how long a step takes.</summary>
     private const float TurnSeconds = 2.2f;
@@ -720,10 +720,10 @@ public class CharacterCreationScreen : MenuScreen
         spriteBatch.End();
     }
 
-    /// <summary>The name box: a dark well, framed in gold while it's being typed in or the mouse is on it.</summary>
+    /// <summary>The name box: a deep enamel well, framed in gold while it's being typed in or the mouse is on it.</summary>
     private void DrawNameBox(SpriteBatch spriteBatch, float alpha)
     {
-        spriteBatch.Draw(ScreenManager.BlankTexture, NameBox, Palette.Ink * (0.92f * alpha));
+        spriteBatch.Draw(ScreenManager.BlankTexture, NameBox, Palette.EnamelDeep * (0.92f * alpha));
         Color frame = _typing ? Palette.Gold : _onNameBox ? Palette.Bone : Palette.Note * 0.7f;
         Frame(spriteBatch, NameBox, _typing ? 3 : 2, frame * alpha);
     }

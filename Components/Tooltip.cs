@@ -10,7 +10,7 @@ namespace LegendQuest.Components;
 /// </summary>
 /// <remarks>
 /// It goes below and to the right of the cursor, and flips to the other side near the edge of the
-/// screen so it's never cut off. On the same soft dark smudge as the toasts, from Text.DrawBacking.
+/// screen so it's never cut off. On the same soft enamel smudge as the toasts, from Text.DrawBacking.
 /// In a fight the line under the name will be the hit chance and the damage.
 /// </remarks>
 public class Tooltip
@@ -21,7 +21,7 @@ public class Tooltip
     /// <summary>How far the smudge reaches past the text, across and up and down.</summary>
     private static readonly Vector2 Spread = new(14f, 8f);
 
-    private static readonly Color BackingColor = Color.Black * 0.8f;
+    private static readonly Color BackingColor = new Color(48, 42, 108) * 0.88f;
 
     private SpriteFont _font;
     private Texture2D _glow;

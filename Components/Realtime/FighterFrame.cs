@@ -7,7 +7,7 @@ using LegendQuest.Combat;
 namespace LegendQuest.Components.Realtime;
 
 /// <summary>
-/// What the player's frame and the target's share: a navy panel with the gold rim, a face in a
+/// What the player's frame and the target's share: an enamel panel in a marble-and-gold rim, a face in a
 /// portrait frame at one end, the name and what they are, the health bar with its lag and its
 /// numbers, and the aura row under the panel.
 /// </summary>
