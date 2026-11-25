@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+    "dominant_color": [
+      250,
+      17,
+      250
+    ],
+    "dominant_fraction": 0.09506607055664062,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.mid.png",
+    "dominant_color": [
+      250,
+      9,
+      249
+    ],
+    "dominant_fraction": 0.04810206095377604,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.fg.png",
+    "dominant_color": [
+      250,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.26092084248860675,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.far.png",
+    "dominant_color": [
+      248,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.11615180969238281,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.mid.png",
+    "dominant_color": [
+      252,
+      5,
+      252
+    ],
+    "dominant_fraction": 0.031118392944335938,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.fg.png",
+    "dominant_color": [
+      252,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.15632184346516928,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.far.png",
+    "dominant_color": [
+      251,
+      3,
+      251
+    ],
+    "dominant_fraction": 0.1371453603108724,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.mid.png",
+    "dominant_color": [
+      252,
+      16,
+      251
+    ],
+    "dominant_fraction": 0.031658172607421875,
+    "exact_magenta_pixels": 1
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.fg.png",
+    "dominant_color": [
+      251,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.19012133280436197,
+    "exact_magenta_pixels": 4
+  }
+]

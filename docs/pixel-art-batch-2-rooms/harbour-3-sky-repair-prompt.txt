@@ -1,0 +1,1 @@
+Remove only the yellow sun disc near the upper left at x80-165, y10-95. Fill its former area with the surrounding blue sky band. This panel has no visible sun. Keep every cloud and all sky bands unchanged. Exactly1536 by1024. No new objects, no scenery, no other changes.

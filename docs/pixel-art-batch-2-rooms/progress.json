@@ -384,8 +384,561 @@
       ],
       "prompt": "docs/pixel-art-batch-2-rooms/prompts/gulls-wager/deck/bg-3.fg.png.txt",
       "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 16,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0",
+      "export_sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/harbourside/bg-1.png",
+          "sha256": "16262ff4599e1c4d2f76f91cff53251deac0fb4cb53c984c8973bf8acf70810c"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 17,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0bbb6913751961205add5e4d040c9fc1e73e288a3b6efb65669d66de95623850",
+      "export_sha256": "0bbb6913751961205add5e4d040c9fc1e73e288a3b6efb65669d66de95623850",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+          "sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 18,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/018-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d505312e77051e7fd8b6cb309cf8da7ac83c492971d3a8aa9476d4cbbbed784f",
+      "export_sha256": "d505312e77051e7fd8b6cb309cf8da7ac83c492971d3a8aa9476d4cbbbed784f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+          "sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/018-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 18,
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "e0f4c5662f30548748380a77419334f2c31f56ae6ed33a9f689028d4adae30e8",
+          "export_sha256": "e0f4c5662f30548748380a77419334f2c31f56ae6ed33a9f689028d4adae30e8",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+              "sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "db86cccace7a5830026afe6e483fd9f5e91cd5cf15c06776772136e3f6068999",
+      "export_sha256": "db86cccace7a5830026afe6e483fd9f5e91cd5cf15c06776772136e3f6068999",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+          "sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 20,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-1.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "db679a53961a543d7ef66defb4ebf2c2f21093a1995c59576886e0772aafbf4f",
+      "export_sha256": "db679a53961a543d7ef66defb4ebf2c2f21093a1995c59576886e0772aafbf4f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+          "sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-1.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 21,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2",
+      "export_sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/harbourside/bg-2.png",
+          "sha256": "ffb3ea0fabaef15374fcd6c549c516d10b13a75dd435fd8374890683f10439bb"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.png",
+          "sha256": "11a98eb35b6757fa61f3c2e242f3bd363093861b4c08c5136f4e9c07d4b335a0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 22,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "1a37092fa5f9473d2c4b2899674c4040e507b9328519d7c5dbbedd437bb95b53",
+      "export_sha256": "1a37092fa5f9473d2c4b2899674c4040e507b9328519d7c5dbbedd437bb95b53",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+          "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.sky.png",
+          "sha256": "0bbb6913751961205add5e4d040c9fc1e73e288a3b6efb65669d66de95623850"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 23,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/023-revision-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "8c598747e0b9f20d752604e0b2a5f63d42f5087d60cea4ccc482123f539d1023",
+      "export_sha256": "8c598747e0b9f20d752604e0b2a5f63d42f5087d60cea4ccc482123f539d1023",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+          "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+          "sha256": "d505312e77051e7fd8b6cb309cf8da7ac83c492971d3a8aa9476d4cbbbed784f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/023-revision-2.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 23,
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-2.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "f7926db97b5576eed82c0fe85b27bf6bac8310930f9122f9df3443e0831097ac",
+          "export_sha256": "f7926db97b5576eed82c0fe85b27bf6bac8310930f9122f9df3443e0831097ac",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+              "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+            },
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+              "sha256": "d505312e77051e7fd8b6cb309cf8da7ac83c492971d3a8aa9476d4cbbbed784f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-2.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        },
+        {
+          "number": 23,
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.far.png",
+          "original": "art/pixel-batch-2-rooms/revisions/023-revision-1.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "09a7d63790bff91c12b854281f051104b9a922d91bec485cd77dffca550bc8c0",
+          "export_sha256": "09a7d63790bff91c12b854281f051104b9a922d91bec485cd77dffca550bc8c0",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+              "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+            },
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+              "sha256": "d505312e77051e7fd8b6cb309cf8da7ac83c492971d3a8aa9476d4cbbbed784f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/revisions/023-revision-1.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending",
+          "earlier_attempts": [
+            {
+              "number": 23,
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.far.png",
+              "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-2.far.png",
+              "native_size": [
+                1536,
+                1024
+              ],
+              "export_size": [
+                1536,
+                1024
+              ],
+              "source_sha256": "f7926db97b5576eed82c0fe85b27bf6bac8310930f9122f9df3443e0831097ac",
+              "export_sha256": "f7926db97b5576eed82c0fe85b27bf6bac8310930f9122f9df3443e0831097ac",
+              "references": [
+                {
+                  "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+                  "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+                },
+                {
+                  "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.far.png",
+                  "sha256": "d505312e77051e7fd8b6cb309cf8da7ac83c492971d3a8aa9476d4cbbbed784f"
+                }
+              ],
+              "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-2.far.png.txt",
+              "status": "source draft; alignment, pixel conversion and runtime registration pending"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "ad2dcf7418e4c8843239fa9ad6ce65947e8de6c89aeca9a1b7f8eee1e70f87dd",
+      "export_sha256": "ad2dcf7418e4c8843239fa9ad6ce65947e8de6c89aeca9a1b7f8eee1e70f87dd",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+          "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.mid.png",
+          "sha256": "db86cccace7a5830026afe6e483fd9f5e91cd5cf15c06776772136e3f6068999"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 25,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-2.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "13f4a7c3851ae93cb2aad6990dcba6edcc214e8a8e4c99f53b51112100c0c851",
+      "export_sha256": "13f4a7c3851ae93cb2aad6990dcba6edcc214e8a8e4c99f53b51112100c0c851",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+          "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-1.fg.png",
+          "sha256": "db679a53961a543d7ef66defb4ebf2c2f21093a1995c59576886e0772aafbf4f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-2.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 26,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d",
+      "export_sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/harbourside/bg-3.png",
+          "sha256": "54f038b67327eb465d307121fbf125a8438074d4c11a59d378830c326cdb0210"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.png",
+          "sha256": "12f605caa1017554cbf0e884c1b306b675757c3486a21a2fc8ec97a6dee3dde2"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 27,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/revisions/027-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "190700970b57c8ab768cc17c44d50f65286415e57e69efbff996acd6f046f7bc",
+      "export_sha256": "190700970b57c8ab768cc17c44d50f65286415e57e69efbff996acd6f046f7bc",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+          "sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.sky.png",
+          "sha256": "1a37092fa5f9473d2c4b2899674c4040e507b9328519d7c5dbbedd437bb95b53"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/027-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 27,
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.sky.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-3.sky.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "b83335dc342e09aa733a0d3343326ad072b505ee89c24621934842587d03d676",
+          "export_sha256": "b83335dc342e09aa733a0d3343326ad072b505ee89c24621934842587d03d676",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+              "sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d"
+            },
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.sky.png",
+              "sha256": "1a37092fa5f9473d2c4b2899674c4040e507b9328519d7c5dbbedd437bb95b53"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-3.sky.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "560a89e8d9bf34e3d4d7e55479f674169d296e0b363bca90e1d99f8013e35a8d",
+      "export_sha256": "560a89e8d9bf34e3d4d7e55479f674169d296e0b363bca90e1d99f8013e35a8d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+          "sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.far.png",
+          "sha256": "8c598747e0b9f20d752604e0b2a5f63d42f5087d60cea4ccc482123f539d1023"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 29,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/revisions/029-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "2c09027977a709cd85b13ee7385155b64e11ec82749d03a192d3348f1f876d81",
+      "export_sha256": "2c09027977a709cd85b13ee7385155b64e11ec82749d03a192d3348f1f876d81",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+          "sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.mid.png",
+          "sha256": "ad2dcf7418e4c8843239fa9ad6ce65947e8de6c89aeca9a1b7f8eee1e70f87dd"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/029-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 29,
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.mid.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-3.mid.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "b98add5ad005f28ef928dabc937033b00126c6d6ae9037d1e27d9b007cfeca42",
+          "export_sha256": "b98add5ad005f28ef928dabc937033b00126c6d6ae9037d1e27d9b007cfeca42",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+              "sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d"
+            },
+            {
+              "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.mid.png",
+              "sha256": "ad2dcf7418e4c8843239fa9ad6ce65947e8de6c89aeca9a1b7f8eee1e70f87dd"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-3.mid.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/harbourside/bg-3.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "b5ebbfa0fa95d7d6b5189979b4d689c9bb4d3f0bd56353e48d25cfb9fe9a6371",
+      "export_sha256": "b5ebbfa0fa95d7d6b5189979b4d689c9bb4d3f0bd56353e48d25cfb9fe9a6371",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-3.png",
+          "sha256": "c4871a6c61040e4fb4e20531ee5d8003376aaf626b99405e5008fc03df07960d"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/harbourside/bg-2.fg.png",
+          "sha256": "13f4a7c3851ae93cb2aad6990dcba6edcc214e8a8e4c99f53b51112100c0c851"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-3.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
     }
   ],
-  "next_number": 16,
+  "next_number": 31,
   "runtime_imported": false
 }

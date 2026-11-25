@@ -42,6 +42,8 @@ def plan():
             filename = filename[1]
             match = re.fullmatch(r'bg-(\d+)(?:\.(sky|far|mid|fg))?\.png', filename)
             panel, kind = int(match[1]), match[2] or 'panel'
+            if kind == 'far':
+                prompt += '\n\nEXTRACTION COMPLETENESS. Retain every visible distant detail in the scene, including distant boats, ships, lighthouses, harbour walls and far banks if present. Carry water or distant terrain behind all removed near objects down to the walking floor line, so it cannot leave gaps when combined with the middle ground. Do not invent objects or shift anything.'
             path = f'tools/source/pixel/rooms/{room}/{filename}'
             reference = (f'art/rooms/generated/{room}/bg-{panel}.png' if kind == 'panel'
                          else f'tools/source/pixel/rooms/{room}/bg-{panel}.png')
@@ -50,6 +52,8 @@ def plan():
                 previous = filename.replace(f'bg-{panel}', f'bg-{panel-1}')
                 references.append(f'tools/source/pixel/rooms/{room}/{previous}')
                 prompt += '\n\nImage 1 is the edit target / scene reference. Image 2 is the finished same-kind preceding panel. Where this panel shows the same stretch as the second attached picture, make it match that one exactly. Do not move anything in image 1 to imitate image 2.'
+            if room == 'docks/harbourside' and panel == 3 and kind == 'far':
+                prompt += '\n\nPANEL 3 POSITION LOCK. Follow IMAGE 1 geometry: retain the fishing boat with red furled sail on the RIGHT at x1235-1478 and y400-636, the white hilltop lighthouse at x1223-1253 and y300-363, and the stone breakwater lighthouse on the far RIGHT at x1448-1509 and y389-516. Do not copy image 2\'s ship or lighthouse from the left side into this panel. Carry sea behind the removed near houses down to y715. Remove all sky, sun and clouds to magenta above the hills. Keep water, boat and far coast; no near buildings, tree, fish stall, bollard or floor.'
             jobs.append(dict(room=room, title=title, outdoor=outdoor, panel=panel,
                              kind=kind, filename=filename, path=path,
                              references=references, prompt=prompt))
@@ -141,6 +145,30 @@ def check():
     assert not problems
 
 
+def revise(number, source, prompt_file):
+    state = read(DOCS/'progress.json')
+    entry = next(r for r in state['images'] if r['number'] == number)
+    assert not any(ref['path'] == entry['path'] for r in state['images'] for ref in r['references']), 'Revise before dependent generations'
+    previous = dict(entry)
+    revision = len(entry.get('earlier_attempts', []))+1
+    dest = ROOT/entry['path']
+    original = ROOT/'art/pixel-batch-2-rooms/revisions'/f'{number:03}-revision-{revision}.png'
+    original.parent.mkdir(parents=True, exist_ok=True)
+    assert not original.exists()
+    shutil.copyfile(source, original)
+    with Image.open(source) as im:
+        assert im.size == (1536,1024), im.size
+    shutil.copyfile(source, dest)
+    prompt = DOCS/'revisions'/f'{number:03}-revision-{revision}.txt'
+    prompt.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(prompt_file, prompt)
+    entry.update(original=original.relative_to(ROOT).as_posix(), source_sha256=digest(original),
+                 export_sha256=digest(dest), prompt=prompt.relative_to(ROOT).as_posix(),
+                 earlier_attempts=entry.get('earlier_attempts', [])+[previous])
+    write(DOCS/'progress.json', state)
+    print(f'Revised {number}; prior attempt preserved')
+
+
 def review(room):
     jobs = [j for j in read(DOCS/'jobs.json') if j['room'] == room]
     saved = {r['path'] for r in read(DOCS/'progress.json')['images']}
@@ -170,12 +198,14 @@ def review(room):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=['plan','ready','save','check','review'])
+    parser.add_argument('command', choices=['plan','ready','save','check','review','revise'])
     parser.add_argument('args', nargs='*')
     args = parser.parse_args()
     if args.command == 'save':
         save(int(args.args[0]), args.args[1])
     elif args.command == 'review':
         review(args.args[0])
+    elif args.command == 'revise':
+        revise(int(args.args[0]), args.args[1], args.args[2])
     else:
         globals()[args.command]()
