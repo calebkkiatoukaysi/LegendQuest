@@ -626,12 +626,12 @@ public partial class LegendQuestGame
                 talk?.ProofChoose(2);
                 return null;
 
-            // The Soul-Bound, remembered: nameless at first, then Wren, a Sylvan, she/her.
+            // The Soul-Bound, remembered: nameless at first, then Linnet, a Sylvan, she/her.
             case 290:
                 return "create-soulbound.png";
 
             case 291:
-                creation?.ProofType("Wren");
+                creation?.ProofType("Linnet");
                 creation?.ProofPronouns(Pronouns.She);
                 creation?.ProofLook(new CharacterLook { Ancestry = Ancestry.Sylvan, Skin = 1, Face = 2, Eyes = 4, Hair = 4, HairColour = 4, Shirt = 2, Vest = 1, LegsColour = 2, Cloak = 3, Portrait = "face-f05", HairTint = 12, EyeTint = 8, BaseTint = 7, TrimTint = 17 }, ClassId.Druid);
                 return null;

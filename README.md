@@ -1233,7 +1233,7 @@ after two losses, on Story.
 
 **The fight stages** (`LegendQuestGame.ProofArena`, `ExploreScreen.ProofArena`) are run on their own:
 `--proof <dir> Arena`, `Boss` or `Classes`. Each bout is a fresh game the way the story has it at
-that fight: you (a Swordhand, Caleb), the Soul-Bound (Wren) and the companions who've joined by
+that fight: you (a Swordhand, Caleb), the Soul-Bound (Linnet) and the companions who've joined by
 then, at `LevelTable`'s level and the class rank the story's fights before it give, in the room the
 fight's fought in, with the story's flags up to it, and the save made as the fight starts, so the
 room starts it as it loads. The party's AI fights for everyone. Each bout saves, once each, the

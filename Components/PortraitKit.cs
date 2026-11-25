@@ -18,7 +18,8 @@ namespace LegendQuest.Components;
 /// Content/Portraits/&lt;id&gt;.png, one 96 x 96 face per expression in Dialogue/Expressions.cs's
 /// order, and portraits.json, which expressions each sheet has. The id is the speaker's (sera,
 /// brannock) or a variant's (brannock-sling). A face a sheet hasn't falls back to the nearest it
-/// has (Expressions.Nearest). Someone without a sheet keeps the old portrait.
+/// has (Expressions.Nearest). Someone without a sheet is drawn from their own picture, made into
+/// pixel art the same size (ImportedFigure.PixelPortrait), with the one face.
 ///
 /// The faces move without frames of their own: they breathe (down an art pixel and back every few
 /// seconds), bob with the words while a line types out, and dip when the expression changes. Cold
@@ -97,22 +98,45 @@ public sealed class PortraitKit
         id = Resolve(id);
 
         string face = Pick(id, expression);
-        if (id != _shownId || face != _shownFace)
-        {
-            // A new speaker starts still; the same one changing expression dips.
-            if (id == _shownId) _dip = DipSeconds;
-            _shownId = id;
-            _shownFace = face;
-        }
+        Shown(id, face);
+        Place(spriteBatch, Sheet(id), Array.IndexOf(_rows[id], face) * Grid, well, Offset(expression, talking), tint);
+        return true;
+    }
 
-        int row = Array.IndexOf(_rows[id], face);
+    /// <summary>
+    /// Draws a face that isn't on a sheet (ImportedFigure.PixelPortrait, for someone without a
+    /// portrait of their own: you, the Soul-Bound, the crowd) into a well the same way, breathing and
+    /// bobbing with the words. It has the one face, so it doesn't dip.
+    /// </summary>
+    /// <param name="spriteBatch">A batch begun with point sampling.</param>
+    /// <param name="id">Whose face, so a new speaker starts still.</param>
+    /// <param name="face">The face, Grid pixels square.</param>
+    /// <param name="well">Where it goes; square.</param>
+    /// <param name="talking">Whether the line's still typing out.</param>
+    /// <param name="tint">What it's drawn with.</param>
+    public void Draw(SpriteBatch spriteBatch, string id, Texture2D face, Rectangle well, bool talking, Color tint)
+    {
+        Shown(id, null);
+        Place(spriteBatch, face, 0, well, Offset(null, talking), tint);
+    }
+
+    /// <summary>Notes who's shown at what: a new speaker starts still; the same one changing expression dips.</summary>
+    private void Shown(string id, string face)
+    {
+        if (id == _shownId && face == _shownFace) return;
+        if (id == _shownId) _dip = DipSeconds;
+        _shownId = id;
+        _shownFace = face;
+    }
+
+    /// <summary>Draws the Grid-square face at `top` on a picture into the middle of a well, whole art pixels big, `down` of them lower with as many rows off its bottom.</summary>
+    private static void Place(SpriteBatch spriteBatch, Texture2D picture, int top, Rectangle well, int down, Color tint)
+    {
         int scale = Math.Max(1, well.Width / Grid);
-        int down = Offset(expression, talking);
-        var source = new Rectangle(0, row * Grid, Grid, Grid - down);
+        var source = new Rectangle(0, top, Grid, Grid - down);
         var at = new Rectangle(well.X + (well.Width - Grid * scale) / 2, well.Y + (well.Height - Grid * scale) / 2 + down * scale,
             Grid * scale, (Grid - down) * scale);
-        spriteBatch.Draw(Sheet(id), at, source, tint);
-        return true;
+        spriteBatch.Draw(picture, at, source, tint);
     }
 
     /// <summary>How many art pixels down the face is drawn this frame: 0 or 1.</summary>

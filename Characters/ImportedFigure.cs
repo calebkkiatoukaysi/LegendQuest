@@ -37,6 +37,9 @@ public sealed class ImportedFigure
     private const float FaceReach = 1.4f;
     private const float FaceLift = 0.1f;
 
+    /// <summary>How covered a pixel of the pixel-art portrait has to be to be drawn, out of 255; the rest are left clear.</summary>
+    private const int PixelSolid = 128;
+
     /// <summary>The widest a portrait's box is kept for, against its height. A wider well gets transparent sides.</summary>
     private const float WidestFace = 1.5f;
 
@@ -53,6 +56,7 @@ public sealed class ImportedFigure
 
     /// <summary>The part of the picture round the head that's kept for the portraits, and where it is on the picture.</summary>
     private readonly Color[] _face;
+    private Texture2D _pixelPortrait;
     private readonly Rectangle _faceArea;
 
     /// <summary>The middle of the head box across, the top of the portrait's box, and the head box's longer side, in the picture's pixels.</summary>
@@ -153,6 +157,7 @@ public sealed class ImportedFigure
         Picture.Dispose();
         foreach (Piece piece in Rig) piece.Picture.Dispose();
         foreach (Texture2D portrait in _portraits.Values) portrait.Dispose();
+        _pixelPortrait?.Dispose();
         _portraits.Clear();
     }
 
@@ -194,7 +199,50 @@ public sealed class ImportedFigure
     public Texture2D Portrait(Point size)
     {
         if (_portraits.TryGetValue(size, out Texture2D portrait)) return portrait;
+        portrait = new Texture2D(_device, size.X, size.Y);
+        portrait.SetData(Face(size));
+        _portraits[size] = portrait;
+        return portrait;
+    }
 
+    /// <summary>
+    /// The face as pixel art, for a conversation's well beside the painted pixel portraits
+    /// (PortraitKit): the same box at `grid` pixels square, each pixel either solid or clear (no soft
+    /// edge), and an outline round it in the UI's plum (Palette.Plum), so it's drawn at a whole number of screen
+    /// pixels to each like theirs. Made the first time and kept.
+    /// </summary>
+    /// <param name="grid">How many pixels square: PortraitKit.Grid.</param>
+    public Texture2D PixelPortrait(int grid)
+    {
+        if (_pixelPortrait is not null && _pixelPortrait.Width == grid) return _pixelPortrait;
+        Color[] face = Face(new Point(grid, grid));
+        var solid = new bool[face.Length];
+        for (int i = 0; i < face.Length; i++)
+        {
+            Color c = face[i];
+            solid[i] = c.A >= PixelSolid;
+            // Premultiplied in, so a solid pixel's colour is what it was over its own coverage.
+            face[i] = solid[i] ? new Color(c.R * 255 / c.A, c.G * 255 / c.A, c.B * 255 / c.A, 255) : Color.Transparent;
+        }
+        for (int y = 0; y < grid; y++)
+        {
+            for (int x = 0; x < grid; x++)
+            {
+                if (solid[y * grid + x]) continue;
+                bool edge = x > 0 && solid[y * grid + x - 1] || x < grid - 1 && solid[y * grid + x + 1]
+                    || y > 0 && solid[(y - 1) * grid + x] || y < grid - 1 && solid[(y + 1) * grid + x];
+                if (edge) face[y * grid + x] = Palette.Plum;
+            }
+        }
+        _pixelPortrait?.Dispose();
+        _pixelPortrait = new Texture2D(_device, grid, grid);
+        _pixelPortrait.SetData(face);
+        return _pixelPortrait;
+    }
+
+    /// <summary>The face's box shaped like a well of a size, at that size, premultiplied.</summary>
+    private Color[] Face(Point size)
+    {
         float tall = _headSide * FaceReach, wide = tall * size.X / size.Y;
         var box = new Rectangle((int)MathF.Round(_faceMiddle - wide / 2f), (int)MathF.Round(_faceTop), Math.Max(1, (int)MathF.Round(wide)), Math.Max(1, (int)MathF.Round(tall)));
         var crop = new Color[box.Width * box.Height];
@@ -206,11 +254,7 @@ public sealed class ImportedFigure
                 if (px >= 0 && py >= 0 && px < _faceArea.Width && py < _faceArea.Height) crop[y * box.Width + x] = _face[py * _faceArea.Width + px];
             }
         }
-
-        portrait = new Texture2D(_device, size.X, size.Y);
-        portrait.SetData(Scaled(crop, box.Width, box.Height, size.X, size.Y));
-        _portraits[size] = portrait;
-        return portrait;
+        return Scaled(crop, box.Width, box.Height, size.X, size.Y);
     }
 
     /// <summary>

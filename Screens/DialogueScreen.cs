@@ -604,8 +604,8 @@ public class DialogueScreen : GameScreen
 
     /// <summary>
     /// The speaker's face, in its frame, on the left of the panel: their pixel portrait at the line's
-    /// expression, bobbing while the words type out (PortraitKit), or for someone without one the
-    /// bust off their sheet or an imported picture's portrait at the frame's size. A voice's is tinted.
+    /// expression, bobbing while the words type out (PortraitKit), or for someone without one their
+    /// picture's face made into pixel art the same way, or the bust off their sheet. A voice's is tinted.
     /// </summary>
     private void DrawPortrait(SpriteBatch spriteBatch, DialogueNode node, Rectangle panel, float alpha)
     {
@@ -619,7 +619,7 @@ public class DialogueScreen : GameScreen
         if (_portraits.Draw(spriteBatch, voice ?? node.Speaker, node.Expression, face, _shown < Length(), tint * alpha)) return;
 
         (_, Texture2D sheet, ImportedFigure art) = _speaker(node.Speaker);
-        if (art is not null) spriteBatch.Draw(art.Portrait(face.Size), face, tint * alpha);
+        if (art is not null) _portraits.Draw(spriteBatch, node.Speaker, art.PixelPortrait(PortraitKit.Grid), face, _shown < Length(), tint * alpha);
         else if (sheet is not null) spriteBatch.Draw(sheet, face, Bust, tint * alpha);
     }
 

@@ -135,7 +135,7 @@ public partial class LegendQuestGame
             Skin = 2, Face = 2, Eyes = 2, Hair = 2, HairColour = 3, Shirt = 1, Vest = 3, Legs = 1, LegsColour = 5, Cloak = 2, Portrait = "face-m03",
             BaseTint = 12, TrimTint = 5, HairPart = "hair-17", Extras = new Dictionary<string, string> { ["beard"] = "beard-01" },
         };
-        soulBound.Name = "Wren";
+        soulBound.Name = "Linnet";
         soulBound.Look = new CharacterLook
         {
             Ancestry = Ancestry.Sylvan, Skin = 1, Face = 2, Eyes = 4, Hair = 4, HairColour = 4, Shirt = 2, Vest = 1, LegsColour = 2, Cloak = 3, Portrait = "face-f05",
