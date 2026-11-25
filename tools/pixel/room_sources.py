@@ -54,6 +54,16 @@ def plan():
                 prompt += '\n\nImage 1 is the edit target / scene reference. Image 2 is the finished same-kind preceding panel. Where this panel shows the same stretch as the second attached picture, make it match that one exactly. Do not move anything in image 1 to imitate image 2.'
             if room == 'docks/harbourside' and panel == 3 and kind == 'far':
                 prompt += '\n\nPANEL 3 POSITION LOCK. Follow IMAGE 1 geometry: retain the fishing boat with red furled sail on the RIGHT at x1235-1478 and y400-636, the white hilltop lighthouse at x1223-1253 and y300-363, and the stone breakwater lighthouse on the far RIGHT at x1448-1509 and y389-516. Do not copy image 2\'s ship or lighthouse from the left side into this panel. Carry sea behind the removed near houses down to y715. Remove all sky, sun and clouds to magenta above the hills. Keep water, boat and far coast; no near buildings, tree, fish stall, bollard or floor.'
+            if room == 'docks/fish-market' and panel == 2:
+                if kind == 'sky':
+                    prompt += '\n\nThis panel has NO visible sun. The gold sun emblem at x1357,y56 belongs to the distant castle spire and must be removed with that building, not retained in the sky. Do not copy the sun from image 2. Keep only image 1 sky and clouds.'
+                elif kind == 'far':
+                    prompt += '\n\nIMAGE 1 POSITION LOCK. Keep its large distant castle on the RIGHT at x980-1535, with tallest gold sun-tipped spire at x1357 and y32-260. Do not replace it with image 2\'s small central island castle. Keep only image 1 far coast, hills, castle, water; carry water behind near objects down to y731. Remove near sailboats and masts (they belong with middle ground), near buildings, pink tree, stairs, lamps, bushes and fish rack. All sky above castle/hills and area below y731 must be magenta. Do not add a sun, clouds or new castle.'
+            if room == 'docks/fish-market' and panel == 3:
+                if kind == 'sky':
+                    prompt += '\n\nNo visible sun in this panel: remove the gold emblem and halo at x1232,y56 with the castle spire. Keep only sky and clouds from IMAGE 1. No emblem, sun, castle or scenery may remain.'
+                elif kind == 'far':
+                    prompt += '\n\nPANEL 3 POSITION LOCK: the main gold sun-tipped castle spire is centered at x1232 (not x1357 as in image 2), from y28 to y260. Keep IMAGE 1 castle and hill geometry unchanged. The castle begins behind the tree at x870. Carry sea down to y731. Remove all near stairs, trees, bushes, buildings, lamps, fish rack and sailboats. No sky, clouds or new sun; keep the castle emblem attached to its spire. Magenta above hill/castle and below y731.'
             jobs.append(dict(room=room, title=title, outdoor=outdoor, panel=panel,
                              kind=kind, filename=filename, path=path,
                              references=references, prompt=prompt))

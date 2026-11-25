@@ -937,8 +937,447 @@
       ],
       "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/harbourside/bg-3.fg.png.txt",
       "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 31,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7",
+      "export_sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/fish-market/bg-1.png",
+          "sha256": "24cfaa56cffb8d42f46f5cd4b4be2578588d10a37a55f0370c1ab7af07158c1e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 32,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a0d9a09a7d10f8b1c3be93064af0c18c44cde96e0672543c602593838c69208d",
+      "export_sha256": "a0d9a09a7d10f8b1c3be93064af0c18c44cde96e0672543c602593838c69208d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+          "sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 33,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/033-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7298353c18437bd61feb56185b6a0efec75135e408ce6ae4b725b05e51f5dfb4",
+      "export_sha256": "7298353c18437bd61feb56185b6a0efec75135e408ce6ae4b725b05e51f5dfb4",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+          "sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/033-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 33,
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "2a8141a7032039387829ad291759d99c3e4441c44902300685898d58011a110a",
+          "export_sha256": "2a8141a7032039387829ad291759d99c3e4441c44902300685898d58011a110a",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+              "sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "8a943cf75d13434df0c71e01aae6a98218172b28d03240d23ff18151e11c2617",
+      "export_sha256": "8a943cf75d13434df0c71e01aae6a98218172b28d03240d23ff18151e11c2617",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+          "sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 35,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-1.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "35553fee0578eb7c239c88cfdf7ffeeebd7573668e4a5f4507facd68c746ee72",
+      "export_sha256": "35553fee0578eb7c239c88cfdf7ffeeebd7573668e4a5f4507facd68c746ee72",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+          "sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-1.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 36,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5",
+      "export_sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/fish-market/bg-2.png",
+          "sha256": "c19f6847e93c9455de504e06a946f8e6129742b28e32db2e1f6735612c7c4770"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.png",
+          "sha256": "e208da7df7cb7a56ad85241fb93c2eb72bac9017e7367090807154a0ead50cf7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 37,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "c15e4aaaa92786efa2ef3963ec855a51f9bd47ee20a3e6c2d34ed4c07b415631",
+      "export_sha256": "c15e4aaaa92786efa2ef3963ec855a51f9bd47ee20a3e6c2d34ed4c07b415631",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.png",
+          "sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.sky.png",
+          "sha256": "a0d9a09a7d10f8b1c3be93064af0c18c44cde96e0672543c602593838c69208d"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 38,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-2.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "27e17420dbfef812f85bd7973e53ba451e5870351ea75c8034d2fbd5d4710db7",
+      "export_sha256": "27e17420dbfef812f85bd7973e53ba451e5870351ea75c8034d2fbd5d4710db7",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.png",
+          "sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.far.png",
+          "sha256": "7298353c18437bd61feb56185b6a0efec75135e408ce6ae4b725b05e51f5dfb4"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-2.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 39,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9adb0316e468c39afce2430438734d6da2214778ab15f50fc64bf2c11f09d351",
+      "export_sha256": "9adb0316e468c39afce2430438734d6da2214778ab15f50fc64bf2c11f09d351",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.png",
+          "sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.mid.png",
+          "sha256": "8a943cf75d13434df0c71e01aae6a98218172b28d03240d23ff18151e11c2617"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 40,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-2.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d73e7edac27bd2bb46118399dbe1d356f55e85857f4798c0a61404d24cd4f682",
+      "export_sha256": "d73e7edac27bd2bb46118399dbe1d356f55e85857f4798c0a61404d24cd4f682",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.png",
+          "sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.fg.png",
+          "sha256": "35553fee0578eb7c239c88cfdf7ffeeebd7573668e4a5f4507facd68c746ee72"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-2.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 41,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316",
+      "export_sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/fish-market/bg-3.png",
+          "sha256": "ab869a66edc46034272ba318bcc1eabcc7135da1578aa9e5eec3e0f490f63989"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.png",
+          "sha256": "a38c90fd4b1e80c03501e63894f7bf61517947f4b600ca481a07efa66d9dfec5"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 42,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "4885eab7a587eb207fd8c30295ef0e91a0457932c1519beef8accaa2147b915f",
+      "export_sha256": "4885eab7a587eb207fd8c30295ef0e91a0457932c1519beef8accaa2147b915f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.png",
+          "sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.sky.png",
+          "sha256": "c15e4aaaa92786efa2ef3963ec855a51f9bd47ee20a3e6c2d34ed4c07b415631"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 43,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "dd11d8d5212384f4287b5c6e6d485297db2bb8c196fa157835cb80fafaa480b0",
+      "export_sha256": "dd11d8d5212384f4287b5c6e6d485297db2bb8c196fa157835cb80fafaa480b0",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.png",
+          "sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.far.png",
+          "sha256": "27e17420dbfef812f85bd7973e53ba451e5870351ea75c8034d2fbd5d4710db7"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 44,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "376caf61eb0e91bd7706ffbac0fc9c0d31ce4de6439551e4354ff5c54ad27290",
+      "export_sha256": "376caf61eb0e91bd7706ffbac0fc9c0d31ce4de6439551e4354ff5c54ad27290",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.png",
+          "sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.mid.png",
+          "sha256": "9adb0316e468c39afce2430438734d6da2214778ab15f50fc64bf2c11f09d351"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 45,
+      "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/045-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "1b17c76c1c0ed30b1434f227d6e15d2d0abfd3ab2b261d30df48afdf35d1fc76",
+      "export_sha256": "1b17c76c1c0ed30b1434f227d6e15d2d0abfd3ab2b261d30df48afdf35d1fc76",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.png",
+          "sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316"
+        },
+        {
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.fg.png",
+          "sha256": "d73e7edac27bd2bb46118399dbe1d356f55e85857f4798c0a61404d24cd4f682"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/045-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 45,
+          "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/fish-market/bg-3.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "c463292fcfdc74c8ca72a2cd4810dd37e0694b07357cd2e11c3d4a349bf60d7c",
+          "export_sha256": "c463292fcfdc74c8ca72a2cd4810dd37e0694b07357cd2e11c3d4a349bf60d7c",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.png",
+              "sha256": "2cfe89620ce18103ebfb48d3404ec6b4762b7d26135030dd20f560aa0f9b4316"
+            },
+            {
+              "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.fg.png",
+              "sha256": "d73e7edac27bd2bb46118399dbe1d356f55e85857f4798c0a61404d24cd4f682"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/fish-market/bg-3.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 31,
+  "next_number": 46,
   "runtime_imported": false
 }
