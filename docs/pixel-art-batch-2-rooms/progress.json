@@ -3500,8 +3500,447 @@
       ],
       "prompt": "docs/pixel-art-batch-2-rooms/prompts/questeria/thornbridge-gate/bg-1.fg.png.txt",
       "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 106,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0",
+      "export_sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0",
+      "references": [
+        {
+          "path": "art/rooms/generated/road/farmland/bg-1.png",
+          "sha256": "2e202dddc50403eec935b434a2f8ac17739e867de25fa470be5da874a27ccbf2"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 107,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a2a23172d61ed8eabbe9bbb018e224bec48d90878dc9555f5a348e70e45a1bd3",
+      "export_sha256": "a2a23172d61ed8eabbe9bbb018e224bec48d90878dc9555f5a348e70e45a1bd3",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+          "sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 108,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/108-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "61b3a5769a6f5436f1b49842a3a31f88bcd23fb5c79fe7e121bc7872f7a1ed46",
+      "export_sha256": "61b3a5769a6f5436f1b49842a3a31f88bcd23fb5c79fe7e121bc7872f7a1ed46",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+          "sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/108-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 108,
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "1e4035980f775b2e1a7d69b99d85ef96fdad70001163e2030b3149169742ccce",
+          "export_sha256": "1e4035980f775b2e1a7d69b99d85ef96fdad70001163e2030b3149169742ccce",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+              "sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 109,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "bd599d63990933a24a436a06b49cd0e4f2489da38169e84162bb475afec8a2a2",
+      "export_sha256": "bd599d63990933a24a436a06b49cd0e4f2489da38169e84162bb475afec8a2a2",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+          "sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 110,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-1.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "558b4632ad3c6aa4298c0d8dd0be508b0e27c97bcf9168a296b386a89e6dad37",
+      "export_sha256": "558b4632ad3c6aa4298c0d8dd0be508b0e27c97bcf9168a296b386a89e6dad37",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+          "sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-1.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 111,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a",
+      "export_sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a",
+      "references": [
+        {
+          "path": "art/rooms/generated/road/farmland/bg-2.png",
+          "sha256": "9e78cd1a0d8601de8f3df57d25287ecffceb9097b05f8693e1558e99cd9d90d4"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.png",
+          "sha256": "727b6cde9fb608599a05108ed216a3dbe017d789d7fd764bec6d681410ae38f0"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 112,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "49281d45ab7777faf0516d1063bb76c58e341f2dc0a351cda1d9f25abee47670",
+      "export_sha256": "49281d45ab7777faf0516d1063bb76c58e341f2dc0a351cda1d9f25abee47670",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+          "sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.sky.png",
+          "sha256": "a2a23172d61ed8eabbe9bbb018e224bec48d90878dc9555f5a348e70e45a1bd3"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 113,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/113-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "439a005e0e08e003793ee5e44adecabf304f4efba9e8b86731831e42fa8a071a",
+      "export_sha256": "439a005e0e08e003793ee5e44adecabf304f4efba9e8b86731831e42fa8a071a",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+          "sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.far.png",
+          "sha256": "61b3a5769a6f5436f1b49842a3a31f88bcd23fb5c79fe7e121bc7872f7a1ed46"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/113-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 113,
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-2.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "f5e003051280bf08f367829ec25478533a4b962369163234e84d8bbdb2a15e7c",
+          "export_sha256": "f5e003051280bf08f367829ec25478533a4b962369163234e84d8bbdb2a15e7c",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+              "sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a"
+            },
+            {
+              "path": "tools/source/pixel/rooms/road/farmland/bg-1.far.png",
+              "sha256": "61b3a5769a6f5436f1b49842a3a31f88bcd23fb5c79fe7e121bc7872f7a1ed46"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-2.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 114,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "df691cc07965034ee1ec965f0c708ae4520e091c59ee4a99d2967fa7019126b8",
+      "export_sha256": "df691cc07965034ee1ec965f0c708ae4520e091c59ee4a99d2967fa7019126b8",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+          "sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.mid.png",
+          "sha256": "bd599d63990933a24a436a06b49cd0e4f2489da38169e84162bb475afec8a2a2"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 115,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-2.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "97f5791fe75d11b34afd8b7e36344c6afc2ebe0318871bfe7897ed89d08bd22d",
+      "export_sha256": "97f5791fe75d11b34afd8b7e36344c6afc2ebe0318871bfe7897ed89d08bd22d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+          "sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-1.fg.png",
+          "sha256": "558b4632ad3c6aa4298c0d8dd0be508b0e27c97bcf9168a296b386a89e6dad37"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-2.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 116,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "f6fc487a30ff852b0682349cae396b4dfbacdc7d665aea933c66c15172cef5ac",
+      "export_sha256": "f6fc487a30ff852b0682349cae396b4dfbacdc7d665aea933c66c15172cef5ac",
+      "references": [
+        {
+          "path": "art/rooms/generated/road/farmland/bg-3.png",
+          "sha256": "48db710f04ab5d163bc31c4c1003bf2176bc1a95bccbeaabbcfb6061c88c465c"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.png",
+          "sha256": "3b9e05677101165ecb5e949dabb1ef5c8888a63beeead543c3af73f999092b6a"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 117,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7a913892b1471b4cd4f6fb5de07ff8a96363e383d7ba19290f7542ab559955bf",
+      "export_sha256": "7a913892b1471b4cd4f6fb5de07ff8a96363e383d7ba19290f7542ab559955bf",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-3.png",
+          "sha256": "f6fc487a30ff852b0682349cae396b4dfbacdc7d665aea933c66c15172cef5ac"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.sky.png",
+          "sha256": "49281d45ab7777faf0516d1063bb76c58e341f2dc0a351cda1d9f25abee47670"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 118,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "83ec31df1145a6cc365635dd35356fcc2cd8f808b5d97e528dddcf94fcbbee05",
+      "export_sha256": "83ec31df1145a6cc365635dd35356fcc2cd8f808b5d97e528dddcf94fcbbee05",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-3.png",
+          "sha256": "f6fc487a30ff852b0682349cae396b4dfbacdc7d665aea933c66c15172cef5ac"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.far.png",
+          "sha256": "439a005e0e08e003793ee5e44adecabf304f4efba9e8b86731831e42fa8a071a"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 119,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "6f50b7713cb68a4ff04c9c522268be2fc45d0c180eee469ac341450263660cdf",
+      "export_sha256": "6f50b7713cb68a4ff04c9c522268be2fc45d0c180eee469ac341450263660cdf",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-3.png",
+          "sha256": "f6fc487a30ff852b0682349cae396b4dfbacdc7d665aea933c66c15172cef5ac"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.mid.png",
+          "sha256": "df691cc07965034ee1ec965f0c708ae4520e091c59ee4a99d2967fa7019126b8"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 120,
+      "path": "tools/source/pixel/rooms/road/farmland/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/farmland/bg-3.fg.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e0d7a994e90e77a97cbc4e8046735c182d2bdc4baed09a8d6529a6d6cd649362",
+      "export_sha256": "e0d7a994e90e77a97cbc4e8046735c182d2bdc4baed09a8d6529a6d6cd649362",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-3.png",
+          "sha256": "f6fc487a30ff852b0682349cae396b4dfbacdc7d665aea933c66c15172cef5ac"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/farmland/bg-2.fg.png",
+          "sha256": "97f5791fe75d11b34afd8b7e36344c6afc2ebe0318871bfe7897ed89d08bd22d"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-3.fg.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
     }
   ],
-  "next_number": 106,
+  "next_number": 121,
   "runtime_imported": false
 }

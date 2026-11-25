@@ -23,3 +23,5 @@ Checkpoint: 95/265 saved and reviewed through Lantern Market. Removed spire orna
 Checkpoint: 100/265 saved and reviewed through Sunspire Steps. Extended far fill; restored near green foliage in middle ground; narrowed foreground pillar to clear chapel stairs, removed its added banner, and reduced the plain topiary below the quarter-height limit. File/dimension/fingerprint and asset-credit checks passed. Next: Questeria Thornbridge Gate.
 
 Checkpoint: 105/265 saved and reviewed through Questeria Thornbridge Gate. Kept the camp/bridge/river through the arch in the far layer, restored continuous far fill to the street line, and kept foreground lamp clear of entrances. Next: Old Road Farmland.
+
+Checkpoint: 120/265 saved and reviewed through Old Road Farmland. Kept sun only in panel 1 sky; separated windmill sails/vane, distant village/castle/aqueduct/waterfall and near bridge/stream into their intended layers. Extended distant fields behind removed near scenery in panels 1 and 2. File/dimension/fingerprint and asset-credit checks passed. Exact keying, grid/palette, registration and runtime import remain pending. Next: Old Road Fork.
