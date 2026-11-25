@@ -1,0 +1,32 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/docks/pier/bg-1.far.png",
+    "dominant_color": [
+      250,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.13400650024414062,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/pier/bg-1.mid.png",
+    "dominant_color": [
+      248,
+      4,
+      248
+    ],
+    "dominant_fraction": 0.037353515625,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/pier/bg-1.fg.png",
+    "dominant_color": [
+      251,
+      15,
+      250
+    ],
+    "dominant_fraction": 0.17113939921061197,
+    "exact_magenta_pixels": 0
+  }
+]

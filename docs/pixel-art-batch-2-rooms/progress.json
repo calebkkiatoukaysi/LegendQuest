@@ -1376,8 +1376,148 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 46,
+      "path": "tools/source/pixel/rooms/docks/pier/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/pier/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf",
+      "export_sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf",
+      "references": [
+        {
+          "path": "art/rooms/generated/docks/pier/bg-1.png",
+          "sha256": "5a8aaff6d8ab2fb71e35677f12edd23d0963658f428d43747adbcd76e12f9358"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/pier/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 47,
+      "path": "tools/source/pixel/rooms/docks/pier/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/pier/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "af76f2e4f92ed2ea3a5a8b0226d61d285bb2113961919b3341b364c1ea12f578",
+      "export_sha256": "af76f2e4f92ed2ea3a5a8b0226d61d285bb2113961919b3341b364c1ea12f578",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/pier/bg-1.png",
+          "sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/pier/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 48,
+      "path": "tools/source/pixel/rooms/docks/pier/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/pier/bg-1.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "67aba0dd8eb83b04659b910318212e285c2d79f4bf2ba45f43c8b45fea6563d1",
+      "export_sha256": "67aba0dd8eb83b04659b910318212e285c2d79f4bf2ba45f43c8b45fea6563d1",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/pier/bg-1.png",
+          "sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/pier/bg-1.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 49,
+      "path": "tools/source/pixel/rooms/docks/pier/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/docks/pier/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9dcfe78b67b062ed32cc16aa68aadf0898e88d275f1f27f1e6ef66fa7ed3cdfd",
+      "export_sha256": "9dcfe78b67b062ed32cc16aa68aadf0898e88d275f1f27f1e6ef66fa7ed3cdfd",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/pier/bg-1.png",
+          "sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/pier/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 50,
+      "path": "tools/source/pixel/rooms/docks/pier/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/050-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "13d86cc23892f949fda55203347cf078a4806ff8f10fe9f20272db159bc9b6a9",
+      "export_sha256": "13d86cc23892f949fda55203347cf078a4806ff8f10fe9f20272db159bc9b6a9",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/docks/pier/bg-1.png",
+          "sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/050-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 50,
+          "path": "tools/source/pixel/rooms/docks/pier/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/docks/pier/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "00bdcd833bdf0141fec75377f5b34f6b99651d1994739c0509275e81e2480bb3",
+          "export_sha256": "00bdcd833bdf0141fec75377f5b34f6b99651d1994739c0509275e81e2480bb3",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/docks/pier/bg-1.png",
+              "sha256": "e93a2ca880d4ba0616a7c1fb6a87af8b5f3f4d58533d28612205e401ff407aaf"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/docks/pier/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 46,
+  "next_number": 51,
   "runtime_imported": false
 }

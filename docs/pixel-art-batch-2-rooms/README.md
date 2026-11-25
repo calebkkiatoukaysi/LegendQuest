@@ -11,3 +11,5 @@ Use `tools/pixel/room_sources.py plan`, `ready`, `save`, `review <zone/room>` an
 Checkpoint: 30/265 room source pictures saved and reviewed through Saltwind Harbourside. Its distance layers were corrected to restore missing ships and harbour structures and retain panel-specific positions. The third sky's added sun was removed, and the fishing boat appears only in its distance layer. Earlier attempts remain archived. Next: Fish Market panel 1.
 
 Checkpoint: 45/265 saved and reviewed through Fish Market. Corrected panel 1 water depth to fill extraction gaps; retained the panel-specific Sunspire positions in panels 2 and 3; moved panel 3 foreground lamp to the left to clear the staircase. File, dimension and fingerprint checks passed. Next: Saltwind Pier.
+
+Checkpoint: 50/265 saved and reviewed through Saltwind Pier. Its foreground bollard was shifted to the central berth to clear the warehouse doors. Next: Questeria Gate Plaza.
