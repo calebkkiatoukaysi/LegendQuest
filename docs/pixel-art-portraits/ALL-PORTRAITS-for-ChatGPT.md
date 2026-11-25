@@ -2,7 +2,7 @@
 
 ## How we'll work
 
-59 characters, 626 pictures. Brannock comes first: he's the test, so after his six pictures (#1 to #6) I'll check them before we go on.
+69 characters, 686 pictures. Brannock comes first: he's the test, so after his six pictures (#1 to #6) I'll check them before we go on.
 
 I've attached this file and two template pictures: portrait-template-male.png and portrait-template-female.png. Make the pictures listed below **one at a time, in order, one picture per message**. When I say "next", make the next picture on the list. When I say "do #N", make picture N. Before each picture, write its number and its file name; after it, stop and wait. Never put more than one portrait in a picture, and never write text in a picture.
 
@@ -969,4 +969,114 @@ CHARACTER. The recruit: human, about 17. Fair skin; smooth, eager face, soft jaw
 624. `portrait-recruit.smile.png`: smile, an edit of #621
 625. `portrait-recruit.laugh.png`: laugh, an edit of #621
 626. `portrait-recruit.sad.png`: sad, an edit of #621
+
+### The Trader (`trader`), template: male
+
+CHARACTER. The Trader: human, about 45, plump. Olive skin; round, cheerful face, full cheeks, a waxed black moustache curled at the ends; bright, quick brown eyes. Dark curly hair under a soft sky-blue velvet cap with a short pheasant feather. Collar: a mustard silk shirt, a sky-blue brocade waistcoat with brass buttons, a cloth measuring tape hung round the neck. The feel of the face: beaming, salesy, quick-witted.
+
+627. `portrait-trader.neutral.png`: neutral, painted on the male template
+628. `portrait-trader.angry.png`: angry, an edit of #627
+629. `portrait-trader.disgust.png`: disgust, an edit of #627
+630. `portrait-trader.smile.png`: smile, an edit of #627
+631. `portrait-trader.laugh.png`: laugh, an edit of #627
+632. `portrait-trader.sad.png`: sad, an edit of #627
+
+### The Smith of Halden's Forge (`smith`), template: male
+
+CHARACTER. The smith: human, about 40, broad and heavy-shouldered. Ruddy skin with smudges of soot on one cheek; square face, a broken nose, a short dark beard; steady grey eyes under heavy brows. Close-cropped dark hair. Collar: a sleeveless charcoal work shirt, the bib and straps of a scorched brown leather apron, a red neckerchief knotted at the throat. The feel of the face: blunt, proud of the work, gruffly kind.
+
+633. `portrait-smith.neutral.png`: neutral, painted on the male template
+634. `portrait-smith.angry.png`: angry, an edit of #633
+635. `portrait-smith.disgust.png`: disgust, an edit of #633
+636. `portrait-smith.smile.png`: smile, an edit of #633
+637. `portrait-smith.laugh.png`: laugh, an edit of #633
+638. `portrait-smith.sad.png`: sad, an edit of #633
+
+### The Chandler (`shopkeeper`), template: female
+
+CHARACTER. The Chandler: human, about 60, thin and upright. Pale, fine-lined skin; narrow face, a sharp nose with round wire spectacles on it, thin lips; pale blue eyes. Grey hair in a neat bun stuck through with a pencil. Collar: a high-necked cream blouse with a cameo brooch, a dark green knitted shawl, a ring of iron keys on a cord round the neck. The feel of the face: precise, dry, secretly fond.
+
+639. `portrait-shopkeeper.neutral.png`: neutral, painted on the female template
+640. `portrait-shopkeeper.angry.png`: angry, an edit of #639
+641. `portrait-shopkeeper.disgust.png`: disgust, an edit of #639
+642. `portrait-shopkeeper.smile.png`: smile, an edit of #639
+643. `portrait-shopkeeper.laugh.png`: laugh, an edit of #639
+644. `portrait-shopkeeper.sad.png`: sad, an edit of #639
+
+### The Innkeeper (`innkeeper`), template: male
+
+CHARACTER. The innkeeper: human, about 55, stout. Rosy, weathered skin; round face, ruddy cheeks, a bushy grey moustache; twinkling hazel eyes. Bald on top with grey hair round the sides. Collar: a cream shirt with the collar open and sleeves rolled, a wine-red waistcoat, a checked linen towel thrown over one shoulder. The feel of the face: warm, tired, kindly.
+
+645. `portrait-innkeeper.neutral.png`: neutral, painted on the male template
+646. `portrait-innkeeper.angry.png`: angry, an edit of #645
+647. `portrait-innkeeper.disgust.png`: disgust, an edit of #645
+648. `portrait-innkeeper.smile.png`: smile, an edit of #645
+649. `portrait-innkeeper.laugh.png`: laugh, an edit of #645
+650. `portrait-innkeeper.sad.png`: sad, an edit of #645
+
+### The Spice Seller (`spice-seller`), template: female
+
+CHARACTER. The spice seller: human, about 30. Warm brown skin; oval face, high cheekbones, a small gold nose stud, a wide smile; dark, lively eyes lined with kohl. Black hair wrapped in a teal headscarf hung with small gold coins along its edge; gold hoop earrings. Collar: a saffron-yellow blouse, a teal shawl embroidered with gold leaves. The feel of the face: brisk, warm, teasing.
+
+651. `portrait-spice-seller.neutral.png`: neutral, painted on the female template
+652. `portrait-spice-seller.angry.png`: angry, an edit of #651
+653. `portrait-spice-seller.disgust.png`: disgust, an edit of #651
+654. `portrait-spice-seller.smile.png`: smile, an edit of #651
+655. `portrait-spice-seller.laugh.png`: laugh, an edit of #651
+656. `portrait-spice-seller.sad.png`: sad, an edit of #651
+
+### The Flower Seller (`flower-seller`), template: female
+
+CHARACTER. The flower seller: human, about 20. Fair, freckled skin; heart-shaped face, a small nose, pink cheeks; soft green eyes. Strawberry-blonde hair in a loose side braid with a white daisy tucked in, a straw sun hat pushed back on the head. Collar: a pink cotton dress with a square neck, the bib of a cream apron, a sprig of lavender pinned at the chest. The feel of the face: sunny, shy, flustered.
+
+657. `portrait-flower-seller.neutral.png`: neutral, painted on the female template
+658. `portrait-flower-seller.angry.png`: angry, an edit of #657
+659. `portrait-flower-seller.disgust.png`: disgust, an edit of #657
+660. `portrait-flower-seller.smile.png`: smile, an edit of #657
+661. `portrait-flower-seller.laugh.png`: laugh, an edit of #657
+662. `portrait-flower-seller.sad.png`: sad, an edit of #657
+
+### The Lookout (`lookout`), template: male
+
+CHARACTER. The lookout: human, about 19, wiry. Sun-browned skin; long face, a sunburnt nose, a gap in his front teeth; wide blue eyes. Wind-tangled sandy hair under a knitted navy watch cap. Collar: a cream-and-navy striped sailor's shirt, a salt-stained short canvas jacket, a brass spyglass on a strap across the chest. The feel of the face: jumpy, alarmed, earnest.
+
+663. `portrait-lookout.neutral.png`: neutral, painted on the male template
+664. `portrait-lookout.angry.png`: angry, an edit of #663
+665. `portrait-lookout.disgust.png`: disgust, an edit of #663
+666. `portrait-lookout.smile.png`: smile, an edit of #663
+667. `portrait-lookout.laugh.png`: laugh, an edit of #663
+668. `portrait-lookout.sad.png`: sad, an edit of #663
+
+### Red Gull Thug (`red-gull`), template: male
+
+CHARACTER. A Red Gull thug: human, about 30, heavy-set. Tan skin; blunt face, a crooked broken nose, three days' stubble, a small scar on the lip; hard, narrow dark eyes. Greasy dark hair under a knotted blood-red bandana with a grey gull feather stuck in it. Collar: a sleeveless red-dyed leather jerkin over a dirty undyed shirt, a brass knuckle-duster hung on a cord at the neck. The feel of the face: sneering, menacing, lazy.
+
+669. `portrait-red-gull.neutral.png`: neutral, painted on the male template
+670. `portrait-red-gull.angry.png`: angry, an edit of #669
+671. `portrait-red-gull.disgust.png`: disgust, an edit of #669
+672. `portrait-red-gull.smile.png`: smile, an edit of #669
+673. `portrait-red-gull.laugh.png`: laugh, an edit of #669
+674. `portrait-red-gull.sad.png`: sad, an edit of #669
+
+### Royal Messenger (`royal-messenger`), template: male
+
+CHARACTER. The royal messenger: human, about 22, slight. Fair skin; boyish face, a pointed chin, freckles; anxious light-brown eyes. Neat brown hair in a short bob under a navy cap with a gold sun badge. Collar: a navy-and-gold royal livery tabard with a gold sun on the chest, a short navy shoulder cape, the strap of a leather dispatch satchel across the chest. The feel of the face: flustered, eager, out of breath.
+
+675. `portrait-royal-messenger.neutral.png`: neutral, painted on the male template
+676. `portrait-royal-messenger.angry.png`: angry, an edit of #675
+677. `portrait-royal-messenger.disgust.png`: disgust, an edit of #675
+678. `portrait-royal-messenger.smile.png`: smile, an edit of #675
+679. `portrait-royal-messenger.laugh.png`: laugh, an edit of #675
+680. `portrait-royal-messenger.sad.png`: sad, an edit of #675
+
+### Royal Guard (`royal-guard`), template: male
+
+CHARACTER. A royal guard: human, about 45, solid. Tan skin; square, weathered face, a short greying beard; patient grey eyes. A polished steel helm with cheek guards and a navy plume, a little hair showing at the temples. Collar: a steel gorget and the top of a breastplate edged in gold, a navy cloak fastened with a gold sun clasp. The feel of the face: stiff, dry, loyal.
+
+681. `portrait-royal-guard.neutral.png`: neutral, painted on the male template
+682. `portrait-royal-guard.angry.png`: angry, an edit of #681
+683. `portrait-royal-guard.disgust.png`: disgust, an edit of #681
+684. `portrait-royal-guard.smile.png`: smile, an edit of #681
+685. `portrait-royal-guard.laugh.png`: laugh, an edit of #681
+686. `portrait-royal-guard.sad.png`: sad, an edit of #681
 
