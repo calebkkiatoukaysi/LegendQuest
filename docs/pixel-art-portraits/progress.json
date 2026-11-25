@@ -620,9 +620,45 @@
     617,
     618,
     619,
-    620
+    620,
+    621,
+    622,
+    623,
+    624,
+    625,
+    626,
+    627,
+    628,
+    629,
+    630,
+    631,
+    632,
+    633,
+    634,
+    635,
+    636,
+    637,
+    638,
+    639,
+    640,
+    641,
+    642,
+    643,
+    644,
+    645,
+    646,
+    647,
+    648,
+    649,
+    650,
+    651,
+    652,
+    653,
+    654,
+    655,
+    656
   ],
-  "next_number": 621,
+  "next_number": 657,
   "review_after_number": null,
   "style": "front-facing; approximately96x96 art pixels; conversion still required",
   "portraits": [
@@ -14760,6 +14796,798 @@
       "source_sha256": "1af85825b92d168e12c3e20abc61e140e881c0fcebafe9c12f45d606af5f457b",
       "export_sha256": "d8fcebaccd29a3646a8b24f1d7539f0f70cb70176a05644c547858b62d524f0a",
       "prompt": "docs/pixel-art-portraits/620-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 621,
+      "filename": "portrait-recruit.neutral.png",
+      "path": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.neutral.png",
+      "original": "art/pixel-portraits/originals/recruit/621-portrait-recruit.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f095e6ca49e71bef7d39204f21c910382ed8be95211b61ba8bfd2dd8455e9a56",
+      "export_sha256": "1a63ba7980e9042dd9d7062ec8572f916b57e25a137377cd637385b3a9f7f938",
+      "prompt": "docs/pixel-art-portraits/621-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 622,
+      "filename": "portrait-recruit.angry.png",
+      "path": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.angry.png",
+      "original": "art/pixel-portraits/originals/recruit/622-portrait-recruit.angry.png",
+      "reference_number": 621,
+      "reference": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.neutral.png",
+      "reference_sha256": "1a63ba7980e9042dd9d7062ec8572f916b57e25a137377cd637385b3a9f7f938",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "fcd51d3135c073bb408a8823b6622c9978c6a0e0d3c09ea7e6b6cfa0c311f4a7",
+      "export_sha256": "cb67ddae30f9700da31db235d4d882d6c156af86349ce78deda44d53d0434b4c",
+      "prompt": "docs/pixel-art-portraits/622-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 623,
+      "filename": "portrait-recruit.disgust.png",
+      "path": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.disgust.png",
+      "original": "art/pixel-portraits/originals/recruit/623-portrait-recruit.disgust.png",
+      "reference_number": 621,
+      "reference": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.neutral.png",
+      "reference_sha256": "1a63ba7980e9042dd9d7062ec8572f916b57e25a137377cd637385b3a9f7f938",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e8e62ca032cb146415dd52617ad88c2decafd0c0b526db642809dffa8a47182f",
+      "export_sha256": "132f8cb20ac89d675ac2bf1309a1be2e892e9e64402608ea006b772a1b718dfb",
+      "prompt": "docs/pixel-art-portraits/623-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 624,
+      "filename": "portrait-recruit.smile.png",
+      "path": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.smile.png",
+      "original": "art/pixel-portraits/originals/recruit/624-portrait-recruit.smile.png",
+      "reference_number": 621,
+      "reference": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.neutral.png",
+      "reference_sha256": "1a63ba7980e9042dd9d7062ec8572f916b57e25a137377cd637385b3a9f7f938",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "29ace5f74b5f61304efd62aac59a9e614a607035b722f445334dc8fa2c1a9f94",
+      "export_sha256": "badf1e8120cbb77f8b08cf8cd8cbe4bcf5543da96d6d32d802df60a811976004",
+      "prompt": "docs/pixel-art-portraits/624-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 625,
+      "filename": "portrait-recruit.laugh.png",
+      "path": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.laugh.png",
+      "original": "art/pixel-portraits/originals/recruit/625-portrait-recruit.laugh.png",
+      "reference_number": 621,
+      "reference": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.neutral.png",
+      "reference_sha256": "1a63ba7980e9042dd9d7062ec8572f916b57e25a137377cd637385b3a9f7f938",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "76ae0481377bc172a6948c5ee7f940eed827e71ea699b08b2d2060a5876a28e4",
+      "export_sha256": "77f1f83b59a84568f47f4d9d7edbde37ee8f43ab87d61b0ed1edaf105758507e",
+      "prompt": "docs/pixel-art-portraits/625-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 626,
+      "filename": "portrait-recruit.sad.png",
+      "path": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.sad.png",
+      "original": "art/pixel-portraits/originals/recruit/626-portrait-recruit.sad.png",
+      "reference_number": 621,
+      "reference": "tools/source/pixel/portraits/recruit/front-facing/portrait-recruit.neutral.png",
+      "reference_sha256": "1a63ba7980e9042dd9d7062ec8572f916b57e25a137377cd637385b3a9f7f938",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "286fd6a393096dc593cf728e993d37756f6d7ade3239c211f05d0ebc73c1a804",
+      "export_sha256": "ce58bd9451990e73434c2d899f51e6b4688fd28f8d902c0c0c156a95d77b2633",
+      "prompt": "docs/pixel-art-portraits/626-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 627,
+      "filename": "portrait-trader.neutral.png",
+      "path": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.neutral.png",
+      "original": "art/pixel-portraits/originals/trader/627-portrait-trader.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "be394f50b7a58acd8b97149d0b54d192cdc77e8f57464a0f3635938daaa5f320",
+      "export_sha256": "aef0adb306c7d40c52059a737628a8c0ff7eb486a7290b387481a979851b58db",
+      "prompt": "docs/pixel-art-portraits/627-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 628,
+      "filename": "portrait-trader.angry.png",
+      "path": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.angry.png",
+      "original": "art/pixel-portraits/originals/trader/628-portrait-trader.angry.png",
+      "reference_number": 627,
+      "reference": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.neutral.png",
+      "reference_sha256": "aef0adb306c7d40c52059a737628a8c0ff7eb486a7290b387481a979851b58db",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "281e6fed7a42d07b26fd9e7a728d3984ed6154557feab9a00323b4aab8e81e58",
+      "export_sha256": "15c8095efdb8d798c72d1ac8521adf0057d995a1fd3993127ac386707cbb58a4",
+      "prompt": "docs/pixel-art-portraits/628-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 629,
+      "filename": "portrait-trader.disgust.png",
+      "path": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.disgust.png",
+      "original": "art/pixel-portraits/originals/trader/629-portrait-trader.disgust.png",
+      "reference_number": 627,
+      "reference": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.neutral.png",
+      "reference_sha256": "aef0adb306c7d40c52059a737628a8c0ff7eb486a7290b387481a979851b58db",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "29a2f6be4d2df10593e65a3060913d263d8d61cca3317b1e3385143e70278ea6",
+      "export_sha256": "c9211aa8bde38a737e28ac28bfef4d3eba161855a96c29952bce12a9816b6d2b",
+      "prompt": "docs/pixel-art-portraits/629-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 630,
+      "filename": "portrait-trader.smile.png",
+      "path": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.smile.png",
+      "original": "art/pixel-portraits/originals/trader/630-portrait-trader.smile.png",
+      "reference_number": 627,
+      "reference": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.neutral.png",
+      "reference_sha256": "aef0adb306c7d40c52059a737628a8c0ff7eb486a7290b387481a979851b58db",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "313d3950983c55c70b4fff4bac46d7593e6cad96980262ef95e236402a5a5b18",
+      "export_sha256": "6abf22fa8acc8eabcf96458d420868cfa47bf0150e56af69bb8d72b121a8e71c",
+      "prompt": "docs/pixel-art-portraits/630-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 631,
+      "filename": "portrait-trader.laugh.png",
+      "path": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.laugh.png",
+      "original": "art/pixel-portraits/originals/trader/631-portrait-trader.laugh.png",
+      "reference_number": 627,
+      "reference": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.neutral.png",
+      "reference_sha256": "aef0adb306c7d40c52059a737628a8c0ff7eb486a7290b387481a979851b58db",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2033a9b4aa9b49c4de796b19d424179e77c937cc7fb7f747cd8d7653022cebb3",
+      "export_sha256": "27b334695df74a672e0b1ac5449366a571c6b2a7d68b9a12490e9fd5c9cc63d7",
+      "prompt": "docs/pixel-art-portraits/631-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 632,
+      "filename": "portrait-trader.sad.png",
+      "path": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.sad.png",
+      "original": "art/pixel-portraits/originals/trader/632-portrait-trader.sad.png",
+      "reference_number": 627,
+      "reference": "tools/source/pixel/portraits/trader/front-facing/portrait-trader.neutral.png",
+      "reference_sha256": "aef0adb306c7d40c52059a737628a8c0ff7eb486a7290b387481a979851b58db",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "fdd67253f9afb48e3f254c542a65902adb754d10eba75d876707032ad52b4f11",
+      "export_sha256": "1c9ab34fcd3a38f90133a4f14acfeba58581bf36cd7db02e4b0db3bfb9bfd0bb",
+      "prompt": "docs/pixel-art-portraits/632-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 633,
+      "filename": "portrait-smith.neutral.png",
+      "path": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.neutral.png",
+      "original": "art/pixel-portraits/originals/smith/633-portrait-smith.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "93e76b55b9f97f238237bd9934cd12181af583e5d9bf15a6538e0c048f47031e",
+      "export_sha256": "b518fd956e5a8141028a169f3b2a360318a1aa9d2717b98acf3c77b04a6ddd6d",
+      "prompt": "docs/pixel-art-portraits/633-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 634,
+      "filename": "portrait-smith.angry.png",
+      "path": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.angry.png",
+      "original": "art/pixel-portraits/originals/smith/634-portrait-smith.angry.png",
+      "reference_number": 633,
+      "reference": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.neutral.png",
+      "reference_sha256": "b518fd956e5a8141028a169f3b2a360318a1aa9d2717b98acf3c77b04a6ddd6d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f0b5fad7dd60d8cff2342b0823539a98429eb1a599638def815bf5011d346e09",
+      "export_sha256": "a4c67e4072f68a080392105e12456e03bef40574ea40023e4508ab37c9f03aa8",
+      "prompt": "docs/pixel-art-portraits/634-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 635,
+      "filename": "portrait-smith.disgust.png",
+      "path": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.disgust.png",
+      "original": "art/pixel-portraits/originals/smith/635-portrait-smith.disgust.png",
+      "reference_number": 633,
+      "reference": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.neutral.png",
+      "reference_sha256": "b518fd956e5a8141028a169f3b2a360318a1aa9d2717b98acf3c77b04a6ddd6d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "fd733e41a4df0705ce3cf8794abaf32592e0c5a462e335f7613c7e4b67be86f5",
+      "export_sha256": "8c6bbc3cd697af007f6fe48ad4ba403334dddf8f053fde979970bb7db48a98e1",
+      "prompt": "docs/pixel-art-portraits/635-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 636,
+      "filename": "portrait-smith.smile.png",
+      "path": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.smile.png",
+      "original": "art/pixel-portraits/originals/smith/636-portrait-smith.smile.png",
+      "reference_number": 633,
+      "reference": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.neutral.png",
+      "reference_sha256": "b518fd956e5a8141028a169f3b2a360318a1aa9d2717b98acf3c77b04a6ddd6d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "37383b9661579a297a56e9cf79c61ddf8e51ba0794b162eb89fb1b757ce795c1",
+      "export_sha256": "b1c1105d0abd72b8212c9c0647c56b841ab85064afadfb3bfd1b5329e6615c2d",
+      "prompt": "docs/pixel-art-portraits/636-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 637,
+      "filename": "portrait-smith.laugh.png",
+      "path": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.laugh.png",
+      "original": "art/pixel-portraits/originals/smith/637-portrait-smith.laugh.png",
+      "reference_number": 633,
+      "reference": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.neutral.png",
+      "reference_sha256": "b518fd956e5a8141028a169f3b2a360318a1aa9d2717b98acf3c77b04a6ddd6d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "c964ef8e679b80730a4840b07de98ca5cf2f9cf4b6bf0cd1e31d0bd3a12820f5",
+      "export_sha256": "a94e7a6ba7cac85cd22f7df726aecc3b17362921522da986dffeb1f1a87ec1aa",
+      "prompt": "docs/pixel-art-portraits/637-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 638,
+      "filename": "portrait-smith.sad.png",
+      "path": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.sad.png",
+      "original": "art/pixel-portraits/originals/smith/638-portrait-smith.sad.png",
+      "reference_number": 633,
+      "reference": "tools/source/pixel/portraits/smith/front-facing/portrait-smith.neutral.png",
+      "reference_sha256": "b518fd956e5a8141028a169f3b2a360318a1aa9d2717b98acf3c77b04a6ddd6d",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b6f8bd019515c9363cac40fa591eba622311ef013acb13d0dcfa9a23b471a70a",
+      "export_sha256": "25688759f75176cf59d3a37b8017ef9e7b4ef4f7d56abae38ebdf44b26d13d60",
+      "prompt": "docs/pixel-art-portraits/638-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 639,
+      "filename": "portrait-shopkeeper.neutral.png",
+      "path": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.neutral.png",
+      "original": "art/pixel-portraits/originals/shopkeeper/639-portrait-shopkeeper.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "682aff7964e56e8750b1abcb487c9ac60e3df8efa7dc41008bb473329f3d817d",
+      "export_sha256": "832a1c592f9b9fd61cbd3415f267c2862c0f8b907c6663f59d8fb6df63ba7e39",
+      "prompt": "docs/pixel-art-portraits/639-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 640,
+      "filename": "portrait-shopkeeper.angry.png",
+      "path": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.angry.png",
+      "original": "art/pixel-portraits/originals/shopkeeper/640-portrait-shopkeeper.angry.png",
+      "reference_number": 639,
+      "reference": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.neutral.png",
+      "reference_sha256": "832a1c592f9b9fd61cbd3415f267c2862c0f8b907c6663f59d8fb6df63ba7e39",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "643abee56c13a976e66bfdb697d1c7dcc93f3d5ccc6f57a75392dc90208c90e9",
+      "export_sha256": "57bae11976802c0aced5f5f99dfd5b67cf90b6aeaf5a0899040ca769b693e623",
+      "prompt": "docs/pixel-art-portraits/640-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 641,
+      "filename": "portrait-shopkeeper.disgust.png",
+      "path": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.disgust.png",
+      "original": "art/pixel-portraits/originals/shopkeeper/641-portrait-shopkeeper.disgust.png",
+      "reference_number": 639,
+      "reference": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.neutral.png",
+      "reference_sha256": "832a1c592f9b9fd61cbd3415f267c2862c0f8b907c6663f59d8fb6df63ba7e39",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2083f837ecbdcbbc53eb2bc02b17e9c4078fcaee44db06cf746cb7d9819b1413",
+      "export_sha256": "3846940669f4017058e64fc431fb031ff5763185022210a19168813f810f0330",
+      "prompt": "docs/pixel-art-portraits/641-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 642,
+      "filename": "portrait-shopkeeper.smile.png",
+      "path": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.smile.png",
+      "original": "art/pixel-portraits/originals/shopkeeper/642-portrait-shopkeeper.smile.png",
+      "reference_number": 639,
+      "reference": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.neutral.png",
+      "reference_sha256": "832a1c592f9b9fd61cbd3415f267c2862c0f8b907c6663f59d8fb6df63ba7e39",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "697a11572db328b15c880e32b56b11a00a24741c398815d8354c691f4efc4b83",
+      "export_sha256": "a20161faf4f610f0d1f0cdb8969c34b302ccb8fe866e5c3591ec96818a6bd014",
+      "prompt": "docs/pixel-art-portraits/642-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 643,
+      "filename": "portrait-shopkeeper.laugh.png",
+      "path": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.laugh.png",
+      "original": "art/pixel-portraits/originals/shopkeeper/643-portrait-shopkeeper.laugh.png",
+      "reference_number": 639,
+      "reference": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.neutral.png",
+      "reference_sha256": "832a1c592f9b9fd61cbd3415f267c2862c0f8b907c6663f59d8fb6df63ba7e39",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f7175e91ffa827d97a53a01d4bc548e242fb84dd94d166717a60a595c23cba0b",
+      "export_sha256": "242cdfc0d1834da3dd1a3e00c04bda5bbc7e7adfe2a1f837b077a279bd041732",
+      "prompt": "docs/pixel-art-portraits/643-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 644,
+      "filename": "portrait-shopkeeper.sad.png",
+      "path": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.sad.png",
+      "original": "art/pixel-portraits/originals/shopkeeper/644-portrait-shopkeeper.sad.png",
+      "reference_number": 639,
+      "reference": "tools/source/pixel/portraits/shopkeeper/front-facing/portrait-shopkeeper.neutral.png",
+      "reference_sha256": "832a1c592f9b9fd61cbd3415f267c2862c0f8b907c6663f59d8fb6df63ba7e39",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "e3e63cb7a7dffd8da014f1a94917d2074278e48293f827c4a52e0a6cf4194506",
+      "export_sha256": "1bd5c240ed64d025aea47c42741995ff6291c01a2c508b10d14f5b2b7592f29b",
+      "prompt": "docs/pixel-art-portraits/644-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 645,
+      "filename": "portrait-innkeeper.neutral.png",
+      "path": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.neutral.png",
+      "original": "art/pixel-portraits/originals/innkeeper/645-portrait-innkeeper.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-male.png",
+      "reference_sha256": "83f7f650883d452fdcc934cdba1e14a3ceeeadfa26c657a92fcf1182df760106",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "efb04da659b93b2f10d24c13e88bf4c9cd82505095b3f7610015743dfc7746d0",
+      "export_sha256": "d35c53d87e8e8d6435cefbf55a798f28ea32852384cf7b862965127065a0cb8e",
+      "prompt": "docs/pixel-art-portraits/645-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 646,
+      "filename": "portrait-innkeeper.angry.png",
+      "path": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.angry.png",
+      "original": "art/pixel-portraits/originals/innkeeper/646-portrait-innkeeper.angry.png",
+      "reference_number": 645,
+      "reference": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.neutral.png",
+      "reference_sha256": "d35c53d87e8e8d6435cefbf55a798f28ea32852384cf7b862965127065a0cb8e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "b5b4e9619765aae04e825dbe3b618ca03b0d5acc5661fce8d4334db94afa7c26",
+      "export_sha256": "b8b8b5d20f3594218bce46a6cab85bb7d4ad5efe2b1adde221db7db67f3be17f",
+      "prompt": "docs/pixel-art-portraits/646-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 647,
+      "filename": "portrait-innkeeper.disgust.png",
+      "path": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.disgust.png",
+      "original": "art/pixel-portraits/originals/innkeeper/647-portrait-innkeeper.disgust.png",
+      "reference_number": 645,
+      "reference": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.neutral.png",
+      "reference_sha256": "d35c53d87e8e8d6435cefbf55a798f28ea32852384cf7b862965127065a0cb8e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "000721372dc58bc8e82fa37671e3c71168894f166306167f9f8fa780c5cd7beb",
+      "export_sha256": "182e915dcb34373594add2d699f960febce730a53e7eaec1057134b1f41b4451",
+      "prompt": "docs/pixel-art-portraits/647-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 648,
+      "filename": "portrait-innkeeper.smile.png",
+      "path": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.smile.png",
+      "original": "art/pixel-portraits/originals/innkeeper/648-portrait-innkeeper.smile.png",
+      "reference_number": 645,
+      "reference": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.neutral.png",
+      "reference_sha256": "d35c53d87e8e8d6435cefbf55a798f28ea32852384cf7b862965127065a0cb8e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "ed2df617a7030b5d78db6be6cd0d910f4b30e2098308c7d99031fa56ff2f2227",
+      "export_sha256": "e8b929052dfa2b40bb8a7a4ff2f27f99f0a7f60f0d8a67ddb6b1e07cbe77cde7",
+      "prompt": "docs/pixel-art-portraits/648-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 649,
+      "filename": "portrait-innkeeper.laugh.png",
+      "path": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.laugh.png",
+      "original": "art/pixel-portraits/originals/innkeeper/649-portrait-innkeeper.laugh.png",
+      "reference_number": 645,
+      "reference": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.neutral.png",
+      "reference_sha256": "d35c53d87e8e8d6435cefbf55a798f28ea32852384cf7b862965127065a0cb8e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "9dd252d9ec7f6b337b1ffbebb00ff88078f515ae96a5ba26d929a53d1e0c3c91",
+      "export_sha256": "c5cdf3801fb75e185303f184817d601318a722bd73688728841bb5cc03ebec4f",
+      "prompt": "docs/pixel-art-portraits/649-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 650,
+      "filename": "portrait-innkeeper.sad.png",
+      "path": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.sad.png",
+      "original": "art/pixel-portraits/originals/innkeeper/650-portrait-innkeeper.sad.png",
+      "reference_number": 645,
+      "reference": "tools/source/pixel/portraits/innkeeper/front-facing/portrait-innkeeper.neutral.png",
+      "reference_sha256": "d35c53d87e8e8d6435cefbf55a798f28ea32852384cf7b862965127065a0cb8e",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "8091ef9da95bddf8c271c4d9278426b6eba58c15a38cfd219e1db9fafaa5e27c",
+      "export_sha256": "901c9a6755e99309908b08bbebaa446cd8ee48880799a715f73568dc42bbaafd",
+      "prompt": "docs/pixel-art-portraits/650-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 651,
+      "filename": "portrait-spice-seller.neutral.png",
+      "path": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.neutral.png",
+      "original": "art/pixel-portraits/originals/spice-seller/651-portrait-spice-seller.neutral.png",
+      "reference_number": null,
+      "reference": "tools/source/pixel/templates/front-facing/portrait-template-female.png",
+      "reference_sha256": "316472a081ff1b93ba9d9e55d8b909acfe6d3f40c3428934b3fdc578cc985bc6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "f2151066dbb4b22eb17b275df17e2a1ba635dec30be82284cfc6e8eceb37dcd5",
+      "export_sha256": "99dbae5ae72e0d817e56f2c173d4f0f200898fa90408ac9025f7ede42bc06b1a",
+      "prompt": "docs/pixel-art-portraits/651-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 652,
+      "filename": "portrait-spice-seller.angry.png",
+      "path": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.angry.png",
+      "original": "art/pixel-portraits/originals/spice-seller/652-portrait-spice-seller.angry.png",
+      "reference_number": 651,
+      "reference": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.neutral.png",
+      "reference_sha256": "99dbae5ae72e0d817e56f2c173d4f0f200898fa90408ac9025f7ede42bc06b1a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "bac13bbc7b43fa34bd6f78644670a8680e362d2997bc81720c3d9e567ee1beb4",
+      "export_sha256": "6524deb14bc24004ff08fe1cddee76ff3df6949865711f371dc0531843ebd25a",
+      "prompt": "docs/pixel-art-portraits/652-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 653,
+      "filename": "portrait-spice-seller.disgust.png",
+      "path": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.disgust.png",
+      "original": "art/pixel-portraits/originals/spice-seller/653-portrait-spice-seller.disgust.png",
+      "reference_number": 651,
+      "reference": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.neutral.png",
+      "reference_sha256": "99dbae5ae72e0d817e56f2c173d4f0f200898fa90408ac9025f7ede42bc06b1a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "55a8c567cca4e5a83e37491f11acb5087ab9a275291110d687776e7e66eb5111",
+      "export_sha256": "8ce46e1d5a29883b47d085bdff124b44af762ee379e802ad6641602fbbb3f81f",
+      "prompt": "docs/pixel-art-portraits/653-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 654,
+      "filename": "portrait-spice-seller.smile.png",
+      "path": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.smile.png",
+      "original": "art/pixel-portraits/originals/spice-seller/654-portrait-spice-seller.smile.png",
+      "reference_number": 651,
+      "reference": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.neutral.png",
+      "reference_sha256": "99dbae5ae72e0d817e56f2c173d4f0f200898fa90408ac9025f7ede42bc06b1a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "2be1090a0b45bf1e05015f8806ab07c86185319fd2329f5e853ea8ccfc2ce149",
+      "export_sha256": "b52b3dd374c0e2a3d81b7d220442aab733559d52c88dfbbb3b9bcb456b980551",
+      "prompt": "docs/pixel-art-portraits/654-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 655,
+      "filename": "portrait-spice-seller.laugh.png",
+      "path": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.laugh.png",
+      "original": "art/pixel-portraits/originals/spice-seller/655-portrait-spice-seller.laugh.png",
+      "reference_number": 651,
+      "reference": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.neutral.png",
+      "reference_sha256": "99dbae5ae72e0d817e56f2c173d4f0f200898fa90408ac9025f7ede42bc06b1a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "4166eefa5094860ee677c79fab8e711cb3d72c95472be68e67a28d79a5eda63f",
+      "export_sha256": "5ce6e03a5de96d14b59d87eb819638ff9b5178a05abf82d7561efbf612b7cf4f",
+      "prompt": "docs/pixel-art-portraits/655-prompt.txt",
+      "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
+      "status": "source draft; exact grid, palette and registration require conversion review"
+    },
+    {
+      "number": 656,
+      "filename": "portrait-spice-seller.sad.png",
+      "path": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.sad.png",
+      "original": "art/pixel-portraits/originals/spice-seller/656-portrait-spice-seller.sad.png",
+      "reference_number": 651,
+      "reference": "tools/source/pixel/portraits/spice-seller/front-facing/portrait-spice-seller.neutral.png",
+      "reference_sha256": "99dbae5ae72e0d817e56f2c173d4f0f200898fa90408ac9025f7ede42bc06b1a",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "export_size": [
+        1024,
+        1024
+      ],
+      "source_sha256": "fbf84205f37260b3d218037bd007384e5848d92ec78c1a95f0f45f3e2e7cece2",
+      "export_sha256": "d34f37e95061fc7a26be6f118001cfc9d46939ed6cdce010320175f8e3b49c55",
+      "prompt": "docs/pixel-art-portraits/656-prompt.txt",
       "export_method": "nearest-neighbour size normalization, explicitly approved by owner; untouched original retained",
       "status": "source draft; exact grid, palette and registration require conversion review"
     }
