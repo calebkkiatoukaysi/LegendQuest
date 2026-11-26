@@ -35,6 +35,7 @@ public class OptionsScreen : MenuScreen
     private const string FlashesLabel = "HIT FLASHES";
     private const string NumbersLabel = "DAMAGE NUMBERS";
     private const string DisplayLabel = "DISPLAY";
+    private const string LookLabel = "ART STYLE";
     private const string BackLabel = "BACK";
 
     /// <summary>How much one press moves a volume.</summary>
@@ -58,6 +59,7 @@ public class OptionsScreen : MenuScreen
     private readonly MenuEntry _flashes;
     private readonly MenuEntry _numbers;
     private readonly MenuEntry _display;
+    private readonly MenuEntry _look;
 
     private SpriteFont _font;
     private SpriteFont _detailFont;
@@ -67,7 +69,7 @@ public class OptionsScreen : MenuScreen
     /// <summary>Whether the difficulty's held where it is, because a fight's on.</summary>
     private readonly bool _lockDifficulty;
 
-    /// <summary>Builds the ten adjustable entries and BACK.</summary>
+    /// <summary>Builds the eleven adjustable entries and BACK.</summary>
     /// <param name="lockDifficulty">Whether a fight's on, so the difficulty can't be changed.</param>
     public OptionsScreen(bool lockDifficulty = false)
     {
@@ -86,6 +88,7 @@ public class OptionsScreen : MenuScreen
         _flashes = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _numbers = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         _display = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
+        _look = new MenuEntry(string.Empty, Palette.Torch, EntrySize);
         var back = new MenuEntry(BackLabel, Palette.Bone);
 
         _master.Adjusted += step => ChangeVolume(v => Audio.Settings.MasterVolume = v, Audio.Settings.MasterVolume, step);
@@ -98,6 +101,7 @@ public class OptionsScreen : MenuScreen
         _flashes.Adjusted += _ => ToggleFlashes();
         _numbers.Adjusted += _ => ToggleNumbers();
         _display.Adjusted += _ => ToggleFullScreen();
+        _look.Adjusted += _ => ToggleLook();
         back.Selected += Close;
 
         MenuEntries.Add(_master);
@@ -110,6 +114,7 @@ public class OptionsScreen : MenuScreen
         MenuEntries.Add(_flashes);
         MenuEntries.Add(_numbers);
         MenuEntries.Add(_display);
+        MenuEntries.Add(_look);
         MenuEntries.Add(back);
     }
 
@@ -230,6 +235,14 @@ public class OptionsScreen : MenuScreen
         Relabel();
     }
 
+    /// <summary>Switches the world between pixel art and the painted figures, straight away.</summary>
+    private void ToggleLook()
+    {
+        Audio.Settings.Look = Audio.Settings.Look == ArtLook.Pixel ? ArtLook.Painted : ArtLook.Pixel;
+        ArtSettings.Apply(Audio.Settings.Look);
+        Relabel();
+    }
+
     /// <summary>Writes each value onto its plate.</summary>
     private void Relabel()
     {
@@ -245,6 +258,7 @@ public class OptionsScreen : MenuScreen
         _flashes.Text = Row(FlashesLabel, settings.HitFlashes ? "ON" : "OFF");
         _numbers.Text = Row(NumbersLabel, settings.DamageNumbers ? "ON" : "OFF");
         _display.Text = Row(DisplayLabel, settings.FullScreen ? "FULL SCREEN" : "WINDOW");
+        _look.Text = Row(LookLabel, settings.Look == ArtLook.Pixel ? "PIXEL ART" : "PAINTED");
     }
 
     /// <summary>A plate's label: the name, then the value between the arrows.</summary>
