@@ -3939,8 +3939,578 @@
       ],
       "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/farmland/bg-3.fg.png.txt",
       "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 121,
+      "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe",
+      "export_sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe",
+      "references": [
+        {
+          "path": "art/rooms/generated/road/fork/bg-1.png",
+          "sha256": "d466c1e799fceeb27301715e31e3986735c621b3d8eee1bbc9bf0ab67b3d34b5"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 122,
+      "path": "tools/source/pixel/rooms/road/fork/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "6ec13f83d12418bcbe3c31bfb570aec48ff5f788782ac0cd52d9ccfca75e605f",
+      "export_sha256": "6ec13f83d12418bcbe3c31bfb570aec48ff5f788782ac0cd52d9ccfca75e605f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+          "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 123,
+      "path": "tools/source/pixel/rooms/road/fork/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/123-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "b299c392ec0f6894ce8e16eeef0f2d37e34a31b75a7f618c3b49827d5aad293f",
+      "export_sha256": "b299c392ec0f6894ce8e16eeef0f2d37e34a31b75a7f618c3b49827d5aad293f",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+          "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/123-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 123,
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "700d142f14c768b9a75c2a9da024dfdd0ef9cf04a73b25aeb0bccd7edf2ccecb",
+          "export_sha256": "700d142f14c768b9a75c2a9da024dfdd0ef9cf04a73b25aeb0bccd7edf2ccecb",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+              "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 124,
+      "path": "tools/source/pixel/rooms/road/fork/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "dd719c5f05f75ea6411e1666b31fe9377a0b4d30bc539f1ccb1f55f4e5b449c3",
+      "export_sha256": "dd719c5f05f75ea6411e1666b31fe9377a0b4d30bc539f1ccb1f55f4e5b449c3",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+          "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 125,
+      "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/125-revision-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "d4e0ec1f0c3a0bd7a1383a81af1bce73c0d0eaa11f5a118be674a8c759ea622e",
+      "export_sha256": "d4e0ec1f0c3a0bd7a1383a81af1bce73c0d0eaa11f5a118be674a8c759ea622e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+          "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/125-revision-2.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 125,
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "247fd90a3564fbba8a15109004c119112a62285740c60817695129bd5307e03d",
+          "export_sha256": "247fd90a3564fbba8a15109004c119112a62285740c60817695129bd5307e03d",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+              "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        },
+        {
+          "number": 125,
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/revisions/125-revision-1.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "a1fe3ffce50ab07ee093fd89f37c5da2028d4a646d96392d6d107512314e0046",
+          "export_sha256": "a1fe3ffce50ab07ee093fd89f37c5da2028d4a646d96392d6d107512314e0046",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+              "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/revisions/125-revision-1.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending",
+          "earlier_attempts": [
+            {
+              "number": 125,
+              "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+              "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-1.fg.png",
+              "native_size": [
+                1536,
+                1024
+              ],
+              "export_size": [
+                1536,
+                1024
+              ],
+              "source_sha256": "247fd90a3564fbba8a15109004c119112a62285740c60817695129bd5307e03d",
+              "export_sha256": "247fd90a3564fbba8a15109004c119112a62285740c60817695129bd5307e03d",
+              "references": [
+                {
+                  "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+                  "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+                }
+              ],
+              "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-1.fg.png.txt",
+              "status": "source draft; alignment, pixel conversion and runtime registration pending"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 126,
+      "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-2.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f",
+      "export_sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f",
+      "references": [
+        {
+          "path": "art/rooms/generated/road/fork/bg-2.png",
+          "sha256": "23d8cb613f66cb356a91e20bf670d35966b543ab79ff49e053f6dea8e866dbbc"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.png",
+          "sha256": "a4176cbe3d767c53513f96670e310902156cdd95350fc98a817971ea4f9cdcbe"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-2.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 127,
+      "path": "tools/source/pixel/rooms/road/fork/bg-2.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-2.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "06b447402c40149a1503abe74f23ff0fc1b65b7a74eba4b7e7a7e601938b769c",
+      "export_sha256": "06b447402c40149a1503abe74f23ff0fc1b65b7a74eba4b7e7a7e601938b769c",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+          "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.sky.png",
+          "sha256": "6ec13f83d12418bcbe3c31bfb570aec48ff5f788782ac0cd52d9ccfca75e605f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-2.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 128,
+      "path": "tools/source/pixel/rooms/road/fork/bg-2.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/128-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "dc66f41338ddd9228464c2fb33bc0da8ed51a43500052b3e0c735c81e98beb56",
+      "export_sha256": "dc66f41338ddd9228464c2fb33bc0da8ed51a43500052b3e0c735c81e98beb56",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+          "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.far.png",
+          "sha256": "b299c392ec0f6894ce8e16eeef0f2d37e34a31b75a7f618c3b49827d5aad293f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/128-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 128,
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-2.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "819fdc99d5cb56dd17f3ab8b322d3f3cb65dce6c251a53ba4feb9596c8f1e71b",
+          "export_sha256": "819fdc99d5cb56dd17f3ab8b322d3f3cb65dce6c251a53ba4feb9596c8f1e71b",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+              "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+            },
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-1.far.png",
+              "sha256": "b299c392ec0f6894ce8e16eeef0f2d37e34a31b75a7f618c3b49827d5aad293f"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-2.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 129,
+      "path": "tools/source/pixel/rooms/road/fork/bg-2.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-2.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9ff6d7b7f36aa94ceaf84d7554d03d06e399723093bd85147c73e74aa6d1d16d",
+      "export_sha256": "9ff6d7b7f36aa94ceaf84d7554d03d06e399723093bd85147c73e74aa6d1d16d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+          "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.mid.png",
+          "sha256": "dd719c5f05f75ea6411e1666b31fe9377a0b4d30bc539f1ccb1f55f4e5b449c3"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-2.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 130,
+      "path": "tools/source/pixel/rooms/road/fork/bg-2.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/130-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7f4d480577e2d180616f902ede79d2e2647c8732d8e25c8501553e84282de316",
+      "export_sha256": "7f4d480577e2d180616f902ede79d2e2647c8732d8e25c8501553e84282de316",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+          "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+          "sha256": "d4e0ec1f0c3a0bd7a1383a81af1bce73c0d0eaa11f5a118be674a8c759ea622e"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/130-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 130,
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-2.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "f58b6fbf6bdf86b9a0a1cd5a4b9a81cab535d748338189a5485fdc58ab12f329",
+          "export_sha256": "f58b6fbf6bdf86b9a0a1cd5a4b9a81cab535d748338189a5485fdc58ab12f329",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+              "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+            },
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+              "sha256": "d4e0ec1f0c3a0bd7a1383a81af1bce73c0d0eaa11f5a118be674a8c759ea622e"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-2.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 131,
+      "path": "tools/source/pixel/rooms/road/fork/bg-3.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-3.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe",
+      "export_sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe",
+      "references": [
+        {
+          "path": "art/rooms/generated/road/fork/bg-3.png",
+          "sha256": "9d03be01a55288e782eec6b5c79bdc083a51c4b2a7c9c1cd3ef6f82726108df5"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.png",
+          "sha256": "2a19b3e00c068d67f6ad0bc218f784645eacdbc8f73fd3d0b8e4421c5569458f"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-3.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 132,
+      "path": "tools/source/pixel/rooms/road/fork/bg-3.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-3.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "b476baae0bc3b95a54d3382e3556211157960534d5729e2efff473bd23610a84",
+      "export_sha256": "b476baae0bc3b95a54d3382e3556211157960534d5729e2efff473bd23610a84",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-3.png",
+          "sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.sky.png",
+          "sha256": "06b447402c40149a1503abe74f23ff0fc1b65b7a74eba4b7e7a7e601938b769c"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-3.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 133,
+      "path": "tools/source/pixel/rooms/road/fork/bg-3.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-3.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a724794b3db094aef2e6009d48f8556c42c71b02b142d9b50ec7a88396e23a9e",
+      "export_sha256": "a724794b3db094aef2e6009d48f8556c42c71b02b142d9b50ec7a88396e23a9e",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-3.png",
+          "sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.far.png",
+          "sha256": "dc66f41338ddd9228464c2fb33bc0da8ed51a43500052b3e0c735c81e98beb56"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-3.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 134,
+      "path": "tools/source/pixel/rooms/road/fork/bg-3.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-3.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "7ddd23ce0d2e9425321812e0459f43e3c5bdf0ab9c928c401f20a8a5114e954d",
+      "export_sha256": "7ddd23ce0d2e9425321812e0459f43e3c5bdf0ab9c928c401f20a8a5114e954d",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-3.png",
+          "sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.mid.png",
+          "sha256": "9ff6d7b7f36aa94ceaf84d7554d03d06e399723093bd85147c73e74aa6d1d16d"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-3.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 135,
+      "path": "tools/source/pixel/rooms/road/fork/bg-3.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/135-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "e40129e68974e46a0c4c9eef6c1b666d405e0e74ddd9ca2d3474fd7013143400",
+      "export_sha256": "e40129e68974e46a0c4c9eef6c1b666d405e0e74ddd9ca2d3474fd7013143400",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-3.png",
+          "sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe"
+        },
+        {
+          "path": "tools/source/pixel/rooms/road/fork/bg-2.fg.png",
+          "sha256": "7f4d480577e2d180616f902ede79d2e2647c8732d8e25c8501553e84282de316"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/135-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 135,
+          "path": "tools/source/pixel/rooms/road/fork/bg-3.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/road/fork/bg-3.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "9b3cf205c0a330a74ecea421bb5a4bfac4345aa4e07891439164617d5df38dba",
+          "export_sha256": "9b3cf205c0a330a74ecea421bb5a4bfac4345aa4e07891439164617d5df38dba",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-3.png",
+              "sha256": "a3382e729d0ab8c6a3d294fc2e717734ddfc33eaf61b2617dd571336efa64cfe"
+            },
+            {
+              "path": "tools/source/pixel/rooms/road/fork/bg-2.fg.png",
+              "sha256": "7f4d480577e2d180616f902ede79d2e2647c8732d8e25c8501553e84282de316"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/road/fork/bg-3.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 121,
+  "next_number": 136,
   "runtime_imported": false
 }

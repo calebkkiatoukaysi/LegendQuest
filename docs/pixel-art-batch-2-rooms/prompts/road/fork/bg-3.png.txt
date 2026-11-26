@@ -1,0 +1,17 @@
+STYLE. An original background for a side-on 2D fantasy role-playing game's room, the scenery only, painted to be converted into detailed pixel art, so it must be made of clean, flat areas of colour with hard edges, like a master pixel artist's design blown up. Bold, even outlines in deep brown-violet, never pure black, on every building, prop, plank, rock and plant. Cel shading with hard-edged shapes only: for each material a base tone, two shadow tones that shift toward cool violet-blue, one highlight tone that shifts toward warm gold; the sky in a few broad, flat bands of colour rather than a smooth gradient. Detail shown with a few bold shapes: plank seams, roof tiles and cobbles as clear repeated shapes, rivets as dots, leaves as clumped scalloped masses, signs with pictures only. No brush texture, no noise, no grain, no soft airbrushing, no hairline detail. Rich high-fantasy colour: deep jewel tones, burnished gold and brass, warm lamplight against cool shadow. The distance is paler, cooler and simpler. Light from the upper left. The camera is side-on at a standing person's eye level, looking straight at the scene: the horizon straight and level, nothing vanishing into the distance.
+
+ROOM. The Old Road: The Fork, panel 3 of 3; bright afternoon, darkening toward the east. The attached picture is this panel as it is in the game now.
+
+REDRAW. Redraw the attached picture in the style above. It is the same picture: every building, wall, door, gate, stair, window, tree, mast and rock, the horizon, the floor line and the open floor band stay exactly where they are, at exactly their size and shape, with the same colours and the same time of day. Don't add, remove or move anything; only the way it's drawn changes.
+
+WHAT'S IN IT (from the room's first brief, for reference: wherever it and the attached picture differ, the attached picture is right). The east end of the fork, where the road goes into the trees. From the left edge to about 35%: the great oak on its gentle rise at about 22%, huge and spreading. From about 45% to the right edge: the wood closing in, oaks at about 57%, 61% and 69%, a dark fir at about 86%, mushrooms at about 72%, the trunks crowding together, darker, mossier and older, ferns at their feet, until at the right edge the road disappears into the shade of the Mirewood. Far off: a dark wooded ridge. Sky: afternoon blue going greyer and cooler toward the right, the light falling off under the trees.
+
+LIGHT. The game darkens this room itself and adds its own glow to lamps, candles and fires, so keep it at clear, readable mid values, as in the attached picture.
+
+SIZE. Exactly 1536 by 1024 pixels, the whole scene edge to edge, like the attached picture. Don't crop, zoom, re-centre or re-frame it.
+
+AVOID. People, faces, animals, birds, creatures. Text, letters, numbers, runes that read as writing, labels, signatures, watermarks. Frames, borders, vignettes. Perspective: vanishing points, a view from above or below, a tilted horizon. Anything new on the open floor band. Painterly blur, smooth gradients, airbrushing, glossy 3D-render shading, photorealism, grain, lens flare, dense noise or tiny texture. Pure-black outlines. Anything copied from an existing game, film, comic or brand.
+
+I'll save it as bg-3.png.
+
+Image 1 is the edit target / scene reference. Image 2 is the finished same-kind preceding panel. Where this panel shows the same stretch as the second attached picture, make it match that one exactly. Do not move anything in image 1 to imitate image 2.
