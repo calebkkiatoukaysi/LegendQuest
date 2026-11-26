@@ -528,6 +528,33 @@ the owner asks.
 - **Check:** the build is clean (0 warnings), `--validate` and `--simulate selftest` pass, and `--simulate all 200` gives
   the same results in both looks. Proof shots of the Arena and Boss stages in both looks.
 
+**As built (2026-11-25, branch `feature/pixel-sprites`).** Steps 1 and 3 are in for the characters, with two changes
+from the plan above, both because of what the code showed:
+
+- **The figures are converted in the game, not into a second set of atlases.** `Characters/Pixel/PixelRig.cs`
+  (`PixelArt.Convert`) converts each figure as `RigComposer` put it together, after the morph, the fit, the skin tint
+  and the dyes. 122 of the 156 recipes are morphed (Brannock is 36% wider, Grell 55%), and parts painted on one base
+  are scaled to fit the other; pixel atlases cut at one size would have to be stretched again, and stretched pixel art
+  is no longer pixel art. Converting last, at exactly the size drawn, also gives the palette per *character* that §1
+  asks for (at most 32 colours, none closer than a fixed step, so brush texture falls into flat colour), keeps the
+  dyes and skin tints exactly the painted look's, and means a repainted part needs no second import: it converts the
+  next time the game starts. Thin ink lines are kept out of the colour vote (they only survive shrinking as specks);
+  the eyes, brows and mouth are found by the skin round them and kept.
+- **Limbs aren't turned on the screen at all.** `Characters/Pixel/PixelPoser.cs` draws each pose as one sprite frame:
+  every piece is kept three times finer than an art pixel, and each art pixel of the frame takes the colour most of
+  the nine sub-cells under it have (the upscale, turn and pick filter, at any angle rather than 64 steps). The dark
+  outline is drawn round the *posed figure*, with a lighter line where one limb crosses another, so no line crosses
+  an elbow or a knee and there are no seams. `WalkerSprite` asks for a new frame when the clip's time crosses a
+  twelfth of a second; the clip itself, its events and where the bones are for the fight are untouched.
+
+`ArtSettings.Look` is `Settings.ArtLook` (`Pixel` by default; ART STYLE on the options screen; `LQ_LOOK=Painted` or
+`Pixel` in the environment overrides it for a proof run). `World/PixelWorld.cs` is the 800 x 450 picture;
+`Camera2D.Grain` keeps the view and everything that snaps to it on whole art pixels. `--proof <dir> Sprites` films
+`pixel/lineup.png` and a close-up sheet for each of the cast. Still to do from these two steps: the repaint list, the
+creatures' sheets and the props (drawn as they were, on the art-pixel picture), the menus' big figures (still
+painted), and the other screens that draw a room (the creation screen, the HUD preview and the Moves and Rooms proofs
+draw the pixel figures but not through the 800 x 450 picture).
+
 ### Step 2: Templates
 
 - `tools/pixel/templates.py` writes `portrait-template-male.png` and `-female.png` (head and shoulders of the
