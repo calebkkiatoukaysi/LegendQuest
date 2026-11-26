@@ -258,11 +258,11 @@ public sealed class RoomScene
     /// <summary>A layer's parallax in this room: none in a flat one.</summary>
     private float Parallax(float outdoors) => _flat ? 1f : outdoors;
 
-    /// <summary>Where a layer's left edge goes in the world for where the camera is, on a whole screen pixel so it doesn't shimmer.</summary>
+    /// <summary>Where a layer's left edge goes in the world for where the camera is, on a whole pixel of the kind the world is drawn in so it doesn't shimmer; about the room's middle in a layered room.</summary>
     private float LayerLeft(Camera2D camera, float parallax)
     {
         float from = _centred ? _room.Width / 2f - HalfView : 0f;
-        return MathF.Round((1f - parallax) * (camera.Left - from) * camera.Zoom) / camera.Zoom;
+        return MathF.Round((1f - parallax) * (camera.Left - from) / camera.Pixel) * camera.Pixel;
     }
 
     /// <summary>Draws a painted layer with its left edge at a world x: each piece at the scale its height gives (the layer is the room's height), the next starting where it ends.</summary>

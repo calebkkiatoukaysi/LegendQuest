@@ -552,6 +552,9 @@ public sealed class ClipPlayer
     private readonly BonePose[] _from, _sampled;
     private float _time, _speed = 1f, _blend = 1f, _blendLength = Blend;
 
+    /// <summary>How long the clip has been playing, in seconds of the figure's own clock: what the blend is measured by once it's over.</summary>
+    private float _since;
+
     /// <summary>A player for a skeleton's bones, at rest.</summary>
     public ClipPlayer(Skeleton skeleton)
     {
@@ -591,6 +594,7 @@ public sealed class ClipPlayer
         Array.Copy(Pose, _from, Pose.Length);
         Clip = clip;
         _time = 0f;
+        _since = 0f;
         _blendLength = clip?.Blend ?? Blend;
         _blend = _blendLength <= 0f ? 1f : 0f;
         Refresh();
@@ -606,6 +610,7 @@ public sealed class ClipPlayer
         if (Clip.Loop) _time %= Clip.Length;
         else _time = MathF.Min(_time, Clip.Length);
         if (_blendLength > 0f) _blend = MathF.Min(1f, _blend + seconds / _blendLength);
+        _since += seconds;
         Refresh();
     }
 
@@ -623,6 +628,31 @@ public sealed class ClipPlayer
         if (_blendLength <= 0f || _speed <= 0f) return;
         float b = MathHelper.Clamp(_blend - (_time - time) / _speed / _blendLength, 0f, 1f);
         float t = b * b * (3f - 2f * b);
+        if (t >= 1f) return;
+        for (int i = 0; i < into.Length; i++) into[i] = BonePose.Lerp(_from[i], into[i], t);
+    }
+
+    /// <summary>How far the blend into the clip had got at an earlier time into it, 0 to 1 before smoothing: 1 once it was the clip alone. Unlike PoseAt's, it's right long after the blend is over.</summary>
+    /// <param name="time">Seconds into the clip, at or before Time.</param>
+    private float BlendAt(float time) =>
+        Clip is null || _blendLength <= 0f || _speed <= 0f ? 1f : MathHelper.Clamp((_since - (_time - time) / _speed) / _blendLength, 0f, 1f);
+
+    /// <summary>Whether the pose at an earlier time into the clip playing is the clip's alone, the blend from the pose before over by then.</summary>
+    /// <param name="time">Seconds into the clip, at or before Time.</param>
+    public bool SettledAt(float time) => BlendAt(time) >= 1f;
+
+    /// <summary>The pose at an earlier time into the clip playing, with the blend as it was then: for a figure drawn in steps (the pixel look's twelve poses a second).</summary>
+    /// <param name="time">Seconds into the clip, at or before Time.</param>
+    /// <param name="into">Each bone's pose, filled in.</param>
+    public void PoseStepped(float time, BonePose[] into)
+    {
+        if (Clip is null)
+        {
+            Array.Fill(into, BonePose.Rest);
+            return;
+        }
+        Clip.Sample(time, into);
+        float b = BlendAt(time), t = b * b * (3f - 2f * b);
         if (t >= 1f) return;
         for (int i = 0; i < into.Length; i++) into[i] = BonePose.Lerp(_from[i], into[i], t);
     }

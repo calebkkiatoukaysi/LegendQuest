@@ -39,6 +39,17 @@ public class Settings
     /// <summary>Whether the damage and healing numbers pop up over people in a fight. On to start with.</summary>
     public bool DamageNumbers { get; set; } = true;
 
+    /// <summary>Which look the world is drawn in, by name (ArtLook): Pixel to start with; Painted is the smooth figures the game was first drawn with. A file from before there was a choice doesn't have it, and gets Pixel.</summary>
+    public string ArtLook { get; set; } = ArtSettings.Default.ToString();
+
+    /// <summary>ArtLook as the enum, or the default if the file has something it doesn't recognise. Setting it sets ArtLook by name.</summary>
+    [JsonIgnore]
+    public ArtLook Look
+    {
+        get => Enum.TryParse(ArtLook, out ArtLook look) && Enum.IsDefined(look) ? look : ArtSettings.Default;
+        set => ArtLook = value.ToString();
+    }
+
     /// <summary>ScreenShake as the enum, or Full if the file has something it doesn't recognise. Setting it sets ScreenShake by name.</summary>
     [JsonIgnore]
     public LegendQuest.Components.ShakeStrength Shake

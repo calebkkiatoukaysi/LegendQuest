@@ -53,6 +53,7 @@ public partial class LegendQuestGame : Game
         // The sound and the screens are components so they keep running no matter what screen is up,
         // and services so any screen can get to them (like the achievement service in the services tutorial).
         _audio = new AudioManager(this, SettingsStore.Load());
+        ArtSettings.Apply(_audio.Settings.Look);
         Components.Add(_audio);
         Services.AddService(_audio);
 
@@ -123,7 +124,8 @@ public partial class LegendQuestGame : Game
         ImportedArt.LoadContent(Services, GraphicsDevice);
         PartCatalog.LoadContent(Services, GraphicsDevice);
         RegisterCrowds();
-        PartCatalog.Prewarm();
+        // The Sprites part only wants the figures on its sheets, made as it asks for them.
+        if (ProofDirectory is null || ProofLast != ProofStage.Sprites) PartCatalog.Prewarm();
         _audio.LoadContent(Content);
         _cursor.LoadContent(Content);
         _canvas.LoadContent(GraphicsDevice);
@@ -176,6 +178,7 @@ public partial class LegendQuestGame : Game
     {
         _canvas.Begin(GraphicsDevice);
         GraphicsDevice.Clear(VoidColor);
+        PixelFrames.Tick();
 
         base.Draw(gameTime);
         _cursor.Draw(gameTime, _screenManager.SpriteBatch, _screenManager.Input.MousePosition);

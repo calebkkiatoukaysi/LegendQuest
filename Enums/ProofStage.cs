@@ -96,6 +96,9 @@ public enum ProofStage
     /// <summary>Writing the audio log and quitting.</summary>
     Done,
 
+    /// <summary>Not part of the run: contact sheets of the cast's figures, painted and as pixel art, standing, walking and fighting (LegendQuestGame.ProofSprites), asked for on its own (--proof &lt;dir&gt; Sprites).</summary>
+    Sprites,
+
     /// <summary>Not part of the run: the real-time HUD drawn from made-up views over a room, in each of its states, and its icons, asked for on its own (--proof &lt;dir&gt; Hud).</summary>
     Hud,
 

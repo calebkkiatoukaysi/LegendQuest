@@ -55,7 +55,7 @@ public static partial class PartCatalog
             for (int start = 0; start < outfits.Count; start += WarmBatch)
             {
                 int count = Math.Min(WarmBatch, outfits.Count - start);
-                Parallel.For(0, count, options, i => made[i] = Composed(outfits[start + i]));
+                Parallel.For(0, count, options, i => made[i] = WithPixel(Composed(outfits[start + i])));
                 for (int i = 0; i < count; i++)
                 {
                     if (!Built.ContainsKey(outfits[start + i].Key)) Keep(outfits[start + i], made[i]);
@@ -85,7 +85,7 @@ public static partial class PartCatalog
         {
             Outfit next = ToWarm.Dequeue();
             if (Built.ContainsKey(next.Key) || Warmed.ContainsKey(next.Key)) continue;
-            Warmed[next.Key] = (next, Task.Run(() => Composed(next)));
+            Warmed[next.Key] = (next, Task.Run(() => WithPixel(Composed(next))));
         }
     }
 

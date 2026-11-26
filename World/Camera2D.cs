@@ -47,13 +47,16 @@ public class Camera2D
     /// <summary>The left edge of the view in world pixels, exactly where it's drawn from: what a room's layers slide against.</summary>
     public float Left => Offset.X / (float)Zoom;
 
-    /// <summary>How big one screen pixel is in world pixels. Things snap to this so they move a screen pixel at a time.</summary>
-    public float Pixel => 1f / Zoom;
+    /// <summary>How many screen pixels across the pixels the world is drawn in are: 1, or in the pixel look an art pixel's (ArtSettings.ArtScale). The view and everything that snaps to Pixel move by this much at a time.</summary>
+    public int Grain { get; set; } = 1;
 
-    /// <summary>The top left of the view in screen pixels, rounded so the whole world sits on whole pixels.</summary>
+    /// <summary>How big one of the pixels the world is drawn in is in world pixels: a screen pixel, or in the pixel look an art pixel. Things snap to this so they move a pixel at a time.</summary>
+    public float Pixel => (float)Grain / Zoom;
+
+    /// <summary>The top left of the view in screen pixels, rounded so the whole world sits on whole pixels (whole art pixels in the pixel look).</summary>
     private Point Offset => new(
-        (int)MathF.Round(Centre.X * Zoom - ViewSize.X / 2f),
-        (int)MathF.Round(Centre.Y * Zoom - ViewSize.Y / 2f));
+        (int)MathF.Round((Centre.X * Zoom - ViewSize.X / 2f) / Grain) * Grain,
+        (int)MathF.Round((Centre.Y * Zoom - ViewSize.Y / 2f) / Grain) * Grain);
 
     /// <summary>The part of the world on screen right now, in world pixels, rounded out to whole pixels.</summary>
     public Rectangle View

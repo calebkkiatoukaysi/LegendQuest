@@ -139,6 +139,7 @@ public partial class LegendQuestGame
         // The Moves part is filmed on its own, so it starts at once rather than after the rest.
         if (ProofLast == ProofStage.Moves) _proofStage = ProofStage.Moves;
         if (ProofLast == ProofStage.Rooms) _proofStage = ProofStage.Rooms;
+        if (ProofLast == ProofStage.Sprites) _proofStage = ProofStage.Sprites;
     }
 
     /// <summary>Runs the proof schedule, one drawn frame at a time.</summary>
@@ -284,6 +285,10 @@ public partial class LegendQuestGame
 
             case ProofStage.Rooms:
                 _proofPending = ProofRooms();
+                break;
+
+            case ProofStage.Sprites:
+                _proofPending = ProofSprites();
                 break;
 
             case ProofStage.Arena:

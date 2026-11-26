@@ -191,6 +191,7 @@ public partial class ExploreScreen : GameScreen
     public override void Unload()
     {
         _scene?.Unload();
+        _pixelWorld.Dispose();
         _band?.Dispose();
         foreach (Texture2D sheet in _sheets.Values) sheet.Dispose();
         _strip.Unload();
@@ -289,6 +290,32 @@ public partial class ExploreScreen : GameScreen
         Chatter();
     }
 
+    /// <summary>
+    /// Starts drawing the world: in the pixel look, onto the art-pixel picture (PixelWorld), with the
+    /// camera on whole art pixels; in the painted look, straight onto the screen as ever.
+    /// </summary>
+    /// <param name="shake">The shake on the screen, after the camera.</param>
+    /// <returns>What goes after the camera's matrix for everything in the world: the shake, and in the pixel look the shrink to art pixels.</returns>
+    private Matrix BeginWorld(Matrix shake)
+    {
+        _inPixelWorld = ArtSettings.Pixel;
+        _camera.Grain = _inPixelWorld ? ArtSettings.ArtScale : 1;
+        if (!_inPixelWorld) return shake;
+        _pixelWorld.Begin(ScreenManager.GraphicsDevice);
+        return PixelWorld.Lens(shake);
+    }
+
+    /// <summary>Ends drawing the world: in the pixel look, blows the art-pixel picture up onto the screen.</summary>
+    private void EndWorld(SpriteBatch spriteBatch)
+    {
+        if (_inPixelWorld) _pixelWorld.End(spriteBatch);
+        _inPixelWorld = false;
+    }
+
+    /// <summary>The pixel look's art-pixel picture of the world, and whether the world is being drawn onto it now.</summary>
+    private readonly PixelWorld _pixelWorld = new();
+    private bool _inPixelWorld;
+
     /// <summary>Draws the room behind everyone, everyone on its floor sorted by depth in its tint (or a scene's), the room in front of them, the dark over that, the light over the dark, then what's over people's heads and on the screen itself.</summary>
     /// <param name="gameTime">The frame's timing.</param>
     public override void Draw(GameTime gameTime)
@@ -300,12 +327,13 @@ public partial class ExploreScreen : GameScreen
         }
 
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-        Matrix world = _camera.Transform * _cueShake.Transform;
+        Matrix lens = BeginWorld(_cueShake.Transform);
+        Matrix world = _camera.Transform * lens;
         float pixel = _camera.Pixel;
         Color tint = WorldTint;
 
         // 1. The room behind everyone: the sky, the far layer, the tile strip and the mid layer.
-        _scene.DrawBack(gameTime, spriteBatch, _camera, tint, _cueShake.Transform);
+        _scene.DrawBack(gameTime, spriteBatch, _camera, tint, lens);
 
         // 2. Everything on the floor sorted by how far down the band it stands, all in the room's tint.
         //    Not the flames, which are the light, not what it falls on.
@@ -318,8 +346,8 @@ public partial class ExploreScreen : GameScreen
         spriteBatch.End();
 
         // 3. The room in front of everyone, then in a dark room the dark over all of it.
-        _scene.DrawFront(spriteBatch, _camera, tint, _cueShake.Transform);
-        _scene.DrawDark(spriteBatch, _camera, _cueShake.Transform);
+        _scene.DrawFront(spriteBatch, _camera, tint, lens);
+        _scene.DrawDark(spriteBatch, _camera, lens);
 
         // 4. Light, additive so it brightens what's under it: the flicker over each torch in a dark
         //    room, the glow round anyone a scene's lit, and the pool under whatever the mouse is on,
@@ -335,6 +363,7 @@ public partial class ExploreScreen : GameScreen
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
         DrawPathPreview(spriteBatch);
         spriteBatch.End();
+        EndWorld(spriteBatch);
 
         // 6. The indicators: the badges over the doors, the chevrons at the ends and on the stairs,
         //    the names over heads and the glints, none of them while the arrival or a conversation's
