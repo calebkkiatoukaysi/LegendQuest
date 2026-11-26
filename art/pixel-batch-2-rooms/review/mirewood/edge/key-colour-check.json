@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-1.far.png",
+    "dominant_color": [
+      250,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.1676654815673828,
+    "exact_magenta_pixels": 1
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-1.mid.png",
+    "dominant_color": [
+      246,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.022289276123046875,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-1.fg.png",
+    "dominant_color": [
+      251,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.13791974385579428,
+    "exact_magenta_pixels": 19
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-2.far.png",
+    "dominant_color": [
+      251,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.11990928649902344,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-2.mid.png",
+    "dominant_color": [
+      243,
+      5,
+      247
+    ],
+    "dominant_fraction": 0.008518854777018229,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-2.fg.png",
+    "dominant_color": [
+      249,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.2392114003499349,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-3.far.png",
+    "dominant_color": [
+      250,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.12768173217773438,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-3.mid.png",
+    "dominant_color": [
+      111,
+      139,
+      48
+    ],
+    "dominant_fraction": 0.008665720621744791,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/edge/bg-3.fg.png",
+    "dominant_color": [
+      250,
+      4,
+      251
+    ],
+    "dominant_fraction": 0.16861661275227866,
+    "exact_magenta_pixels": 0
+  }
+]

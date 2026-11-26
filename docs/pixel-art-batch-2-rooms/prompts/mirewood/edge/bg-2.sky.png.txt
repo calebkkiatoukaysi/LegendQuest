@@ -1,0 +1,8 @@
+Edit the attached picture (bg-2.png: The Mirewood: The Mirewood's Edge, panel 2 of 3; dusk). Keep ONLY the sky: its bands of colour, clouds, sun or moon and stars. Take away everything that stands in front of the sky (buildings, roofs, towers, masts, rigging, trees, hills, the sea, the ground, the floor) and paint the sky on behind where they were, carrying its bands and clouds on naturally all the way down to the bottom edge, so the whole picture is sky with no hole, silhouette or outline of anything removed. Keep what stays exactly as it is in the attached picture, pixel for pixel: the same size (1536 by 1024), the same place, the same flat colours and outlines. Don't zoom, crop, re-centre or redraw anything you keep, and add nothing that isn't in the attached picture. No people, animals, text, letters, numbers, frame, border or watermark.
+I'll save it as bg-2.sky.png.
+
+SKY BOUNDARY. Building ornaments, gold sun emblems mounted on spires, crosses, finials, flags, chimney smoke and their halos are not celestial objects: remove them with their buildings. Retain an actual visible sun/moon only if it exists in this panel; never copy one from a preceding panel.
+
+Image 1 is the edit target / scene reference. Image 2 is the finished same-kind preceding panel. Where this panel shows the same stretch as the second attached picture, make it match that one exactly. Do not move anything in image 1 to imitate image 2.
+
+No actual sun/moon. Remove all gold finials on distant castles/palaces and all near mist/glow with the ground. Only ordinary sky and clouds from image1.
