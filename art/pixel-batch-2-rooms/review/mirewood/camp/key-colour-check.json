@@ -1,0 +1,32 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.far.png",
+    "dominant_color": [
+      251,
+      14,
+      250
+    ],
+    "dominant_fraction": 0.11524200439453125,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.mid.png",
+    "dominant_color": [
+      116,
+      156,
+      74
+    ],
+    "dominant_fraction": 0.018007914225260418,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.17945226033528647,
+    "exact_magenta_pixels": 33
+  }
+]

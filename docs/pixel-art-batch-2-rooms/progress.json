@@ -5532,8 +5532,173 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 166,
+      "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/mirewood/camp/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231",
+      "export_sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231",
+      "references": [
+        {
+          "path": "art/rooms/generated/mirewood/camp/bg-1.png",
+          "sha256": "ec1a9941ff118a93445bfbbfc9b432e09d58cc92755d6d35c7676d484b4ff01a"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/mirewood/camp/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 167,
+      "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/mirewood/camp/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0abf6e4818d9c9643569307a9a32e6040051f7aa7e00e455bdc10751f3cacd60",
+      "export_sha256": "0abf6e4818d9c9643569307a9a32e6040051f7aa7e00e455bdc10751f3cacd60",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+          "sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/mirewood/camp/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 168,
+      "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/revisions/168-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "0e776b93753aeffe6e3ff523984a8869600759630ae16a09fe1a8131b54204c8",
+      "export_sha256": "0e776b93753aeffe6e3ff523984a8869600759630ae16a09fe1a8131b54204c8",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+          "sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/168-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 168,
+          "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.far.png",
+          "original": "art/pixel-batch-2-rooms/originals/mirewood/camp/bg-1.far.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "450f92d51b9c199b7eecb524486b6a0415688a1b049576cfa6e2c9d5bae2cd3e",
+          "export_sha256": "450f92d51b9c199b7eecb524486b6a0415688a1b049576cfa6e2c9d5bae2cd3e",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+              "sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/mirewood/camp/bg-1.far.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
+    },
+    {
+      "number": 169,
+      "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.mid.png",
+      "original": "art/pixel-batch-2-rooms/originals/mirewood/camp/bg-1.mid.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "9948282b10616c3d7e746d0068cf177f430e7c424f93dde3f8b4f7c94039d212",
+      "export_sha256": "9948282b10616c3d7e746d0068cf177f430e7c424f93dde3f8b4f7c94039d212",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+          "sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/mirewood/camp/bg-1.mid.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 170,
+      "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.fg.png",
+      "original": "art/pixel-batch-2-rooms/revisions/170-revision-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "223d6bded7e7a3643106f7a3833c47af5949d3a3add5932161ce17e6a54425c2",
+      "export_sha256": "223d6bded7e7a3643106f7a3833c47af5949d3a3add5932161ce17e6a54425c2",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+          "sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/revisions/170-revision-1.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending",
+      "earlier_attempts": [
+        {
+          "number": 170,
+          "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.fg.png",
+          "original": "art/pixel-batch-2-rooms/originals/mirewood/camp/bg-1.fg.png",
+          "native_size": [
+            1536,
+            1024
+          ],
+          "export_size": [
+            1536,
+            1024
+          ],
+          "source_sha256": "e5963fa36fa5ce687b3856330f525fc23bc71ad50ba5f6382a2a21ebbd1b680f",
+          "export_sha256": "e5963fa36fa5ce687b3856330f525fc23bc71ad50ba5f6382a2a21ebbd1b680f",
+          "references": [
+            {
+              "path": "tools/source/pixel/rooms/mirewood/camp/bg-1.png",
+              "sha256": "34c03b382c04061cee3c1304659f26a404d9668f9eb9792b1a6d0f7ec537e231"
+            }
+          ],
+          "prompt": "docs/pixel-art-batch-2-rooms/prompts/mirewood/camp/bg-1.fg.png.txt",
+          "status": "source draft; alignment, pixel conversion and runtime registration pending"
+        }
+      ]
     }
   ],
-  "next_number": 166,
+  "next_number": 171,
   "runtime_imported": false
 }
