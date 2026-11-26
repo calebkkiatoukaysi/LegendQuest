@@ -121,7 +121,7 @@ public partial class LegendQuestGame
                 var cells = new List<Cell>();
                 for (int i = 0; i < poses.Length; i++)
                 {
-                    var feet = new Vector2((i % 5 + (i == 9 ? 0.2f : 0.45f)) * wide, (i / 5 + 1) * tall - 3f);
+                    var feet = new Vector2((i % 5 + (i == 9 ? 0.6f : i == 8 ? 0.3f : 0.45f)) * wide, (i / 5 + 1) * tall - 3f);
                     cells.Add(new Cell(id, poses[i].Look, poses[i].Clip, poses[i].Time, feet, poses[i].Label));
                 }
                 _sheets.Add((id, close, cells));
