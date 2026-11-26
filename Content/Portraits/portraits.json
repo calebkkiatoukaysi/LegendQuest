@@ -21,6 +21,14 @@
    "shock",
    "disgust"
   ],
+  "anvil-barkeep": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
   "brannock": [
    "neutral",
    "smile",
@@ -70,7 +78,13 @@
   ],
   "brisk": [
    "neutral",
-   "angry"
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
   ],
   "corra": [
    "neutral",
@@ -176,7 +190,25 @@
    "shock",
    "disgust"
   ],
+  "flower-seller": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
   "gannet": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "garrick": [
    "neutral",
    "smile",
    "laugh",
@@ -229,6 +261,80 @@
    "shock",
    "disgust"
   ],
+  "hedda": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "hesper": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "hester": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "hobb": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "ide": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "ilsa": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "imra-vell": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "innkeeper": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
   "isadora": [
    "neutral",
    "smile",
@@ -261,6 +367,14 @@
    "angry",
    "cold"
   ],
+  "lark": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
   "leon": [
    "neutral",
    "smile",
@@ -282,6 +396,30 @@
    "sad",
    "worried",
    "tired"
+  ],
+  "lise-aged": [
+   "neutral",
+   "sad",
+   "afraid",
+   "shock"
+  ],
+  "lookout": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "mags": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
   ],
   "maleficio": [
    "neutral",
@@ -309,6 +447,26 @@
    "smile",
    "laugh",
    "worried"
+  ],
+  "maren-elder": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "maud": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
   ],
   "mira": [
    "neutral",
@@ -341,6 +499,14 @@
    "shock",
    "disgust"
   ],
+  "netty": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
   "odelle": [
    "neutral",
    "smile",
@@ -359,6 +525,110 @@
    "worried",
    "angry",
    "shock",
+   "disgust"
+  ],
+  "osric": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "oswin": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "pell": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "pip": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "recruit": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "red-gull": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "refugee-1": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "refugee-2": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "refugee-3": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "refugee-child": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "royal-guard": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "royal-messenger": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
    "disgust"
   ],
   "ruck": [
@@ -414,7 +684,41 @@
    "angry",
    "cold"
   ],
+  "shopkeeper": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
   "sister-vale": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "smith": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "spice-seller": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
+   "disgust"
+  ],
+  "tamsin": [
    "neutral",
    "smile",
    "laugh",
@@ -442,6 +746,23 @@
   "thessaly-crystal": [
    "neutral"
   ],
+  "tobin": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "tobin-levy": [
+   "neutral",
+   "smile",
+   "sad",
+   "tired",
+   "shock"
+  ],
   "tomas": [
    "neutral",
    "smile",
@@ -450,6 +771,14 @@
    "worried",
    "angry",
    "shock",
+   "disgust"
+  ],
+  "trader": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "angry",
    "disgust"
   ],
   "valencia": [
@@ -521,6 +850,16 @@
    "disgust"
   ],
   "vreya": [
+   "neutral",
+   "smile",
+   "laugh",
+   "sad",
+   "worried",
+   "angry",
+   "shock",
+   "disgust"
+  ],
+  "wren": [
    "neutral",
    "smile",
    "laugh",

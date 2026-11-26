@@ -1,3 +1,5 @@
-; Written by tools/rooms/cut_room.py; explicit layers also override stale build outputs.
-flat
+; Written by tools/rooms/cut_pixel_room.py: pixel-art layers, 450 texels to the screen's height,
+; each sliding by its parallax about the room's middle.
+layered
+parallax sky 0.15 far 0.5
 foreground no

@@ -31,9 +31,12 @@ internal sealed class LifeLoops
     /// <summary>A cloud in world pixels, and how many different ones Rooms/Life/clouds has side by side.</summary>
     private const int CloudWidth = 132, CloudCells = 6;
 
-    /// <summary>A gull's picture across, in world pixels; Rooms/Life/gull is its two wingbeats side by side.</summary>
+    /// <summary>A gull's picture across, in world pixels; Rooms/Life/gull is its wings up, level and down side by side, in pixel art (tools/pixel/life_sprites.py).</summary>
     private const float GullWidth = 16f;
-    private const int GullFrames = 2;
+    private const int GullFrames = 3;
+
+    /// <summary>The frames a wingbeat goes through: up, level, down, level.</summary>
+    private static readonly int[] GullBeat = { 0, 1, 2, 1 };
 
     /// <summary>A flag's cloth across, in world pixels, Rooms/Life/flag's frames of it waving, how long each is up, and the pole's thickness.</summary>
     private const float FlagWidth = 16f, FlagFrameTime = 0.11f, PoleWidth = 1.5f;
@@ -50,7 +53,7 @@ internal sealed class LifeLoops
     private const float CloudSpeedMin = 1.5f, CloudSpeedMax = 4f;
 
     /// <summary>A gull to so many world pixels of its box, how fast they glide, how far and how often they bob, and how long a wingbeat is.</summary>
-    private const float GullSpacing = 90f, GullSpeedMin = 9f, GullSpeedMax = 17f, GullBob = 3f, GullBobRate = 0.8f, WingBeat = 0.22f;
+    private const float GullSpacing = 90f, GullSpeedMin = 9f, GullSpeedMax = 17f, GullBob = 3f, GullBobRate = 0.8f, WingBeat = 0.13f;
 
     /// <summary>A flag to so many world pixels of its box.</summary>
     private const float FlagSpacing = 80f;
@@ -229,7 +232,7 @@ internal sealed class LifeLoops
             var origin = new Vector2(width / 2f, _gullSheet.Height / 2f);
             foreach ((Vector2 at, float speed, float phase, _, _) in _gulls)
             {
-                int frame = (int)((_clock + phase) / WingBeat) % GullFrames;
+                int frame = GullBeat[(int)((_clock + phase) / WingBeat) % GullBeat.Length];
                 var middle = new Vector2(at.X, at.Y + MathF.Sin(_clock * GullBobRate * MathHelper.TwoPi + phase) * GullBob);
                 spriteBatch.Draw(_gullSheet, middle, new Rectangle(frame * width, 0, width, _gullSheet.Height), tint, 0f, origin, scale,
                     speed < 0f ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);

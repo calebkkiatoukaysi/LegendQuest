@@ -14,6 +14,15 @@ def fit_panel(zone, room, index, picture, entries):
     entry = entries[key]
     if hashlib.sha256(picture.tobytes()).hexdigest() != entry["rgba_sha256"]:
         raise sk.SourceError(key + ": the painting changed; review its fitting measurements again")
+    return warp(picture, *fit_grid(zone, room, index, entry))
+
+
+def fit_grid(zone, room, index, entry):
+    """Where each pixel of the fitted panel is read from in the painting: (xs, ys), one source x per
+    column and one source y per row, from the entry's reviewed floor line and door centres. A
+    redraw painted on the same panel (the pixel-ready sources) is fitted by its original's entry."""
+    import sourcekit as sk
+    key = f"{zone.id}/{room.id}/bg-{index}"
     floor = entry["floor_y"]
     target_floor = sk.to_panel(0, room.back_edge_at(room.width / 2), 0)[1]
     left = sk.panel_lefts(room.width)[index - 1]
@@ -39,6 +48,12 @@ def fit_panel(zone, room, index, picture, entries):
     # door centres and the floor, without moving any gameplay coordinates.
     xs = np.interp(np.arange(1536), dest, source)
     ys = np.interp(np.arange(1024), (0, target_floor, 1023), (0, floor, 1023))
+    return xs, ys
+
+
+def warp(picture, xs, ys):
+    """Resamples a picture (any channels, uint8 or float) at the columns xs and rows ys, bilinearly;
+    a uint8 picture comes back uint8, rounded."""
     x0 = np.floor(xs).astype(int); x1 = np.minimum(x0 + 1, 1535)
     y0 = np.floor(ys).astype(int); y1 = np.minimum(y0 + 1, 1023)
     fx = (xs - x0)[None, :, None]; fy = (ys - y0)[:, None, None]
@@ -46,7 +61,8 @@ def fit_panel(zone, room, index, picture, entries):
     b = picture[y0[:, None], x1[None, :]].astype(float)
     c = picture[y1[:, None], x0[None, :]].astype(float)
     d = picture[y1[:, None], x1[None, :]].astype(float)
-    return np.rint((a * (1-fx) + b * fx) * (1-fy) + (c * (1-fx) + d * fx) * fy).astype(np.uint8)
+    out = (a * (1-fx) + b * fx) * (1-fy) + (c * (1-fx) + d * fx) * fy
+    return np.rint(out).astype(np.uint8) if picture.dtype == np.uint8 else out
 
 
 def seam_weight(previous, incoming, start, width):

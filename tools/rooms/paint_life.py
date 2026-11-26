@@ -4,7 +4,8 @@ Components/TorchSprite.cs draw the moving things in a room with, in the rooms' i
 into Content/Rooms/Life:
 
     clouds.png      six clouds side by side, 528 x 240 each (132 x 60 world pixels at 4 texels each)
-    gull.png        a gull's two wingbeats, 64 x 40 each, flying right (flipped to fly left)
+    (gull.png, the gull's wingbeat, is pixel art now: tools/pixel/life_sprites.py makes it from the deck's
+    life sheet. gull() is kept for the record but no longer written.)
     flag.png        eight frames of a pennant waving, 64 x 40 each; the pole's top at (6, 8)
     flag-pole.png   a slice of the pole, 6 texels across, stretched down to the ground
     flame.png       a torch's flame flickering, six frames of 48 x 80 (12 x 20 art pixels at 4)
@@ -270,7 +271,7 @@ def leaf():
 
 
 PICTURES = (
-    ("clouds", clouds), ("gull", gull), ("flag", flag), ("flag-pole", flag_pole), ("flame", flame), ("candle", candle),
+    ("clouds", clouds), ("flag", flag), ("flag-pole", flag_pole), ("flame", flame), ("candle", candle),
     ("smoke", smoke), ("mote", mote), ("ash", ash), ("sparkle", sparkle), ("leaf", leaf),
 )
 
@@ -317,7 +318,7 @@ def assets_lines():
     """paint_all.py's ASSETS.md line for these pictures: ([the files], the line)."""
     files = ["Content/Rooms/Life/%s.png" % n for n, _ in PICTURES]
     return [(files, ", ".join(files) + " - created by Caleb Kiatoukaysi for Legend Quest, the rooms' life loops in the "
-             "illustrated style: six drifting clouds, a gull's two wingbeats, a pennant waving and its pole, a torch's "
+             "illustrated style: six drifting clouds, a pennant waving and its pole, a torch's "
              "and a candle's flames flickering, and the smoke, motes, ash, sparkles and petals the rooms' particles are "
              "drawn with, painted procedurally by tools/rooms/paint_life.py with tools/rooms/paint.py, released under "
              "public domain")]

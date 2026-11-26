@@ -32,6 +32,12 @@ namespace LegendQuest.World;
 /// the room's scenery lines are drawn from the props' own pictures instead.
 /// </para>
 /// <para>
+/// A pixel-art room (tools/rooms/cut_pixel_room.py) is 450 texels tall, two screen pixels to a texel,
+/// and its layers.txt says "layered" and each layer's parallax. Its layers are each as wide as the
+/// room and slide about the room's middle rather than its left end: with the camera in the middle
+/// every layer sits where it was painted, and a slow layer never runs out at either end.
+/// </para>
+/// <para>
 /// To wire it into ExploreScreen:
 /// </para>
 /// <list type="number">
@@ -88,6 +94,12 @@ public sealed class RoomScene
     /// <summary>Whether the room has no sky and no far layer: an interior, or a street painted as one picture. Nothing in it slides.</summary>
     private bool _flat;
 
+    /// <summary>How far the sky, the far layer and the foreground slide: the defaults, or what a layered room's layers.txt says.</summary>
+    private float _skyParallax = SkyParallax, _farParallax = FarParallax, _foreParallax = ForeParallax;
+
+    /// <summary>Whether the sliding layers slide about the room's middle (a layered room's, each as wide as the room) rather than its left end.</summary>
+    private bool _centred;
+
     /// <summary>Gets a room ready to draw. Nothing loads until LoadContent.</summary>
     /// <param name="room">The room.</param>
     public RoomScene(RoomDefinition room)
@@ -119,9 +131,9 @@ public sealed class RoomScene
         _flat = declaredFlat || _sky is null && _far is null;
         _mid = Layer("mid");
         _fore = foreground ? Layer("fore") : null;
-        if (_far is null && !_flat) ComposePieces("far", FarParallax, FarScale);
+        if (_far is null && !_flat) ComposePieces("far", _farParallax, FarScale);
         if (_mid is null) ComposePieces("mid", 1f, MidScale);
-        if (_fore is null && !_flat) ComposePieces("fore", Parallax(ForeParallax), ForeScale);
+        if (_fore is null && !_flat) ComposePieces("fore", Parallax(_foreParallax), ForeScale);
 
         ReadDoorArt();
         _life.LoadContent(_content);
@@ -165,11 +177,11 @@ public sealed class RoomScene
             // Out of the dark: a painted night sky already has its light.
             BlendState blend = _lightMap is null ? BlendState.AlphaBlend : LightMap.OutOfTheDark;
             spriteBatch.Begin(SpriteSortMode.Deferred, blend, SamplerState.PointClamp, transformMatrix: world);
-            float skyLeft = LayerLeft(camera, SkyParallax);
+            float skyLeft = LayerLeft(camera, _skyParallax);
             if (_sky is not null) DrawLayer(spriteBatch, _sky, skyLeft, tint);
             else DrawSkyBands(spriteBatch, skyLeft, tint);
             _life.DrawSky(spriteBatch, skyLeft, tint);
-            float farLeft = LayerLeft(camera, FarParallax);
+            float farLeft = LayerLeft(camera, _farParallax);
             if (_far is not null) DrawLayer(spriteBatch, _far, farLeft, tint);
             else DrawPieces(spriteBatch, "far", farLeft, FarScale, tint);
             spriteBatch.End();
@@ -202,7 +214,7 @@ public sealed class RoomScene
     public void DrawFront(SpriteBatch spriteBatch, Camera2D camera, Color tint, Matrix shake)
     {
         Matrix world = camera.Transform * shake;
-        float left = LayerLeft(camera, Parallax(ForeParallax));
+        float left = LayerLeft(camera, Parallax(_foreParallax));
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
         if (_fore is not null) DrawLayer(spriteBatch, _fore, left, tint);
         else DrawPieces(spriteBatch, "fore", left, ForeScale, tint);
@@ -247,8 +259,11 @@ public sealed class RoomScene
     private float Parallax(float outdoors) => _flat ? 1f : outdoors;
 
     /// <summary>Where a layer's left edge goes in the world for where the camera is, on a whole screen pixel so it doesn't shimmer.</summary>
-    private static float LayerLeft(Camera2D camera, float parallax) =>
-        MathF.Round((1f - parallax) * camera.Left * camera.Zoom) / camera.Zoom;
+    private float LayerLeft(Camera2D camera, float parallax)
+    {
+        float from = _centred ? _room.Width / 2f - HalfView : 0f;
+        return MathF.Round((1f - parallax) * (camera.Left - from) * camera.Zoom) / camera.Zoom;
+    }
 
     /// <summary>Draws a painted layer with its left edge at a world x: each piece at the scale its height gives (the layer is the room's height), the next starting where it ends.</summary>
     private static void DrawLayer(SpriteBatch spriteBatch, List<Texture2D> pieces, float left, Color tint)
@@ -367,7 +382,12 @@ public sealed class RoomScene
         }
     }
 
-    /// <summary>An explicit flat layout prevents obsolete XNBs from restoring removed sky or foreground layers.</summary>
+    /// <summary>
+    /// Reads layers.txt, if the room has one: "flat" then "foreground yes|no" (an explicit flat layout,
+    /// so obsolete XNBs can't bring back a removed sky or foreground), or "layered", then "parallax"
+    /// with each sliding layer's name and how far it slides ("parallax sky 0.15 far 0.5 fore 1"), then
+    /// "foreground yes|no", which sets the parallaxes and slides them about the room's middle.
+    /// </summary>
     private (bool Flat, bool Foreground) ReadLayerMode()
     {
         string path = $"{_content.RootDirectory}/Rooms/{_room.Paint}/layers.txt";
@@ -381,13 +401,41 @@ public sealed class RoomScene
                 string text = line.Trim();
                 if (text.Length > 0 && text[0] != ';') lines.Add(text);
             }
-            if (lines.Count != 2 || lines[0] != "flat" || lines[1] != "foreground yes" && lines[1] != "foreground no")
-                throw new InvalidOperationException($"{path}: expected flat, then foreground yes/no.");
+            if (lines.Count == 3 && lines[0] == "layered" && IsForeground(lines[2]))
+            {
+                ReadParallax(path, lines[1]);
+                _centred = true;
+                return (false, lines[2] == "foreground yes");
+            }
+            if (lines.Count != 2 || lines[0] != "flat" || !IsForeground(lines[1]))
+                throw new InvalidOperationException($"{path}: expected flat, then foreground yes/no; or layered, parallax, then foreground yes/no.");
             return (true, lines[1] == "foreground yes");
         }
         catch (Exception missing) when (missing is FileNotFoundException or DirectoryNotFoundException)
         {
             return (false, true);
+        }
+    }
+
+    private static bool IsForeground(string line) => line is "foreground yes" or "foreground no";
+
+    /// <summary>Reads a layered room's "parallax sky 0.15 far 0.5 fore 1" line into the layers' parallaxes.</summary>
+    private void ReadParallax(string path, string line)
+    {
+        string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length % 2 != 1 || parts[0] != "parallax")
+            throw new InvalidOperationException($"{path}: expected parallax, then each layer's name and how far it slides.");
+        for (int i = 1; i < parts.Length; i += 2)
+        {
+            if (!float.TryParse(parts[i + 1], NumberStyles.Float, CultureInfo.InvariantCulture, out float slide))
+                throw new InvalidOperationException($"{path}: {parts[i + 1]} isn't a number.");
+            switch (parts[i])
+            {
+                case "sky": _skyParallax = slide; break;
+                case "far": _farParallax = slide; break;
+                case "fore": _foreParallax = slide; break;
+                default: throw new InvalidOperationException($"{path}: there's no {parts[i]} layer to slide.");
+            }
         }
     }
 

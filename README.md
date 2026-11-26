@@ -503,6 +503,19 @@ the thumbnail, and puts it all in `Content.mgcb` and `ASSETS.md`. The floor text
 to 64 texels onto the sheet in `TilesetCatalog`'s order, keeping any tile there's no texture for. A
 room with no pictures keeps the art it has, and the painters leave a room with pictures alone.
 
+**Pixel-art rooms.** ChatGPT's pixel-ready redraws (`docs/pixel-art-brief.md` §7) are in
+`tools/source/pixel/rooms/<zone>/<room>/`: each panel whole (`bg-<i>.png`) and isolated into its sky,
+far, middle and foreground layers on flat #FF00FF (`bg-<i>.sky.png`, `.far`, `.mid`, `.fg`).
+`python tools/rooms/cut_pixel_room.py [rooms]` turns them into layered pixel-art rooms: it fits each
+panel to the doors and floor as its original painting was (the redraws sit on the originals exactly,
+which it checks), keys and joins the layers along the room, and makes each one pixel art at 800 x 450
+art pixels a screen (a palette per layer, majority colour per 2 x 2 cell, hard alpha, stray pixels
+tidied). The layers are 450 texels tall, so `RoomScene` draws them two screen pixels to a texel, and
+`layers.txt` says `layered` and how far each slides (sky 0.15, far 0.5, foreground 1), about the
+room's middle, so with the camera there every layer is where it was painted. The painted floor stays
+over the tile strip. A room whose layers aren't painted yet is cut flat from its whole redraw.
+`tools/pixel/life_sprites.py` makes the gulls in the sky from the deck's life sheet.
+
 ## The party
 
 Up to four: you, and whoever's with you. A new game starts you with the Soul-Bound, and the story

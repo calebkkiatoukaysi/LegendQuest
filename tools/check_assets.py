@@ -16,7 +16,9 @@ It fails with a list of problems if:
     Content/Rooms/Life, the life loops' pictures, is for every room). A room the owner has painted
     (its pictures in tools/source/rooms/<zone>/<room>/, or an explicit layers.txt) is flat once tools/rooms/cut_room.py has cut
     it: a mid layer, a thumbnail and doors.txt, a foreground only if it has one, and no sky or far
-    layer, which it fails on as not cut yet
+    layer, which it fails on as not cut yet. A pixel-art room whose layers.txt says "layered"
+    (tools/rooms/cut_pixel_room.py) has its sky, far and mid layers, thumbnail and doors.txt, and a
+    foreground if its layers.txt says so
 
 One exception to the last one: a font file counts as in Content.mgcb when a .spritefont that is in
 it names the font. The pipeline reads the TTF through the .spritefont and bakes the letters out of
@@ -155,9 +157,14 @@ def room_problems(content_files):
         painted.add(paint)
         layout = os.path.join(CONTENT, "Rooms", *paint.split("/"), "layers.txt")
         declared_flat = os.path.isfile(layout)
+        settings = []
         if declared_flat:
             with open(layout, encoding="utf-8") as f:
                 settings = [line.strip() for line in f if line.strip() and not line.lstrip().startswith(";")]
+        if settings[:1] == ["layered"]:
+            problems += layered_problems(paint, street, key, settings, layer_there)
+            continue
+        if declared_flat:
             if settings not in (["flat", "foreground yes"], ["flat", "foreground no"]):
                 problems.append("room " + paint + " has an invalid layers.txt (flat, then foreground yes/no)")
             elif settings[-1] == "foreground yes" and layer_there("Content/Rooms/" + paint + "/fore.png") != 1:
@@ -194,6 +201,34 @@ def room_problems(content_files):
         if folder not in painted and folder.split("/")[0] not in SHARED_ROOM_FOLDERS:
             problems.append(path + " is for a room that isn't in Content/Zones")
     return problems
+
+
+PARALLAX_LAYERS = ("sky", "far", "fore")
+
+
+def layered_problems(paint, street, key, settings, layer_there):
+    """A pixel-art room's (tools/rooms/cut_pixel_room.py): layered, its parallax line, foreground yes or
+    no, and its sky, far and mid layers, thumbnail and doors, and a fore layer only if it says so."""
+    out = []
+    fix = " (run tools/rooms/cut_pixel_room.py " + key + ")"
+    parallax = settings[1].split() if len(settings) > 1 else []
+    names = parallax[1::2]
+    numbers_ok = all(re.fullmatch(r"-?\d+(\.\d+)?", n) for n in parallax[2::2])
+    if (len(settings) != 3 or settings[2] not in ("foreground yes", "foreground no") or parallax[:1] != ["parallax"]
+            or len(parallax) % 2 != 1 or not numbers_ok or any(n not in PARALLAX_LAYERS for n in names)):
+        return ["room " + paint + " has an invalid layers.txt (layered, parallax <layer> <slide> ..., then "
+                "foreground yes/no)" + fix]
+    if not street:
+        out.append("room " + paint + " is layered but isn't a street: only a street draws its sky and far layer")
+    wanted = list(FLAT_FILES) + list(STREET_FILES) + (["fore.png"] if settings[2] == "foreground yes" else [])
+    for name in wanted:
+        path = "Content/Rooms/" + paint + "/" + name
+        there = layer_there(path)
+        if there != 1:
+            out.append("room " + paint + (" has no " + path if not there else " has both " + path + " and its pieces") + fix)
+    if settings[2] == "foreground no" and layer_there("Content/Rooms/" + paint + "/fore.png"):
+        out.append("room " + paint + " says it has no foreground but has a fore layer" + fix)
+    return out
 
 
 def main():

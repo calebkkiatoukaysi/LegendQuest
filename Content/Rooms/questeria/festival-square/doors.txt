@@ -1,5 +1,5 @@
 ; The painted doorway of each door in questeria/festival-square: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; (the game divides by RoomScale). Written by tools/rooms/cut_pixel_room.py: the room is the owner's
 ; painting, made over its guide, so each doorway is the door's box in the zone file.
 road 2150 300 300 300
 ivy-south 2640 400 120 200

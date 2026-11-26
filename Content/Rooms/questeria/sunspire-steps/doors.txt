@@ -1,5 +1,5 @@
 ; The painted doorway of each door in questeria/sunspire-steps: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; (the game divides by RoomScale). Written by tools/rooms/cut_pixel_room.py: the room is the owner's
 ; painting, made over its guide, so each doorway is the door's box in the zone file.
 keep 610 300 300 300
 vault 1080 480 160 120

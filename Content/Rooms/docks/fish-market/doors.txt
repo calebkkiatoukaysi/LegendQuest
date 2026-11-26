@@ -1,4 +1,4 @@
 ; The painted doorway of each door in docks/fish-market: id, then x y width height in canvas pixels
-; (the game divides by RoomScale). Written by tools/rooms/cut_room.py: the room is the owner's
+; (the game divides by RoomScale). Written by tools/rooms/cut_pixel_room.py: the room is the owner's
 ; painting, made over its guide, so each doorway is the door's box in the zone file.
 chandler 1198 400 120 200
