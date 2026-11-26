@@ -7337,3 +7337,9 @@ tools/source/pixel/rooms/mirewood/camp/bg-1.far.png - batch 2 room source, suppl
 tools/source/pixel/rooms/mirewood/camp/bg-1.mid.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
 
 tools/source/pixel/rooms/mirewood/camp/bg-1.fg.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.sky.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.
+
+tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.far.png - batch 2 room source, supplied by Caleb Kiatoukaysi, made in ChatGPT with built-in image generation. Prompt, originals and fingerprints retained in docs/pixel-art-batch-2-rooms and art/pixel-batch-2-rooms. Source draft awaiting alignment and pixel conversion; released for Legend Quest by its owner.

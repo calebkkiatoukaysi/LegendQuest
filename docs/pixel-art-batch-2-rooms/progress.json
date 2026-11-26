@@ -5697,8 +5697,77 @@
           "status": "source draft; alignment, pixel conversion and runtime registration pending"
         }
       ]
+    },
+    {
+      "number": 171,
+      "path": "tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.png",
+      "original": "art/pixel-batch-2-rooms/originals/thornbridge/camp-gate/bg-1.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "ef15975af94b3441bc88fd8bfb135df6991d4334d24914df9ade0285e6fb930b",
+      "export_sha256": "ef15975af94b3441bc88fd8bfb135df6991d4334d24914df9ade0285e6fb930b",
+      "references": [
+        {
+          "path": "art/rooms/generated/thornbridge/camp-gate/bg-1.png",
+          "sha256": "5e0e70b16c10a47608f81bc55366354e1aa15a9db50181c9c90131ad6db655f4"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/thornbridge/camp-gate/bg-1.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 172,
+      "path": "tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.sky.png",
+      "original": "art/pixel-batch-2-rooms/originals/thornbridge/camp-gate/bg-1.sky.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "50e5f06f545f85d053e54256d4e747143f03fd1ff5d8cdb105bb6053580eee1a",
+      "export_sha256": "50e5f06f545f85d053e54256d4e747143f03fd1ff5d8cdb105bb6053580eee1a",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.png",
+          "sha256": "ef15975af94b3441bc88fd8bfb135df6991d4334d24914df9ade0285e6fb930b"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/thornbridge/camp-gate/bg-1.sky.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
+    },
+    {
+      "number": 173,
+      "path": "tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.far.png",
+      "original": "art/pixel-batch-2-rooms/originals/thornbridge/camp-gate/bg-1.far.png",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "export_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "68a57476216efcad7be408ef0838d8a478ea1a6cddd2163710d3412d632217da",
+      "export_sha256": "68a57476216efcad7be408ef0838d8a478ea1a6cddd2163710d3412d632217da",
+      "references": [
+        {
+          "path": "tools/source/pixel/rooms/thornbridge/camp-gate/bg-1.png",
+          "sha256": "ef15975af94b3441bc88fd8bfb135df6991d4334d24914df9ade0285e6fb930b"
+        }
+      ],
+      "prompt": "docs/pixel-art-batch-2-rooms/prompts/thornbridge/camp-gate/bg-1.far.png.txt",
+      "status": "source draft; alignment, pixel conversion and runtime registration pending"
     }
   ],
-  "next_number": 171,
+  "next_number": 174,
   "runtime_imported": false
 }
