@@ -67,7 +67,7 @@ public partial class ExploreScreen
     private void DrawCombat(GameTime gameTime)
     {
         SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-        Matrix shake = _cueShake.Transform * _effects.Shake;
+        Matrix shake = BeginWorld(_cueShake.Transform * _effects.Shake);
         Matrix world = _camera.Transform * shake;
         float pixel = _camera.Pixel;
         float alpha = TransitionAlpha;
@@ -80,7 +80,8 @@ public partial class ExploreScreen
         //    room in front of everyone, faint.
         _scene.DrawBack(gameTime, spriteBatch, _camera, tint, shake);
         _effects.DrawGround(world);
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp);
+        // The ring is laid out in screen pixels: in the pixel look it's shrunk onto the art pixels with the rest of the floor.
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, transformMatrix: _inPixelWorld ? PixelWorld.Screen : Matrix.Identity);
         _hud.DrawRing(spriteBatch, view, alpha * RingStrength);
         spriteBatch.End();
 
@@ -113,6 +114,7 @@ public partial class ExploreScreen
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, transformMatrix: world);
         _effects.DrawFlying(spriteBatch);
         spriteBatch.End();
+        EndWorld(spriteBatch);
 
         // 4. The screen: the band across the top, then the HUD's art, the supports' banners, the
         //    words, the numbers (kept off everything else) and the lines said.
