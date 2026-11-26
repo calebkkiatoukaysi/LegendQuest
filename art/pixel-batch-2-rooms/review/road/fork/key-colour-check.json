@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-1.far.png",
+    "dominant_color": [
+      248,
+      5,
+      250
+    ],
+    "dominant_fraction": 0.16230646769205728,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-1.mid.png",
+    "dominant_color": [
+      250,
+      4,
+      249
+    ],
+    "dominant_fraction": 0.053104400634765625,
+    "exact_magenta_pixels": 1
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      18,
+      251
+    ],
+    "dominant_fraction": 0.12035687764485677,
+    "exact_magenta_pixels": 2
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-2.far.png",
+    "dominant_color": [
+      249,
+      14,
+      250
+    ],
+    "dominant_fraction": 0.1336688995361328,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-2.mid.png",
+    "dominant_color": [
+      251,
+      4,
+      245
+    ],
+    "dominant_fraction": 0.03402010599772135,
+    "exact_magenta_pixels": 2
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-2.fg.png",
+    "dominant_color": [
+      250,
+      18,
+      251
+    ],
+    "dominant_fraction": 0.13139788309733072,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-3.far.png",
+    "dominant_color": [
+      249,
+      5,
+      250
+    ],
+    "dominant_fraction": 0.13745689392089844,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-3.mid.png",
+    "dominant_color": [
+      251,
+      4,
+      249
+    ],
+    "dominant_fraction": 0.024260203043619793,
+    "exact_magenta_pixels": 10
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/fork/bg-3.fg.png",
+    "dominant_color": [
+      252,
+      19,
+      251
+    ],
+    "dominant_fraction": 0.18988800048828125,
+    "exact_magenta_pixels": 0
+  }
+]

@@ -1,0 +1,1 @@
+Remove ONLY the floating gold spire ornament and its halo at x1443,y38. Fill that area with the surrounding blue-violet sky band. No visible sun or star should remain in this sunset sky. Keep every cloud, band and colour otherwise unchanged. Exactly1536 by1024, no scenery, text or added objects.

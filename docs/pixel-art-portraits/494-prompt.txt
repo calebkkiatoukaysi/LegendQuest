@@ -1,0 +1,5 @@
+Edit the attached neutral portrait for this character. Change ONLY the variant described below, keeping the same person's identity, neutral expression, pixel grid, size, position and front-facing framing. Paint new clothing and details on the same coarse96by96 grid of big square pixels, with flat three-or-four-tone cel shading and dark brown-violet outlines. No fine texture, fabric weave, grain, gradients, smoothing or smaller pixels. Keep the flat #00FF00 background. Give it back at exactly1024by1024pixels.
+
+VARIANT. Act 3, aged to forty-six overnight by the time-tear. Change: a lean, strong adult face with a small chin scar, loose, unkempt chestnut hair, the child's smock tight on her, bewildered eyes.
+
+I'll save it as portrait-lise-aged.neutral.png.

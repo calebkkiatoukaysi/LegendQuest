@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.far.png",
+    "dominant_color": [
+      251,
+      12,
+      251
+    ],
+    "dominant_fraction": 0.10709826151529948,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.mid.png",
+    "dominant_color": [
+      252,
+      2,
+      251
+    ],
+    "dominant_fraction": 0.047304789225260414,
+    "exact_magenta_pixels": 3
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.22280248006184897,
+    "exact_magenta_pixels": 56
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.far.png",
+    "dominant_color": [
+      252,
+      10,
+      251
+    ],
+    "dominant_fraction": 0.09439849853515625,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.mid.png",
+    "dominant_color": [
+      247,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.04577318827311198,
+    "exact_magenta_pixels": 10
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-2.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.24848302205403647,
+    "exact_magenta_pixels": 2
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.far.png",
+    "dominant_color": [
+      251,
+      7,
+      251
+    ],
+    "dominant_fraction": 0.12721570332845053,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.mid.png",
+    "dominant_color": [
+      251,
+      3,
+      251
+    ],
+    "dominant_fraction": 0.07037925720214844,
+    "exact_magenta_pixels": 9
+  },
+  {
+    "path": "tools/source/pixel/rooms/docks/fish-market/bg-3.fg.png",
+    "dominant_color": [
+      250,
+      15,
+      250
+    ],
+    "dominant_fraction": 0.10096422831217448,
+    "exact_magenta_pixels": 0
+  }
+]

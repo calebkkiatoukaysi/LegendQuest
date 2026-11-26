@@ -1,0 +1,1 @@
+Remove only the small floating gold star at x1384,y84. It is a building's ornament and does not belong in the sky. Fill its former area with the surrounding blue sky band. Keep the round sun at x126,y56, every cloud and all sky bands unchanged. Exactly1536 by1024; no other changes.

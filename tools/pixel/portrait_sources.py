@@ -63,7 +63,9 @@ def plan():
                           "Move only the eyes, eyebrows, nose, mouth and cheeks, and the head no more than the expression needs. "
                           "The hair, beard, clothes, colours, pixel grid, size and position of everything else stay exactly the same, "
                           "and the face keeps looking straight at the viewer. Keep it real pixel art on the same grid of big pixels, "
-                          "on the same flat #00FF00 background. Give it back at exactly1024by1024pixels.\n"
+                          "on the same flat #00FF00 background. Preserve scars and distinguishing marks. "
+                          "No added blush hatching, cheek stripes, sweat drops, floating symbols or tear streams. "
+                          "Give it back at exactly1024by1024pixels.\n"
                           "EXPRESSION. " + expressions[expression] + "\nI'll save it as " + filename + ".")
                 kind = "expression"
             else:
@@ -79,8 +81,8 @@ def plan():
         overrides = read(overrides_path)
         for job in jobs:
             job.update(overrides.get(str(job["number"]), {}))
-    # The first 626 are the original series (2026-11-20); later pictures are only ever appended after them.
-    assert [j["number"] for j in jobs] == list(range(1, len(jobs) + 1)) and len(jobs) >= 626,         "Numbering changed or parser lost a row"
+    assert len(jobs) >= 626, "Original portrait series was truncated"
+    assert [j["number"] for j in jobs] == list(range(1, len(jobs)+1)), "Numbering changed or parser lost a row"
     assert len({j["path"] for j in jobs}) == len(jobs), "Duplicate destination"
     assert all(j["parent"] is None or j["parent"] < j["number"] for j in jobs), "Forward reference"
     write(PLAN, jobs)
@@ -200,10 +202,11 @@ def check():
                 problems.append(f"#{row['number']} invalid export")
         if "reference_sha256" in row and digest(ROOT / row["reference"]) != row["reference_sha256"]:
             problems.append(f"#{row['number']} reference changed")
-    write(DOCS/"source-check.json", dict(completed=len(state["portraits"]), total=626,
+    total = len(read(PLAN))
+    write(DOCS/"source-check.json", dict(completed=len(state["portraits"]), total=total,
                                         next_number=state["next_number"], retained_alternates=len(archived), problems=problems,
                                         runtime_imported=False, pixel_conversion_accepted=False))
-    print(f"{len(state['portraits'])}/626 exports; {len(problems)} file/dimension/fingerprint problems")
+    print(f"{len(state['portraits'])}/{total} exports; {len(problems)} file/dimension/fingerprint problems")
     for problem in problems:
         print(problem)
     return bool(problems)

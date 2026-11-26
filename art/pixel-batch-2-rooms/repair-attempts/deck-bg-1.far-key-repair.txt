@@ -1,0 +1,4 @@
+The magenta isn't flat: make every removed area exactly #FF00FF magenta RGB(255,0,255), one colour, with no gradient, glow, texture, colour variation or soft edge. Keep the edges of the sea hard. Change ONLY the magenta background. Keep every sea pixel, the narrow sea band at y486 through y547, and all wave shapes exactly where they are in the attached image. Exactly1536 by1024, no resizing or reframing.
+
+Reference: tools/source/pixel/rooms/gulls-wager/deck/bg-1.far.png
+Result retained for comparison, not selected. Dominant RGB(251,4,250); zero exact RGB(255,0,255) pixels. This is not a successful key-colour repair.

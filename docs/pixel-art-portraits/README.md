@@ -132,7 +132,7 @@ That changed the character's face, hair or clothes. Go back to the neutral portr
 
 <!-- Not generated: keep this section when the prompts are written again. -->
 
-The owner requested automatic progress through the full626-picture document, overriding its per-picture pauses. Pictures are generated one at a time, in order; expression edits reference their own neutral, and variants retain their stated parent. The current position and exact sources are in progress.json; jobs.json contains the resolved prompt/dependency list.
+The owner requested automatic progress through the portrait document, overriding its per-picture pauses. Batch 2 extends the series to 686 pictures and is preserved in docs/pixel-art-batch-2-for-ChatGPT.md. Pictures are generated one at a time, in order; expression edits reference their own neutral, and variants retain their stated parent. The current position and exact sources are in progress.json; jobs.json contains the resolved prompt/dependency list.
 
 New versions live under tools/source/pixel/portraits/<character>/front-facing/ so the previous128-grid pilot is preserved. Original exports remain under art/pixel-portraits/originals. Owner-approved nearest-neighbour sizing normalizes square exports to1024x1024 without cropping or palette/grid conversion. These are source drafts for subsequent conversion and registration review, not runtime imports.
 
@@ -149,3 +149,4 @@ Every front-facing source saved so far is converted and in the dialogue box (53 
 ### Added 2026-11-25
 
 Ten speakers the scripts use had no card: `trader`, `smith`, `shopkeeper` (the Chandler), `innkeeper`, `spice-seller`, `flower-seller`, `lookout`, `red-gull`, `royal-messenger` and `royal-guard`. They're #627 to #686, after the recruit, so pictures #1 to #626 keep their numbers. (`refugee-mother` is Hedda and uses her portrait.)
+Generation resumed on 2026-11-25 for batch 2. Pictures 1–686 are saved and checked, with full-set contact reviews through the Royal Guard. Portrait source generation is complete; next are the open-air room panels and layers in batch 2 story order. Hesper's neutral was corrected to her specified deep umber complexion before making her expressions; the first draft remains archived. The updated planner accepts appended characters and reminds expression edits to retain scars and avoid added cheek hatching. Odelle's six revised expressions retain her chin scar and remove added cheek hatching; Fennick's seven revised expressions remove blush hatching while retaining natural eye creases. Earlier attempts are retained in provenance. New exports remain source drafts awaiting pixel conversion and runtime registration in this checkout.

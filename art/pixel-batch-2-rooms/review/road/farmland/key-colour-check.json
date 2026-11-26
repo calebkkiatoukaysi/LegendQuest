@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-1.far.png",
+    "dominant_color": [
+      250,
+      6,
+      250
+    ],
+    "dominant_fraction": 0.10540835062662761,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-1.mid.png",
+    "dominant_color": [
+      160,
+      192,
+      60
+    ],
+    "dominant_fraction": 0.04326438903808594,
+    "exact_magenta_pixels": 1
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.1725921630859375,
+    "exact_magenta_pixels": 19
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-2.far.png",
+    "dominant_color": [
+      251,
+      8,
+      250
+    ],
+    "dominant_fraction": 0.10870552062988281,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-2.mid.png",
+    "dominant_color": [
+      250,
+      4,
+      249
+    ],
+    "dominant_fraction": 0.06108919779459635,
+    "exact_magenta_pixels": 4
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-2.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.24037551879882812,
+    "exact_magenta_pixels": 17
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-3.far.png",
+    "dominant_color": [
+      250,
+      5,
+      249
+    ],
+    "dominant_fraction": 0.17074712117513022,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-3.mid.png",
+    "dominant_color": [
+      253,
+      2,
+      251
+    ],
+    "dominant_fraction": 0.06946182250976562,
+    "exact_magenta_pixels": 10
+  },
+  {
+    "path": "tools/source/pixel/rooms/road/farmland/bg-3.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.22978083292643228,
+    "exact_magenta_pixels": 17
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-1.far.png",
+    "dominant_color": [
+      250,
+      5,
+      248
+    ],
+    "dominant_fraction": 0.12689844767252603,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-1.mid.png",
+    "dominant_color": [
+      252,
+      3,
+      247
+    ],
+    "dominant_fraction": 0.01604461669921875,
+    "exact_magenta_pixels": 6
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      6,
+      251
+    ],
+    "dominant_fraction": 0.1622136433919271,
+    "exact_magenta_pixels": 8
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-2.far.png",
+    "dominant_color": [
+      250,
+      5,
+      248
+    ],
+    "dominant_fraction": 0.09722900390625,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-2.mid.png",
+    "dominant_color": [
+      252,
+      2,
+      250
+    ],
+    "dominant_fraction": 0.016164143880208332,
+    "exact_magenta_pixels": 21
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-2.fg.png",
+    "dominant_color": [
+      252,
+      5,
+      251
+    ],
+    "dominant_fraction": 0.19663619995117188,
+    "exact_magenta_pixels": 65
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-3.far.png",
+    "dominant_color": [
+      249,
+      6,
+      249
+    ],
+    "dominant_fraction": 0.08113670349121094,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-3.mid.png",
+    "dominant_color": [
+      69,
+      62,
+      43
+    ],
+    "dominant_fraction": 0.0138702392578125,
+    "exact_magenta_pixels": 30
+  },
+  {
+    "path": "tools/source/pixel/rooms/mirewood/deep/bg-3.fg.png",
+    "dominant_color": [
+      251,
+      7,
+      250
+    ],
+    "dominant_fraction": 0.11920229593912761,
+    "exact_magenta_pixels": 0
+  }
+]

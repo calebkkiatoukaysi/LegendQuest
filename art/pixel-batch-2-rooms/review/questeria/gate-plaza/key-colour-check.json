@@ -1,0 +1,92 @@
+[
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.far.png",
+    "dominant_color": [
+      250,
+      9,
+      250
+    ],
+    "dominant_fraction": 0.07954915364583333,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.mid.png",
+    "dominant_color": [
+      252,
+      2,
+      251
+    ],
+    "dominant_fraction": 0.043162027994791664,
+    "exact_magenta_pixels": 13
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-1.fg.png",
+    "dominant_color": [
+      252,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.15475845336914062,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.far.png",
+    "dominant_color": [
+      251,
+      8,
+      251
+    ],
+    "dominant_fraction": 0.09879112243652344,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.mid.png",
+    "dominant_color": [
+      251,
+      2,
+      251
+    ],
+    "dominant_fraction": 0.04371007283528646,
+    "exact_magenta_pixels": 28
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-2.fg.png",
+    "dominant_color": [
+      252,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.1769415537516276,
+    "exact_magenta_pixels": 11
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.far.png",
+    "dominant_color": [
+      252,
+      4,
+      250
+    ],
+    "dominant_fraction": 0.12525304158528647,
+    "exact_magenta_pixels": 0
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.mid.png",
+    "dominant_color": [
+      251,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.03852971394856771,
+    "exact_magenta_pixels": 27
+  },
+  {
+    "path": "tools/source/pixel/rooms/questeria/gate-plaza/bg-3.fg.png",
+    "dominant_color": [
+      252,
+      3,
+      250
+    ],
+    "dominant_fraction": 0.19079971313476562,
+    "exact_magenta_pixels": 0
+  }
+]
