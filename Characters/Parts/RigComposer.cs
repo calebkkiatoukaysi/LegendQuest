@@ -78,7 +78,11 @@ public static class RigComposer
     /// <param name="Layers">Its pieces back to front.</param>
     /// <param name="Hand">Where the near hand is.</param>
     /// <param name="Joints">Each bone's joint, by the bone's name.</param>
-    public sealed record Result(Color[] Pixels, int Width, int Height, Vector2 Root, Rectangle Head, IReadOnlyList<Layer> Layers, Vector2 Hand, IReadOnlyDictionary<string, Vector2> Joints);
+    public sealed record Result(Color[] Pixels, int Width, int Height, Vector2 Root, Rectangle Head, IReadOnlyList<Layer> Layers, Vector2 Hand, IReadOnlyDictionary<string, Vector2> Joints)
+    {
+        /// <summary>The figure as pixel art, once it's been converted (PixelArt.Convert); null till then.</summary>
+        public PixelRig Pixel { get; set; }
+    }
 
     /// <summary>One piece of a figure on the whole picture's canvas: which it is (a bone, or the cape or what a hand holds), the bone it moves with, its pixels, and its bone's joint.</summary>
     /// <param name="Key">Which piece: a bone's name, Cape, Weapon or Offhand.</param>

@@ -73,18 +73,19 @@ public sealed class ImportedFigure
     /// <param name="onBase">For a figure from parts, the base it's built on (base-male, base-female), so it plays the clips worked out for its own proportions.</param>
     public ImportedFigure(GraphicsDevice device, ImportedArtInfo info, Color[] pixels, float fileHeight = ImportedArt.FileHeight, bool hasBody = true,
         IReadOnlyList<RigComposer.Layer> layers = null, Vector2? hand = null, IReadOnlyDictionary<string, Vector2> joints = null, float rigPx = 0f,
-        string onBase = null)
+        string onBase = null, PixelRig pixel = null)
     {
         _device = device;
         HasBody = hasBody;
         Base = onBase;
+        Pixel = pixel;
         int width = info.Size[0], height = info.Size[1];
 
-        float shrink = ImportedArt.RoomHeight / fileHeight;
-        int roomWidth = Math.Max(1, (int)MathF.Round(width * shrink)), roomHeight = Math.Max(1, (int)MathF.Round(height * shrink));
+        (Point room, Vector2 feet) = RoomFrame(width, height, fileHeight, new Vector2(info.Feet[0], info.Feet[1]));
+        int roomWidth = room.X, roomHeight = room.Y;
         Picture = new Texture2D(device, roomWidth, roomHeight);
         Picture.SetData(Scaled(pixels, width, height, roomWidth, roomHeight));
-        Feet = new Vector2(MathF.Round(info.Feet[0] * roomWidth / width), MathF.Round(info.Feet[1] * roomHeight / height));
+        Feet = feet;
         Size = new Vector2(roomWidth, Feet.Y) * Texel;
         float shadow = info.Creature ? Size.X * CreatureShadow : Size.Y * PersonShadow;
         Shadow = new Vector2(shadow, shadow * (info.Creature ? CreatureShadowDepth : PersonShadowDepth));
@@ -127,6 +128,25 @@ public sealed class ImportedFigure
         Rig = rig;
         if (hand is Vector2 h) Hand = h * new Vector2((float)roomWidth / width, (float)roomHeight / height);
     }
+
+    /// <summary>
+    /// How big a picture is once it's shrunk to the size it stands in a room, and where its feet are
+    /// on that, on a whole pixel. The pixel look's grid (PixelArt.Convert) is laid from the same feet,
+    /// so both looks stand on the same spot.
+    /// </summary>
+    /// <param name="width">The picture's width.</param>
+    /// <param name="height">The picture's height.</param>
+    /// <param name="fileHeight">How tall a standard adult is in the picture's pixels.</param>
+    /// <param name="feet">Where the feet are on the picture.</param>
+    internal static (Point Size, Vector2 Feet) RoomFrame(int width, int height, float fileHeight, Vector2 feet)
+    {
+        float shrink = ImportedArt.RoomHeight / fileHeight;
+        int roomWidth = Math.Max(1, (int)MathF.Round(width * shrink)), roomHeight = Math.Max(1, (int)MathF.Round(height * shrink));
+        return (new Point(roomWidth, roomHeight), new Vector2(MathF.Round(feet.X * roomWidth / width), MathF.Round(feet.Y * roomHeight / height)));
+    }
+
+    /// <summary>The figure as pixel art, for the pixel look (ArtSettings): its palette and its pieces on the art-pixel grid; null if it wasn't converted.</summary>
+    public PixelRig Pixel { get; }
 
     /// <summary>Where the near hand is on the picture, for a figure from parts (a cast glows there); null for a whole picture.</summary>
     public Vector2? Hand { get; }

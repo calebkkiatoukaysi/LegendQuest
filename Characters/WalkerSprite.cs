@@ -227,6 +227,19 @@ public class WalkerSprite
     /// <summary>How far through a breath an imported picture is, in seconds.</summary>
     private float _breath = _made++ * BreathSpacing % 1f * BreathSeconds;
 
+    /// <summary>The pixel look's sprite frame, and what it was last drawn of: the figure, the clip and the step into it, the beat, and the squash, swings and smear then.</summary>
+    private PixelPoser _poser;
+    private bool _posed;
+    private ImportedFigure _posedBody;
+    private Clip _posedClip;
+    private float _posedTime, _posedClock, _posedSkirt, _posedCape, _posedSmear;
+    private int _posedBeat;
+    private Vector2 _posedSquash = Vector2.One;
+    private BonePose[] _stepPose;
+    private float[] _stepTurns;
+    private Vector2[] _stepAt;
+    private Linear2[] _stepLinear;
+
     /// <summary>The sheet to cut frames from.</summary>
     public Texture2D Sheet { get; set; }
 
@@ -595,6 +608,7 @@ public class WalkerSprite
         Animate(own);
         Swing(own);
         _trail.Update(own);
+        _posedClock += seconds;
 
         if (!IsWalking)
         {
@@ -706,6 +720,9 @@ public class WalkerSprite
 
         // Between screen pixels, the art pixels would come out two and four screen pixels wide by turns.
         Vector2 at = Position + Displacement + new Vector2(posed.Offset.X * sign, posed.Offset.Y);
+        // In the pixel look everyone stands on a whole art pixel, whatever they're drawn on.
+        float art = ImportedFigure.Texel * ArtSettings.ArtScale;
+        if (ArtSettings.Pixel) pixel = MathF.Max(pixel, art);
         var feet = new Vector2(MathF.Round(at.X / pixel) * pixel, MathF.Round(at.Y / pixel) * pixel);
 
         // A picture lying down spreads its shadow back along the floor under it.
@@ -723,7 +740,14 @@ public class WalkerSprite
             (int)size.X,
             (int)size.Y);
         float opacity = Opacity * posed.Alpha;
-        spriteBatch.Draw(_shadow, shadow, null, ShadowColor * opacity, 0f, Vector2.Zero, SpriteEffects.None, MathF.Min(1f, layerDepth + 0.0001f));
+        if (ArtSettings.Pixel)
+        {
+            int wide = Math.Max(2, (int)MathF.Round(size.X / art)), deep = Math.Max(1, (int)MathF.Round(size.Y / art));
+            var corner = new Vector2(MathF.Round((feet.X + back) / art - wide / 2f) * art, MathF.Round(feet.Y / art - deep / 2f) * art);
+            spriteBatch.Draw(PixelShadow.Of(spriteBatch.GraphicsDevice, wide, deep), corner, null, PixelShadow.Colour * opacity, 0f, Vector2.Zero, art,
+                SpriteEffects.None, MathF.Min(1f, layerDepth + 0.0001f));
+        }
+        else spriteBatch.Draw(_shadow, shadow, null, ShadowColor * opacity, 0f, Vector2.Zero, SpriteEffects.None, MathF.Min(1f, layerDepth + 0.0001f));
 
         float flash = 1f - _flashClock / _flashLength;
         Color colour = Color.Lerp(tint, new Color(tint.ToVector4() * FlashColour.ToVector4()), flash * flash) * opacity;
@@ -812,63 +836,22 @@ public class WalkerSprite
         _placedSquash = global;
         Vector2 Place(Vector2 onPicture) => at + global.Apply(onPicture - body.Feet) * new Vector2(sign, 1f) * scale;
 
-        // Back to front, what the clip brings in front of the chest moved to just after the head.
-        _order.Clear();
-        IReadOnlyList<string> front = _player.Clip?.Front ?? Array.Empty<string>();
-        bool Behind(ImportedFigure.Piece p) => p.Key == RigComposer.Weapon || _player.Clip?.BehindHead(p.Bone, _player.Time) == true ||
-            (_player.Clip is Clip c && Contains(c.BeforeHead, p.Key));
-        int afterHead = -1;
-        // Running, the near foot is its side-on picture (the clip swaps it); else its own.
-        bool sideFoot = _player.Clip?.PartOf("foot_near", _player.Time) == "side" && HasPiece(body, RigComposer.SideFoot);
-        foreach (ImportedFigure.Piece piece in body.Rig)
+        if (ArtSettings.Pixel && body.Pixel is not null)
         {
-            if (piece.Key == (sideFoot ? "foot_near" : RigComposer.SideFoot)) continue;
-            if (Behind(piece) || (front.Count > 0 && Contains(front, piece.Bone))) continue;
-            _order.Add(piece);
-            if (piece.Key == "head") afterHead = _order.Count;
+            DrawPosed(spriteBatch, body, skeleton, at, colour, overlay, layerDepth);
+            DrawGlow(spriteBatch, body, skeleton, Place, layerDepth);
+            return;
         }
-        if (front.Count > 0)
-        {
-            int at0 = afterHead < 0 ? _order.Count : afterHead;
-            foreach (ImportedFigure.Piece piece in body.Rig)
-                if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && !Behind(piece) && Contains(front, piece.Bone)) _order.Insert(at0++, piece);
-        }
-        int beforeHead = _order.FindIndex(p => p.Key == "head");
-        if (beforeHead < 0) beforeHead = _order.Count;
-        foreach (ImportedFigure.Piece piece in body.Rig)
-            if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && Behind(piece)) _order.Insert(beforeHead++, piece);
 
+        Order(body, _player.Time);
         SpriteEffects flip = left ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         for (int k = 0; k < _order.Count; k++)
         {
             ImportedFigure.Piece piece = _order[k];
             int i = skeleton.IndexOf(piece.Bone);
             if (i < 0) continue;
-            Vector2 origin = piece.Pivot - piece.Offset;
-            Vector2 where = _at[i];
-            Linear2 linear = _linear[i];
-            bool plain = !squashed && !ScaledAbove(skeleton, i);
-            if (piece.Key == "skirt" && _skirtSwing != 0f)
-            {
-                linear *= Linear2.Turn(MathHelper.ToRadians(_skirtSwing));
-                plain = false;
-            }
-            else if (piece.Key == RigComposer.Cape && _capeSwing != 0f)
-            {
-                // The cape hangs from the top of its own picture, the middle across, and swings about there.
-                Vector2 hang = piece.Offset + new Vector2(piece.Picture.Width / 2f, 0f);
-                where = _at[i] + _linear[i].Apply(hang - piece.Pivot);
-                origin = hang - piece.Offset;
-                linear *= Linear2.Turn(MathHelper.ToRadians(_capeSwing));
-                plain = false;
-            }
-            else if (piece.Key == RigComposer.Weapon && _smear > 0f)
-            {
-                Vector2 axis = WeaponShape.Of(piece.Picture, origin).Axis;
-                float s = _smear;
-                linear *= new Linear2(1f + s * axis.X * axis.X, s * axis.X * axis.Y, s * axis.X * axis.Y, 1f + s * axis.Y * axis.Y);
-                plain = false;
-            }
+            bool plain = !Swung(piece, i, _at, _linear, out Vector2 where, out Vector2 about, out Linear2 linear) && !squashed && !ScaledAbove(skeleton, i);
+            Vector2 origin = about - piece.Offset;
 
             float turn;
             Vector2 stretch;
@@ -902,11 +885,149 @@ public class WalkerSprite
             }
         }
 
+        DrawGlow(spriteBatch, body, skeleton, Place, layerDepth);
+    }
+
+    /// <summary>
+    /// The pieces in the order they're drawn at a time into the clip, into _order: back to front, what
+    /// the clip brings in front of the chest moved to just after the head, and what it puts behind the
+    /// head moved to just before it.
+    /// </summary>
+    /// <param name="body">The figure.</param>
+    /// <param name="time">Seconds into the clip playing.</param>
+    private void Order(ImportedFigure body, float time)
+    {
+        _order.Clear();
+        IReadOnlyList<string> front = _player.Clip?.Front ?? Array.Empty<string>();
+        bool Behind(ImportedFigure.Piece p) => p.Key == RigComposer.Weapon || _player.Clip?.BehindHead(p.Bone, time) == true ||
+            (_player.Clip is Clip c && Contains(c.BeforeHead, p.Key));
+        int afterHead = -1;
+        // Running, the near foot is its side-on picture (the clip swaps it); else its own.
+        bool sideFoot = _player.Clip?.PartOf("foot_near", time) == "side" && HasPiece(body, RigComposer.SideFoot);
+        foreach (ImportedFigure.Piece piece in body.Rig)
+        {
+            if (piece.Key == (sideFoot ? "foot_near" : RigComposer.SideFoot)) continue;
+            if (Behind(piece) || (front.Count > 0 && Contains(front, piece.Bone))) continue;
+            _order.Add(piece);
+            if (piece.Key == "head") afterHead = _order.Count;
+        }
+        if (front.Count > 0)
+        {
+            int at0 = afterHead < 0 ? _order.Count : afterHead;
+            foreach (ImportedFigure.Piece piece in body.Rig)
+                if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && !Behind(piece) && Contains(front, piece.Bone)) _order.Insert(at0++, piece);
+        }
+        int beforeHead = _order.FindIndex(p => p.Key == "head");
+        if (beforeHead < 0) beforeHead = _order.Count;
+        foreach (ImportedFigure.Piece piece in body.Rig)
+            if (piece.Key != (sideFoot ? "foot_near" : RigComposer.SideFoot) && Behind(piece)) _order.Insert(beforeHead++, piece);
+    }
+
+    /// <summary>
+    /// Where a piece is drawn in a pose and how it's turned and stretched: its bone's, with the skirt
+    /// and the cape swung by their springs (the cape about the top of its own picture) and the weapon
+    /// smeared along its blade.
+    /// </summary>
+    /// <param name="piece">The piece.</param>
+    /// <param name="bone">Its bone's place in the skeleton.</param>
+    /// <param name="at">Where each bone's joint is in the pose, on the picture.</param>
+    /// <param name="whole">Each bone's turn and stretch in the pose.</param>
+    /// <param name="where">Where the point it turns about is drawn, on the picture.</param>
+    /// <param name="about">The point it turns about, on the picture at rest.</param>
+    /// <param name="linear">How it's turned and stretched.</param>
+    /// <returns>Whether a spring or the smear changed it from its bone's own.</returns>
+    private bool Swung(ImportedFigure.Piece piece, int bone, Vector2[] at, Linear2[] whole, out Vector2 where, out Vector2 about, out Linear2 linear)
+    {
+        where = at[bone];
+        about = piece.Pivot;
+        linear = whole[bone];
+        if (piece.Key == "skirt" && _skirtSwing != 0f)
+        {
+            linear *= Linear2.Turn(MathHelper.ToRadians(_skirtSwing));
+            return true;
+        }
+        if (piece.Key == RigComposer.Cape && _capeSwing != 0f)
+        {
+            // The cape hangs from the top of its own picture, the middle across, and swings about there.
+            about = piece.Offset + new Vector2(piece.Picture.Width / 2f, 0f);
+            where = at[bone] + whole[bone].Apply(about - piece.Pivot);
+            linear *= Linear2.Turn(MathHelper.ToRadians(_capeSwing));
+            return true;
+        }
+        if (piece.Key == RigComposer.Weapon && _smear > 0f)
+        {
+            Vector2 axis = WeaponShape.Of(piece.Picture, piece.Pivot - piece.Offset).Axis;
+            float s = _smear;
+            linear *= new Linear2(1f + s * axis.X * axis.X, s * axis.X * axis.Y, s * axis.X * axis.Y, 1f + s * axis.Y * axis.Y);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// The pixel look's figure: one sprite frame of the pose (PixelPoser), drawn a texel to an art
+    /// pixel. The pose is the clip's at the last twelfth of a second it reached, so it steps like a
+    /// hand-drawn sprite's frames while where the figure stands moves every frame; the frame is drawn
+    /// again only when that step, the clip, or (on the same beat) a spring, the smear or the squash
+    /// changes. What the fight reads (the clip's time, its events, where the bones are) is untouched.
+    /// </summary>
+    private void DrawPosed(SpriteBatch spriteBatch, ImportedFigure body, Skeleton skeleton, Vector2 at, Color colour, Color overlay, float layerDepth)
+    {
+        Clip clip = _player.Clip;
+        float time = clip is null ? 0f : _player.Finished ? _player.Time : MathF.Floor(_player.Time * ArtSettings.PoseRate + 1e-3f) / ArtSettings.PoseRate;
+        int beat = (int)(_posedClock * ArtSettings.PoseRate);
+        Vector2 squash = SquashNow;
+        bool moved = squash != _posedSquash || MathF.Abs(_skirtSwing - _posedSkirt) > 0.5f || MathF.Abs(_capeSwing - _posedCape) > 0.5f || _smear != _posedSmear;
+        if (_poser is null || _poser.Texture is null || body != _posedBody || clip != _posedClip || time != _posedTime || moved && beat != _posedBeat)
+        {
+            _poser ??= new PixelPoser();
+            _posedBody = body;
+            _posedClip = clip;
+            _posedTime = time;
+            _posedBeat = beat;
+            _posedSquash = squash;
+            _posedSkirt = _skirtSwing;
+            _posedCape = _capeSwing;
+            _posedSmear = _smear;
+
+            _stepPose ??= new BonePose[skeleton.Count];
+            _stepTurns ??= new float[skeleton.Count];
+            _stepAt ??= new Vector2[skeleton.Count];
+            _stepLinear ??= new Linear2[skeleton.Count];
+            _player.PoseAt(time, _stepPose);
+            skeleton.Solve(_stepPose, _joints, body.RigPx, _stepTurns, _stepAt, _stepLinear);
+            Order(body, time);
+
+            Linear2 global = Linear2.Stretch(squash.X, squash.Y);
+            _poser.Begin(body.Pixel);
+            foreach (ImportedFigure.Piece piece in _order)
+            {
+                int i = skeleton.IndexOf(piece.Bone);
+                if (i < 0) continue;
+                Swung(piece, i, _stepAt, _stepLinear, out Vector2 where, out Vector2 about, out Linear2 linear);
+                _poser.Add(piece.Key, global * linear, (about - body.Feet) / ArtSettings.ArtScale, global.Apply(where - body.Feet) / ArtSettings.ArtScale);
+            }
+            _posed = _poser.End(spriteBatch.GraphicsDevice);
+        }
+        if (!_posed) return;
+
+        bool left = Facing == Direction.Left;
+        Vector2 origin = _poser.Feet;
+        if (left) origin.X = _poser.Source.Width - origin.X;
+        SpriteEffects flip = left ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        var scale = new Vector2(ImportedFigure.Texel * ArtSettings.ArtScale);
+        spriteBatch.Draw(_poser.Texture, at, _poser.Source, colour, 0f, origin, scale, flip, layerDepth);
+        if (overlay.A > 0) spriteBatch.Draw(_poser.Texture, at, _poser.Flash, overlay, 0f, origin, scale, flip, MathF.Max(0f, layerDepth - PieceStep / 2f));
+    }
+
+    /// <summary>The cast glow in the near hand, when there is one.</summary>
+    private void DrawGlow(SpriteBatch spriteBatch, ImportedFigure body, Skeleton skeleton, Func<Vector2, Vector2> place, float layerDepth)
+    {
         if (_glow <= 0.01f) return;
         int hand = skeleton.IndexOf("hand_near");
         if (hand < 0) return;
         float size = body.Size.Y * CastGlowSize * (0.85f + 0.15f * MathF.Sin(_breath * 9f));
-        spriteBatch.Draw(_shadow, Place(_at[hand]), null, CastGlow * (_glow * 0.75f * Opacity), 0f, new Vector2(_shadow.Width, _shadow.Height) / 2f,
+        spriteBatch.Draw(_shadow, place(_at[hand]), null, CastGlow * (_glow * 0.75f * Opacity), 0f, new Vector2(_shadow.Width, _shadow.Height) / 2f,
             size / _shadow.Width, SpriteEffects.None, MathF.Max(0f, layerDepth - PieceStep));
     }
 

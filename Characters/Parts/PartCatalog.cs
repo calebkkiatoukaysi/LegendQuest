@@ -522,6 +522,24 @@ public static partial class PartCatalog
         return Keep(outfit, Warming(key) is { } task ? task.Result : Composed(outfit));
     }
 
+    /// <summary>
+    /// A figure put together, converted to pixel art for the pixel look (PixelArt): done with the
+    /// putting together, off the main thread when that is, and kept on the result for Keep.
+    /// </summary>
+    private static (RigComposer.Result Result, bool HasBody, float RigPx, string Base)? WithPixel((RigComposer.Result Result, bool HasBody, float RigPx, string Base)? made)
+    {
+        if (made is { Result: RigComposer.Result result } && result.Pixel is null) result.Pixel = Pixelled(result);
+        return made;
+    }
+
+    /// <summary>A figure's pieces as pixel art, at the size it stands in a room.</summary>
+    private static PixelRig Pixelled(RigComposer.Result result)
+    {
+        var layers = new List<(string Key, Color[] Pixels)>(result.Layers.Count);
+        foreach (RigComposer.Layer layer in result.Layers) layers.Add((layer.Key, layer.Pixels));
+        return PixelArt.Convert(layers, result.Pixels, result.Width, result.Height, _file.StandardHeight, result.Root, result.Head);
+    }
+
     /// <summary>A figure made from an outfit's parts put together (or null for none), kept by its Key for the rooms.</summary>
     private static ImportedFigure Keep(Outfit outfit, (RigComposer.Result Result, bool HasBody, float RigPx, string Base)? made)
     {
@@ -536,7 +554,8 @@ public static partial class PartCatalog
         if (info.Problem() is string problem)
             throw new InvalidOperationException($"Putting {outfit.Name} together with {outfit.Face} made a picture that {problem}.");
 
-        var built = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight, hasBody, result.Layers, result.Hand, result.Joints, rigPx, onBase);
+        var built = new ImportedFigure(_device, info, result.Pixels, _file.StandardHeight, hasBody, result.Layers, result.Hand, result.Joints, rigPx, onBase,
+            result.Pixel ?? Pixelled(result));
         Built[key] = built;
         return built;
     }
