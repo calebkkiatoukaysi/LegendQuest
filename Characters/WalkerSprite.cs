@@ -229,7 +229,8 @@ public class WalkerSprite
 
     /// <summary>The pixel look's sprite frame, and what it was last drawn of: the figure, the clip and the step into it, the beat, and the squash, swings and smear then.</summary>
     private PixelPoser _poser;
-    private bool _posed;
+    private PixelFrame _sprite;
+    private PixelFrames.Key _frameKey;
     private ImportedFigure _posedBody;
     private Clip _posedClip;
     private float _posedTime, _posedClock, _posedSkirt, _posedCape, _posedSmear;
@@ -967,57 +968,94 @@ public class WalkerSprite
     /// <summary>
     /// The pixel look's figure: one sprite frame of the pose (PixelPoser), drawn a texel to an art
     /// pixel. The pose is the clip's at the last twelfth of a second it reached, so it steps like a
-    /// hand-drawn sprite's frames while where the figure stands moves every frame; the frame is drawn
-    /// again only when that step, the clip, or (on the same beat) a spring, the smear or the squash
-    /// changes. What the fight reads (the clip's time, its events, where the bones are) is untouched.
+    /// hand-drawn sprite's frames while where the figure stands moves every frame. A step of a clip
+    /// with nothing passing in it is a frame kept for everyone with the figure (PixelFrames); while
+    /// the pose is blending from the last clip, squashed by a hit or smearing a blade it's drawn on
+    /// the walker's own texture, again only when the step or (on a beat) one of those changes. What
+    /// the fight reads (the clip's time, its events, where the bones are) is untouched.
     /// </summary>
     private void DrawPosed(SpriteBatch spriteBatch, ImportedFigure body, Skeleton skeleton, Vector2 at, Color colour, Color overlay, float layerDepth)
     {
         Clip clip = _player.Clip;
-        float time = clip is null ? 0f : _player.Finished ? _player.Time : MathF.Floor(_player.Time * ArtSettings.PoseRate + 1e-3f) / ArtSettings.PoseRate;
+        bool held = clip is null || _player.Finished;
+        int step = clip is null ? 0 : held ? PixelFrames.Held : (int)MathF.Floor(_player.Time * ArtSettings.PoseRate + 1e-3f);
+        float time = clip is null ? 0f : held ? _player.Time : step / ArtSettings.PoseRate;
         int beat = (int)(_posedClock * ArtSettings.PoseRate);
         Vector2 squash = SquashNow;
-        bool moved = squash != _posedSquash || MathF.Abs(_skirtSwing - _posedSkirt) > 0.5f || MathF.Abs(_capeSwing - _posedCape) > 0.5f || _smear != _posedSmear;
-        if (_poser is null || _poser.Texture is null || body != _posedBody || clip != _posedClip || time != _posedTime || moved && beat != _posedBeat)
+
+        if (squash == Vector2.One && _smear == 0f && _player.SettledAt(time))
         {
-            _poser ??= new PixelPoser();
-            _posedBody = body;
-            _posedClip = clip;
-            _posedTime = time;
-            _posedBeat = beat;
-            _posedSquash = squash;
-            _posedSkirt = _skirtSwing;
-            _posedCape = _capeSwing;
-            _posedSmear = _smear;
-
-            _stepPose ??= new BonePose[skeleton.Count];
-            _stepTurns ??= new float[skeleton.Count];
-            _stepAt ??= new Vector2[skeleton.Count];
-            _stepLinear ??= new Linear2[skeleton.Count];
-            _player.PoseAt(time, _stepPose);
-            skeleton.Solve(_stepPose, _joints, body.RigPx, _stepTurns, _stepAt, _stepLinear);
-            Order(body, time);
-
-            Linear2 global = Linear2.Stretch(squash.X, squash.Y);
-            _poser.Begin(body.Pixel);
-            foreach (ImportedFigure.Piece piece in _order)
+            // Nothing passing in the pose: the clip's own frame, kept for everyone with this figure.
+            var key = new PixelFrames.Key(body.Pixel, clip, step, (int)MathF.Round(_skirtSwing / PixelFrames.SwingStep), (int)MathF.Round(_capeSwing / PixelFrames.SwingStep));
+            if (_sprite is null || key != _frameKey)
             {
-                int i = skeleton.IndexOf(piece.Bone);
-                if (i < 0) continue;
-                Swung(piece, i, _stepAt, _stepLinear, out Vector2 where, out Vector2 about, out Linear2 linear);
-                _poser.Add(piece.Key, global * linear, (about - body.Feet) / ArtSettings.ArtScale, global.Apply(where - body.Feet) / ArtSettings.ArtScale);
+                if (!PixelFrames.TryGet(key, out PixelFrame kept))
+                {
+                    float skirt = _skirtSwing, cape = _capeSwing;
+                    _skirtSwing = key.Skirt * PixelFrames.SwingStep;
+                    _capeSwing = key.Cape * PixelFrames.SwingStep;
+                    LayPose(body, skeleton, time, squash);
+                    _skirtSwing = skirt;
+                    _capeSwing = cape;
+                    kept = _poser.Bake(spriteBatch.GraphicsDevice);
+                    if (kept is not null) PixelFrames.Add(key, kept);
+                }
+                _sprite = kept;
+                _frameKey = key;
             }
-            _posed = _poser.End(spriteBatch.GraphicsDevice);
+            _posedBody = null;
         }
-        if (!_posed) return;
+        else
+        {
+            bool moved = squash != _posedSquash || MathF.Abs(_skirtSwing - _posedSkirt) > 0.5f || MathF.Abs(_capeSwing - _posedCape) > 0.5f || _smear != _posedSmear;
+            if (_sprite is null || body != _posedBody || clip != _posedClip || time != _posedTime || moved && beat != _posedBeat)
+            {
+                _posedBody = body;
+                _posedClip = clip;
+                _posedTime = time;
+                _posedBeat = beat;
+                _posedSquash = squash;
+                _posedSkirt = _skirtSwing;
+                _posedCape = _capeSwing;
+                _posedSmear = _smear;
+                LayPose(body, skeleton, time, squash);
+                _sprite = _poser.End(spriteBatch.GraphicsDevice);
+            }
+            _frameKey = default;
+        }
+        if (_sprite is null) return;
+        _sprite.Used = PixelFrames.Now;
 
         bool left = Facing == Direction.Left;
-        Vector2 origin = _poser.Feet;
-        if (left) origin.X = _poser.Source.Width - origin.X;
+        Vector2 origin = _sprite.Feet;
+        if (left) origin.X = _sprite.Source.Width - origin.X;
         SpriteEffects flip = left ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         var scale = new Vector2(ImportedFigure.Texel * ArtSettings.ArtScale);
-        spriteBatch.Draw(_poser.Texture, at, _poser.Source, colour, 0f, origin, scale, flip, layerDepth);
-        if (overlay.A > 0) spriteBatch.Draw(_poser.Texture, at, _poser.Flash, overlay, 0f, origin, scale, flip, MathF.Max(0f, layerDepth - PieceStep / 2f));
+        spriteBatch.Draw(_sprite.Texture, at, _sprite.Source, colour, 0f, origin, scale, flip, layerDepth);
+        if (overlay.A > 0) spriteBatch.Draw(_sprite.Texture, at, _sprite.Flash, overlay, 0f, origin, scale, flip, MathF.Max(0f, layerDepth - PieceStep / 2f));
+    }
+
+    /// <summary>Lays the figure's pieces on the poser as the clip has them at a time, squashed, ready to be finished as a frame.</summary>
+    private void LayPose(ImportedFigure body, Skeleton skeleton, float time, Vector2 squash)
+    {
+        _poser ??= new PixelPoser();
+        _stepPose ??= new BonePose[skeleton.Count];
+        _stepTurns ??= new float[skeleton.Count];
+        _stepAt ??= new Vector2[skeleton.Count];
+        _stepLinear ??= new Linear2[skeleton.Count];
+        _player.PoseStepped(time, _stepPose);
+        skeleton.Solve(_stepPose, _joints, body.RigPx, _stepTurns, _stepAt, _stepLinear);
+        Order(body, time);
+
+        Linear2 global = Linear2.Stretch(squash.X, squash.Y);
+        _poser.Begin(body.Pixel);
+        foreach (ImportedFigure.Piece piece in _order)
+        {
+            int i = skeleton.IndexOf(piece.Bone);
+            if (i < 0) continue;
+            Swung(piece, i, _stepAt, _stepLinear, out Vector2 where, out Vector2 about, out Linear2 linear);
+            _poser.Add(piece.Key, global * linear, (about - body.Feet) / ArtSettings.ArtScale, global.Apply(where - body.Feet) / ArtSettings.ArtScale);
+        }
     }
 
     /// <summary>The cast glow in the near hand, when there is one.</summary>

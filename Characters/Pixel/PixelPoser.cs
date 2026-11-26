@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,9 +17,10 @@ namespace LegendQuest.Characters;
 /// A walker keeps one of these and asks for a new frame only when its pose steps (twelve times a
 /// second), so a frame is a real sprite frame: it's drawn a texel to an art pixel, never turned or
 /// stretched on the screen, and so can't shimmer or show a pixel that isn't square. The pieces are
-/// laid back to front (Add) and the frame is finished once (End): because the outline goes round
-/// the posed figure rather than each piece, no line crosses an elbow or a knee, and the pieces'
-/// overlap at a joint closes it.
+/// laid back to front (Add) and the frame is finished once: on the poser's own texture (End), or
+/// on one to keep (Bake), since a clip's steps come round again (PixelFrames). Because the outline
+/// goes round the posed figure rather than each piece, no line crosses an elbow or a knee, and the
+/// pieces' overlap at a joint closes it.
 /// </para>
 /// <para>
 /// The frame's texture is the picture on the left and, beside it, the figure's inside in white for
@@ -30,8 +32,8 @@ public sealed class PixelPoser : IDisposable
     /// <summary>The clear art pixels kept round a frame, for the outline.</summary>
     private const int Margin = 1;
 
-    /// <summary>How many of the nine sub-cells under an art pixel have to be solid for it to be.</summary>
-    private const int Solid = 4;
+    /// <summary>How many of the nine sub-cells under an art pixel have to be solid for it to be: fewer if the one under its middle is, so a bowstave or a blade's tip a pixel wide isn't broken into dashes when it turns.</summary>
+    private const int Solid = 5, SolidMiddle = 3;
 
     /// <summary>How many sub-cells a feature of the face counts as when an art pixel picks its colour, so an eye half a pixel wide is still drawn.</summary>
     private const int FeatureWeight = 2;
@@ -39,20 +41,27 @@ public sealed class PixelPoser : IDisposable
     /// <summary>The bit kept with a pixel's limb that says it's a feature of the face, which tidying leaves alone; and the bits that are the limb.</summary>
     private const int Kept = 64, Limb = 63;
 
+    /// <summary>How far a piece can have moved, or its far end swung, since the frame was drawn without it being drawn again, in art pixels.</summary>
+    private const float Still = 0.12f;
+
+    /// <summary>Added to a place on a piece before it's cut to a whole number and taken off after, so the cut rounds down either side of zero; a multiple of PixelRig.Sub.</summary>
+    private const int Lift = 3072;
+
     /// <summary>The widest and tallest a frame can be, in art pixels: far more than anyone holding the longest spear overhead.</summary>
     private const int Most = 512;
 
     private readonly struct Draw
     {
         public readonly PixelPiece Piece;
-        public readonly Linear2 Inverse;
+        public readonly Linear2 Linear, Inverse;
         public readonly Vector2 Rest, Now;
         public readonly int Limb;
         public readonly Rectangle Box;
 
-        public Draw(PixelPiece piece, Linear2 inverse, Vector2 rest, Vector2 now, int limb, Rectangle box)
+        public Draw(PixelPiece piece, Linear2 linear, Linear2 inverse, Vector2 rest, Vector2 now, int limb, Rectangle box)
         {
             Piece = piece;
+            Linear = linear;
             Inverse = inverse;
             Rest = rest;
             Now = now;
@@ -61,24 +70,22 @@ public sealed class PixelPoser : IDisposable
         }
     }
 
-    private readonly List<Draw> _draws = new();
+    private readonly List<Draw> _draws = new(), _drawn = new();
+    private PixelRig _drawnRig;
     private PixelRig _rig;
     private byte[] _index = Array.Empty<byte>(), _owner = Array.Empty<byte>(), _limb = Array.Empty<byte>();
     private Color[] _upload = Array.Empty<Color>();
     private readonly int[] _counts = new int[256];
+    private readonly byte[] _taps = new byte[9];
+    private readonly float[] _stepX = new float[9], _stepY = new float[9];
     private Texture2D _texture;
 
-    /// <summary>The frame's texture: the picture in Source and its white inside in Flash. Null before the first End.</summary>
-    public Texture2D Texture => _texture;
+    /// <summary>The frame last finished on the poser's own texture, and whether it's still the last one drawn into the buffer.</summary>
+    private PixelFrame _own;
+    private bool _ownIsLast;
 
-    /// <summary>Where the picture is on the texture.</summary>
-    public Rectangle Source { get; private set; }
-
-    /// <summary>Where the figure's inside, in white, is on the texture.</summary>
-    public Rectangle Flash { get; private set; }
-
-    /// <summary>Where the feet are on the picture, in art pixels from Source's top left.</summary>
-    public Vector2 Feet { get; private set; }
+    /// <summary>The frame last finished to be kept.</summary>
+    private PixelFrame _baked;
 
     /// <summary>Starts a frame of a figure.</summary>
     /// <param name="rig">The figure.</param>
@@ -119,20 +126,58 @@ public sealed class PixelPoser : IDisposable
         }
         if (!(x1 - x0 < Most) || !(y1 - y0 < Most)) return;
         var box = new Rectangle((int)MathF.Floor(x0) - 1, (int)MathF.Floor(y0) - 1, (int)MathF.Ceiling(x1 - MathF.Floor(x0)) + 2, (int)MathF.Ceiling(y1 - MathF.Floor(y0)) + 2);
-        _draws.Add(new Draw(piece, inverse, rest, now, LimbOf(key), box));
+        _draws.Add(new Draw(piece, linear, inverse, rest, now, LimbOf(key), box));
     }
 
-    /// <summary>Finishes the frame: draws the pieces, the lines between limbs and the outline, and puts it on the texture.</summary>
+    /// <summary>Finishes the frame on the poser's own texture: draws the pieces, the lines between limbs and the outline, unless nothing has moved a pixel's worth since it last did.</summary>
     /// <param name="device">The device the texture is made on.</param>
-    /// <returns>Whether there's anything to draw.</returns>
-    public bool End(GraphicsDevice device)
+    /// <returns>The frame, or null if there's nothing to draw.</returns>
+    public PixelFrame End(GraphicsDevice device)
     {
-        if (_rig is null || _draws.Count == 0) return false;
-        Rectangle all = _draws[0].Box;
+        if (_rig is null || _draws.Count == 0) return null;
+        if (_own is not null && _ownIsLast && Unmoved()) return _own;
+        if (!Render(out int w, out int h, out Rectangle all)) return null;
+        if (_texture is null || _texture.Width < w * 2 || _texture.Height < h)
+        {
+            int tw = Math.Max(_texture?.Width ?? 128, Grown(w * 2)), th = Math.Max(_texture?.Height ?? 128, Grown(h));
+            _texture?.Dispose();
+            _texture = new Texture2D(device, tw, th);
+        }
+        _texture.SetData(0, new Rectangle(0, 0, w * 2, h), _upload, 0, w * 2 * h);
+        _own = new PixelFrame(_texture, new Rectangle(0, 0, w, h), new Rectangle(w, 0, w, h), new Vector2(-all.X, -all.Y));
+        _ownIsLast = true;
+        _baked = null;
+        return _own;
+    }
+
+    /// <summary>Finishes the frame on a texture of its own, to be kept (PixelFrames).</summary>
+    /// <param name="device">The device the texture is made on.</param>
+    /// <returns>The frame, or null if there's nothing to draw.</returns>
+    public PixelFrame Bake(GraphicsDevice device)
+    {
+        if (_rig is null || _draws.Count == 0) return null;
+        // Most steps of a breath are the picture the step before was: the same frame, kept twice.
+        if (_baked is not null && !_ownIsLast && !_baked.Texture.IsDisposed && Unmoved()) return _baked;
+        if (!Render(out int w, out int h, out Rectangle all)) return null;
+        _ownIsLast = false;
+        var texture = new Texture2D(device, w * 2, h);
+        texture.SetData(0, new Rectangle(0, 0, w * 2, h), _upload, 0, w * 2 * h);
+        return _baked = new PixelFrame(texture, new Rectangle(0, 0, w, h), new Rectangle(w, 0, w, h), new Vector2(-all.X, -all.Y));
+    }
+
+    /// <summary>Draws the frame into the upload buffer: the pieces front to back, the tidying, the lines between limbs, the outline and the white inside.</summary>
+    private bool Render(out int w, out int h, out Rectangle all)
+    {
+        _drawnRig = _rig;
+        _drawn.Clear();
+        _drawn.AddRange(_draws);
+        all = _draws[0].Box;
         for (int i = 1; i < _draws.Count; i++) all = Rectangle.Union(all, _draws[i].Box);
         all.Inflate(Margin, Margin);
         if (all.Width > Most || all.Height > Most) all = Rectangle.Intersect(all, new Rectangle(-Most / 2, -Most + 32, Most, Most));
-        int w = all.Width, h = all.Height;
+        w = all.Width;
+        h = all.Height;
+        if (w <= 0 || h <= 0) return false;
         if (_index.Length < w * h)
         {
             _index = new byte[w * h];
@@ -142,22 +187,34 @@ public sealed class PixelPoser : IDisposable
         Array.Clear(_index, 0, w * h);
         Array.Clear(_owner, 0, w * h);
 
-        for (int d = 0; d < _draws.Count; d++) Lay(_draws[d], d + 1, all);
+        // Front to back, so what a nearer piece covers isn't worked out for the ones behind it.
+        for (int d = _draws.Count - 1; d >= 0; d--) Lay(_draws[d], d + 1, all);
         Tidy(w, h);
 
         if (_upload.Length < w * 2 * h) _upload = new Color[w * 2 * h];
         Paint(w, h);
+        return true;
+    }
 
-        if (_texture is null || _texture.Width < w * 2 || _texture.Height < h)
+    /// <summary>
+    /// Whether the frame asked for is the one already drawn, to within Still of an art pixel: the same
+    /// pieces in the same order, none of them moved or turned enough to change a pixel's worth. Most
+    /// of a breath is, so someone standing is drawn again only a few times a second; the difference
+    /// is always taken from the frame that was drawn, so a slow drift still gets there.
+    /// </summary>
+    private bool Unmoved()
+    {
+        if (_drawnRig != _rig || _drawn.Count != _draws.Count) return false;
+        for (int i = 0; i < _draws.Count; i++)
         {
-            int tw = Math.Max(_texture?.Width ?? 128, Grown(w * 2)), th = Math.Max(_texture?.Height ?? 128, Grown(h));
-            _texture?.Dispose();
-            _texture = new Texture2D(device, tw, th);
+            Draw a = _draws[i], b = _drawn[i];
+            if (a.Piece != b.Piece || a.Rest != b.Rest) return false;
+            if (MathF.Abs(a.Now.X - b.Now.X) > Still || MathF.Abs(a.Now.Y - b.Now.Y) > Still) return false;
+            float reach = Math.Max(a.Piece.Width, a.Piece.Height) / (float)PixelRig.Sub;
+            float turned = MathF.Max(MathF.Max(MathF.Abs(a.Linear.M11 - b.Linear.M11), MathF.Abs(a.Linear.M12 - b.Linear.M12)),
+                MathF.Max(MathF.Abs(a.Linear.M21 - b.Linear.M21), MathF.Abs(a.Linear.M22 - b.Linear.M22)));
+            if (turned * reach > Still) return false;
         }
-        _texture.SetData(0, new Rectangle(0, 0, w * 2, h), _upload, 0, w * 2 * h);
-        Source = new Rectangle(0, 0, w, h);
-        Flash = new Rectangle(w, 0, w, h);
-        Feet = new Vector2(-all.X, -all.Y);
         return true;
     }
 
@@ -166,6 +223,7 @@ public sealed class PixelPoser : IDisposable
     {
         _texture?.Dispose();
         _texture = null;
+        _own = null;
     }
 
     /// <summary>A size rounded up to the next 64, so a texture isn't made again for every pixel a frame grows.</summary>
@@ -190,6 +248,7 @@ public sealed class PixelPoser : IDisposable
     };
 
     /// <summary>Draws one piece into the frame: each art pixel in its box takes the colour most of the nine sub-cells under it have.</summary>
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     private void Lay(in Draw draw, int order, Rectangle all)
     {
         PixelPiece piece = draw.Piece;
@@ -197,27 +256,54 @@ public sealed class PixelPoser : IDisposable
         Linear2 inv = draw.Inverse;
         byte[] cells = piece.Cells;
         int pw = piece.Width, ph = piece.Height, w = all.Width;
-        Span<byte> taps = stackalloc byte[9];
+        bool[] near = piece.Near, flat = piece.Flat;
+        int nw = piece.NearWidth, nh = near.Length / nw;
+        byte[] taps = _taps;
+        float[] stepX = _stepX, stepY = _stepY;
+        int[] counts = _counts;
+        byte[] index = _index, owner = _owner, limbs = _limb;
+        byte mine = (byte)Math.Min(255, order), limb = (byte)draw.Limb;
+        for (int k = 0; k < 9; k++)
+        {
+            int dx = k % 3 - 1, dy = k / 3 - 1;
+            // Kept above zero, so a cast rounds down.
+            stepX[k] = inv.M11 * dx + inv.M12 * dy + Lift;
+            stepY[k] = inv.M21 * dx + inv.M22 * dy + Lift;
+        }
         for (int y = box.Top; y < box.Bottom; y++)
         {
-            for (int x = box.Left; x < box.Right; x++)
+            // The art pixel's middle, taken back to where it is on the piece at rest, in sub-cells.
+            float oy = y + 0.5f - draw.Now.Y, ox = box.Left + 0.5f - draw.Now.X;
+            float ax = (draw.Rest.X + inv.M11 * ox + inv.M12 * oy) * PixelRig.Sub - piece.Left;
+            float ay = (draw.Rest.Y + inv.M21 * ox + inv.M22 * oy) * PixelRig.Sub - piece.Top;
+            float alongX = inv.M11 * PixelRig.Sub, alongY = inv.M21 * PixelRig.Sub;
+            for (int x = box.Left; x < box.Right; x++, ax += alongX, ay += alongY)
             {
-                // The art pixel's middle, taken back to where it is on the piece at rest, in sub-cells.
-                Vector2 o = new Vector2(x + 0.5f, y + 0.5f) - draw.Now;
-                float ax = (draw.Rest.X + inv.M11 * o.X + inv.M12 * o.Y) * PixelRig.Sub - piece.Left;
-                float ay = (draw.Rest.Y + inv.M21 * o.X + inv.M22 * o.Y) * PixelRig.Sub - piece.Top;
-                if (ax < -2f || ay < -2f || ax > pw + 2f || ay > ph + 2f) continue;
+                // Nothing of the piece anywhere near: most of a turned piece's box.
+                int bx = (int)(ax + Lift) / PixelRig.Sub - Lift / PixelRig.Sub + 1, by = (int)(ay + Lift) / PixelRig.Sub - Lift / PixelRig.Sub + 1;
+                if (bx < 0 || by < 0 || bx >= nw || by >= nh || !near[by * nw + bx]) continue;
+
+                int at = (y - all.Y) * w + x - all.X;
+                if (index[at] != 0) continue;
+                // Well inside a flat patch of colour, every sub-cell under the pixel is that colour.
+                int mx = (int)(ax + Lift) - Lift, my = (int)(ay + Lift) - Lift;
+                if (mx >= 0 && my >= 0 && mx < pw && my < ph && flat[my * pw + mx])
+                {
+                    index[at] = cells[my * pw + mx];
+                    owner[at] = mine;
+                    limbs[at] = limb;
+                    continue;
+                }
 
                 int solid = 0;
                 for (int k = 0; k < 9; k++)
                 {
-                    int dx = k % 3 - 1, dy = k / 3 - 1;
-                    int sx = (int)MathF.Floor(ax + inv.M11 * dx + inv.M12 * dy), sy = (int)MathF.Floor(ay + inv.M21 * dx + inv.M22 * dy);
+                    int sx = (int)(ax + stepX[k]) - Lift, sy = (int)(ay + stepY[k]) - Lift;
                     byte tap = sx >= 0 && sy >= 0 && sx < pw && sy < ph ? cells[sy * pw + sx] : (byte)0;
                     taps[k] = tap;
                     if (tap != 0) solid++;
                 }
-                if (solid < Solid) continue;
+                if (solid < (taps[4] != 0 ? SolidMiddle : Solid)) continue;
 
                 // The commonest colour, a feature of the face counting three times; the middle sub-cell's wins a tie.
                 int best = 0, most = 0, middle = taps[4] & PixelRig.Number;
@@ -225,7 +311,7 @@ public sealed class PixelPoser : IDisposable
                 {
                     int tap = taps[k] & PixelRig.Number;
                     if (tap == 0) continue;
-                    int count = _counts[tap] += (taps[k] & PixelRig.Feature) != 0 ? FeatureWeight : 1;
+                    int count = counts[tap] += (taps[k] & PixelRig.Feature) != 0 ? FeatureWeight : 1;
                     if (count > most || count == most && tap == middle)
                     {
                         most = count;
@@ -235,22 +321,21 @@ public sealed class PixelPoser : IDisposable
                 bool feature = false;
                 for (int k = 0; k < 9; k++)
                 {
-                    _counts[taps[k] & PixelRig.Number] = 0;
+                    counts[taps[k] & PixelRig.Number] = 0;
                     feature |= (taps[k] & PixelRig.Feature) != 0 && (taps[k] & PixelRig.Number) == best;
                 }
 
-                int at = (y - all.Y) * w + x - all.X;
-                _index[at] = (byte)best;
-                _owner[at] = (byte)Math.Min(255, order);
-                _limb[at] = (byte)(feature ? Kept | draw.Limb : draw.Limb);
+                index[at] = (byte)best;
+                owner[at] = mine;
+                limbs[at] = (byte)(feature ? Kept | limb : limb);
             }
         }
     }
 
     /// <summary>
     /// Tidies the frame as a pixel artist would: a lone pixel sticking out of the figure is dropped, a
-    /// one-pixel hole is filled, and a pixel whose colour none of its neighbours share takes theirs
-    /// (not a feature of the face: an eye is a single pixel).
+    /// one-pixel hole is filled, and a speck of a colour its neighbours don't share takes theirs (not
+    /// a feature of the face: an eye is a pixel or two).
     /// </summary>
     private void Tidy(int w, int h)
     {
@@ -278,11 +363,13 @@ public sealed class PixelPoser : IDisposable
                     continue;
                 }
                 if ((_limb[at] & Kept) != 0 || around < 4) continue;
-                if (own == up || own == down || own == left || own == right) continue;
-                if (own == _index[at - w - 1] || own == _index[at - w + 1] || own == _index[at + w - 1] || own == _index[at + w + 1]) continue;
-                // An orphan in the middle of the figure: the colour most of the four beside it have.
-                byte most = up == down || up == left || up == right ? up : down == left || down == right ? down : left == right ? left : (byte)0;
-                if (most != 0) _index[at] = most;
+                // A speck in the middle of the figure (at most one of the eight round it shares its
+                // colour, so it isn't part of a line) takes the colour three of the four beside it have.
+                int alike = (own == up ? 1 : 0) + (own == down ? 1 : 0) + (own == left ? 1 : 0) + (own == right ? 1 : 0)
+                    + (own == _index[at - w - 1] ? 1 : 0) + (own == _index[at - w + 1] ? 1 : 0) + (own == _index[at + w - 1] ? 1 : 0) + (own == _index[at + w + 1] ? 1 : 0);
+                if (alike > 1) continue;
+                byte most = up == down && (up == left || up == right) ? up : left == right && (left == up || left == down) ? left : (byte)0;
+                if (most != 0 && most != own) _index[at] = most;
             }
         }
     }

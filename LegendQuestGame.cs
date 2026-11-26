@@ -178,6 +178,7 @@ public partial class LegendQuestGame : Game
     {
         _canvas.Begin(GraphicsDevice);
         GraphicsDevice.Clear(VoidColor);
+        PixelFrames.Tick();
 
         base.Draw(gameTime);
         _cursor.Draw(gameTime, _screenManager.SpriteBatch, _screenManager.Input.MousePosition);

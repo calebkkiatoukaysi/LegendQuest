@@ -34,7 +34,76 @@ public sealed record PixelRig(Color[] Colours, Color[] Outline, Color[] Shade, I
 /// <param name="Width">How many sub-cells wide.</param>
 /// <param name="Height">How many sub-cells tall.</param>
 /// <param name="Cells">Each sub-cell's palette number, row by row, 0 for clear; with PixelRig.Feature set on a feature of the face.</param>
-public sealed record PixelPiece(int Left, int Top, int Width, int Height, byte[] Cells);
+public sealed record PixelPiece(int Left, int Top, int Width, int Height, byte[] Cells)
+{
+    private bool[] _near, _flat;
+
+    /// <summary>How far round a sub-cell everything has to be its colour for it to be Flat: as far as an art pixel of a turned, squashed piece reaches.</summary>
+    private const int FlatReach = 2;
+
+    /// <summary>
+    /// For each sub-cell, whether it and every sub-cell within FlatReach of it are one colour (and no
+    /// feature of the face): an art pixel whose middle is on one is that colour without a count.
+    /// Worked out the first time and kept.
+    /// </summary>
+    public bool[] Flat
+    {
+        get
+        {
+            if (_flat is not null) return _flat;
+            var flat = new bool[Cells.Length];
+            for (int y = FlatReach; y < Height - FlatReach; y++)
+            {
+                for (int x = FlatReach; x < Width - FlatReach; x++)
+                {
+                    byte own = Cells[y * Width + x];
+                    if (own == 0 || (own & PixelRig.Feature) != 0) continue;
+                    bool same = true;
+                    for (int dy = -FlatReach; dy <= FlatReach && same; dy++)
+                        for (int dx = -FlatReach; dx <= FlatReach; dx++)
+                            if (Cells[(y + dy) * Width + x + dx] != own)
+                            {
+                                same = false;
+                                break;
+                            }
+                    flat[y * Width + x] = same;
+                }
+            }
+            return _flat = flat;
+        }
+    }
+
+    /// <summary>How many blocks wide Near is: the piece's art pixels, and one more each side.</summary>
+    public int NearWidth => (Width + PixelRig.Sub - 1) / PixelRig.Sub + 2;
+
+    /// <summary>
+    /// For each block of Sub by Sub sub-cells (an art pixel's worth), and a ring of blocks round the
+    /// piece, whether anything of the piece is in it or a block beside it: so PixelPoser can skip the
+    /// empty parts of a turned piece's box at a glance. Worked out the first time and kept.
+    /// </summary>
+    public bool[] Near
+    {
+        get
+        {
+            if (_near is not null) return _near;
+            int wide = NearWidth, tall = (Height + PixelRig.Sub - 1) / PixelRig.Sub + 2;
+            var own = new bool[wide * tall];
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                    if (Cells[y * Width + x] != 0) own[(y / PixelRig.Sub + 1) * wide + x / PixelRig.Sub + 1] = true;
+            var near = new bool[wide * tall];
+            for (int y = 0; y < tall; y++)
+                for (int x = 0; x < wide; x++)
+                    for (int dy = -1; dy <= 1 && !near[y * wide + x]; dy++)
+                        for (int dx = -1; dx <= 1; dx++)
+                        {
+                            int nx = x + dx, ny = y + dy;
+                            if (nx >= 0 && ny >= 0 && nx < wide && ny < tall && own[ny * wide + nx]) near[y * wide + x] = true;
+                        }
+            return _near = near;
+        }
+    }
+}
 
 /// <summary>
 /// Turns a painted figure into pixel art at the size it stands in a room: one palette for the whole

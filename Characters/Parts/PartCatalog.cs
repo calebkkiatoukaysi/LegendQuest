@@ -203,6 +203,7 @@ public static partial class PartCatalog
         Images.Clear();
         PieceImages.Clear();
         Built.Clear();
+        PixelFrames.Clear();
         foreach ((_, Standing kept) in Pictures) kept.Picture.Dispose();
         Pictures.Clear();
         foreach ((_, ImportedFigure kept) in Larges) kept.Dispose();
